@@ -65,7 +65,7 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create the expected XML file" {
-            val expectedBom = File("src/funTest/assets/bom.cyclonedx.xml").readText()
+            val expectedBom = File("src/funTest/assets/cyclonedx-reporter-expected-result.xml").readText()
 
             val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).single()
@@ -83,7 +83,7 @@ class CycloneDxReporterFunTest : WordSpec({
         }
 
         "create the expected JSON file" {
-            val expectedBom = File("src/funTest/assets/bom.cyclonedx.json").readText()
+            val expectedBom = File("src/funTest/assets/cyclonedx-reporter-expected-result.json").readText()
 
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
@@ -125,9 +125,9 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "generate expected XML files" {
             val expectedBomWithFindings =
-                File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-with-findings-1.0.xml").readText()
+                File("src/funTest/assets/cyclonedx-reporter-expected-result-with-findings.xml").readText()
             val expectedBomWithoutFindings =
-                File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-without-findings-1.0.xml").readText()
+                File("src/funTest/assets/cyclonedx-reporter-expected-result-without-findings.xml").readText()
             val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
 
             val (bomProjectWithFindings, bomProjectWithoutFindings) = CycloneDxReporter()
@@ -161,9 +161,9 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "generate expected JSON files" {
             val expectedBomWithFindings =
-                File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-with-findings-1.0.json").readText()
+                File("src/funTest/assets/cyclonedx-reporter-expected-result-with-findings.json").readText()
             val expectedBomWithoutFindings =
-                File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-without-findings-1.0.json")
+                File("src/funTest/assets/cyclonedx-reporter-expected-result-without-findings.json")
                     .readText()
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
