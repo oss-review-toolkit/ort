@@ -1,6 +1,6 @@
 module github.com/oss-review-toolkit/ort/gomod-synthetic-test-project
 
-go 1.13
+go 1.18
 
 require github.com/fatih/color v1.7.0
 
