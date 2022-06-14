@@ -21,6 +21,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -45,8 +46,6 @@ class CycloneDxReporterFunTest : WordSpec({
     val optionSingle = mapOf("single.bom" to "true")
     val optionMulti = mapOf("single.bom" to "false")
     val outputDir = createSpecTempDir()
-
-    fun String.addEOL() = this + "\n"
 
     "BOM generation with single option" should {
         "be composed with just one file" {
@@ -89,7 +88,7 @@ class CycloneDxReporterFunTest : WordSpec({
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
 
-            bomFile.readText().patchCycloneDxResult().addEOL() shouldBe expectedBom
+            bomFile.readText().patchCycloneDxResult() shouldEqualJson expectedBom
         }
     }
 
@@ -169,8 +168,8 @@ class CycloneDxReporterFunTest : WordSpec({
             val bomProjectWithFindings = bomFile[0].readText()
             val bomProjectWithoutFindings = bomFile[1].readText()
 
-            bomProjectWithFindings.patchCycloneDxResult().addEOL() shouldBe expectedBomWithFindings
-            bomProjectWithoutFindings.patchCycloneDxResult().addEOL() shouldBe expectedBomWithoutFindings
+            bomProjectWithFindings.patchCycloneDxResult() shouldEqualJson expectedBomWithFindings
+            bomProjectWithoutFindings.patchCycloneDxResult() shouldEqualJson expectedBomWithoutFindings
         }
     }
 })

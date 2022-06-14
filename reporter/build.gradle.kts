@@ -28,6 +28,7 @@ val flexmarkVersion: String by project
 val freemarkerVersion: String by project
 val hamcrestCoreVersion: String by project
 val jacksonVersion: String by project
+val kotestVersion: String by project
 val kotlinxCoroutinesVersion: String by project
 val kotlinxHtmlVersion: String by project
 val mockkVersion: String by project
@@ -94,5 +95,6 @@ dependencies {
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     implementation("net.sf.saxon:Saxon-HE:$saxonHeVersion")
 
+    testImplementation("io.kotest:kotest-assertions-json:$kotestVersion")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
