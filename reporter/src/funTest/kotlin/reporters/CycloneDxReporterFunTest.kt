@@ -51,6 +51,7 @@ class CycloneDxReporterFunTest : WordSpec({
     "BOM generation with single option" should {
         "create just one file" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
+
             val bomFiles = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
             bomFiles shouldHaveSize 1
@@ -58,6 +59,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "be valid XML according to schema version $defaultSchemaVersion" {
             val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
+
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).single()
 
             bomFile shouldBe aFile()
@@ -77,6 +79,7 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "be valid JSON according to schema version $defaultSchemaVersion" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
+
             val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
 
             bomFile shouldBe aFile()
@@ -86,17 +89,19 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "create the expected JSON file" {
             val expectedBom = File("src/funTest/assets/cyclonedx-reporter-expected-result.json").readText()
-
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
 
-            bomFile.readText().patchCycloneDxResult() shouldEqualJson expectedBom
+            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).single()
+            val actualBom = bomFile.readText().patchCycloneDxResult()
+
+            actualBom shouldEqualJson expectedBom
         }
     }
 
     "BOM generation with multi option" should {
         "create one file per project" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
+
             val bomFiles = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
             bomFiles shouldHaveSize 2
@@ -176,9 +181,11 @@ class CycloneDxReporterFunTest : WordSpec({
                 .generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).also {
                     it shouldHaveSize 2
                 }
+            val actualBomWithFindings = bomProjectWithFindings.readText().patchCycloneDxResult()
+            val actualBomWithoutFindings = bomProjectWithoutFindings.readText().patchCycloneDxResult()
 
-            bomProjectWithFindings.readText().patchCycloneDxResult() shouldEqualJson expectedBomWithFindings
-            bomProjectWithoutFindings.readText().patchCycloneDxResult() shouldEqualJson expectedBomWithoutFindings
+            actualBomWithFindings shouldEqualJson expectedBomWithFindings
+            actualBomWithoutFindings shouldEqualJson expectedBomWithoutFindings
         }
     }
 })
