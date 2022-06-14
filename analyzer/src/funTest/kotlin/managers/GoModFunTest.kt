@@ -63,7 +63,7 @@ class GoModFunTest : StringSpec() {
             val definitionFile = projectDir.resolve("go.mod")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gomod-expected-output.yml"),
+                projectDir.parentFile.resolve("gomod-subpkg-expected-output.yml"),
                 definitionFilePath = "$vcsPath/go.mod",
                 path = vcsPath,
                 revision = vcsRevision,
