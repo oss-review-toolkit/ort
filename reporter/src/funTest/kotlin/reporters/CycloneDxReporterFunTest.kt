@@ -48,7 +48,7 @@ class CycloneDxReporterFunTest : WordSpec({
     val outputDir = createSpecTempDir()
 
     "BOM generation with single option" should {
-        "be composed with just one file" {
+        "create just one file" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
             val bomFiles = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
@@ -93,7 +93,7 @@ class CycloneDxReporterFunTest : WordSpec({
     }
 
     "BOM generation with multi option" should {
-        "be composed with one file by project not excluded" {
+        "create one file per project" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
             val bomFiles = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
