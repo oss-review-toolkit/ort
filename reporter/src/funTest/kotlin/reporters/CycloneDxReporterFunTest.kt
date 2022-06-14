@@ -39,6 +39,7 @@ import org.cyclonedx.parsers.XmlParser
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.patchCycloneDxResult
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class CycloneDxReporterFunTest : WordSpec({
@@ -66,11 +67,12 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "create the expected XML file" {
             val expectedBom = File("src/funTest/assets/cyclonedx-reporter-expected-result.xml").readText()
-
             val xmlOptions = optionSingle + mapOf("output.file.formats" to "xml")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).single()
 
-            bomFile.readText().patchCycloneDxResult() shouldBe expectedBom
+            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).single()
+            val actualBom = bomFile.readText().patchCycloneDxResult().normalizeLineBreaks()
+
+            actualBom shouldBe expectedBom
         }
 
         "be valid JSON according to schema version $defaultSchemaVersion" {
@@ -134,9 +136,12 @@ class CycloneDxReporterFunTest : WordSpec({
                 .generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).also {
                     it shouldHaveSize 2
                 }
+            val actualBomWithFindings = bomProjectWithFindings.readText().patchCycloneDxResult().normalizeLineBreaks()
+            val actualBomWithoutFindings = bomProjectWithoutFindings.readText().patchCycloneDxResult()
+                .normalizeLineBreaks()
 
-            bomProjectWithFindings.readText().patchCycloneDxResult() shouldBe expectedBomWithFindings
-            bomProjectWithoutFindings.readText().patchCycloneDxResult() shouldBe expectedBomWithoutFindings
+            actualBomWithFindings shouldBe expectedBomWithFindings
+            actualBomWithoutFindings shouldBe expectedBomWithoutFindings
         }
 
         "generate valid JSON files according to schema version $defaultSchemaVersion" {
