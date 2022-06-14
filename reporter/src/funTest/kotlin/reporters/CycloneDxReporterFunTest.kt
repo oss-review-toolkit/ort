@@ -102,10 +102,11 @@ class CycloneDxReporterFunTest : WordSpec({
 
         "generate valid XML files according to schema version $defaultSchemaVersion" {
             val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions)
 
-            val bomFileProjectWithFindings = bomFile[0]
-            val bomFileProjectWithoutFindings = bomFile[1]
+            val (bomFileProjectWithFindings, bomFileProjectWithoutFindings) = CycloneDxReporter()
+                .generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).also {
+                    it shouldHaveSize 2
+                }
 
             bomFileProjectWithFindings shouldBe aFile()
             bomFileProjectWithFindings shouldNotBe emptyFile()
@@ -128,21 +129,23 @@ class CycloneDxReporterFunTest : WordSpec({
             val expectedBomWithoutFindings =
                 File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-without-findings-1.0.xml").readText()
             val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions)
 
-            val bomProjectWithFindings = bomFile[0].readText()
-            val bomProjectWithoutFindings = bomFile[1].readText()
+            val (bomProjectWithFindings, bomProjectWithoutFindings) = CycloneDxReporter()
+                .generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).also {
+                    it shouldHaveSize 2
+                }
 
-            bomProjectWithFindings.patchCycloneDxResult() shouldBe expectedBomWithFindings
-            bomProjectWithoutFindings.patchCycloneDxResult() shouldBe expectedBomWithoutFindings
+            bomProjectWithFindings.readText().patchCycloneDxResult() shouldBe expectedBomWithFindings
+            bomProjectWithoutFindings.readText().patchCycloneDxResult() shouldBe expectedBomWithoutFindings
         }
 
         "generate valid JSON files according to schema version $defaultSchemaVersion" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
-            val bomFileProjectWithFindings = bomFile[0]
-            val bomFileProjectWithoutFindings = bomFile[1]
+            val (bomFileProjectWithFindings, bomFileProjectWithoutFindings) = CycloneDxReporter()
+                .generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).also {
+                    it shouldHaveSize 2
+                }
 
             bomFileProjectWithFindings shouldBe aFile()
             bomFileProjectWithFindings shouldNotBe emptyFile()
@@ -163,13 +166,14 @@ class CycloneDxReporterFunTest : WordSpec({
                 File("src/funTest/assets/bom.cyclonedx-NPM-%40ort-project-without-findings-1.0.json")
                     .readText()
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
-            val bomFile = CycloneDxReporter().generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions)
 
-            val bomProjectWithFindings = bomFile[0].readText()
-            val bomProjectWithoutFindings = bomFile[1].readText()
+            val (bomProjectWithFindings, bomProjectWithoutFindings) = CycloneDxReporter()
+                .generateReport(ReporterInput(ORT_RESULT), outputDir, jsonOptions).also {
+                    it shouldHaveSize 2
+                }
 
-            bomProjectWithFindings.patchCycloneDxResult() shouldEqualJson expectedBomWithFindings
-            bomProjectWithoutFindings.patchCycloneDxResult() shouldEqualJson expectedBomWithoutFindings
+            bomProjectWithFindings.readText().patchCycloneDxResult() shouldEqualJson expectedBomWithFindings
+            bomProjectWithoutFindings.readText().patchCycloneDxResult() shouldEqualJson expectedBomWithoutFindings
         }
     }
 })
