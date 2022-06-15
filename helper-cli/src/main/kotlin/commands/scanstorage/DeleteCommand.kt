@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021-2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.inList
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.isNotNull
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.regexp
 import org.jetbrains.exposed.sql.compoundAnd
@@ -38,6 +39,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
+import org.ossreviewtoolkit.helper.common.execAndMap
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
@@ -77,6 +79,11 @@ internal class DeleteCommand : CliktCommand(
         help = "A regular expression for matching the package id."
     )
 
+    private val license by option(
+        "--license",
+        help = "The license expression of a detected license of a package that should be deleted."
+    )
+
     private val dryRun by option(
         "--dry-run",
         help = "Perform a dry run without actually deleting anything."
@@ -93,11 +100,28 @@ internal class DeleteCommand : CliktCommand(
         }
 
         val identifierCondition = packageId?.let { ScanResults.identifier regexp it }
+
+        val licenseCondition = license?.let {
+            println("Searching for stored scan results with license '$license'. This might take some time.")
+            val ids = database.transaction {
+                // language=PostgreSQL
+                """
+                SELECT id
+                FROM scan_storage.scan_results
+                WHERE (scan_result -> 'summary' -> 'licenses')::jsonb @> '[{"license": "$license"}]'::jsonb
+                """.trimIndent().execAndMap {
+                    it.getInt("id")
+                }
+            }
+
+            ScanResults.id inList ids
+        }
+
         val provenanceConditions = provenanceKeys.map { key ->
             rawParam("scan_result->'provenance'->>'$key'").isNotNull()
         }.takeIf { it.isNotEmpty() }?.compoundOr()
 
-        val conditions = listOfNotNull(identifierCondition, provenanceConditions)
+        val conditions = listOfNotNull(identifierCondition, licenseCondition, provenanceConditions)
         if (conditions.isEmpty()) {
             // Default to the safe option to not delete anything if no conditions are given.
             println("Not specified what entries to delete. Not deleting anything.")
