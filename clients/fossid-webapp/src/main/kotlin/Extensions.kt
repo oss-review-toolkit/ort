@@ -341,9 +341,15 @@ suspend fun FossIdRestService.generateReport(
         val fileName = if (reportType == ReportType.HTML_STATIC) {
             "fossid-$scanCode-report.html"
         } else {
-            response.headers()["Content-disposition"]?.split(';')?.firstNotNullOfOrNull {
+            val contentDisposition = response.headers()["Content-disposition"]
+
+            contentDisposition?.split(';')?.firstNotNullOfOrNull {
                 it.trim().withoutPrefix("filename=")?.removeSurrounding("\"")
-            } ?: return Result.failure(IllegalStateException("Cannot determine name of the report"))
+            } ?: return Result.failure<File>(IllegalStateException("Cannot determine name of the report")).also {
+                FossIdRestService.logger.error {
+                    "Cannot determine name of the report with raw headers '$contentDisposition'."
+                }
+            }
         }
 
         Result.success(
