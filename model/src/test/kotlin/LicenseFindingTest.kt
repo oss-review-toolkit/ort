@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class LicenseFindingTest : WordSpec({
@@ -35,6 +36,19 @@ class LicenseFindingTest : WordSpec({
                 )
             ) shouldBe LicenseFinding(
                 license = "BSD-3-Clause".toSpdx(),
+                location = TextLocation(".", -1),
+            )
+        }
+
+        "apply the detected license mapping to a valid SPDX expression" {
+            LicenseFinding.createAndMap(
+                license = "LicenseRef-scancode-unknown",
+                location = TextLocation(".", -1),
+                detectedLicenseMapping = mapOf(
+                    "LicenseRef-scancode-unknown" to SpdxConstants.NOASSERTION,
+                )
+            ) shouldBe LicenseFinding(
+                license = SpdxConstants.NOASSERTION,
                 location = TextLocation(".", -1),
             )
         }
