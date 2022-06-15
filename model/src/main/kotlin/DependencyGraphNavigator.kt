@@ -150,6 +150,8 @@ private class DependencyRefCursor(
 
     override fun getStableReference(): DependencyNode = DependencyRefCursor(graph, initCurrent = current)
 
+    override fun getInternalId(): Any = current
+
     /**
      * Return a sequence of [DependencyNode]s that is implemented based on this instance. This sequence allows access
      * to the properties of the [DependencyReference]s passed to this instance, although each sequence element is a
