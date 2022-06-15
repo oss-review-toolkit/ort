@@ -33,7 +33,18 @@ import org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModel
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 
+/**
+ * A [Reporter] that generates a web application that allows browsing an ORT result interactively.
+ *
+ * This reporter supports the following options:
+ * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
+ *   stripped.
+ */
 class WebAppReporter : Reporter {
+    companion object {
+        const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
+    }
+
     override val reporterName = "WebApp"
 
     private val reportFilename = "scan-report-web-app.html"
@@ -44,7 +55,7 @@ class WebAppReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
-        val evaluatedModel = EvaluatedModel.create(input)
+        val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
 
         val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)
