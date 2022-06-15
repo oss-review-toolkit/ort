@@ -91,11 +91,7 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val graph = getModuleGraph(projectDir).let {
-                val vendorModules = getVendorModules(projectDir)
-                it.subgraph(vendorModules + it.projectId())
-            }
-
+            val graph = getModuleGraph(projectDir)
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
             val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
@@ -126,18 +122,6 @@ class GoMod(
             )
         }
     }
-
-    private fun getVendorModules(projectDir: File): Set<Identifier> =
-        run(projectDir, "mod", "vendor", "-v")
-            .requireSuccess()
-            .stderr
-            .lineSequence()
-            .filter { it.startsWith("# ") }
-            .map {
-                val parts = it.removePrefix("# ").split(" ", limit = 2)
-                Identifier(managerName, "", parts[0], parts[1])
-            }
-            .toSet()
 
     /**
      * Return the module graph output from `go mod graph` with unused dependencies removed.
@@ -217,7 +201,7 @@ class GoMod(
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
             usedModuleNames +=
-                parseWhyOutput(run(projectDir, "mod", "why", "-m", *moduleNames).requireSuccess().stdout)
+                parseWhyOutput(run(projectDir, "mod", "why", "-m", "-vendor", *moduleNames).requireSuccess().stdout)
         }
 
         return graph.nodes().filterTo(mutableSetOf()) { it.name in usedModuleNames }
