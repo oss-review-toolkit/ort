@@ -146,6 +146,9 @@ class GoMod(
             }
             .toSet()
 
+    /**
+     * Return the module graph output from `go mod graph` with unused dependencies removed.
+     */
     private fun getModuleGraph(projectDir: File): Graph {
         fun parseModuleEntry(entry: String) =
             Identifier(
