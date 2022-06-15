@@ -32,10 +32,14 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  *
  * This reporter supports the following options:
  * - *output.file.formats*: The list of [FileFormat]s to generate, defaults to [FileFormat.JSON].
+ * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
+ *   stripped.
  */
 class EvaluatedModelReporter : Reporter {
     companion object {
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
+
+        const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
 
     override val reporterName = "EvaluatedModel"
@@ -45,7 +49,9 @@ class EvaluatedModelReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val evaluatedModel = measureTimedValue { EvaluatedModel.create(input) }
+        val evaluatedModel = measureTimedValue {
+            EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
+        }
 
         val outputFiles = mutableListOf<File>()
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
