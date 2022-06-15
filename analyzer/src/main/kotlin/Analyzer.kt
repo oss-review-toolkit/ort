@@ -25,7 +25,10 @@ import java.time.Instant
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -170,5 +173,78 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         return analyzerResultBuilder.build()
+    }
+}
+
+/**
+ * A class to manage running a [PackageManager].
+ */
+private class PackageManagerRunner(
+    /**
+     * The [PackageManager] to run.
+     */
+    val manager: PackageManager,
+
+    /**
+     * The list of definition files to analyze.
+     */
+    val definitionFiles: List<File>,
+
+    /**
+     * The labels passed to ORT.
+     */
+    val labels: Map<String, String>,
+
+    /**
+     * A set of the names of package managers that this package manager must run after.
+     */
+    val mustRunAfter: Set<String>,
+
+    /**
+     * A [StateFlow] that updates with the list of already finished package managers.
+     */
+    val finishedPackageManagersState: StateFlow<Set<String>>,
+
+    /**
+     * A callback for this package manager to return its result.
+     */
+    val onResult: (PackageManagerResult) -> Unit
+) {
+    /**
+     * Start the runner. If [mustRunAfter] is not empty, it waits until [finishedPackageManagersState] contains all
+     * required package managers.
+     */
+    suspend fun start() {
+        if (mustRunAfter.isNotEmpty()) {
+            manager.log.info {
+                "Waiting for the following package managers to complete: ${mustRunAfter.joinToString()}."
+            }
+
+            finishedPackageManagersState.first { finishedPackageManagers ->
+                val remaining = mustRunAfter - finishedPackageManagers
+
+                if (remaining.isNotEmpty()) {
+                    manager.log.info {
+                        "Still waiting for the following package managers to complete: ${remaining.joinToString()}."
+                    }
+                }
+
+                remaining.isEmpty()
+            }
+        }
+
+        run()
+    }
+
+    private suspend fun run() {
+        manager.log.info { "Starting analysis." }
+
+        withContext(Dispatchers.IO) {
+            val result = manager.resolveDependencies(definitionFiles, labels)
+
+            manager.log.info { "Finished analysis." }
+
+            onResult(result)
+        }
     }
 }
