@@ -23,11 +23,16 @@ package org.ossreviewtoolkit.analyzer
 import java.io.File
 import java.time.Instant
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
@@ -137,43 +142,62 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         managedFiles: Map<PackageManager, List<File>>,
         curationProvider: PackageCurationProvider
     ): AnalyzerResult {
-        val analyzerResultBuilder = AnalyzerResultBuilder(curationProvider)
+        val state = AnalyzerState(curationProvider)
 
-        runBlocking(Dispatchers.IO) {
-            managedFiles.map { (manager, files) ->
-                async {
-                    val results = manager.resolveDependencies(files, labels)
-
-                    // By convention, project ids must be of the type of the respective package manager. An exception
-                    // for this is Pub with Flutter, which internally calls Gradle.
-                    results.projectResults.forEach { (_, result) ->
-                        val invalidProjects = result.filterNot {
-                            val projectType = it.project.id.type
-
-                            projectType == manager.managerName ||
-                                    (manager.managerName == "Pub" && projectType == "Gradle")
-                        }
-
-                        require(invalidProjects.isEmpty()) {
-                            val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
-                            "Projects $projectString must be of type '${manager.managerName}'."
-                        }
-                    }
-
-                    manager to results
-                }
-            }.forEach { deferredResult ->
-                val (manager, managerResult) = deferredResult.await()
-                managerResult.projectResults.values.flatten().forEach { analyzerResultBuilder.addResult(it) }
-                managerResult.dependencyGraph?.let {
-                    analyzerResultBuilder.addDependencyGraph(manager.managerName, it)
-                        .addPackages(managerResult.sharedPackages)
-                }
-            }
+        runBlocking {
+            managedFiles.entries.map { (manager, files) ->
+                PackageManagerRunner(
+                    manager = manager,
+                    definitionFiles = files,
+                    labels = labels,
+                    mustRunAfter = emptySet(),
+                    finishedPackageManagersState = state.finishedPackageManagersState,
+                    onResult = { result -> state.addResult(manager, result) }
+                )
+            }.forEach { launch { it.start() } }
         }
 
-        return analyzerResultBuilder.build()
+        return state.buildResult()
     }
+}
+
+private class AnalyzerState(curationProvider: PackageCurationProvider) {
+    private val builder = AnalyzerResultBuilder(curationProvider)
+    private val scope = CoroutineScope(Dispatchers.Default)
+    private val addMutex = Mutex()
+
+    private val _finishedPackageManagersState = MutableStateFlow<Set<String>>(emptySet())
+    val finishedPackageManagersState = _finishedPackageManagersState.asStateFlow()
+
+    fun addResult(manager: PackageManager, result: PackageManagerResult) {
+        scope.launch {
+            // By convention, project ids must be of the type of the respective package manager. An exception
+            // for this is Pub with Flutter, which internally calls Gradle.
+            result.projectResults.forEach { (_, result) ->
+                val invalidProjects = result.filterNot {
+                    val projectType = it.project.id.type
+
+                    projectType == manager.managerName ||
+                            (manager.managerName == "Pub" && projectType == "Gradle")
+                }
+
+                require(invalidProjects.isEmpty()) {
+                    val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
+                    "Projects $projectString must be of type '${manager.managerName}'."
+                }
+            }
+
+            addMutex.withLock {
+                result.projectResults.values.flatten().forEach { builder.addResult(it) }
+                result.dependencyGraph?.let {
+                    builder.addDependencyGraph(manager.managerName, it).addPackages(result.sharedPackages)
+                }
+                _finishedPackageManagersState.value += manager.managerName
+            }
+        }
+    }
+
+    fun buildResult() = builder.build()
 }
 
 /**
