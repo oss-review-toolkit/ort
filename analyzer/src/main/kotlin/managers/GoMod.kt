@@ -150,13 +150,17 @@ class GoMod(
      * Return the module graph output from `go mod graph` with unused dependencies removed.
      */
     private fun getModuleGraph(projectDir: File): Graph {
-        fun parseModuleEntry(entry: String) =
-            Identifier(
-                type = managerName,
-                namespace = "",
-                name = entry.substringBefore('@'),
-                version = entry.substringAfter('@', "")
-            )
+        val moduleVersionForModuleName = getAllModules(projectDir).associateBy({ it.name }, { it.version })
+
+        fun parseModuleEntry(entry: String): Identifier =
+            entry.substringBefore('@').let { moduleName ->
+                Identifier(
+                    type = managerName,
+                    namespace = "",
+                    name = moduleName,
+                    version = moduleVersionForModuleName[moduleName].orEmpty()
+                )
+            }
 
         var graph = Graph()
 
@@ -189,6 +193,23 @@ class GoMod(
         }
 
         return graph
+    }
+
+    /**
+     * Return the list of all modules contained in the dependency tree with resolved versions.
+     */
+    private fun getAllModules(projectDir: File): Set<Identifier> {
+        val result = mutableSetOf<Identifier>()
+
+        val list = run("list", "-m", "all", workingDir = projectDir)
+        list.stdout.lines().forEach { line ->
+            val columns = line.split(' ')
+            if (columns.size != 2) return@forEach
+
+            result += Identifier(type = managerName, namespace = "", name = columns[0], version = columns[1])
+        }
+
+        return result
     }
 
     /**
