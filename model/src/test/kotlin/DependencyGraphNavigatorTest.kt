@@ -20,9 +20,11 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.matchers.types.shouldBeTypeOf
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
     override val resultFileName = "src/test/assets/sbt-multi-project-example-graph.yml"
@@ -49,6 +51,17 @@ class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
                 shouldThrow<IllegalArgumentException> {
                     DependencyGraphNavigator(result)
                 }
+            }
+        }
+
+        "getInternalId" should {
+            "return the underlying graph node" {
+                val result = readOrtResult(resultFileName)
+                val testProject = result.getProjects().first()
+
+                val node = navigator.directDependencies(testProject, "test").first()
+
+                node.getInternalId().shouldBeTypeOf<DependencyGraphNode>()
             }
         }
     }
