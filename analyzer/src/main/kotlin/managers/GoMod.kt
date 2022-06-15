@@ -99,9 +99,7 @@ class GoMod(
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
             val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
-
             val projectVcs = processProjectVcs(projectDir)
-
             val scopes = sortedSetOf(
                 Scope(name = "vendor", dependencies = graph.toPackageReferenceForest(projectId))
             )
