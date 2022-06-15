@@ -124,7 +124,7 @@ class GoMod(
     }
 
     /**
-     * Return the module graph output from `go mod graph` with unused dependencies removed.
+     * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
     private fun getModuleGraph(projectDir: File): Graph {
         val moduleVersionForModuleName = getAllModules(projectDir).associateBy({ it.name }, { it.version })
@@ -153,11 +153,11 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        val usedModules = getUsedModules(graph, projectDir, graph.projectId())
-        if (usedModules.size < graph.size()) {
-            log.debug { "Removing ${graph.size() - usedModules.size} unused modules from the dependency graph." }
+        val vendorModules = getVendorModules(graph, projectDir, graph.projectId())
+        if (vendorModules.size < graph.size()) {
+            log.debug { "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph." }
 
-            graph = graph.subgraph(usedModules)
+            graph = graph.subgraph(vendorModules)
         }
 
         val referencedModules = graph.getTransitiveDependencies(graph.projectId())
@@ -193,18 +193,19 @@ class GoMod(
      * Determine the set of modules that are actually used by the [main module][projectId] by running the _go mod why_
      * command repeatedly in [projectDir].
      */
-    private fun getUsedModules(graph: Graph, projectDir: File, projectId: Identifier): Set<Identifier> {
-        val usedModuleNames = mutableSetOf(projectId.name)
+    private fun getVendorModules(graph: Graph, projectDir: File, projectId: Identifier): Set<Identifier> {
+        val vendorModuleNames = mutableSetOf(projectId.name)
 
         graph.nodes().chunked(WHY_CHUNK_SIZE).forEach { ids ->
             val moduleNames = ids.map { it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
-            usedModuleNames +=
-                parseWhyOutput(run(projectDir, "mod", "why", "-m", "-vendor", *moduleNames).requireSuccess().stdout)
+            vendorModuleNames += parseWhyOutput(
+                run(projectDir, "mod", "why", "-m", "-vendor", *moduleNames).requireSuccess().stdout
+            )
         }
 
-        return graph.nodes().filterTo(mutableSetOf()) { it.name in usedModuleNames }
+        return graph.nodes().filterTo(mutableSetOf()) { it.name in vendorModuleNames }
     }
 
     private fun createPackage(id: Identifier): Package {
