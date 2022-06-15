@@ -16,31 +16,6 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
-  - name: "all"
-    dependencies:
-    - id: "GoMod::github.com/davecgh/go-spew:v1.1.0"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/fatih/color:v1.13.0"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/google/uuid:v1.0.0"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/pborman/uuid:v1.2.1"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/pmezard/go-difflib:v1.0.0"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::github.com/stretchr/testify:v1.7.2"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
-      linkage: "PROJECT_STATIC"
-    - id: "GoMod::gopkg.in/yaml.v3:v3.0.1"
-      linkage: "PROJECT_STATIC"
-      dependencies:
-      - id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
-        linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
     - id: "GoMod::github.com/davecgh/go-spew:v1.1.0"
@@ -285,32 +260,6 @@ packages:
       algorithm: ""
   source_artifact:
     url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20220610221304-9f5ed59c137d.zip"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-- id: "GoMod::gopkg.in/check.v1:v0.0.0-20161208181325-20d25e280405"
-  purl: "pkg:golang/gopkg.in%2Fcheck.v1@v0.0.0-20161208181325-20d25e280405"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://proxy.golang.org/gopkg.in/check.v1/@v/v0.0.0-20161208181325-20d25e280405.zip"
     hash:
       value: ""
       algorithm: ""
