@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -79,7 +80,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private val packageExcludeInfo = mutableMapOf<Identifier, PackageExcludeInfo>()
 
-    fun build(): EvaluatedModel {
+    /**
+     * Build an [EvaluatedModel] instance. If [deduplicateDependencyTree] is *true*, remove duplicate subtrees from
+     * the dependency tree. This may be necessary for huge projects to avoid excessive memory consumption.
+     */
+    fun build(deduplicateDependencyTree: Boolean = false): EvaluatedModel {
         createExcludeInfo()
         createScopes()
 
@@ -99,7 +104,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             val pkg = packages.getValue(project.id)
-            addDependencyTree(project, pkg)
+            addDependencyTree(project, pkg, deduplicateDependencyTree)
         }
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
@@ -423,7 +428,29 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         return actualScanResult
     }
 
-    private fun addDependencyTree(project: Project, pkg: EvaluatedPackage) {
+    private fun addDependencyTree(
+        project: Project,
+        pkg: EvaluatedPackage,
+        deduplicateDependencyTree: Boolean
+    ) {
+        val visitedNodes = mutableMapOf<Any, DependencyTreeNode>()
+
+        fun createDependencyNode(
+            dependency: EvaluatedPackage,
+            linkage: PackageLinkage,
+            issues: List<EvaluatedOrtIssue>,
+            children: List<DependencyTreeNode> = emptyList()
+        ) =
+            DependencyTreeNode(
+                linkage = linkage,
+                pkg = dependency,
+                scope = null,
+                children = children,
+                pathExcludes = emptyList(),
+                scopeExcludes = emptyList(),
+                issues = issues
+            )
+
         fun DependencyNode.toEvaluatedTreeNode(
             scope: EvaluatedScope,
             path: List<EvaluatedPackage>
@@ -445,20 +472,28 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 issues += addIssues(this.issues, EvaluatedOrtIssueType.ANALYZER, dependency, null, packagePath)
             }
 
-            return DependencyTreeNode(
-                linkage = linkage,
-                pkg = dependency,
-                scope = null,
-                children = visitDependencies { dependencies ->
-                    dependencies.map { it.toEvaluatedTreeNode(scope, path + dependency) }.toList()
-                },
-                pathExcludes = emptyList(),
-                scopeExcludes = emptyList(),
-                issues = issues
-            )
+            visitedNodes += getInternalId() to createDependencyNode(dependency, linkage, issues)
+
+            val children = visitDependencies { dependencies ->
+                dependencies.map { node ->
+                    val nodeId = node.getInternalId()
+
+                    if (deduplicateDependencyTree && nodeId in visitedNodes) {
+                        // Cut the duplicate subtree here and only return the node without its children.
+                        visitedNodes.getValue(nodeId).copy(children = emptyList())
+                    } else {
+                        node.toEvaluatedTreeNode(scope, path + dependency)
+                    }
+                }.toList()
+            }
+
+            return createDependencyNode(dependency, linkage, issues, children)
         }
 
         val scopeTrees = input.ortResult.dependencyNavigator.scopeNames(project).map { scope ->
+            // Deduplication should not happen across scopes.
+            visitedNodes.clear()
+
             val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope).map {
                 it.toEvaluatedTreeNode(scopes.getValue(scope), mutableListOf())
             }.toList()
