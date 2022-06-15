@@ -148,7 +148,8 @@ data class EvaluatedModel(
             YAMLMapper().apply(mapperConfig).registerModule(IntIdModule(INT_ID_TYPES))
         }
 
-        fun create(input: ReporterInput): EvaluatedModel = EvaluatedModelMapper(input).build()
+        fun create(input: ReporterInput, deduplicateDependencyTree: Boolean = false): EvaluatedModel =
+            EvaluatedModelMapper(input).build(deduplicateDependencyTree)
     }
 
     /**
