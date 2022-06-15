@@ -91,7 +91,7 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val graph = getDependencyGraph(projectDir)
+            val graph = getModuleGraph(projectDir)
             val projectId = graph.projectId()
             val vendorModules = getVendorModules(projectDir)
 
@@ -146,8 +146,8 @@ class GoMod(
             }
             .toSet()
 
-    private fun getDependencyGraph(projectDir: File): Graph {
-        fun parsePackageEntry(entry: String) =
+    private fun getModuleGraph(projectDir: File): Graph {
+        fun parseModuleEntry(entry: String) =
             Identifier(
                 type = managerName,
                 namespace = "",
@@ -163,26 +163,26 @@ class GoMod(
             val columns = line.split(' ')
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
 
-            val parent = parsePackageEntry(columns[0])
-            val child = parsePackageEntry(columns[1])
+            val parent = parseModuleEntry(columns[0])
+            val child = parseModuleEntry(columns[1])
 
             graph.addEdge(parent, child)
         }
 
-        val usedPackages = getUsedModules(graph, projectDir, graph.projectId())
-        if (usedPackages.size < graph.size()) {
-            log.debug { "Removing ${graph.size() - usedPackages.size} unused packages from the dependency graph." }
+        val usedModules = getUsedModules(graph, projectDir, graph.projectId())
+        if (usedModules.size < graph.size()) {
+            log.debug { "Removing ${graph.size() - usedModules.size} unused modules from the dependency graph." }
 
-            graph = graph.subgraph(usedPackages)
+            graph = graph.subgraph(usedModules)
         }
 
-        val referencedPackages = graph.getTransitiveDependencies(graph.projectId())
-        if (referencedPackages.size < graph.size()) {
+        val referencedModules = graph.getTransitiveDependencies(graph.projectId())
+        if (referencedModules.size < graph.size()) {
             log.debug {
-                "Removing ${graph.size() - referencedPackages.size} unreferenced packages from the dependency graph."
+                "Removing ${graph.size() - referencedModules.size} unreferenced modules from the dependency graph."
             }
 
-            graph = graph.subgraph(referencedPackages)
+            graph = graph.subgraph(referencedModules)
         }
 
         return graph
