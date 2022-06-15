@@ -160,15 +160,6 @@ class GoMod(
             graph = graph.subgraph(vendorModules)
         }
 
-        val referencedModules = graph.getTransitiveDependencies(graph.projectId())
-        if (referencedModules.size < graph.size()) {
-            log.debug {
-                "Removing ${graph.size() - referencedModules.size} unreferenced modules from the dependency graph."
-            }
-
-            graph = graph.subgraph(referencedModules)
-        }
-
         return graph
     }
 
@@ -327,25 +318,6 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
 
         val startNodes = dependencies(root)
         return startNodes.mapTo(sortedSetOf()) { getPackageReference(it, startNodes) }
-    }
-
-    /**
-     * Return all identifiers reachable from [root] including [root].
-     */
-    fun getTransitiveDependencies(root: Identifier): Set<Identifier> {
-        val queue = mutableListOf(root)
-        val result = mutableSetOf<Identifier>()
-
-        while (queue.isNotEmpty()) {
-            val id = queue.removeFirst()
-
-            if (id !in result) {
-                result += id
-                queue += dependencies(id)
-            }
-        }
-
-        return result
     }
 
     /**
