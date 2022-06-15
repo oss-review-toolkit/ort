@@ -22,12 +22,6 @@ project:
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
       linkage: "PROJECT_STATIC"
-      dependencies:
-      - id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
-        linkage: "PROJECT_STATIC"
-        dependencies:
-        - id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
-          linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
       linkage: "PROJECT_STATIC"
       dependencies:
@@ -97,32 +91,6 @@ packages:
     url: "https://github.com/mattn/go-colorable.git"
     revision: "v0.1.4"
     path: ""
-- id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.8"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: "Git"
-    url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.8"
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/mattn/go-isatty.git"
-    revision: "v0.0.8"
-    path: ""
 - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
   declared_licenses: []
@@ -148,32 +116,6 @@ packages:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.10"
-    path: ""
-- id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
-  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20190222072716-a9d3bda3a223"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
-  homepage_url: ""
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190222072716-a9d3bda3a223.zip"
-    hash:
-      value: ""
-      algorithm: ""
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: ""
-    url: ""
-    revision: ""
     path: ""
 - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
   purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
