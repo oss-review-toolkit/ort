@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.isSpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
@@ -62,7 +61,7 @@ data class LicenseFinding(
             score: Float? = null,
             detectedLicenseMapping: Map<String, String>
         ): LicenseFinding = LicenseFinding(
-            license = if (license.isSpdxExpression() || detectedLicenseMapping.isEmpty()) {
+            license = if (detectedLicenseMapping.isEmpty()) {
                 license
             } else {
                 license.applyDetectedLicenseMapping(detectedLicenseMapping)
