@@ -25,8 +25,14 @@ project:
       dependencies:
       - id: "GoMod::github.com/mattn/go-isatty:v0.0.8"
         linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
+          linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
       linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+        linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
     - id: "GoMod::github.com/fatih/color:v1.7.0"
@@ -35,6 +41,9 @@ project:
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
       linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+        linkage: "PROJECT_STATIC"
 packages:
 - id: "GoMod::github.com/fatih/color:v1.7.0"
   purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.7.0"
@@ -139,4 +148,56 @@ packages:
     type: "Git"
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.10"
+    path: ""
+- id: "GoMod::golang.org/x/sys:v0.0.0-20190222072716-a9d3bda3a223"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20190222072716-a9d3bda3a223"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20190222072716-a9d3bda3a223.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20191008105621-543471e840be.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
     path: ""
