@@ -153,7 +153,7 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        val vendorModules = getVendorModules(graph, projectDir, graph.projectId())
+        val vendorModules = getVendorModules(graph, projectDir)
         if (vendorModules.size < graph.size()) {
             log.debug { "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph." }
 
@@ -184,8 +184,8 @@ class GoMod(
      * Return the subset of the modules in [graph] required for building and testing the main module. So, test
      * dependencies of dependencies are filtered out.
      */
-    private fun getVendorModules(graph: Graph, projectDir: File, projectId: Identifier): Set<Identifier> {
-        val vendorModuleNames = mutableSetOf(projectId.name)
+    private fun getVendorModules(graph: Graph, projectDir: File): Set<Identifier> {
+        val vendorModuleNames = mutableSetOf(graph.projectId().name)
 
         graph.nodes().chunked(WHY_CHUNK_SIZE).forEach { ids ->
             val moduleNames = ids.map { it.name }.toTypedArray()
