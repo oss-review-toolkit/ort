@@ -73,4 +73,13 @@ interface DependencyNode {
      */
     @JsonIgnore
     fun getStableReference(): DependencyNode = this
+
+    /**
+     * Return a unique ID for this [DependencyNode]. This ID can be used for instance during traversal of the
+     * dependency graph to detect nodes that have already been visited. As pointed out in the class comment, the
+     * reference to this [DependencyNode] itself is not suitable for this purpose. A concrete implementation
+     * typically returns a reference to an underlying node structure.
+     */
+    @JsonIgnore
+    fun getInternalId(): Any = this
 }
