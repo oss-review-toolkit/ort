@@ -91,24 +91,19 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val graph = getModuleGraph(projectDir)
-            val projectId = graph.projectId()
-            val vendorModules = getVendorModules(projectDir)
+            val graph = getModuleGraph(projectDir).let {
+                val vendorModules = getVendorModules(projectDir)
+                it.subgraph(vendorModules + it.projectId())
+            }
 
+            val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
             val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
 
             val projectVcs = processProjectVcs(projectDir)
 
             val scopes = sortedSetOf(
-                Scope(
-                    name = "all",
-                    dependencies = graph.toPackageReferenceForest(projectId)
-                ),
-                Scope(
-                    name = "vendor",
-                    dependencies = graph.subgraph(vendorModules + projectId).toPackageReferenceForest(projectId)
-                )
+                Scope(name = "vendor", dependencies = graph.toPackageReferenceForest(projectId))
             )
 
             return listOf(
