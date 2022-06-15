@@ -190,8 +190,8 @@ class GoMod(
     }
 
     /**
-     * Determine the set of modules that are actually used by the [main module][projectId] by running the _go mod why_
-     * command repeatedly in [projectDir].
+     * Return the subset of the modules in [graph] required for building and testing the main module. So, test
+     * dependencies of dependencies are filtered out.
      */
     private fun getVendorModules(graph: Graph, projectDir: File, projectId: Identifier): Set<Identifier> {
         val vendorModuleNames = mutableSetOf(projectId.name)
