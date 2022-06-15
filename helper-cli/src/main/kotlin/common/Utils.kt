@@ -27,8 +27,11 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 
 import java.io.File
 import java.nio.file.Paths
+import java.sql.ResultSet
 
 import kotlin.io.path.createTempDirectory
+
+import org.jetbrains.exposed.sql.transactions.TransactionManager
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.Downloader
@@ -425,6 +428,20 @@ internal fun String.wrapAt(column: Int): String =
             appendLine(line)
         }
     }.trimEnd()
+
+/**
+ * Execute the raw SQL statement and map it using [transform].
+ */
+internal fun <T : Any> String.execAndMap(transform: (ResultSet) -> T): List<T> {
+    val result = mutableListOf<T>()
+    TransactionManager.current().exec(this) { resultSet ->
+        while (resultSet.next()) {
+            result += transform(resultSet)
+        }
+    }
+
+    return result
+}
 
 /**
  * Return all path excludes from [pathExcludes] represented as [RepositoryPathExcludes].
