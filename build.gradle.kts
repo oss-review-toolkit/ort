@@ -140,9 +140,6 @@ allprojects {
     }
 
     detekt {
-        // Align the detekt core and plugin versions.
-        toolVersion = detektPluginVersion
-
         // Only configure differences to the default.
         buildUponDefaultConfig = true
         config = files("$rootDir/.detekt.yml")
