@@ -17,10 +17,6 @@
  * License-Filename: LICENSE
  */
 
-val apacheCommonsEmailVersion: String by project
-val jiraRestClientVersion: String by project
-val mockkVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -45,13 +41,13 @@ dependencies {
 
     implementation(project(":utils:ort-utils"))
 
-    implementation("com.atlassian.jira:jira-rest-java-client-api:$jiraRestClientVersion")
-    implementation("com.atlassian.jira:jira-rest-java-client-app:$jiraRestClientVersion") {
+    implementation(libs.jiraRestClientApi)
+    implementation(libs.jiraRestClientApp) {
         exclude("org.slf4j", "slf4j-log4j12")
     }
-    implementation("org.apache.commons:commons-email:$apacheCommonsEmailVersion")
+    implementation(libs.commonsEmail)
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.mockk)
 }

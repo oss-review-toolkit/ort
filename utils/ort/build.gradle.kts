@@ -18,12 +18,6 @@
  * License-Filename: LICENSE
  */
 
-val commonsCompressVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val mockkVersion: String by project
-val okhttpVersion: String by project
-val xzVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -32,13 +26,13 @@ plugins {
 dependencies {
     api(project(":utils:common-utils"))
 
-    api("com.squareup.okhttp3:okhttp:$okhttpVersion")
+    api(libs.okhttp)
 
     implementation(project(":utils:spdx-utils"))
 
-    implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.tukaani:xz:$xzVersion")
+    implementation(libs.commonsCompress)
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.xz)
 
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.mockk)
 }
