@@ -29,7 +29,7 @@ plugins {
     `java-library`
 
     // Apply third-party plugins.
-    kotlin("plugin.serialization")
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {

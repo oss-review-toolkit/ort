@@ -38,7 +38,7 @@ plugins {
     `java-library`
 
     // Apply third-party plugins.
-    id("at.bxm.svntools")
+    alias(libs.plugins.svnTools)
 }
 
 tasks.withType<AntlrTask>().configureEach {
