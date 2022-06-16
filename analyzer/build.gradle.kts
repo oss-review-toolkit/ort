@@ -19,18 +19,6 @@
  * License-Filename: LICENSE
  */
 
-val digraphVersion: String by project
-val jacksonVersion: String by project
-val jrubyVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val mavenVersion: String by project
-val mavenResolverVersion: String by project
-val mockkVersion: String by project
-val semverVersion: String by project
-val sw360ClientVersion: String by project
-val toml4jVersion: String by project
-val wiremockVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -66,26 +54,22 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.moandjiezana.toml:toml4j:$toml4jVersion")
-    implementation("com.paypal.digraph:digraph-parser:$digraphVersion")
-    implementation("com.vdurmont:semver4j:$semverVersion")
-    implementation("org.apache.maven:maven-core:$mavenVersion")
-    implementation("org.apache.maven:maven-compat:$mavenVersion")
+    implementation(libs.jacksonModuleJaxbAnnotations)
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.toml4j)
+    implementation(libs.digraphParser)
+    implementation(libs.semver4j)
+    implementation(libs.bundles.maven)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
-    implementation("org.apache.maven.resolver:maven-resolver-connector-basic:$mavenResolverVersion")
-    implementation("org.apache.maven.resolver:maven-resolver-transport-file:$mavenResolverVersion")
-    implementation("org.apache.maven.resolver:maven-resolver-transport-http:$mavenResolverVersion")
-    implementation("org.apache.maven.resolver:maven-resolver-transport-wagon:$mavenResolverVersion")
+    implementation(libs.bundles.mavenResolver)
 
-    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
+    implementation(libs.sw360Client)
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.jruby:jruby-complete:$jrubyVersion")
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.jruby)
 
-    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.wiremock)
+    testImplementation(libs.mockk)
 }

@@ -35,11 +35,6 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val jacksonVersion: String by project
-val kotestVersion: String by project
-val log4jCoreVersion: String by project
-val okhttpVersion: String by project
-
 plugins {
     alias(libs.plugins.buildConfig)
     alias(libs.plugins.detekt)
@@ -52,9 +47,7 @@ plugins {
 
 buildscript {
     dependencies {
-        // For some reason "jgitVersion" needs to be declared here instead of globally.
-        val jgitVersion: String by project
-        classpath("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
+        classpath(libs.jgit)
     }
 }
 
@@ -192,8 +185,8 @@ subprojects {
         dependencies {
             "testImplementation"(project(":utils:test-utils"))
 
-            "testImplementation"("io.kotest:kotest-runner-junit5:$kotestVersion")
-            "testImplementation"("io.kotest:kotest-assertions-core:$kotestVersion")
+            "testImplementation"(libs.kotestAssertionsCore)
+            "testImplementation"(libs.kotestRunnerJunit5)
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
@@ -209,10 +202,10 @@ subprojects {
         if (!name.startsWith("detekt")) {
             resolutionStrategy {
                 // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
-                force("com.squareup.okhttp3:okhttp:$okhttpVersion")
+                force(rootProject.libs.okhttp)
 
                 // Ensure all API library versions match our core library version.
-                force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
+                force(rootProject.libs.log4jApi)
 
                 // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
                 force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
@@ -242,6 +235,9 @@ subprojects {
             configureEach {
                 jdkVersion.set(11)
 
+                val jacksonVersion = libs.versions.jackson.get()
+                val log4jVersion = libs.versions.log4j.get()
+
                 externalDocumentationLink {
                     val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
                     url.set(URL(baseUrl))
@@ -262,7 +258,7 @@ subprojects {
                 }
 
                 externalDocumentationLink {
-                    val majorVersion = log4jCoreVersion.substringBefore('.')
+                    val majorVersion = log4jVersion.substringBefore('.')
                     val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
                     url.set(URL(baseUrl))
                     packageListUrl.set(URL("$baseUrl/package-list"))

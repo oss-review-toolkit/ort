@@ -28,8 +28,6 @@ import java.time.Year
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val antlrVersion: String by project
-val jacksonVersion: String by project
 val spdxLicenseListVersion: String by project
 
 plugins {
@@ -50,14 +48,14 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
-    antlr("org.antlr:antlr4:$antlrVersion")
+    antlr(libs.antlr)
 
     implementation(project(":utils:common-utils"))
 
-    implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
+    implementation(libs.jacksonDatabind)
+    implementation(libs.jacksonDataformatYaml)
+    implementation(libs.jacksonDatatypeJsr310)
+    implementation(libs.jacksonModuleKotlin)
 }
 
 val importScanCodeLicenseTexts by tasks.registering(SvnExport::class) {

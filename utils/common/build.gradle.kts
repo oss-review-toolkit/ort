@@ -17,25 +17,18 @@
  * License-Filename: LICENSE
  */
 
-val commonsCompressVersion: String by project
-val disklrucacheVersion: String by project
-val log4jApiKotlinVersion: String by project
-val jacksonVersion: String by project
-val semverVersion: String by project
-val springCoreVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
 }
 
 dependencies {
-    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    api("com.vdurmont:semver4j:$semverVersion")
-    api("org.apache.logging.log4j:log4j-api-kotlin:$log4jApiKotlinVersion")
+    api(libs.jacksonDatabind)
+    api(libs.semver4j)
+    api(libs.log4jApiKotlin)
 
-    implementation("com.jakewharton:disklrucache:$disklrucacheVersion")
-    implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
+    implementation(libs.diskLruCache)
+    implementation(libs.commonsCompress)
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
-    implementation("org.springframework:spring-core:$springCoreVersion")
+    implementation(libs.springCore)
 }
