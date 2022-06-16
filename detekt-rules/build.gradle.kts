@@ -29,7 +29,7 @@ plugins {
 }
 
 dependencies {
-    implementation("io.gitlab.arturbosch.detekt:detekt-api:$detektPluginVersion")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektPluginVersion")
 }
 
 tasks.named<Jar>("jar").configure {
