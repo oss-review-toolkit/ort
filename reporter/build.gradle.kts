@@ -26,7 +26,6 @@ val commonsCompressVersion: String by project
 val cyclonedxCoreJavaVersion: String by project
 val flexmarkVersion: String by project
 val freemarkerVersion: String by project
-val hamcrestCoreVersion: String by project
 val jacksonVersion: String by project
 val kotestVersion: String by project
 val kotlinxCoroutinesVersion: String by project
@@ -34,7 +33,6 @@ val kotlinxHtmlVersion: String by project
 val mockkVersion: String by project
 val retrofitVersion: String by project
 val saxonHeVersion: String by project
-val simpleExcelVersion: String by project
 
 plugins {
     // Apply core plugins.
