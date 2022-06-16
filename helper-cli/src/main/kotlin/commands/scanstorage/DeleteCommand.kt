@@ -106,11 +106,12 @@ internal class DeleteCommand : CliktCommand(
             val ids = database.transaction {
                 // language=PostgreSQL
                 """
-                SELECT id
-                FROM scan_storage.scan_results
-                WHERE (scan_result -> 'summary' -> 'licenses')::jsonb @> '[{"license": "$license"}]'::jsonb
+                SELECT ${ScanResults.id.name}
+                FROM ${ScanResults.tableName}
+                WHERE (${ScanResults.scanResult.name} -> 'summary' -> 'licenses')::jsonb @>
+                    '[{"license": "$license"}]'::jsonb
                 """.trimIndent().execAndMap {
-                    it.getInt("id")
+                    it.getInt(ScanResults.id.name)
                 }
             }
 
