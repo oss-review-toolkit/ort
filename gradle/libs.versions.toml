@@ -1,0 +1,26 @@
+[versions]
+buildConfigPlugin = "3.0.3"
+detektPlugin = "1.20.0"
+dokkaPlugin = "1.6.21"
+graalPlugin = "0.10.0"
+graphQlPlugin = "5.5.0"
+ideaExtPlugin = "1.1.4"
+kotlinPlugin = "1.7.0"
+shadowPlugin = "7.1.2"
+svnToolsPlugin = "3.1"
+taskInfoPlugin = "1.4.0"
+versionsPlugin = "0.42.0"
+
+[plugins]
+buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfigPlugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detektPlugin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokkaPlugin" }
+graal = { id = "com.palantir.graal", version.ref = "graalPlugin" }
+graphQl = { id = "com.expediagroup.graphql", version.ref = "graphQlPlugin" }
+ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
+kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadowPlugin" }
+svnTools = { id = "at.bxm.svntools", version.ref = "svnToolsPlugin" }
+taskInfo = { id = "org.barfuin.gradle.taskinfo", version.ref = "taskInfoPlugin" }
+versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
