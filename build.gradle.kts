@@ -35,23 +35,19 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val detektPluginVersion: String by project
-val kotlinPluginVersion: String by project
-
 val jacksonVersion: String by project
 val kotestVersion: String by project
 val log4jCoreVersion: String by project
 val okhttpVersion: String by project
 
 plugins {
-    kotlin("jvm")
-
-    id("com.github.ben-manes.versions")
-    id("com.github.gmazzo.buildconfig")
-    id("io.gitlab.arturbosch.detekt")
-    id("org.barfuin.gradle.taskinfo")
-    id("org.jetbrains.dokka")
-    id("org.jetbrains.gradle.plugin.idea-ext")
+    alias(libs.plugins.buildConfig)
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.ideaExt)
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.taskInfo)
+    alias(libs.plugins.versions)
 }
 
 buildscript {
@@ -136,7 +132,7 @@ allprojects {
     dependencies {
         "detektPlugins"(project(":detekt-rules"))
 
-        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:$detektPluginVersion")
+        "detektPlugins"("io.gitlab.arturbosch.detekt:detekt-formatting:${rootProject.libs.versions.detektPlugin.get()}")
     }
 
     detekt {
@@ -204,7 +200,7 @@ subprojects {
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinPluginVersion")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${rootProject.libs.versions.kotlinPlugin.get()}")
     }
 
     configurations.all {
@@ -219,8 +215,8 @@ subprojects {
                 force("org.apache.logging.log4j:log4j-api:$log4jCoreVersion")
 
                 // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
-                force("org.jetbrains.kotlin:kotlin-reflect:$kotlinPluginVersion")
-                force("org.jetbrains.kotlin:kotlin-script-runtime:$kotlinPluginVersion")
+                force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
+                force("org.jetbrains.kotlin:kotlin-script-runtime:${rootProject.libs.versions.kotlinPlugin.get()}")
             }
         }
     }
