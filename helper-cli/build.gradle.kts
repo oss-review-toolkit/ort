@@ -35,7 +35,7 @@ plugins {
     application
 
     // Apply third-party plugins.
-    id("com.github.johnrengelman.shadow")
+    alias(libs.plugins.shadow)
 }
 
 application {

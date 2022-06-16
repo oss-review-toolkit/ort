@@ -21,15 +21,13 @@ import org.gradle.internal.logging.text.StyledTextOutput
 import org.gradle.internal.logging.text.StyledTextOutputFactory
 import org.gradle.kotlin.dsl.support.serviceOf
 
-val detektPluginVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
 }
 
 dependencies {
-    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:$detektPluginVersion")
+    compileOnly("io.gitlab.arturbosch.detekt:detekt-api:${libs.versions.detektPlugin.get()}")
 }
 
 tasks.named<Jar>("jar").configure {

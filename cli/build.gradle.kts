@@ -43,8 +43,8 @@ plugins {
     application
 
     // Apply third-party plugins.
-    id("com.github.johnrengelman.shadow")
-    id("com.palantir.graal")
+    alias(libs.plugins.graal)
+    alias(libs.plugins.shadow)
 }
 
 application {
