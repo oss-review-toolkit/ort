@@ -18,15 +18,6 @@
  * License-Filename: LICENSE
  */
 
-val exposedVersion: String by project
-val hikariVersion: String by project
-val hopliteVersion: String by project
-val jacksonVersion: String by project
-val jsonSchemaValidatorVersion: String by project
-val postgresVersion: String by project
-val mockkVersion: String by project
-val semverVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -37,24 +28,20 @@ dependencies {
     api(project(":utils:ort-utils"))
     api(project(":utils:spdx-utils"))
 
-    api("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-    api("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
-    api("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
+    api(libs.jacksonDatabind)
+    api(libs.jacksonDataformatXml)
+    api(libs.jacksonDataformatYaml)
 
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:$jacksonVersion")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.sksamuel.hoplite:hoplite-core:$hopliteVersion")
-    implementation("com.sksamuel.hoplite:hoplite-hocon:$hopliteVersion")
-    implementation("com.vdurmont:semver4j:$semverVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation(libs.jacksonDatatypeJsr310)
+    implementation(libs.jacksonModuleJaxbAnnotations)
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.bundles.hoplite)
+    implementation(libs.semver4j)
+    implementation(libs.hikari)
+    implementation(libs.bundles.exposed)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.postgresql:postgresql:$postgresVersion")
+    implementation(libs.postgres)
 
-    testImplementation("com.networknt:json-schema-validator:$jsonSchemaValidatorVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.jsonSchemaValidator)
+    testImplementation(libs.mockk)
 }

@@ -23,21 +23,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import java.nio.charset.Charset
 
-val cliktVersion: String by project
-val config4kVersion: String by project
-val exposedVersion: String by project
-val graalVmVersion: String by project
-val jacksonVersion: String by project
-val hikariVersion: String by project
-val kotestVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val logbackClassicVersion: String by project
-val slf4jVersion: String by project
-val postgresVersion: String by project
-val reflectionsVersion: String by project
-val sw360ClientVersion: String by project
-val greenMailVersion: String by project
-
 plugins {
     // Apply core plugins.
     application
@@ -53,7 +38,7 @@ application {
 }
 
 graal {
-    graalVersion(graalVmVersion)
+    graalVersion(libs.versions.graalVm.get())
     javaVersion("17")
 
     option("--no-fallback")
@@ -162,29 +147,25 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("io.github.config4k:config4k:$config4kVersion")
-    implementation("ch.qos.logback:logback-classic:$logbackClassicVersion")
-    implementation("org.slf4j:slf4j-api:$slf4jVersion")
-    implementation("org.slf4j:jcl-over-slf4j:$slf4jVersion")
-    implementation("org.slf4j:jul-to-slf4j:$slf4jVersion")
-    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    implementation(libs.jacksonDatabind)
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.clikt)
+    implementation(libs.hikari)
+    implementation(libs.config4k)
+    implementation(libs.log4jCore)
+    implementation(libs.log4jImplSlf4j)
+    implementation(libs.sw360Client)
+    implementation(libs.bundles.exposed)
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.postgresql:postgresql:$postgresVersion")
-    implementation("org.reflections:reflections:$reflectionsVersion")
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.postgres)
+    implementation(libs.reflections)
 
     testImplementation(project(":utils:test-utils"))
 
-    testImplementation("com.icegreen:greenmail:$greenMailVersion")
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation(libs.greenmail)
+    testImplementation(libs.kotestAssertionsCore)
+    testImplementation(libs.kotestRunnerJunit5)
 
     funTestImplementation(sourceSets["main"].output)
     funTestImplementation(sourceSets["test"].output)

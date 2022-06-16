@@ -18,8 +18,6 @@
  * License-Filename: LICENSE
  */
 
-val mockkVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -35,5 +33,5 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.mockk)
 }
