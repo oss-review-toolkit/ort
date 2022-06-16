@@ -18,11 +18,6 @@
  * License-Filename: LICENSE
  */
 
-val jacksonVersion: String by project
-val kotestVersion: String by project
-val log4jCoreVersion: String by project
-val postgresEmbeddedVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -32,12 +27,12 @@ dependencies {
     api(project(":model"))
     api(project(":utils:ort-utils"))
 
-    api("io.kotest:kotest-assertions-core:$kotestVersion")
-    api("io.kotest:kotest-framework-api:$kotestVersion")
+    api(libs.kotestAssertionsCore)
+    api(libs.kotestFrameworkApi)
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
-    implementation("io.kotest:kotest-extensions-junitxml:$kotestVersion")
-    implementation("io.kotest:kotest-framework-engine:$kotestVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.postgresEmbedded)
+    implementation(libs.kotestExtensionsJunitXml)
+    implementation(libs.kotestFrameworkEngine)
+    implementation(libs.log4jImplSlf4j)
 }

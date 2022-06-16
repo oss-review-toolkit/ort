@@ -19,11 +19,6 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val kotlinxSerializationVersion: String by project
-val retrofitVersion: String by project
-val retrofitKotlinxSerializationConverterVersion: String by project
-val wiremockVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -33,15 +28,12 @@ plugins {
 }
 
 dependencies {
-    api("com.squareup.retrofit2:retrofit:$retrofitVersion")
+    api(libs.retrofit)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinxSerializationVersion")
-    implementation(
-        "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:" +
-                retrofitKotlinxSerializationConverterVersion
-    )
+    implementation(libs.kotlinxSerialization)
+    implementation(libs.retrofitConverterKotlinxSerialization)
 
-    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
+    testImplementation(libs.wiremock)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
