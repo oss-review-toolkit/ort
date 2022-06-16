@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-val kotlinxCoroutinesVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -32,5 +30,5 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation(libs.kotlinxCoroutines)
 }

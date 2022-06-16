@@ -18,10 +18,6 @@
  * License-Filename: LICENSE
  */
 
-val kotlinxCoroutinesVersion: String by project
-val mockkVersion: String by project
-val wiremockVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -34,8 +30,8 @@ dependencies {
     api(project(":clients:github-graphql"))
     api(project(":model"))
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
+    implementation(libs.kotlinxCoroutines)
 
-    testImplementation("com.github.tomakehurst:wiremock-jre8:$wiremockVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.wiremock)
+    testImplementation(libs.mockk)
 }

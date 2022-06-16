@@ -22,13 +22,6 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 import java.nio.charset.Charset
 
-val cliktVersion: String by project
-val commonsCompressVersion: String by project
-val exposedVersion: String by project
-val hikariVersion: String by project
-val jsltVersion: String by project
-val log4jCoreVersion: String by project
-
 plugins {
     // Apply core plugins.
     application
@@ -98,11 +91,11 @@ dependencies {
     implementation(project(":scanner"))
     implementation(project(":utils:ort-utils"))
 
-    implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
-    implementation("com.schibsted.spt.data:jslt:$jsltVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("org.apache.commons:commons-compress:$commonsCompressVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation(libs.clikt)
+    implementation(libs.jslt)
+    implementation(libs.hikari)
+    implementation(libs.commonsCompress)
+    implementation(libs.log4jCore)
+    implementation(libs.log4jImplSlf4j)
+    implementation(libs.exposedCore)
 }
