@@ -27,6 +27,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class PackageManagerConfiguration(
     /**
+     * A list of package manager names that this package manager must run after. For example, this can be used, if
+     * another package manager generates files that this package manager requires to run correctly.
+     */
+    val mustRunAfter: List<String>? = null,
+
+    /**
      * Custom configuration options for the package manager. See the documentation of the respective class for available
      * options.
      */
