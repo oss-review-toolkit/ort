@@ -31,8 +31,8 @@ dependencies {
     api(libs.kotestFrameworkApi)
 
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.postgresEmbedded)
     implementation(libs.kotestExtensionsJunitXml)
     implementation(libs.kotestFrameworkEngine)
     implementation(libs.log4jImplSlf4j)
+    implementation(libs.postgresEmbedded)
 }

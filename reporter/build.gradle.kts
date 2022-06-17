@@ -61,18 +61,18 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation(libs.jacksonDatatypeJsr310)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.retrofit)
-    implementation(libs.flexmark)
-    implementation(libs.commonsCompress)
-    implementation(libs.poiOoxml)
     implementation(libs.asciidoctorj)
     implementation(libs.asciidoctorjPdf)
+    implementation(libs.commonsCompress)
     implementation(libs.cyclonedx)
+    implementation(libs.flexmark)
     implementation(libs.freemarker)
+    implementation(libs.jacksonDatatypeJsr310)
+    implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxHtml)
+    implementation(libs.poiOoxml)
+    implementation(libs.retrofit)
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.

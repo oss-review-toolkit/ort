@@ -51,19 +51,19 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
 
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.scanoss)
-    implementation(libs.retrofitConverterJackson)
-    implementation(libs.hikari)
-    implementation(libs.sw360Client)
     implementation(libs.bundles.exposed)
+    implementation(libs.hikari)
+    implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.postgres)
+    implementation(libs.retrofitConverterJackson)
+    implementation(libs.scanoss)
+    implementation(libs.sw360Client)
 
-    testImplementation(libs.wiremock)
-    testImplementation(libs.mockk)
     testImplementation(libs.kotlinxSerialization)
+    testImplementation(libs.mockk)
     testImplementation(libs.retrofitConverterKotlinxSerialization)
+    testImplementation(libs.wiremock)
 }
 
 buildConfig {

@@ -24,11 +24,11 @@ plugins {
 
 dependencies {
     api(libs.jacksonDatabind)
-    api(libs.semver4j)
     api(libs.log4jApiKotlin)
+    api(libs.semver4j)
 
-    implementation(libs.diskLruCache)
-    implementation(libs.commonsCompress)
     implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
+    implementation(libs.commonsCompress)
+    implementation(libs.diskLruCache)
     implementation(libs.springCore)
 }
