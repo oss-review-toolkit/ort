@@ -23,12 +23,12 @@ plugins {
 }
 
 dependencies {
-    api(libs.retrofit)
     api(libs.log4jApiKotlin)
+    api(libs.retrofit)
 
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.retrofitConverterJackson)
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.retrofitConverterJackson)
 
     testImplementation(libs.wiremock)
 }
