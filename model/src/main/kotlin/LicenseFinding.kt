@@ -83,8 +83,11 @@ data class LicenseFinding(
 private fun String.applyDetectedLicenseMapping(detectedLicenseMapping: Map<String, String>): String {
     var result = this
     detectedLicenseMapping.forEach { (from, to) ->
-        // Replace a license restricted by whitespace boundaries.
-        result = result.replace("""(?<!\S)${Regex.escape(from)}""".toRegex(), to)
+        val regex = """(^| |\()(${Regex.escape(from)})($| |\))""".toRegex()
+
+        result = regex.replace(result) {
+            "${it.groupValues[1]}${to}${it.groupValues[3]}"
+        }
     }
 
     return result
