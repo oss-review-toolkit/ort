@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.ort.log
 
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
-*/
+ */
 class Poetry(
     name: String,
     analysisRoot: File,
