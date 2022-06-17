@@ -41,13 +41,13 @@ dependencies {
 
     implementation(project(":utils:ort-utils"))
 
+    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
+    implementation(libs.commonsEmail)
     implementation(libs.jiraRestClientApi)
     implementation(libs.jiraRestClientApp) {
         exclude("org.slf4j", "slf4j-log4j12")
     }
-    implementation(libs.commonsEmail)
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     testImplementation(libs.mockk)
 }

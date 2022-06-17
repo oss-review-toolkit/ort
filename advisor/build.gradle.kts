@@ -32,6 +32,6 @@ dependencies {
 
     implementation(libs.kotlinxCoroutines)
 
-    testImplementation(libs.wiremock)
     testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }
