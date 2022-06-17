@@ -40,6 +40,19 @@ class LicenseFindingTest : WordSpec({
             )
         }
 
+        "apply the detected license mapping if the mapping is wrapped in parentheses" {
+            LicenseFinding.createAndMap(
+                license = "(a)",
+                location = TextLocation(".", -1),
+                detectedLicenseMapping = mapOf(
+                    "(a)" to "b",
+                )
+            ) shouldBe LicenseFinding(
+                license = "b".toSpdx(),
+                location = TextLocation(".", -1),
+            )
+        }
+
         "apply the detected license mapping to a valid SPDX expression" {
             LicenseFinding.createAndMap(
                 license = "LicenseRef-scancode-unknown",
@@ -62,6 +75,19 @@ class LicenseFindingTest : WordSpec({
                 )
             ) shouldBe LicenseFinding(
                 license = "AGPL-1.0-or-later".toSpdx(),
+                location = TextLocation(".", -1),
+            )
+        }
+
+        "apply the detected license mapping only on word boundaries" {
+            LicenseFinding.createAndMap(
+                license = "LicenseRef-scancode-unknown-license-reference",
+                location = TextLocation(".", -1),
+                detectedLicenseMapping = mapOf(
+                    "LicenseRef-scancode-unknown" to SpdxConstants.NOASSERTION,
+                )
+            ) shouldBe LicenseFinding(
+                license = "LicenseRef-scancode-unknown-license-reference".toSpdx(),
                 location = TextLocation(".", -1),
             )
         }
@@ -97,6 +123,19 @@ class LicenseFindingTest : WordSpec({
                 )
             ) shouldBe LicenseFinding(
                 license = "(AGPL-1.0-or-later AND BSD-3-Clause) OR MIT".toSpdx(),
+                location = TextLocation(".", -1),
+            )
+        }
+
+        "apply the detected license mapping without removing necessary parentheses" {
+            LicenseFinding.createAndMap(
+                license = "(a OR b) AND c",
+                location = TextLocation(".", -1),
+                detectedLicenseMapping = mapOf(
+                    "a" to "d",
+                )
+            ) shouldBe LicenseFinding(
+                license = "(d OR b) AND c".toSpdx(),
                 location = TextLocation(".", -1),
             )
         }
