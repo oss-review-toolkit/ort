@@ -16,6 +16,17 @@ project:
     path: "<REPLACE_PATH>"
   homepage_url: ""
   scopes:
+  - name: "main"
+    dependencies:
+    - id: "GoMod::github.com/fatih/color:v1.7.0"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+      linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+        linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
     - id: "GoMod::github.com/fatih/color:v1.7.0"
