@@ -85,8 +85,10 @@ fun scanOrtResult(
 
     // Note: Currently, each scanner gets its own reference to the whole scanner configuration, which includes the
     // options for all scanners.
-    check(packageScanner?.scannerConfig === projectScanner?.scannerConfig) {
-        "The package and project scanners need to refer to the same global scanner configuration."
+    if (packageScanner != null && projectScanner != null) {
+        check(packageScanner.scannerConfig === projectScanner.scannerConfig) {
+            "The package and project scanners need to refer to the same global scanner configuration."
+        }
     }
 
     if (ortResult.analyzer == null) {
