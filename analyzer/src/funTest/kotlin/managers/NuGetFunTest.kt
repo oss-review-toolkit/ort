@@ -31,6 +31,7 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -100,7 +101,13 @@ class NuGetFunTest : StringSpec() {
             "NuGet",
             USER_DIR,
             DEFAULT_ANALYZER_CONFIGURATION.copy(
-                options = mapOf("NuGet" to mapOf(OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"))
+                packageManagers = mapOf(
+                    "NuGet" to PackageManagerConfiguration(
+                        options = mapOf(
+                            OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
+                        )
+                    )
+                )
             ),
             DEFAULT_REPOSITORY_CONFIGURATION
         )
