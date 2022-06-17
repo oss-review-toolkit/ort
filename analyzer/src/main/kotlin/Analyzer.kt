@@ -155,6 +155,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                     onResult = { result -> state.addResult(manager, result) }
                 )
             }.forEach { launch { it.start() } }
+
+            state.finishedPackageManagersState.first { finishedPackageManagers ->
+                finishedPackageManagers.containsAll(managedFiles.keys.map { it.managerName })
+            }
         }
 
         return state.buildResult()
