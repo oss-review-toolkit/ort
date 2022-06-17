@@ -92,10 +92,10 @@ dependencies {
     implementation(project(":utils:ort-utils"))
 
     implementation(libs.clikt)
-    implementation(libs.jslt)
-    implementation(libs.hikari)
     implementation(libs.commonsCompress)
+    implementation(libs.exposedCore)
+    implementation(libs.hikari)
+    implementation(libs.jslt)
     implementation(libs.log4jCore)
     implementation(libs.log4jImplSlf4j)
-    implementation(libs.exposedCore)
 }
