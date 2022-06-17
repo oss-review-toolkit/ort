@@ -38,12 +38,13 @@ import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
  *
- * This package manager supports the following [options][AnalyzerConfiguration.options]:
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *directDependenciesOnly*: If true, only direct dependencies are reported. Defaults to false.
  */
 class NuGet(
@@ -63,7 +64,7 @@ class NuGet(
     }
 
     private val directDependenciesOnly =
-        analyzerConfig.options?.get(managerName)?.get(OPTION_DIRECT_DEPENDENCIES_ONLY).toBoolean()
+        analyzerConfig.packageManagers?.get(managerName)?.options?.get(OPTION_DIRECT_DEPENDENCIES_ONLY).toBoolean()
 
     private val reader = NuGetPackageFileReader()
 
