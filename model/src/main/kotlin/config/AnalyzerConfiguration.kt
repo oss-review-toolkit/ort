@@ -48,10 +48,10 @@ data class AnalyzerConfiguration(
     val disabledPackageManagers: List<String>? = null,
 
     /**
-     * Package manager specific configuration options. The key needs to match the name of the package manager class,
-     * e.g. "NuGet" for the NuGet package manager. See the documentation of the respective class for available options.
+     * Package manager specific configurations. The key needs to match the name of the package manager class, e.g.
+     * "NuGet" for the NuGet package manager.
      */
-    val options: Map<String, Options>? = null,
+    val packageManagers: Map<String, PackageManagerConfiguration>? = null,
 
     /**
      * Configuration of the SW360 package curation provider.

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
+import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -48,6 +50,14 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
+
+                packageManagers shouldNotBeNull {
+                    get("DotNet") shouldNotBeNull {
+                        options shouldNotBeNull {
+                            this shouldContainExactly mapOf("directDependenciesOnly" to "true")
+                        }
+                    }
+                }
 
                 sw360Configuration shouldNotBeNull {
                     restUrl shouldBe "https://your-sw360-rest-url"
