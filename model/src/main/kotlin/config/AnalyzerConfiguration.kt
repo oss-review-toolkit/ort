@@ -36,6 +36,18 @@ data class AnalyzerConfiguration(
     val allowDynamicVersions: Boolean = false,
 
     /**
+     * A list of the case-insensitive names of package managers that are enabled. Disabling a package manager in
+     * [disabledPackageManagers] overrides enabling it here.
+     */
+    val enabledPackageManagers: List<String>? = null,
+
+    /**
+     * A list of the case-insensitive names of package managers that are disabled. Disabling a package manager in this
+     * list overrides [enabledPackageManagers].
+     */
+    val disabledPackageManagers: List<String>? = null,
+
+    /**
      * Package manager specific configuration options. The key needs to match the name of the package manager class,
      * e.g. "NuGet" for the NuGet package manager. See the documentation of the respective class for available options.
      */

@@ -65,7 +65,7 @@ class OrtMainFunTest : StringSpec() {
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are activated:") break
+                if (iterator.next() == "The following package managers are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
@@ -83,7 +83,7 @@ class OrtMainFunTest : StringSpec() {
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are activated:") break
+                if (iterator.next() == "The following package managers are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
