@@ -54,22 +54,22 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation(libs.jacksonModuleJaxbAnnotations)
-    implementation(libs.jacksonModuleKotlin)
-    implementation(libs.toml4j)
-    implementation(libs.digraphParser)
-    implementation(libs.semver4j)
+    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation(libs.bundles.maven)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
     implementation(libs.bundles.mavenResolver)
 
-    implementation(libs.sw360Client)
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.kotlinxCoroutines)
+    implementation(libs.digraphParser)
+    implementation(libs.jacksonModuleJaxbAnnotations)
+    implementation(libs.jacksonModuleKotlin)
     implementation(libs.jruby)
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.semver4j)
+    implementation(libs.sw360Client)
+    implementation(libs.toml4j)
 
-    testImplementation(libs.wiremock)
     testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }
