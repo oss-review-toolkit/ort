@@ -177,7 +177,7 @@ class OrtConfigurationTest : WordSpec({
                     hostName shouldBe "localhost"
                     port shouldBe 465
                     username shouldBe "user"
-                    password shouldBe "secret"
+                    password shouldBe "password"
                     useSsl shouldBe true
                     fromAddress shouldBe "no-reply@oss-review-toolkit.org"
                 }
@@ -185,7 +185,7 @@ class OrtConfigurationTest : WordSpec({
                 jira shouldNotBeNull {
                     host shouldBe "localhost"
                     username shouldBe "user"
-                    password shouldBe "secret"
+                    password shouldBe "password"
                 }
             }
 
