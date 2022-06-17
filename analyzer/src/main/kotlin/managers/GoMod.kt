@@ -96,8 +96,20 @@ class GoMod(
             val packageIds = graph.nodes() - projectId
             val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
             val projectVcs = processProjectVcs(projectDir)
+
+            val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
+                graph.nodes().filterTo(mutableSetOf()) { it.name in moduleNames }
+            }
+
             val scopes = sortedSetOf(
-                Scope(name = "vendor", dependencies = graph.toPackageReferenceForest(projectId))
+                Scope(
+                    name = "main",
+                    dependencies = graph.subgraph(dependenciesScopePackageIds).toPackageReferenceForest(projectId)
+                ),
+                Scope(
+                    name = "vendor",
+                    dependencies = graph.toPackageReferenceForest(projectId)
+                )
             )
 
             return listOf(
@@ -199,6 +211,26 @@ class GoMod(
         }
 
         return graph.nodes().filterTo(mutableSetOf()) { it.name in vendorModuleNames }
+    }
+
+    /**
+     * Return the module names of all transitive main module dependencies. This excludes test-only dependencies.
+     */
+    private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
+        val result = mutableSetOf<String>()
+
+        val list = run(
+            "list", "-deps", "-f", "{{with .Module}}{{.Path}} {{.Version}}{{end}}", "./...", workingDir = projectDir
+        )
+
+        list.stdout.lines().forEach { line ->
+            val columns = line.split(' ')
+            if (columns.size != 2) return@forEach
+
+            result += columns[0]
+        }
+
+        return result
     }
 
     private fun createPackage(id: Identifier): Package {
