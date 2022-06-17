@@ -28,6 +28,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -159,7 +160,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
-    }.split(",")
+    }.split(",").deprecated(
+        message = "--package-managers is deprecated, use -P ort.analyzer.enabledPackageManagers=... on the ort " +
+                "command instead.",
+        tagValue = "use -P ort.analyzer.enabledPackageManagers=... on the ort command instead"
+    )
 
     private val deactivatedPackageManagers by option(
         "--not-package-managers", "-n",
@@ -169,7 +174,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
-    }.split(",")
+    }.split(",").deprecated(
+        message = "--not-package-managers is deprecated, use -P ort.analyzer.disabledPackageManagers=... on the ort " +
+                "command instead.",
+        tagValue = "use -P ort.analyzer.disabledPackageManagers=... on the ort command instead"
+    )
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
