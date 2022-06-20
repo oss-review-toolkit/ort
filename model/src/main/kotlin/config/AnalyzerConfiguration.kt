@@ -57,4 +57,25 @@ data class AnalyzerConfiguration(
      * Configuration of the SW360 package curation provider.
      */
     val sw360Configuration: Sw360StorageConfiguration? = null
-)
+) {
+    /**
+     * A copy of [packageManagers] with case-insensitive keys.
+     */
+    private val packageManagersCaseInsensitive: Map<String, PackageManagerConfiguration>? =
+        packageManagers?.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+
+    init {
+        val duplicatePackageManagers =
+            packageManagers?.keys.orEmpty() - packageManagersCaseInsensitive?.keys?.toSet().orEmpty()
+
+        require(duplicatePackageManagers.isEmpty()) {
+            "The following package managers have duplicate configuration: ${duplicatePackageManagers.joinToString()}."
+        }
+    }
+
+    /**
+     * Get a [PackageManagerConfiguration] from [packageManagers]. The difference to accessing the map directly is that
+     * [packageManager] can be case-insensitive.
+     */
+    fun getPackageManagerConfiguration(packageManager: String) = packageManagersCaseInsensitive?.get(packageManager)
+}
