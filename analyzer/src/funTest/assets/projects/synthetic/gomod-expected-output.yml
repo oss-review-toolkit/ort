@@ -36,6 +36,8 @@ project:
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/fatih/color:v1.13.0"
       linkage: "PROJECT_STATIC"
+    - id: "GoMod::github.com/go-playground/assert/v2:v2.0.1"
+      linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/google/uuid:v1.0.0"
       linkage: "PROJECT_STATIC"
     - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
@@ -104,6 +106,32 @@ packages:
     type: "Git"
     url: "https://github.com/fatih/color.git"
     revision: "v1.13.0"
+    path: ""
+- id: "GoMod::github.com/go-playground/assert/v2:v2.0.1"
+  purl: "pkg:golang/github.com%2Fgo-playground%2Fassert%2Fv2@v2.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/go-playground/assert.git"
+    revision: "v2.0.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/go-playground/assert.git"
+    revision: "v2.0.1"
     path: ""
 - id: "GoMod::github.com/google/uuid:v1.0.0"
   purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@v1.0.0"
