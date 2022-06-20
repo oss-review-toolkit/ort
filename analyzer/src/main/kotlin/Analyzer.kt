@@ -150,7 +150,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                     manager = manager,
                     definitionFiles = files,
                     labels = labels,
-                    mustRunAfter = config.packageManagers?.get(manager.managerName)?.mustRunAfter?.toSet().orEmpty(),
+                    mustRunAfter = config.getPackageManagerConfiguration(manager.managerName)?.mustRunAfter?.toSet()
+                        .orEmpty(),
                     finishedPackageManagersState = state.finishedPackageManagersState,
                     onResult = { result -> state.addResult(manager, result) }
                 )
