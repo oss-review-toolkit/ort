@@ -171,7 +171,9 @@ class GoMod(
 
         val list = run("list", "-m", "all", workingDir = projectDir)
         list.stdout.lines().forEach { line ->
-            val columns = line.split(' ')
+            // For replaced modules the line is formatted as "${orig-module} => ${replaced-module}", see also
+            // https://go.dev/ref/mod#go-mod-file-replace.
+            val columns = line.substringAfterLast(" => ").split(' ')
             if (columns.size != 2) return@forEach
 
             result += Identifier(type = managerName, namespace = "", name = columns[0], version = columns[1])
