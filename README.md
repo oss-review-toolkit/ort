@@ -326,8 +326,7 @@ supported:
   * [dep](https://golang.github.io/dep/)
   * [Glide](https://github.com/Masterminds/glide)
   * [Godep](https://github.com/tools/godep)
-  * [GoMod](https://github.com/golang/go/wiki/Modules) (limitations:
-    [no `replace` directive](https://github.com/oss-review-toolkit/ort/issues/4445))
+  * [GoMod](https://github.com/golang/go/wiki/Modules)
 * Haskell
   * [Stack](https://haskellstack.org/)
 * Java
