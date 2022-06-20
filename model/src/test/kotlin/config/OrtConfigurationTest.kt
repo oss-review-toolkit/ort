@@ -61,6 +61,10 @@ class OrtConfigurationTest : WordSpec({
                             this shouldContainExactly mapOf("directDependenciesOnly" to "true")
                         }
                     }
+
+                    getPackageManagerConfiguration("gradle") shouldNotBeNull {
+                        this shouldBe get("Gradle")
+                    }
                 }
 
                 sw360Configuration shouldNotBeNull {

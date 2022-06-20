@@ -65,7 +65,8 @@ class DotNet(
     }
 
     private val directDependenciesOnly =
-        analyzerConfig.packageManagers?.get(managerName)?.options?.get(OPTION_DIRECT_DEPENDENCIES_ONLY).toBoolean()
+        analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_DIRECT_DEPENDENCIES_ONLY)
+            .toBoolean()
 
     private val reader = DotNetPackageFileReader()
 
