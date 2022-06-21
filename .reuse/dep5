@@ -24,6 +24,10 @@ Files: mlc_config.json
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: NOTICE
+Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
 Files: */src/main/resources/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
