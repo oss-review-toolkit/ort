@@ -23,7 +23,7 @@ class EntityResponseBody<T>(
     val operation: String? = null,
     val status: Int? = null,
     val message: String? = null,
-    val messageParameters: Array<String>? = null,
+    val messageParameters: Map<String, String> = emptyMap(),
     val error: String? = null,
 
     val data: T? = null
