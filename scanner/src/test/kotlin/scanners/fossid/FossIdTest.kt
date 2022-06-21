@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.MapResponseBody
+import org.ossreviewtoolkit.clients.fossid.PolymorphicInt
 import org.ossreviewtoolkit.clients.fossid.PolymorphicList
 import org.ossreviewtoolkit.clients.fossid.PolymorphicResponseBody
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
@@ -1057,7 +1058,9 @@ private fun FossIdServiceWithVersion.expectCreateScan(
  * Prepare this service mock to expect a request to delete the scan with the given [scanCode].
  */
 private fun FossIdServiceWithVersion.expectDeleteScan(scanCode: String): FossIdServiceWithVersion {
-    coEvery { deleteScan(USER, API_KEY, scanCode) } returns EntityResponseBody(status = 1, data = 0)
+    coEvery {
+        deleteScan(USER, API_KEY, scanCode)
+    } returns EntityResponseBody(status = 1, data = PolymorphicInt(0))
     return this
 }
 
