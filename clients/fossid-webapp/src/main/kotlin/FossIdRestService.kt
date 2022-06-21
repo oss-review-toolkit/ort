@@ -75,6 +75,7 @@ interface FossIdRestService {
             enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
             addModule(
                 kotlinModule().addDeserializer(PolymorphicList::class.java, PolymorphicListDeserializer())
+                    .addDeserializer(PolymorphicInt::class.java, PolymorphicIntDeserializer())
             )
         }
 
@@ -120,6 +121,37 @@ interface FossIdRestService {
                 // Extract the type from the property, i.e. the T in PolymorphicList.data<T>
                 val type = property?.member?.type?.bindings?.getBoundType(0)
                 return PolymorphicListDeserializer(type)
+            }
+        }
+
+        /**
+         * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
+         * sent by the FossID server.
+         * When deleting a scan, FossId returns the scan id as String in the 'data' property of the response. If no scan
+         * could be found, it returns an empty array.
+         * This custom deserializer streamlines the result: everything is converted to Int and empty array is converted
+         * to `null`. This deserializer also accepts primitive integers and arrays containing integers, which will
+         * be also mapped to Int.
+         */
+        private class PolymorphicIntDeserializer :
+            StdDeserializer<PolymorphicInt>(PolymorphicInt::class.java) {
+            override fun deserialize(p: JsonParser, ctxt: DeserializationContext): PolymorphicInt {
+                return when (p.currentToken) {
+                    JsonToken.VALUE_STRING -> {
+                        val value = JSON_MAPPER.readValue(p, String::class.java)
+                        PolymorphicInt(value.toInt())
+                    }
+                    JsonToken.VALUE_NUMBER_INT -> {
+                        val value = JSON_MAPPER.readValue(p, Int::class.java)
+                        PolymorphicInt(value)
+                    }
+                    JsonToken.START_ARRAY -> {
+                        val array = JSON_MAPPER.readValue(p, IntArray::class.java)
+                        val value = if (array.isEmpty()) null else array.first()
+                        PolymorphicInt(value)
+                    }
+                    else -> throw IllegalStateException("FossID returned a type not handled by this deserializer!")
+                }
             }
         }
 
@@ -172,7 +204,7 @@ interface FossIdRestService {
     suspend fun runScan(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
-    suspend fun deleteScan(@Body body: PostRequestBody): EntityResponseBody<Int>
+    suspend fun deleteScan(@Body body: PostRequestBody): EntityResponseBody<PolymorphicInt>
 
     @POST("api.php")
     suspend fun downloadFromGit(@Body body: PostRequestBody): EntityResponseBody<Nothing>
