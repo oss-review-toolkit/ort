@@ -54,6 +54,19 @@ class EvaluatedModelReporterFunTest : WordSpec({
             val options = mapOf(EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension)
             generateReport(ortResult, options) shouldBe expectedResult
         }
+
+        "support an option to deduplicate the dependency tree" {
+            val expectedResult = File(
+                "src/funTest/assets/evaluated-model-reporter-test-deduplicate-expected-output.yml"
+            ).readText()
+            val ortResult = readOrtResult("src/funTest/assets/evaluated-model-reporter-test-input.yml")
+
+            val options = mapOf(
+                EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
+                EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "True"
+            )
+            generateReport(ortResult, options).normalizeLineBreaks() shouldBe expectedResult
+        }
     }
 })
 
