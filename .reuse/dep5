@@ -98,6 +98,10 @@ Files: clients/github-graphql/src/main/assets/schema.docs.graphql
 Copyright: 2017 Gregor Martynus
 License: MIT
 
+Files: reporter/src/main/resources/prismjs/*
+Copyright: 2012 Lea Verou
+License: MIT
+
 Files: reporter/src/funTest/assets/sample.fossinfo.json
 Copyright: 2020-2021 Bosch Rexroth AG
 License: MIT
