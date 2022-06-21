@@ -34,3 +34,5 @@ typealias MapResponseBody<T> = EntityResponseBody<Map<String, T>>
 typealias PolymorphicResponseBody<T> = EntityResponseBody<PolymorphicList<T>>
 
 class PolymorphicList<T>(data: List<T> = listOf()) : List<T> by data
+
+class PolymorphicInt(val value: Int?)
