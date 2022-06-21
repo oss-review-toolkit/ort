@@ -83,7 +83,7 @@ interface FossIdRestService {
          * A class to modify the standard Jackson deserialization to deal with inconsistencies in responses
          * sent by the FossID server.
          * FossID usually returns data as a List or Map, but in case of no entries it returns a Boolean (which is set to
-         * false). This custom deserializer streamLines the result:
+         * false). This custom deserializer streamlines the result:
          * - maps are converted to lists by ignoring the keys
          * - empty list is returned when the result is Boolean
          * - to address a FossID bug in get_all_scans operation, arrays are converted to list.
