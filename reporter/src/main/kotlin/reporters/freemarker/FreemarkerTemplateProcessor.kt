@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
+import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -345,6 +346,13 @@ class FreemarkerTemplateProcessor(
 
                 violation.severity >= threshold && !isResolved && !isExcluded
             } ?: false
+
+        /**
+         * Return a list of [RuleViolation]s for which no [RuleViolationResolution] is provided.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun filterForUnresolvedRuleViolations(ruleViolation: List<RuleViolation>): List<RuleViolation> =
+            ruleViolation.filterNot { input.resolutionProvider.isResolved(it) }
 
         /**
          * Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided.
