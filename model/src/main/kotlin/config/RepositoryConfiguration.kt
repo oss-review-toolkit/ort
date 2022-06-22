@@ -29,6 +29,12 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
  */
 data class RepositoryConfiguration(
     /**
+     * The configuration for the analyzer. Values in this configuration take precedence over global configuration.
+     */
+    @JsonInclude(value = JsonInclude.Include.NON_NULL)
+    val analyzer: AnalyzerConfiguration? = null,
+
+    /**
      * Defines which parts of the repository will be excluded. Note that excluded parts will still be analyzed and
      * scanned, but related errors will be marked as resolved in the reporter output.
      */
