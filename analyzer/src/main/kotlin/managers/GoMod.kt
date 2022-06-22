@@ -162,8 +162,9 @@ class GoMod(
 
         var graph = Graph()
 
-        for (line in run("mod", "graph", workingDir = projectDir).stdout.lines()) {
-            if (line.isBlank()) continue
+        val edges = run("mod", "graph", workingDir = projectDir)
+        edges.stdout.lines().forEach { line ->
+            if (line.isBlank()) return@forEach
 
             val columns = line.split(' ')
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
@@ -173,7 +174,7 @@ class GoMod(
 
             if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
                 log.debug { "Module '${child.name}' is an indirect dependency of '${parent.name}. Skip adding edge." }
-                continue
+                return@forEach
             }
 
             graph.addEdge(parent, child)
