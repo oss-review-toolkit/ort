@@ -226,10 +226,13 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         println("Analyzing project path:\n\t$inputDir")
 
-        val analyzer = Analyzer(config.analyzer, labels)
-
         val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
+
+        val analyzerConfiguration =
+            repositoryConfiguration.analyzer?.let { config.analyzer.merge(it) } ?: config.analyzer
+
+        val analyzer = Analyzer(analyzerConfiguration, labels)
 
         val defaultCurationProviders = buildList {
             if (useOrtCurations) add(OrtConfigPackageCurationProvider())
