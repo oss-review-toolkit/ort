@@ -19,6 +19,11 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.databind.ObjectMapper
+
 import java.io.File
 import java.util.SortedSet
 
@@ -39,6 +44,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -139,7 +145,10 @@ class GoMod(
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
     private fun getModuleGraph(projectDir: File): Graph {
-        val moduleVersionForModuleName = getAllModules(projectDir).associateBy({ it.name }, { it.version })
+        val moduleInfoForModuleName = getModuleInfos(projectDir).map { it.replace ?: it }
+            .associateBy({ it.path }, { it })
+
+        fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): Identifier =
             entry.substringBefore('@').let { moduleName ->
@@ -147,7 +156,7 @@ class GoMod(
                     type = managerName,
                     namespace = "",
                     name = moduleName,
-                    version = moduleVersionForModuleName[moduleName].orEmpty()
+                    version = moduleInfo(moduleName).version
                 )
             }
 
@@ -175,23 +184,39 @@ class GoMod(
         return graph
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private data class ModuleInfo(
+        @JsonProperty("Path")
+        val path: String,
+
+        @JsonProperty("Version")
+        val version: String = "",
+
+        @JsonProperty("Replace")
+        val replace: ModuleInfo? = null
+    )
+
     /**
      * Return the list of all modules contained in the dependency tree with resolved versions.
      */
-    private fun getAllModules(projectDir: File): Set<Identifier> {
-        val result = mutableSetOf<Identifier>()
+    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
+        val list = run("list", "-m", "-json", "all", workingDir = projectDir)
 
-        val list = run("list", "-m", "all", workingDir = projectDir)
-        list.stdout.lines().forEach { line ->
-            // For replaced modules the line is formatted as "${orig-module} => ${replaced-module}", see also
-            // https://go.dev/ref/mod#go-mod-file-replace.
-            val columns = line.substringAfterLast(" => ").split(' ')
-            if (columns.size != 2) return@forEach
+        list.stdout.byteInputStream().use { inputStream ->
+            val result = mutableListOf<ModuleInfo>()
 
-            result += Identifier(type = managerName, namespace = "", name = columns[0], version = columns[1])
+            JsonFactory().createParser(inputStream).apply {
+                codec = ObjectMapper()
+                nextToken()
+
+                while (hasCurrentToken()) {
+                    result += jsonMapper.readValue(this, ModuleInfo::class.java)
+                    nextToken()
+                }
+            }
+
+            return result
         }
-
-        return result
     }
 
     /**
