@@ -347,7 +347,7 @@ class FreemarkerTemplateProcessor(
             } ?: false
 
         /**
-         * Return a list of [Vulnerability]s for which there is no [VulnerabilityResolution] is provided.
+         * Return a list of [Vulnerability]s for which no [VulnerabilityResolution] is provided.
          */
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
