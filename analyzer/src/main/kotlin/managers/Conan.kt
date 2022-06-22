@@ -144,7 +144,7 @@ class Conan(
             conanConfig?.also { configureRemoteAuthentication(it) }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
-            run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS).requireSuccess()
+            run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
 
             val pkgInfos = jsonMapper.readTree(jsonFile)
             jsonFile.parentFile.safeDeleteRecursively(force = true)
@@ -304,7 +304,7 @@ class Conan(
     private fun inspectField(pkgName: String, workingDir: File, field: String): String =
         pkgInspectResults.getOrPut(pkgName) {
             val jsonFile = createOrtTempDir().resolve("inspect.json")
-            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath).requireSuccess()
+            run(workingDir, "inspect", pkgName, "--json", jsonFile.absolutePath)
             jsonMapper.readTree(jsonFile).also { jsonFile.parentFile.safeDeleteRecursively(force = true) }
         }.get(field).textValueOrEmpty()
 
