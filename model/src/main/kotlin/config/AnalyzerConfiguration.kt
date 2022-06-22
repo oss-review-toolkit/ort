@@ -78,4 +78,43 @@ data class AnalyzerConfiguration(
      * [packageManager] can be case-insensitive.
      */
     fun getPackageManagerConfiguration(packageManager: String) = packageManagersCaseInsensitive?.get(packageManager)
+
+    /**
+     * Merge this [AnalyzerConfiguration] with [other]. Values of [other] take precedence.
+     */
+    fun merge(other: AnalyzerConfiguration): AnalyzerConfiguration {
+        val mergedPackageManagers = when {
+            packageManagers == null -> other.packageManagers
+            other.packageManagers == null -> packageManagers
+            else -> {
+                val keys = sortedSetOf(String.CASE_INSENSITIVE_ORDER).apply {
+                    addAll(packageManagers.keys)
+                    addAll(other.packageManagers.keys)
+                }
+
+                val result = sortedMapOf<String, PackageManagerConfiguration>(String.CASE_INSENSITIVE_ORDER)
+
+                keys.forEach { key ->
+                    val configSelf = getPackageManagerConfiguration(key)
+                    val configOther = other.getPackageManagerConfiguration(key)
+
+                    result[key] = when {
+                        configSelf == null -> configOther
+                        configOther == null -> configSelf
+                        else -> configSelf.merge(configOther)
+                    }
+                }
+
+                result
+            }
+        }
+
+        return AnalyzerConfiguration(
+            allowDynamicVersions = other.allowDynamicVersions,
+            enabledPackageManagers = other.enabledPackageManagers ?: enabledPackageManagers,
+            disabledPackageManagers = other.disabledPackageManagers ?: disabledPackageManagers,
+            packageManagers = mergedPackageManagers,
+            sw360Configuration = other.sw360Configuration ?: sw360Configuration
+        )
+    }
 }
