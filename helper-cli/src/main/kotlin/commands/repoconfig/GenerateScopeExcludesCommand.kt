@@ -115,6 +115,13 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages for development only."
             )
         )
+        "GoMod" -> listOf(
+            ScopeExclude(
+                pattern = "vendor",
+                reason = ScopeExcludeReason.DEV_DEPENDENCY_OF,
+                comment = "Packages to build and test the main module."
+            )
+        )
         "Gradle" -> listOf(
             ScopeExclude(
                 pattern = ".*AnnotationProcessor.*",
