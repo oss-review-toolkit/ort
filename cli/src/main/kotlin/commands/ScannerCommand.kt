@@ -328,7 +328,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val packageScannerWrappers = scannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
         val projectScannerWrappers = projectScannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
 
-        val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
+        val storages = config.scanner.storages.orEmpty()
+            .associateWith(OrtConfiguration::resolveStorage)
+            .mapValues { createStorage(it.value) }
 
         fun resolve(name: String): ScanStorage = requireNotNull(storages[name]) { "Could not resolve storage '$name'." }
 
@@ -406,11 +408,14 @@ private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfigurati
 private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
 
 private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedPackageProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    config?.fileStorage?.let { fileStorageName ->
+        val fileStorageConfiguration = OrtConfiguration.resolveStorage(fileStorageName) as FileBasedStorageConfiguration
+        return FileBasedPackageProvenanceStorage(fileStorageConfiguration.backend.createFileStorage())
     }
 
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
+    config?.postgresStorage?.let { postgresStorageName ->
+        val postgresStorageConfiguration =
+            OrtConfiguration.resolveStorage(postgresStorageName) as PostgresStorageConfiguration
         return PostgresPackageProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
     }
 
@@ -420,11 +425,14 @@ private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguratio
 }
 
 private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration?): NestedProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedNestedProvenanceStorage(fileStorageConfiguration.createFileStorage())
+    config?.fileStorage?.let { fileStorageName ->
+        val fileStorageConfiguration = OrtConfiguration.resolveStorage(fileStorageName) as FileBasedStorageConfiguration
+        return FileBasedNestedProvenanceStorage(fileStorageConfiguration.backend.createFileStorage())
     }
 
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
+    config?.postgresStorage?.let { postgresStorageName ->
+        val postgresStorageConfiguration =
+            OrtConfiguration.resolveStorage(postgresStorageName) as PostgresStorageConfiguration
         return PostgresNestedProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
     }
 

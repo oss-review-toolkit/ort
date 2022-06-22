@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
@@ -85,7 +86,8 @@ class UploadResultToPostgresCommand : CliktCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
-        val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
+        val postgresConfig = globalOptionsForSubcommands.config.scanner.storages
+            ?.map { OrtConfiguration.resolveStorage(it) }
             ?.filterIsInstance<PostgresStorageConfiguration>()?.let { configs ->
                 if (configs.size > 1) {
                     val config = configs.first()

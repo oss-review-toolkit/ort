@@ -26,14 +26,14 @@ import org.ossreviewtoolkit.utils.ort.log
  */
 data class ProvenanceStorageConfiguration(
     /**
-     * Configuration of a file storage.
+     * Storage ID of a file storage.
      */
-    val fileStorage: FileStorageConfiguration? = null,
+    val fileStorage: String? = null,
 
     /**
-     * Configuration of a PostgreSQL storage.
+     * Storage ID of a PostgreSQL storage.
      */
-    val postgresStorage: PostgresStorageConfiguration? = null,
+    val postgresStorage: String? = null,
 ) {
     init {
         if (fileStorage != null && postgresStorage != null) {

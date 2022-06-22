@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.HttpFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.CompositeStorage
@@ -53,8 +54,11 @@ class ScanResultsStorageTest : WordSpec({
             val fileStorageConfig = LocalFileStorageConfiguration(directory = File("."))
             val backendConfig = FileStorageConfiguration(localFileStorage = fileStorageConfig)
             val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
+
+            OrtConfiguration(storages = mapOf("local" to fileBasedStorageConfig))
+
             val config = ScannerConfiguration(
-                storages = mapOf("local" to fileBasedStorageConfig),
+                storages = listOf("local"),
                 storageWriters = listOf("local")
             )
 
@@ -73,8 +77,11 @@ class ScanResultsStorageTest : WordSpec({
             )
             val backendConfig = FileStorageConfiguration(httpFileStorage = httpStorageConfig)
             val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
+
+            OrtConfiguration(storages = mapOf("http" to fileBasedStorageConfig))
+
             val config = ScannerConfiguration(
-                storages = mapOf("http" to fileBasedStorageConfig),
+                storages = listOf("http"),
                 storageReaders = listOf("http"),
                 storageWriters = listOf("http")
             )
@@ -88,8 +95,11 @@ class ScanResultsStorageTest : WordSpec({
 
         "configure a ClearlyDefined storage" {
             val cdConfig = ClearlyDefinedStorageConfiguration("https://clearly-defined.org/data/")
+
+            OrtConfiguration(storages = mapOf("clearly-defined" to cdConfig))
+
             val config = ScannerConfiguration(
-                storages = mapOf("clearly-defined" to cdConfig),
+                storages = listOf("clearly-defined"),
                 storageReaders = listOf("clearly-defined"),
                 storageWriters = listOf()
             )
@@ -111,8 +121,11 @@ class ScanResultsStorageTest : WordSpec({
             val backendConfig = FileStorageConfiguration(localFileStorage = fileStorageConfig)
             val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
             val cdConfig = ClearlyDefinedStorageConfiguration("https://clearly-defined.org/data/")
+
+            OrtConfiguration(storages = mapOf("file" to fileBasedStorageConfig, "cd" to cdConfig))
+
             val config = ScannerConfiguration(
-                storages = mapOf("file" to fileBasedStorageConfig, "cd" to cdConfig),
+                storages = listOf("file", "cd"),
                 storageWriters = listOf("file", "cd"),
                 storageReaders = listOf("cd", "file")
             )
@@ -129,11 +142,15 @@ class ScanResultsStorageTest : WordSpec({
 
         "detect references to unknown storage readers" {
             val exception = shouldThrow<IllegalArgumentException> {
-                val config = ScannerConfiguration(
+                OrtConfiguration(
                     storages = mapOf(
                         "cdProd" to ClearlyDefinedStorageConfiguration("http://prod.cd"),
                         "cdDev" to ClearlyDefinedStorageConfiguration("http://dev.cd")
-                    ),
+                    )
+                )
+
+                val config = ScannerConfiguration(
+                    storages = listOf("cdProd", "cdDev"),
                     storageReaders = listOf("nonExistingReader")
                 )
                 ScanResultsStorage.configure(config)
@@ -144,11 +161,15 @@ class ScanResultsStorageTest : WordSpec({
 
         "detect references to unknown storage writers" {
             val exception = shouldThrow<IllegalArgumentException> {
-                val config = ScannerConfiguration(
+                OrtConfiguration(
                     storages = mapOf(
                         "cdProd" to ClearlyDefinedStorageConfiguration("http://prod.cd"),
                         "cdDev" to ClearlyDefinedStorageConfiguration("http://dev.cd")
-                    ),
+                    )
+                )
+
+                val config = ScannerConfiguration(
+                    storages = listOf("cdProd", "cdDev"),
                     storageWriters = listOf("nonExistingWriter")
                 )
                 ScanResultsStorage.configure(config)

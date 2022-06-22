@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 /**
@@ -43,16 +42,16 @@ data class FileArchiverConfiguration(
     val enabled: Boolean = true,
 
     /**
-     * Configuration of the [FileStorage] used for archiving the files.
+     * Storage ID of a file storage used for archiving the files.
      */
     @ConfigAlias("storage")
     @JsonAlias("storage")
-    val fileStorage: FileStorageConfiguration? = null,
+    val fileStorage: String? = null,
 
     /**
-     * Configuration of the [PostgresFileArchiverStorage] used for archiving the files.
+     * Storage ID of a PostgreSQL storage used for archiving the files.
      */
-    val postgresStorage: PostgresStorageConfiguration? = null
+    val postgresStorage: String? = null
 ) {
     init {
         if (fileStorage != null && postgresStorage != null) {
@@ -71,17 +70,21 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
     if (this?.enabled == false) return null
 
     val storage = when {
-        this?.fileStorage != null -> FileArchiverFileStorage(fileStorage.createFileStorage())
+        this?.fileStorage != null -> {
+            val fileStorageConfiguration = OrtConfiguration.resolveStorage(fileStorage) as FileBasedStorageConfiguration
+            FileArchiverFileStorage(fileStorageConfiguration.backend.createFileStorage())
+        }
 
         this?.postgresStorage != null -> {
+            val postgresStorageConfiguration =
+                OrtConfiguration.resolveStorage(postgresStorage) as PostgresStorageConfiguration
             val dataSource = DatabaseUtils.createHikariDataSource(
-                config = postgresStorage,
+                config = postgresStorageConfiguration,
                 applicationNameSuffix = "file-archiver"
             )
 
             PostgresFileArchiverStorage(dataSource)
         }
-
         else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))
     }
 

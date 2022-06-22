@@ -145,8 +145,8 @@ class DownloadResultsFromPostgresCommand : CliktCommand(
     }
 
     private fun openDatabaseConnection(): Connection {
-        val storageConfig = OrtConfiguration.load(configArguments, configFile).scanner.storages?.values
-            ?.filterIsInstance<PostgresStorageConfiguration>()?.firstOrNull()
+        val storageConfig = OrtConfiguration.load(configArguments, configFile).storages.values
+            .filterIsInstance<PostgresStorageConfiguration>().firstOrNull()
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(

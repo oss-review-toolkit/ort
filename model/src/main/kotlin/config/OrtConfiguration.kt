@@ -69,6 +69,13 @@ data class OrtConfiguration(
     val enableRepositoryPackageConfigurations: Boolean = false,
 
     /**
+     * A map with the configurations of the scan result storages available. Based on this information the actual
+     * storages are created. Storages can be configured as readers or writers of scan results. Having this map
+     * makes it possible for storage instances to act in both roles without having to duplicate configuration.
+     */
+    val storages: Map<String, ScanStorageConfiguration> = emptyMap(),
+
+    /**
      * The configuration of the analyzer.
      */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
@@ -98,7 +105,22 @@ data class OrtConfiguration(
      */
     val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
+    init {
+        Companion.storages = storages
+    }
+
     companion object {
+        private var storages: Map<String, ScanStorageConfiguration> = emptyMap()
+
+        /**
+         * Returns the [ScanStorageConfiguration] from the [storages] matching the [storageName], which should be
+         * available in the map. Otherwise, an [IllegalArgumentException] is thrown.
+         */
+        fun resolveStorage(storageName: String): ScanStorageConfiguration =
+            requireNotNull(storages[storageName]) {
+                "Could not resolve storage '$storageName'."
+            }
+
         /**
          * Load the [OrtConfiguration]. The different sources are used with this priority:
          *

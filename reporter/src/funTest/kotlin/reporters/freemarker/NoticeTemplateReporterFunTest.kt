@@ -28,6 +28,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
+import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
@@ -56,14 +57,19 @@ class NoticeTemplateReporterFunTest : WordSpec({
 
             val archiveDir = File("src/funTest/assets/archive")
             val config = OrtConfiguration(
+                storages = mapOf(
+                   "localArchive" to FileBasedStorageConfiguration(
+                       backend = FileStorageConfiguration(
+                           localFileStorage = LocalFileStorageConfiguration(
+                               directory = archiveDir,
+                               compression = false
+                           )
+                       )
+                   )
+                ),
                 scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
-                        fileStorage = FileStorageConfiguration(
-                            localFileStorage = LocalFileStorageConfiguration(
-                                directory = archiveDir,
-                                compression = false
-                            )
-                        )
+                        fileStorage = "localArchive"
                     )
                 )
             )

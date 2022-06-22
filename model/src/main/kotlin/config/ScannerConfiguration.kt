@@ -85,11 +85,10 @@ data class ScannerConfiguration(
     val options: Map<String, Options>? = null,
 
     /**
-     * A map with the configurations of the scan result storages available. Based on this information the actual
-     * storages are created. Storages can be configured as readers or writers of scan results. Having this map
-     * makes it possible for storage instances to act in both roles without having to duplicate configuration.
+     * A list with the IDs of scan storages. The strings in this list must match keys in the storages map of the
+     * [OrtConfiguration].
      */
-    val storages: Map<String, ScanStorageConfiguration>? = null,
+    val storages: List<String>? = null,
 
     /**
      * A list with the IDs of scan storages that are queried for existing scan results. The strings in this list

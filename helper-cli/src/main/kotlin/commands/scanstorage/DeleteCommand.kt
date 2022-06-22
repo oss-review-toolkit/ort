@@ -155,7 +155,7 @@ internal class DeleteCommand : CliktCommand(
     }
 
     private fun connectPostgresStorage(config: OrtConfiguration): Database {
-        val storageConfig = config.scanner.storages?.get("postgresStorage") as? PostgresStorageConfiguration
+        val storageConfig = config.storages["postgresStorage"] as? PostgresStorageConfiguration
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         log.info {

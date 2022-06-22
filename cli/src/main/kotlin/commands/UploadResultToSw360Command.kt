@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -82,7 +83,8 @@ class UploadResultToSw360Command : CliktCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
-        val sw360Config = globalOptionsForSubcommands.config.scanner.storages?.values
+        val sw360Config = globalOptionsForSubcommands.config.scanner.storages
+            ?.map { OrtConfiguration.resolveStorage(it) }
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()
 
         requireNotNull(sw360Config) {

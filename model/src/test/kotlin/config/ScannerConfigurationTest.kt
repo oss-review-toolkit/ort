@@ -25,6 +25,7 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
 
@@ -41,8 +42,10 @@ class ScannerConfigurationTest : WordSpec({
                 readValue<OrtConfiguration>()
             }
 
+            val actualStorageConfigurations = rereadOrtConfig.storages
             val actualScannerConfig = rereadOrtConfig.scanner
             val actualStorages = actualScannerConfig.storages.orEmpty()
+            val expectedStorageConfigurations = ortConfig.storages
             val expectedScannerConfig = ortConfig.scanner
             val expectedStorages = expectedScannerConfig.storages.orEmpty()
 
@@ -50,11 +53,16 @@ class ScannerConfigurationTest : WordSpec({
             // Relative paths have been normalized, passwords do not get serialized, etc.
             actualScannerConfig.storageReaders shouldBe expectedScannerConfig.storageReaders
             actualScannerConfig.storageWriters shouldBe expectedScannerConfig.storageWriters
-            actualScannerConfig.archive?.fileStorage?.httpFileStorage should beNull()
 
-            actualStorages.keys shouldContainExactly expectedStorages.keys
-            actualStorages.entries.forAll { (storageKey, storage) ->
-                val orgStorage = expectedStorages.getOrDefault(storageKey, this)
+            with(actualStorageConfigurations) {
+                val localArchiveStorage = this[actualScannerConfig.archive?.fileStorage]
+                localArchiveStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                localArchiveStorage.backend.httpFileStorage should beNull()
+            }
+
+            actualStorages shouldContainExactly expectedStorages
+            actualStorageConfigurations.entries.forAll { (storageKey, storage) ->
+                val orgStorage = expectedStorageConfigurations.getOrDefault(storageKey, this)
                 storage::class shouldBe orgStorage::class
             }
         }

@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -75,10 +76,10 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          */
         fun configure(config: ScannerConfiguration): ScanResultsStorage {
             // Unfortunately, the smart cast does not work when moving this to a capturing "when" subject.
-            val configuredStorages = config.storages
+            val configuredStorages = config.storages.orEmpty().associateWith(OrtConfiguration::resolveStorage)
 
             storage = when {
-                configuredStorages.isNullOrEmpty() -> createDefaultStorage()
+                configuredStorages.isEmpty() -> createDefaultStorage()
                 configuredStorages.size == 1 -> createStorage(configuredStorages.values.first())
                 else -> createCompositeStorage(config)
             }
@@ -100,7 +101,9 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          * Create a [CompositeStorage] that manages all storages defined in the given [config].
          */
         private fun createCompositeStorage(config: ScannerConfiguration): ScanResultsStorage {
-            val storages = config.storages.orEmpty().mapValues { createStorage(it.value) }
+            val storages = config.storages.orEmpty()
+                .associateWith(OrtConfiguration::resolveStorage)
+                .mapValues { createStorage(it.value) }
 
             fun resolve(name: String): ScanResultsStorage =
                 requireNotNull(storages[name]) {

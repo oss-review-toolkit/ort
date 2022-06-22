@@ -48,6 +48,62 @@ class OrtConfigurationTest : WordSpec({
             val refConfig = File("src/main/resources/reference.conf")
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
+            with(ortConfig.storages) {
+                keys shouldContainExactlyInAnyOrder setOf(
+                    "local", "localProvenance", "localArchive", "http", "clearlyDefined", "postgres", "sw360Storage"
+                )
+
+                val httpStorage = this["http"]
+                httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                httpStorage.backend.httpFileStorage shouldNotBeNull {
+                    url shouldBe "https://your-http-server"
+                    headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
+                }
+
+                val localStorage = this["local"]
+                localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                localStorage.backend.localFileStorage shouldNotBeNull {
+                    directory shouldBe File("~/.ort/scanner/results")
+                }
+
+                val localProvenanceStorage = this["localProvenance"]
+                localProvenanceStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                localProvenanceStorage.backend.localFileStorage shouldNotBeNull {
+                    directory shouldBe File("~/.ort/scanner/provenance")
+                }
+
+                val localArchiveStorage = this["localArchive"]
+                localArchiveStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                localArchiveStorage.backend.localFileStorage shouldNotBeNull {
+                    directory shouldBe File("~/.ort/scanner/archive")
+                }
+
+                val postgresStorage = this["postgres"]
+                postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
+                postgresStorage.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                postgresStorage.schema shouldBe "public"
+                postgresStorage.username shouldBe "username"
+                postgresStorage.password shouldBe "password"
+                postgresStorage.sslmode shouldBe "required"
+                postgresStorage.sslcert shouldBe "/defaultdir/postgresql.crt"
+                postgresStorage.sslkey shouldBe "/defaultdir/postgresql.pk8"
+                postgresStorage.sslrootcert shouldBe "/defaultdir/root.crt"
+
+                val cdStorage = this["clearlyDefined"]
+                cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
+                cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
+
+                val sw360Storage = this["sw360Storage"]
+                sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
+                sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
+                sw360Storage.authUrl shouldBe "https://your-authentication-url"
+                sw360Storage.username shouldBe "username"
+                sw360Storage.password shouldBe "password"
+                sw360Storage.clientId shouldBe "clientId"
+                sw360Storage.clientPassword shouldBe "clientPassword"
+                sw360Storage.token shouldBe "token"
+            }
+
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
 
@@ -101,68 +157,11 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.scanner) {
                 archive shouldNotBeNull {
-                    fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/archive")
-                        }
-                    }
-
-                    postgresStorage shouldNotBeNull {
-                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                        schema shouldBe "public"
-                        username shouldBe "username"
-                        password shouldBe "password"
-                        sslmode shouldBe "required"
-                        sslcert shouldBe "/defaultdir/postgresql.crt"
-                        sslkey shouldBe "/defaultdir/postgresql.pk8"
-                        sslrootcert shouldBe "/defaultdir/root.crt"
-                    }
+                    fileStorage shouldBe "localArchive"
+                    postgresStorage shouldBe "postgres"
                 }
 
-                storages shouldNotBeNull {
-                    keys shouldContainExactlyInAnyOrder setOf(
-                        "local", "http", "clearlyDefined", "postgres", "sw360Configuration"
-                    )
-                    val httpStorage = this["http"]
-                    httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    httpStorage.backend.httpFileStorage shouldNotBeNull {
-                        url shouldBe "https://your-http-server"
-                        headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
-                    }
-
-                    val localStorage = this["local"]
-                    localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    localStorage.backend.localFileStorage shouldNotBeNull {
-                        directory shouldBe File("~/.ort/scanner/results")
-                    }
-
-                    val postgresStorage = this["postgres"]
-                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                    postgresStorage.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                    postgresStorage.schema shouldBe "public"
-                    postgresStorage.username shouldBe "username"
-                    postgresStorage.password shouldBe "password"
-                    postgresStorage.sslmode shouldBe "required"
-                    postgresStorage.sslcert shouldBe "/defaultdir/postgresql.crt"
-                    postgresStorage.sslkey shouldBe "/defaultdir/postgresql.pk8"
-                    postgresStorage.sslrootcert shouldBe "/defaultdir/root.crt"
-
-                    val cdStorage = this["clearlyDefined"]
-                    cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
-                    cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
-
-                    val sw360Storage = this["sw360Configuration"]
-                    sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
-                    sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
-                    sw360Storage.authUrl shouldBe "https://your-authentication-url"
-                    sw360Storage.username shouldBe "username"
-                    sw360Storage.password shouldBe "password"
-                    sw360Storage.clientId shouldBe "clientId"
-                    sw360Storage.clientPassword shouldBe "clientPassword"
-                    sw360Storage.token shouldBe "token"
-                }
-
+                storages shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined", "sw360Storage")
                 options shouldNot beNull()
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
@@ -170,23 +169,8 @@ class OrtConfigurationTest : WordSpec({
                 ignorePatterns shouldContainExactly listOf("**/META-INF/DEPENDENCIES")
 
                 provenanceStorage shouldNotBeNull {
-                    fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/provenance")
-                        }
-                    }
-
-                    postgresStorage shouldNotBeNull {
-                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                        schema shouldBe "public"
-                        username shouldBe "username"
-                        password shouldBe "password"
-                        sslmode shouldBe "required"
-                        sslcert shouldBe "/defaultdir/postgresql.crt"
-                        sslkey shouldBe "/defaultdir/postgresql.pk8"
-                        sslrootcert shouldBe "/defaultdir/root.crt"
-                    }
+                    fileStorage shouldBe "localProvenance"
+                    postgresStorage shouldBe "postgres"
                 }
             }
 
@@ -221,33 +205,31 @@ class OrtConfigurationTest : WordSpec({
             val configFile = createTestConfig(
                 """
                 ort {
-                  scanner {
-                    storages {
-                      postgresStorage {
-                        url = "postgresql://your-postgresql-server:5444/your-database"
-                        schema = "public"
-                        username = username
-                        password = password
-                      }
+                  storages {
+                    postgresStorage {
+                      url = "postgresql://your-postgresql-server:5444/your-database"
+                      schema = "public"
+                      username = username
+                      password = password
                     }
                   }
                 }
                 """.trimIndent()
             )
 
-            val env = mapOf("ort.scanner.storages.postgresStorage.password" to "envPassword")
+            val env = mapOf("ort.storages.postgresStorage.password" to "envPassword")
 
             withEnvironment(env) {
                 val config = OrtConfiguration.load(
                     args = mapOf(
-                        "ort.scanner.storages.postgresStorage.schema" to "argsSchema",
-                        "ort.scanner.storages.postgresStorage.password" to "argsPassword",
+                        "ort.storages.postgresStorage.schema" to "argsSchema",
+                        "ort.storages.postgresStorage.password" to "argsPassword",
                         "other.property" to "someValue"
                     ),
                     file = configFile
                 )
 
-                config.scanner.storages shouldNotBeNull {
+                config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe "username"
@@ -261,10 +243,8 @@ class OrtConfigurationTest : WordSpec({
             val configFile = createTestConfig(
                 """
                 ort {
-                  scanner {
-                    storages {
-                      foo = baz
-                    }
+                  storages {
+                    foo = baz
                   }
                 }
                 """.trimIndent()
@@ -277,7 +257,7 @@ class OrtConfigurationTest : WordSpec({
 
         "fail for invalid properties in the map with arguments" {
             val file = File("anotherNonExistingConfig.conf")
-            val args = mapOf("ort.scanner.storages.new" to "test")
+            val args = mapOf("ort.storages.new" to "test")
 
             shouldThrow<IllegalArgumentException> {
                 OrtConfiguration.load(file = file, args = args)
@@ -297,14 +277,12 @@ class OrtConfigurationTest : WordSpec({
             val configFile = createTestConfig(
                 """
                 ort {
-                  scanner {
-                    storages {
-                      postgresStorage {
-                        url = "postgresql://your-postgresql-server:5444/your-database"
-                        schema = "public"
-                        username = ${'$'}{POSTGRES_USERNAME}
-                        password = ${'$'}{POSTGRES_PASSWORD}
-                      }
+                  storages {
+                    postgresStorage {
+                      url = "postgresql://your-postgresql-server:5444/your-database"
+                      schema = "public"
+                      username = ${'$'}{POSTGRES_USERNAME}
+                      password = ${'$'}{POSTGRES_PASSWORD}
                     }
                   }
                 }
@@ -317,7 +295,7 @@ class OrtConfigurationTest : WordSpec({
             withEnvironment(env) {
                 val config = OrtConfiguration.load(file = configFile)
 
-                config.scanner.storages shouldNotBeNull {
+                config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe user
@@ -332,16 +310,16 @@ class OrtConfigurationTest : WordSpec({
             val url = "url"
             val schema = "public"
             val env = mapOf(
-                "ort.scanner.storages.postgresStorage.username" to user,
-                "ort.scanner.storages.postgresStorage.url" to url,
-                "ort__scanner__storages__postgresStorage__schema" to schema,
-                "ort__scanner__storages__postgresStorage__password" to password
+                "ort.storages.postgresStorage.username" to user,
+                "ort.storages.postgresStorage.url" to url,
+                "ort__storages__postgresStorage__schema" to schema,
+                "ort__storages__postgresStorage__password" to password
             )
 
             withEnvironment(env) {
                 val config = OrtConfiguration.load(file = File("dummyPath"))
 
-                config.scanner.storages shouldNotBeNull {
+                config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
                     postgresStorage.username shouldBe user
