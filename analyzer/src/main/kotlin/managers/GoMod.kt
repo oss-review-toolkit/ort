@@ -171,6 +171,11 @@ class GoMod(
             val parent = parseModuleEntry(columns[0])
             val child = parseModuleEntry(columns[1])
 
+            if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
+                log.debug { "Module '${child.name}' is an indirect dependency of '${parent.name}. Skip adding edge." }
+                continue
+            }
+
             graph.addEdge(parent, child)
         }
 
@@ -193,7 +198,13 @@ class GoMod(
         val version: String = "",
 
         @JsonProperty("Replace")
-        val replace: ModuleInfo? = null
+        val replace: ModuleInfo? = null,
+
+        @JsonProperty("Indirect")
+        val indirect: Boolean = false,
+
+        @JsonProperty("Main")
+        val main: Boolean = false
     )
 
     /**
