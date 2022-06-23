@@ -37,6 +37,11 @@ import org.ossreviewtoolkit.utils.ort.log
 
 object DatabaseUtils {
     /**
+     * This map holds the [HikariDataSource] based on the [PostgresConfiguration].
+     */
+    private val dataSources: MutableMap<PostgresConfiguration, Lazy<DataSource>> = mutableMapOf()
+
+    /**
      * Return a [HikariDataSource] for the given [PostgresConfiguration].
      */
     fun createHikariDataSource(
@@ -60,26 +65,28 @@ object DatabaseUtils {
             "Password for PostgreSQL storage is missing."
         }
 
-        val dataSourceConfig = HikariConfig().apply {
-            jdbcUrl = config.url
-            username = config.username
-            password = config.password
-            schema = config.schema
-            maximumPoolSize = maxPoolSize
+        return dataSources.getOrElse(config) {
+            val dataSourceConfig = HikariConfig().apply {
+                jdbcUrl = config.url
+                username = config.username
+                password = config.password
+                schema = config.schema
+                maximumPoolSize = maxPoolSize
 
-            val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
-            addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME$suffix")
+                val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
+                addDataSourceProperty("ApplicationName", "$ORT_FULL_NAME$suffix")
 
-            // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
-            // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
-            // "sslmode", "ssl" is not required.
-            addDataSourceProperty("sslmode", config.sslmode)
-            addDataSourcePropertyIfDefined("sslcert", config.sslcert)
-            addDataSourcePropertyIfDefined("sslkey", config.sslkey)
-            addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
+                // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
+                // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
+                // "sslmode", "ssl" is not required.
+                addDataSourceProperty("sslmode", config.sslmode)
+                addDataSourcePropertyIfDefined("sslcert", config.sslcert)
+                addDataSourcePropertyIfDefined("sslkey", config.sslkey)
+                addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
+            }
+
+            lazyOf(HikariDataSource(dataSourceConfig)).also { dataSources[config] = it }
         }
-
-        return lazyOf(HikariDataSource(dataSourceConfig))
     }
 
     /**
