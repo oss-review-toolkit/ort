@@ -24,6 +24,11 @@ project:
       - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
         linkage: "PROJECT_STATIC"
         dependencies:
+        - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+            linkage: "PROJECT_STATIC"
         - id: "GoMod::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
       - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
@@ -44,6 +49,11 @@ project:
       - id: "GoMod::github.com/mattn/go-colorable:v0.1.12"
         linkage: "PROJECT_STATIC"
         dependencies:
+        - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "GoMod::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+            linkage: "PROJECT_STATIC"
         - id: "GoMod::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
       - id: "GoMod::github.com/mattn/go-isatty:v0.0.14"
