@@ -66,7 +66,7 @@ data class FileBasedStorageConfiguration(
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
-    val type: StorageType = StorageType.PACKAGE_BASED
+    val type: List<StorageType> = listOf(StorageType.PACKAGE_BASED)
 ) : ScanStorageConfiguration
 
 /**
@@ -81,7 +81,7 @@ data class PostgresStorageConfiguration(
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
-    val type: StorageType = StorageType.PACKAGE_BASED
+    val type: List<StorageType> = listOf(StorageType.PACKAGE_BASED)
 
     /**
      * TODO: Make additional parameters configurable, see:

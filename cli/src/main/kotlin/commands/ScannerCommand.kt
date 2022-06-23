@@ -332,13 +332,14 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             .associateWith(OrtConfiguration::resolveStorage)
             .mapValues { createStorage(it.value) }
 
-        fun resolve(name: String): ScanStorage = requireNotNull(storages[name]) { "Could not resolve storage '$name'." }
+        fun resolve(name: String): List<ScanStorage> =
+            requireNotNull(storages[name]) { "Could not resolve storage '$name'." }
 
         val defaultStorage = createDefaultStorage()
 
-        val readers = config.scanner.storageReaders.orEmpty().map { resolve(it) }
+        val readers = config.scanner.storageReaders.orEmpty().flatMap { resolve(it) }
             .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
-        val writers = config.scanner.storageWriters.orEmpty().map { resolve(it) }
+        val writers = config.scanner.storageWriters.orEmpty().flatMap { resolve(it) }
             .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
 
         val packageProvenanceStorage = createPackageProvenanceStorage(config.scanner.provenanceStorage)
@@ -378,7 +379,7 @@ private fun createDefaultStorage(): ScanStorage {
     return ProvenanceBasedFileStorage(localFileStorage)
 }
 
-private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
+private fun createStorage(config: ScanStorageConfiguration): List<ScanStorage> =
     when (config) {
         is FileBasedStorageConfiguration -> createFileBasedStorage(config)
         is PostgresStorageConfiguration -> createPostgresStorage(config)
@@ -387,25 +388,30 @@ private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
     }
 
 private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
-    when (config.type) {
-        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
+    config.type.map {
+        when (it) {
+            StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
+            StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
+        }
     }
 
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
-    when (config.type) {
-        StorageType.PACKAGE_BASED -> PostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME),
-            config.database.parallelTransactions
-        )
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME)
-        )
+    config.type.map {
+        when (it) {
+            StorageType.PACKAGE_BASED -> PostgresStorage(
+                DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME),
+                config.database.parallelTransactions
+            )
+            StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
+                DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME)
+            )
+        }
     }
 
-private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
+private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) =
+    listOf(ClearlyDefinedStorage(config))
 
-private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
+private fun createSw360Storage(config: Sw360StorageConfiguration) = listOf(Sw360Storage(config))
 
 private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
     config?.fileStorage?.let { fileStorageName ->
