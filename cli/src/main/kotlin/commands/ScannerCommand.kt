@@ -395,7 +395,7 @@ private fun createPostgresStorage(config: PostgresStorageConfiguration) =
     when (config.type) {
         StorageType.PACKAGE_BASED -> PostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME),
-            config.parallelTransactions
+            config.connection.parallelTransactions
         )
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
             DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)

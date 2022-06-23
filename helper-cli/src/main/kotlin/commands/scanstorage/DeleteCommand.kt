@@ -159,7 +159,8 @@ internal class DeleteCommand : CliktCommand(
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         log.info {
-            "Using Postgres storage with URL '${storageConfig.url}' and schema '${storageConfig.schema}'."
+            "Using Postgres storage with URL '${storageConfig.connection.url}' and schema " +
+                    "'${storageConfig.connection.schema}'."
         }
 
         val dataSource = DatabaseUtils.createHikariDataSource(
