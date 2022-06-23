@@ -79,7 +79,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
             val postgresStorageConfiguration =
                 OrtConfiguration.resolveStorage(postgresStorage) as PostgresStorageConfiguration
             val dataSource = DatabaseUtils.createHikariDataSource(
-                config = postgresStorageConfiguration,
+                config = postgresStorageConfiguration.database,
                 applicationNameSuffix = "file-archiver"
             )
 

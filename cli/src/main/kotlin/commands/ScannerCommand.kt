@@ -395,11 +395,11 @@ private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
     when (config.type) {
         StorageType.PACKAGE_BASED -> PostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME),
+            DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME),
             config.database.parallelTransactions
         )
         StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config, applicationNameSuffix = TOOL_NAME)
+            DatabaseUtils.createHikariDataSource(config = config.database, applicationNameSuffix = TOOL_NAME)
         )
     }
 
@@ -416,7 +416,9 @@ private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguratio
     config?.postgresStorage?.let { postgresStorageName ->
         val postgresStorageConfiguration =
             OrtConfiguration.resolveStorage(postgresStorageName) as PostgresStorageConfiguration
-        return PostgresPackageProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+        return PostgresPackageProvenanceStorage(
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.database)
+        )
     }
 
     return FileBasedPackageProvenanceStorage(
@@ -433,7 +435,9 @@ private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration
     config?.postgresStorage?.let { postgresStorageName ->
         val postgresStorageConfiguration =
             OrtConfiguration.resolveStorage(postgresStorageName) as PostgresStorageConfiguration
-        return PostgresNestedProvenanceStorage(DatabaseUtils.createHikariDataSource(postgresStorageConfiguration))
+        return PostgresNestedProvenanceStorage(
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.database)
+        )
     }
 
     return FileBasedNestedProvenanceStorage(

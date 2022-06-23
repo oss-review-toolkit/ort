@@ -31,40 +31,40 @@ import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
+import org.ossreviewtoolkit.model.config.PostgresConfiguration
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.log
 
 object DatabaseUtils {
     /**
-     * Return a [HikariDataSource] for the given [PostgresStorageConfiguration].
+     * Return a [HikariDataSource] for the given [PostgresConfiguration].
      */
     fun createHikariDataSource(
-        config: PostgresStorageConfiguration,
+        config: PostgresConfiguration,
         applicationNameSuffix: String = "",
         maxPoolSize: Int = 5
     ): Lazy<DataSource> {
-        require(config.database.url.isNotBlank()) {
+        require(config.url.isNotBlank()) {
             "URL for PostgreSQL storage is missing."
         }
 
-        require(config.database.schema.isNotBlank()) {
+        require(config.schema.isNotBlank()) {
             "Schema for PostgreSQL storage is missing."
         }
 
-        require(config.database.username.isNotBlank()) {
+        require(config.username.isNotBlank()) {
             "Username for PostgreSQL storage is missing."
         }
 
-        require(config.database.password.isNotBlank()) {
+        require(config.password.isNotBlank()) {
             "Password for PostgreSQL storage is missing."
         }
 
         val dataSourceConfig = HikariConfig().apply {
-            jdbcUrl = config.database.url
-            username = config.database.username
-            password = config.database.password
-            schema = config.database.schema
+            jdbcUrl = config.url
+            username = config.username
+            password = config.password
+            schema = config.schema
             maximumPoolSize = maxPoolSize
 
             val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
@@ -73,10 +73,10 @@ object DatabaseUtils {
             // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
             // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
             // "sslmode", "ssl" is not required.
-            addDataSourceProperty("sslmode", config.database.sslmode)
-            addDataSourcePropertyIfDefined("sslcert", config.database.sslcert)
-            addDataSourcePropertyIfDefined("sslkey", config.database.sslkey)
-            addDataSourcePropertyIfDefined("sslrootcert", config.database.sslrootcert)
+            addDataSourceProperty("sslmode", config.sslmode)
+            addDataSourcePropertyIfDefined("sslcert", config.sslcert)
+            addDataSourcePropertyIfDefined("sslkey", config.sslkey)
+            addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
         }
 
         return lazyOf(HikariDataSource(dataSourceConfig))

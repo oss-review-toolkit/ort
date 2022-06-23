@@ -150,7 +150,7 @@ class DownloadResultsFromPostgresCommand : CliktCommand(
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(
-            config = storageConfig,
+            config = storageConfig.database,
             applicationNameSuffix = ORTH_NAME,
             maxPoolSize = 1
         )
