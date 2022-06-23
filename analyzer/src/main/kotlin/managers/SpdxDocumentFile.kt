@@ -276,10 +276,10 @@ class SpdxDocumentFile(
     private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
         val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
 
-        // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
-        // from the download location.
+        // If the VCS information cannot be determined from the download location,
+        // fall back to try getting it from the VCS working tree itself.
         val packageDir = definitionFile?.resolveSibling(packageFilename)
-        val vcs = packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() } ?: getVcsInfo().orEmpty()
+        val vcs = getVcsInfo() ?: packageDir?.let { VersionControlSystem.forDirectory(it)?.getInfo() }.orEmpty()
 
         val generatedFromRelations = doc.relationships.filter {
             it.relationshipType == SpdxRelationship.Type.GENERATED_FROM
