@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
@@ -204,6 +205,16 @@ abstract class PackageManager(
      * Optional mapping of found [definitionFiles] before dependency resolution.
      */
     open fun mapDefinitionFiles(definitionFiles: List<File>): List<File> = definitionFiles
+
+    /**
+     * Return if this package manager must run before or after certain other package managers. This can manually be
+     * configured by the user in [PackageManagerConfiguration.mustRunAfter], but in some cases it is possible to
+     * determine such dependencies automatically.
+     */
+    open fun findPackageManagerDependencies(
+        managedFiles: Map<PackageManager, List<File>>
+    ): PackageManagerDependencyResult =
+        PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
 
     /**
      * Optional step to run before dependency resolution, like checking for prerequisites.
