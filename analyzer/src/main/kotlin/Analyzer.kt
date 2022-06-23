@@ -144,14 +144,18 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     ): AnalyzerResult {
         val state = AnalyzerState(curationProvider)
 
+        val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
+
         runBlocking {
             managedFiles.entries.map { (manager, files) ->
+                val mustRunAfter = config.getPackageManagerConfiguration(manager.managerName)?.mustRunAfter?.toSet()
+                    ?: packageManagerDependencies[manager]?.mapTo(mutableSetOf()) { it.managerName }.orEmpty()
+
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
                     labels = labels,
-                    mustRunAfter = config.getPackageManagerConfiguration(manager.managerName)?.mustRunAfter?.toSet()
-                        .orEmpty(),
+                    mustRunAfter = mustRunAfter,
                     finishedPackageManagersState = state.finishedPackageManagersState,
                     onResult = { result -> state.addResult(manager, result) }
                 )
@@ -163,6 +167,46 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         return state.buildResult()
+    }
+
+    private fun determinePackageManagerDependencies(
+        managedFiles: Map<PackageManager, List<File>>
+    ): Map<PackageManager, Set<PackageManager>> {
+        val allPackageManagers =
+            managedFiles.keys.associateBy { it.managerName }.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+
+        val result = mutableMapOf<PackageManager, MutableSet<PackageManager>>()
+
+        managedFiles.keys.forEach { packageManager ->
+            val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
+            dependencies.mustRunAfter.forEach { name ->
+                val managerForName = allPackageManagers[name]
+
+                if (managerForName == null) {
+                    log.debug {
+                        "Ignoring that ${packageManager.managerName} must run after $name, because there are no " +
+                                "definition files for $name."
+                    }
+                } else {
+                    result.getOrPut(packageManager) { mutableSetOf() } += managerForName
+                }
+            }
+
+            dependencies.mustRunBefore.forEach { name ->
+                val managerForName = allPackageManagers[name]
+
+                if (managerForName == null) {
+                    log.debug {
+                        "Ignoring that ${packageManager.managerName} must run before $name, because there are no " +
+                                "definition files for $name."
+                    }
+                } else {
+                    result.getOrPut(managerForName) { mutableSetOf() } += packageManager
+                }
+            }
+        }
+
+        return result
     }
 }
 
