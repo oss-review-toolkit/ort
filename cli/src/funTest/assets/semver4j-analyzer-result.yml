@@ -179,13 +179,14 @@ scanner:
     options: null
     storages:
       postgresStorage: !<.PostgresStorageConfiguration>
-        url: "jdbc:postgresql://172.17.0.1:5432/ort"
-        schema: "scan_storage"
-        username: "ort"
-        sslmode: "disable"
-        sslcert: null
-        sslkey: null
-        sslrootcert: null
+        connection:
+          url: "jdbc:postgresql://172.17.0.1:5432/ort"
+          schema: "scan_storage"
+          username: "ort"
+          sslmode: "disable"
+          sslcert: null
+          sslkey: null
+          sslrootcert: null
     storage_readers:
       - "postgresStorage"
     storage_writers:

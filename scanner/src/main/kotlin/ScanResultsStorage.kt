@@ -153,14 +153,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 config = config,
                 applicationNameSuffix = TOOL_NAME,
                 // Use a value slightly higher than the number of transactions accessing the storage.
-                maxPoolSize = config.parallelTransactions + 3
+                maxPoolSize = config.connection.parallelTransactions + 3
             )
 
             log.info {
-                "Using Postgres storage with URL '${config.url}' and schema '${config.schema}'."
+                "Using Postgres storage with URL '${config.connection.url}' and schema '${config.connection.schema}'."
             }
 
-            return PostgresStorage(dataSource, config.parallelTransactions)
+            return PostgresStorage(dataSource, config.connection.parallelTransactions)
         }
 
         /**

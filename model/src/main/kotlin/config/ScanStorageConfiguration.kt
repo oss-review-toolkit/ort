@@ -74,54 +74,9 @@ data class FileBasedStorageConfiguration(
  */
 data class PostgresStorageConfiguration(
     /**
-     * The database URL in JDBC format.
+     * The configuration of the PostgreSQL database.
      */
-    val url: String,
-
-    /**
-     * The name of the database to use.
-     */
-    val schema: String = "public",
-
-    /**
-     * The username to use for authentication.
-     */
-    val username: String,
-
-    /**
-     * The password to use for authentication.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String = "",
-
-    /**
-     * The SSL mode to use, one of "disable", "allow", "prefer", "require", "verify-ca" or "verify-full".
-     * See: https://jdbc.postgresql.org/documentation/head/ssl-client.html
-     */
-    val sslmode: String = "verify-full",
-
-    /**
-     * The full path of the certificate file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslcert: String? = null,
-
-    /**
-     * The full path of the key file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslkey: String? = null,
-
-    /**
-     * The full path of the root certificate file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslrootcert: String? = null,
-
-    /**
-     * The number of parallel transactions to use for the storage dispatcher.
-     */
-    val parallelTransactions: Int = 5,
+    val connection: PostgresConnection,
 
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
