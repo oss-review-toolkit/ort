@@ -371,22 +371,23 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
      */
     fun toPackageReferenceForest(root: Identifier): SortedSet<PackageReference> {
         fun getPackageReference(id: Identifier, predecessorNodes: Set<Identifier> = mutableSetOf()): PackageReference {
-            val currentDependencies = dependencies(id) - predecessorNodes
-            val nextPredecessorNodes = predecessorNodes + currentDependencies
-
-            val dependencyReferences = currentDependencies.mapTo(sortedSetOf()) {
-                getPackageReference(it, nextPredecessorNodes)
-            }
+            val dependencies = nodeMap.getValue(id).mapNotNull {
+                if (predecessorNodes.contains(it)) {
+                    null
+                } else {
+                    getPackageReference(it, predecessorNodes + id)
+                }
+            }.toSortedSet()
 
             return PackageReference(
                 id = id,
                 linkage = PackageLinkage.PROJECT_STATIC,
-                dependencies = dependencyReferences
+                dependencies = dependencies
             )
         }
 
         val startNodes = dependencies(root)
-        return startNodes.mapTo(sortedSetOf()) { getPackageReference(it, startNodes) }
+        return startNodes.mapTo(sortedSetOf()) { getPackageReference(it) }
     }
 
     /**
