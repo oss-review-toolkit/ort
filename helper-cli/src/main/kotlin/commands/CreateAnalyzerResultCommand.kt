@@ -109,7 +109,7 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(
-            config = storageConfig,
+            config = storageConfig.connection,
             applicationNameSuffix = ORTH_NAME,
             maxPoolSize = 1
         )

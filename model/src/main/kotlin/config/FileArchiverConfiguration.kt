@@ -75,7 +75,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
 
         this?.postgresStorage != null -> {
             val dataSource = DatabaseUtils.createHikariDataSource(
-                config = postgresStorage,
+                config = postgresStorage.connection,
                 applicationNameSuffix = "file-archiver"
             )
 
