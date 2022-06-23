@@ -93,7 +93,7 @@ class UploadResultToPostgresCommand : CliktCommand(
                     val config = configs.first()
                     println(
                         "Multiple PostgreSQL storages are configured, using the first one which points to schema " +
-                                "${config.schema} at ${config.url}."
+                                "${config.database.schema} at ${config.database.url}."
                     )
                 }
 

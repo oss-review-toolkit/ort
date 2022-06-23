@@ -80,14 +80,14 @@ class OrtConfigurationTest : WordSpec({
 
                 val postgresStorage = this["postgres"]
                 postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                postgresStorage.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                postgresStorage.schema shouldBe "public"
-                postgresStorage.username shouldBe "username"
-                postgresStorage.password shouldBe "password"
-                postgresStorage.sslmode shouldBe "required"
-                postgresStorage.sslcert shouldBe "/defaultdir/postgresql.crt"
-                postgresStorage.sslkey shouldBe "/defaultdir/postgresql.pk8"
-                postgresStorage.sslrootcert shouldBe "/defaultdir/root.crt"
+                postgresStorage.database.url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                postgresStorage.database.schema shouldBe "public"
+                postgresStorage.database.username shouldBe "username"
+                postgresStorage.database.password shouldBe "password"
+                postgresStorage.database.sslmode shouldBe "required"
+                postgresStorage.database.sslcert shouldBe "/defaultdir/postgresql.crt"
+                postgresStorage.database.sslkey shouldBe "/defaultdir/postgresql.pk8"
+                postgresStorage.database.sslrootcert shouldBe "/defaultdir/root.crt"
 
                 val cdStorage = this["clearlyDefined"]
                 cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
@@ -207,23 +207,25 @@ class OrtConfigurationTest : WordSpec({
                 ort {
                   storages {
                     postgresStorage {
-                      url = "postgresql://your-postgresql-server:5444/your-database"
-                      schema = "public"
-                      username = username
-                      password = password
+                      database {
+                        url = "postgresql://your-postgresql-server:5444/your-database"
+                        schema = "public"
+                        username = username
+                        password = password
+                      }
                     }
                   }
                 }
                 """.trimIndent()
             )
 
-            val env = mapOf("ort.storages.postgresStorage.password" to "envPassword")
+            val env = mapOf("ort.storages.postgresStorage.database.password" to "envPassword")
 
             withEnvironment(env) {
                 val config = OrtConfiguration.load(
                     args = mapOf(
-                        "ort.storages.postgresStorage.schema" to "argsSchema",
-                        "ort.storages.postgresStorage.password" to "argsPassword",
+                        "ort.storages.postgresStorage.database.schema" to "argsSchema",
+                        "ort.storages.postgresStorage.database.password" to "argsPassword",
                         "other.property" to "someValue"
                     ),
                     file = configFile
@@ -232,9 +234,9 @@ class OrtConfigurationTest : WordSpec({
                 config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                    postgresStorage.username shouldBe "username"
-                    postgresStorage.schema shouldBe "argsSchema"
-                    postgresStorage.password shouldBe "envPassword"
+                    postgresStorage.database.username shouldBe "username"
+                    postgresStorage.database.schema shouldBe "argsSchema"
+                    postgresStorage.database.password shouldBe "envPassword"
                 }
             }
         }
@@ -279,10 +281,12 @@ class OrtConfigurationTest : WordSpec({
                 ort {
                   storages {
                     postgresStorage {
-                      url = "postgresql://your-postgresql-server:5444/your-database"
-                      schema = "public"
-                      username = ${'$'}{POSTGRES_USERNAME}
-                      password = ${'$'}{POSTGRES_PASSWORD}
+                      database {
+                        url = "postgresql://your-postgresql-server:5444/your-database"
+                        schema = "public"
+                        username = ${'$'}{POSTGRES_USERNAME}
+                        password = ${'$'}{POSTGRES_PASSWORD}
+                      }
                     }
                   }
                 }
@@ -298,8 +302,8 @@ class OrtConfigurationTest : WordSpec({
                 config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                    postgresStorage.username shouldBe user
-                    postgresStorage.password shouldBe password
+                    postgresStorage.database.username shouldBe user
+                    postgresStorage.database.password shouldBe password
                 }
             }
         }
@@ -310,10 +314,10 @@ class OrtConfigurationTest : WordSpec({
             val url = "url"
             val schema = "public"
             val env = mapOf(
-                "ort.storages.postgresStorage.username" to user,
-                "ort.storages.postgresStorage.url" to url,
-                "ort__storages__postgresStorage__schema" to schema,
-                "ort__storages__postgresStorage__password" to password
+                "ort.storages.postgresStorage.database.username" to user,
+                "ort.storages.postgresStorage.database.url" to url,
+                "ort__storages__postgresStorage__database__schema" to schema,
+                "ort__storages__postgresStorage__database__password" to password
             )
 
             withEnvironment(env) {
@@ -322,10 +326,10 @@ class OrtConfigurationTest : WordSpec({
                 config.storages shouldNotBeNull {
                     val postgresStorage = this["postgresStorage"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
-                    postgresStorage.username shouldBe user
-                    postgresStorage.password shouldBe password
-                    postgresStorage.url shouldBe url
-                    postgresStorage.schema shouldBe schema
+                    postgresStorage.database.username shouldBe user
+                    postgresStorage.database.password shouldBe password
+                    postgresStorage.database.url shouldBe url
+                    postgresStorage.database.schema shouldBe schema
                 }
             }
         }

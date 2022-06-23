@@ -44,27 +44,27 @@ object DatabaseUtils {
         applicationNameSuffix: String = "",
         maxPoolSize: Int = 5
     ): Lazy<DataSource> {
-        require(config.url.isNotBlank()) {
+        require(config.database.url.isNotBlank()) {
             "URL for PostgreSQL storage is missing."
         }
 
-        require(config.schema.isNotBlank()) {
+        require(config.database.schema.isNotBlank()) {
             "Schema for PostgreSQL storage is missing."
         }
 
-        require(config.username.isNotBlank()) {
+        require(config.database.username.isNotBlank()) {
             "Username for PostgreSQL storage is missing."
         }
 
-        require(config.password.isNotBlank()) {
+        require(config.database.password.isNotBlank()) {
             "Password for PostgreSQL storage is missing."
         }
 
         val dataSourceConfig = HikariConfig().apply {
-            jdbcUrl = config.url
-            username = config.username
-            password = config.password
-            schema = config.schema
+            jdbcUrl = config.database.url
+            username = config.database.username
+            password = config.database.password
+            schema = config.database.schema
             maximumPoolSize = maxPoolSize
 
             val suffix = " - $applicationNameSuffix".takeIf { applicationNameSuffix.isNotEmpty() }.orEmpty()
@@ -73,10 +73,10 @@ object DatabaseUtils {
             // Configure SSL, see: https://jdbc.postgresql.org/documentation/head/connect.html
             // Note that the "ssl" property is only a fallback in case "sslmode" is not used. Since we always set
             // "sslmode", "ssl" is not required.
-            addDataSourceProperty("sslmode", config.sslmode)
-            addDataSourcePropertyIfDefined("sslcert", config.sslcert)
-            addDataSourcePropertyIfDefined("sslkey", config.sslkey)
-            addDataSourcePropertyIfDefined("sslrootcert", config.sslrootcert)
+            addDataSourceProperty("sslmode", config.database.sslmode)
+            addDataSourcePropertyIfDefined("sslcert", config.database.sslcert)
+            addDataSourcePropertyIfDefined("sslkey", config.database.sslkey)
+            addDataSourcePropertyIfDefined("sslrootcert", config.database.sslrootcert)
         }
 
         return lazyOf(HikariDataSource(dataSourceConfig))
