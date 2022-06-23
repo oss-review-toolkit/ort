@@ -31,6 +31,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -186,6 +187,22 @@ class Pub(
         }
 
         return result
+    }
+
+    override fun findPackageManagerDependencies(
+        managedFiles: Map<PackageManager, List<File>>
+    ): PackageManagerDependencyResult {
+        // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
+        // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
+        // the path to the Android SDK.
+        val gradle = managedFiles.keys.find { it.managerName == Gradle.Factory().managerName }
+        val mustRunBefore = if (gradle != null && findGradleDefinitionFiles(managedFiles.getValue(this)).isNotEmpty()) {
+            setOf(gradle.managerName)
+        } else {
+            emptySet()
+        }
+
+        return PackageManagerDependencyResult(mustRunBefore = mustRunBefore, mustRunAfter = emptySet())
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
