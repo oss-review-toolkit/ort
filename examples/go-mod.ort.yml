@@ -1,5 +1,5 @@
 excludes:
   scopes:
-    - pattern: "all"
+    - pattern: "vendor"
       reason: "DEV_DEPENDENCY_OF"
-      comment: "Packages to build all targets including tests only."
+      comment: "Packages to build and test the main module."
