@@ -150,7 +150,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          */
         private fun createPostgresStorage(config: PostgresStorageConfiguration): ScanResultsStorage {
             val dataSource = DatabaseUtils.createHikariDataSource(
-                config = config,
+                config = config.connection,
                 applicationNameSuffix = TOOL_NAME,
                 // Use a value slightly higher than the number of transactions accessing the storage.
                 maxPoolSize = config.connection.parallelTransactions + 3

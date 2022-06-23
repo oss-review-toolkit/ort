@@ -111,7 +111,7 @@ class UploadResultToPostgresCommand : CliktCommand(
         }
 
         val dataSource = DatabaseUtils.createHikariDataSource(
-            config = postgresConfig,
+            config = postgresConfig.connection,
             applicationNameSuffix = "upload-result-command"
         )
 
