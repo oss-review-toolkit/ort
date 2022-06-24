@@ -38,7 +38,7 @@ application {
 }
 
 graal {
-    graalVersion(libs.versions.graalVm.get())
+    graalVersion(libs.versions.graal.get())
     javaVersion("17")
 
     option("--no-fallback")
