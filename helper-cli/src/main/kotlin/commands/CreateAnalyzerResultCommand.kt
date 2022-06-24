@@ -89,13 +89,13 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
 
     private val scancodeVersion by option(
         "--scancode-version",
-        help = "The ScanCode version to match for in the scan results."
+        help = "The ScanCode version to match for in the scan results. If blank, any ScanCode version is matched."
     )
 
     override fun run() {
         val ids = packageIdsFile.readLines().filterNot { it.isBlank() }.map { Identifier(it.trim()) }
         val packages = openDatabaseConnection().use { connection ->
-            getScannedPackages(connection, ids, scancodeVersion)
+            getScannedPackages(connection, ids, scancodeVersion?.takeIf { it.isNotBlank() })
         }.filterMaxByDate()
         val ortResult = createAnalyzerResult(packages)
 
