@@ -444,6 +444,9 @@ class FossId internal constructor(
     ): String {
         // we ignore the revision because we want to do a delta scan
         val recentScans = scans.recentScansForRepository(url)
+
+        log.info { "Found ${recentScans.size} scans." }
+
         val existingScan = recentScans.findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
