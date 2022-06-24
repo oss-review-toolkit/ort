@@ -258,6 +258,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
 
         if (checkSyntax) {
             if (Evaluator().checkSyntax(script)) {
+                println("Syntax check succeeded.")
                 return
             }
 
