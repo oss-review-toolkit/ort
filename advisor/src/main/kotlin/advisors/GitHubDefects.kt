@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
+
 import java.net.URI
 import java.time.Instant
 import java.util.concurrent.Executors
@@ -109,7 +112,8 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     private val service by lazy {
         GitHubService.create(
             token = gitHubConfiguration.token.orEmpty(),
-            url = gitHubConfiguration.endpointUrl?.let { URI(it) } ?: GitHubService.ENDPOINT
+            url = gitHubConfiguration.endpointUrl?.let { URI(it) } ?: GitHubService.ENDPOINT,
+            client = HttpClient(OkHttp)
         )
     }
 

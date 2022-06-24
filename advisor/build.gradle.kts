@@ -31,6 +31,7 @@ dependencies {
     api(project(":model"))
 
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.ktorClientOkHttp)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)

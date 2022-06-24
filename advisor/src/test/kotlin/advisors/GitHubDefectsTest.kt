@@ -307,7 +307,7 @@ class GitHubDefectsTest : WordSpec({
             advisor.retrievePackageFindings(listOf(createPackage()))
 
             verify {
-                GitHubService.create(GITHUB_TOKEN, endpointUri)
+                GitHubService.create(GITHUB_TOKEN, endpointUri, any())
             }
         }
     }
@@ -415,7 +415,7 @@ private fun createGitHubServiceMock(url: URI = GitHubService.ENDPOINT): GitHubSe
     val service = mockk<GitHubService>()
 
     mockkObject(GitHubService)
-    every { GitHubService.create(GITHUB_TOKEN, url) } returns service
+    every { GitHubService.create(GITHUB_TOKEN, url, any()) } returns service
 
     return service
 }

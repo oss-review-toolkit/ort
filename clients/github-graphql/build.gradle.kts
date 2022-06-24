@@ -37,9 +37,10 @@ graphql {
 }
 
 dependencies {
+    api(libs.ktorClientCore)
+
     implementation(libs.graphQlKtorClient)
     implementation(libs.kotlinxSerialization)
-    implementation(libs.ktor)
     implementation(libs.log4jApiKotlin)
 
     testImplementation(libs.wiremock)
