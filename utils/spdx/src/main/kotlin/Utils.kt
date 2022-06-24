@@ -136,7 +136,7 @@ fun getLicenseTextReader(
 ): (() -> String)? {
     return if (id.startsWith(LICENSE_REF_PREFIX)) {
         getLicenseTextResource(id)?.let { { it.readText() } }
-            ?: addScanCodeLicenseTextsDir(licenseTextDirectories).asSequence().firstNotNullOfOrNull {
+            ?: addScanCodeLicenseTextsDir(licenseTextDirectories).firstNotNullOfOrNull {
                 getLicenseTextFile(id, it)?.let { file -> { file.readText() } }
             }
     } else {
