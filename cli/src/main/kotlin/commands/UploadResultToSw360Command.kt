@@ -105,15 +105,14 @@ class UploadResultToSw360Command : CliktCommand(
                 if (attachSources) {
                     val tempDirectory = createOrtTempDir(pkg.id.toPath())
                     try {
-                        // First, download the sources of the package into a sources directory, whose parent directory
+                        // First, download the sources of the package into a source directory, whose parent directory
                         // is temporary.
                         val sourcesDirectory = tempDirectory.resolve("sources")
                         downloader.download(pkg, sourcesDirectory)
 
-                        // After downloading the source files successfully in a sources directory, create a
-                        // ZIP file of the sources directory and save it in the root directory of it.
-                        // Finally the created ZIP file of the sources can be uploaded to SW360 as an attachment
-                        // of the release.
+                        // After downloading the source files successfully in a source directory, create a ZIP file of
+                        // the sources directory and save it in the root directory of it. Finally, the created ZIP file
+                        // of the sources can be uploaded to SW360 as an attachment of the release.
                         val zipFile = tempDirectory.resolve("${pkg.id.toPath("-")}.zip")
                         val archiveResult = sourcesDirectory.packZip(zipFile)
 

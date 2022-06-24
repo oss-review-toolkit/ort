@@ -46,7 +46,7 @@ interface DependencyNavigator {
         val MATCH_ALL: DependencyMatcher = { true }
 
         /**
-         * A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating sub projects.
+         * A pre-defined [DependencyMatcher] that matches only dependencies with a linkage indicating subprojects.
          */
         private val MATCH_SUB_PROJECTS: DependencyMatcher = { node ->
             node.linkage in PackageLinkage.PROJECT_LINKAGE
@@ -147,7 +147,7 @@ interface DependencyNavigator {
     }
 
     /**
-     * Return the set of [Identifier]s that refer to sub-projects of the given [project].
+     * Return the set of [Identifier]s that refer to subprojects of the given [project].
      */
     fun collectSubProjects(project: Project): Set<Identifier> =
         scopeDependencies(project, matcher = MATCH_SUB_PROJECTS).collectDependencies()
@@ -177,7 +177,7 @@ interface DependencyNavigator {
         collectIssues(scopeNames(project).asSequence().flatMap { directDependencies(project, it) })
 
     /**
-     * Determine the map of shortest paths for all the dependencies of a [project], given its map of
+     * Determine the map of the shortest paths for all the dependencies of a [project], given its map of
      * [scopeDependencies].
      */
     private fun getShortestPathForScope(
@@ -187,7 +187,7 @@ interface DependencyNavigator {
         getShortestPathsForScope(directDependencies(project, scope), dependenciesForScope(project, scope))
 
     /**
-     * Determine the map of shortest paths for a specific scope given its direct dependency [nodes] and a set with
+     * Determine the map of the shortest paths for a specific scope given its direct dependency [nodes] and a set with
      * [allDependencies].
      */
     private fun getShortestPathsForScope(

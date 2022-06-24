@@ -314,7 +314,7 @@ class Pub(
 
             val pkgInfoFromLockFile = lockFile["packages"][packageName]
             // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
-            // it is not stored in .pub-cache. For now we just ignore those SDK packages.
+            // it is not stored in .pub-cache. For now, we just ignore those SDK packages.
             if (pkgInfoFromLockFile == null || pkgInfoFromLockFile["source"].textValueOrEmpty() == "sdk") return@forEach
 
             val id = Identifier(

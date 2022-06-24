@@ -215,7 +215,7 @@ class Subversion : VersionControlSystem() {
                 // Then update the working tree in the current revision along the requested path, and ...
                 updateEmptyPath(workingTree, SVNRevision.HEAD, path)
 
-                // finally deepen only the requested path in the current revision.
+                // Finally, deepen only the requested path in the current revision.
                 clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
                     workingTree.workingDir.resolve(path),
                     SVNRevision.HEAD,

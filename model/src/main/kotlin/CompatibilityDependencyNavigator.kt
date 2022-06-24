@@ -25,10 +25,10 @@ package org.ossreviewtoolkit.model
  *
  * While in future newly written [OrtResult] files are going to use the dependency graph format exclusively, existing
  * files may still store their dependency information in the classic dependency tree format, or even in a mixture of
- * both formats (if some of the package managers in use have already been ported to the new format while others have
- * not). In such a constellation, it has to be decided on a per project basis, how dependency information has to be
- * accessed. This is exactly what this implementation does: For each request, it determines the dependency format of
- * the project in question and then delegates to a corresponding [DependencyNavigator] instance.
+ * both formats (if some package managers in use have already been ported to the new format while others have not). In
+ * such a constellation, it has to be decided on a per-project basis, how dependency information has to be accessed.
+ * This is exactly what this implementation does: For each request, it determines the dependency format of the project
+ * in question and then delegates to a corresponding [DependencyNavigator] instance.
  */
 class CompatibilityDependencyNavigator internal constructor(
     /** The [DependencyNavigator] to handle projects using the graph format. */

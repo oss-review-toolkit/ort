@@ -192,7 +192,7 @@ interface ClearlyDefinedService {
     /**
      * Search for existing definitions based on the [pattern] string provided, see
      * https://api.clearlydefined.io/api-docs/#/definitions/get_definitions. This function represents the part of
-     * the definitions endpoint that allows searching for package coordinates based on a pattern. The pattern string
+     * the definition's endpoint that allows searching for package coordinates based on a pattern. The pattern string
      * should contain the parts of the coordinates (typically namespace, name, and version) relevant for the search.
      * Result is a list with the ClearlyDefined URIs to all the definitions that are matched by the pattern.
      */

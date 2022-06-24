@@ -118,7 +118,7 @@ class Cargo(
     }
 
     /**
-     * Check if a package is a project. All path dependencies inside of the analyzer root are treated as project
+     * Check if a package is a project. All path dependencies inside the analyzer root are treated as project
      * dependencies.
      */
     private fun isProjectDependency(id: String) =
@@ -247,7 +247,7 @@ private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
         .map { it.trim() }
         .filterTo(sortedSetOf()) { it.isNotEmpty() }
 
-    // Cargo allows to declare non-SPDX licenses only by referencing a license file. If a license file is specified, add
+    // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
     // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
     // point.
     // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields

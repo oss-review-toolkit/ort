@@ -77,7 +77,7 @@ object OkHttpClientHelper {
         OrtProxySelector.install()
 
         if (log.delegate.isDebugEnabled) {
-            // Allow to track down leaked connections.
+            // Allow tracking down leaked connections.
             Logger.getLogger(OkHttpClient::javaClass.name).level = Level.FINE
         }
 

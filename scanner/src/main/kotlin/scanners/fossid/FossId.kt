@@ -397,7 +397,7 @@ class FossId internal constructor(
         revision: String? = null
     ): List<Scan> = filter {
         val isArchived = it.isArchived ?: false
-        // The scans in the server contain the url with the credentials so we have to remove it for the
+        // The scans in the server contain the url with the credentials, so we have to remove it for the
         // comparison. If we don't, the scans won't be matched if the password changes!
         val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
         !isArchived && urlWithoutCredentials == url && (revision == null || it.gitBranch == revision)

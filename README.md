@@ -126,8 +126,8 @@ You can find further hints for using ORT with Docker in the [documentation](./do
 
 ## Run natively
 
-First of all, make sure that the locale of your system is set to `en_US.UTF-8` as using other locales might lead to
-issues with parsing the output of some external tools.
+First, make sure that the locale of your system is set to `en_US.UTF-8` as using other locales might lead to issues with
+parsing the output of some external tools.
 
 Then install any missing external command line tools as listed by
 
@@ -192,15 +192,15 @@ operational.
 | HOCON  | Global | `$ORT_CONFIG_DIR/ort.conf` |
 
 The [reference configuration file](./model/src/main/resources/reference.conf) gives a good impression about the content
-of the main ORT configuration file. It consists of sections related to different sub components of ORT. The meaning
-of these sections and the properties they can contain is described together with the corresponding sub components.
+of the main ORT configuration file. It consists of sections related to different subcomponents of ORT. The meaning
+of these sections and the properties they can contain is described together with the corresponding subcomponents.
 
 While the file is rather static, there are means to override configuration options for a specific run of ORT or to
 customize the configuration to a specific environment. The following options are supported, in order of precedence:
 
 * Properties can be defined via environment variables by using the full property path as the variable name.
   For instance, one can override the Postgres schema by setting 
-  `ort.scanner.storages.postgres.schema=test_schema`. The variable's name is case sensitive.
+  `ort.scanner.storages.postgres.schema=test_schema`. The variable's name is case-sensitive.
   Some programs like Bash do not support dots in variable names. For this case, the dots can be
   replaced by double underscores, i.e., the above example is turned into 
   `ort__scanner__storages__postgres__schema=test_schema`.
@@ -248,7 +248,7 @@ A directory that contains license texts which are not provided by ORT.
 
 #### [How to fix text provider script](./docs/how-to-fix-text-provider-kts.md)
 
-A Kotlin script that enables the injection of how-to-fix texts in markdown format for ORT issues into the reports.
+A Kotlin script that enables the injection of how-to-fix texts in Markdown format for ORT issues into the reports.
 
 | Format        | Scope  | Default location                               |
 |---------------|--------|------------------------------------------------|
@@ -688,7 +688,7 @@ following formats are supported (reporter names are case-insensitive):
 
 ORT is being continuously used on Linux, Windows and macOS by the
 [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are
-considered to be well supported.
+considered to be well-supported.
 
 To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required. Memory and
 CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is

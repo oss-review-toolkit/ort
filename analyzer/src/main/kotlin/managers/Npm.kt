@@ -136,7 +136,7 @@ open class Npm(
                     // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
                     declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
 
-                    // NPM allows to declare non-SPDX licenses only by referencing a license file. Avoid reporting an
+                    // NPM allows declaring non-SPDX licenses only by referencing a license file. Avoid reporting an
                     // [OrtIssue] by mapping this to a valid license identifier.
                     declaredLicense.startsWith("SEE LICENSE IN ") -> SpdxConstants.NOASSERTION
 

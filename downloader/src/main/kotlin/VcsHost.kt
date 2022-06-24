@@ -580,7 +580,7 @@ private fun toGitPermalink(
     if (revision.isNotEmpty()) {
         // GitHub and GitLab are tolerant about "blob" vs. "tree" here, but SourceHut requires "tree" also for files.
         val gitObject = if (path.isNotEmpty()) {
-            // Markdown files are usually rendered and can only link to lines in blame view.
+            // Markdown files are usually rendered and can only link to lines in the blame view.
             if (path.isPathToMarkdownFile() && startLine != -1) "blame" else "tree"
         } else {
             "commit"

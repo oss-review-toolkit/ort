@@ -177,8 +177,8 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         return url
     }
 
-    // URLs to Git repos may omit the scheme and use an scp-like URL that uses ":" to separate the host from the path,
-    // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL so it can be parsed
+    // URLs to Git repos may omit the scheme and use an SCP-like URL that uses ":" to separate the host from the path,
+    // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL, so it can be parsed
     // by Java's URI class.
     url = url.replace(Regex("^(.*)([a-zA-Z]+):([a-zA-Z]+)(.*)$")) {
         val tail = "${it.groupValues[1]}${it.groupValues[2]}/${it.groupValues[3]}${it.groupValues[4]}"
@@ -226,11 +226,11 @@ fun normalizeVcsUrl(vcsUrl: String): String {
                 val query = uri.query?.takeIf { it.isNotBlank() }?.let { "?$it" }.orEmpty()
 
                 return if (uri.scheme == "ssh") {
-                    // Ensure the generic "git" user name is specified.
+                    // Ensure the generic "git" username is specified.
                     val host = uri.authority.let { if (it.startsWith("git@")) it else "git@$it" }
                     "ssh://$host$path$query"
                 } else {
-                    // Remove any user name and "www" prefix.
+                    // Remove any username and "www" prefix.
                     val host = uri.authority.substringAfter('@').removePrefix("www.")
                     "https://$host$path$query"
                 }

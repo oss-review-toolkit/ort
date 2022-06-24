@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
 /**
  * Creates YAML and JSON SPDX documents mainly targeting the use case of sharing information about the dependencies
- * used, similar to e.g. a NOTICE file. Information about the project / sub-module structure as well as project VCS
+ * used, similar to e.g. a NOTICE file. Information about the project / submodule structure as well as project VCS
  * locations are deliberately omitted. The underlying idea is to clearly separate this mentioned use case from a maximum
  * detailed report which could be preferred for archiving or internal use only. The latter could be implemented either
  * as a future extension of this [SpdxDocumentReporter] or as a separate [Reporter].

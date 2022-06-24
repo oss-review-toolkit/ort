@@ -67,7 +67,7 @@ class MavenFunTest : StringSpec() {
             )
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
-            // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
+            // available in the Maven.projectsByIdentifier cache. Otherwise, resolution of transitive dependencies would
             // not work.
             val managerResult = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib), emptyMap())
             val result = managerResult.projectResults[pomFileApp]

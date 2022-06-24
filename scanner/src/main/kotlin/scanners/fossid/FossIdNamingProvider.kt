@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.ort.log
  * Available builtin variables:
  * * **projectName**: The name of the project (i.e. the part of the URL before .git).
  * * **currentTimestamp**: The current time.
- * * **deltaTag** (scan code only): If delta scans is enabled, this qualify the scan as an *origin* scan or a *delta*
+ * * **deltaTag** (scan code only): If delta scans is enabled, this qualifies the scan as an *origin* scan or a *delta*
  * scan.
  */
 internal class FossIdNamingProvider(

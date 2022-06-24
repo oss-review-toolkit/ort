@@ -160,7 +160,7 @@ data class Sw360StorageConfiguration(
     val password: String = "",
 
     /**
-     * The client ID of the SW360 instance for the two step authentication.
+     * The client ID of the SW360 instance for the two-step authentication.
      */
     val clientId: String,
 

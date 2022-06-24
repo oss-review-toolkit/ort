@@ -630,9 +630,9 @@ class ExperimentalScannerTest : WordSpec({
                 provenanceWithoutVcsPath,
                 scannerWrapper.details,
                 sortedSetOf(
-                    // Add a license finding outside of the subdirectory that is matched by a license file pattern.
+                    // Add a license finding outside the subdirectory that is matched by a license file pattern.
                     LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 1)),
-                    // Add a license finding outside of the subdirectory that is not matched by a license file pattern.
+                    // Add a license finding outside the subdirectory that is not matched by a license file pattern.
                     LicenseFinding("Apache-2.0", TextLocation("other", 1, 1)),
                     // Add a license finding inside the subdirectory.
                     LicenseFinding("Apache-2.0", TextLocation("subdirectory/file", 1, 1))
@@ -652,7 +652,7 @@ class ExperimentalScannerTest : WordSpec({
                 provenanceWithVcsPath,
                 scannerWrapper.details,
                 sortedSetOf(
-                    // Add a license finding outside of the subdirectory that is matched by a license file pattern.
+                    // Add a license finding outside the subdirectory that is matched by a license file pattern.
                     LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 1)),
                     // Add a license finding inside the subdirectory.
                     LicenseFinding("Apache-2.0", TextLocation("subdirectory/file", 1, 1))

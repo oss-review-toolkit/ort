@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
- * Classifications for licenses which allow to assign metadata to licenses. This allows defining rather generic
+ * Classifications for licenses which allow assigning metadata to licenses. This allows defining rather generic
  * categories and assigning licenses to these. That way flexible classifications can be created based on
  * customizable categories. The available license categories need to be declared explicitly; when creating an
  * instance, it is checked that all the references from the [categorizations] point to existing [categories].

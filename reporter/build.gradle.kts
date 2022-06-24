@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.poiOoxml)
     implementation(libs.retrofit)
 
-    // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise the formatting of
+    // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise, the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     implementation(libs.saxonHe)
 
