@@ -442,22 +442,32 @@ class FossId internal constructor(
         projectCode: String,
         projectName: String
     ): String {
+        val urlWithoutCredentials = url.replaceCredentialsInUri()
+        if (urlWithoutCredentials != url) {
+            log.warn { "The URL should not contain credentials as its interaction with delta scans is unpredictable." }
+        }
+
         // we ignore the revision because we want to do a delta scan
-        val recentScans = scans.recentScansForRepository(url)
+        val recentScans = scans.recentScansForRepository(urlWithoutCredentials)
 
         log.info { "Found ${recentScans.size} scans." }
 
         val existingScan = recentScans.findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
-            log.info { "No scan found for $url and revision $revision. Creating origin scan..." }
+            log.info { "No scan found for $urlWithoutCredentials and revision $revision. Creating origin scan..." }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
         } else {
-            log.info { "Scan found for $url and revision $revision. Creating delta scan..." }
+            log.info { "Scan found for $urlWithoutCredentials and revision $revision. Creating delta scan..." }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
-        val newUrl = if (config.addAuthenticationToUrl) queryAuthenticator(url) else url
+        val newUrl = if (config.addAuthenticationToUrl) {
+            queryAuthenticator(urlWithoutCredentials)
+        } else {
+            urlWithoutCredentials
+        }
+
         createScan(projectCode, scanCode, newUrl, revision)
 
         log.info { "Initiating the download..." }
