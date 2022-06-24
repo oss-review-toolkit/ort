@@ -31,8 +31,8 @@ hoplite = "2.1.5"
 jackson = "2.13.3"
 jgit = "6.2.0.202206071550-r"
 jiraRestClient = "5.2.4"
-jschAgentProxy = "0.0.7"
 jruby = "9.3.4.0"
+jschAgentProxy = "0.0.7"
 jslt = "0.1.12"
 jsonSchemaValidator = "1.0.70"
 kotest = "5.3.1"
@@ -40,8 +40,8 @@ kotlinxCoroutines = "1.6.2"
 kotlinxHtml = "0.7.5"
 kotlinxSerialization = "1.3.3"
 ktor = "1.6.8"
-log4jApiKotlin = "1.1.0"
 log4j = "2.17.2"
+log4jApiKotlin = "1.1.0"
 maven = "3.8.6"
 mavenResolver = "1.7.3"
 mockk = "1.12.4"
@@ -90,8 +90,8 @@ digraphParser = { module = "com.paypal.digraph:digraph-parser", version.ref = "d
 diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
 exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposedDao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
+exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
 graphQlKtorClient = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphQlPlugin" }
@@ -109,8 +109,8 @@ jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 jgitJsch = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.jsch", version.ref = "jgit" }
 jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClientApp = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
-jschAgentProxy = { module = "com.jcraft:jsch.agentproxy.jsch", version.ref = "jschAgentProxy" }
 jruby = { module = "org.jruby:jruby-complete", version.ref = "jruby" }
+jschAgentProxy = { module = "com.jcraft:jsch.agentproxy.jsch", version.ref = "jschAgentProxy" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
@@ -127,8 +127,8 @@ log4jApi = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j
 log4jApiKotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
 log4jCore = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
 log4jImplSlf4j = { module = "org.apache.logging.log4j:log4j-slf4j-impl", version.ref = "log4j" }
-mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
 mavenCompat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
+mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
 mavenResolverConnectorBasic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
 mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
 mavenResolverTransportHttp = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
@@ -141,8 +141,8 @@ postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", versio
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 retrofitConverterJackson = { module = "com.squareup.retrofit2:converter-jackson", version.ref = "retrofit" }
-retrofitConverterScalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofitConverterKotlinxSerialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofitConverterKotlinxSerialization" }
+retrofitConverterScalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
 scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }
 semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }
