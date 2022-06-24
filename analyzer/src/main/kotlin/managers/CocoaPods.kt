@@ -89,7 +89,7 @@ class CocoaPods(
 
     override fun command(workingDir: File?) = "pod"
 
-    override fun getVersionRequirement() = Requirement.buildIvy("[1.11.0,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.11.0,)")
 
     override fun getVersionArguments() = "--version --allow-root"
 

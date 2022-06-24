@@ -47,7 +47,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun getDefaultBranchName(url: String): String? = null
 
-    override fun transformVersion(output: String) =
+    override fun transformVersion(output: String): String =
         versionRegex.matcher(output.lineSequence().first()).let {
             if (it.matches()) {
                 it.group("version")

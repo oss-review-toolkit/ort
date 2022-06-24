@@ -42,7 +42,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
-val SCANCODE_TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
+val SCANCODE_TIMESTAMP_FORMATTER: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
 
 private data class LicenseMatch(
     val expression: String,

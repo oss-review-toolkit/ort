@@ -57,13 +57,15 @@ class LicenseInfoResolver(
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
      */
-    fun resolveLicenseInfo(id: Identifier) = resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
+    fun resolveLicenseInfo(id: Identifier): ResolvedLicenseInfo =
+        resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
 
     /**
      * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id]. Requires an [archiver] to be
      * configured, otherwise always returns empty results.
      */
-    fun resolveLicenseFiles(id: Identifier) = resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
+    fun resolveLicenseFiles(id: Identifier): ResolvedLicenseFileInfo =
+        resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
 
     private fun createLicenseInfo(id: Identifier): ResolvedLicenseInfo {
         val licenseInfo = provider.get(id)
