@@ -1,10 +1,11 @@
 # AsciiDoc template reporters
 
 The AsciiDoc template reporters create reports using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
-with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator for the [PDF Template Reporter](#PDF).
-For each Freemarker template provided using the options described below a separate intermediate file is created that can be
-processed by AsciidoctorJ. If no options are provided, the "disclosure_document" template is used, and if security
-vulnerability information is available also the "vulnerability_report" template.
+with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator for the
+[PDF Template Reporter](#PDF). For each Freemarker template provided using the options described below a separate
+intermediate file is created that can be processed by AsciidoctorJ. If no options are provided, the
+"disclosure_document" template is used, and if security vulnerability information is available also the
+"vulnerability_report" template.
 
 ## General report options
 
