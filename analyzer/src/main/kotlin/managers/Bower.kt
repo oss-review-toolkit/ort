@@ -154,7 +154,7 @@ class Bower(
 
         private fun dependencyKeyOf(node: JsonNode): String? {
             // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
-            // only the name and version attributes can be used. Typically those attributes should be not null
+            // only the name and version attributes can be used. Typically, those attributes should be not null
             // however in particular for root projects the null case also happens.
             val name = node["pkgMeta"]["name"].textValueOrEmpty()
             val version = node["pkgMeta"]["version"].textValueOrEmpty()

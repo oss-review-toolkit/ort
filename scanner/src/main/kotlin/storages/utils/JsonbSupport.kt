@@ -58,7 +58,7 @@ private class JsonbColumnType<T : Any>(private val klass: KClass<T>) : ColumnTyp
 fun <T : Any> Table.jsonb(name: String, klass: KClass<T>): Column<T> = registerColumn(name, JsonbColumnType(klass))
 
 /**
- * The null character "\u0000" is not allowed in PostgreSQL JSONB columns so we need to escape it before writing a
+ * The null character "\u0000" is not allowed in PostgreSQL JSONB columns, so we need to escape it before writing a
  * string to the database.
  * See: [https://www.postgresql.org/docs/11/datatype-json.html]
  */

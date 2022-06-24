@@ -200,7 +200,7 @@ fun File.searchUpwardsForFile(searchFileName: String, ignoreCase: Boolean = fals
 }
 
 /**
- * Search [this] directory upwards towards the root until a contained sub-directory called [searchDirName] is found and
+ * Search [this] directory upwards towards the root until a contained subdirectory called [searchDirName] is found and
  * return the parent of [searchDirName], or return null if no such directory is found.
  */
 fun File.searchUpwardsForSubdirectory(searchDirName: String): File? {
@@ -397,8 +397,8 @@ fun String.percentEncode(): String =
         .replace("%7E", "~")
 
 /**
- * Replace any user name / password in the URI represented by this [String] with [userInfo]. If [userInfo] is null, the
- * user name / password are stripped. Return the unmodified [String] if it does not represent a URI.
+ * Replace any username / password in the URI represented by this [String] with [userInfo]. If [userInfo] is null, the
+ * username / password are stripped. Return the unmodified [String] if it does not represent a URI.
  */
 fun String.replaceCredentialsInUri(userInfo: String? = null) =
     toUri {

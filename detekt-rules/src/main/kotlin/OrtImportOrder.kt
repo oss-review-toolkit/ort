@@ -57,7 +57,7 @@ class OrtImportOrder(config: Config) : Rule(config) {
                 is KtImportDirective -> psi.importPath.toString()
                 // Between two imports there is a child PSI of type whitespace.
                 // For 'n' blank lines in between, the text of this child contains
-                // 'n + 1' line breaks. Thus a single blank line is represented by "\n\n".
+                // 'n + 1' line breaks. Thus, a single blank line is represented by "\n\n".
                 is PsiWhiteSpace -> if (psi.text == "\n\n") "" else null
                 else -> null
             }

@@ -153,7 +153,7 @@ data class Vulnerability(
  */
 @Serializable
 enum class VulnerabilitySource {
-    /** Github Advisories. */
+    /** GitHub Advisories. */
     @SerialName("github_advisories")
     GITHUB_ADVISORIES,
 

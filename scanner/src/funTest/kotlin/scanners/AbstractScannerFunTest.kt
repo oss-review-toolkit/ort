@@ -53,7 +53,7 @@ abstract class AbstractScannerFunTest(testTags: Set<Tag> = emptySet()) : StringS
     override suspend fun beforeSpec(spec: Spec) {
         inputDir = createSpecTempDir()
 
-        // Copy our own root license under different names to a temporary directory so we have something to operate on.
+        // Copy our own root license under different names to a temporary directory, so we have something to operate on.
         val ortLicense = File("../LICENSE")
         commonlyDetectedFiles.forEach {
             val text = ortLicense.readText()

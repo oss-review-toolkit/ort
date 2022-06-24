@@ -13,7 +13,7 @@ The pipeline is defined in `ort-pipeline.yaml`. You will need to replace `ort:la
 
 The pipeline takes a few inputs:
 * `shared-data` is a workspace and will need a volume, it's used for checking out the source code repo, and storing the temporary artifacts
-* `gcs-credentials` is a workspace and will need a volume. On GKE you can use Workload Identities to allow the Kubernetes Service Account (KSA) to access the GCS bucket for uploading the results. (If you are not using Workload Idenity, find more information how to configure credentials in the [gcs-upload](https://hub.tekton.dev/tekton/task/gcs-upload) documentation).
+* `gcs-credentials` is a workspace and will need a volume. On GKE, you can use Workload Identities to allow the Kubernetes Service Account (KSA) to access the GCS bucket for uploading the results. (If you are not using Workload Idenity, find more information how to configure credentials in the [gcs-upload](https://hub.tekton.dev/tekton/task/gcs-upload) documentation).
 * `repo-url` is a param, and takes the path to the Git repo that should be scanned.
 * `result-bucket-path` is a parameter, and takes the path to GCS where the result report should be stored e.g. gs://<gcs-bucket>/<sub_path>.
 
@@ -26,4 +26,4 @@ In order to get started call `kubectl apply -f ort-pipeline.yaml` to create the 
 ## Next Steps
 You probably don't want to trigger each execution via `kubectl`. Check out the [Tekton documentation](https://tekton.dev/docs/triggers/) to learn how you can trigger a _PipelineRun_ via _EventListeneres_.
 
-If you aren't working on a public GitHub repository you should also checkout how to work with a [private repo](https://hub.tekton.dev/tekton/task/git-clone).
+If you aren't working on a public GitHub repository you should also check out how to work with a [private repo](https://hub.tekton.dev/tekton/task/git-clone).

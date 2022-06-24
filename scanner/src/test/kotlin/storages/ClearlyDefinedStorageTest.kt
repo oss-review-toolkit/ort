@@ -164,7 +164,7 @@ private fun stubHarvestToolResponse(server: WireMockServer, coordinates: Coordin
 }
 
 /**
- * Stub a request for the definitions endpoint for the given [coordinates] on the [server] server.
+ * Stub a request for the definition's endpoint for the given [coordinates] on the [server] server.
  */
 private fun stubDefinitions(server: WireMockServer, coordinates: Coordinates = COORDINATES) {
     val coordinatesList = listOf(coordinates)

@@ -129,7 +129,7 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Try to download the source code from the sources artifact. Returns null if the download failed adds the
+     * Try to download the source code from the source artifact. Returns null if the download failed adds the
      * suppressed exception to [exception].
      */
     private fun handleSourceArtifactDownload(
@@ -249,7 +249,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             //       non-strict mode.
             val vcsUrlNoCredentials = pkg.vcsProcessed.url.replaceCredentialsInUri()
             if (vcsUrlNoCredentials != pkg.vcsProcessed.url) {
-                // Try once more with any user name / password stripped from the URL.
+                // Try once more with any username / password stripped from the URL.
                 log.info {
                     "Falling back to trying to download from $vcsUrlNoCredentials which has credentials removed."
                 }
@@ -350,7 +350,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
 /**
  * Consolidate [projects] based on their VcsInfo without taking the path into account. As we store VcsInfo per project
- * but many project definition files actually reside in different sub-directories of the same VCS working tree, it does
+ * but many project definition files actually reside in different subdirectories of the same VCS working tree, it does
  * not make sense to download (and scan) all of them individually, not even if doing sparse checkouts. Return a map that
  * associates packages for projects in distinct VCS working trees with all other projects from the same VCS working
  * tree.

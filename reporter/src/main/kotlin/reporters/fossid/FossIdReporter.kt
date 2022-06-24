@@ -45,7 +45,7 @@ class FossIdReporter : Reporter {
         /** Name of the configuration property for the API key. */
         const val API_KEY_PROPERTY = "apiKey"
 
-        /** Name of the configuration property for the user name. */
+        /** Name of the configuration property for the username. */
         const val USER_PROPERTY = "user"
 
         /** Name of the configuration property for the report type. Default is [ReportType.HTML_DYNAMIC]. */

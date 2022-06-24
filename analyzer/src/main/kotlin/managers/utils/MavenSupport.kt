@@ -825,7 +825,7 @@ private class SkipBinaryDownloadsWorkspaceReader(
      * Locate the given artifact on the local disk. This implementation does a correct location only for POM files;
      * for all other artifacts it returns a non-null file. Note: For the purpose of analyzing the project's
      * dependencies the artifact files are never accessed. Therefore, the concrete file returned here does not
-     * actually matter; it just have to be non-null to indicate that the artifact is present locally.
+     * actually matter; it just has to be non-null to indicate that the artifact is present locally.
      */
     override fun findArtifact(artifact: Artifact): File? {
         return if (artifact.extension == "pom") {

@@ -36,20 +36,20 @@ enum class PackageLinkage {
     STATIC,
 
     /**
-     * A dynamically linked package whose source code is part of the project itself, e.g. a sub-project of a
+     * A dynamically linked package whose source code is part of the project itself, e.g. a subproject of a
      * multi-project.
      */
     PROJECT_DYNAMIC,
 
     /**
-     * A statically linked package whose source code is part of the project itself, e.g. a sub-project of a
+     * A statically linked package whose source code is part of the project itself, e.g. a subproject of a
      * multi-project.
      */
     PROJECT_STATIC;
 
     companion object {
         /**
-         * A set of linkage types that all refer to a sub-project in a multi-project.
+         * A set of linkage types that all refer to a subproject in a multi-project.
          */
         val PROJECT_LINKAGE = setOf(PROJECT_DYNAMIC, PROJECT_STATIC)
     }

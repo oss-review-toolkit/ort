@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  *
  * For any given directory the heuristic tries to assign license files by utilizing
  * [LicenseFilenamePatterns.licenseFilenames] and patent files by utilizing [LicenseFilenamePatterns.patentFilenames]
- * independently from one another. The [LicenseFilenamePatterns.rootLicenseFilenames] serve only as fallback to find
+ * independently of one another. The [LicenseFilenamePatterns.rootLicenseFilenames] serve only as fallback to find
  * license files if there isn't any match for [LicenseFilenamePatterns.licenseFilenames].
  *
  * To determine the (root) license files applicable for a specific directory, all filenames in that directory are

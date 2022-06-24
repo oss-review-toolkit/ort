@@ -35,7 +35,7 @@ interface RuleMatcher {
 }
 
 /**
- * A [RuleMatcher] that requires all of the provided [matchers] to match.
+ * A [RuleMatcher] that requires all provided [matchers] to match.
  */
 class AllOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "(${matchers.joinToString(" && ") { it.description }})"

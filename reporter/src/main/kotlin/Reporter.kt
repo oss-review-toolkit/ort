@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
- * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
+ * A reporter that creates a human-readable report from the [AnalyzerResult] and [ScanRecord] contained in an
  * [OrtResult]. The signatures of public functions in this class define the library API.
  */
 interface Reporter {

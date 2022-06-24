@@ -218,7 +218,7 @@ abstract class PackageManager(
     /**
      * Generate the final result to be returned by this package manager. This function is called at the very end of the
      * execution of this package manager (after [afterResolution]) with the [projectResults] created for the single
-     * definition files that have been processed. It can be overridden by sub classes to add additional data to the
+     * definition files that have been processed. It can be overridden by subclasses to add additional data to the
      * result. This base implementation produces a result that contains only the passed in map with project results.
      */
     protected open fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>):

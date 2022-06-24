@@ -158,7 +158,7 @@ class CycloneDxReporter : Reporter {
             // - If a multi-module project only produces a single application that gets distributed, then usually only a
             //   single BOM for that application is generated.
             // - If a multi-module project produces multiple applications (e.g. if there is one module per independent
-            //   micro-service), then usually for each project a BOM is generated as there are multiple things being
+            //   microservice), then usually for each project a BOM is generated as there are multiple things being
             //   distributed.
             //
             // As this distinction is hard to make programmatically (without additional information about the
@@ -238,7 +238,7 @@ class CycloneDxReporter : Reporter {
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
         val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
 
-        // Get all licenses, but note down their origins inside of an extensible type.
+        // Get all licenses, but note down their origins inside an extensible type.
         val licenseObjects = mapLicenseNamesToObjects(concludedLicenseNames, "concluded license", input) +
                 mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
                 mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)

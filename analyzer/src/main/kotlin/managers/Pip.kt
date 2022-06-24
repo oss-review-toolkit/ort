@@ -124,7 +124,7 @@ object PythonVersion : CommandLineTool {
 
     /**
      * Return the absolute path to the Python interpreter for the given [version]. This is helpful as esp. on Windows
-     * different Python versions can by installed in arbitrary locations, and the Python executable is even usually
+     * different Python versions can be installed in arbitrary locations, and the Python executable is even usually
      * called the same in those locations. Return `null` if no matching Python interpreter is available.
      */
     fun getPythonInterpreter(version: Int): String? =
@@ -495,7 +495,7 @@ class Pip(
     }
 
     private fun installDependencies(workingDir: File, definitionFile: File, virtualEnvDir: File): ProcessCapture {
-        // Ensure to have installed a version of pip that is know to work for us.
+        // Ensure to have installed a version of pip that is known to work for us.
         var pip = if (Os.isWindows) {
             // On Windows, in-place pip up- / downgrades require pip to be wrapped by "python -m", see
             // https://github.com/pypa/pip/issues/1299.
@@ -753,7 +753,7 @@ private fun Package.enrichWith(other: Package?): Package =
  * Normalize all PyPI package names to be lowercase and hyphenated as per PEP 426 and 503:
  *
  * PEP 426 (https://www.python.org/dev/peps/pep-0426/#name):
- * "All comparisons of distribution names MUST be case insensitive,
+ * "All comparisons of distribution names MUST be case-insensitive,
  * and MUST consider hyphens and underscores to be equivalent".
  *
  * PEP 503 (https://www.python.org/dev/peps/pep-0503/#normalized-names):

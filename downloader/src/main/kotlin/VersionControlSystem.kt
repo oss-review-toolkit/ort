@@ -272,7 +272,7 @@ abstract class VersionControlSystem {
      * [allowMovingRevisions] toggles whether candidates with symbolic names that point to moving revisions, like Git
      * branches, are accepted or not.
      *
-     * Revision candidates are created from the [processed VCS information[Package.vcsProcessed] of the [package][pkg]
+     * Revision candidates are created from the [processed VCS information][Package.vcsProcessed] of the [package][pkg]
      * and from [guessing revisions][WorkingTree.guessRevisionName] based on the name and version of the [package][pkg].
      * This is useful when the metadata of the package does not contain a revision or if the revision points to a
      * non-fetchable commit, but the repository still has a tag for the package version.

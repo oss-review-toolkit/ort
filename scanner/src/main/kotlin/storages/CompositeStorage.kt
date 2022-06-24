@@ -97,7 +97,7 @@ class CompositeStorage(
 
     /**
      * Trigger all configured writer storages to add the [scanResult] for the given [id]. Return a success result
-     * if all of the writers are successful; otherwise return a failure result with an accumulated error message.
+     * if all writers are successful; otherwise return a failure result with an accumulated error message.
      */
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
         val writeResults = writers.map { it.add(id, scanResult) }

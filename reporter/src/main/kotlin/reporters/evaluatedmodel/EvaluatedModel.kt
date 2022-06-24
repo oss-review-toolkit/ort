@@ -74,7 +74,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  *
  * Use cases for the [EvaluatedModel] are:
  *
- * * Input for the [WebAppReporter], so that it does not have to evaluate the model at runtime. Currently the model is
+ * * Input for the [WebAppReporter], so that it does not have to evaluate the model at runtime. Currently, the model is
  *   optimized for this use case.
  * * Input for [Reporter] implementations, so that they do not have to repeatedly implement the application of excludes,
  *   resolutions, and so on.
@@ -84,7 +84,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  *
  * * The model uses Kotlin data classes with cyclic dependencies, therefore the [hashCode] and [toString] of affected
  *   classes cannot be used, because they would create stack overflows.
- * * When modifying the model make sure that the objects are serialized at the right place. By default Jackson
+ * * When modifying the model make sure that the objects are serialized at the right place. By default, Jackson
  *   serializes an Object with [ObjectIdInfo] the first time the serializer sees the object. If this is not desired
  *   because the object shall be serialized as the generated ID, the [JsonIdentityReference] annotation can be used to
  *   enforce this. For example, the list of [EvaluatedOrtIssue]s is serialized before the list of [EvaluatedPackage]s.

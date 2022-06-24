@@ -41,7 +41,7 @@ enum class RuleViolationResolutionReason {
     LICENSE_ACQUIRED_EXCEPTION,
 
     /**
-     * The rule violation is acceptable given the fact that the code it relates to has not be modified.
+     * The rule violation is acceptable given the fact that the code it relates to has not been modified.
      */
     NOT_MODIFIED_EXCEPTION,
 
