@@ -93,13 +93,14 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
 }
 
 tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+    gradleReleaseChannel = "current"
+    outputFormatter = null
+
     val nonFinalQualifiers = listOf(
         "alpha", "b", "beta", "cr", "dev", "ea", "eap", "m", "milestone", "pr", "preview", "rc", "\\d{14}"
     ).joinToString("|", "(", ")")
 
     val nonFinalQualifiersRegex = Regex(".*[.-]$nonFinalQualifiers[.\\d-+]*", RegexOption.IGNORE_CASE)
-
-    gradleReleaseChannel = "current"
 
     rejectVersionIf {
         candidate.version.matches(nonFinalQualifiersRegex)
