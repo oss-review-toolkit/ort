@@ -196,7 +196,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                             "sec:modifying_the_generated_pom"
                 "Maven" ->
                     " Please define the \"connection\" tag within the \"scm\" tag in the POM file, see: " +
-                            "http://maven.apache.org/pom.html#SCM"
+                            "https://maven.apache.org/pom.html#SCM"
                 "NPM" ->
                     " Please define the \"repository\" in the package.json file, see: " +
                             "https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository"
@@ -205,7 +205,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                             "https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls"
                 "SBT" ->
                     " Please make sure the published POM file includes the SCM connection, see: " +
-                            "http://maven.apache.org/pom.html#SCM"
+                            "https://maven.apache.org/pom.html#SCM"
                 else -> ""
             }
 
