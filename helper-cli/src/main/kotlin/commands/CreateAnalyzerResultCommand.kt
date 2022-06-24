@@ -94,7 +94,9 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
 
     override fun run() {
         val ids = packageIdsFile.readLines().filterNot { it.isBlank() }.map { Identifier(it.trim()) }
-        val packages = openDatabaseConnection().use { getScannedPackages(it, ids, scancodeVersion) }.filterMaxByDate()
+        val packages = openDatabaseConnection().use { connection ->
+            getScannedPackages(connection, ids, scancodeVersion)
+        }.filterMaxByDate()
         val ortResult = createAnalyzerResult(packages)
 
         println("Writing analyzer result with ${packages.size} packages to '${ortFile.absolutePath}'.")
