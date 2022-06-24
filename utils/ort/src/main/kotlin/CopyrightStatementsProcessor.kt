@@ -36,7 +36,7 @@ private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') 
 
 private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
 
-private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b([ ]*[,][ ]*)\\b(\\d{4})\\b".toRegex()
+private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b( *, *)\\b(\\d{4})\\b".toRegex()
 
 private val DUPLICATE_WHITESPACES_REGEX = "\\s+".toRegex()
 
@@ -61,7 +61,7 @@ private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
 
 private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
 
-private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})([ ]*[-][ ]*)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
+private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
 
 private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
