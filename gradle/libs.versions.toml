@@ -61,7 +61,7 @@ retrofitConverterKotlinxSerialization = "0.8.0"
 saxonHe = "11.3"
 scanoss = "1.1.6"
 semver4j = "3.1.0"
-springCore = "5.3.20"
+springCore = "5.3.21"
 svnkit = "1.10.6"
 # @pin this version as there are only newer weekly releases.
 sw360Client = "13.2.0-28"
