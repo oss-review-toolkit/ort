@@ -25,7 +25,7 @@ import com.expediagroup.graphql.client.types.GraphQLClientRequest
 import com.expediagroup.graphql.client.types.GraphQLClientResponse
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.features.defaultRequest
 import io.ktor.client.request.header
 
@@ -70,16 +70,19 @@ class GitHubService private constructor(
 
         /**
          * Create a new [GitHubService] instance that uses the given [token] to authenticate against the GitHub API.
-         * Optionally, the [url] for the GitHub GraphQL endpoint can be configured.
+         * Optionally, the [url] for the GitHub GraphQL endpoint can be configured, and a HTTP [client] can be
+         * specified.
          */
-        fun create(token: String, url: URI = ENDPOINT): GitHubService {
-            val client = HttpClient(engineFactory = OkHttp) {
+        fun create(token: String, url: URI = ENDPOINT, client: HttpClient? = null): GitHubService {
+            val clientConfig: HttpClientConfig<*>.() -> Unit = {
                 defaultRequest {
                     header("Authorization", "Bearer $token")
                 }
             }
 
-            return GitHubService(GraphQLKtorClient(url.toURL(), client))
+            val httpClient = client?.config(clientConfig) ?: HttpClient(clientConfig)
+
+            return GitHubService(GraphQLKtorClient(url.toURL(), httpClient))
         }
     }
 
