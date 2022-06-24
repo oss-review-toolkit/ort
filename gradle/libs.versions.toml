@@ -38,7 +38,7 @@ jruby = "9.3.4.0"
 # @pin this version as upgrading requires more testing.
 jschAgentProxy = "0.0.7"
 jslt = "0.1.12"
-jsonSchemaValidator = "1.0.70"
+jsonSchemaValidator = "1.0.71"
 kotest = "5.3.1"
 kotlinxCoroutines = "1.6.2"
 kotlinxHtml = "0.7.5"
