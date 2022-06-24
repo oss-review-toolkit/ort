@@ -33,6 +33,9 @@ import java.io.File
 import java.io.IOException
 import java.nio.file.Files
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import org.apache.commons.compress.archivers.ArchiveEntry
 
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -420,8 +423,11 @@ class ArchiveUtilsTest : WordSpec() {
                 val inputDir = createTestTempDir()
                 val parentDir = inputDir.resolve("parent").apply { safeMkdirs() }
                 val readmeFile = parentDir.resolve("readme.txt").apply { writeText("Hello World!") }
-                Files.createSymbolicLink(parentDir.resolve("loop-link").toPath(), parentDir.toPath())
-                Files.createSymbolicLink(parentDir.resolve("readme-link.txt").toPath(), readmeFile.toPath())
+
+                withContext(Dispatchers.IO) {
+                    Files.createSymbolicLink(parentDir.resolve("loop-link").toPath(), parentDir.toPath())
+                    Files.createSymbolicLink(parentDir.resolve("readme-link.txt").toPath(), readmeFile.toPath())
+                }
 
                 val zipFile = inputDir.packZip(outputDir.resolve("archive.zip")) {
                     it shouldBe readmeFile

@@ -48,6 +48,9 @@ import java.net.ServerSocket
 import java.net.URI
 import java.util.regex.Pattern
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.clients.github.issuesquery.Issue
 
 class GitHubServiceTest : WordSpec({
@@ -85,7 +88,7 @@ class GitHubServiceTest : WordSpec({
 
         "handle a connection error" {
             // Find a port on which no service is running.
-            val port = ServerSocket(0).use { it.localPort }
+            val port = withContext(Dispatchers.IO) { ServerSocket(0).use { it.localPort } }
             val serverUrl = "http://localhost:$port"
 
             val service = GitHubService.create(TOKEN, URI(serverUrl))
