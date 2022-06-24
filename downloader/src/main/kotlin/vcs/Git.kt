@@ -113,7 +113,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         return (refs["HEAD"] as? SymbolicRef)?.target?.name?.removePrefix("refs/heads/") ?: "master"
     }
 
-    override fun transformVersion(output: String) =
+    override fun transformVersion(output: String): String =
         versionRegex.matcher(output.lineSequence().first()).let {
             if (it.matches()) {
                 it.group("version")

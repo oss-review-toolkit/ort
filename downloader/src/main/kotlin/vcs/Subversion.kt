@@ -62,7 +62,7 @@ class Subversion : VersionControlSystem() {
     override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
 
-    override fun getVersion() = Version.getVersionString()
+    override fun getVersion(): String = Version.getVersionString()
 
     override fun getDefaultBranchName(url: String) = "trunk"
 
