@@ -69,17 +69,15 @@ class Unmanaged(
             vcsInfo == VcsInfo.EMPTY -> {
                 // This seems to be an analysis of a local directory that is not under version control, i.e. that is not
                 // a VCS working tree. In this case we have no change to get a version.
-                val projectDir = definitionFile
-
                 log.warn {
-                    "Analysis of local directory '$projectDir' which is not under version control will produce " +
+                    "Analysis of local directory '$definitionFile' which is not under version control will produce " +
                             "non-cacheable results as no version for the cache key can be determined."
                 }
 
                 Identifier(
                     type = managerName,
                     namespace = "",
-                    name = projectDir.name,
+                    name = definitionFile.name,
                     version = ""
                 )
             }
