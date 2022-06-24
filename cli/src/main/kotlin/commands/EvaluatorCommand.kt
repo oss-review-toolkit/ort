@@ -259,10 +259,10 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         if (checkSyntax) {
             if (Evaluator().checkSyntax(script)) {
                 return
-            } else {
-                println("Syntax check failed.")
-                throw ProgramResult(2)
             }
+
+            println("Syntax check failed.")
+            throw ProgramResult(2)
         }
 
         val existingOrtFile = requireNotNull(ortFile) {
