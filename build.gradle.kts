@@ -42,6 +42,7 @@ plugins {
     alias(libs.plugins.ideaExt)
     alias(libs.plugins.kotlin)
     alias(libs.plugins.taskInfo)
+    alias(libs.plugins.versionCatalogUpdate)
     alias(libs.plugins.versions)
 }
 
@@ -105,6 +106,11 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
     rejectVersionIf {
         candidate.version.matches(nonFinalQualifiersRegex)
     }
+}
+
+versionCatalogUpdate {
+    // Keep the custom sorting / grouping.
+    sortByKey.set(false)
 }
 
 allprojects {
