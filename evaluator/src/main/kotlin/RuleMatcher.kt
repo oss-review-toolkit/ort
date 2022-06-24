@@ -37,7 +37,7 @@ interface RuleMatcher {
 /**
  * A [RuleMatcher] that requires all of the provided [matchers] to match.
  */
-class AllOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class AllOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "(${matchers.joinToString(" && ") { it.description }})"
 
     override fun matches() = matchers.all { it.matches() }
@@ -46,7 +46,7 @@ class AllOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that requires at least one of the provided [matchers] to match.
  */
-class AnyOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class AnyOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "(${matchers.joinToString(" || ") { it.description }})"
 
     override fun matches() = matchers.any { it.matches() }
@@ -55,7 +55,7 @@ class AnyOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that requires none of the provided [matchers] to match.
  */
-class NoneOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class NoneOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "!(${matchers.joinToString(" || ") { it.description }})"
 
     override fun matches() = matchers.none { it.matches() }
@@ -64,7 +64,7 @@ class NoneOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that inverts the result of the provided [matcher].
  */
-class Not(val matcher: RuleMatcher) : RuleMatcher {
+class Not(private val matcher: RuleMatcher) : RuleMatcher {
     override val description = "!(${matcher.description})"
 
     override fun matches() = !matcher.matches()
