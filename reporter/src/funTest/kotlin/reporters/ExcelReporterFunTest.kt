@@ -28,6 +28,9 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 import org.apache.poi.ss.usermodel.Cell
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.Sheet
@@ -53,7 +56,9 @@ class ExcelReporterFunTest : WordSpec({
 
             // Open the sheet in shared read mode so Excel can have the file opened in the background.
             val path = Paths.get("src/funTest/assets/dummy-expected-scan-report.xlsx")
-            val expectedWorkbook = Files.newInputStream(path, StandardOpenOption.READ).use {
+            val expectedWorkbook = withContext(Dispatchers.IO) {
+                Files.newInputStream(path, StandardOpenOption.READ)
+            }.use {
                 WorkbookFactory.create(it)
             }
             val expectedSheetNames = expectedWorkbook.sheetIterator().asSequence().map { it.sheetName }.toList()
