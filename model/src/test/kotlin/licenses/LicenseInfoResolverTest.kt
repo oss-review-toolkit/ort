@@ -665,6 +665,7 @@ class LicenseInfoResolverTest : WordSpec() {
     private fun createLicenseInfo(
         id: Identifier,
         authors: SortedSet<String> = sortedSetOf(),
+        copyrightHolders : SortedSet<String> = sortedSetOf(),
         declaredLicenses: Set<String> = emptySet(),
         detectedLicenses: List<Findings> = emptyList(),
         concludedLicense: SpdxExpression? = null
@@ -673,6 +674,7 @@ class LicenseInfoResolverTest : WordSpec() {
             id = id,
             declaredLicenseInfo = DeclaredLicenseInfo(
                 authors = authors,
+                copyrightHolders = copyrightHolders,
                 licenses = declaredLicenses,
                 processed = DeclaredLicenseProcessor.process(declaredLicenses),
                 appliedCurations = emptyList()

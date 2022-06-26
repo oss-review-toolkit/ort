@@ -44,6 +44,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             authors = sortedSetOf("author"),
+            copyrightHolders = sortedSetOf("copyright"),
             declaredLicenses = sortedSetOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
@@ -61,6 +62,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             authors = sortedSetOf("other author"),
+            copyrightHolders = sortedSetOf("other copyright"),
             declaredLicenses = sortedSetOf("other declared license"),
             description = "other description",
             homepageUrl = "other homepageUrl",
@@ -75,6 +77,7 @@ class PackageTest : StringSpec({
         diff.binaryArtifact shouldBe pkg.binaryArtifact
         diff.comment should beNull()
         diff.authors shouldBe pkg.authors
+        diff.copyrightHolders shouldBe pkg.copyrightHolders
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
         diff.vcs shouldBe pkg.vcsProcessed.toCuration()

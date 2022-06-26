@@ -116,15 +116,13 @@ class LicenseInfoResolver(
                     )
                 }
 
-                licenseInfo.declaredLicenseInfo.copyrightHolders.takeIf { it.isNotEmpty() }?.let {
-                    locations.add(
-                        ResolvedLicenseLocation(
+                licenseInfo.declaredLicenseInfo.copyrightHolders.takeIf { it.isNotEmpty() }?.also {
+                    locations += ResolvedLicenseLocation(
                             provenance = UnknownProvenance,
                             location = UNDEFINED_TEXT_LOCATION,
                             appliedCuration = null,
                             matchingPathExcludes = emptyList(),
-                            copyrights = licenseInfo.declaredLicenseInfo
-                                .copyrightHolders.mapTo(mutableSetOf()) { copyrightHolder ->
+                            copyrights = it.mapTo(mutableSetOf()) { copyrightHolder ->
                                     ResolvedCopyrightFinding(
                                         statement = copyrightHolder,
                                         location = UNDEFINED_TEXT_LOCATION,
@@ -132,7 +130,7 @@ class LicenseInfoResolver(
                                     )
                                 }
                         )
-                    )
+
                 }
             }
         }

@@ -63,7 +63,9 @@ data class Project(
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
-     * The list of authors declared for this package.
+     * The list of copyright holders or copyright statements declared for this package.
+     *
+     * This might be different from the list of [authors] if all or part of the copyright has been transferred.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val copyrightHolders: SortedSet<String> = sortedSetOf(),

@@ -252,6 +252,7 @@ class Bower(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = projectPackage.authors,
+                copyrightHolders = projectPackage.copyrightHolders,
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),

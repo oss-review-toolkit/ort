@@ -83,7 +83,9 @@ data class DeclaredLicenseInfo(
     val authors: SortedSet<String>,
 
     /**
-     * The set of authors.
+     * The list of copyright holders or copyright statements declared for this package.
+     *
+     * This might be different from the list of [authors] if all or part of the copyright has been transferred.
      */
     val copyrightHolders: SortedSet<String>,
 

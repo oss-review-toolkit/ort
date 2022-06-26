@@ -147,6 +147,7 @@ class PackageCurationTest : WordSpec({
                 purl shouldBe pkg.purl
                 cpe shouldBe pkg.cpe
                 authors shouldBe pkg.authors
+                copyrightHolders shouldBe pkg.copyrightHolders
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description

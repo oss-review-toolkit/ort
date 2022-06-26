@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.sorted
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -64,7 +65,7 @@ class NpmDependencyHandlerTest : StringSpec({
         handler.linkageFor(module) shouldBe PackageLinkage.DYNAMIC
     }
 
-    "a package can be created for a module" {
+    "a package can be created for a module with author and without copyright holder" {
         val pkgJsonFile = File("src/test/assets/test-package.json")
         val module = createModuleInfo(createIdentifier("packageTest"), packageFile = pkgJsonFile)
 
@@ -76,6 +77,25 @@ class NpmDependencyHandlerTest : StringSpec({
             id shouldBe Identifier("NPM", "", "bonjour", "3.5.0")
             declaredLicenses should containExactly("MIT")
             authors should containExactly("Thomas Watson Steen")
+            copyrightHolders shouldBe emptySet<String>()
+            homepageUrl shouldBe "https://github.com/watson/bonjour/local"
+            description shouldBe "A Bonjour/Zeroconf implementation in pure JavaScript (local)"
+        }
+    }
+
+    "a package can be created for a module with author and with copyright holder" {
+        val pkgJsonFile = File("src/test/assets/test-package.json")
+        val module = createModuleInfo(createIdentifier("packageTest"), packageFile = pkgJsonFile)
+
+        val handler = createHandler()
+
+        val pkg = handler.createPackage(module, mutableListOf())
+
+        pkg shouldNotBeNull {
+            id shouldBe Identifier("NPM", "", "bonjour", "3.5.0")
+            declaredLicenses should containExactly("MIT")
+            authors should containExactly("Thomas Watson Steen")
+            copyrightHolders should containExactly("Copyright 2200 Thomas Watson Steen")
             homepageUrl shouldBe "https://github.com/watson/bonjour/local"
             description shouldBe "A Bonjour/Zeroconf implementation in pure JavaScript (local)"
         }
