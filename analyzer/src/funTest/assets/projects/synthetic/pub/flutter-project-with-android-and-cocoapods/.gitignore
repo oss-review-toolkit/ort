@@ -1,0 +1,4 @@
+.dart_tool/
+.packages
+android/local.properties
+ios/Flutter/
