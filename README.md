@@ -78,7 +78,8 @@ by running `git submodule update --init --recursive`.
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for Docker.
+* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for 
+  Docker.
 
 Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
 `scripts/docker_build.sh` which also sets the ORT version from the Git revision.
@@ -204,8 +205,8 @@ customize the configuration to a specific environment. The following options are
   Some programs like Bash do not support dots in variable names. For this case, the dots can be
   replaced by double underscores, i.e., the above example is turned into 
   `ort__scanner__storages__postgres__schema=test_schema`.
-* In addition to that, one can override the values of properties on the command line using the `-P` option. The option expects a
-  key-value pair. Again, the key must define the full path to the property to be overridden, e.g.
+* In addition to that, one can override the values of properties on the command line using the `-P` option. The option
+  expects a key-value pair. Again, the key must define the full path to the property to be overridden, e.g.
   `-P ort.scanner.storages.postgres.schema=test_schema`. The `-P` option can be repeated on the command
   line to override multiple properties.
 * Properties in the configuration file can reference environment variables using the syntax `${VAR}`.
@@ -441,9 +442,9 @@ operation is considered successful if all writer storages could successfully per
 
 The configuration of storage backends is located in the [ORT configuration file](#ort-configuration-file). (For the
 general structure of this file and the set of options available refer to the
-[reference configuration](./model/src/main/resources/reference.conf).) The file has a section named _storages_ that lists
-all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be configured
-with type-specific properties. The different types of storage backends supported by ORT are described below.
+[reference configuration](./model/src/main/resources/reference.conf).) The file has a section named _storages_ that
+lists all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be
+configured with type-specific properties. The different types of storage backends supported by ORT are described below.
 
 After the declaration of the storage backends, the configuration file has to specify which ones of them the
 scanner should use for looking up existing scan results or to store new results. This is done in two list properties
@@ -549,7 +550,8 @@ ort {
 }
 ```
 
-The database needs to exist. If the schema is set to something else than the default of `public`, it needs to exist and be accessible by the configured username.
+The database needs to exist. If the schema is set to something else than the default of `public`, it needs to exist and
+be accessible by the configured username.
 
 The _scanner_ will itself create a table called `scan_results` and
 store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
@@ -659,8 +661,10 @@ The _reporter_ generates a wide variety of documents in different formats from O
 following formats are supported (reporter names are case-insensitive):
 
 * [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
-  * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and [AsciiDoc](https://asciidoc.org/)
-  * PDF style customizable with Asciidoctor [PDF themes](https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc)
+  * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and
+    [AsciiDoc](https://asciidoc.org/)
+  * PDF style customizable with Asciidoctor
+    [PDF themes](https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc)
   * Supports multiple AsciiDoc backends:
     * PDF (`-f PdfTemplate`)
     * HTML (`-f HtmlTemplate`)
@@ -670,16 +674,19 @@ following formats are supported (reporter names are case-insensitive):
     * AsciiDoc (`-f AdocTemplate`): Does not convert the created AsciiDoc files but writes the generated files as
       reports.
 * [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform
-  [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo) (`-f CtrlXAutomation`)
+  [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo)
+  (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://products.office.com/excel) sheet (`-f Excel`)
-* [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate) (`-f GitLabLicenseModel`)
+* [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
+  (`-f GitLabLicenseModel`)
   * A nice tutorial video has been [published](https://youtu.be/dNmH_kYJ34g) by GitLab engineer @mokhan.
 * [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f NoticeTemplate`)
   * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=summary`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
-* Opossum input that can be visualized and edited in the [OpossumUI](https://github.com/opossum-tool/opossumUI)  (`-f Opossum`)
+* Opossum input that can be visualized and edited in the [OpossumUI](https://github.com/opossum-tool/opossumUI)
+  (`-f Opossum`)
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
@@ -739,14 +746,16 @@ created run configuration to your needs, e.g. by adding an argument and options 
 
 ## Testing
 
-For running tests and individual test cases from the IDE, the [kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest)
-needs to be installed. Afterwards tests can be run via the green "Play" icon from the gutter as described above.
+For running tests and individual test cases from the IDE, the
+[kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterwards tests can be run
+via the green "Play" icon from the gutter as described above.
 
 # Want to Help or have Questions?
 
 All contributions are welcome. If you are interested in contributing, please read our
 [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers
-to any of your questions we recommend you [join our Slack community](https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY).
+to any of your questions we recommend you
+[join our Slack community](https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY).
 
 # License
 
@@ -756,4 +765,5 @@ Copyright (C) 2020-2022 Bosch.IO GmbH
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
-OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of [ACT](https://automatecompliance.org/).
+OSS Review Toolkit (ORT) is a [Linux Foundation project](https://www.linuxfoundation.org) and part of
+[ACT](https://automatecompliance.org/).
