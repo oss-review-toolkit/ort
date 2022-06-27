@@ -334,7 +334,7 @@ class Pub(
                 val transitiveDependencies =
                     buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages, labels, workingDir)
 
-                // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
+                // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter) {
@@ -345,7 +345,7 @@ class Pub(
                                 ?.dependencies
                         )
                     }
-                    // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.
+                    // TODO: Enable support for iOS / CocoaPods once the package manager is implemented.
                 }
 
                 packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
@@ -400,7 +400,7 @@ class Pub(
     }
 
     private fun scanIosPackages(packageInfo: JsonNode, workingDir: File): ProjectAnalyzerResult? {
-        // TODO: Implement similar to `scanAndroidPackages` once Cocoapods is implemented.
+        // TODO: Implement similar to `scanAndroidPackages` once CocoaPods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
@@ -554,7 +554,7 @@ class Pub(
             }
         }
 
-        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod dependencies for
+        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods dependencies for
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
         // the ".pub-cache" directory.
         if (containsFlutter) {
