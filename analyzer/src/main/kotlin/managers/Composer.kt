@@ -61,7 +61,8 @@ const val COMPOSER_LOCK_FILE = "composer.lock"
 
 private val EXCLUDED_PACKAGES = setOf(
     "php", // Exclude the PHP runtime itself.
-    "composer-plugin-api" // Exclude the package to specify the supported composer plugin versions.
+    "composer-plugin-api", // Exclude the package to specify the supported composer plugin versions.
+    "composer-runtime-api" // Exclude the package to specify the supported composer versions for additional features.
 )
 
 /**

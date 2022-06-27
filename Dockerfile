@@ -51,7 +51,6 @@ ENV \
     BOWER_VERSION=1.8.12 \
     CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~20.04.1 \
     COCOAPODS_VERSION=1.11.2 \
-    COMPOSER_VERSION=1.10.1-1 \
     CONAN_VERSION=1.48.1 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.18.3 \
@@ -64,6 +63,8 @@ ENV \
     YARN_VERSION=1.22.10 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
+    # Composer hash for 2.3.7 version
+    COMPOSER_HASH=92769472d2d1457c681e9e01ba95e4c36054e86e \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOPATH=/tmp/go
@@ -102,7 +103,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         subversion \
         # Install package managers (in versions known to work).
         cargo=$CARGO_VERSION \
-        composer=$COMPOSER_VERSION \
+        php-cli \
         nodejs \
         python-dev \
         python-setuptools \
@@ -150,7 +151,10 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
     chmod -R o+w $ANDROID_HOME && \
     # Install 'CocoaPods'.
-    gem install cocoapods -v $COCOAPODS_VERSION
+    gem install cocoapods -v $COCOAPODS_VERSION && \
+    # Install Composer V2 manually.
+    curl https://raw.githubusercontent.com/composer/getcomposer.org/$COMPOSER_HASH/web/installer -s | php -- --quiet && \
+    mv composer.phar /usr/local/bin/composer
 
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
