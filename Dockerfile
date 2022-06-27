@@ -80,6 +80,7 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     curl -ksS "https://keyserver.ubuntu.com/pks/lookup?op=get&options=mr&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" | apt-key adv --import - && \
     curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
     add-apt-repository -y ppa:git-core/ppa && \
+    add-apt-repository -y ppa:ondrej/php && \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         # Install general tools required by this Dockerfile.
@@ -103,7 +104,9 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         subversion \
         # Install package managers (in versions known to work).
         cargo=$CARGO_VERSION \
-        php-cli \
+        php8.1-cli \
+        php8.1-xml \
+        php8.1-sqlite3 \
         nodejs \
         python-dev \
         python-setuptools \
