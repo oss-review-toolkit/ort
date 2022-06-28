@@ -63,7 +63,7 @@ jobs:
         job-id: test
         arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         flags: test
   funTest-non-analyzer:
@@ -98,7 +98,7 @@ jobs:
         job-id: funTest-non-analyzer
         arguments: funTest jacocoFunTestReport -x :analyzer:funTest
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         flags: funTest-non-analyzer
   funTest-analyzer-docker:
@@ -119,6 +119,6 @@ jobs:
     - name: Run functional tests
       run: ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -p analyzer
     - name: Upload code coverage data
-      uses: codecov/codecov-action@v2
+      uses: codecov/codecov-action@v3
       with:
         flags: funTest-analyzer-docker
