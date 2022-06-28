@@ -23,12 +23,17 @@ package org.ossreviewtoolkit.model
  * A [DependencyNavigator] implementation based on the dependency graph format. It obtains the information about a
  * project's dependencies from the shared [DependencyGraph] stored in the [OrtResult].
  */
-class DependencyGraphNavigator(ortResult: OrtResult) : DependencyNavigator {
+class DependencyGraphNavigator(
     /** The map with shared dependency graphs from the associated result. */
-    private val graphs: Map<String, DependencyGraph> =
-        requireNotNull(ortResult.analyzer?.result?.dependencyGraphs?.takeIf { it.isNotEmpty() }) {
+    private val graphs: Map<String, DependencyGraph>
+) : DependencyNavigator {
+    constructor(ortResult: OrtResult) : this(ortResult.analyzer?.result?.dependencyGraphs.orEmpty())
+
+    init {
+        require(graphs.isNotEmpty()) {
             "No dependency graph available to initialize DependencyGraphNavigator."
         }
+    }
 
     /**
      * A data structure allowing fast access to a specific [DependencyReference] based on its index and fragment.
