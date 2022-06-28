@@ -118,3 +118,5 @@ object DependencyGraphConverter {
             dependency.issues
     }
 }
+
+fun AnalyzerResult.convertToDependencyGraph() = DependencyGraphConverter.convert(this)

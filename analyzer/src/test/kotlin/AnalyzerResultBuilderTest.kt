@@ -24,18 +24,22 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
 
+import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
+import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RootDependencyIndex
@@ -64,7 +68,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val project1 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
-        scopeDependencies = sortedSetOf(scope1)
+        scopeDependencies = sortedSetOf(scope1),
+        definitionFilePath = "project1"
     )
     private val project2 = Project.EMPTY.copy(
         id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
@@ -208,7 +213,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 analyzerResult.collectIssues() should containExactly(
                     package1.id to setOf(issue1),
-                    package3.id to setOf(issue2, issue5),
+                    package3.id to setOf(issue2),
                     project1.id to setOf(issue3, issue4),
                     project2.id to setOf(issue4)
                 )
@@ -297,6 +302,72 @@ class AnalyzerResultBuilderTest : WordSpec() {
                         .addResult(analyzerResult1)
                         .addPackages(setOf(packageWithProjectId))
                         .build()
+                }
+            }
+
+            "resolve package manager dependencies" {
+                val packageManagerDependency = PackageManagerDependencyHandler.createPackageManagerDependency(
+                    packageManager = project1.id.type,
+                    definitionFile = project1.definitionFilePath,
+                    scope = scope1.name,
+                    linkage = PackageLinkage.PROJECT_DYNAMIC
+                )
+
+                val scope = Scope(
+                    name = "scope",
+                    dependencies = sortedSetOf(
+                        packageManagerDependency,
+                        PackageReference(
+                            id = pkgRef1.id,
+                            dependencies = sortedSetOf(packageManagerDependency)
+                        )
+                    )
+                )
+
+                val project = Project.EMPTY.copy(
+                    id = Identifier("type", "namespace", "project", "version"),
+                    scopeDependencies = sortedSetOf(scope),
+                    definitionFilePath = "project"
+                )
+
+                val projectAnalyzerResult = ProjectAnalyzerResult(
+                    project = project,
+                    packages = sortedSetOf(package1)
+                )
+
+                val analyzerResult = AnalyzerResultBuilder().run {
+                    addResult(projectAnalyzerResult)
+                    addResult(analyzerResult1)
+                    build()
+                }
+
+                analyzerResult.withResolvedScopes().apply {
+                    projects.find { it.id == project.id } shouldNotBeNull {
+                        project.scopes shouldContainExactly sortedSetOf(
+                            Scope(
+                                name = "scope",
+                                dependencies = sortedSetOf(
+                                    PackageReference(
+                                        id = project1.id,
+                                        dependencies = sortedSetOf(
+                                            PackageReference(id = package1.id)
+                                        )
+                                    ),
+                                    PackageReference(
+                                        id = package1.id,
+                                        dependencies = sortedSetOf(
+                                            PackageReference(
+                                                id = project1.id,
+                                                dependencies = sortedSetOf(
+                                                    PackageReference(id = package1.id)
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    }
                 }
             }
         }

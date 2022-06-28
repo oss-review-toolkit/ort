@@ -22,16 +22,19 @@ package org.ossreviewtoolkit.analyzer
 
 import kotlin.time.measureTimedValue
 
+import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyGraph
+import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.log
 
@@ -47,7 +50,9 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
             "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
         }
 
-        return DependencyGraphConverter.convert(AnalyzerResult(projects, packages, issues, dependencyGraphs))
+        return AnalyzerResult(projects, packages, issues, dependencyGraphs)
+            .convertToDependencyGraph()
+            .resolvePackageManagerDependencies()
     }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult): AnalyzerResultBuilder {
@@ -115,4 +120,30 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
         dependencyGraphs[packageManagerName] = graph
         return this
     }
+}
+
+private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
+    val handler = PackageManagerDependencyHandler(this)
+    val navigator = DependencyGraphNavigator(dependencyGraphs)
+
+    val graphs = projects.groupBy { it.id.type }.entries.associate { (type, projectsForType) ->
+        val builder = DependencyGraphBuilder(handler)
+
+        projectsForType.forEach { project ->
+            project.scopeNames?.forEach { scopeName ->
+                val qualifiedScopeName = DependencyGraph.qualifyScope(project, scopeName)
+                navigator.directDependencies(project, scopeName).forEach { node ->
+                    handler.resolvePackageManagerDependency(node).forEach {
+                        builder.addDependency(qualifiedScopeName, it)
+                    }
+                }
+            }
+        }
+
+        // Package managers that do not use the dependency graph representation, might not have a check implemented to
+        // verify that packages exist for all dependencies, so we need to disable the reference check here.
+        type to builder.build(checkReferences = false)
+    }
+
+    return copy(dependencyGraphs = graphs)
 }
