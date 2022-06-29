@@ -1012,6 +1012,8 @@ packages:
     path: ""
 - id: "NPM::semver:5.7.0"
   purl: "pkg:npm/semver@5.7.0"
+  authors:
+  - "GitHub Inc."
   declared_licenses:
   - "ISC"
   declared_licenses_processed:
