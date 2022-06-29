@@ -217,6 +217,7 @@ class Cargo(
             id = projectPkg.id,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = projectPkg.declaredLicenses,
             declaredLicensesProcessed = processDeclaredLicenses(projectPkg.declaredLicenses),
             vcs = projectPkg.vcs,
@@ -272,6 +273,7 @@ private fun parsePackage(node: JsonNode, hashes: Map<String, String>): Package {
     return Package(
         id = parsePackageId(node),
         authors = parseAuthors(node["authors"]),
+        copyrightHolders = sortedSetOf(),
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
         description = node["description"].textValueOrEmpty(),

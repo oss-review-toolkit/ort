@@ -264,6 +264,7 @@ class Gradle(
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = sortedSetOf(),
+                    copyrightHolders = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),

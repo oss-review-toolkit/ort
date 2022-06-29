@@ -163,6 +163,7 @@ class Stack(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = projectPackage.declaredLicenses,
             vcs = projectPackage.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
@@ -334,6 +335,7 @@ class Stack(
                 .map(String::trim)
                 .filter(String::isNotEmpty)
                 .mapTo(sortedSetOf(), ::parseAuthorString),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,
