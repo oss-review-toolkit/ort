@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import java.util.SortedSet
 import java.util.concurrent.ConcurrentHashMap
 
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -99,23 +100,11 @@ class LicenseInfoResolver(
                 }.keys
 
                 licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
-                    locations += ResolvedLicenseLocation(
-                        provenance = UnknownProvenance,
-                        location = UNDEFINED_TEXT_LOCATION,
-                        appliedCuration = null,
-                        matchingPathExcludes = emptyList(),
-                        copyrights = it.mapTo(mutableSetOf()) { author ->
-                            val statement = "Copyright (C) $author".takeUnless {
-                                author.contains("Copyright", ignoreCase = true)
-                            } ?: author
+                    locations += resolveCopyrightsFromOwners(it)
+                }
 
-                            ResolvedCopyrightFinding(
-                                statement = statement,
-                                location = UNDEFINED_TEXT_LOCATION,
-                                matchingPathExcludes = emptyList()
-                            )
-                        }
-                    )
+                licenseInfo.declaredLicenseInfo.copyrightHolders.takeIf { it.isNotEmpty() }?.also {
+                    locations += resolveCopyrightsFromOwners(it)
                 }
             }
         }
@@ -282,6 +271,24 @@ class LicenseInfoResolver(
 
         return ResolvedLicenseFileInfo(id, licenseFiles)
     }
+
+    private fun resolveCopyrightsFromOwners(owners: SortedSet<String>) = ResolvedLicenseLocation(
+        provenance = UnknownProvenance,
+        location = UNDEFINED_TEXT_LOCATION,
+        appliedCuration = null,
+        matchingPathExcludes = emptyList(),
+        copyrights = owners.mapTo(mutableSetOf()) { owner ->
+            val statement = "Copyright (C) $owner".takeUnless {
+                owner.contains("Copyright", ignoreCase = true)
+            } ?: owner
+
+            ResolvedCopyrightFinding(
+                statement = statement,
+                location = UNDEFINED_TEXT_LOCATION,
+                matchingPathExcludes = emptyList()
+            )
+        }
+    )
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {

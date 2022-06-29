@@ -340,8 +340,10 @@ class ExperimentalScanner(
     }
 
     private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
-        takeUnless { scannerConfig.skipConcluded }
-            ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+        takeUnless { scannerConfig.skipConcluded } ?: partition {
+                it.concludedLicense != null
+                    && (it.authors.isNotEmpty() || it.copyrightHolders.isNotEmpty())
+            }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
                     this@ExperimentalScanner.log.debug {
                         "Not scanning the following package(s) with concluded licenses: $skip"

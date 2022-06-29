@@ -720,6 +720,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 version = mavenProject.version
             ),
             authors = parseAuthors(mavenProject),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             description = mavenProject.description.orEmpty(),

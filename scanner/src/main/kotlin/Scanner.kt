@@ -46,8 +46,15 @@ const val TOOL_NAME = "scanner"
 
 private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): Set<Package> =
     packages.takeUnless { scanner.scannerConfig.skipConcluded }
-        // Remove all packages that have a concluded license and authors set.
-        ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+        /*
+         * Remove all packages that have a concluded license and authors or copyright holders set.
+         *
+         * TODO: The below condition partly depends on that addAuthorsToCopyrights is enabled, which may not hold.
+         */
+        ?: packages.partition {
+            it.concludedLicense != null
+                && (it.authors.isNotEmpty() || it.copyrightHolders.isNotEmpty())
+        }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
                 scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
             }

@@ -400,6 +400,7 @@ open class Npm(
         val module = Package(
             id = id,
             authors = authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             description = description,
             homepageUrl = homepageUrl,
@@ -623,6 +624,7 @@ open class Npm(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(packageJson).path,
             authors = authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             vcs = vcsFromPackage,
             vcsProcessed = processProjectVcs(projectDir, vcsFromPackage, homepageUrl),
