@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
@@ -286,6 +287,17 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .build()
 
                 mergedResults.dependencyGraphs.keys should containExactlyInAnyOrder("type-1", "type-2")
+            }
+
+            "throw if a result contains a project and a package with the same ID" {
+                val packageWithProjectId = package1.copy(id = project1.id)
+
+                shouldThrow<IllegalArgumentException> {
+                    AnalyzerResultBuilder()
+                        .addResult(analyzerResult1)
+                        .addPackages(setOf(packageWithProjectId))
+                        .build()
+                }
             }
         }
     }
