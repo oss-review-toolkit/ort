@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
@@ -211,6 +212,29 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         // TODO: Test that we can read in files written by SpdxDocumentReporter.
+    }
+
+    "createPackageManagerResult" should {
+        "not include sub project dependencies as packages" {
+            val projectFile = projectDir.resolve("project-xyz-with-sub-project-dependencies.spdx.yml")
+            val subProjectFile = projectDir.resolve("projects/sub-project-xyz-with-inline-packages.spdx.yml")
+            val definitionFiles = listOf(projectFile, subProjectFile)
+
+            val result = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())
+            val projectResults = result.projectResults.values.flatten()
+            val projectIds = projectResults.map { it.project.id }
+            val packageIds = projectResults.flatMap { projResult -> projResult.packages.map { it.id } }
+
+            projectIds shouldContainExactlyInAnyOrder listOf(
+                Identifier("SpdxDocumentFile::xyz:0.1.0"),
+                Identifier("SpdxDocumentFile::sub-xyz:0.1.0")
+            )
+            packageIds shouldContainExactlyInAnyOrder listOf(
+                Identifier("SpdxDocumentFile::curl:7.70.0"),
+                Identifier("SpdxDocumentFile::my-lib:8.88.8"),
+                Identifier("SpdxDocumentFile:OpenSSL Development Team:openssl:1.1.1g")
+            )
+        }
     }
 })
 
