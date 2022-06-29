@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
+import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.log
 
 class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
@@ -40,7 +41,14 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     private val issues = sortedMapOf<Identifier, List<OrtIssue>>()
     private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
 
-    fun build() = DependencyGraphConverter.convert(AnalyzerResult(projects, packages, issues, dependencyGraphs))
+    fun build(): AnalyzerResult {
+        val duplicateIds = (projects.map { it.id } + packages.map { it.pkg.id }).getDuplicates()
+        require(duplicateIds.isEmpty()) {
+            "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
+        }
+
+        return DependencyGraphConverter.convert(AnalyzerResult(projects, packages, issues, dependencyGraphs))
+    }
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult): AnalyzerResultBuilder {
         // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
