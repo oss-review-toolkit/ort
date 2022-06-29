@@ -360,16 +360,18 @@ class ExperimentalScanner(
     }
 
     private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
-        takeUnless { scannerConfig.skipConcluded }
-            ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+        takeUnless { scannerConfig.skipConcluded } ?: run {
+            // Remove all packages that have a concluded license and concluded copyrights set.
+            partition { it.concludedLicense != null && it.concludedCopyrights.isNotEmpty() }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
                     logger.debug {
-                        "Not scanning the following package(s) with concluded licenses: $skip"
+                        "Not scanning the following package(s) with concluded licenses and concluded copyrights: $skip"
                     }
                 }
 
                 keep
             }
+        }
 
     private fun Collection<Package>.filterNotMetaDataOnly(): List<Package> =
         partition { it.isMetaDataOnly }.let { (skip, keep) ->

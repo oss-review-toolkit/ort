@@ -63,6 +63,11 @@ data class LicenseInfo(
  */
 data class ConcludedLicenseInfo(
     /**
+     * The concluded copyright statements, or null if no copyrights were concluded.
+     */
+    val concludedCopyrights: SortedSet<String>?,
+
+    /**
      * The concluded license, or null if no license was concluded.
      */
     val concludedLicense: SpdxExpression?,

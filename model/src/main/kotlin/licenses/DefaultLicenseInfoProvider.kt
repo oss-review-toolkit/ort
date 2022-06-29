@@ -53,10 +53,11 @@ class DefaultLicenseInfoProvider(
     private fun createConcludedLicenseInfo(id: Identifier): ConcludedLicenseInfo =
         ortResult.getPackage(id)?.let { (pkg, curations) ->
             ConcludedLicenseInfo(
+                concludedCopyrights = pkg.concludedCopyrights,
                 concludedLicense = pkg.concludedLicense,
                 appliedCurations = curations.filter { it.curation.concludedLicense != null }
             )
-        } ?: ConcludedLicenseInfo(concludedLicense = null, appliedCurations = emptyList())
+        } ?: ConcludedLicenseInfo(concludedCopyrights = null, concludedLicense = null, appliedCurations = emptyList())
 
     private fun createDeclaredLicenseInfo(id: Identifier): DeclaredLicenseInfo =
         ortResult.getProject(id)?.let { project ->

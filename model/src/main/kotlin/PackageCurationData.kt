@@ -56,6 +56,12 @@ data class PackageCurationData(
     val authors: SortedSet<String>? = null,
 
     /**
+     * The set of concluded copyright statements for the package. It can be used to override the [detected copyright
+     * statements][CopyrightFinding.statement].
+     */
+    val concludedCopyrights: SortedSet<String>? = null,
+
+    /**
      * The concluded license as an [SpdxExpression]. It can be used to override the [declared][Package.declaredLicenses]
      * / [detected][LicenseFinding.license] licenses of a package.
      */
@@ -131,6 +137,7 @@ data class PackageCurationData(
             purl = purl ?: original.purl,
             cpe = cpe ?: original.cpe,
             authors = authors ?: original.authors,
+            concludedCopyrights = concludedCopyrights ?: original.concludedCopyrights,
             declaredLicenses = original.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             concludedLicense = concludedLicense ?: original.concludedLicense,
@@ -170,6 +177,7 @@ data class PackageCurationData(
             purl = purl ?: other.purl,
             cpe = cpe ?: other.cpe,
             authors = (authors.orEmpty() + other.authors.orEmpty()).toSortedSet(),
+            concludedCopyrights = (concludedCopyrights.orEmpty() + other.concludedCopyrights.orEmpty()).toSortedSet(),
             concludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).reduce(SpdxExpression::and),
             description = description ?: other.description,
             homepageUrl = homepageUrl ?: other.homepageUrl,
