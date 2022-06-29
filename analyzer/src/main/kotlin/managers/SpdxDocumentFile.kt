@@ -26,6 +26,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -474,5 +475,30 @@ class SpdxDocumentFile(
         )
 
         return listOf(ProjectAnalyzerResult(project, packages.toSortedSet()))
+    }
+
+    /**
+     * Create the final [PackageManagerResult] by making sure that packages are removed from [projectResults] that
+     * are also referenced as project dependencies.
+     */
+    override fun createPackageManagerResult(
+        projectResults: Map<File, List<ProjectAnalyzerResult>>
+    ): PackageManagerResult {
+        val projectIds =
+            projectResults.flatMapTo(mutableSetOf()) { (_, projectResult) -> projectResult.map { it.project.id } }
+
+        val filteredResults = projectResults.mapValues { entry ->
+            entry.value.map { projectResult ->
+                val projectReferences = projectResult.packages.filterTo(mutableSetOf()) { it.id in projectIds }
+                projectResult.takeIf { projectReferences.isEmpty() }
+                    ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
+                        .also {
+                            log.info { "Removing ${projectReferences.size} packages that are projects." }
+                            log.debug { projectReferences.joinToString { it.id.toCoordinates() } }
+                        }
+            }
+        }
+
+        return PackageManagerResult(filteredResults)
     }
 }
