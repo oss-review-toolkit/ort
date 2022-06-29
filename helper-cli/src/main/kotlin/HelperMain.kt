@@ -19,6 +19,13 @@
 
 package org.ossreviewtoolkit.helper
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+import ch.qos.logback.classic.LoggerContext
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder
+import ch.qos.logback.classic.spi.ILoggingEvent
+import ch.qos.logback.core.ConsoleAppender
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
@@ -27,9 +34,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
-
-import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
 import org.ossreviewtoolkit.helper.commands.DownloadResultsFromPostgresCommand
@@ -56,6 +60,8 @@ import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCo
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.common.ORTH_NAME
 import org.ossreviewtoolkit.utils.ort.printStackTrace
+
+import org.slf4j.LoggerFactory
 
 /**
  * The entry point for the application with [args] being the list of arguments.
@@ -106,9 +112,31 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     }
 
     override fun run() {
-        Configurator.setRootLevel(logLevel)
+        initLogging()
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
+    }
+
+    private fun initLogging() {
+        val logCtx: LoggerContext = LoggerFactory.getILoggerFactory() as LoggerContext
+
+        val logEncoder = PatternLayoutEncoder()
+
+        logEncoder.setContext(logCtx)
+        logEncoder.setPattern("%-12date{YYYY-MM-dd HH:mm:ss.SSS} %-5level – %msg%n")
+        logEncoder.start()
+
+        val logConsoleAppender = ConsoleAppender<ILoggingEvent>()
+
+        logConsoleAppender.setContext(logCtx)
+        logConsoleAppender.setName("console")
+        logConsoleAppender.setEncoder(logEncoder)
+        logConsoleAppender.start()
+
+        val rootLogger: Logger = logCtx.getLogger(Logger.ROOT_LOGGER_NAME)
+
+        rootLogger.level = logLevel as Level
+        rootLogger.addAppender(logConsoleAppender)
     }
 }
