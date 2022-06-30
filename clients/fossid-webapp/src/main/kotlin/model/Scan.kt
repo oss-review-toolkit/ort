@@ -46,6 +46,7 @@ data class Scan(
      */
     val targetPath: String?,
 
+    @JsonDeserialize(using = IntBooleanDeserializer::class)
     val isBlindAudit: Boolean?,
 
     val filesNotScanned: String?,
