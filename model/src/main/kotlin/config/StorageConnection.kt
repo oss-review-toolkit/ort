@@ -20,6 +20,14 @@
 package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
+@JsonSubTypes(
+    JsonSubTypes.Type(PostgresConnection::class)
+)
+sealed interface StorageConnection
 
 data class PostgresConnection(
     /**
@@ -76,4 +84,4 @@ data class PostgresConnection(
      * TODO: Make additional parameters configurable, see:
      *       https://jdbc.postgresql.org/documentation/head/connect.html
      */
-)
+) : StorageConnection
