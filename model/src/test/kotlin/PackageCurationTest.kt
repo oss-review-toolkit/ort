@@ -407,7 +407,22 @@ class PackageCurationTest : WordSpec({
             )
         }
     }
+
+    "isApplicable()" should {
+        "comply to the ivy version matchers specifications" {
+            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
+            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("[1.0,2.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("1.+").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("]1.0,)").isApplicable(identifierForVersion("1.0")) shouldBe false
+        }
+    }
 })
+
+private fun packageCurationForVersion(version: String) =
+    PackageCuration(identifierForVersion(version), PackageCurationData())
+
+private fun identifierForVersion(version: String) = Identifier(type = "", namespace = "", name = "", version = version)
 
 private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
     PackageCuration(
