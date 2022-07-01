@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -232,40 +233,17 @@ class Pub(
             val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
 
             if (gradleDefinitionFiles.isNotEmpty()) {
-                log.info { "Found ${gradleDefinitionFiles.size} Gradle definition file(s) at:" }
-
-                gradleDefinitionFiles.forEach { gradleDefinitionFile ->
-                    val relativePath =
-                        gradleDefinitionFile.toRelativeString(workingDir).takeIf { it.isNotEmpty() } ?: "."
-
-                    log.info { "\t$relativePath" }
-                }
-
-                log.info { "Running Gradle analysis for Flutter project." }
-
-                val gradleAnalyzerResult = Gradle.Factory().create(analysisRoot, analyzerConfig, repoConfig)
-                    .resolveDependencies(gradleDefinitionFiles, labels)
-
-                val androidScope = Scope("android", sortedSetOf())
-                gradleAnalyzerResult.projectResults.values.flatten().forEach { projectAnalyzerResult ->
-                    val project = projectAnalyzerResult.project.withResolvedScopes(gradleAnalyzerResult.dependencyGraph)
-
-                    androidScope.dependencies += PackageReference(
-                        id = project.id,
-                        linkage = PackageLinkage.PROJECT_STATIC,
-                        dependencies = project.scopes.find { it.name == "releaseCompileClasspath" }?.dependencies
-                            ?: sortedSetOf()
+                val gradleName = Gradle.Factory().managerName
+                val gradleDependencies = gradleDefinitionFiles.map {
+                    PackageManagerDependencyHandler.createPackageManagerDependency(
+                        packageManager = gradleName,
+                        definitionFile = VersionControlSystem.getPathInfo(it).path,
+                        scope = "releaseCompileClasspath",
+                        linkage = PackageLinkage.PROJECT_STATIC
                     )
+                }.toSortedSet()
 
-                    projectAnalyzerResults += ProjectAnalyzerResult(
-                        project,
-                        projectAnalyzerResult.packages,
-                        projectAnalyzerResult.issues
-                    )
-                }
-
-                scopes += androidScope
-                packages += gradleAnalyzerResult.sharedPackages.associateBy { it.id }
+                scopes += Scope("android", gradleDependencies)
             }
 
             packages += parsePackagesResult.packages
