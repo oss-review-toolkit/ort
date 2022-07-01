@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import com.vdurmont.semver4j.Requirement
+import com.vdurmont.semver4j.Semver
+
+import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * Return true if this string equals the [other] string, or if either string is blank.
@@ -57,7 +61,19 @@ data class PackageCuration(
      * package with the given [identifier][pkgId].
      */
     private fun isApplicableIvyVersion(pkgId: Identifier) =
-        runCatching { Requirement.buildIvy(id.version).isSatisfiedBy(pkgId.version) }.getOrDefault(false)
+        runCatching {
+            // TODO: This check does not completely comply to the Ivy version-matchers specification. E.g. the version
+            //       '1.0' does not satisfy the version range [1.0,2.0], see
+            //       https://github.com/vdurmont/semver4j/issues/67.
+            Requirement.buildIvy(id.version).isSatisfiedBy(Semver(pkgId.version, Semver.SemverType.LOOSE))
+        }.onFailure {
+            log.warn {
+                "Failed to check if package curation version '${id.version}' is applicable to package version " +
+                        "'${pkgId.version}' of package '${pkgId.toCoordinates()}'."
+            }
+
+            it.showStackTrace()
+        }.getOrDefault(false)
 
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
