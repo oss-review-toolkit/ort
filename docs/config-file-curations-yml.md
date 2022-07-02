@@ -46,6 +46,10 @@ These curations can be configured in a YAML file that is passed to the _analyzer
 amends the metadata provided by the packages themselves. This way, it is possible to fix broken VCS URLs or provide the
 location of source artifacts.
 
+Hint: If the `concluded_license` _and_ the `authors` are curated, this package will be skipped during the `scan` step,
+as no more information from the scanner is required. This requires the `skipConcluded` scanner option to be enabled in
+the [ort.conf](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.conf).
+
 The structure of the curations file consist of one or more `id` entries:
 
 ```yaml
