@@ -20,7 +20,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.JsonTypeInfo
@@ -89,43 +88,9 @@ data class PostgresStorageConfiguration(
  */
 data class Sw360StorageConfiguration(
     /**
-     * The REST API URL of SW360.
+     * The configuration for SW360.
      */
-    val restUrl: String,
-
-    /**
-     * The authentication URL of your SW360 instance.
-     */
-    val authUrl: String,
-
-    /**
-     * The username for the requests to SW360.
-     */
-    val username: String,
-
-    /**
-     * The password of the SW360 user.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String = "",
-
-    /**
-     * The client ID of the SW360 instance for the two-step authentication.
-     */
-    val clientId: String,
-
-    /**
-     * The password of the client ID.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val clientPassword: String = "",
-
-    /**
-     * Optional access token that can be used instead of the [authUrl], [username], [password], [clientId] and
-     * [clientPassword] if the token is already known.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val token: String = ""
+    val connection: Sw360Connection
 ) : ScanStorageConfiguration
 
 /**

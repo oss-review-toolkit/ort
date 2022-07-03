@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
+import org.ossreviewtoolkit.model.config.Sw360Connection
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -48,12 +48,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 /**
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
-class Sw360PackageCurationProvider(configuration: Sw360StorageConfiguration) : PackageCurationProvider {
+class Sw360PackageCurationProvider(configuration: Sw360Connection) : PackageCurationProvider {
     companion object {
         val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-        fun createConnection(config: Sw360StorageConfiguration): SW360Connection {
+        fun createConnection(config: Sw360Connection): SW360Connection {
             val httpClientConfig = HttpClientConfig
                 .basicConfig()
                 .withObjectMapper(JSON_MAPPER)

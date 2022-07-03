@@ -68,13 +68,13 @@ class Sw360Storage(
             val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
 
             val sw360ClientConfig = SW360ClientConfig.createConfig(
-                config.restUrl,
-                config.authUrl,
-                config.username,
-                config.password,
-                config.clientId,
-                config.clientPassword,
-                config.token,
+                config.connection.restUrl,
+                config.connection.authUrl,
+                config.connection.username,
+                config.connection.password,
+                config.connection.clientId,
+                config.connection.clientPassword,
+                config.connection.token,
                 httpClient,
                 JSON_MAPPER
             )

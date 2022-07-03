@@ -27,13 +27,15 @@ import org.ossreviewtoolkit.model.yamlMapper
 class Sw360StorageConfigurationTest : StringSpec({
     "Credentials should be ignored in serialization" {
         val sw360StorageConfiguration = Sw360StorageConfiguration(
-            "restUrl",
-            "authUrl",
-            "username",
-            "password",
-            "clientId",
-            "clientPassword",
-            "token"
+            Sw360Connection(
+                "restUrl",
+                "authUrl",
+                "username",
+                "password",
+                "clientId",
+                "clientPassword",
+                "token"
+            )
         )
         val yaml = yamlMapper.writeValueAsString(sw360StorageConfiguration).lowercase()
 

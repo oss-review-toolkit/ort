@@ -132,14 +132,14 @@ class AnalyzerConfigurationTest : WordSpec({
     }
 })
 
-private val sw360Config1 = Sw360StorageConfiguration(
+private val sw360Config1 = Sw360Connection(
     restUrl = "url1",
     authUrl = "auth1",
     username = "user1",
     clientId = "client1"
 )
 
-private val sw360Config2 = Sw360StorageConfiguration(
+private val sw360Config2 = Sw360Connection(
     restUrl = "url2",
     authUrl = "auth2",
     username = "user2",

@@ -181,13 +181,14 @@ ort:
           sslrootcert: /defaultdir/root.crt
 
       sw360Configuration:
-        restUrl: 'https://your-sw360-rest-url'
-        authUrl: 'https://your-authentication-url'
-        username: username
-        password: password
-        clientId: clientId
-        clientPassword: clientPassword
-        token: token
+        connection:
+          restUrl: 'https://your-sw360-rest-url'
+          authUrl: 'https://your-authentication-url'
+          username: username
+          password: password
+          clientId: clientId
+          clientPassword: clientPassword
+          token: token
 
     storageReaders: [local, postgres, http, clearlyDefined]
 

@@ -178,7 +178,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         private fun createSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
             Sw360Storage(config).also {
                 logger.info {
-                    "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'."
+                    "Using SW360 storage with auth URL '${config.connection.authUrl}' and REST URL " +
+                            "'${config.connection.restUrl}'."
                 }
             }
     }
