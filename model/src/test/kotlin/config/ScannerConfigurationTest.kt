@@ -22,9 +22,8 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactly
-import io.kotest.matchers.nulls.beNull
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
 
@@ -50,7 +49,7 @@ class ScannerConfigurationTest : WordSpec({
             // Relative paths have been normalized, passwords do not get serialized, etc.
             actualScannerConfig.storageReaders shouldBe expectedScannerConfig.storageReaders
             actualScannerConfig.storageWriters shouldBe expectedScannerConfig.storageWriters
-            actualScannerConfig.archive?.fileStorage?.httpFileStorage should beNull()
+            actualScannerConfig.archive?.fileStorage.shouldBeInstanceOf<LocalFileBasedConnection>()
 
             actualStorages.keys shouldContainExactly expectedStorages.keys
             actualStorages.entries.forAll { (storageKey, storage) ->

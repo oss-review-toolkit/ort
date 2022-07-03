@@ -134,7 +134,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          * Create a [FileBasedStorage] based on the [config] passed in.
          */
         private fun createFileBasedStorage(config: FileBasedStorageConfiguration): ScanResultsStorage {
-            val backend = config.backend.createFileStorage()
+            val backend = config.connection.createFileStorage()
 
             when (backend) {
                 is HttpFileStorage -> logger.info { "Using file based storage with HTTP backend '${backend.url}'." }

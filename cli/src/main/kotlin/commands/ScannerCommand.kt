@@ -412,8 +412,8 @@ private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
 
 private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
     when (config.type) {
-        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
+        StorageType.PACKAGE_BASED -> FileBasedStorage(config.connection.createFileStorage())
+        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.connection.createFileStorage())
     }
 
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =

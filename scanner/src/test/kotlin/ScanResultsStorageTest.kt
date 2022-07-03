@@ -32,9 +32,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
-import org.ossreviewtoolkit.model.config.FileStorageConfiguration
-import org.ossreviewtoolkit.model.config.HttpFileStorageConfiguration
-import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
+import org.ossreviewtoolkit.model.config.HttpFileBasedConnection
+import org.ossreviewtoolkit.model.config.LocalFileBasedConnection
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.CompositeStorage
@@ -50,9 +49,8 @@ class ScanResultsStorageTest : WordSpec({
         }
 
         "configure a local file storage" {
-            val fileStorageConfig = LocalFileStorageConfiguration(directory = File("."))
-            val backendConfig = FileStorageConfiguration(localFileStorage = fileStorageConfig)
-            val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
+            val localConnection = LocalFileBasedConnection(directory = File("."))
+            val fileBasedStorageConfig = FileBasedStorageConfiguration(localConnection)
             val config = ScannerConfiguration(
                 storages = mapOf("local" to fileBasedStorageConfig),
                 storageWriters = listOf("local")
@@ -62,17 +60,16 @@ class ScanResultsStorageTest : WordSpec({
             storage should beInstanceOf<FileBasedStorage>()
             val backend = (storage as FileBasedStorage).backend
             backend should beInstanceOf<LocalFileStorage>()
-            (backend as LocalFileStorage).directory.absolutePath shouldBe fileStorageConfig.directory.absolutePath
+            (backend as LocalFileStorage).directory.absolutePath shouldBe localConnection.directory.absolutePath
         }
 
         "configure an HTTP file storage" {
-            val httpStorageConfig = HttpFileStorageConfiguration(
+            val httpConnection = HttpFileBasedConnection(
                 "https://some.storage.org/data",
                 "?user=User",
                 mapOf("Authorization" to "Bearer 1234567890")
             )
-            val backendConfig = FileStorageConfiguration(httpFileStorage = httpStorageConfig)
-            val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
+            val fileBasedStorageConfig = FileBasedStorageConfiguration(httpConnection)
             val config = ScannerConfiguration(
                 storages = mapOf("http" to fileBasedStorageConfig),
                 storageReaders = listOf("http"),
@@ -83,7 +80,7 @@ class ScanResultsStorageTest : WordSpec({
             storage should beInstanceOf<FileBasedStorage>()
             val backend = (storage as FileBasedStorage).backend
             backend should beInstanceOf<HttpFileStorage>()
-            (backend as HttpFileStorage).url shouldBe httpStorageConfig.url
+            (backend as HttpFileStorage).url shouldBe httpConnection.url
         }
 
         "configure a ClearlyDefined storage" {
@@ -107,9 +104,8 @@ class ScanResultsStorageTest : WordSpec({
         }
 
         "order storage readers and writers correctly" {
-            val fileStorageConfig = LocalFileStorageConfiguration(directory = File("."))
-            val backendConfig = FileStorageConfiguration(localFileStorage = fileStorageConfig)
-            val fileBasedStorageConfig = FileBasedStorageConfiguration(backendConfig)
+            val localConnection = LocalFileBasedConnection(directory = File("."))
+            val fileBasedStorageConfig = FileBasedStorageConfiguration(localConnection)
             val cdConfig = ClearlyDefinedStorageConfiguration("https://clearly-defined.org/data/")
             val config = ScannerConfiguration(
                 storages = mapOf("file" to fileBasedStorageConfig, "cd" to cdConfig),

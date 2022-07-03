@@ -40,7 +40,7 @@ data class FileArchiverConfiguration(
     /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
-    val fileStorage: FileStorageConfiguration? = null,
+    val fileStorage: FileBasedConnection? = null,
 
     /**
      * Configuration of the [PostgresFileArchiverStorage] used for archiving the files.

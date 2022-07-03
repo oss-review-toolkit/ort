@@ -28,7 +28,7 @@ data class ProvenanceStorageConfiguration(
     /**
      * Configuration of a file storage.
      */
-    val fileStorage: FileStorageConfiguration? = null,
+    val fileStorage: FileBasedConnection? = null,
 
     /**
      * Configuration of a PostgreSQL storage.

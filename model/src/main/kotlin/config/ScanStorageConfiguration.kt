@@ -60,7 +60,7 @@ data class FileBasedStorageConfiguration(
     /**
      * The configuration of the [FileStorage] used to store the files.
      */
-    val backend: FileStorageConfiguration,
+    val connection: FileBasedConnection,
 
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].

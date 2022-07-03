@@ -26,12 +26,12 @@ import org.ossreviewtoolkit.model.yamlMapper
 
 class HttpFileStorageConfigurationTest : StringSpec({
     "Header values should be masked in serialization" {
-        val config = HttpFileStorageConfiguration("url", headers = mapOf("key1" to "value1", "key2" to "value2"))
+        val config = HttpFileBasedConnection("url", headers = mapOf("key1" to "value1", "key2" to "value2"))
 
         val yaml = yamlMapper.writeValueAsString(config).trim()
 
         yaml shouldBe """
-            ---
+            --- !<.HttpFileBasedConnection>
             url: "url"
             headers:
               key1: "***"
@@ -40,12 +40,12 @@ class HttpFileStorageConfigurationTest : StringSpec({
     }
 
     "Query string should be masked in serialization" {
-        val config = HttpFileStorageConfiguration("url", "?query=value", emptyMap())
+        val config = HttpFileBasedConnection("url", "?query=value", emptyMap())
 
         val yaml = yamlMapper.writeValueAsString(config).trim()
 
         yaml shouldBe """
-            ---
+            --- !<.HttpFileBasedConnection>
             url: "url"
             query: "***"
             """.trimIndent()

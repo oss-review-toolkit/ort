@@ -102,10 +102,8 @@ class OrtConfigurationTest : WordSpec({
             with(ortConfig.scanner) {
                 archive shouldNotBeNull {
                     fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/archive")
-                        }
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
+                        directory shouldBe File("~/.ort/scanner/archive")
                     }
 
                     postgresStorage shouldNotBeNull {
@@ -128,14 +126,16 @@ class OrtConfigurationTest : WordSpec({
                     )
                     val httpStorage = this["http"]
                     httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    httpStorage.backend.httpFileStorage shouldNotBeNull {
+                    httpStorage.connection shouldNotBeNull {
+                        this.shouldBeInstanceOf<HttpFileBasedConnection>()
                         url shouldBe "https://your-http-server"
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                     }
 
                     val localStorage = this["local"]
                     localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    localStorage.backend.localFileStorage shouldNotBeNull {
+                    localStorage.connection shouldNotBeNull {
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
                         directory shouldBe File("~/.ort/scanner/results")
                     }
 
@@ -177,10 +177,8 @@ class OrtConfigurationTest : WordSpec({
 
                 provenanceStorage shouldNotBeNull {
                     fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/provenance")
-                        }
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
+                        directory shouldBe File("~/.ort/scanner/provenance")
                     }
 
                     postgresStorage shouldNotBeNull {

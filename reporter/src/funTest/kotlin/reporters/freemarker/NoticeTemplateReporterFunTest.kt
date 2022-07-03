@@ -28,8 +28,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
-import org.ossreviewtoolkit.model.config.FileStorageConfiguration
-import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
+import org.ossreviewtoolkit.model.config.LocalFileBasedConnection
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
@@ -58,11 +57,9 @@ class NoticeTemplateReporterFunTest : WordSpec({
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
-                        fileStorage = FileStorageConfiguration(
-                            localFileStorage = LocalFileStorageConfiguration(
-                                directory = archiveDir,
-                                compression = false
-                            )
+                        fileStorage = LocalFileBasedConnection(
+                            directory = archiveDir,
+                            compression = false
                         )
                     )
                 )

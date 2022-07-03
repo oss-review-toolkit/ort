@@ -92,9 +92,8 @@ ort:
       enabled: true
 
       fileStorage:
-        localFileStorage:
-          directory: ~/.ort/scanner/archive
-          compression: false
+        directory: ~/.ort/scanner/archive
+        compression: false
 
       postgresStorage:
         connection:
@@ -152,19 +151,17 @@ ort:
 
     storages:
       local:
-        backend:
-          localFileStorage:
-            directory: ~/.ort/scanner/results
-            compression: false
+        connection:
+          directory: ~/.ort/scanner/results
+          compression: false
 
       http:
-        backend:
-          httpFileStorage:
-            url: 'https://your-http-server'
-            query: '?username=user&password=123'
-            headers:
-              key1: value1
-              key2: value2
+        connection:
+          url: 'https://your-http-server'
+          query: '?username=user&password=123'
+          headers:
+            key1: value1
+            key2: value2
 
       clearlyDefined:
         serverUrl: 'https://api.clearlydefined.io'
@@ -198,9 +195,8 @@ ort:
 
     provenanceStorage:
       fileStorage:
-        localFileStorage:
-          directory: ~/.ort/scanner/provenance
-          compression: false
+        directory: ~/.ort/scanner/provenance
+        compression: false
 
       postgresStorage:
         connection:
