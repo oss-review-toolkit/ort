@@ -32,6 +32,9 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.licenses.ResolvedCopyrightSource.DETERMINED_BY_SCANNER
+import org.ossreviewtoolkit.model.licenses.ResolvedCopyrightSource.PROVIDED_BY_CURATION
+import org.ossreviewtoolkit.model.licenses.ResolvedCopyrightSource.SYNTHESIZED_FROM_AUTHOR
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
@@ -112,7 +115,8 @@ class LicenseInfoResolver(
                             ResolvedCopyrightFinding(
                                 statement = statement,
                                 location = UNDEFINED_TEXT_LOCATION,
-                                matchingPathExcludes = emptyList()
+                                matchingPathExcludes = emptyList(),
+                                copyrightSource = SYNTHESIZED_FROM_AUTHOR
                             )
                         }
                     )
@@ -132,7 +136,8 @@ class LicenseInfoResolver(
                             ResolvedCopyrightFinding(
                                 statement = statement,
                                 location = UNDEFINED_TEXT_LOCATION,
-                                matchingPathExcludes = emptyList()
+                                matchingPathExcludes = emptyList(),
+                                copyrightSource = PROVIDED_BY_CURATION
                             )
                         }
                     )
@@ -261,7 +266,7 @@ class LicenseInfoResolver(
                 it.matches(finding.location.prependPath(relativeFindingsPath))
             }
 
-            ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes)
+            ResolvedCopyrightFinding(finding.statement, finding.location, matchingPathExcludes, DETERMINED_BY_SCANNER)
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
