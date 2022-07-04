@@ -20,13 +20,11 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
-import io.kotest.matchers.string.startWith
 
 import java.io.File
 
@@ -95,15 +93,23 @@ class PubFunTest : WordSpec() {
 
             "resolve multi-module dependencies correctly" {
                 val workingDir = projectsDir.resolve("multi-module")
+                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-multi-module.yml")
 
                 val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
                 val managedFiles = analyzer.findManagedFiles(workingDir)
 
-                val exception = shouldThrow<IllegalArgumentException> {
-                    analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
-                }
+                val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
+                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes()
 
-                exception.message should startWith("AnalyzerResult contains packages that are also projects.")
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                    expectedResultFile,
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
+
+                analyzerResult.toYaml() shouldBe expectedResult
             }
 
             "resolve dependencies for a project with Flutter, Android and Cocoapods" {
