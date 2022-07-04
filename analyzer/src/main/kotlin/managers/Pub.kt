@@ -32,6 +32,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -665,6 +666,19 @@ class Pub(
 
         return specFile?.get("dependencies")?.get("flutter")?.get("sdk")?.textValue() == "flutter"
     }
+
+    /**
+     * Create the final [PackageManagerResult] by making sure that packages are removed from [projectResults] that
+     * are also referenced as project dependencies.
+     */
+    override fun createPackageManagerResult(
+        projectResults: Map<File, List<ProjectAnalyzerResult>>
+    ): PackageManagerResult =
+        // TODO: Dependencies on projects should use the correct package linkage. To fix this, all project identifiers
+        //       should already be determined in beforeResolution() so that the linkage can be correctly set when the
+        //       dependency tree is built. Then also project packages could be prevented and the filter below could be
+        //       removed.
+        PackageManagerResult(projectResults.filterProjectPackages())
 }
 
 /**

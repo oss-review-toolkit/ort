@@ -1,0 +1,103 @@
+---
+projects:
+- id: "Pub:multi-module:multi-module:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/multi-module/pubspec.yaml"
+  authors:
+  - "The ORT Project Authors"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: "https://ossreviewtoolkit.org/"
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pub:subproject:subproject:1.0.0"
+      dependencies:
+      - id: "Pub:typed_data:typed_data:1.3.1"
+        dependencies:
+        - id: "Pub:collection:collection:1.16.0"
+- id: "Pub:subproject:subproject:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/multi-module/subproject/pubspec.yaml"
+  authors:
+  - "The ORT Project Authors"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "https://github.com/oss-review-toolkit/ort.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>/subproject"
+  homepage_url: "https://ossreviewtoolkit.org/"
+  scopes: []
+packages:
+- package:
+    id: "Pub:collection:collection:1.16.0"
+    purl: "pkg:pub/collection/collection@1.16.0"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: "Collections and utilities functions and classes related to collections."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/dart-lang/collection.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/dart-lang/collection.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Pub:typed_data:typed_data:1.3.1"
+    purl: "pkg:pub/typed_data/typed_data@1.3.1"
+    declared_licenses: []
+    declared_licenses_processed: {}
+    description: "Utility functions and classes related to the dart:typed_data library."
+    homepage_url: ""
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    vcs:
+      type: "Git"
+      url: "https://github.com/dart-lang/typed_data.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/dart-lang/typed_data.git"
+      revision: ""
+      path: ""
+  curations: []
+has_issues: false
