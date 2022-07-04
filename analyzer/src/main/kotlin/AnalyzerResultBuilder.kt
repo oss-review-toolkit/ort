@@ -43,8 +43,11 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
 
     fun build(): AnalyzerResult {
         val duplicateIds = (projects.map { it.id } + packages.map { it.pkg.id }).getDuplicates()
-        require(duplicateIds.isEmpty()) {
-            "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
+        val duplicateVcs = (projects.map { listOf(it.id.type,it.vcsProcessed) } +
+                            packages.map { listOf(it.pkg.id.type,it.pkg.vcsProcessed) }
+        ).getDuplicates()
+        require(duplicateIds.isEmpty() && duplicateVcs.isEmpty()) {
+            "AnalyzerResult contains packages that are also projects. Duplicates: '{$duplicateVcs ?: duplicateVcs}'."
         }
 
         return DependencyGraphConverter.convert(AnalyzerResult(projects, packages, issues, dependencyGraphs))
