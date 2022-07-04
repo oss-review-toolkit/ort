@@ -22,7 +22,7 @@
 
 #------------------------------------------------------------------------
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:11-jdk-focal AS build
+FROM eclipse-temurin:11-jdk-jammy AS build
 
 ENV LANG=C.UTF-8
 
@@ -44,8 +44,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     build-essential \
-    clang-9 \
-    clang++-9 \
     dirmngr \
     dpkg-dev \
     git \
@@ -86,16 +84,14 @@ ARG PYTHON2_VERSION=""
 ENV PYENV_ROOT=/opt/python
 RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 ENV PATH=/opt/python/bin:$PATH
-# Python 3.6.x series has problems with alignment with modern GCC
-# As we don not want patch Python versions we use Clang as compiler
 RUN for pyvers in ${PYTHON_VERSION} ${PYTHON2_VERSION}; do \
-    CC=clang-9 CXX=clang++9 pyenv install $pyvers; done
+    pyenv install $pyvers; done
 RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
 ENV PATH=/opt/python/shims:$PATH
 
 ARG CONAN_VERSION=1.44.0
-ARG PYTHON_VIRTUALENV_VERSION=20.13.0
-ARG PIPTOOL_VERSION=21.3.1
+ARG PYTHON_VIRTUALENV_VERSION=20.15.1
+ARG PIPTOOL_VERSION=22.1.2
 ARG SCANCODE_VERSION=30.1.0
 
 # Install pip and wheel ahead of regular modules as python try to generate
@@ -107,6 +103,7 @@ RUN pip install -U \
     Mercurial \
     conan=="${CONAN_VERSION}" \
     pipenv \
+    poetry \
     scancode-toolkit==${SCANCODE_VERSION} \
     virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
@@ -117,7 +114,7 @@ COPY docker/python.sh /etc/profile.d
 FROM build as rubybuild
 
 ARG COCOAPODS_VERSION=1.11.2
-ARG RUBY_VERSION=2.7.4
+ARG RUBY_VERSION=3.1.2
 ENV RBENV_ROOT=/opt/rbenv
 ENV PATH=${RBENV_ROOT}/bin:${RBENV_ROOT}/shims/:${RBENV_ROOT}/plugins/ruby-build/bin:$PATH
 
@@ -126,7 +123,7 @@ RUN git clone --depth 1 https://github.com/rbenv/ruby-build.git "$(rbenv root)"/
 WORKDIR ${RBENV_ROOT}
 RUN src/configure \
     && make -C src
-RUN rbenv install ${RUBY_VERSION} \
+RUN rbenv install ${RUBY_VERSION} -v \
     && rbenv global ${RUBY_VERSION} \
     && gem install bundler cocoapods:${COCOAPODS_VERSION}
 
@@ -137,7 +134,7 @@ COPY docker/ruby.sh /etc/profile.d
 FROM build AS nodebuild
 
 ARG BOWER_VERSION=1.8.12
-ARG NODEJS_VERSION=16.13.2
+ARG NODEJS_VERSION=16.15.1
 ARG NPM_VERSION=7.20.6
 ARG NVM_DIR=/opt/nodejs
 ARG YARN_VERSION=1.22.10
@@ -154,7 +151,7 @@ RUN . $NVM_DIR/nvm.sh \
 FROM build AS gobuild
 
 ARG GO_DEP_VERSION=0.5.4
-ARG GO_VERSION=1.17.3
+ARG GO_VERSION=1.18.3
 ENV GOPATH=/opt/go
 RUN curl -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /opt -xz
 ENV PATH=/opt/go/bin:$PATH
@@ -167,7 +164,7 @@ RUN echo "add_local_path /opt/go/bin:\$PATH" > /etc/profile.d/go.sh
 FROM build AS haskellbuild
 
 ARG HASKELL_STACK_VERSION=2.1.3
-RUN curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | bash -s -- -d /usr/bin
+RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d /usr/bin
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
@@ -202,9 +199,7 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 # Prepare Gradle
-RUN --mount=type=cache,target=/tmp/.gradle/ \
-    export GRADLE_USER_HOME=/tmp/.gradle/ \
-    && scripts/import_proxy_certs.sh \
+RUN scripts/import_proxy_certs.sh \
     && scripts/set_gradle_proxy.sh \
     && sed -i -r 's,(^distributionUrl=)(.+)-all\.zip$,\1\2-bin.zip,' gradle/wrapper/gradle-wrapper.properties \
     && sed -i -r '/distributionSha256Sum=[0-9a-f]{64}/d' gradle/wrapper/gradle-wrapper.properties \
@@ -220,7 +215,7 @@ RUN mkdir -p /opt/ort \
 
 #------------------------------------------------------------------------
 # Main container
-FROM eclipse-temurin:11-jdk-focal
+FROM eclipse-temurin:11-jdk-jammy
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -257,7 +252,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 ARG USERNAME=ort
 ARG USER_ID=1000
 ARG USER_GID=$USER_ID
-ARG HOMEDIR=/workspace
+ARG HOMEDIR=/home/ort
 ENV HOME=$HOMEDIR
 
 # Run with non privileged user
@@ -323,20 +318,21 @@ RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
     && curl -ksS "$LISTURL" > /etc/apt/sources.list.d/dart.list \
     && echo "add_local_path /usr/lib/dart/bin:\$PATH" > /etc/profile.d/dart.sh
 
-ARG COMPOSER_VERSION=1.10.1-1
-
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     cargo \
-    composer=$COMPOSER_VERSION \
     dart \
     git \
+    php \
     sbt=$SBT_VERSION \
     subversion \
     && rm -rf /var/lib/apt/lists/*
+
+# PHP composer
+RUN curl -ksS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer
 
 # ORT
 COPY --chown=$USERNAME:$USERNAME --from=ortbuild /opt/ort /opt/ort
@@ -348,4 +344,3 @@ USER $USERNAME
 WORKDIR $HOMEDIR
 
 ENTRYPOINT ["/usr/bin/ort"]
-
