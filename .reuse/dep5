@@ -48,6 +48,10 @@ Files: clients/github-graphql/src/main/assets/*
 Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
+Files: clients/osv/src/test/assets/vulnerability/examples/*
+Copyright: 2021-2022 OSV Schema Authors
+License: Apache-2.0
+
 Files: docs/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
