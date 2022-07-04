@@ -96,16 +96,15 @@ ort:
         compression: false
 
       postgresStorage:
-        connection:
-          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
-          schema: public
-          username: username
-          password: password
-          sslmode: required
-          sslcert: /defaultdir/postgresql.crt
-          sslkey: /defaultdir/postgresql.pk8
-          sslrootcert: /defaultdir/root.crt
-          parallelTransactions: 5
+        url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+        schema: public
+        username: username
+        password: password
+        sslmode: required
+        sslcert: /defaultdir/postgresql.crt
+        sslkey: /defaultdir/postgresql.pk8
+        sslrootcert: /defaultdir/root.crt
+        parallelTransactions: 5
 
     createMissingArchives: false
 

@@ -45,7 +45,7 @@ data class FileArchiverConfiguration(
     /**
      * Configuration of the [PostgresFileArchiverStorage] used for archiving the files.
      */
-    val postgresStorage: PostgresStorageConfiguration? = null
+    val postgresStorage: PostgresConnection? = null
 ) {
     companion object : Logging
 
@@ -70,7 +70,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
 
         this?.postgresStorage != null -> {
             val dataSource = DatabaseUtils.createHikariDataSource(
-                config = postgresStorage.connection,
+                config = postgresStorage,
                 applicationNameSuffix = "file-archiver"
             )
 
