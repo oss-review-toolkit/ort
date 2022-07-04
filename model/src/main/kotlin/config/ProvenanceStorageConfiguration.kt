@@ -33,7 +33,7 @@ data class ProvenanceStorageConfiguration(
     /**
      * Configuration of a PostgreSQL storage.
      */
-    val postgresStorage: PostgresStorageConfiguration? = null,
+    val postgresStorage: PostgresConnection? = null,
 ) {
     companion object : Logging
 

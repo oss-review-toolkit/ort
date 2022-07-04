@@ -438,7 +438,7 @@ private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguratio
 
     config?.postgresStorage?.let { postgresStorageConfiguration ->
         return PostgresPackageProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration)
         )
     }
 
@@ -454,7 +454,7 @@ private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration
 
     config?.postgresStorage?.let { postgresStorageConfiguration ->
         return PostgresNestedProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration)
         )
     }
 
