@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -314,6 +315,28 @@ abstract class PackageManager(
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
                     "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."
+        }
+    }
+
+    /**
+     * Remove all packages from the contained [ProjectAnalyzerResult]s which are also projects.
+     */
+    protected fun Map<File, List<ProjectAnalyzerResult>>.filterProjectPackages():
+            Map<File, List<ProjectAnalyzerResult>> {
+        val projectIds = flatMapTo(mutableSetOf()) { (_, projectResult) -> projectResult.map { it.project.id } }
+
+        return mapValues { entry ->
+            entry.value.map { projectResult ->
+                val projectReferences = projectResult.packages.filterTo(mutableSetOf()) { it.id in projectIds }
+                projectResult.takeIf { projectReferences.isEmpty() }
+                    ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
+                        .also {
+                            this@PackageManager.log.info {
+                                "Removing ${projectReferences.size} packages that are projects."
+                            }
+                            this@PackageManager.log.debug { projectReferences.joinToString { it.id.toCoordinates() } }
+                        }
+            }
         }
     }
 }

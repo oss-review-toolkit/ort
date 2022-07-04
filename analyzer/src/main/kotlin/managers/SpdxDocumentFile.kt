@@ -483,22 +483,5 @@ class SpdxDocumentFile(
      */
     override fun createPackageManagerResult(
         projectResults: Map<File, List<ProjectAnalyzerResult>>
-    ): PackageManagerResult {
-        val projectIds =
-            projectResults.flatMapTo(mutableSetOf()) { (_, projectResult) -> projectResult.map { it.project.id } }
-
-        val filteredResults = projectResults.mapValues { entry ->
-            entry.value.map { projectResult ->
-                val projectReferences = projectResult.packages.filterTo(mutableSetOf()) { it.id in projectIds }
-                projectResult.takeIf { projectReferences.isEmpty() }
-                    ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
-                        .also {
-                            log.info { "Removing ${projectReferences.size} packages that are projects." }
-                            log.debug { projectReferences.joinToString { it.id.toCoordinates() } }
-                        }
-            }
-        }
-
-        return PackageManagerResult(filteredResults)
-    }
+    ): PackageManagerResult = PackageManagerResult(projectResults.filterProjectPackages())
 }
