@@ -1523,7 +1523,7 @@ packages:
   - "Dart Team"
   declared_licenses: []
   declared_licenses_processed: {}
-  description: "A platform-independent package for parsing and serializing HTTP formats.\n"
+  description: "A platform-independent package for parsing and serializing HTTP formats."
   homepage_url: "https://github.com/dart-lang/http_parser"
   binary_artifact:
     url: ""
@@ -1551,7 +1551,7 @@ packages:
   - "Dart Team"
   declared_licenses: []
   declared_licenses_processed: {}
-  description: "Utilities for the Dart VM Runtime.\n"
+  description: "Utilities for the Dart VM Runtime."
   homepage_url: "https://github.com/dart-lang/io"
   binary_artifact:
     url: ""
@@ -1695,7 +1695,7 @@ packages:
   declared_licenses_processed: {}
   description: "This library contains the definitions of annotations that provide\
     \ additional semantic information about the program being annotated. These annotations\
-    \ are intended to be used by tools to provide a better user experience.\n"
+    \ are intended to be used by tools to provide a better user experience."
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/meta"
   binary_artifact:
     url: ""
@@ -1866,7 +1866,7 @@ packages:
   declared_licenses_processed: {}
   description: "A string-based path manipulation library. All of the path operations\
     \ you know and love, with solid support on both Windows and POSIX (Linux and Mac\
-    \ OS X) machines.\n"
+    \ OS X) machines."
   homepage_url: "http://github.com/dart-lang/path"
   binary_artifact:
     url: ""
@@ -1952,7 +1952,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Runtime library for protocol buffers support. Use https://pub.dartlang.org/packages/protoc_plugin\
-    \ to generate dart code for your '.proto' files.\n"
+    \ to generate dart code for your '.proto' files."
   homepage_url: "https://github.com/dart-lang/protobuf"
   binary_artifact:
     url: ""
@@ -1981,7 +1981,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Versions and version constraints implementing pub's versioning policy.\
-    \ This is very similar to vanilla semver, with a few corner cases.\n"
+    \ This is very similar to vanilla semver, with a few corner cases."
   homepage_url: "http://github.com/dart-lang/pub_semver"
   binary_artifact:
     url: ""
@@ -2459,7 +2459,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A file system watcher. It monitors changes to contents of directories\
-    \ and sends notifications when files have been added, removed, or modified.\n"
+    \ and sends notifications when files have been added, removed, or modified."
   homepage_url: "https://github.com/dart-lang/watcher"
   binary_artifact:
     url: ""

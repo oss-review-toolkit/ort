@@ -512,7 +512,7 @@ class Pub(
                             val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
+                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
                             homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
                             authors = parseAuthors(pkgInfoFromYamlFile)
 
