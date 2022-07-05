@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub:multi-module:multi-module:1.0.0"
+- id: "Pub:multimodule:multimodule:1.0.0"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/multi-module/pubspec.yaml"
   authors:
   - "The ORT Project Authors"

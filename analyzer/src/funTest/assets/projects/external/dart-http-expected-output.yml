@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Pub:dart-http:dart-http:0.12.0+2"
+  id: "Pub:http:http:0.12.0+2"
   definition_file_path: "pubspec.yaml"
   authors:
   - "Dart Team"
