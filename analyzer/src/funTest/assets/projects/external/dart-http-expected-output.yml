@@ -1286,7 +1286,7 @@ packages:
   - "Dart Team"
   declared_licenses: []
   declared_licenses_processed: {}
-  description: "A platform-independent package for parsing and serializing HTTP formats.\n"
+  description: "A platform-independent package for parsing and serializing HTTP formats."
   homepage_url: "https://github.com/dart-lang/http_parser"
   binary_artifact:
     url: ""
@@ -1314,7 +1314,7 @@ packages:
   - "Dart Team"
   declared_licenses: []
   declared_licenses_processed: {}
-  description: "Utilities for the Dart VM Runtime.\n"
+  description: "Utilities for the Dart VM Runtime."
   homepage_url: "https://github.com/dart-lang/io"
   binary_artifact:
     url: ""
@@ -1430,7 +1430,7 @@ packages:
   declared_licenses_processed: {}
   description: "This library contains the definitions of annotations that provide\
     \ additional semantic information about the program being annotated. These annotations\
-    \ are intended to be used by tools to provide a better user experience.\n"
+    \ are intended to be used by tools to provide a better user experience."
   homepage_url: "https://github.com/dart-lang/sdk/tree/master/pkg/meta"
   binary_artifact:
     url: ""
@@ -1687,7 +1687,7 @@ packages:
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Versions and version constraints implementing pub's versioning policy.\
-    \ This is very similar to vanilla semver, with a few corner cases.\n"
+    \ This is very similar to vanilla semver, with a few corner cases."
   homepage_url: "http://github.com/dart-lang/pub_semver"
   binary_artifact:
     url: ""
