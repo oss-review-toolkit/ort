@@ -20,11 +20,13 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
+import io.kotest.matchers.string.startWith
 
 import java.io.File
 
@@ -89,6 +91,19 @@ class PubFunTest : WordSpec() {
                 )
 
                 result.toYaml() shouldBe expectedResult
+            }
+
+            "resolve multi-module dependencies correctly" {
+                val workingDir = projectsDir.resolve("multi-module")
+
+                val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+                val managedFiles = analyzer.findManagedFiles(workingDir)
+
+                val exception = shouldThrow<IllegalArgumentException> {
+                    analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
+                }
+
+                exception.message should startWith("AnalyzerResult contains packages that are also projects.")
             }
 
             "resolve dependencies for a project with Flutter, Android and Cocoapods" {
