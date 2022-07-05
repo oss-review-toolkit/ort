@@ -1,6 +1,6 @@
 ---
 projects:
-- id: "Pub:flutter-project-with-android-and-cocoapods:flutter-project-with-android-and-cocoapods:1.0.0+1"
+- id: "Pub:flutter_example:flutter_example:1.0.0+1"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/flutter-project-with-android-and-cocoapods/pubspec.yaml"
   declared_licenses: []
   declared_licenses_processed: {}
