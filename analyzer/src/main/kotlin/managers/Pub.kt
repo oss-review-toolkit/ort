@@ -112,7 +112,6 @@ class Pub(
         val issues: List<OrtIssue>
     )
 
-    private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
     private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
@@ -312,7 +311,8 @@ class Pub(
         lockFile: JsonNode,
         packages: Map<Identifier, Package>,
         labels: Map<String, String>,
-        workingDir: File
+        workingDir: File,
+        processedPackages: Set<String> = emptySet()
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
@@ -320,14 +320,10 @@ class Pub(
 
         log.info { "buildDependencyTree for package $nameOfCurrentPackage " }
 
-        // Ensure we process every package only once.
-        processedPackages += nameOfCurrentPackage
-
         // Lookup the dependencies listed in pubspec.yaml file and build the dependency tree.
         dependencies.forEach { packageName ->
-            // We need to resolve the dependency tree for every package just once. This check ensures we do not run into
-            // infinite loops. When we add this check, and two packages list the same package as dependency, only the
-            // first might be listed.
+            // To prevent infinite loops, resolve the dependency tree for each package just once for each branch of the
+            // dependency tree.
             if (packageName in processedPackages) return@forEach
 
             val pkgInfoFromLockFile = lockFile["packages"][packageName]
@@ -349,8 +345,15 @@ class Pub(
                 val requiredPackages =
                     dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
-                val transitiveDependencies =
-                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages, labels, workingDir)
+                val transitiveDependencies = buildDependencyTree(
+                    dependencies = requiredPackages,
+                    manifest = dependencyYamlFile,
+                    lockFile = lockFile,
+                    packages = packages,
+                    labels = labels,
+                    workingDir = workingDir,
+                    processedPackages = processedPackages + nameOfCurrentPackage
+                )
 
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
