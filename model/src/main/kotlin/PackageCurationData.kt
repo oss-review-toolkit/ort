@@ -111,6 +111,8 @@ data class PackageCurationData(
      * non-null values of the curation data, and return the curated package.
      */
     fun apply(targetPackage: CuratedPackage): CuratedPackage {
+        if (this in targetPackage.curations.map { it.curation }) return targetPackage
+
         val original = targetPackage.pkg
 
         val vcsProcessed = vcs?.let {
