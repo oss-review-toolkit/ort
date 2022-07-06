@@ -1,0 +1,121 @@
+---
+projects:
+- id: "Conan::ConanProject:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/subproject/conanfile.py"
+  authors:
+  - "The ORT Project Authors"
+  declared_licenses:
+  - "The Boost Software License 1.0"
+  declared_licenses_processed:
+    unmapped:
+    - "The Boost Software License 1.0"
+  vcs:
+    type: "Git"
+    url: "http://github.com/ossreviewtoolkit/ort"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/subproject"
+  homepage_url: ""
+  scopes:
+  - name: "requires"
+    dependencies:
+    - id: "Conan::openssl:3.0.0"
+      dependencies:
+      - id: "Conan::zlib:1.2.12"
+- id: "SpdxDocumentFile::xyz:0.1.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/project-xyz.spdx.yml"
+  authors:
+  - "Thomas Steenbergen"
+  declared_licenses:
+  - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan"
+  homepage_url: "https://example.com/products/xyz"
+  scopes:
+  - name: "runtime"
+    dependencies:
+    - id: "Conan::ConanProject:1.0.0"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Conan::openssl:3.0.0"
+        dependencies:
+        - id: "Conan::zlib:1.2.12"
+packages:
+- package:
+    id: "Conan::openssl:3.0.0"
+    purl: "pkg:conan/openssl@3.0.0"
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
+      \ Layer (SSL) protocols"
+    homepage_url: "https://github.com/openssl/openssl"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://www.openssl.org/source/openssl-3.0.0.tar.gz"
+      hash:
+        value: "59eedfcb46c25214c9bd37ed6078297b4df01d012267fe9e9eee31f61bc70536"
+        algorithm: "SHA-256"
+    vcs:
+      type: "Git"
+      url: "https://github.com/openssl/openssl.git"
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/openssl/openssl.git"
+      revision: ""
+      path: ""
+  curations: []
+- package:
+    id: "Conan::zlib:1.2.12"
+    purl: "pkg:conan/zlib@1.2.12"
+    declared_licenses:
+    - "Zlib"
+    declared_licenses_processed:
+      spdx_expression: "Zlib"
+    description: "A Massively Spiffy Yet Delicately Unobtrusive Compression Library\
+      \ (Also Free, Not to Mention Unencumbered by Patents)"
+    homepage_url: "https://zlib.net"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://zlib.net/fossils/zlib-1.2.12.tar.gz"
+      hash:
+        value: "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9"
+        algorithm: "SHA-256"
+    vcs:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    vcs_processed:
+      type: ""
+      url: ""
+      revision: ""
+      path: ""
+    is_modified: true
+  curations: []
+has_issues: false
