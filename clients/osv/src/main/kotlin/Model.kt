@@ -75,6 +75,25 @@ data class Credit(
     val contact: List<String> = emptyList()
 )
 
+/**
+ * Defined package ecosystem values, see https://ossf.github.io/osv-schema/.
+ */
+object Ecosystem {
+    const val ANDROID = "Android"
+    const val CRATES_IO = "crates.io"
+    const val DEBIAN = "Debian"
+    const val GO = "Go"
+    const val HEX = "Hex"
+    const val LINUX = "Linux"
+    const val MAVEN = "Maven"
+    const val NPM = "npm"
+    const val NUGET = "NuGet"
+    const val OSS_FUZZ = "OSS-Fuzz"
+    const val PACKAGIST = "Packagist"
+    const val PYPI = "PyPI"
+    const val RUBY_GEMS = "RubyGems"
+}
+
 @Serializable(EventSerializer::class)
 data class Event(
     val type: Type,
@@ -90,6 +109,7 @@ data class Event(
 
 @Serializable
 data class Package(
+    /** See also [Ecosystem]. */
     val ecosystem: String,
     val name: String,
     val purl: String? = null
