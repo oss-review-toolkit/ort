@@ -25,11 +25,13 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
@@ -187,6 +189,26 @@ class SpdxDocumentFileFunTest : WordSpec({
                     packages.map { it.id } should containExactlyInAnyOrder(idZlib, idMyLib, idCurl, idOpenSsl)
                 }
             }
+        }
+
+        "resolve dependencies from other package managers" {
+            val testProjectDir = projectDir.resolve("subproject-conan")
+            val definitionFile = testProjectDir.resolve("project-xyz.spdx.yml")
+            val expectedResult = patchExpectedResult(
+                projectDir.resolveSibling("spdx-project-xyz-expected-output-subproject-conan.yml"),
+                definitionFilePath = vcsDir.getPathToRoot(definitionFile),
+                url = vcsUrl,
+                urlProcessed = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+            val managedFiles = analyzer.findManagedFiles(testProjectDir)
+
+            val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
+            val analyzerResult = analyzerRun.result.withResolvedScopes()
+
+            analyzerResult.toYaml() shouldBe expectedResult
         }
     }
 

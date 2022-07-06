@@ -27,6 +27,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -319,7 +320,7 @@ class SpdxDocumentFile(
     ): SortedSet<PackageReference> =
         getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<OrtIssue>()
-            doc.getSpdxPackageForId(target, issues)?.let { dependency ->
+            getPackageManagerDependency(target, doc) ?: doc.getSpdxPackageForId(target, issues)?.let { dependency ->
                 packages += dependency.toPackage(doc.getDefinitionFile(target), doc)
 
                 PackageReference(
@@ -330,6 +331,36 @@ class SpdxDocumentFile(
                 )
             }
         }
+
+    private fun getPackageManagerDependency(pkgId: String, doc: SpdxResolvedDocument): PackageReference? {
+        val spdxPackage = doc.getSpdxPackageForId(pkgId, mutableListOf()) ?: return null
+        val definitionFile = doc.getDefinitionFile(pkgId) ?: return null
+
+        if (spdxPackage.packageFilename.isBlank()) return null
+        if (spdxPackage.packageFilename.count { it == '?' } != 1) return null
+
+        val packageFilename = spdxPackage.packageFilename.substringBefore("?")
+        val scope = spdxPackage.packageFilename.substringAfter("?").substringAfter("=")
+        val packageFile = definitionFile.parentFile.resolve(packageFilename)
+
+        if (packageFile.isFile) {
+            val managedFiles = findManagedFiles(packageFile.parentFile, ALL)
+            managedFiles.forEach { (factory, files) ->
+                if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
+                    // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
+                    //       preserved somehow.
+                    return PackageManagerDependencyHandler.createPackageManagerDependency(
+                        packageManager = factory.managerName,
+                        definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
+                        scope = scope,
+                        linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.
+                    )
+                }
+            }
+        }
+
+        return null
+    }
 
     /**
      * Return the dependencies of the package with the given [pkgId] defined in [doc] of the given
@@ -360,21 +391,22 @@ class SpdxDocumentFile(
                         )
                     }
 
-                    doc.getSpdxPackageForId(source, issues)?.let { dependency ->
-                        packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
-                        PackageReference(
-                            id = dependency.toIdentifier(),
-                            dependencies = getDependencies(
-                                source,
-                                doc,
-                                packages,
-                                SpdxRelationship.Type.DEPENDENCY_OF,
-                                dependsOnCase
-                            ),
-                            issues = issues,
-                            linkage = getLinkageForDependency(dependency, target, doc.relationships)
-                        )
-                    }
+                    getPackageManagerDependency(source, doc) ?: doc.getSpdxPackageForId(source, issues)
+                        ?.let { dependency ->
+                            packages += dependency.toPackage(doc.getDefinitionFile(source), doc)
+                            PackageReference(
+                                id = dependency.toIdentifier(),
+                                dependencies = getDependencies(
+                                    source,
+                                    doc,
+                                    packages,
+                                    SpdxRelationship.Type.DEPENDENCY_OF,
+                                    dependsOnCase
+                                ),
+                                issues = issues,
+                                linkage = getLinkageForDependency(dependency, target, doc.relationships)
+                            )
+                        }
                 }
 
                 // ...or on the source.
