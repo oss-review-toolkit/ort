@@ -1,0 +1,49 @@
+[
+    {
+        "schema_version": "1.2.0",
+        "id": "OSV-2020-484",
+        "modified": "2022-04-13T03:04:32.842142Z",
+        "published": "2020-07-01T00:00:12.297418Z",
+        "summary": "Heap-buffer-overflow in AAT::KerxSubTableFormat4<AAT::KerxSubTableHeader>::driver_context_t::transition",
+        "details": "OSS-Fuzz report: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=12532\n\n```\nCrash type: Heap-buffer-overflow READ 4\nCrash state:\nAAT::KerxSubTableFormat4<AAT::KerxSubTableHeader>::driver_context_t::transition\nvoid AAT::StateTableDriver<AAT::ExtendedTypes, AAT::KerxSubTableFormat4<AAT::Ker\nAAT::KerxSubTableFormat4<AAT::KerxSubTableHeader>::apply\n```\n",
+        "affected": [
+            {
+                "package": {
+                    "ecosystem": "OSS-Fuzz",
+                    "name": "harfbuzz",
+                    "purl": "pkg:generic/harfbuzz"
+                },
+                "ranges": [
+                    {
+                        "type": "GIT",
+                        "repo": "https://github.com/harfbuzz/harfbuzz.git",
+                        "events": [
+                            {
+                                "introduced": "4009a05ca7de21fff2176621597cd0cd01e9d80e"
+                            },
+                            {
+                                "fixed": "cc8e9a436fa408a1c63f4b9afb7643cea76a079c"
+                            }
+                        ]
+                    }
+                ],
+                "versions": [
+                    "2.2.0",
+                    "2.3.0"
+                ],
+                "ecosystem_specific": {
+                    "severity": "MEDIUM"
+                },
+                "database_specific": {
+                    "source": "https://github.com/google/oss-fuzz-vulns/blob/main/vulns/harfbuzz/OSV-2020-484.yaml"
+                }
+            }
+        ],
+        "references": [
+            {
+                "type": "REPORT",
+                "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=12532"
+            }
+        ]
+    }
+]
