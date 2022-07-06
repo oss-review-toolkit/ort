@@ -27,9 +27,15 @@ plugins {
 }
 
 dependencies {
+    api(libs.retrofit)
+
     implementation(libs.kotlinxSerialization)
+    implementation(libs.retrofitConverterKotlinxSerialization)
+    implementation(libs.retrofitConverterScalars)
 
     testImplementation(libs.kotestAssertionsJson)
+
+    funTestImplementation(libs.kotestAssertionsJson)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
