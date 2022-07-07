@@ -153,7 +153,7 @@ class ExperimentalScanner(
         runProvenanceScanners(controller, context)
         runPathScanners(controller, context)
 
-        createMissingArchives(controller.getNestedProvenancesByPackage())
+        createMissingArchives(controller)
 
         val results = controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
             it.key.id to it.value.merge()
@@ -548,7 +548,7 @@ class ExperimentalScanner(
         }
     }
 
-    private fun createMissingArchives(nestedProvenances: Map<Package, NestedProvenance>) {
+    private fun createMissingArchives(controller: ScanController) {
         // TODO: The archives are currently created in a way compatible with the existing implementation in the
         //       PathScanner. This allows to keep using existing file archives without changing the logic used to
         //       access those archives in the reporter. To achieve this nested provenances are downloaded recursively,
@@ -561,17 +561,29 @@ class ExperimentalScanner(
             return
         }
 
-        val provenancesWithMissingArchives = nestedProvenances.filterNot { (_, nestedProvenance) ->
-            archiver.hasArchive(nestedProvenance.root)
-        }
+        val provenancesWithMissingArchives = controller.getNestedProvenancesByPackage()
+            .filterNot { (_, nestedProvenance) -> archiver.hasArchive(nestedProvenance.root) }
 
         logger.info { "Creating file archives for ${provenancesWithMissingArchives.size} package(s)." }
 
         val duration = measureTime {
-            provenancesWithMissingArchives.forEach { (_, nestedProvenance) ->
-                val dir = downloadRecursively(nestedProvenance)
-                archiver.archive(dir, nestedProvenance.root)
-                dir.safeDeleteRecursively(force = true)
+            provenancesWithMissingArchives.forEach { (pkg, nestedProvenance) ->
+                runCatching {
+                    downloadRecursively(nestedProvenance)
+                }.onSuccess { dir ->
+                    archiver.archive(dir, nestedProvenance.root)
+                    dir.safeDeleteRecursively(force = true)
+                }.onFailure {
+                    controller.addIssue(
+                        pkg.id,
+                        OrtIssue(
+                            source = "Downloader",
+                            message = "Could not create file archive for " +
+                                    "'${pkg.id.toCoordinates()}': ${it.collectMessages()}",
+                            severity = Severity.ERROR
+                        )
+                    )
+                }
             }
         }
 

@@ -59,6 +59,11 @@ class ScanController(
     private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
     /**
+     * TODO: Docs
+     */
+    private val issues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+
+    /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
      */
     private val nestedProvenances = mutableMapOf<KnownProvenance, NestedProvenance>()
@@ -82,6 +87,10 @@ class ScanController(
 
     fun addProvenanceResolutionIssue(id: Identifier, issue: OrtIssue) {
         provenanceResolutionIssues.getOrPut(id) { mutableListOf() } += issue
+    }
+
+    fun addIssue(id: Identifier, issue: OrtIssue) {
+        issues.getOrPut(id) { mutableListOf() } += issue
     }
 
     /**
@@ -158,7 +167,7 @@ class ScanController(
      * Get the [NestedProvenanceScanResult] for the provided [id].
      */
     fun getNestedScanResult(id: Identifier): NestedProvenanceScanResult =
-        buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id))
+        buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id), emptyList())
 
     /**
      * Get the [NestedProvenanceScanResult] for each [Package], filtered by the VCS path for each package and the
@@ -167,7 +176,8 @@ class ScanController(
     fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
         // TODO: Return map containing all packages with issues for packages that could not be completely scanned.
         packageProvenancesWithoutVcsPath.entries.associate { (id, provenance) ->
-            packages.first { it.id == id } to buildNestedProvenanceScanResult(provenance)
+            val issues = issues[id].orEmpty()
+            packages.first { it.id == id } to buildNestedProvenanceScanResult(provenance, issues)
         }.filterByVcsPath().filterByIgnorePatterns()
 
     /**
@@ -276,10 +286,13 @@ class ScanController(
     fun hasScanResult(scanner: ScannerWrapper, provenance: Provenance) =
         scanResults[scanner]?.get(provenance)?.isNotEmpty() == true
 
-    private fun buildNestedProvenanceScanResult(root: KnownProvenance): NestedProvenanceScanResult {
+    private fun buildNestedProvenanceScanResult(
+        root: KnownProvenance,
+        issues: List<OrtIssue>
+    ): NestedProvenanceScanResult {
         val nestedProvenance = nestedProvenances.getValue(root)
         val scanResults = nestedProvenance.getProvenances().associateWith { provenance ->
-            getScanResults(provenance)
+            getScanResults(provenance).map { it.copy(summary = it.summary.copy(issues = it.summary.issues + issues)) }
         }
 
         return NestedProvenanceScanResult(nestedProvenance, scanResults)
