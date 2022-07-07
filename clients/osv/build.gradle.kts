@@ -28,6 +28,8 @@ plugins {
 
 dependencies {
     implementation(libs.kotlinxSerialization)
+
+    testImplementation(libs.kotestAssertionsJson)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
