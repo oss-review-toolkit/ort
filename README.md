@@ -339,6 +339,8 @@ supported:
   * [NPM](https://www.npmjs.com/) (limitations:
     [no scope-specific registries](https://github.com/oss-review-toolkit/ort/issues/3741),
     [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [PNPM](https://pnpm.io/) (limitations:
+    [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
   * [Yarn 1](https://classic.yarnpkg.com/)
   * [Yarn 2+](https://next.yarnpkg.com/)
 * .NET

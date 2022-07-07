@@ -47,7 +47,26 @@ data class NpmModuleInfo(
 
     /** A set with information about the modules this module depends on. */
     val dependencies: Set<NpmModuleInfo>
-)
+) {
+    /**
+     * [workingDir] and [packageFile] are not relevant when adding this [NpmModuleInfo] to the dependency graph.
+     * However, if these values differ the same dependencies are added as duplicates to the set which is used to create
+     * the dependency graph. Therefore, remove them from the equals check.
+     */
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as NpmModuleInfo
+
+        if (id != other.id) return false
+        if (dependencies != other.dependencies) return false
+
+        return true
+    }
+
+    override fun hashCode() = 31 * id.hashCode() + dependencies.hashCode()
+}
 
 /**
  * A specialized [DependencyHandler] implementation for NPM.

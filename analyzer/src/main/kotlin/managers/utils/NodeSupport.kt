@@ -21,6 +21,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.node.ArrayNode
 
@@ -30,6 +31,7 @@ import java.nio.file.PathMatcher
 
 import org.ossreviewtoolkit.analyzer.managers.Yarn2
 import org.ossreviewtoolkit.model.readTree
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.logger
@@ -47,6 +49,14 @@ object NodeSupport
  */
 fun hasNpmLockFile(directory: File) =
     NPM_LOCK_FILES.any { lockfile ->
+        File(directory, lockfile).isFile
+    }
+
+/**
+ * Return whether the [directory] contains a PNPM lock file.
+ */
+fun hasPnpmLockFile(directory: File) =
+    PNPM_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
 
@@ -69,8 +79,16 @@ fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOUR
  */
 fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        !isHandledByYarn(entry)
+        !isHandledByYarn(entry) && !isHandledByPnpm(entry)
     }.mapTo(mutableSetOf()) { it.definitionFile }
+
+/**
+ * Map [definitionFiles] to contain only files handled by PNPM.
+ */
+fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
+    getPackageJsonInfo(definitionFiles.toSet())
+        .filter { isHandledByPnpm(it) && !it.isPnpmWorkspaceSubmodule }
+        .mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
  * Map [definitionFiles] to contain only files handled by Yarn.
@@ -125,6 +143,7 @@ fun expandNpmShortcutUrl(url: String): String {
 }
 
 private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
+private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
 private val YARN_LOCK_FILES = listOf("yarn.lock")
 
 private data class PackageJsonInfo(
@@ -132,27 +151,41 @@ private data class PackageJsonInfo(
     val hasYarnLockfile: Boolean = false,
     val hasYarn2ResourceFile: Boolean = false,
     val hasNpmLockfile: Boolean = false,
+    val hasPnpmLockfile: Boolean = false,
+    val isPnpmWorkspaceRoot: Boolean = false,
+    val isPnpmWorkspaceSubmodule: Boolean = false,
     val isYarnWorkspaceRoot: Boolean = false,
     val isYarnWorkspaceSubmodule: Boolean = false
 )
+
+private fun isHandledByPnpm(entry: PackageJsonInfo) =
+    entry.isPnpmWorkspaceRoot || entry.isPnpmWorkspaceSubmodule || entry.hasPnpmLockfile
 
 private fun isHandledByYarn(entry: PackageJsonInfo) =
     entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
 
 private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJsonInfo> {
+    val pnpmWorkspaceSubmodules = getPnpmWorkspaceSubmodules(definitionFiles)
     val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
 
     return definitionFiles.map { definitionFile ->
         PackageJsonInfo(
             definitionFile = definitionFile,
-            isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile),
+            isPnpmWorkspaceRoot = isPnpmWorkspaceRoot(definitionFile.parentFile),
+            isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile) &&
+                    !isPnpmWorkspaceRoot(definitionFile.parentFile),
             hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
             hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
+            hasPnpmLockfile = hasPnpmLockFile(definitionFile.parentFile),
             hasYarn2ResourceFile = hasYarn2ResourceFile(definitionFile.parentFile),
-            isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules
+            isPnpmWorkspaceSubmodule = definitionFile in pnpmWorkspaceSubmodules,
+            isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules &&
+                    definitionFile !in pnpmWorkspaceSubmodules
         )
     }
 }
+
+private fun isPnpmWorkspaceRoot(directory: File) = directory.resolve("pnpm-workspace.yaml").isFile
 
 private fun isYarnWorkspaceRoot(definitionFile: File) =
     try {
@@ -212,4 +245,48 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
         val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
         FileSystems.getDefault().getPathMatcher(pattern)
     }.orEmpty()
+}
+
+private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class PnpmWorkspaces(val packages: List<String>)
+
+    val pnpmWorkspaceFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
+
+    return if (pnpmWorkspaceFile.isFile) {
+        val workspaceMatchers = pnpmWorkspaceFile.readValue<PnpmWorkspaces>().packages
+
+        workspaceMatchers.map { matcher ->
+            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${matcher.removeSuffix("/")}"
+            FileSystems.getDefault().getPathMatcher(pattern)
+        }
+    } else {
+        emptyList()
+    }
+}
+
+private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
+    val result = mutableSetOf<File>()
+
+    definitionFiles.forEach { definitionFile ->
+        val pnpmWorkspacesFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
+
+        if (pnpmWorkspacesFile.isFile) {
+            val pathMatchers = getPnpmWorkspaceMatchers(definitionFile)
+
+            pathMatchers.forEach { matcher ->
+                definitionFiles.forEach inner@{ other ->
+                    val projectDir = other.parentFile.toPath()
+                    if (other != definitionFile && matcher.matches(projectDir)) {
+                        result += other
+                        return@inner
+                    }
+                }
+            }
+        } else {
+            return@forEach
+        }
+    }
+
+    return result
 }
