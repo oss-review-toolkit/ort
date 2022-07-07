@@ -26,6 +26,7 @@ plugins {
 dependencies {
     api(project(":clients:nexus-iq"))
     api(project(":clients:oss-index"))
+    api(project(":clients:osv"))
     api(project(":clients:vulnerable-code"))
     api(project(":clients:github-graphql"))
     api(project(":model"))
@@ -35,4 +36,7 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    funTestImplementation(libs.jacksonModuleKotlin)
+    funTestApi(libs.jacksonDatabind)
 }

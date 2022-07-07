@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class AdvisorConfiguration(
     val gitHubDefects: GitHubDefectsConfiguration? = null,
     val nexusIq: NexusIqConfiguration? = null,
+    val osv: OsvConfiguration? = null,
     val vulnerableCode: VulnerableCodeConfiguration? = null,
 
     /**
@@ -67,6 +68,16 @@ data class NexusIqConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
+)
+
+/**
+ * The configuration for the Google OSV vulnerability provider.
+ */
+data class OsvConfiguration(
+    /**
+     * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
+     */
+    val serverUrl: String?
 )
 
 /**
