@@ -316,7 +316,7 @@ class Pub(
         val nameOfCurrentPackage = manifest["name"].textValue()
         val containsFlutter = "flutter" in dependencies
 
-        log.info { "buildDependencyTree for package $nameOfCurrentPackage " }
+        log.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
 
         // Lookup the dependencies listed in pubspec.yaml file and build the dependency tree.
         dependencies.forEach { packageName ->
