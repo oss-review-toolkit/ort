@@ -405,9 +405,11 @@ class Pub(
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return emptyList()
 
-        log.info { "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION." }
-
         return analyzerResultCacheAndroid.getOrPut(packageName) {
+            log.info {
+                "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION."
+            }
+
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
                 .resolveDependencies(listOf(packageFile), labels).run {
                     projectResults.getValue(packageFile).map { result ->
