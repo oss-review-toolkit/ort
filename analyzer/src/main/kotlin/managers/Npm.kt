@@ -228,7 +228,18 @@ open class Npm(
 
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
+    /**
+     * Search depth in the `node_modules` directory for `package.json` files used for collecting all packages of the
+     * projects.
+     */
+    protected open val modulesSearchDepth = Int.MAX_VALUE
+
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
+
+    /**
+     * Check if [this] represents a workspace within a `node_modules` directory.
+     */
+    protected open fun File.isWorkspaceDir() = isSymbolicLink()
 
     /**
      * Load the submodule directories of the project defined in [moduleDir].
@@ -317,7 +328,7 @@ open class Npm(
 
         logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
-        val nodeModulesFiles = nodeModulesDir.walk().filter {
+        val nodeModulesFiles = nodeModulesDir.walk().maxDepth(modulesSearchDepth).filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
         }
 
@@ -395,7 +406,7 @@ open class Npm(
 
         val id = Identifier("NPM", namespace, name, version)
 
-        if (packageDir.isSymbolicLink()) {
+        if (packageDir.isWorkspaceDir()) {
             val realPackageDir = packageDir.realFile()
 
             logger.debug { "The package directory '$packageDir' links to '$realPackageDir'." }

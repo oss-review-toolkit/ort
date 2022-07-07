@@ -51,9 +51,9 @@ class PackageManagerTest : WordSpec({
         "gradle-kotlin/build.gradle.kts",
         "maven/pom.xml",
 
-        // Note that the NPM and Yarn implementations share code. Internal logic decides dynamically whether to process
-        // "package.json" with NPM or Yarn.
-        "npm-and-yarn/package.json",
+        // Note that the NPM, PNPM and Yarn implementations share code. Internal logic decides dynamically whether to
+        // process "package.json" with NPM, PNPM or Yarn.
+        "npm-pnpm-and-yarn/package.json",
 
         "nuget/packages.config",
         "pip-requirements/requirements.txt",
@@ -112,13 +112,14 @@ class PackageManagerTest : WordSpec({
                     "gradle-kotlin/build.gradle.kts"
                 )
                 managedFilesByName["Maven"] should containExactlyInAnyOrder("maven/pom.xml")
-                managedFilesByName["NPM"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
+                managedFilesByName["NPM"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
                 managedFilesByName["NuGet"] should containExactlyInAnyOrder("nuget/packages.config")
                 managedFilesByName["PIP"] should containExactlyInAnyOrder(
                     "pip-requirements/requirements.txt",
                     "pip-setup/setup.py"
                 )
                 managedFilesByName["Pipenv"] should containExactlyInAnyOrder("pipenv/Pipfile.lock")
+                managedFilesByName["PNPM"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
                 managedFilesByName["Poetry"] should containExactlyInAnyOrder("poetry/poetry.lock")
                 managedFilesByName["Pub"] should containExactlyInAnyOrder("pub/pubspec.yaml")
                 managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
@@ -127,7 +128,7 @@ class PackageManagerTest : WordSpec({
                     "spdx-project/project.spdx.yml"
                 )
                 managedFilesByName["Stack"] should containExactlyInAnyOrder("stack/stack.yaml")
-                managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-and-yarn/package.json")
+                managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
             }
         }
 
