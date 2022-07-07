@@ -279,8 +279,6 @@ class Pub(
             )
         }
 
-        log.info { "Reading ${definitionFile.name} file in $workingDir." }
-
         val project = parseProject(definitionFile, manifest, scopes)
 
         projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues)
