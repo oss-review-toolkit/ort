@@ -32,16 +32,14 @@ import kotlinx.serialization.json.Json
 class ModelTest : StringSpec({
     "Deserializing and serializing any vulnerability is idempotent for all official examples" {
         getVulnerabilityExamplesJson().forAll { vulnerabilityJson ->
-            val vulnerability = JSON.decodeFromString<Vulnerability>(vulnerabilityJson)
+            val vulnerability = Json.Default.decodeFromString<Vulnerability>(vulnerabilityJson)
 
-            val serializedVulnerabilityJson = JSON.encodeToString(vulnerability)
+            val serializedVulnerabilityJson = Json.Default.encodeToString(vulnerability)
 
             serializedVulnerabilityJson shouldEqualJson vulnerabilityJson
         }
     }
 })
-
-private val JSON = Json.Default
 
 private fun getVulnerabilityExamplesJson(): List<String> =
     (1..7).map { i -> File("src/test/assets/vulnerability/examples/$i.json").readText() }
