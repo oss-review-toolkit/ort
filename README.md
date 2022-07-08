@@ -644,6 +644,24 @@ ort {
 
 To enable this provider, pass `-a VulnerableCode` on the command line.
 
+## OSV
+
+This provider obtains information about security vulnerabilities from Google [OSV](https://osv.dev/), a distributed
+vulnerability database for Open Source. The database aggregates data from different sources for various ecosystems. The
+configuration is optional and limited to overriding the server URL.
+
+```hocon
+ort {
+  advisor {
+    osv {
+      serverUrl = "https://api-staging.osv.dev"
+    }
+  }
+}
+```
+
+To enable this provider, pass `-a Osv` on the command line.
+
 <a name="evaluator">&nbsp;</a>
 
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
