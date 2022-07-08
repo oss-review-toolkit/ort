@@ -177,12 +177,6 @@ class Pip(
             "pypi.org",
             "pypi.python.org" // Legacy
         ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
-
-        /**
-         * Return a version string with leading zeros of components stripped.
-         */
-        private fun stripLeadingZerosFromVersion(version: String) =
-            version.split('.').joinToString(".") { it.trimStart('0').ifEmpty { "0" } }
     }
 
     override fun command(workingDir: File?) = "pip"
@@ -569,13 +563,7 @@ class Pip(
 
             val pkgInfo = pkgData["info"]
 
-            val pkgRelease = pkgData["releases"]?.let { pkgReleases ->
-                val pkgVersion = pkgReleases.fieldNames().asSequence().find { version ->
-                    stripLeadingZerosFromVersion(version) == id.version
-                }
-
-                pkgReleases[pkgVersion]
-            } as? ArrayNode
+            val pkgRelease = pkgData["urls"] as? ArrayNode
 
             val homepageUrl = pkgInfo["home_page"]?.textValue().orEmpty()
             val declaredLicenses = getDeclaredLicenses(pkgInfo)
