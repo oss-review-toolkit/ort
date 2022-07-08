@@ -53,7 +53,7 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
         result.shouldBeSuccess {
-            JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
         }
     }
 
@@ -63,7 +63,7 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
         result.shouldBeSuccess {
-            JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
         }
     }
 
@@ -97,7 +97,7 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
         result.shouldBeSuccess {
-            JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
         }
     }
 
@@ -111,7 +111,5 @@ class OsvServiceFunTest : StringSpec({
         }
     }
 })
-
-private val JSON = OsvApiClient.JSON
 
 private fun getAssetAsString(path: String): String = File("src/funTest/assets").resolve(path).readText()
