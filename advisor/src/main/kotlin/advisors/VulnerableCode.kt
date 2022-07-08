@@ -68,9 +68,9 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
         val startTime = Instant.now()
 
         return runCatching {
-            mutableMapOf<Package, List<AdvisorResult>>().also {
+            buildMap {
                 packages.chunked(BULK_REQUEST_SIZE).forEach { pkg ->
-                    it += loadVulnerabilities(pkg, startTime)
+                    putAll(loadVulnerabilities(pkg, startTime))
                 }
             }
         }.getOrElse {

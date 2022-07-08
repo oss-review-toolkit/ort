@@ -59,7 +59,7 @@ data class CuratedPackage(
 
     @JsonIgnore
     fun getDeclaredLicenseMapping(): Map<String, SpdxExpression> =
-        mutableMapOf<String, SpdxExpression>().apply {
+        buildMap {
             curations.forEach { putAll(it.curation.declaredLicenseMapping) }
         }
 }
