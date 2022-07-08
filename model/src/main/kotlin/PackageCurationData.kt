@@ -148,7 +148,7 @@ data class PackageCurationData(
             isModified = isModified ?: original.isModified
         )
 
-        val declaredLicenseMappingDiff = mutableMapOf<String, SpdxExpression>().apply {
+        val declaredLicenseMappingDiff = buildMap {
             val previous = targetPackage.getDeclaredLicenseMapping().toList()
             val current = declaredLicenseMapping.toList()
 

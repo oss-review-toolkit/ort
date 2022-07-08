@@ -479,7 +479,7 @@ open class Npm(
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
         val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
 
-        return mutableSetOf<NpmModuleInfo>().apply {
+        return buildSet {
             addAll(getModuleInfo(moduleDir, scopes)!!.dependencies)
 
             workspaceModuleDirs.forEach { workspaceModuleDir ->
