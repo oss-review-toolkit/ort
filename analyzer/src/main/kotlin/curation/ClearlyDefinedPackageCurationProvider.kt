@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
-import org.ossreviewtoolkit.clients.clearlydefined.ContributedCurations
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.Hash
@@ -109,9 +108,9 @@ class ClearlyDefinedPackageCurationProvider(
         }.toMap()
 
         val contributedCurations = runCatching {
-            mutableMapOf<Coordinates, ContributedCurations>().also {
+            buildMap {
                 coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
-                    it += runBlocking(Dispatchers.IO) { service.getCurations(coordinates) }
+                    putAll(runBlocking(Dispatchers.IO) { service.getCurations(coordinates) })
                 }
             }
         }.onFailure { e ->
