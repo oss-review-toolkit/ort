@@ -41,7 +41,7 @@ class ModelTest : StringSpec({
     }
 })
 
-private val JSON = Json {}
+private val JSON = Json.Default
 
 private fun getVulnerabilityExamplesJson(): List<String> =
     (1..7).map { i -> File("src/test/assets/vulnerability/examples/$i.json").readText() }
