@@ -78,6 +78,8 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
+private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  *
@@ -151,6 +153,21 @@ open class Npm(
                     else -> declaredLicense.takeUnless { it.isBlank() }
                 }
             }
+        }
+
+        /**
+         * Do various replacements in [downloadUrl]. Return the transformed URL.
+         */
+        internal fun fixDownloadUrl(downloadUrl: String): String {
+            @Suppress("HttpUrlsUsage")
+            return downloadUrl
+                // Work around the issue described at
+                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+                // Work around Artifactory returning API URLs instead of download URLs.
+                // See these somewhat related issues : https://www.jfrog.com/jira/browse/RTFACT-8727
+                // https://www.jfrog.com/jira/browse/RTFACT-18463
+                .replace(artifactoryApiPathPattern, "$1/$2")
         }
 
         /**
@@ -394,15 +411,7 @@ open class Npm(
             }
         }
 
-        @Suppress("HttpUrlsUsage")
-        downloadUrl = downloadUrl
-            // Work around the issue described at
-            // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-            .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
-            // Work around Artifactory returning API URLs instead of download URLs. See these somewhat related issues:
-            // https://www.jfrog.com/jira/browse/RTFACT-8727
-            // https://www.jfrog.com/jira/browse/RTFACT-18463
-            .replace(artifactoryApiPathPattern, "$1/$2")
+        downloadUrl = fixDownloadUrl(downloadUrl)
 
         val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
         if (vcsFromDownloadUrl.url != downloadUrl) {
