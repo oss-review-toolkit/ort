@@ -172,6 +172,6 @@ class ClearlyDefinedPackageCurationProvider(
             }
         }
 
-        return curations
+        return curations.mapValues { (_, curations) -> curations.distinct() }
     }
 }
