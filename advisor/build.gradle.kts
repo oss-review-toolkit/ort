@@ -33,6 +33,7 @@ dependencies {
 
     implementation(libs.cvssCalculator)
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinxSerialization)
     implementation(libs.ktorClientOkHttp)
 
     testImplementation(libs.mockk)
