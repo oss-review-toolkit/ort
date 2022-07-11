@@ -174,6 +174,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
+    // TODO: Clarify which entry is relevant and pick the right one accordingly.
     var (scoringSystem, severity) = this.severity.firstOrNull()?.let {
         Cvss.fromVector(it.score)?.let { cvss ->
             val scoringSystem = when {
