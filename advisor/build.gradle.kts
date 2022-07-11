@@ -31,6 +31,7 @@ dependencies {
     api(project(":clients:github-graphql"))
     api(project(":model"))
 
+    implementation(libs.cvssCalculator)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.ktorClientOkHttp)
 

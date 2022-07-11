@@ -13,40 +13,40 @@
       "id" : "GHSA-ww39-953v-wcq6",
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-28469",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://github.com/gulpjs/glob-parent/pull/36",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://github.com/gulpjs/glob-parent/blob/6ce8d11f2f1ed8e80a9526b1dc8cf3aa71f43474/index.js%23L9",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://github.com/gulpjs/glob-parent/releases/tag/v5.1.2",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBES128-1059093",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1059092",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://snyk.io/vuln/SNYK-JS-GLOBPARENT-1016905",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://www.oracle.com/security-alerts/cpujan2022.html",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       }, {
         "url" : "https://github.com/gulpjs/glob-parent",
-        "scoring_system" : "CVSS_V3",
-        "severity" : "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H"
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "7.5"
       } ]
     } ]
   } ]
