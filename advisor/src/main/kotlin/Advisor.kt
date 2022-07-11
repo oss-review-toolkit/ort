@@ -79,7 +79,20 @@ class Advisor(
             runBlocking {
                 providers.map { provider ->
                     async {
-                        provider.retrievePackageFindings(packages)
+                        val providerResults = provider.retrievePackageFindings(packages)
+
+                        this@Advisor.log.info {
+                            "Found ${providerResults.values.flatten().distinct().size} distinct vulnerabilities via " +
+                                "${provider.providerName}. "
+                        }
+
+                        providerResults.filter { it.value.isNotEmpty() }.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
+                            this@Advisor.log.debug {
+                                "Affected packages:\n\n${pkgs.joinToString("\n") { it.id.toCoordinates() }}\n"
+                            }
+                        }
+
+                        providerResults
                     }
                 }.forEach { providerResults ->
                     providerResults.await().forEach { (pkg, advisorResults) ->
