@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
@@ -67,6 +68,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
@@ -78,6 +80,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *legacyPeerDeps*: If true, the "--legacy-peer-deps" flag is passed to NPM to ignore conflicts in peer dependencies
+ *   which are reported since NPM 7. This allows to analyze NPM 6 projects with peer dependency conflicts. For more
+ *   information see the [documentation](https://docs.npmjs.com/cli/v8/commands/npm-install#strict-peer-deps) and the
+ *   [NPM Blog](https://blog.npmjs.org/post/626173315965468672/npm-v7-series-beta-release-and-semver-major).
  */
 open class Npm(
     name: String,
@@ -195,6 +203,10 @@ open class Npm(
             return Pair(namespace, name)
         }
     }
+
+    private val legacyPeerDeps =
+        analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_LEGACY_PEER_DEPS)
+            .toBoolean()
 
     private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
@@ -644,6 +656,15 @@ open class Npm(
         process.stderr.withoutPrefix("Error: ")?.also { throw IOException(it.lineSequence().first()) }
     }
 
-    protected open fun runInstall(workingDir: File) =
-        run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", "--ignore-scripts", "--no-audit")
+    protected open fun runInstall(workingDir: File): ProcessCapture {
+        val options = listOfNotNull(
+            "--ignore-scripts",
+            "--no-audit",
+            "--legacy-peer-deps".takeIf { legacyPeerDeps }
+        )
+
+        return run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", *options.toTypedArray())
+    }
 }
+
+private const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
