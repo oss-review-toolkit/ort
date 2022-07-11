@@ -73,7 +73,6 @@ class Advisor(
         if (packages.isEmpty()) {
             log.info { "There are no packages to give advice for." }
         } else {
-
             val providers = providerFactories.map { it.create(config) }
 
             runBlocking {
