@@ -43,6 +43,9 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.log
 
+import us.springett.cvss.Cvss
+import us.springett.cvss.CvssV2
+
 /**
  * An advice provider that obtains vulnerability information from OSV.dev https://osv.dev/.
  */
@@ -168,12 +171,23 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
-    val (scoringSystem, severity) = severity.firstOrNull()?.let {
-        it.type.name to it.score
+    val (scoringSystem, severity) = this.severity.firstOrNull()?.let {
+        Cvss.fromVector(it.score)?.let { cvss ->
+            val scoringSystem = when {
+                // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
+                it.score.startsWith("CVSS:") -> it.score.substringBefore("/")
+                cvss is CvssV2 -> "CVSS:2.0"
+                else -> cvss.vector.substringBefore("/", "CVSS")
+            }
+
+            scoringSystem to "${cvss.calculateScore().baseScore}"
+        } ?: run {
+            log.debug { "Could not parse CVSS vector '${it.score}'." }
+            null to it.score
+        }
     } ?: (null to null)
 
-    // TODO: Improve parsing the severity properties. Parse vectors, e.g. CVSS:3.1 and consider using the severity
-    // in the database specific property as a fallback.
+    // TODO: Consider using the severity in the database specific property as a fallback.
     return org.ossreviewtoolkit.model.Vulnerability(
         id = id,
         references = references.map {
