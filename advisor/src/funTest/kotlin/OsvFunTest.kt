@@ -63,7 +63,8 @@ class OsvFunTest : StringSpec({
             .readValue<Map<Identifier, List<AdvisorResult>>>()
         val osv = createOsv()
         val packages = listOf(
-            "NPM::glob-parent:5.1.1"
+            "NPM::glob-parent:5.1.1",
+            "NPM::gun:0.7.0" // Package without severity, but with severity inside the databaseSpecific JSON object.
         ).map { identifierToPackage(it) }
 
         val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
