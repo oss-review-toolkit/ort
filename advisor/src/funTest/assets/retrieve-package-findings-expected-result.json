@@ -49,5 +49,32 @@
         "severity" : "7.5"
       } ]
     } ]
+  } ],
+  "NPM::gun:0.7.0" : [ {
+    "advisor" : {
+      "name" : "Osv",
+      "capabilities" : [ "VULNERABILITIES" ]
+    },
+    "summary" : {
+      "start_time" : "2022-07-11T11:43:59.561110209Z",
+      "end_time" : "2022-07-11T11:44:00.397553119Z"
+    },
+    "defects" : [ ],
+    "vulnerabilities" : [ {
+      "id" : "GHSA-886v-mm6p-4m66",
+      "references" : [ {
+        "url" : "https://github.com/amark/gun/security/advisories/GHSA-886v-mm6p-4m66",
+        "scoring_system" : null,
+        "severity" : null
+      }, {
+        "url" : "https://github.com/advisories/GHSA-886v-mm6p-4m66",
+        "scoring_system" : null,
+        "severity" : null
+      }, {
+        "url" : "https://github.com/amark/gun",
+        "scoring_system" : null,
+        "severity" : null
+      } ]
+    } ]
   } ]
 }
