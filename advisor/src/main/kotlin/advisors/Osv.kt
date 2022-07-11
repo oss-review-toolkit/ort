@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.contentOrNull
+
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.osv.Ecosystem
@@ -171,7 +174,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
-    val (scoringSystem, severity) = this.severity.firstOrNull()?.let {
+    var (scoringSystem, severity) = this.severity.firstOrNull()?.let {
         Cvss.fromVector(it.score)?.let { cvss ->
             val scoringSystem = when {
                 // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
@@ -187,7 +190,15 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         }
     } ?: (null to null)
 
-    // TODO: Consider using the severity in the database specific property as a fallback.
+    if (severity == null && databaseSpecific != null) {
+        // Fallback to the 'severity' property of the unspecified 'databaseSpecific' object.
+        databaseSpecific!!["severity"]?.let {
+            if (it is JsonPrimitive) {
+                severity = it.contentOrNull
+            }
+        }
+    }
+
     return org.ossreviewtoolkit.model.Vulnerability(
         id = id,
         references = references.map {

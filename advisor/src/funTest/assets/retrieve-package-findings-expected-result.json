@@ -65,15 +65,15 @@
       "references" : [ {
         "url" : "https://github.com/amark/gun/security/advisories/GHSA-886v-mm6p-4m66",
         "scoring_system" : null,
-        "severity" : null
+        "severity" : "HIGH"
       }, {
         "url" : "https://github.com/advisories/GHSA-886v-mm6p-4m66",
         "scoring_system" : null,
-        "severity" : null
+        "severity" : "HIGH"
       }, {
         "url" : "https://github.com/amark/gun",
         "scoring_system" : null,
-        "severity" : null
+        "severity" : "HIGH"
       } ]
     } ]
   } ]
