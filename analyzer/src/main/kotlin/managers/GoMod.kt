@@ -272,7 +272,7 @@ class GoMod(
         val vcsInfo = id.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
 
         return Package(
-            id = Identifier(managerName, "", id.name, id.version),
+            id = id,
             authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
