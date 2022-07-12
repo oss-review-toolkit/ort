@@ -20,19 +20,23 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyTreeNavigator
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 
@@ -46,6 +50,25 @@ fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boo
 
         if (resolveScopes) managerResult.resolveScopes(result) else result
     }
+}
+
+/**
+ * Resolve the dependencies of a [definitionFile] which should create at least one project. All created projects will be
+ * collated in an [AnalyzerResult] with their dependency graph.
+ */
+fun PackageManager.collateMultipleProjects(definitionFile: File): AnalyzerResult {
+    val managerResult = resolveDependencies(listOf(definitionFile), emptyMap())
+
+    val builder = AnalyzerResultBuilder()
+    managerResult.dependencyGraph?.let {
+        builder.addDependencyGraph(managerName, it).addPackages(managerResult.sharedPackages)
+    }
+    managerResult.projectResults[definitionFile].shouldNotBeNull {
+        this shouldHaveAtLeastSize 1
+        forEach { builder.addResult(it) }
+    }
+
+    return builder.build()
 }
 
 /**

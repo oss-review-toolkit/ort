@@ -42,7 +42,17 @@ class Yarn2FunTest : WordSpec({
             result shouldBe expectedResult
         }
 
-        // TODO: Add a test showcasing Yarn 2+ workspaces support.
+        "resolve workspace dependencies correctly" {
+            val projectDir = File("src/funTest/assets/projects/synthetic/yarn2-workspaces").absoluteFile
+
+            val result = resolveMultipleDependencies(projectDir)
+
+            val expectedResult = getExpectedResult(
+                projectDir,
+                "yarn2-workspaces-expected-output.yml"
+            )
+            result shouldBe expectedResult
+        }
     }
 })
 
@@ -67,6 +77,13 @@ private fun resolveDependencies(projectDir: File): String {
     val packageFile = projectDir.resolve("package.json")
     val result = createYarn2().resolveSingleProject(packageFile, resolveScopes = true)
     return result.toYaml()
+}
+
+private fun resolveMultipleDependencies(projectDir: File): String {
+    val packageFile = projectDir.resolve("package.json")
+    val result = createYarn2().collateMultipleProjects(packageFile)
+    // Remove the dependency graph and add scope information.
+    return result.withResolvedScopes().toYaml()
 }
 
 private fun createYarn2() =
