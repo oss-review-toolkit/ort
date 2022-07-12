@@ -12,12 +12,12 @@ project:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx"
+    path: "<REPLACE_PATH>"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx"
+    path: "<REPLACE_PATH>"
   homepage_url: "https://example.com/products/xyz"
   scopes:
   - name: "default"

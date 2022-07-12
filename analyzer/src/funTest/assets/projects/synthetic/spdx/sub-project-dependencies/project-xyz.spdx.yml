@@ -13,15 +13,15 @@ documentDescribes:
 - "SPDXRef-Package-xyz"
 externalDocumentRefs:
 - externalDocumentId: "DocumentRef-my-lib-8.88.8"
-  spdxDocument: "./libs/my-lib/package.spdx.yml"
+  spdxDocument: "../libs/my-lib/package.spdx.yml"
   checksum:
     algorithm: "SHA1"
     checksumValue: "2fb02799a2486623af054418736f6a30957e2fd1"
-- externalDocumentId: "DocumentRef-zlib-1.2.11"
-  spdxDocument: "./libs/zlib/package.spdx.yml"
+- externalDocumentId: "DocumentRef-sub-xyz"
+  spdxDocument: "./projects/sub-project-xyz.spdx.yml"
   checksum:
     algorithm: "SHA1"
-    checksumValue: "c3d22d3fbff30a845d57e9fa19e0b5f453b7b0ee"
+    checksumValue: "6ffefacb845132a6425fd2006fb93e46f320d020"
 packages:
 - SPDXID: "SPDXRef-Package-xyz"
   description: "Awesome product created by Example Inc."
@@ -38,6 +38,6 @@ relationships:
 - spdxElementId: "DocumentRef-my-lib-8.88.8:SPDXRef-Package-my-lib"
   relationshipType: "RUNTIME_DEPENDENCY_OF"
   relatedSpdxElement: "SPDXRef-Package-xyz"
-- spdxElementId: "SPDXRef-Package-xyz"
-  relationshipType: "DEPENDS_ON"
-  relatedSpdxElement: "DocumentRef-zlib-1.2.11:SPDXRef-Package-zlib"
+- spdxElementId: "DocumentRef-sub-xyz:SPDXRef-Package-sub-xyz"
+  relationshipType: "RUNTIME_DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-xyz"

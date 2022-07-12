@@ -47,10 +47,11 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
         "succeed if a project with inline packages is provided" {
-            val definitionFile = projectDir.resolve("project-xyz-with-inline-packages.spdx.yml")
+            val definitionFile = projectDir.resolve("inline-packages/project-xyz.spdx.yml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("spdx-project-xyz-expected-output.yml"),
                 definitionFilePath = vcsDir.getPathToRoot(definitionFile),
+                path = vcsDir.getPathToRoot(definitionFile.parentFile),
                 url = vcsUrl,
                 urlProcessed = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
@@ -62,10 +63,11 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "succeed if a project with package references is provided" {
-            val definitionFile = projectDir.resolve("project-xyz-with-package-references.spdx.yml")
+            val definitionFile = projectDir.resolve("package-references/project-xyz.spdx.yml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("spdx-project-xyz-expected-output.yml"),
                 definitionFilePath = vcsDir.getPathToRoot(definitionFile),
+                path = vcsDir.getPathToRoot(definitionFile.parentFile),
                 url = vcsUrl,
                 urlProcessed = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
@@ -164,7 +166,7 @@ class SpdxDocumentFileFunTest : WordSpec({
             val idZlib = Identifier("SpdxDocumentFile::zlib:1.2.11")
             val idMyLib = Identifier("SpdxDocumentFile::my-lib:8.88.8")
 
-            val projectFile = projectDir.resolve("project-xyz-with-transitive-dependencies.spdx.yml")
+            val projectFile = projectDir.resolve("transitive-dependencies/project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile)
 
             val result = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())
@@ -190,7 +192,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
     "mapDefinitionFiles()" should {
         "remove SPDX documents that do not describe a project if a project file is provided" {
-            val projectFile = projectDir.resolve("project-xyz-with-package-references.spdx.yml")
+            val projectFile = projectDir.resolve("package-references/project-xyz.spdx.yml")
             val packageFile = projectDir.resolve("libs/curl/package.spdx.yml")
 
             val definitionFiles = listOf(projectFile, packageFile)
@@ -216,8 +218,8 @@ class SpdxDocumentFileFunTest : WordSpec({
 
     "createPackageManagerResult" should {
         "not include sub project dependencies as packages" {
-            val projectFile = projectDir.resolve("project-xyz-with-sub-project-dependencies.spdx.yml")
-            val subProjectFile = projectDir.resolve("projects/sub-project-xyz-with-inline-packages.spdx.yml")
+            val projectFile = projectDir.resolve("sub-project-dependencies/project-xyz.spdx.yml")
+            val subProjectFile = projectDir.resolve("sub-project-dependencies/projects/sub-project-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile, subProjectFile)
 
             val result = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())

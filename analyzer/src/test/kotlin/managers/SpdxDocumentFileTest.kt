@@ -93,13 +93,13 @@ class SpdxDocumentFileTest : WordSpec({
 
     "projectPackage()" should {
         "return project package when list of packages is given" {
-            val spdxDocument = createSpdxDocument("project-xyz-with-inline-packages.spdx.yml")
+            val spdxDocument = createSpdxDocument("inline-packages/project-xyz.spdx.yml")
 
             spdxDocument.projectPackage()?.spdxId shouldBe "SPDXRef-Package-xyz"
         }
 
         "return project package when only one package in list, but external document references exist" {
-            val spdxDocument = createSpdxDocument("project-xyz-with-package-references.spdx.yml")
+            val spdxDocument = createSpdxDocument("package-references/project-xyz.spdx.yml")
 
             spdxDocument.projectPackage()?.spdxId shouldBe "SPDXRef-Package-xyz"
         }

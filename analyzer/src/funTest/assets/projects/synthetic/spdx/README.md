@@ -1,10 +1,12 @@
-This the root of a synthetic project called "xyz" without a dedicated package manager. Instead, SPDX files are used to
+This directory contains synthetic test projects without a dedicated package manager. Instead, SPDX files are used to
 declare the project's metadata and its used packages.
 
-Two alternative (but equivalent) ways are demonstrated to declare the metadata:
+- [inline-packages](inline-packages): This project declares the project's and all its package's metadata within a single
+  file.
+- [package-references](package-references): The same project as above, but only the project's metadata is declared in
+  the main file, which refers to external SPDX files which contain the metadata for the respective packages.
+- [sub-project-dependencies](sub-project-dependencies): A test project to verify that subprojects are handled correctly.
+- [transitive-dependencies](transitive-dependencies): A test project to verify that transitive dependencies are resolved
+  correctly.
 
-- The `project-xyz-with-inline-packages.spdx.yml` file declares the project's and all its package's metadata within that
-  single file only.
-
-- The `project-xyz-with-package-references.spdx.yml` file only declares the project's metadata directly, but refers to
-  external SPDX files which contain the metadata for the respective packages.
+The [libs](libs) directory contains SPDX packages that can be used by all test projects.
