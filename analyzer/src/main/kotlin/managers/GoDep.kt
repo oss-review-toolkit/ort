@@ -130,7 +130,7 @@ class GoDep(
             }
 
             val pkg = Package(
-                id = Identifier(managerName, "", name, version),
+                id = Identifier("Go", "", name, version),
                 authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",

@@ -42,7 +42,6 @@ class OsvFunTest : StringSpec({
             "Maven:com.jfinal:jfinal:1.4",
             "NPM::rebber:1.0.0",
             "Go::github.com/nats-io/nats-server/v2:v2.1.0",
-            "GoDep::github.com/nats-io/nats-server/v2:v2.1.0",
             "Crate::sys-info:0.7.0",
             "NuGet::Microsoft.ChakraCore:1.10.0"
             // TODO: Add an identifier for a composer package after https://github.com/google/osv.dev/issues/497 got
