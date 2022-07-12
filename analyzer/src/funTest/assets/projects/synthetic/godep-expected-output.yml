@@ -18,16 +18,16 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "GoDep::github.com/fatih/color:v1.9.0"
+    - id: "Go::github.com/fatih/color:v1.9.0"
       linkage: "STATIC"
-    - id: "GoDep::github.com/mattn/go-colorable:v0.1.6"
+    - id: "Go::github.com/mattn/go-colorable:v0.1.6"
       linkage: "STATIC"
-    - id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
+    - id: "Go::github.com/mattn/go-isatty:v0.0.12"
       linkage: "STATIC"
-    - id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
+    - id: "Go::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
       linkage: "STATIC"
 packages:
-- id: "GoDep::github.com/fatih/color:v1.9.0"
+- id: "Go::github.com/fatih/color:v1.9.0"
   purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.9.0"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -53,7 +53,7 @@ packages:
     url: "https://github.com/fatih/color.git"
     revision: "daf2830f2741ebb735b21709a520c5f37d642d85"
     path: ""
-- id: "GoDep::github.com/mattn/go-colorable:v0.1.6"
+- id: "Go::github.com/mattn/go-colorable:v0.1.6"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.6"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -79,7 +79,7 @@ packages:
     url: "https://github.com/mattn/go-colorable.git"
     revision: "68e95eba382c972aafde02ead2cd2426a8a92480"
     path: ""
-- id: "GoDep::github.com/mattn/go-isatty:v0.0.12"
+- id: "Go::github.com/mattn/go-isatty:v0.0.12"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -105,7 +105,7 @@ packages:
     url: "https://github.com/mattn/go-isatty.git"
     revision: "7b513a986450394f7bbf1476909911b3aa3a55ce"
     path: ""
-- id: "GoDep::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
+- id: "Go::golang.org/x/sys:05986578812163b26672dabd9b425240ae2bb0ad"
   purl: "pkg:golang/golang.org%2Fx%2Fsys@05986578812163b26672dabd9b425240ae2bb0ad"
   declared_licenses: []
   declared_licenses_processed: {}
