@@ -145,7 +145,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         "Crate" -> Ecosystem.CRATES_IO
         // TODO: The entries for Go should be merged, see https://github.com/oss-review-toolkit/ort/issues/5533.
         "GoDep" -> Ecosystem.GO
-        "GoMod" -> Ecosystem.GO
+        "Go" -> Ecosystem.GO
         "NPM" -> Ecosystem.NPM
         "NuGet" -> Ecosystem.NUGET
         "Maven" -> Ecosystem.MAVEN

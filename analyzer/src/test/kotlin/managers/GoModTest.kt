@@ -31,19 +31,19 @@ import org.ossreviewtoolkit.model.VcsType
 class GoModTest : WordSpec({
     "toVcsInfo" should {
         "return the VCS type 'Git'" {
-            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
 
             id.toVcsInfo().type shouldBe VcsType.GIT
         }
 
         "return the revision" {
-            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
 
             id.toVcsInfo().revision shouldBe "v1.0.0"
         }
 
         "return the VCS URL and path for a package from a single module repository" {
-            val id = Identifier("GoMod::github.com/chai2010/gettext-go:v1.0.0")
+            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
 
             with(id.toVcsInfo()) {
                 path shouldBe ""
@@ -52,7 +52,7 @@ class GoModTest : WordSpec({
         }
 
         "return the VCS URL and path for a package from a mono repository" {
-            val id = Identifier("GoMod::github.com/Azure/go-autorest/autorest/date:v0.1.0")
+            val id = Identifier("Go::github.com/Azure/go-autorest/autorest/date:v0.1.0")
 
             with(id.toVcsInfo()) {
                 path shouldBe "autorest/date"
@@ -62,7 +62,7 @@ class GoModTest : WordSpec({
 
         "return the SHA1 from a 'pseudo version', when there is no known base version" {
             // See https://golang.org/ref/mod#pseudo-versions.
-            val id = Identifier("GoMod::github.com/example/project:v0.0.0-20191109021931-daa7c04131f5")
+            val id = Identifier("Go::github.com/example/project:v0.0.0-20191109021931-daa7c04131f5")
 
             id.toVcsInfo().revision shouldBe "daa7c04131f5"
         }
@@ -70,7 +70,7 @@ class GoModTest : WordSpec({
         "return the SHA1 from a 'pseudo version', when base version is a release version" {
             // See https://golang.org/ref/mod#pseudo-versions.
             val id = Identifier(
-                "GoMod::github.com/example/project:v0.8.1-0.20171018195549-f15c970de5b7"
+                "Go::github.com/example/project:v0.8.1-0.20171018195549-f15c970de5b7"
             )
 
             id.toVcsInfo().revision shouldBe "f15c970de5b7"
@@ -78,13 +78,13 @@ class GoModTest : WordSpec({
 
         "return the SHA1 from a 'pseudo version', when base version is a pre-release version" {
             // See https://golang.org/ref/mod#pseudo-versions.
-            val id = Identifier("GoMod::github.com/example/project:v0.8.1-pre.0.20171018195549-f15c970de5b7")
+            val id = Identifier("Go::github.com/example/project:v0.8.1-pre.0.20171018195549-f15c970de5b7")
 
             id.toVcsInfo().revision shouldBe "f15c970de5b7"
         }
 
         "return the SHA1 for a version with a '+incompatible' suffix" {
-            val id = Identifier("GoMod::github.com/example/project:v43.3.0+incompatible")
+            val id = Identifier("Go::github.com/example/project:v43.3.0+incompatible")
 
             id.toVcsInfo().revision shouldBe "v43.3.0"
         }

@@ -152,11 +152,13 @@ class GoMod(
 
         fun parseModuleEntry(entry: String): Identifier =
             entry.substringBefore('@').let { moduleName ->
+                val version = moduleInfo(moduleName).version
+
                 Identifier(
-                    type = managerName,
+                    type = managerName.takeIf { version.isBlank() } ?: "Go",
                     namespace = "",
                     name = moduleName,
-                    version = moduleInfo(moduleName).version
+                    version = version
                 )
             }
 
