@@ -1,27 +1,28 @@
 SPDXID: "SPDXRef-DOCUMENT"
 spdxVersion: "SPDX-2.2"
 creationInfo:
-  created: "2022-06-29T08:57:22Z"
+  created: "2020-07-23T18:30:22Z"
   creators:
   - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
   licenseListVersion: "3.9"
-name: "sub-xyz-0.1.0"
+name: "xyz-0.1.0"
 dataLicense: "CC0-1.0"
 documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
 documentDescribes:
-- "SPDXRef-Package-sub-xyz"
+- "SPDXRef-Package-xyz"
 packages:
-- SPDXID: "SPDXRef-Package-sub-xyz"
-  description: "Awesome sub product created by Example Inc."
+- SPDXID: "SPDXRef-Package-xyz"
+  description: "Awesome product created by Example Inc."
   copyrightText: "Copyright (C) 2020 Example Inc."
-  downloadLocation: "git+ssh://gitlab.example.com:3389/products/sub-xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+  downloadLocation: "git+ssh://gitlab.example.com:3389/products/xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
   filesAnalyzed: false
-  homepage: "https://example.com/products/sub-xyz"
+  homepage: "https://example.com/products/xyz"
   licenseConcluded:  "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
-  name: "sub-xyz"
+  name: "xyz"
   versionInfo: "0.1.0"
-  originator: "Person: Sub Project"
+  originator: "Person: Thomas Steenbergen"
 - SPDXID: "SPDXRef-Package-curl"
   description: "A command line tool and library for transferring data with URL syntax, supporting \
     HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \
@@ -40,7 +41,7 @@ packages:
   name: "curl"
   versionInfo: "7.70.0"
   originator: "Person: Daniel Stenberg (daniel@haxx.se)"
-  packageFileName: "./libs/curl"
+  packageFileName: "../libs/curl"
 - SPDXID: "SPDXRef-Package-openssl"
   description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the \
     Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) \
@@ -62,7 +63,7 @@ packages:
   name: "openssl"
   versionInfo: "1.1.1g"
   originator: "Organization: OpenSSL Development Team"
-  packageFileName: "./libs/openssl"
+  packageFileName: "../libs/openssl"
 - SPDXID: "SPDXRef-Package-zlib"
   description: "zlib 1.2.11 is a general purpose data compression library."
   copyrightText: "(C) 1995-2017 Jean-loup Gailly and Mark Adler"
@@ -78,7 +79,7 @@ packages:
   name: "zlib"
   versionInfo: "1.2.11"
   originator: "Person: Mark Adler, Jean-loup Gailly"
-  packageFileName: "./libs/zlib"
+  packageFileName: "../libs/zlib"
 relationships:
 - spdxElementId: "SPDXRef-Package-curl"
   relationshipType: "TEST_DEPENDENCY_OF"

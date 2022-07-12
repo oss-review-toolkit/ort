@@ -558,7 +558,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             "return the definition file for a relative URI" {
                 val resolvedDocument = ResolvedSpdxDocument(
                     SpdxDocumentCache().load(BASE_DOCUMENT_FILE).getOrThrow(),
-                    URI("src/funTest/assets/projects/synthetic/spdx/project-xyz-with-inline-packages.spdx.yml")
+                    URI("src/funTest/assets/projects/synthetic/spdx/package-references/project-xyz.spdx.yml")
                 )
 
                 resolvedDocument.definitionFile() shouldBe BASE_DOCUMENT_FILE.absoluteFile
@@ -568,8 +568,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val resolvedDocument = ResolvedSpdxDocument(
                     SpdxDocumentCache().load(BASE_DOCUMENT_FILE).getOrThrow(),
                     URI(
-                        "../analyzer/src/funTest/assets/projects/synthetic/spdx/" +
-                            "project-xyz-with-inline-packages.spdx.yml"
+                        "src/funTest/assets/projects/synthetic/spdx/package-references/project-xyz.spdx.yml"
                     )
                 )
 
@@ -616,7 +615,7 @@ private const val SPDX_REF = "SPDXRef-Package-Dummy"
 
 /** References the SPDX file used to define the base document. */
 private val BASE_DOCUMENT_FILE =
-    File("src/funTest/assets/projects/synthetic/spdx/project-xyz-with-inline-packages.spdx.yml")
+    File("src/funTest/assets/projects/synthetic/spdx/package-references/project-xyz.spdx.yml")
 
 /** The name of the package manager used by tests. */
 private const val MANAGER_NAME = "TestSpdxDocumentFile"
