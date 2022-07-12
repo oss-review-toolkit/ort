@@ -18,14 +18,14 @@ project:
   scopes:
   - name: "main"
     dependencies:
-    - id: "GoMod::github.com/fatih/color:v1.7.0"
+    - id: "Go::github.com/fatih/color:v1.7.0"
       linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
-    - id: "GoMod::github.com/fatih/color:v1.7.0"
+    - id: "Go::github.com/fatih/color:v1.7.0"
       linkage: "PROJECT_STATIC"
 packages:
-- id: "GoMod::github.com/fatih/color:v1.7.0"
+- id: "Go::github.com/fatih/color:v1.7.0"
   purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.7.0"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -51,7 +51,7 @@ packages:
     url: "https://github.com/fatih/color.git"
     revision: "v1.7.0"
     path: ""
-- id: "GoMod::github.com/mattn/go-colorable:v0.1.4"
+- id: "Go::github.com/mattn/go-colorable:v0.1.4"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.4"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -77,7 +77,7 @@ packages:
     url: "https://github.com/mattn/go-colorable.git"
     revision: "v0.1.4"
     path: ""
-- id: "GoMod::github.com/mattn/go-isatty:v0.0.10"
+- id: "Go::github.com/mattn/go-isatty:v0.0.10"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.10"
   declared_licenses: []
   declared_licenses_processed: {}
@@ -103,7 +103,7 @@ packages:
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.10"
     path: ""
-- id: "GoMod::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
+- id: "Go::golang.org/x/sys:v0.0.0-20191008105621-543471e840be"
   purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20191008105621-543471e840be"
   declared_licenses: []
   declared_licenses_processed: {}
