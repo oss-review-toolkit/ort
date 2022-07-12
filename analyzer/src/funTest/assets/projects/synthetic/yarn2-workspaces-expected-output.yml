@@ -1,0 +1,164 @@
+---
+projects:
+- id: "Yarn2::pkg2:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces/packages/pkg2/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM:@here:harp-fetch:0.3.6"
+      dependencies:
+      - id: "NPM::node-fetch:2.6.0"
+- id: "Yarn2::workspace:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces"
+  homepage_url: ""
+  scopes: []
+- id: "Yarn2:@scope1:pkg1:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces/packages/pkg1/package.json"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/yarn2-workspaces"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "NPM:@here:harp-fetch:0.11.0"
+      dependencies:
+      - id: "NPM::node-fetch:2.6.0"
+packages:
+- package:
+    id: "NPM::node-fetch:2.6.0"
+    purl: "pkg:npm/node-fetch@2.6.0"
+    authors:
+    - "David Frank"
+    declared_licenses:
+    - "MIT"
+    declared_licenses_processed:
+      spdx_expression: "MIT"
+    description: "A light-weight module that brings window.fetch to node.js"
+    homepage_url: "https://github.com/bitinn/node-fetch"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
+      hash:
+        value: "e633456386d4aa55863f676a7ab0daa8fdecb0fd"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/bitinn/node-fetch.git"
+      revision: "95286f52bb866283bc69521a04efe1de37b26a33"
+      path: ""
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/bitinn/node-fetch.git"
+      revision: "95286f52bb866283bc69521a04efe1de37b26a33"
+      path: ""
+  curations: []
+- package:
+    id: "NPM:@here:harp-fetch:0.3.6"
+    purl: "pkg:npm/%40here/harp-fetch@0.3.6"
+    authors:
+    - "HERE Europe B.V."
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "This module adds a subset of the fetch API for Node.js"
+    homepage_url: "https://github.com/heremaps/harp.gl#readme"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+      hash:
+        value: "703fc8b034f6e0d621cc2c3ded96c6f904723742"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/heremaps/harp.gl.git"
+      revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+      path: "@here/harp-fetch"
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/heremaps/harp.gl.git"
+      revision: "0c2857f958a34ef7638384afada4fceec427d48d"
+      path: "@here/harp-fetch"
+  curations: []
+- package:
+    id: "NPM:@here:harp-fetch:0.11.0"
+    purl: "pkg:npm/%40here/harp-fetch@0.11.0"
+    authors:
+    - "HERE Europe B.V."
+    declared_licenses:
+    - "Apache-2.0"
+    declared_licenses_processed:
+      spdx_expression: "Apache-2.0"
+    description: "This module adds a subset of the fetch API for Node.js"
+    homepage_url: "https://github.com/heremaps/harp.gl#readme"
+    binary_artifact:
+      url: ""
+      hash:
+        value: ""
+        algorithm: ""
+    source_artifact:
+      url: "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+      hash:
+        value: "8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
+        algorithm: "SHA-1"
+    vcs:
+      type: "Git"
+      url: "git+https://github.com/heremaps/harp.gl.git"
+      revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
+      path: "@here/harp-fetch"
+    vcs_processed:
+      type: "Git"
+      url: "https://github.com/heremaps/harp.gl.git"
+      revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
+      path: "@here/harp-fetch"
+  curations: []
+has_issues: false

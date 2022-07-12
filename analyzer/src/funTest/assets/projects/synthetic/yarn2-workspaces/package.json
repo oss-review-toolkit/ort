@@ -1,0 +1,10 @@
+{
+  "name": "workspace",
+  "version": "1.0.0",
+  "description": "Yarn test project using Yarn workspaces.",
+  "workspaces": [
+    "packages/*"
+  ],
+  "private": true,
+  "license": "Apache-2.0"
+}
