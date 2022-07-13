@@ -55,7 +55,7 @@ spec:
     - name: subdirectory
       value: ort
   - name: ort-scan
-    runAfter: ["fetch-repo"] 
+    runAfter: ["fetch-repo"]
     workspaces:
     - name: shared
       workspace: shared-data
@@ -65,8 +65,8 @@ spec:
       workspaces:
       - name: shared
       - name: ort-data-dir
-      steps: 
-      - name: "analyze" 
+      steps:
+      - name: "analyze"
         image: ort:latest
         args: ["analyze", "-i", "/workspace/shared/source", "-o" ,"/workspace/shared/results/analyzer", "--package-curations-file", "/workspace/shared/ort/examples/curations.yml" ]
         env:
@@ -78,7 +78,7 @@ spec:
         resources:
           requests:
             memory: 4Gi
-            cpu: 4  
+            cpu: 4
       - name: "evaluate"
         image: ort:latest
         args: ["evaluate", "-i", "/workspace/shared/results/scanner/scan-result.yml", "-o" ,"/workspace/shared/results/evaluator","--package-curations-file", "/workspace/shared/ort/examples/curations.yml","--rules-file","/workspace/shared/ort/examples/evaluator-rules/src/main/resources/example.rules.kts","--license-classifications-file","/workspace/shared/ort/examples/license-classifications.yml" ]
