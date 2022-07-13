@@ -33,7 +33,6 @@ import kotlinx.serialization.json.JsonObject
  *
  * For the documentation of all entities and properties please refer to above links.
  */
-
 @Serializable
 data class Vulnerability(
     @SerialName("schema_version")
