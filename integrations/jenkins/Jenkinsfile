@@ -17,12 +17,6 @@
  * License-Filename: LICENSE
  */
 
-/**
- * Required Jenkins plugins:
- * - Pipeline Utility Steps (https://plugins.jenkins.io/pipeline-utility-steps)
- * - Docker Pipeline (https://plugins.jenkins.io/docker-workflow)
- */
-
 import com.cloudbees.groovy.cps.NonCPS
 
 import java.io.IOException
