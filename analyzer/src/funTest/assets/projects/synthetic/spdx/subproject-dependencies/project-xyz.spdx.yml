@@ -17,8 +17,8 @@ externalDocumentRefs:
   checksum:
     algorithm: "SHA1"
     checksumValue: "2fb02799a2486623af054418736f6a30957e2fd1"
-- externalDocumentId: "DocumentRef-sub-xyz"
-  spdxDocument: "./projects/sub-project-xyz.spdx.yml"
+- externalDocumentId: "DocumentRef-subproject-xyz"
+  spdxDocument: "./subproject/subproject-xyz.spdx.yml"
   checksum:
     algorithm: "SHA1"
     checksumValue: "6ffefacb845132a6425fd2006fb93e46f320d020"
@@ -38,6 +38,6 @@ relationships:
 - spdxElementId: "DocumentRef-my-lib-8.88.8:SPDXRef-Package-my-lib"
   relationshipType: "RUNTIME_DEPENDENCY_OF"
   relatedSpdxElement: "SPDXRef-Package-xyz"
-- spdxElementId: "DocumentRef-sub-xyz:SPDXRef-Package-sub-xyz"
+- spdxElementId: "DocumentRef-subproject-xyz:SPDXRef-Package-subproject-xyz"
   relationshipType: "RUNTIME_DEPENDENCY_OF"
   relatedSpdxElement: "SPDXRef-Package-xyz"
