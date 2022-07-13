@@ -1,7 +1,7 @@
 {
   "NPM::glob-parent:5.1.1" : [ {
     "advisor" : {
-      "name" : "Osv",
+      "name" : "OSV",
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {

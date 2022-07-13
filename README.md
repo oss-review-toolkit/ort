@@ -660,7 +660,7 @@ ort {
 }
 ```
 
-To enable this provider, pass `-a Osv` on the command line.
+To enable this provider, pass `-a OSV` on the command line.
 
 <a name="evaluator">&nbsp;</a>
 
