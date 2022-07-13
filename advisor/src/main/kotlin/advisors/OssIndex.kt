@@ -50,7 +50,7 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for [Sonatype OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
 class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_URL) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
+    class Factory : AbstractAdviceProviderFactory<OssIndex>("OSS Index") {
         override fun create(config: AdvisorConfiguration) = OssIndex(providerName)
     }
 
