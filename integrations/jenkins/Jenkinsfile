@@ -360,7 +360,7 @@ pipeline {
                                 STACKTRACE_OPTION="--stacktrace"
                             fi
 
-                            echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc    
+                            echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
                             /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION scan -i out/results/current-result.yml -o out/results/scanner
                             rm -f $HOME/.netrc
                         '''
