@@ -5,23 +5,23 @@ creationInfo:
   creators:
   - "Organization: Example Inc."
   licenseListVersion: "3.9"
-name: "sub-xyz-0.1.0"
+name: "subproject-xyz-0.1.0"
 dataLicense: "CC0-1.0"
 documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
 documentDescribes:
-- "SPDXRef-Package-sub-xyz"
+- "SPDXRef-Package-subproject-xyz"
 packages:
-- SPDXID: "SPDXRef-Package-sub-xyz"
+- SPDXID: "SPDXRef-Package-subproject-xyz"
   description: "Awesome sub product created by Example Inc."
   copyrightText: "Copyright (C) 2020 Example Inc."
-  downloadLocation: "git+ssh://gitlab.example.com:3389/products/sub-xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+  downloadLocation: "git+ssh://gitlab.example.com:3389/products/subproject-xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
   filesAnalyzed: false
-  homepage: "https://example.com/products/sub-xyz"
+  homepage: "https://example.com/products/subproject-xyz"
   licenseConcluded:  "NOASSERTION"
   licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
-  name: "sub-xyz"
+  name: "subproject-xyz"
   versionInfo: "0.1.0"
-  originator: "Person: Sub Project"
+  originator: "Person: Subproject"
 - SPDXID: "SPDXRef-Package-curl"
   description: "A command line tool and library for transferring data with URL syntax, supporting \
     HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \

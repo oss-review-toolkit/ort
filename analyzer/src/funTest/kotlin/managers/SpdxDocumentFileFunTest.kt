@@ -217,9 +217,9 @@ class SpdxDocumentFileFunTest : WordSpec({
     }
 
     "createPackageManagerResult" should {
-        "not include sub project dependencies as packages" {
-            val projectFile = projectDir.resolve("sub-project-dependencies/project-xyz.spdx.yml")
-            val subProjectFile = projectDir.resolve("sub-project-dependencies/projects/sub-project-xyz.spdx.yml")
+        "not include subproject dependencies as packages" {
+            val projectFile = projectDir.resolve("subproject-dependencies/project-xyz.spdx.yml")
+            val subProjectFile = projectDir.resolve("subproject-dependencies/subproject/subproject-xyz.spdx.yml")
             val definitionFiles = listOf(projectFile, subProjectFile)
 
             val result = createSpdxDocumentFile().resolveDependencies(definitionFiles, emptyMap())
@@ -229,7 +229,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             projectIds shouldContainExactlyInAnyOrder listOf(
                 Identifier("SpdxDocumentFile::xyz:0.1.0"),
-                Identifier("SpdxDocumentFile::sub-xyz:0.1.0")
+                Identifier("SpdxDocumentFile::subproject-xyz:0.1.0")
             )
             packageIds shouldContainExactlyInAnyOrder listOf(
                 Identifier("SpdxDocumentFile::curl:7.70.0"),
