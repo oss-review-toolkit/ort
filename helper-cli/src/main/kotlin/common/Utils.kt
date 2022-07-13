@@ -976,7 +976,7 @@ internal fun OrtResult.getRepositoryPaths(): Map<String, Set<String>> {
     }
 
     // For some Git-repo projects `OrtResult.repository.nestedRepositories´ misses some nested repositories for Git
-    // submodules. FIXME: Ensure that the OrtResult holds all nested repositories and remove below workaround.
+    // submodules. TODO: Ensure that the OrtResult holds all nested repositories and remove below workaround.
     getProjects().forEach { project ->
         result.getOrPut(project.vcsProcessed.url) { mutableSetOf() } += project.getRepositoryPath(this)
     }
