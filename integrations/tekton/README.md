@@ -9,9 +9,9 @@ uploading Service Account Keys.
 ## Getting Started
 
 To run the pipeline, you will need the following things:
-* A Kubernetes cluster with Tekton installed (follow the 
+* A Kubernetes cluster with Tekton installed (follow the
   [installation instructions](https://tekton.dev/docs/pipelines/install/)).
-* You will need to install the [git-clone](https://hub.tekton.dev/tekton/task/git-clone) and 
+* You will need to install the [git-clone](https://hub.tekton.dev/tekton/task/git-clone) and
   [gcs-upload](https://hub.tekton.dev/tekton/task/gcs-upload) tasks.
 * A [Google Cloud Storage](https://cloud.google.com/products/storage) bucket.
 
