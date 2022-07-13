@@ -124,6 +124,16 @@ pipeline {
         )
 
         /*
+         * ORT advisor tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_ADVISOR',
+            defaultValue: true,
+            description: 'Run the advisor tool'
+        )
+
+        /*
          * ORT evaluator tool parameters.
          */
 
@@ -377,6 +387,55 @@ pipeline {
                 always {
                     archiveArtifacts(
                         artifacts: 'out/results/scanner/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT advisor') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_ADVISOR
+                }
+            }
+
+            agent {
+                dockerfile {
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            if [ "$STACKTRACE" = "true" ]; then
+                                STACKTRACE_OPTION="--stacktrace"
+                            fi
+
+                            /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION advise -a OSV -i out/results/current-result.yml -o out/results/advisor
+                        '''
+
+                        if (status >= ORT_FAILURE_STATUS_CODE) unstable('Advisor issues found.')
+                        else if (status != 0) error('Error executing the advisor.')
+                    }
+
+                    sh 'ln -frs out/results/advisor/advisor-result.yml out/results/current-result.yml'
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/advisor/*',
                         fingerprint: true
                     )
                 }
