@@ -25,6 +25,15 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
+// TODO: Remove all JsonElement subtypes as property types from the model in favor of raw strings holding JSON.
+// Accessing JsonElement subtypes requires the client code to add 'kotlinx.serialization' as dependency, which is not
+// desired - raw strings would fix that.
+// At the time of writing, that's not (easily) possible to implement due to limitations in the serialization library,
+// see:
+// 1. https://github.com/Kotlin/kotlinx.serialization/issues/1298
+// 2. https://github.com/Kotlin/kotlinx.serialization/issues/1405
+// 3. https://github.com/Kotlin/kotlinx.serialization/issues/1058
+
 /**
  * Implementation of the "Open Source Vulnerability format" according to schema version 1.3.0 (March 24, 2022), see
  * https://ossf.github.io/osv-schema/ which links to
