@@ -170,7 +170,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
     val (scoringSystem, severity) = severity.firstOrNull()?.let {
         it.type.name to it.score
-    } ?: null to null
+    } ?: (null to null)
 
     // TODO: Improve parsing the severity properties. Parse vectors, e.g. CVSS:3.1 and consider using the severity
     // in the database specific property as a fallback.
