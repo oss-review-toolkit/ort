@@ -61,7 +61,7 @@ data class Vulnerability(
 data class Affected(
     @SerialName("package")
     val pkg: Package,
-    val ranges: List<Range>,
+    val ranges: List<Range> = emptyList(),
     val versions: List<String> = emptyList(),
     @SerialName("ecosystem_specific")
     val ecosystemSpecific: JsonObject? = null,
