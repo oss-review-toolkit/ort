@@ -76,7 +76,7 @@ private fun identifierToPackage(id: String): Package =
     Package.EMPTY.copy(id = Identifier(id))
 
 private fun createOsv(): Osv =
-    Osv("Osv", AdvisorConfiguration())
+    Osv("OSV", AdvisorConfiguration())
 
 private fun Map<Identifier, List<AdvisorResult>>.patchTimes(): Map<Identifier, List<AdvisorResult>> =
     mapValues { (_, advisorResults) ->
