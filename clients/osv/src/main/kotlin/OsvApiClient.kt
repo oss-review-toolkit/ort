@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.osv
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
+import java.time.Instant
 import java.util.concurrent.Executors
 
 import kotlinx.serialization.SerialName
@@ -114,12 +115,14 @@ data class VulnerabilitiesForPackageBatchResponse(
     @Serializable
     data class IdList(
         @SerialName("vulns")
-        val vulnerabilities: List<Id> = emptyList()
+        val vulnerabilities: List<Vulnerability> = emptyList()
     )
 
     @Serializable
-    data class Id(
-        val id: String
+    data class Vulnerability(
+        val id: String,
+        @Serializable(InstantSerializer::class)
+        val modified: Instant
     )
 }
 
