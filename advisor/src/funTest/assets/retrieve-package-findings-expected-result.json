@@ -52,7 +52,7 @@
   } ],
   "NPM::gun:0.7.0" : [ {
     "advisor" : {
-      "name" : "Osv",
+      "name" : "OSV",
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
