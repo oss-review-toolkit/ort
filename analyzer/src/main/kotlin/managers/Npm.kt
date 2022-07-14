@@ -613,7 +613,7 @@ open class Npm(
         return emptyList()
     }
 
-    private fun parseProject(packageJson: File): Project {
+    protected fun parseProject(packageJson: File): Project {
         log.debug { "Parsing project info from '$packageJson'." }
 
         val json = jsonMapper.readTree(packageJson)
