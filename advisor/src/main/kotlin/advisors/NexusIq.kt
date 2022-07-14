@@ -53,7 +53,7 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<NexusIq>("Nexus IQ Server") {
+    class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(providerName, config.forProvider { nexusIq })
     }
 
