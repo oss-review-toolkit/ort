@@ -115,11 +115,11 @@ data class VulnerabilitiesForPackageBatchResponse(
     @Serializable
     data class IdList(
         @SerialName("vulns")
-        val vulnerabilities: List<Vulnerability> = emptyList()
+        val vulnerabilities: List<Id> = emptyList()
     )
 
     @Serializable
-    data class Vulnerability(
+    data class Id(
         val id: String,
         @Serializable(InstantSerializer::class)
         val modified: Instant
