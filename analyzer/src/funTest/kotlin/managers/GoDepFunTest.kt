@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
@@ -45,7 +46,8 @@ class GoDepFunTest : WordSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
-    private val gitHubProject = normalizedVcsUrl.substringAfter("://").substringBefore(".git")
+    private val gitHubProject = normalizedVcsUrl.replaceCredentialsInUri()
+        .substringAfter("://").substringBefore(".git")
 
     init {
         "GoDep" should {
