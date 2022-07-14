@@ -150,7 +150,7 @@ or
 
 A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily be run on
 [Jenkins CI](https://jenkins.io/) by using the [Jenkinsfile](./integrations/jenkins/Jenkinsfile) in a (declarative)
-[pipeline](https://jenkins.io/doc/book/pipeline/) job. Please see the [Jenkinsfile](./integrations/jenkins/Jenkinsfile) itself
+[pipeline](https://jenkins.io/doc/book/pipeline/) job. Please see the [README.md](./integrations/jenkins/README.md)
 for documentation of the required Jenkins plugins. The job accepts various parameters that are translated to ORT command
 line arguments. Additionally, one can trigger a downstream job which e.g. further processes scan results. Note that it
 is the downstream job's responsibility to copy any artifacts it needs from the upstream job.
