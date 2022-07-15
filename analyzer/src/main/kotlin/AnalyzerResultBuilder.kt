@@ -123,6 +123,8 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
 }
 
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {
+    if (dependencyGraphs.isEmpty()) return this
+
     val handler = PackageManagerDependencyHandler(this)
     val navigator = DependencyGraphNavigator(dependencyGraphs)
 
