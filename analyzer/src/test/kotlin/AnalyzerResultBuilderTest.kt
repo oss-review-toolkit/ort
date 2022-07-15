@@ -23,6 +23,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
@@ -369,6 +370,13 @@ class AnalyzerResultBuilderTest : WordSpec() {
                         )
                     }
                 }
+            }
+
+            "handle a result without dependencies" {
+                val emptyResult = AnalyzerResultBuilder().build()
+
+                emptyResult.projects should beEmpty()
+                emptyResult.packages should beEmpty()
             }
         }
     }
