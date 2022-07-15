@@ -342,9 +342,11 @@ class FossId internal constructor(
                     val scanResult = ScanResult(provenance, details, summary)
                     results.getOrPut(pkg) { mutableListOf() } += scanResult
 
-                    createdScans.forEach { code ->
-                        log.warn { "Deleting scan '$code' during exception cleanup." }
-                        deleteScan(code)
+                    if (!config.keepFailedScans) {
+                        createdScans.forEach { code ->
+                            log.warn { "Deleting scan '$code' during exception cleanup." }
+                            deleteScan(code)
+                        }
                     }
                 }
             }
