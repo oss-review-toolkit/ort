@@ -28,22 +28,5 @@ echo "Setting ORT_VERSION to $GIT_VERSION."
 DOCKER_BUILDKIT=1 docker build -f "$GIT_ROOT"/Dockerfile \
     -t "$ORT_DOCKER" \
     --build-arg ORT_VERSION="$GIT_VERSION" \
-    --build-arg ANDROID_CMD_VERSION=7583922 \
-    --build-arg BOWER_VERSION="1.8.12" \
-    --build-arg COCOAPODS_VERSION="1.11.2" \
-    --build-arg COMPOSER_VERSION="2.2.6-1" \
-    --build-arg CONAN_VERSION="1.44.0" \
-    --build-arg GO_DEP_VERSION="0.5.4" \
-    --build-arg GO_VERSION="1.18.3" \
-    --build-arg HASKELL_STACK_VERSION="2.1.3" \
-    --build-arg NODEJS_VERSION="16.15.1" \
-    --build-arg NPM_VERSION="7.20.6" \
-    --build-arg PIPTOOL_VERSION="22.1.2" \
-    --build-arg PYTHON_VERSION="3.10.5" \
-    --build-arg PYTHON_VIRTUALENV_VERSION="20.15.1" \
-    --build-arg SCANCODE_VERSION="30.1.0" \
-    --build-arg RUBY_VERSION="3.1.2" \
-    --build-arg SBT_VERSION="1.6.1" \
-    --build-arg YARN_VERSION="1.22.10" \
     "$@" \
     "$GIT_ROOT"
