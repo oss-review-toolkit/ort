@@ -760,6 +760,7 @@ private fun createConfig(
         apiKey = API_KEY,
         waitForResult = waitForResult,
         addAuthenticationToUrl = false,
+        keepFailedScans = false,
         deltaScans = deltaScans,
         deltaScanLimit = deltaScanLimit,
         timeout = 60,

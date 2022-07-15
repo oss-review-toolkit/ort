@@ -50,6 +50,7 @@ class FossIdConfigTest : WordSpec({
                 "apiKey" to API_KEY,
                 "waitForResult" to "false",
                 "addAuthenticationToUrl" to "false",
+                "keepFailedScans" to "true",
                 "deltaScans" to "true",
                 "deltaScanLimit" to "42",
                 "timeout" to "300"
@@ -64,6 +65,7 @@ class FossIdConfigTest : WordSpec({
                 apiKey = API_KEY,
                 waitForResult = false,
                 addAuthenticationToUrl = false,
+                keepFailedScans = true,
                 deltaScans = true,
                 deltaScanLimit = 42,
                 timeout = 300,
@@ -87,6 +89,7 @@ class FossIdConfigTest : WordSpec({
                 apiKey = API_KEY,
                 waitForResult = true,
                 addAuthenticationToUrl = false,
+                keepFailedScans = false,
                 deltaScans = false,
                 deltaScanLimit = Int.MAX_VALUE,
                 timeout = 60,
