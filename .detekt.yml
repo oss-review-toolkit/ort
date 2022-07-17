@@ -42,11 +42,17 @@ formatting:
   ParameterListWrapping:
     active: false
 
+naming:
+  InvalidPackageDeclaration:
+    active: false
+
 performance:
   SpreadOperator:
     active: false
 
 style:
+  DestructuringDeclarationWithTooManyEntries:
+    maxDestructuringEntries: 4
   ForbiddenComment:
     active: false
   LoopWithTooManyJumpStatements:
@@ -63,19 +69,18 @@ style:
     active: true
   WildcardImport:
     excludes: ''
-    excludeImports: '
-      org.ossreviewtoolkit.analyzer.managers.*,
-      org.ossreviewtoolkit.cli.commands.*,
-      org.ossreviewtoolkit.downloader.vcs.*,
-      org.ossreviewtoolkit.helper.commands.*,
-      org.ossreviewtoolkit.reporter.reporters.*,
-      org.ossreviewtoolkit.scanner.scanners.*,
-      org.ossreviewtoolkit.scanner.storages.*,
-      org.ossreviewtoolkit.utils.spdx.SpdxLicense.*,
-      org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*,
-      kotlinx.html.*,
-      kotlinx.html.dom.*
-      '
+    excludeImports:
+      - org.ossreviewtoolkit.analyzer.managers.*
+      - org.ossreviewtoolkit.cli.commands.*
+      - org.ossreviewtoolkit.downloader.vcs.*
+      - org.ossreviewtoolkit.helper.commands.*
+      - org.ossreviewtoolkit.reporter.reporters.*
+      - org.ossreviewtoolkit.scanner.scanners.*
+      - org.ossreviewtoolkit.scanner.storages.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
+      - kotlinx.html.*
+      - kotlinx.html.dom.*
 
 ORT:
   OrtImportOrder:
