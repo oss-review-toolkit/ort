@@ -572,9 +572,7 @@ class FossId internal constructor(
         val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
             .checkResponse("check scan status", false)
 
-        if (response.data?.status == ScanStatus.FAILED) {
-            throw IllegalStateException("Triggered scan has failed.")
-        }
+        check(response.data?.status != ScanStatus.FAILED) { "Triggered scan has failed." }
 
         if (response.data?.status in SCAN_STATE_FOR_TRIGGER) {
             log.info { "Triggering scan as it has not yet been started." }
@@ -616,9 +614,7 @@ class FossId internal constructor(
             when (response.data) {
                 DownloadStatus.FINISHED -> return@wait true
 
-                DownloadStatus.FAILED -> throw IllegalStateException(
-                    "Could not download scan: ${response.message}."
-                )
+                DownloadStatus.FAILED -> error("Could not download scan: ${response.message}.")
 
                 else -> {
                     // There is a bug with the FossID server version < 20.2: Sometimes the download is complete, but it
@@ -651,7 +647,7 @@ class FossId internal constructor(
 
             when (response.data?.status) {
                 ScanStatus.FINISHED -> true
-                ScanStatus.FAILED -> throw IllegalStateException("Scan waited for has failed.")
+                ScanStatus.FAILED -> error("Scan waited for has failed.")
                 null -> false
                 else -> {
                     FossId.log.info {

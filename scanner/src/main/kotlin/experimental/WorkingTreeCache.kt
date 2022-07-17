@@ -68,7 +68,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
 
     private suspend fun getWorkingTreeMutex(vcsInfo: VcsInfo) =
         mutex.withLock {
-            if (terminated) throw IllegalStateException("The cache was already shut down.")
+            check(!terminated) { "The cache was already shut down." }
 
             workingTreeMutexes.getOrPut(getKey(vcsInfo)) { Mutex() }
         }

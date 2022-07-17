@@ -113,7 +113,7 @@ interface FossIdRestService {
                         // present in the elements themselves, we don't lose any information by discarding the keys.
                         PolymorphicList(map.values.toList())
                     }
-                    else -> throw IllegalStateException("FossID returned a type not handled by this deserializer!")
+                    else -> error("FossID returned a type not handled by this deserializer!")
                 }
             }
 
@@ -150,7 +150,7 @@ interface FossIdRestService {
                         val value = if (array.isEmpty()) null else array.first()
                         PolymorphicInt(value)
                     }
-                    else -> throw IllegalStateException("FossID returned a type not handled by this deserializer!")
+                    else -> error("FossID returned a type not handled by this deserializer!")
                 }
             }
         }

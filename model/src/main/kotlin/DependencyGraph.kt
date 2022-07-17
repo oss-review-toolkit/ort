@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.lang.IllegalStateException
 import java.util.SortedSet
 
 /**
@@ -170,8 +169,7 @@ data class DependencyGraph(
     private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>, unqualify: Boolean): SortedSet<Scope> =
         map.mapTo(sortedSetOf()) { entry ->
             val dependencies = entry.value.mapTo(sortedSetOf()) { index ->
-                referenceMapping[index.toKey()]
-                    ?: throw IllegalStateException("Could not resolve dependency index $index.")
+                referenceMapping[index.toKey()] ?: error("Could not resolve dependency index $index.")
             }
 
             val scopeName = if (unqualify) unqualifyScope(entry.key) else entry.key
