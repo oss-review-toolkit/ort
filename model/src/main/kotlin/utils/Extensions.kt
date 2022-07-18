@@ -157,7 +157,7 @@ fun Identifier.getPurlType() =
         "composer" -> PurlType.COMPOSER
         "conan" -> PurlType.CONAN
         "crate" -> PurlType.CARGO
-        "go" -> PurlType.GOLANG
+        "go" /* backwards compatibility: */, "godep", "gomod" -> PurlType.GOLANG
         "gem" -> PurlType.GEM
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
