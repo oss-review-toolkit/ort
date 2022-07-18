@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import java.net.URI
 import java.time.Instant
 
 import kotlinx.serialization.json.JsonPrimitive
@@ -42,6 +41,7 @@ import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.log
@@ -198,14 +198,17 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         }
     }
 
-    return org.ossreviewtoolkit.model.Vulnerability(
-        id = id,
-        references = references.map {
+    val references = references.mapNotNull { reference ->
+        reference.url.trim().toUri().onFailure {
+            log.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
+        }.map {
             VulnerabilityReference(
-                url = URI.create(it.url.trim()),
+                url = it,
                 scoringSystem = scoringSystem,
                 severity = severity,
             )
-        }
-    )
+        }.getOrNull()
+    }
+
+    return org.ossreviewtoolkit.model.Vulnerability(id = id, references = references)
 }
