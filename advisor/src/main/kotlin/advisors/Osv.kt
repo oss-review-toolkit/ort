@@ -191,6 +191,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
 
     if (severity == null && databaseSpecific != null) {
         // Fallback to the 'severity' property of the unspecified 'databaseSpecific' object.
+        // See also https://github.com/google/osv.dev/issues/484.
         databaseSpecific!!["severity"]?.let {
             if (it is JsonPrimitive) {
                 severity = it.contentOrNull
