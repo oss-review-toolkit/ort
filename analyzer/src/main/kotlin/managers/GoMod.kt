@@ -145,8 +145,7 @@ class GoMod(
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
     private fun getModuleGraph(projectDir: File): Graph {
-        val moduleInfoForModuleName = getModuleInfos(projectDir).map { it.replace ?: it }
-            .associateBy({ it.path }, { it })
+        val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy({ it.path }, { it })
 
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
@@ -211,7 +210,8 @@ class GoMod(
     )
 
     /**
-     * Return the list of all modules contained in the dependency tree with resolved versions.
+     * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
+     * directive applied.
      */
     private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
         val list = run("list", "-m", "-json", "all", workingDir = projectDir)
@@ -229,7 +229,7 @@ class GoMod(
                 }
             }
 
-            return result
+            return result.map { it.replace ?: it }
         }
     }
 
