@@ -197,8 +197,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
     }
 
     val references = references.mapNotNull { reference ->
-        var url = reference.url.trim()
-        url = url.takeUnless { it.startsWith("://") } ?: "https$url"
+        val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
         url.toUri().onFailure {
             log.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
