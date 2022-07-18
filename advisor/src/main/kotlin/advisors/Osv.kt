@@ -203,7 +203,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         id = id,
         references = references.map {
             VulnerabilityReference(
-                url = URI.create(it.url),
+                url = URI.create(it.url.trim()),
                 scoringSystem = scoringSystem,
                 severity = severity,
             )
