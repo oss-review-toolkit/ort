@@ -27,6 +27,7 @@ import java.net.URI
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -130,7 +131,7 @@ class GoDep(
             }
 
             val pkg = Package(
-                id = Identifier("Go", "", name, version),
+                id = Identifier("Go", "", name, normalizeModuleVersion(version)),
                 authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
