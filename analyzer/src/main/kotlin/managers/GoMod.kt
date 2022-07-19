@@ -97,10 +97,11 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use {
-            val graph = getModuleGraph(projectDir)
+            val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy({ it.path }, { it })
+            val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
-            val packages = packageIds.mapTo(sortedSetOf()) { createPackage(it) }
+            val packages = packageIds.mapTo(sortedSetOf()) { createPackage(moduleInfoForModuleName.getValue(it.name)) }
             val projectVcs = processProjectVcs(projectDir)
 
             val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
@@ -144,9 +145,7 @@ class GoMod(
     /**
      * Return the module graph output from `go mod graph` with non-vendor dependencies removed.
      */
-    private fun getModuleGraph(projectDir: File): Graph {
-        val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy({ it.path }, { it })
-
+    private fun getModuleGraph(projectDir: File, moduleInfoForModuleName: Map<String, ModuleInfo>): Graph {
         fun moduleInfo(moduleName: String): ModuleInfo = moduleInfoForModuleName.getValue(moduleName)
 
         fun parseModuleEntry(entry: String): Identifier =
@@ -185,7 +184,7 @@ class GoMod(
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    private data class ModuleInfo(
+    internal data class ModuleInfo(
         @JsonProperty("Path")
         val path: String,
 
@@ -271,18 +270,18 @@ class GoMod(
         return result
     }
 
-    private fun createPackage(id: Identifier): Package {
-        val vcsInfo = id.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
+    private fun createPackage(moduleInfo: ModuleInfo): Package {
+        val vcsInfo = moduleInfo.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
 
         return Package(
-            id = id,
+            id = moduleInfo.toId(),
             authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = if (vcsInfo == VcsInfo.EMPTY) {
-                getSourceArtifactForPackage(id)
+                getSourceArtifactForPackage(moduleInfo)
             } else {
                 RemoteArtifact.EMPTY
             },
@@ -290,7 +289,7 @@ class GoMod(
         )
     }
 
-    private fun getSourceArtifactForPackage(id: Identifier): RemoteArtifact {
+    private fun getSourceArtifactForPackage(moduleInfo: ModuleInfo): RemoteArtifact {
         /**
          * The below construction of the remote artifact URL makes several simplifying assumptions and it is still
          * questionable whether those assumptions are ok:
@@ -306,7 +305,7 @@ class GoMod(
          */
         val goProxy = getGoProxy()
 
-        return RemoteArtifact(url = "$goProxy/${id.name}/@v/${id.version}.zip", hash = Hash.NONE)
+        return RemoteArtifact(url = "$goProxy/${moduleInfo.path}/@v/${moduleInfo.version}.zip", hash = Hash.NONE)
     }
 
     private fun getGoProxy(): String {
@@ -429,10 +428,10 @@ private fun getRevision(version: String): String {
     return version
 }
 
-internal fun Identifier.toVcsInfo(): VcsInfo {
-    val hostname = GITHUB_NAME_REGEX.matchEntire(name)?.let {
+internal fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo {
+    val hostname = GITHUB_NAME_REGEX.matchEntire(path)?.let {
         it.groupValues[1]
-    } ?: name
+    } ?: path
 
     val vcsInfo = VcsHost.parseUrl("https://$hostname")
     return vcsInfo.copy(revision = getRevision(version))

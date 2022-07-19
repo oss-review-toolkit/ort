@@ -25,36 +25,41 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.VcsType
 
 class GoModTest : WordSpec({
     "toVcsInfo" should {
         "return the VCS type 'Git'" {
-            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/chai2010/gettext-go",
+                version = "v1.0.0"
+            )
 
-            id.toVcsInfo().type shouldBe VcsType.GIT
+            moduleInfo.toVcsInfo().type shouldBe VcsType.GIT
         }
 
         "return the revision" {
-            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/chai2010/gettext-go",
+                version = "v1.0.0"
+            )
 
-            id.toVcsInfo().revision shouldBe "v1.0.0"
+            moduleInfo.toVcsInfo().revision shouldBe "v1.0.0"
         }
 
         "return the VCS URL and path for a package from a single module repository" {
-            val id = Identifier("Go::github.com/chai2010/gettext-go:v1.0.0")
+            val moduleInfo = GoMod.ModuleInfo(path = "github.com/chai2010/gettext-go", version = "v1.0.0")
 
-            with(id.toVcsInfo()) {
+            with(moduleInfo.toVcsInfo()) {
                 path shouldBe ""
                 url shouldBe "https://github.com/chai2010/gettext-go.git"
             }
         }
 
         "return the VCS URL and path for a package from a mono repository" {
-            val id = Identifier("Go::github.com/Azure/go-autorest/autorest/date:v0.1.0")
+            val moduleInfo = GoMod.ModuleInfo(path = "github.com/Azure/go-autorest/autorest/date", version = "v0.1.0")
 
-            with(id.toVcsInfo()) {
+            with(moduleInfo.toVcsInfo()) {
                 path shouldBe "autorest/date"
                 url shouldBe "https://github.com/Azure/go-autorest.git"
             }
@@ -62,31 +67,41 @@ class GoModTest : WordSpec({
 
         "return the SHA1 from a 'pseudo version', when there is no known base version" {
             // See https://golang.org/ref/mod#pseudo-versions.
-            val id = Identifier("Go::github.com/example/project:v0.0.0-20191109021931-daa7c04131f5")
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/example/project",
+                version = "v0.0.0-20191109021931-daa7c04131f5"
+            )
 
-            id.toVcsInfo().revision shouldBe "daa7c04131f5"
+            moduleInfo.toVcsInfo().revision shouldBe "daa7c04131f5"
         }
 
         "return the SHA1 from a 'pseudo version', when base version is a release version" {
             // See https://golang.org/ref/mod#pseudo-versions.
-            val id = Identifier(
-                "Go::github.com/example/project:v0.8.1-0.20171018195549-f15c970de5b7"
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/example/project",
+                version = "v0.8.1-0.20171018195549-f15c970de5b7"
             )
 
-            id.toVcsInfo().revision shouldBe "f15c970de5b7"
+            moduleInfo.toVcsInfo().revision shouldBe "f15c970de5b7"
         }
 
         "return the SHA1 from a 'pseudo version', when base version is a pre-release version" {
             // See https://golang.org/ref/mod#pseudo-versions.
-            val id = Identifier("Go::github.com/example/project:v0.8.1-pre.0.20171018195549-f15c970de5b7")
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/example/project",
+                version = "v0.8.1-pre.0.20171018195549-f15c970de5b7"
+            )
 
-            id.toVcsInfo().revision shouldBe "f15c970de5b7"
+            moduleInfo.toVcsInfo().revision shouldBe "f15c970de5b7"
         }
 
         "return the SHA1 for a version with a '+incompatible' suffix" {
-            val id = Identifier("Go::github.com/example/project:v43.3.0+incompatible")
+            val moduleInfo = GoMod.ModuleInfo(
+                path = "github.com/example/project",
+                version = "v43.3.0+incompatible"
+            )
 
-            id.toVcsInfo().revision shouldBe "v43.3.0"
+            moduleInfo.toVcsInfo().revision shouldBe "v43.3.0"
         }
     }
 
