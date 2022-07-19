@@ -151,14 +151,7 @@ class GoMod(
 
         fun parseModuleEntry(entry: String): Identifier =
             entry.substringBefore('@').let { moduleName ->
-                val version = moduleInfo(moduleName).version
-
-                Identifier(
-                    type = managerName.takeIf { version.isBlank() } ?: "Go",
-                    namespace = "",
-                    name = moduleName,
-                    version = version
-                )
+                moduleInfo(moduleName).toId()
             }
 
         var graph = Graph()
@@ -208,6 +201,14 @@ class GoMod(
         @JsonProperty("Main")
         val main: Boolean = false
     )
+
+    private fun ModuleInfo.toId(): Identifier =
+        Identifier(
+            type = managerName.takeIf { version.isBlank() } ?: "Go",
+            namespace = "",
+            name = path,
+            version = version
+        )
 
     /**
      * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
