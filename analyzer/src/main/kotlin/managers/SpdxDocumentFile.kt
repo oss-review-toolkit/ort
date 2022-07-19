@@ -48,6 +48,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.getQueryParameters
+import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.log
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -99,6 +101,18 @@ internal fun SpdxDocument.projectPackage(): SpdxPackage? =
         // The package that describes a project must have an "empty" package filename (as the "filename" is the project
         // directory itself).
         ?.singleOrNull { it.packageFilename.isEmpty() || it.packageFilename == "." }
+
+/**
+ * Try to find an [SpdxExternalReference] in this [SpdxPackage] of type purl from which the scope of a
+ * package manager dependency can be extracted. Return this scope or *null* if cannot be determined.
+ */
+internal fun SpdxPackage.extractScopeFromExternalReferences(): String? =
+    externalRefs.filter { it.referenceType == SpdxExternalReference.Type.Purl }
+        // Need to convert the URI to a hierarchical one; otherwise query parameters cannot be extracted.
+        .map { it.referenceLocator.replace("pkg:", "pkg://") }
+        .firstNotNullOfOrNull {
+            it.toUri { uri -> uri.getQueryParameters()["scope"]?.singleOrNull() }.getOrNull()
+        }
 
 /**
  * Return the concluded license to be used in ORT's data model, which expects a not present value to be null instead
@@ -332,16 +346,15 @@ class SpdxDocumentFile(
             }
         }
 
-    private fun getPackageManagerDependency(pkgId: String, doc: SpdxResolvedDocument): PackageReference? {
+    internal fun getPackageManagerDependency(pkgId: String, doc: SpdxResolvedDocument): PackageReference? {
         val spdxPackage = doc.getSpdxPackageForId(pkgId, mutableListOf()) ?: return null
         val definitionFile = doc.getDefinitionFile(pkgId) ?: return null
 
         if (spdxPackage.packageFilename.isBlank()) return null
-        if (spdxPackage.packageFilename.count { it == '?' } != 1) return null
 
-        val packageFilename = spdxPackage.packageFilename.substringBefore("?")
-        val scope = spdxPackage.packageFilename.substringAfter("?").substringAfter("=")
-        val packageFile = definitionFile.parentFile.resolve(packageFilename)
+        val scope = spdxPackage.extractScopeFromExternalReferences() ?: return null
+
+        val packageFile = definitionFile.parentFile.resolve(spdxPackage.packageFilename)
 
         if (packageFile.isFile) {
             val managedFiles = findManagedFiles(packageFile.parentFile, ALL)
