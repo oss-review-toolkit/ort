@@ -18,66 +18,66 @@ project:
   scopes:
   - name: "main"
     dependencies:
-    - id: "Go::github.com/fatih/color:v1.13.0"
+    - id: "Go::github.com/fatih/color:1.13.0"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/mattn/go-colorable:v0.1.12"
+      - id: "Go::github.com/mattn/go-colorable:0.1.12"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::github.com/mattn/go-isatty:v0.0.14"
+        - id: "Go::github.com/mattn/go-isatty:0.0.14"
           linkage: "PROJECT_STATIC"
           dependencies:
-          - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+          - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
             linkage: "PROJECT_STATIC"
-        - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+        - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/mattn/go-isatty:v0.0.14"
+      - id: "Go::github.com/mattn/go-isatty:0.0.14"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+        - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
-    - id: "Go::github.com/pborman/uuid:v1.2.1"
+    - id: "Go::github.com/pborman/uuid:1.2.1"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/google/uuid:v1.0.0"
+      - id: "Go::github.com/google/uuid:1.0.0"
         linkage: "PROJECT_STATIC"
   - name: "vendor"
     dependencies:
-    - id: "Go::github.com/fatih/color:v1.13.0"
+    - id: "Go::github.com/fatih/color:1.13.0"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/mattn/go-colorable:v0.1.12"
+      - id: "Go::github.com/mattn/go-colorable:0.1.12"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::github.com/mattn/go-isatty:v0.0.14"
+        - id: "Go::github.com/mattn/go-isatty:0.0.14"
           linkage: "PROJECT_STATIC"
           dependencies:
-          - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+          - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
             linkage: "PROJECT_STATIC"
-        - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+        - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/mattn/go-isatty:v0.0.14"
+      - id: "Go::github.com/mattn/go-isatty:0.0.14"
         linkage: "PROJECT_STATIC"
         dependencies:
-        - id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
+        - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
-    - id: "Go::github.com/pborman/uuid:v1.2.1"
+    - id: "Go::github.com/pborman/uuid:1.2.1"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/google/uuid:v1.0.0"
+      - id: "Go::github.com/google/uuid:1.0.0"
         linkage: "PROJECT_STATIC"
-    - id: "Go::github.com/stretchr/testify:v1.7.2"
+    - id: "Go::github.com/stretchr/testify:1.7.2"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/davecgh/go-spew:v1.1.0"
+      - id: "Go::github.com/davecgh/go-spew:1.1.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::github.com/pmezard/go-difflib:v1.0.0"
+      - id: "Go::github.com/pmezard/go-difflib:1.0.0"
         linkage: "PROJECT_STATIC"
-      - id: "Go::gopkg.in/yaml.v3:v3.0.1"
+      - id: "Go::gopkg.in/yaml.v3:3.0.1"
         linkage: "PROJECT_STATIC"
 packages:
-- id: "Go::github.com/davecgh/go-spew:v1.1.0"
-  purl: "pkg:golang/github.com%2Fdavecgh%2Fgo-spew@v1.1.0"
+- id: "Go::github.com/davecgh/go-spew:1.1.0"
+  purl: "pkg:golang/github.com%2Fdavecgh%2Fgo-spew@1.1.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -102,8 +102,8 @@ packages:
     url: "https://github.com/davecgh/go-spew.git"
     revision: "v1.1.0"
     path: ""
-- id: "Go::github.com/fatih/color:v1.13.0"
-  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@v1.13.0"
+- id: "Go::github.com/fatih/color:1.13.0"
+  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@1.13.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -128,8 +128,8 @@ packages:
     url: "https://github.com/fatih/color.git"
     revision: "v1.13.0"
     path: ""
-- id: "Go::github.com/google/uuid:v1.0.0"
-  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@v1.0.0"
+- id: "Go::github.com/google/uuid:1.0.0"
+  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -154,8 +154,8 @@ packages:
     url: "https://github.com/google/uuid.git"
     revision: "v1.0.0"
     path: ""
-- id: "Go::github.com/mattn/go-colorable:v0.1.12"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@v0.1.12"
+- id: "Go::github.com/mattn/go-colorable:0.1.12"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@0.1.12"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -180,8 +180,8 @@ packages:
     url: "https://github.com/mattn/go-colorable.git"
     revision: "v0.1.12"
     path: ""
-- id: "Go::github.com/mattn/go-isatty:v0.0.14"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.14"
+- id: "Go::github.com/mattn/go-isatty:0.0.14"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@0.0.14"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -206,8 +206,8 @@ packages:
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.14"
     path: ""
-- id: "Go::github.com/pborman/uuid:v1.2.1"
-  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@v1.2.1"
+- id: "Go::github.com/pborman/uuid:1.2.1"
+  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -232,8 +232,8 @@ packages:
     url: "https://github.com/pborman/uuid.git"
     revision: "v1.2.1"
     path: ""
-- id: "Go::github.com/pmezard/go-difflib:v1.0.0"
-  purl: "pkg:golang/github.com%2Fpmezard%2Fgo-difflib@v1.0.0"
+- id: "Go::github.com/pmezard/go-difflib:1.0.0"
+  purl: "pkg:golang/github.com%2Fpmezard%2Fgo-difflib@1.0.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -258,8 +258,8 @@ packages:
     url: "https://github.com/pmezard/go-difflib.git"
     revision: "v1.0.0"
     path: ""
-- id: "Go::github.com/stretchr/testify:v1.7.2"
-  purl: "pkg:golang/github.com%2Fstretchr%2Ftestify@v1.7.2"
+- id: "Go::github.com/stretchr/testify:1.7.2"
+  purl: "pkg:golang/github.com%2Fstretchr%2Ftestify@1.7.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -284,8 +284,8 @@ packages:
     url: "https://github.com/stretchr/testify.git"
     revision: "v1.7.2"
     path: ""
-- id: "Go::golang.org/x/sys:v0.0.0-20220610221304-9f5ed59c137d"
-  purl: "pkg:golang/golang.org%2Fx%2Fsys@v0.0.0-20220610221304-9f5ed59c137d"
+- id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@0.0.0-20220610221304-9f5ed59c137d"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -310,8 +310,8 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "Go::gopkg.in/yaml.v3:v3.0.1"
-  purl: "pkg:golang/gopkg.in%2Fyaml.v3@v3.0.1"
+- id: "Go::gopkg.in/yaml.v3:3.0.1"
+  purl: "pkg:golang/gopkg.in%2Fyaml.v3@3.0.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""

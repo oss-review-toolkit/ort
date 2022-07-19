@@ -206,7 +206,9 @@ class GoMod(
             type = managerName.takeIf { version.isBlank() } ?: "Go",
             namespace = "",
             name = path,
-            version = version
+            // Strip any suffix starting with '+', because build metadata is not involved in version comparison, see
+            // https://go.dev/ref/mod#incompatible-versions.
+            version = version.removePrefix("v").substringBefore("+")
         )
 
     /**
