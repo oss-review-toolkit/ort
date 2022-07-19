@@ -18,13 +18,13 @@ project:
   scopes:
   - name: "default"
     dependencies:
-    - id: "Go::github.com/mattn/go-isatty:v0.0.12"
+    - id: "Go::github.com/mattn/go-isatty:0.0.12"
       linkage: "STATIC"
     - id: "Go::golang.org/x/sys:8d3cce7afc34617998104db7c4b58c2de9e77215"
       linkage: "STATIC"
 packages:
-- id: "Go::github.com/mattn/go-isatty:v0.0.12"
-  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@v0.0.12"
+- id: "Go::github.com/mattn/go-isatty:0.0.12"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@0.0.12"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
