@@ -107,6 +107,7 @@ class Conan(
     override fun command(workingDir: File?) = "conan"
 
     // TODO: Add support for Conan lock files.
+
     // protected open fun hasLockFile(projectDir: File) = null
 
     override fun transformVersion(output: String) =

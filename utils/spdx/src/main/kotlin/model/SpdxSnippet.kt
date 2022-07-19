@@ -102,7 +102,7 @@ data class SpdxSnippet(
         }
 
         // TODO: The check for [licenseInfoInSnippets] can be made more strict, but the SPDX specification is not exact
-        // enough yet to do this safely.
+        //       enough yet to do this safely.
         licenseInfoInSnippets.filterNot { it.isSpdxExpressionOrNotPresent() }.let { invalidEntries ->
             require(invalidEntries.isEmpty()) {
                 "The entries in licenseInfoInSnippets must each be either an SpdxExpression, 'NONE' or " +

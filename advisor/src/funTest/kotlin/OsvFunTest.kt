@@ -45,8 +45,8 @@ class OsvFunTest : StringSpec({
             "Crate::sys-info:0.7.0",
             "NuGet::Microsoft.ChakraCore:1.10.0"
             // TODO: Add an identifier for a composer package after https://github.com/google/osv.dev/issues/497 got
-            // fixed. That issue causes queries for vulnerabilities of the "Packagist" ecosystem to always return
-            // an empty result.
+            //       fixed. That issue causes queries for vulnerabilities of the "Packagist" ecosystem to always return
+            //       an empty result.
         ).map { identifierToPackage(it) }
 
         val packageFindings = osv.retrievePackageFindings(packages)

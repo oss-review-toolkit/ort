@@ -148,8 +148,9 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
     }
 
     // Strip the version prefix for GoMod / GoDep packages.
+    //
     // TODO: That prefix should not be assigned by the package manager in the first place, see
-    // https://github.com/oss-review-toolkit/ort/issues/5532.
+    //       https://github.com/oss-review-toolkit/ort/issues/5532.
     val version = pkg.id.version.withoutPrefix("v") ?: pkg.id.version
 
     if (name.isNotBlank() && version.isNotBlank() && !ecosystem.isNullOrBlank()) {
