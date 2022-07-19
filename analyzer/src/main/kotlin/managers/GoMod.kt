@@ -29,6 +29,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -206,9 +207,7 @@ class GoMod(
             type = managerName.takeIf { version.isBlank() } ?: "Go",
             namespace = "",
             name = path,
-            // Strip any suffix starting with '+', because build metadata is not involved in version comparison, see
-            // https://go.dev/ref/mod#incompatible-versions.
-            version = version.removePrefix("v").substringBefore("+")
+            version = normalizeModuleVersion(version)
         )
 
     /**
