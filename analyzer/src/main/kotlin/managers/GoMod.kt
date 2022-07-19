@@ -101,7 +101,7 @@ class GoMod(
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
-            val packages = packageIds.mapTo(sortedSetOf()) { createPackage(moduleInfoForModuleName.getValue(it.name)) }
+            val packages = packageIds.mapTo(sortedSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
             val projectVcs = processProjectVcs(projectDir)
 
             val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
@@ -272,18 +272,18 @@ class GoMod(
         return result
     }
 
-    private fun createPackage(moduleInfo: ModuleInfo): Package {
-        val vcsInfo = moduleInfo.toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
+    private fun ModuleInfo.toPackage(): Package {
+        val vcsInfo = toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
 
         return Package(
-            id = moduleInfo.toId(),
+            id = toId(),
             authors = sortedSetOf(), // Go mod doesn't support author information.
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = if (vcsInfo == VcsInfo.EMPTY) {
-                getSourceArtifactForPackage(moduleInfo)
+                toSourceArtifact()
             } else {
                 RemoteArtifact.EMPTY
             },
@@ -291,7 +291,7 @@ class GoMod(
         )
     }
 
-    private fun getSourceArtifactForPackage(moduleInfo: ModuleInfo): RemoteArtifact {
+    private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
         /**
          * The below construction of the remote artifact URL makes several simplifying assumptions and it is still
          * questionable whether those assumptions are ok:
@@ -307,7 +307,7 @@ class GoMod(
          */
         val goProxy = getGoProxy()
 
-        return RemoteArtifact(url = "$goProxy/${moduleInfo.path}/@v/${moduleInfo.version}.zip", hash = Hash.NONE)
+        return RemoteArtifact(url = "$goProxy/$path/@v/$version.zip", hash = Hash.NONE)
     }
 
     private fun getGoProxy(): String {
