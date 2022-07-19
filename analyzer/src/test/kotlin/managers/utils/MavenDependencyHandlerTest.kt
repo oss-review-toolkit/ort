@@ -131,13 +131,13 @@ class MavenDependencyHandlerTest : WordSpec({
             val dependency = createDependency(IDENTIFIER)
             val artifact = dependency.artifact
             val repos = listOf(createRepository(), createRepository())
-            val pkg = mockk<Package>()
+            val pkg = createPackage(IDENTIFIER)
             val issues = mutableListOf<OrtIssue>()
 
             val handler = createHandler()
 
             every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS) } returns pkg
+            every { handler.support.parsePackage(artifact, repos) } returns pkg
 
             handler.createPackage(dependency, issues) shouldBe pkg
             issues should beEmpty()
@@ -147,13 +147,13 @@ class MavenDependencyHandlerTest : WordSpec({
             val dependency = createDependency(IDENTIFIER)
             val artifact = dependency.artifact
             val repos = listOf(createRepository())
-            val pkg = mockk<Package>()
+            val pkg = createPackage(IDENTIFIER)
             val issues = mutableListOf<OrtIssue>()
 
             val handler = createHandler(sbtMode = true)
 
             every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS, sbtMode = true) } returns pkg
+            every { handler.support.parsePackage(artifact, repos, sbtMode = true) } returns pkg
 
             handler.createPackage(dependency, issues) shouldBe pkg
             issues should beEmpty()
@@ -169,6 +169,36 @@ class MavenDependencyHandlerTest : WordSpec({
             issues should beEmpty()
         }
 
+        "return null for a package that is resolved to a project dependency" {
+            val dependency = createDependency(IDENTIFIER)
+            val artifact = dependency.artifact
+            val repos = listOf(createRepository(), createRepository())
+            val pkg = createPackage(PROJECT_ID)
+
+            val handler = createHandler()
+
+            every { dependency.repositories } returns repos
+            every { handler.support.parsePackage(artifact, repos) } returns pkg
+
+            handler.createPackage(dependency, mutableListOf()) should beNull()
+        }
+
+        "report the correct linkage for a package that is resolved to a project dependency" {
+            val dependency = createDependency(IDENTIFIER)
+            val artifact = dependency.artifact
+            val repos = listOf(createRepository(), createRepository())
+            val pkg = createPackage(PROJECT_ID)
+
+            val handler = createHandler()
+
+            every { dependency.repositories } returns repos
+            every { handler.support.parsePackage(artifact, repos) } returns pkg
+
+            handler.createPackage(dependency, mutableListOf())
+
+            handler.linkageFor(dependency) shouldBe PackageLinkage.PROJECT_DYNAMIC
+        }
+
         "handle an exception from MavenSupport" {
             val exception = ProjectBuildingException(
                 "BrokenProject", "Cannot parse pom.",
@@ -182,7 +212,7 @@ class MavenDependencyHandlerTest : WordSpec({
             val handler = createHandler()
 
             every { dependency.repositories } returns repos
-            every { handler.support.parsePackage(artifact, repos, LOCAL_PROJECTS) } throws exception
+            every { handler.support.parsePackage(artifact, repos) } throws exception
 
             handler.createPackage(dependency, issues) should beNull()
 
@@ -204,13 +234,19 @@ private const val IDENTIFIER = "org.apache.commons:commons-lang2:3.12"
  * A map simulating local projects. This is required by [MavenSupport] when parsing packages.
  */
 private val LOCAL_PROJECTS = mapOf(
-    "localProject1" to createProject(),
-    "localProject2" to createProject(),
-    "localProject3" to createProject()
+    "namespace:project1:1.0" to createProject(),
+    "namespace:project2:2.0" to createProject(),
+    "namespace:project3:3.0" to createProject()
 )
 
 /** ID of an inter-project dependency. */
 private val PROJECT_ID = LOCAL_PROJECTS.toList().first().first
+
+/**
+ * Return an [Identifier] from the given [mavenId]. The identifiers used by Maven internally are very close to
+ * ORT's identifiers; only the type component is missing.
+ */
+private fun toOrtIdentifier(mavenId: String): Identifier = Identifier("Maven:$mavenId")
 
 /**
  * Return a mock [Artifact] that is prepared to return the given [identifier][id]. Note: For this to work, the
@@ -259,3 +295,11 @@ private fun createRepository(): RemoteRepository = mockk()
  * warnings about explicit type arguments.
  */
 private fun createProject(): MavenProject = mockk()
+
+/**
+ * Create a mock for a [Package] that is prepared to return an [Identifier] based on [mavenId].
+ */
+private fun createPackage(mavenId: String): Package =
+    mockk<Package>().apply {
+        every { id } returns toOrtIdentifier(mavenId)
+    }
