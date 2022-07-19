@@ -26,6 +26,7 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 // TODO: Remove all JsonElement subtypes as property types from the model in favor of raw strings holding JSON.
+//
 // Accessing JsonElement subtypes requires the client code to add 'kotlinx.serialization' as dependency, which is not
 // desired - raw strings would fix that.
 // At the time of writing, that's not (easily) possible to implement due to limitations in the serialization library,

@@ -231,7 +231,7 @@ class ReportTableModelMapper(
         )
 
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
-        // report.
+        //       report.
         val labels = ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = ortResult.getRuleViolations()

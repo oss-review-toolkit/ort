@@ -186,7 +186,7 @@ data class SpdxFile(
         }
 
         // TODO: The check for [licenseInfoInFiles] can be made more strict, but the SPDX specification is not exact
-        // enough yet to do this safely.
+        //       enough yet to do this safely.
         licenseInfoInFiles.filterNot { it.isSpdxExpressionOrNotPresent() }.let {
             require(it.isEmpty()) {
                 "The entries in licenseInfoInFiles must each be either an SpdxExpression, 'NONE' or 'NOASSERTION', " +

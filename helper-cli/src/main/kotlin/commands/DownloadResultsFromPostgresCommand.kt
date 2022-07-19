@@ -114,8 +114,8 @@ class DownloadResultsFromPostgresCommand : CliktCommand(
     }
 
     private fun fetchOrtResult(connection: Connection, rowId: Int): String? {
-        // TODO: The transmission is relatively slow currently due to lack of compression. Check whether
-        // the gzip extension can help speed this up https://github.com/pramsey/pgsql-gzip.
+        // TODO: The transmission is relatively slow currently due to lack of compression. Check whether the gzip
+        //       extension can help speed this up https://github.com/pramsey/pgsql-gzip.
 
         val query = "SELECT t.$columnName::TEXT AS result FROM $tableName t WHERE id = ?;"
 
