@@ -48,6 +48,29 @@
         "scoring_system" : "CVSS:3.1",
         "severity" : "7.5"
       } ]
+    }, {
+      "id" : "GHSA-cj88-88mr-972w",
+      "references" : [ {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2021-35065",
+        "scoring_system" : null,
+        "severity" : "MODERATE"
+      }, {
+        "url" : "https://github.com/opensearch-project/OpenSearch-Dashboards/issues/1103",
+        "scoring_system" : null,
+        "severity" : "MODERATE"
+      }, {
+        "url" : "https://github.com/gulpjs/glob-parent/pull/49",
+        "scoring_system" : null,
+        "severity" : "MODERATE"
+      }, {
+        "url" : "https://www.mend.io/vulnerability-database/CVE-2021-35065",
+        "scoring_system" : null,
+        "severity" : "MODERATE"
+      }, {
+        "url" : "https://github.com/gulpjs/glob-parent",
+        "scoring_system" : null,
+        "severity" : "MODERATE"
+      } ]
     } ]
   } ],
   "NPM::gun:0.7.0" : [ {
