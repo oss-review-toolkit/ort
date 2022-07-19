@@ -70,9 +70,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
         val vulnerabilitiesForPackage = getVulnerabilitiesForPackage(packages)
 
         return packages.associateWith { pkg ->
-            val vulnerabilities = vulnerabilitiesForPackage[pkg.id].orEmpty().map { it.toOrtVulnerability() }
-
-            if (vulnerabilities.isNotEmpty()) {
+            vulnerabilitiesForPackage[pkg.id]?.let { vulnerabilities ->
                 listOf(
                     AdvisorResult(
                         advisor = details,
@@ -80,12 +78,10 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
                             startTime = startTime,
                             endTime = Instant.now()
                         ),
-                        vulnerabilities = vulnerabilities
+                        vulnerabilities = vulnerabilities.map { it.toOrtVulnerability() }
                     )
                 )
-            } else {
-                emptyList()
-            }
+            }.orEmpty()
         }
     }
 
