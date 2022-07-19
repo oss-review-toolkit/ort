@@ -24,13 +24,20 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import io.mockk.every
+import io.mockk.mockk
+
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 
 /*
@@ -110,4 +117,87 @@ class SpdxDocumentFileTest : WordSpec({
             spdxDocument.projectPackage() should beNull()
         }
     }
+
+    "getPackageManagerDependency" should {
+        "return null for an unknown package" {
+            val doc = mockk<SpdxResolvedDocument>()
+            doc.mockPackage(null)
+
+            val manager = createPackageManager()
+
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) should beNull()
+        }
+
+        "return null for a missing definition file" {
+            val pkg = mockk<SpdxPackage>()
+            val doc = mockk<SpdxResolvedDocument>()
+            doc.mockPackage(pkg)
+            doc.mockDefinitionFile(null)
+
+            val manager = createPackageManager()
+
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+        }
+
+        "return null for an undefined package file name" {
+            val doc = mockk<SpdxResolvedDocument>()
+            doc.mockPackage(pkgForVcs)
+            doc.mockDefinitionFile(File("definition.spdx"))
+
+            val manager = createPackageManager()
+
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+        }
+
+        "return null if no external reference with a scope is defined" {
+            val references = listOf(
+                SpdxExternalReference(SpdxExternalReference.Type.Purl, "pkg:conan/test.org/t1@0.7"),
+                SpdxExternalReference(SpdxExternalReference.Type.Purl, "pkg:conan/test.org/t2@0.7?foo=bar"),
+                SpdxExternalReference(SpdxExternalReference.Type.Cpe22Type, "pkg:conan/test.org/t3@0.7?scope=scope")
+            )
+            val pkg = mockk<SpdxPackage>()
+            every { pkg.externalRefs } returns references
+            every { pkg.packageFilename } returns "somePackageFile.tst"
+
+            val doc = mockk<SpdxResolvedDocument>()
+            doc.mockPackage(pkg)
+            doc.mockDefinitionFile(File("wrongReferences.spdx"))
+
+            val manager = createPackageManager()
+
+            manager.getPackageManagerDependency(pkgForVcs.spdxId, doc) shouldBe null
+        }
+    }
+
+    "extractScopeFromExternalReferences" should {
+        "extract the correct scope even if there are multiple URL parameters" {
+            val reference = SpdxExternalReference(
+                SpdxExternalReference.Type.Purl,
+                "pkg:conan/test.org@1.2.3?foo=bar&x=y&scope=requires&one=more"
+            )
+            val pkg = pkgForVcs.copy(externalRefs = listOf(reference))
+
+            pkg.extractScopeFromExternalReferences() shouldBe "requires"
+        }
+    }
 })
+
+/**
+ * Create a [SpdxDocumentFile] instance to be used by tests.
+ */
+private fun createPackageManager(): SpdxDocumentFile =
+    SpdxDocumentFile("test", File("."), AnalyzerConfiguration(), RepositoryConfiguration())
+
+/**
+ * Prepare this mock [SpdxResolvedDocument] to return [pkg] when queried for the test package.
+ */
+private fun SpdxResolvedDocument.mockPackage(pkg: SpdxPackage?) {
+    every { getSpdxPackageForId(pkgForVcs.spdxId, any()) } returns pkg
+}
+
+/**
+ * Prepare this mock [SpdxResolvedDocument] to return [file] when queried for the test definition file.
+ */
+private fun SpdxResolvedDocument.mockDefinitionFile(file: File?) {
+    every { getDefinitionFile(pkgForVcs.spdxId) } returns file
+}

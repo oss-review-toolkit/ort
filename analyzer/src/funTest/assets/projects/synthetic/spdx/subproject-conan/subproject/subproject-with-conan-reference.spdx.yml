@@ -18,4 +18,8 @@ packages:
     licenseDeclared: "NOASSERTION"
     name: "ConanProject"
     versionInfo: "1.0.0"
-    packageFileName: "./conanfile.py?scope=requires"
+    packageFileName: "./conanfile.py"
+    externalRefs:
+    - referenceCategory: "PACKAGE_MANAGER"
+      referenceLocator: "pkg:conan/example.org/sub-conan@0.1.0?scope=requires"
+      referenceType: "purl"
