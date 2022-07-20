@@ -38,12 +38,12 @@ class OsvFunTest : StringSpec({
     "retrievePackageFindings() returns vulnerabilities for the supported ecosystems" {
         val osv = createOsv()
         val packages = listOf(
-            "PyPI::Plone:3.2",
+            "Crate::sys-info:0.7.0",
+            "Go::github.com/nats-io/nats-server/v2:2.1.0",
             "Maven:com.jfinal:jfinal:1.4",
             "NPM::rebber:1.0.0",
-            "Go::github.com/nats-io/nats-server/v2:v2.1.0",
-            "Crate::sys-info:0.7.0",
-            "NuGet::Microsoft.ChakraCore:1.10.0"
+            "NuGet::Microsoft.ChakraCore:1.10.0",
+            "PyPI::Plone:3.2"
             // TODO: Add an identifier for a composer package after https://github.com/google/osv.dev/issues/497 got
             //       fixed. That issue causes queries for vulnerabilities of the "Packagist" ecosystem to always return
             //       an empty result.
