@@ -1,0 +1,24 @@
+{
+  "name": "testing-pnpm-package-a",
+  "version": "1.0.2",
+  "description": "",
+  "amdName": "packageA",
+  "source": "src/index.js",
+  "main": "dist/package-a.js",
+  "module": "dist/package-a.module.js",
+  "unpkg": "dist/package-a.umd.js",
+  "sideEffects": false,
+  "keywords": [],
+  "author": "Marcel Bochtler",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "5.0.1",
+    "is-even": "1.0.0"
+  },
+  "devDependencies": {
+    "require-uncached": "2.0.0"
+  },
+  "optionalDependencies": {
+    "sax": "1.2.4"
+  }
+}

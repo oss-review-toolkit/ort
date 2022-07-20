@@ -1,0 +1,17 @@
+{
+  "name": "testing-pnpm-package-b",
+  "version": "1.0.2",
+  "description": "",
+  "amdName": "packageA",
+  "source": "src/index.js",
+  "main": "dist/package-b.js",
+  "module": "dist/package-b.module.js",
+  "unpkg": "dist/package-b.umd.js",
+  "sideEffects": false,
+  "keywords": [],
+  "author": "Marcel Bochtler",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "4.0.0"
+  }
+}
