@@ -99,7 +99,7 @@ internal data class FossIdConfig(
         /** Name of the configuration property defining the naming convention for scans. */
         private const val NAMING_SCAN_PATTERN_PROPERTY = "namingScanPattern"
 
-        /** Name of the configuration property defining wether to keep failed scans. */
+        /** Name of the configuration property defining whether to keep failed scans. */
         private const val KEEP_FAILED_SCANS_PROPERTY = "keepFailedScans"
 
         /** Name of the configuration property controlling whether delta scans are to be created. */
