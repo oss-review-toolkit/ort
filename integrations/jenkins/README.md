@@ -26,7 +26,7 @@ Finally, click on *Save*.
 
 ## Running the Pipeline
 
-You are now good to go to perform an inital run of the pipeline by clicking on *Build Now*. This will not yet run ORT,
+You are now good to go to perform an initial run of the pipeline by clicking on *Build Now*. This will not yet run ORT,
 but just configure the pipeline parameters and its stages. Note that this first run is expected to "fail".
 
 After this run, there will be a new *Build with Parameters* entry in the job menu. Clicking on it will show the job
@@ -36,7 +36,7 @@ the `Dockerfile` are done, subsequent runs will be *much* faster. Also the "Run 
 longer, but again subsequent scans will be faster thanks to the use of stored scan results.
 
 Once the pipeline run completes you will see that the "Run ORT evaluator" stage is actually yellow and marked as
-"unstable". This is expected due to the use of a build-in rules resource as an example. The ORT results from the stages
+"unstable". This is expected due to the use of a built-in rules resource as an example. The ORT results from the stages
 and the report formats are published as build artifacts.
 
 Now the pipeline is properly configured / initialized and you can click again on *Build with Parameters* to run it
