@@ -68,7 +68,9 @@ class OsvFunTest : StringSpec({
             // Package with severity:
             "NPM::find-my-way:3.0.0",
             // Package without severity, but with severity inside the databaseSpecific JSON object:
-            "NPM::discord-markdown:2.3.0"
+            "NPM::discord-markdown:2.3.0",
+            // Package without severity:
+            "PyPI::donfig:0.2.0"
         ).map { identifierToPackage(it) }
 
         val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }

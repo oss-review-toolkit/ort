@@ -56,5 +56,28 @@
         "severity" : "HIGH"
       } ]
     } ]
+  } ],
+  "PyPI::donfig:0.2.0" : [ {
+    "advisor" : {
+      "name" : "OSV",
+      "capabilities" : [ "VULNERABILITIES" ]
+    },
+    "summary" : {
+      "start_time" : "2022-07-20T08:55:02.798653218Z",
+      "end_time" : "2022-07-20T08:55:03.677229008Z"
+    },
+    "defects" : [ ],
+    "vulnerabilities" : [ {
+      "id" : "PYSEC-2019-21",
+      "references" : [ {
+        "url" : "https://github.com/pytroll/donfig/issues/5",
+        "scoring_system" : null,
+        "severity" : null
+      }, {
+        "url" : "https://github.com/pytroll/donfig/commits/master",
+        "scoring_system" : null,
+        "severity" : null
+      } ]
+    } ]
   } ]
 }
