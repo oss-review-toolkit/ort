@@ -57,6 +57,7 @@ ENV \
     GO_VERSION=1.18.3 \
     HASKELL_STACK_VERSION=2.1.3 \
     NPM_VERSION=8.5.0 \
+    PNPM_VERSION=7.8.0 \
     PYTHON_PIPENV_VERSION=2018.11.26 \
     PYTHON_POETRY_VERSION=1.1.13 \
     PYTHON_VIRTUALENV_VERSION=20.0.26 \
@@ -128,7 +129,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
