@@ -139,6 +139,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         "Bower" -> null
         "Composer" -> Ecosystem.PACKAGIST
         "Crate" -> Ecosystem.CRATES_IO
+        "Gem" -> Ecosystem.RUBY_GEMS
         "Go" -> Ecosystem.GO
         "NPM" -> Ecosystem.NPM
         "NuGet" -> Ecosystem.NUGET
