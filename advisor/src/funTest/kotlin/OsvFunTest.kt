@@ -39,6 +39,7 @@ class OsvFunTest : StringSpec({
         val osv = createOsv()
         val packages = listOf(
             "Crate::sys-info:0.7.0",
+            "Gem::rack:2.0.4",
             "Go::github.com/nats-io/nats-server/v2:2.1.0",
             "Maven:com.jfinal:jfinal:1.4",
             "NPM::rebber:1.0.0",
