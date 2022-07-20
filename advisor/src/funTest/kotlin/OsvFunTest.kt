@@ -62,9 +62,13 @@ class OsvFunTest : StringSpec({
         val expectedResult = File("src/funTest/assets").resolve("retrieve-package-findings-expected-result.json")
             .readValue<Map<Identifier, List<AdvisorResult>>>()
         val osv = createOsv()
+        // The following packages have been chosen because they have only one vulnerability with the oldest possible
+        // modified date from the current OSV database, in order to hopefully minimize the flakiness.
         val packages = listOf(
-            "NPM::glob-parent:5.1.1",
-            "NPM::gun:0.7.0" // Package without severity, but with severity inside the databaseSpecific JSON object.
+            // Package with severity:
+            "NPM::find-my-way:3.0.0",
+            // Package without severity, but with severity inside the databaseSpecific JSON object:
+            "NPM::discord-markdown:2.3.0"
         ).map { identifierToPackage(it) }
 
         val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }

@@ -1,5 +1,5 @@
 {
-  "NPM::glob-parent:5.1.1" : [ {
+  "NPM::find-my-way:3.0.0" : [ {
     "advisor" : {
       "name" : "OSV",
       "capabilities" : [ "VULNERABILITIES" ]
@@ -10,82 +10,27 @@
     },
     "defects" : [ ],
     "vulnerabilities" : [ {
-      "id" : "GHSA-cj88-88mr-972w",
+      "id" : "GHSA-jgrh-5m3h-9c5f",
       "references" : [ {
-        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2021-35065",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/opensearch-project/OpenSearch-Dashboards/issues/1103",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent/pull/36",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent/pull/49",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent/releases/tag/v5.1.2",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent/releases/tag/v6.0.1",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://www.mend.io/vulnerability-database/CVE-2021-35065",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent",
-        "scoring_system" : null,
-        "severity" : "MODERATE"
-      } ]
-    }, {
-      "id" : "GHSA-ww39-953v-wcq6",
-      "references" : [ {
-        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-28469",
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
         "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
+        "severity" : "5.9"
       }, {
-        "url" : "https://github.com/gulpjs/glob-parent/pull/36",
+        "url" : "https://github.com/delvedor/find-my-way/commit/ab408354690e6b9cf3c4724befb3b3fa4bb90aac",
         "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
+        "severity" : "5.9"
       }, {
-        "url" : "https://github.com/gulpjs/glob-parent/blob/6ce8d11f2f1ed8e80a9526b1dc8cf3aa71f43474/index.js%23L9",
+        "url" : "https://snyk.io/vuln/SNYK-JS-FINDMYWAY-1038269",
         "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
+        "severity" : "5.9"
       }, {
-        "url" : "https://github.com/gulpjs/glob-parent/releases/tag/v5.1.2",
+        "url" : "https://www.npmjs.com/package/find-my-way",
         "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
-      }, {
-        "url" : "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSBOWERGITHUBES128-1059093",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
-      }, {
-        "url" : "https://snyk.io/vuln/SNYK-JAVA-ORGWEBJARSNPM-1059092",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
-      }, {
-        "url" : "https://snyk.io/vuln/SNYK-JS-GLOBPARENT-1016905",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
-      }, {
-        "url" : "https://www.oracle.com/security-alerts/cpujan2022.html",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
-      }, {
-        "url" : "https://github.com/gulpjs/glob-parent",
-        "scoring_system" : "CVSS:3.1",
-        "severity" : "7.5"
+        "severity" : "5.9"
       } ]
     } ]
   } ],
-  "NPM::gun:0.7.0" : [ {
+  "NPM::discord-markdown:2.3.0" : [ {
     "advisor" : {
       "name" : "OSV",
       "capabilities" : [ "VULNERABILITIES" ]
@@ -96,17 +41,17 @@
     },
     "defects" : [ ],
     "vulnerabilities" : [ {
-      "id" : "GHSA-886v-mm6p-4m66",
+      "id" : "GHSA-9r27-994c-4xch",
       "references" : [ {
-        "url" : "https://github.com/amark/gun/security/advisories/GHSA-886v-mm6p-4m66",
+        "url" : "https://github.com/brussell98/discord-markdown/security/advisories/GHSA-9r27-994c-4xch",
         "scoring_system" : null,
         "severity" : "HIGH"
       }, {
-        "url" : "https://github.com/advisories/GHSA-886v-mm6p-4m66",
+        "url" : "https://github.com/brussell98/discord-markdown/issues/13",
         "scoring_system" : null,
         "severity" : "HIGH"
       }, {
-        "url" : "https://github.com/amark/gun",
+        "url" : "https://github.com/brussell98/discord-markdown/commit/7ce2eb66520815dcf5e97ef2bc8a2d5979da66e7",
         "scoring_system" : null,
         "severity" : "HIGH"
       } ]
