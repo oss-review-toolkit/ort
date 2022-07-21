@@ -125,7 +125,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
         references += nexusIqReference
         url.takeIf { it != browseUrl }?.let { references += nexusIqReference.copy(url = it) }
 
-        return Vulnerability(reference, references)
+        return Vulnerability(id = reference, references = references)
     }
 
     /**

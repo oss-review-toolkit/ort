@@ -151,7 +151,7 @@ private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability
  */
 private fun Collection<Vulnerability>.mergeReferences(): Vulnerability {
     val references = flatMapTo(mutableSetOf()) { it.references }
-    return Vulnerability(first().id, references.toList())
+    return Vulnerability(id = first().id, references = references.toList())
 }
 
 /**

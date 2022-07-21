@@ -89,7 +89,7 @@ class VulnerableCodeTest : WordSpec({
             langResults[0].advisor shouldBe vulnerableCode.details
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
-                listOf(
+                references = listOf(
                     VulnerabilityReference(
                         URI("https://nvd.nist.gov/vuln/detail/CVE-2014-8242"),
                         scoringSystem = null,
@@ -115,7 +115,7 @@ class VulnerableCodeTest : WordSpec({
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2009-1382",
-                    listOf(
+                    references = listOf(
                         VulnerabilityReference(
                             URI("https://nvd.nist.gov/vuln/detail/CVE-2009-1382"),
                             scoringSystem = "cvssv2",
@@ -125,7 +125,7 @@ class VulnerableCodeTest : WordSpec({
                 ),
                 Vulnerability(
                     id = "CVE-2019-CoV19",
-                    listOf(
+                    references = listOf(
                         VulnerabilityReference(
                             URI("https://nvd.nist.gov/vuln/detail/CVE-2019-CoV19"),
                             scoringSystem = "cvssv3",

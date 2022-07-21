@@ -33,20 +33,20 @@ class AdvisorResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
     private val vulnerability11 = Vulnerability(
-        "CVE-11",
-        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score1", "5"))
+        id = "CVE-11",
+        references = listOf(VulnerabilityReference(URI("https://src1.example.org"), "score1", "5"))
     )
     private val vulnerability12 = Vulnerability(
-        "CVE-12",
-        listOf(VulnerabilityReference(URI("https://src2.example.org"), "score1", "7"))
+        id = "CVE-12",
+        references = listOf(VulnerabilityReference(URI("https://src2.example.org"), "score1", "7"))
     )
     private val vulnerability21 = Vulnerability(
-        "CVE-21",
-        listOf(VulnerabilityReference(URI("https://src3.example.org"), "score2", "medium"))
+        id = "CVE-21",
+        references = listOf(VulnerabilityReference(URI("https://src3.example.org"), "score2", "medium"))
     )
     private val vulnerability22 = Vulnerability(
-        "CVE-22",
-        listOf(VulnerabilityReference(URI("https://src1.example.org"), "score2", "low"))
+        id = "CVE-22",
+        references = listOf(VulnerabilityReference(URI("https://src1.example.org"), "score2", "low"))
     )
 
     private val vulnerabilities1 = listOf(vulnerability11, vulnerability12)
