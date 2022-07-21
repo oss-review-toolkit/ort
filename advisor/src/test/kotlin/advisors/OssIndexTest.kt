@@ -87,6 +87,8 @@ class OssIndexTest : WordSpec({
                     vulnerabilities should containExactlyInAnyOrder(
                         Vulnerability(
                             id = "CVE-2020-15250",
+                            summary = "[CVE-2020-15250] In JUnit4 from version 4.7 and before 4.13.1,...",
+                            description = "In JUnit4 from version 4.7 and before 4.13.1, the test...",
                             references = listOf(
                                 VulnerabilityReference(
                                     url = URI(
