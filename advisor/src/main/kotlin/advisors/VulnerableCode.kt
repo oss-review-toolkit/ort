@@ -102,7 +102,7 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
      * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability].
      */
     private fun VulnerableCodeService.Vulnerability.toModel(): Vulnerability =
-        Vulnerability(vulnerabilityId, references.flatMap { it.toModel() })
+        Vulnerability(id = vulnerabilityId, references = references.flatMap { it.toModel() })
 
     /**
      * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.

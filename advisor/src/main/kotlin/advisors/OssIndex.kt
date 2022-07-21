@@ -110,7 +110,7 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
 
         val references = mutableListOf(reference)
         externalReferences?.mapTo(references) { reference.copy(url = URI(it)) }
-        return Vulnerability(cve ?: displayName ?: title, references)
+        return Vulnerability(id = cve ?: displayName ?: title, references = references)
     }
 
     /**

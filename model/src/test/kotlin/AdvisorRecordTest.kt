@@ -204,7 +204,7 @@ class AdvisorRecordTest : WordSpec({
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createVulnerability("CVE-2021-2")
-            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references)
+            val mergedVulnerability = Vulnerability(id = vul1.id, references = vul1.references + vul2.references)
 
             val record = AdvisorRecord(
                 sortedMapOf(
@@ -224,7 +224,10 @@ class AdvisorRecordTest : WordSpec({
             val vul2 = createVulnerability("CVE-2021-1", otherSource, "cvssv2", "7")
             val vul3 = createVulnerability("CVE-2021-1")
             val vul4 = createVulnerability("CVE-2021-1", otherSource, "cvssv3", "5")
-            val mergedVulnerability = Vulnerability(vul1.id, vul1.references + vul2.references + vul4.references)
+            val mergedVulnerability = Vulnerability(
+                id = vul1.id,
+                references = vul1.references + vul2.references + vul4.references
+            )
 
             val record = AdvisorRecord(
                 sortedMapOf(
