@@ -11,6 +11,8 @@
     "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "GHSA-jgrh-5m3h-9c5f",
+      "summary" : "Web Cache Poisoning in find-my-way",
+      "description" : "This affects the package find-my-way before 2.2.5, from 3.0.0 and before 3.0.5. It accepts the Accept-Version' header by default, and if versioned routes are not being used, this could lead to a denial of service. Accept-Version can be used as an unkeyed header in a cache poisoning attack.",
       "references" : [ {
         "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
         "scoring_system" : "CVSS:3.1",
@@ -42,6 +44,8 @@
     "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "GHSA-9r27-994c-4xch",
+      "summary" : "discord-html not escaping HTML code blocks when lacking a language identifier",
+      "description" : "### Impact\nAny website using discord-markdown with user-generated markdown is vulnerable to having code injected into the page where the markdown is displayed.\n\n### Patches\nThis has been patched in version 2.3.1\n\n### Workarounds\nEscape the characters `&lt;&gt;&amp;` before sending plain code blocks to discord-markdown.\n\n### References\nhttps://github.com/brussell98/discord-markdown/issues/13",
       "references" : [ {
         "url" : "https://github.com/brussell98/discord-markdown/security/advisories/GHSA-9r27-994c-4xch",
         "scoring_system" : null,
@@ -69,6 +73,7 @@
     "defects" : [ ],
     "vulnerabilities" : [ {
       "id" : "PYSEC-2019-21",
+      "description" : "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the collect_yaml method in config_obj.py. It can execute arbitrary Python commands, resulting in command execution.",
       "references" : [ {
         "url" : "https://github.com/pytroll/donfig/issues/5",
         "scoring_system" : null,
