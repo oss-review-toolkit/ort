@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.log
 
@@ -148,19 +147,13 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         else -> null
     }
 
-    // Strip the version prefix for GoMod / GoDep packages.
-    //
-    // TODO: That prefix should not be assigned by the package manager in the first place, see
-    //       https://github.com/oss-review-toolkit/ort/issues/5532.
-    val version = pkg.id.version.withoutPrefix("v") ?: pkg.id.version
-
-    if (name.isNotBlank() && version.isNotBlank() && !ecosystem.isNullOrBlank()) {
+    if (name.isNotBlank() && pkg.id.version.isNotBlank() && !ecosystem.isNullOrBlank()) {
         return VulnerabilitiesForPackageRequest(
             pkg = org.ossreviewtoolkit.clients.osv.Package(
                 name = name,
                 ecosystem = ecosystem
             ),
-            version = version
+            version = pkg.id.version
         )
     }
 
