@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvApiClient
 import org.ossreviewtoolkit.clients.osv.OsvService
+import org.ossreviewtoolkit.clients.osv.Severity
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
 import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -46,7 +47,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.log
 
 import us.springett.cvss.Cvss
-import us.springett.cvss.CvssV2
 
 /**
  * An advice provider that obtains vulnerability information from OSV.dev https://osv.dev/.
@@ -168,15 +168,13 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
     // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
     // single severity representation.
     var (scoringSystem, severity) = this.severity.firstOrNull()?.let {
-        Cvss.fromVector(it.score)?.let { cvss ->
-            val scoringSystem = when {
-                // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
-                it.score.startsWith("CVSS:") -> it.score.substringBefore("/")
-                cvss is CvssV2 -> "CVSS:2.0"
-                else -> cvss.vector.substringBefore("/", "CVSS")
-            }
+        require(it.type == Severity.Type.CVSS_V3) {
+            "The severity mapping for type '${it.type}' is not implemented."
+        }
 
-            scoringSystem to "${cvss.calculateScore().baseScore}"
+        Cvss.fromVector(it.score)?.let { cvss ->
+            // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
+            it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
         } ?: run {
             log.debug { "Could not parse CVSS vector '${it.score}'." }
             null to it.score
