@@ -205,5 +205,10 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         }.getOrNull()
     }
 
-    return org.ossreviewtoolkit.model.Vulnerability(id = id, references = references)
+    return org.ossreviewtoolkit.model.Vulnerability(
+        id = id,
+        summary = summary,
+        description = details,
+        references = references
+    )
 }
