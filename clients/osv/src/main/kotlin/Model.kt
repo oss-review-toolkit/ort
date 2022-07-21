@@ -58,7 +58,14 @@ data class Vulnerability(
     val related: List<String> = emptyList(),
     val summary: String? = null,
     val details: String? = null,
+
+    /**
+     * The severity of this [Vulnerability]. This is a list in order to allow for providing multiple representations,
+     * using different scoring systems. See https://github.com/google/osv.dev/issues/545#issuecomment-1190880767 and
+     * https://ossf.github.io/osv-schema/#severity-field.
+     */
     val severity: List<Severity> = emptyList(),
+
     val affected: List<Affected> = emptyList(),
     val references: List<Reference> = emptyList(),
     @SerialName("database_specific")
