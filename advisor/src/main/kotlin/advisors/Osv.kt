@@ -163,7 +163,10 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 }
 
 private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulnerability {
-    // TODO: Clarify which entry is relevant and pick the right one accordingly.
+    // OSV uses a list in order to support multiple representations of the severity using different scoring systems.
+    // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
+    // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
+    // single severity representation.
     var (scoringSystem, severity) = this.severity.firstOrNull()?.let {
         Cvss.fromVector(it.score)?.let { cvss ->
             val scoringSystem = when {
