@@ -377,7 +377,7 @@ supported:
 
 If another package manager that is not part of the list above is used (or no package manager at all), the generic
 fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe
-[projects](./analyzer/src/funTest/assets/projects/synthetic/spdx/project-xyz-with-inline-packages.spdx.yml) or
+[projects](./analyzer/src/funTest/assets/projects/synthetic/spdx/inline-packages/project-xyz.spdx.yml) or
 [packages](./analyzer/src/funTest/assets/projects/synthetic/spdx/libs/curl/package.spdx.yml).
 
 <a name="downloader">&nbsp;</a>
