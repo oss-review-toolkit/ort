@@ -586,7 +586,7 @@
       "path" : ""
     },
     "paths" : [ 3, 4 ],
-    "levels" : [ 1 ],
+    "levels" : [ 1, 2 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 4 ],
     "is_excluded" : false
@@ -630,12 +630,53 @@
       "path" : ""
     },
     "paths" : [ 5, 6 ],
-    "levels" : [ 0 ],
+    "levels" : [ 0, 1 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 5 ],
     "is_excluded" : false
   }, {
     "_id" : 7,
+    "id" : "Maven:org.example.test:example-component:1.11",
+    "is_project" : false,
+    "definition_file_path" : "",
+    "purl" : "pkg:maven/org.example.test/example-component@1.11",
+    "declared_licenses" : [ 14 ],
+    "declared_licenses_processed" : {
+      "spdx_expression" : "Apache-2.0",
+      "mapped_licenses" : [ 3 ]
+    },
+    "description" : "A test component with no specific functionality",
+    "homepage_url" : "http://example.org/test/component/",
+    "binary_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/org/example/test/component/1.11/test-component-1.11.jar",
+      "hash" : {
+        "value" : "c446bf600f44b88af356c8a85eef4af822b06a4d",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "source_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/org/example/test/component/1.11/test-component-1.11-sources.jar",
+      "hash" : {
+        "value" : "f0880f7f0472bf120ada47beecadce4056fbd20a",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "vcs" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "paths" : [ ],
+    "is_excluded" : true
+  }, {
+    "_id" : 8,
     "id" : "Maven:org.hamcrest:hamcrest-core:1.3",
     "is_project" : false,
     "definition_file_path" : "",
@@ -679,6 +720,42 @@
     "scan_results" : [ 6 ],
     "is_excluded" : true,
     "scope_excludes" : [ 0 ]
+  }, {
+    "_id" : 9,
+    "id" : "Maven:org.example.test:component:1.11",
+    "is_project" : false,
+    "definition_file_path" : "",
+    "declared_licenses_processed" : { },
+    "binary_artifact" : {
+      "url" : "",
+      "hash" : {
+        "value" : "",
+        "algorithm" : ""
+      }
+    },
+    "source_artifact" : {
+      "url" : "",
+      "hash" : {
+        "value" : "",
+        "algorithm" : ""
+      }
+    },
+    "vcs" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "paths" : [ 8, 9 ],
+    "levels" : [ 0 ],
+    "scopes" : [ 0, 1 ],
+    "is_excluded" : false
   } ],
   "paths" : [ {
     "_id" : 0,
@@ -709,7 +786,7 @@
     "pkg" : 5,
     "project" : 0,
     "scope" : 1,
-    "path" : [ 6 ]
+    "path" : [ 9, 6 ]
   }, {
     "_id" : 5,
     "pkg" : 6,
@@ -721,13 +798,25 @@
     "pkg" : 6,
     "project" : 0,
     "scope" : 1,
-    "path" : [ ]
+    "path" : [ 9 ]
   }, {
     "_id" : 7,
-    "pkg" : 7,
+    "pkg" : 8,
     "project" : 0,
     "scope" : 1,
     "path" : [ 2 ]
+  }, {
+    "_id" : 8,
+    "pkg" : 9,
+    "project" : 0,
+    "scope" : 0,
+    "path" : [ ]
+  }, {
+    "_id" : 9,
+    "pkg" : 9,
+    "project" : 0,
+    "scope" : 1,
+    "path" : [ ]
   } ],
   "dependency_trees" : [ {
     "key" : 0,
@@ -748,36 +837,55 @@
           "linkage" : "DYNAMIC",
           "pkg" : 5
         } ]
+      }, {
+        "key" : 5,
+        "linkage" : "DYNAMIC",
+        "pkg" : 9,
+        "children" : [ {
+          "key" : 6,
+          "linkage" : "DYNAMIC",
+          "pkg" : 6,
+          "children" : [ {
+            "key" : 7,
+            "linkage" : "DYNAMIC",
+            "pkg" : 5
+          } ]
+        } ]
       } ]
     }, {
-      "key" : 5,
+      "key" : 8,
       "scope" : 1,
       "scope_excludes" : [ 0 ],
       "children" : [ {
-        "key" : 6,
+        "key" : 9,
         "linkage" : "DYNAMIC",
         "pkg" : 2,
         "children" : [ {
-          "key" : 7,
+          "key" : 10,
           "linkage" : "DYNAMIC",
           "pkg" : 3
         }, {
-          "key" : 8,
+          "key" : 11,
           "linkage" : "DYNAMIC",
           "pkg" : 4
         }, {
-          "key" : 9,
+          "key" : 12,
           "linkage" : "DYNAMIC",
-          "pkg" : 7
+          "pkg" : 8
         } ]
       }, {
-        "key" : 10,
+        "key" : 13,
         "linkage" : "DYNAMIC",
-        "pkg" : 6,
+        "pkg" : 9,
         "children" : [ {
-          "key" : 11,
+          "key" : 14,
           "linkage" : "DYNAMIC",
-          "pkg" : 5
+          "pkg" : 6,
+          "children" : [ {
+            "key" : 15,
+            "linkage" : "DYNAMIC",
+            "pkg" : 5
+          } ]
         } ]
       } ]
     } ]
@@ -810,7 +918,7 @@
   }, {
     "_id" : 2,
     "rule" : "rule 3",
-    "pkg" : 7,
+    "pkg" : 8,
     "license" : 16,
     "license_source" : "CONCLUDED",
     "severity" : "WARNING",
@@ -855,15 +963,15 @@
       "included_projects" : 1,
       "excluded_projects" : 1,
       "included_packages" : 2,
-      "excludes_packages" : 4,
-      "total_tree_depth" : 2,
-      "included_tree_depth" : 2,
+      "excludes_packages" : 5,
+      "total_tree_depth" : 3,
+      "included_tree_depth" : 3,
       "included_scopes" : [ "compile" ],
       "excluded_scopes" : [ "testCompile" ]
     },
     "licenses" : {
       "declared" : {
-        "Apache-2.0" : 2,
+        "Apache-2.0" : 3,
         "BSD-3-Clause" : 1,
         "CC-BY-NC-3.0" : 1,
         "EPL-1.0" : 2,

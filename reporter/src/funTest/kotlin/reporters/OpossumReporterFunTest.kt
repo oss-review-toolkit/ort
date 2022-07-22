@@ -50,7 +50,7 @@ class OpossumReporterFunTest : WordSpec({
             with(JsonMapper().readTree(reportStr)) {
                 isObject shouldBe true
                 get("metadata").get("projectId").asText() shouldBe "0"
-                get("attributionBreakpoints").size() shouldBe 5
+                get("attributionBreakpoints").size() shouldBe 8
                 get("externalAttributionSources").size() shouldBe 6
                 get("resourcesToAttributions").fieldNames().asSequence() shouldContain
                         "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/" +
