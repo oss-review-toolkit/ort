@@ -23,14 +23,13 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import kotlinx.serialization.encodeToString
 
 import org.ossreviewtoolkit.clients.osv.OsvApiClient
 import org.ossreviewtoolkit.clients.osv.OsvService
 import org.ossreviewtoolkit.clients.osv.Package
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0f"
@@ -111,5 +110,3 @@ class OsvServiceFunTest : StringSpec({
         }
     }
 })
-
-private fun getAssetAsString(path: String): String = File("src/funTest/assets").resolve(path).readText()

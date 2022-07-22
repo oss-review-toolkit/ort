@@ -46,6 +46,11 @@ private val ENV_TOOL_REGEX = Regex("(\\s{4}tool_versions:)\\n(?:\\s{6}.+)+")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 
+/**
+ * Return the asset file located under [path] relative to the 'assets' directory as text.
+ */
+fun getAssetAsString(path: String): String = File("src/funTest/assets").resolve(path).readText()
+
 fun patchExpectedResult(
     result: File,
     custom: Map<String, String> = emptyMap(),
