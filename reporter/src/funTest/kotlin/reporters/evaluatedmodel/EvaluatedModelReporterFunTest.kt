@@ -50,7 +50,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
             generateReport(ortResult, options) shouldBe expectedResult
         }
 
-        "support an option to deduplicate the dependency tree" {
+        "create the expected YAML output with dependency tree de-duplication enabled" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
             val options = mapOf(
