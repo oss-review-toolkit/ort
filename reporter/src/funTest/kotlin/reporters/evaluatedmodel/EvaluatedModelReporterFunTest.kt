@@ -24,31 +24,28 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class EvaluatedModelReporterFunTest : WordSpec({
     "EvaluatedModelReporter" should {
         "create the expected JSON output" {
-            val expectedResult = File(
-                "src/funTest/assets/evaluated-model-reporter-test-expected-output.json"
-            ).readText()
+            val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.json")
+
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
             generateReport(ortResult).normalizeLineBreaks() shouldBe expectedResult
         }
 
         "create the expected YAML output" {
-            val expectedResult = File(
-                "src/funTest/assets/evaluated-model-reporter-test-expected-output.yml"
-            ).readText()
+            val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.yml")
+
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
             val options = mapOf(EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension)
@@ -56,9 +53,8 @@ class EvaluatedModelReporterFunTest : WordSpec({
         }
 
         "support an option to deduplicate the dependency tree" {
-            val expectedResult = File(
-                "src/funTest/assets/evaluated-model-reporter-test-deduplicate-expected-output.yml"
-            ).readText()
+            val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
+
             val ortResult = readOrtResult("src/funTest/assets/evaluated-model-reporter-test-input.yml")
 
             val options = mapOf(
