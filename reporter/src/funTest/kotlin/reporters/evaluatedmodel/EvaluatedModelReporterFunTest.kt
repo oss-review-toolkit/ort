@@ -37,7 +37,6 @@ class EvaluatedModelReporterFunTest : WordSpec({
     "EvaluatedModelReporter" should {
         "create the expected JSON output" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.json")
-
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
             generateReport(ortResult) shouldBe expectedResult
@@ -45,22 +44,20 @@ class EvaluatedModelReporterFunTest : WordSpec({
 
         "create the expected YAML output" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-expected-output.yml")
-
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
-
             val options = mapOf(EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension)
+
             generateReport(ortResult, options) shouldBe expectedResult
         }
 
         "support an option to deduplicate the dependency tree" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
-
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
-
             val options = mapOf(
                 EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
                 EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "True"
             )
+
             generateReport(ortResult, options) shouldBe expectedResult
         }
     }
