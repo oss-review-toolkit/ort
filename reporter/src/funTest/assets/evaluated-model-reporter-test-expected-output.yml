@@ -845,6 +845,8 @@ vulnerabilities:
 - _id: 0
   id: "VULCOID-VULNERABILITY_ID"
   pkg: 2
+  summary: "summary text"
+  description: "description text"
   references:
   - url: "https://registry.vulnerability-url/"
     scoring_system: "SCORING_SYSTEM_NAME"

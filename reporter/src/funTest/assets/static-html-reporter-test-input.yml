@@ -593,6 +593,8 @@ advisor:
       Ant:junit:junit:4.12:
       - vulnerabilities:
         - id: "VULCOID-VULNERABILITY_ID"
+          summary: "summary text"
+          description: "description text"
           references:
           - url: "https://registry.vulnerability-url/"
             scoring_system: "SCORING_SYSTEM_NAME"
