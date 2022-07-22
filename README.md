@@ -773,7 +773,7 @@ via the green "Play" icon from the gutter as described above.
 All contributions are welcome. If you are interested in contributing, please read our
 [contributing guide](https://github.com/oss-review-toolkit/.github/blob/main/CONTRIBUTING.md), and to get quick answers
 to any of your questions we recommend you
-[join our Slack community](https://join.slack.com/t/ort-talk/shared_invite/enQtMzk3MDU5Njk0Njc1LThiNmJmMjc5YWUxZTU4OGI5NmY3YTFlZWM5YTliZmY5ODc0MGMyOWIwYmRiZWFmNGMzOWY2NzVhYTI0NTJkNmY).
+[join our Slack community][2].
 
 # License
 
