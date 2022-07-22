@@ -40,7 +40,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
 
             val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
-            generateReport(ortResult).normalizeLineBreaks() shouldBe expectedResult
+            generateReport(ortResult) shouldBe expectedResult
         }
 
         "create the expected YAML output" {
@@ -61,7 +61,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
                 EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
                 EvaluatedModelReporter.OPTION_DEDUPLICATE_DEPENDENCY_TREE to "True"
             )
-            generateReport(ortResult, options).normalizeLineBreaks() shouldBe expectedResult
+            generateReport(ortResult, options) shouldBe expectedResult
         }
     }
 })
@@ -75,5 +75,5 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
 
     val outputDir = createTestTempDir()
 
-    return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText()
+    return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText().normalizeLineBreaks()
 }
