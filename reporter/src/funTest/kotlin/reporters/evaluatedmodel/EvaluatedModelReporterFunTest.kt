@@ -55,7 +55,7 @@ class EvaluatedModelReporterFunTest : WordSpec({
         "support an option to deduplicate the dependency tree" {
             val expectedResult = getAssetAsString("evaluated-model-reporter-test-deduplicate-expected-output.yml")
 
-            val ortResult = readOrtResult("src/funTest/assets/evaluated-model-reporter-test-input.yml")
+            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
 
             val options = mapOf(
                 EvaluatedModelReporter.OPTION_OUTPUT_FILE_FORMATS to FileFormat.YAML.fileExtension,
