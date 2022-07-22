@@ -101,6 +101,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
+/**
+ * Return the path to this file or a corresponding message if the file is unknown.
+ */
+private val File?.safePath: String
+    get() = this?.invariantSeparatorsPath ?: "<unknown file>"
+
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
@@ -446,16 +452,15 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             if (resultForPomFile != null) {
                 log.warn {
-                    "There was an error building project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}'. " +
+                    "There was an error building project '${e.projectId}' at '${e.pomFile.safePath}'. " +
                             "Still continuing with the incompletely built project '${resultForPomFile.projectId}' at " +
-                            "'${resultForPomFile.pomFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+                            "'${resultForPomFile.pomFile.safePath}': ${e.collectMessages()}"
                 }
 
                 resultForPomFile
             } else {
                 log.error {
-                    "Failed to build project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}': " +
-                            e.collectMessages()
+                    "Failed to build project '${e.projectId}' at '${e.pomFile.safePath}': ${e.collectMessages()}"
                 }
 
                 throw e
