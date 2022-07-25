@@ -165,7 +165,10 @@ class Bundler(
         workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
         scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<OrtIssue>
     ) {
-        log.debug { "Parsing scope: $groupName\nscope top level deps list=$dependencyList" }
+        log.debug {
+            "Parsing scope '$groupName' with top-level dependencies $dependencyList for project " +
+                    "'${projectId.toCoordinates()}' in '$workingDir'."
+        }
 
         val scopeDependencies = mutableSetOf<PackageReference>()
 
@@ -211,7 +214,8 @@ class Bundler(
 
             issues += createAndLogIssue(
                 source = managerName,
-                message = "Failed to parse dependency '$gemName': ${it.collectMessages()}"
+                message = "Failed to parse dependency '$gemName' of project '${projectId.toCoordinates()}' in " +
+                        "'$workingDir': ${it.collectMessages()}"
             )
         }
     }
