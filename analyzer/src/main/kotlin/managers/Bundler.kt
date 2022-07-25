@@ -148,7 +148,7 @@ class Bundler(
             val projectId = Identifier(managerName, "", name, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
-            for ((groupName, dependencyList) in groupedDeps) {
+            groupedDeps.forEach { (groupName, dependencyList) ->
                 parseScope(workingDir, projectId, groupName, dependencyList, scopes, gemSpecs, issues)
             }
 
