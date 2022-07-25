@@ -128,7 +128,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
-    npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
+    npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
