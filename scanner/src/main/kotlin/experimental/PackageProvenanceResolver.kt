@@ -134,16 +134,31 @@ class DefaultPackageProvenanceResolver(
             }
         }
 
-        val request = Request.Builder().head().url(pkg.sourceArtifact.url).build()
-        OkHttpClientHelper.execute(request).use { response ->
-            if (response.code == HttpURLConnection.HTTP_OK) {
-                val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
-                storage.putProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
-                return artifactProvenance
-            }
+        val responseCode = requestSourceArtifact(pkg, "HEAD").takeUnless { it == HttpURLConnection.HTTP_BAD_METHOD }
+            ?: requestSourceArtifact(pkg, "GET")
 
-            throw IOException("Could not verify existence of source artifact at ${pkg.sourceArtifact.url}.")
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            val artifactProvenance = ArtifactProvenance(pkg.sourceArtifact)
+            storage.putProvenance(pkg.id, pkg.sourceArtifact, ResolvedArtifactProvenance(artifactProvenance))
+            return artifactProvenance
         }
+
+        throw IOException(
+            "Could not verify existence of source artifact at ${pkg.sourceArtifact.url}. " +
+                    "HTTP request got response $responseCode."
+        )
+    }
+
+    /**
+     * Execute an HTTP request with the given [method] for the source artifact URL of the given [package][pkg].
+     * Return the response status code, from which the existence of the artifact can be concluded.
+     */
+    private fun requestSourceArtifact(pkg: Package, method: String): Int {
+        log.debug { "Request for source artifact: $method ${pkg.sourceArtifact.url}." }
+
+        val request = Request.Builder().method(method, null).url(pkg.sourceArtifact.url).build()
+
+        return OkHttpClientHelper.execute(request).use { it.code }
     }
 
     private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {
