@@ -96,6 +96,11 @@ enum class VcsHost(
             return "https://dev.azure.com/$userOrOrg/$team/_apis/git/repositories/$project/items" +
                     "?scopePath=/${vcsInfo.path}"
         }
+
+        /**
+         * Return whether [url] is a VCS URI for Azure DevOps. URIs referencing an artifacts feed are excluded.
+         */
+        override fun isApplicable(url: URI): Boolean = super.isApplicable(url) && url.host != "pkgs.$hostname"
     },
 
     /**

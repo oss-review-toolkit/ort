@@ -82,6 +82,13 @@ class VcsHostTest : WordSpec({
             AZURE_DEVOPS.toRawDownloadUrl(projectUrl) shouldBe "https://dev.azure.com/oss-review-toolkit/kotlin-devs/" +
                     "_apis/git/repositories/ort/items?scopePath=/README.md"
         }
+
+        "not be applicable to a URL pointing to a package registry" {
+            val url = "https://pkgs.dev.azure.com/project/0123456789/_packaging/some-npm-registry/" +
+                    "npm/registry/apkg/-/apkg-1.2.3.tgz"
+
+            VcsHost.fromUrl(url) should beNull()
+        }
     }
 
     "The Bitbucket implementation" should {
