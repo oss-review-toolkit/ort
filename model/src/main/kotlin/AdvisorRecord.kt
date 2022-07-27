@@ -65,12 +65,14 @@ data class AdvisorRecord(
          * encountered problems. Therefore, support an optional filter for a [capability] of the advisor that produced
          * a result.
          */
-        fun resultsWithIssues(minSeverity: Severity = Severity.HINT, capability: AdvisorCapability? = null):
-                    AdvisorResultFilter =
-            { result ->
-                (capability == null || capability in result.advisor.capabilities) &&
-                        result.summary.issues.any { it.severity >= minSeverity }
+        fun resultsWithIssues(
+            minSeverity: Severity = Severity.HINT,
+            capability: AdvisorCapability? = null
+        ): AdvisorResultFilter = { result ->
+            (capability == null || capability in result.advisor.capabilities) && result.summary.issues.any {
+                it.severity >= minSeverity
             }
+        }
     }
 
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
