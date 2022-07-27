@@ -26,8 +26,6 @@ import java.net.Proxy
 import java.net.ProxySelector
 import java.util.concurrent.ConcurrentHashMap
 
-import org.apache.logging.log4j.Level
-
 /**
  * A caching authenticator that chains other authenticators. For proxy authentication, the [OrtProxySelector] is
  * required to also be installed.
@@ -41,7 +39,6 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
         fun install(): OrtAuthenticator {
             val current = getDefault()
             return if (current is OrtAuthenticator) {
-                logOnce(Level.INFO) { "Authenticator is already installed." }
                 current
             } else {
                 OrtAuthenticator(current).also {
