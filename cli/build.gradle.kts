@@ -45,6 +45,11 @@ graal {
     option("--no-fallback")
 
     // Work-around for:
+    // "WARNING: Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports"
+    option("-J--add-modules")
+    option("-JALL-SYSTEM")
+
+    // Work-around for:
     // "Error: Classes that should be initialized at run time got initialized during image building"
     option("--initialize-at-build-time=org.jruby.util.RubyFileTypeDetector")
 
