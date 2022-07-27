@@ -212,7 +212,7 @@ abstract class PathScanner(
         val missingArchives = mutableSetOf<Pair<Package, KnownProvenance>>()
 
         scanResults.forEach { (pkg, results) ->
-            results.forEach { (provenance, _, _) ->
+            results.forEach { (provenance, _, _, _) ->
                 if (provenance is KnownProvenance && !archiver.hasArchive(provenance)) {
                     missingArchives += Pair(pkg, provenance)
                 }
