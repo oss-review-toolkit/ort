@@ -225,7 +225,6 @@ open class Npm(
         analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_LEGACY_PEER_DEPS)
             .toBoolean()
 
-    private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
