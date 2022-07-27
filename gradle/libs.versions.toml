@@ -28,7 +28,7 @@ exposed = "0.38.2"
 flexmark = "0.64.0"
 freemarker = "2.3.31"
 # @keep this version which is only being used via get().
-graal = "22.1.0"
+graal = "22.2.0"
 greenmail = "1.6.9"
 hikari = "5.0.1"
 hoplite = "2.4.0"
