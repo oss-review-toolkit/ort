@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
@@ -65,8 +65,8 @@ abstract class Rule(
      */
     private fun matches() = matchers.all { matcher ->
         matcher.matches().also { matches ->
-            log.info { "\t${matcher.description} == $matches" }
-            if (!matches) log.info { "\tRule skipped." }
+            logger.info { "\t${matcher.description} == $matches" }
+            if (!matches) logger.info { "\tRule skipped." }
         }
     }
 
@@ -75,13 +75,13 @@ abstract class Rule(
      * rule are added to the [ruleSet]. To add custom behavior if the rule matches override [runInternal].
      */
     fun evaluate() {
-        log.info { description }
+        logger.info { description }
 
         if (matches()) {
             ruleSet.violations += violations
 
             if (violations.isNotEmpty()) {
-                log.info {
+                logger.info {
                     "\tFound violations:\n\t\t${violations.joinToString("\n\t\t") { "${it.severity}: ${it.message}" }}"
                 }
             }

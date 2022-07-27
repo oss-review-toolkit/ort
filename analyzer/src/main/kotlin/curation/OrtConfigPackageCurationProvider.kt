@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
@@ -60,7 +60,7 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
             runCatching {
                 yamlMapper.readValue<List<PackageCuration>>(file).filter { it.isApplicable(pkgId) }
             }.onFailure {
-                log.warn { "Failed parsing package curation from '${file.absolutePath}'." }
+                logger.warn { "Failed parsing package curation from '${file.absolutePath}'." }
             }.getOrThrow()
         } else {
             emptyList()

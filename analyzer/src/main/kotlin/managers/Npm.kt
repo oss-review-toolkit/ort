@@ -75,7 +75,7 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
@@ -299,7 +299,7 @@ open class Npm(
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
         val nodeModulesDir = rootDirectory.resolve("node_modules")
 
-        log.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
+        logger.info { "Searching for 'package.json' files in '$nodeModulesDir'..." }
 
         val nodeModulesFiles = nodeModulesDir.walk().filter {
             it.name == "package.json" && isValidNodeModulesDirectory(nodeModulesDir, nodeModulesDirForPackageJson(it))
@@ -307,10 +307,10 @@ open class Npm(
 
         return runBlocking(Dispatchers.IO) {
             nodeModulesFiles.mapTo(mutableListOf()) { file ->
-                this@Npm.log.debug { "Starting to parse '$file'..." }
+                this@Npm.logger.debug { "Starting to parse '$file'..." }
                 async {
                     parsePackage(rootDirectory, file).also { (id, _) ->
-                        this@Npm.log.debug { "Finished parsing '$file' to '$id'." }
+                        this@Npm.logger.debug { "Finished parsing '$file' to '$id'." }
                     }
                 }
             }.awaitAll().toMap()
@@ -351,7 +351,7 @@ open class Npm(
     internal fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
         val packageDir = packageFile.parentFile
 
-        log.debug { "Found a 'package.json' file in '$packageDir'." }
+        logger.debug { "Found a 'package.json' file in '$packageDir'." }
 
         // The "name" and "version" are the only required fields, see:
         // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
@@ -382,11 +382,11 @@ open class Npm(
         if (packageDir.isSymbolicLink()) {
             val realPackageDir = packageDir.realFile()
 
-            log.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
+            logger.debug { "The package directory '$packageDir' links to '$realPackageDir'." }
 
             // Yarn workspaces refer to project dependencies from the same workspace via symbolic links. Use that
             // as the trigger to get VcsInfo locally instead of querying the NPM registry.
-            log.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
+            logger.debug { "Resolving the package info for '${id.toCoordinates()}' locally from '$realPackageDir'." }
 
             val vcsFromDirectory = VersionControlSystem.forDirectory(realPackageDir)?.getInfo().orEmpty()
             vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
@@ -526,7 +526,7 @@ open class Npm(
         if (cycleStartIndex >= 0) {
             val cycle = (ancestorModuleIds.subList(cycleStartIndex, ancestorModuleIds.size) + moduleId)
                 .joinToString(" -> ")
-            log.debug { "Not adding dependency '$moduleId' to avoid cycle: $cycle." }
+            logger.debug { "Not adding dependency '$moduleId' to avoid cycle: $cycle." }
             return null
         }
 
@@ -548,7 +548,7 @@ open class Npm(
                 return@forEach
             }
 
-            log.debug { "Could not find module dir for '$dependencyName' within: '${pathToRoot.joinToString()}'." }
+            logger.debug { "Could not find module dir for '$dependencyName' within: '${pathToRoot.joinToString()}'." }
             getPackageReferenceForMissingModule(dependencyName, pathToRoot.first())
         }
 
@@ -572,19 +572,19 @@ open class Npm(
     private fun parsePackageJson(moduleDir: File, scopes: Set<String>): RawModuleInfo =
         rawModuleInfoCache.getOrPut(moduleDir to scopes) {
             val packageJsonFile = moduleDir.resolve("package.json")
-            log.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
+            logger.debug { "Parsing module info from '${packageJsonFile.absolutePath}'." }
             val json = packageJsonFile.readTree()
 
             val name = json["name"].textValueOrEmpty()
             if (name.isBlank()) {
-                log.warn {
+                logger.warn {
                     "The '$packageJsonFile' does not set a name, which is only allowed for unpublished packages."
                 }
             }
 
             val version = json["version"].textValueOrEmpty()
             if (version.isBlank()) {
-                log.warn {
+                logger.warn {
                     "The '$packageJsonFile' does not set a version, which is only allowed for unpublished packages."
                 }
             }
@@ -614,19 +614,19 @@ open class Npm(
     }
 
     private fun parseProject(packageJson: File): Project {
-        log.debug { "Parsing project info from '$packageJson'." }
+        logger.debug { "Parsing project info from '$packageJson'." }
 
         val json = jsonMapper.readTree(packageJson)
 
         val rawName = json["name"].textValueOrEmpty()
         val (namespace, name) = splitNamespaceAndName(rawName)
         if (name.isBlank()) {
-            log.warn { "'$packageJson' does not define a name." }
+            logger.warn { "'$packageJson' does not define a name." }
         }
 
         val version = json["version"].textValueOrEmpty()
         if (version.isBlank()) {
-            log.warn { "'$packageJson' does not define a version." }
+            logger.warn { "'$packageJson' does not define a version." }
         }
 
         val declaredLicenses = parseLicenses(json)

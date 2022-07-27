@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.
@@ -86,7 +86,7 @@ class RuleSet(
             visitedPackages: MutableSet<DependencyNode>
         ) {
             if (node in visitedPackages) {
-                log.debug { "Skipping rule $name for already visited dependency ${node.id.toCoordinates()}." }
+                logger.debug { "Skipping rule $name for already visited dependency ${node.id.toCoordinates()}." }
                 return
             }
 
@@ -96,7 +96,7 @@ class RuleSet(
                 ?: ortResult.getProject(node.id)?.toPackage()?.toCuratedPackage()
 
             if (curatedPackage == null) {
-                log.warn { "Could not find package for dependency ${node.id.toCoordinates()}, skipping rule $name." }
+                logger.warn { "Could not find package for dependency ${node.id.toCoordinates()}, skipping rule $name." }
             } else {
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.pkg.id)
 

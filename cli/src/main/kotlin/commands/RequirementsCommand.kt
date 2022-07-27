@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
@@ -54,13 +54,13 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                 var category = "Other tool"
                 val instance = when {
                     kotlinObject != null -> {
-                        log.debug { "$it is a Kotlin object." }
+                        logger.debug { "$it is a Kotlin object." }
                         kotlinObject
                     }
 
                     PackageManager::class.java.isAssignableFrom(it) -> {
                         category = "PackageManager"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
                             File::class.java,
@@ -76,7 +76,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
 
                     Scanner::class.java.isAssignableFrom(it) -> {
                         category = "Scanner"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
                             ScannerConfiguration::class.java,
@@ -86,12 +86,12 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
                         category = "VersionControlSystem"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor().newInstance()
                     }
 
                     else -> {
-                        log.debug { "Trying to instantiate $it without any arguments." }
+                        logger.debug { "Trying to instantiate $it without any arguments." }
                         it.getDeclaredConstructor().newInstance()
                     }
                 }
@@ -100,7 +100,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                     allTools.getOrPut(category) { mutableListOf() } += instance
                 }
             }.onFailure { e ->
-                log.error { "There was an error instantiating $it: $e." }
+                logger.error { "There was an error instantiating $it: $e." }
                 throw ProgramResult(1)
             }
         }

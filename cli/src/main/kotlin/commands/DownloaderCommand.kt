@@ -71,7 +71,7 @@ import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
@@ -188,7 +188,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         }
 
         if (failureMessages.isNotEmpty()) {
-            log.error {
+            logger.error {
                 "The following failure(s) occurred:\n" + failureMessages.joinToString("\n--\n")
             }
 
@@ -206,7 +206,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
         val analyzerResult = ortResult.analyzer?.result
 
         if (analyzerResult == null) {
-            log.warn {
+            logger.warn {
                 "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
                         "not contain an analyzer result. Nothing will be downloaded."
             }
@@ -224,7 +224,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
         }
 
-        log.info { "Found ${packages.size} package(s)." }
+        logger.info { "Found ${packages.size} package(s)." }
 
         packageIds?.also {
             val originalCount = packages.size
@@ -234,7 +234,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                log.info { "Removed $diffCount package(s) which do not match the specified id pattern." }
+                logger.info { "Removed $diffCount package(s) which do not match the specified id pattern." }
             }
         }
 
@@ -259,11 +259,11 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                log.info { "Removed $diffCount package(s) which do not match the specified license classification." }
+                logger.info { "Removed $diffCount package(s) which do not match the specified license classification." }
             }
         }
 
-        log.info { "Downloading ${packages.size} package(s)." }
+        logger.info { "Downloading ${packages.size} package(s)." }
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
@@ -274,7 +274,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 if (archiveMode == ArchiveMode.ENTITY) {
                     val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
 
-                    log.info { "Archiving directory '$dir' to '$zipFile'." }
+                    logger.info { "Archiving directory '$dir' to '$zipFile'." }
                     val result = runCatching {
                         dir.packZip(
                             zipFile,
@@ -283,7 +283,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                     }
 
                     result.exceptionOrNull()?.let {
-                        log.error { "Could not archive '$dir': ${it.collectMessages()}" }
+                        logger.error { "Could not archive '$dir': ${it.collectMessages()}" }
                     }
 
                     dir.safeDeleteRecursively(baseDirectory = outputDir)
@@ -295,18 +295,18 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                         e.collectMessages()
                 failureMessages += failureMessage
 
-                log.error { failureMessage }
+                logger.error { failureMessage }
             }
         }
 
         if (archiveMode == ArchiveMode.BUNDLE) {
             val zipFile = outputDir.resolve("archive.zip")
 
-            log.info { "Archiving directory '$outputDir' to '$zipFile'." }
+            logger.info { "Archiving directory '$outputDir' to '$zipFile'." }
             val result = runCatching { outputDir.packZip(zipFile) }
 
             result.exceptionOrNull()?.let {
-                log.error { "Could not archive '$outputDir': ${it.collectMessages()}" }
+                logger.error { "Could not archive '$outputDir': ${it.collectMessages()}" }
             }
 
             packageDownloadDirs.forEach { (_, dir) ->

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
@@ -117,7 +117,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         )
 
         if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {
-            log.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
+            logger.info { "Configuring Mercurial to do sparse checkout of path '${vcs.path}'." }
 
             // Mercurial does not accept absolute paths.
             val globPatterns = getSparseCheckoutGlobPatterns() + "${vcs.path}/**"
@@ -142,7 +142,7 @@ class Mercurial : VersionControlSystem(), CommandLineTool {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessages()}" }
+            logger.warn { "Failed to update $type working tree to revision '$revision': ${it.collectMessages()}" }
         }.map {
             revision
         }

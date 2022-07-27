@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
@@ -65,7 +65,7 @@ class FileArchiverFileStorage(
 
             zipFile
         } catch (e: IOException) {
-            log.error { "Could not unarchive from $archivePath: ${e.collectMessages()}" }
+            logger.error { "Could not unarchive from $archivePath: ${e.collectMessages()}" }
 
             null
         }

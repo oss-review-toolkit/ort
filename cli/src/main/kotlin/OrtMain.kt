@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
@@ -173,7 +173,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     override fun run() {
         Configurator.setRootLevel(logLevel)
 
-        log.debug { "Used command line arguments: ${currentContext.originalArgv}" }
+        logger.debug { "Used command line arguments: ${currentContext.originalArgv}" }
 
         // Make the parameter globally available.
         printStackTrace = stacktrace

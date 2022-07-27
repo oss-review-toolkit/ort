@@ -23,7 +23,7 @@ package test.other
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A test class simulating an external base class for ORT extensions. This is used to check whether extensions are
@@ -38,7 +38,7 @@ abstract class OrtLogTestBaseExtension : CommandLineTool
  */
 class OrtLogTestExtension : OrtLogTestBaseExtension() {
     override fun command(workingDir: File?): String {
-        log.info { "Test of the logger." }
+        logger.info { "Test of the logger." }
         return "success"
     }
 }

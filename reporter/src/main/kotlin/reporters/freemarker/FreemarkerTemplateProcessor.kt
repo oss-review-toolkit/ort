@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
@@ -87,7 +87,7 @@ class FreemarkerTemplateProcessor(
         }
 
         if (projectTypesAsPackages.isNotEmpty()) {
-            log.info {
+            logger.info {
                 "Handling ${projectTypesAsPackages.size} projects of types $projectTypesAsPackages as packages."
             }
         }
@@ -160,7 +160,7 @@ class FreemarkerTemplateProcessor(
         templateIds.forEach { id ->
             val outputFile = outputDir.resolve("$filePrefix$id$fileExtensionWithDot")
 
-            log.info { "Generating output file '$outputFile' using template id '$id'." }
+            logger.info { "Generating output file '$outputFile' using template id '$id'." }
 
             val template = freemarkerConfig.getTemplate("$id.ftl")
             outputFile.writer().use { template.process(dataModel, it) }
@@ -171,7 +171,7 @@ class FreemarkerTemplateProcessor(
         templateFiles.forEach { file ->
             val outputFile = outputDir.resolve("$filePrefix${file.nameWithoutExtension}$fileExtensionWithDot")
 
-            log.info { "Generating output file '$outputFile' using template file '${file.absolutePath}'." }
+            logger.info { "Generating output file '$outputFile' using template file '${file.absolutePath}'." }
 
             val template = freemarkerConfig.run {
                 setDirectoryForTemplateLoading(file.parentFile)
@@ -409,7 +409,7 @@ class FreemarkerTemplateProcessor(
          */
         fun getPackage(id: Identifier): Package =
             input.ortResult.getPackage(id)?.pkg
-                ?: Package.EMPTY.also { log.warn { "Could not resolve package '${id.toCoordinates()}'." } }
+                ?: Package.EMPTY.also { logger.warn { "Could not resolve package '${id.toCoordinates()}'." } }
     }
 }
 

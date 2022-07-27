@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.filterVersionNames
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -153,7 +153,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      * GitHub repository  for the necessary information.
      */
     private suspend fun findDefectsForGitHubPackage(pkg: GitHubPackage): List<AdvisorResult> {
-        log.info { "Finding defects for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.info { "Finding defects for package '${pkg.pkg.id.toCoordinates()}'." }
 
         val startTime = Instant.now()
         val ortIssues = mutableListOf<OrtIssue>()
@@ -175,18 +175,18 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
             "releases"
         )
 
-        log.debug { "Found ${releases.size} releases for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Found ${releases.size} releases for package '${pkg.pkg.id.toCoordinates()}'." }
 
         val issues = handleError(
             fetchAll(maxDefects) { service.repositoryIssues(pkg.repoOwner, pkg.repoName, it) },
             "issues"
         )
 
-        log.debug { "Found ${issues.size} issues for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Found ${issues.size} issues for package '${pkg.pkg.id.toCoordinates()}'." }
 
         val defects = if (ortIssues.isEmpty()) {
             issuesForRelease(pkg, issues.applyLabelFilters(), releases, ortIssues).also {
-                log.debug { "Found ${it.size} defects for package '${pkg.pkg.id.toCoordinates()}'." }
+                logger.debug { "Found ${it.size} defects for package '${pkg.pkg.id.toCoordinates()}'." }
             }
         } else {
             emptyList()
@@ -222,7 +222,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
                 )
             }
 
-        log.debug { "Assuming release date $releaseDate for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Assuming release date $releaseDate for package '${pkg.pkg.id.toCoordinates()}'." }
         return issues.filter { it.closedAfter(releaseDate) }.map { it.toDefect(releases) }
     }
 

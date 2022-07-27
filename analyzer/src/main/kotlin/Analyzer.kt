@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.
@@ -68,7 +68,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
 
-        log.debug {
+        logger.debug {
             "Using the following configuration settings:\n${yamlMapper.writeValueAsString(repositoryConfiguration)}"
         }
 
@@ -183,7 +183,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 val managerForName = allPackageManagers[name]
 
                 if (managerForName == null) {
-                    log.debug {
+                    logger.debug {
                         "Ignoring that ${packageManager.managerName} must run after $name, because there are no " +
                                 "definition files for $name."
                     }
@@ -196,7 +196,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 val managerForName = allPackageManagers[name]
 
                 if (managerForName == null) {
-                    log.debug {
+                    logger.debug {
                         "Ignoring that ${packageManager.managerName} must run before $name, because there are no " +
                                 "definition files for $name."
                     }
@@ -290,7 +290,7 @@ private class PackageManagerRunner(
      */
     suspend fun start() {
         if (mustRunAfter.isNotEmpty()) {
-            manager.log.info {
+            manager.logger.info {
                 "Waiting for the following package managers to complete: ${mustRunAfter.joinToString()}."
             }
 
@@ -298,7 +298,7 @@ private class PackageManagerRunner(
                 val remaining = mustRunAfter - finishedPackageManagers
 
                 if (remaining.isNotEmpty()) {
-                    manager.log.info {
+                    manager.logger.info {
                         "Still waiting for the following package managers to complete: ${remaining.joinToString()}."
                     }
                 }
@@ -311,12 +311,12 @@ private class PackageManagerRunner(
     }
 
     private suspend fun run() {
-        manager.log.info { "Starting analysis." }
+        manager.logger.info { "Starting analysis." }
 
         withContext(Dispatchers.IO) {
             val result = manager.resolveDependencies(definitionFiles, labels)
 
-            manager.log.info { "Finished analysis." }
+            manager.logger.info { "Finished analysis." }
 
             onResult(result)
         }

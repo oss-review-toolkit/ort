@@ -133,7 +133,7 @@ object DeclaredLicenseProcessor {
         runCatching {
             declaredLicense.toSpdx()
         }.onFailure {
-            log.debug { "Could not parse declared license '$declaredLicense': ${it.collectMessages()}" }
+            logger.debug { "Could not parse declared license '$declaredLicense': ${it.collectMessages()}" }
         }.getOrNull()
 }
 

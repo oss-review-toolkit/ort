@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class DeleteCommand : CliktCommand(
@@ -139,10 +139,10 @@ internal class DeleteCommand : CliktCommand(
 
             println("Would delete $count scan result(s).")
 
-            if (log.delegate.isDebugEnabled) {
+            if (logger.delegate.isDebugEnabled) {
                 database.transaction {
                     ScanResults.slice(ScanResults.identifier).select { condition }
-                        .forEach(this@DeleteCommand.log::debug)
+                        .forEach(this@DeleteCommand.logger::debug)
                 }
             }
         } else {
@@ -158,7 +158,7 @@ internal class DeleteCommand : CliktCommand(
         val storageConfig = config.scanner.storages?.get("postgresStorage") as? PostgresStorageConfiguration
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
-        log.info {
+        logger.info {
             "Using Postgres storage with URL '${storageConfig.connection.url}' and schema " +
                     "'${storageConfig.connection.schema}'."
         }

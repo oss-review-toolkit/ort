@@ -60,7 +60,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -125,7 +125,7 @@ class Bundler(
         }
 
         if (bundlerGems.containsAll(HELPER_SCRIPT_DEPENDENCIES)) {
-            log.info { "Already installed the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s)." }
+            logger.info { "Already installed the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s)." }
         } else {
             // Install the Gems the helper scripts depend on.
             val duration = measureTime {
@@ -137,7 +137,7 @@ class Bundler(
                 )
             }
 
-            log.info { "Installing the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s) took $duration." }
+            logger.info { "Installing the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s) took $duration." }
         }
     }
 
@@ -184,7 +184,7 @@ class Bundler(
         workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
         scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<OrtIssue>
     ) {
-        log.debug {
+        logger.debug {
             "Parsing scope '$groupName' with top-level dependencies $dependencyList for project " +
                     "'${projectId.toCoordinates()}' in '$workingDir'."
         }
@@ -202,7 +202,7 @@ class Bundler(
         workingDir: File, projectId: Identifier, gemName: String, gemSpecs: MutableMap<String, GemSpec>,
         scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>
     ) {
-        log.debug { "Parsing dependency '$gemName'." }
+        logger.debug { "Parsing dependency '$gemName'." }
 
         runCatching {
             val gemSpec = gemSpecs.getValue(gemName)
@@ -299,12 +299,12 @@ class Bundler(
             GemSpec.createFromGem(yamlMapper.readTree(it))
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
-                log.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
+                logger.warn { "Unable to retrieve metadata for gem '$name' from RubyGems: ${it.message}" }
                 return null
             }
 
             when (error.code) {
-                HttpURLConnection.HTTP_NOT_FOUND -> log.info { "Gem '$name' was not found on RubyGems." }
+                HttpURLConnection.HTTP_NOT_FOUND -> logger.info { "Gem '$name' was not found on RubyGems." }
 
                 OkHttpClientHelper.HTTP_TOO_MANY_REQUESTS -> {
                     throw IOException(

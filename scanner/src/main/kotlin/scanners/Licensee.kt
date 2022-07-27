@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(
@@ -94,7 +94,7 @@ class Licensee internal constructor(
         val endTime = Instant.now()
 
         return with(process) {
-            if (stderr.isNotBlank()) log.debug { stderr }
+            if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
             generateSummary(startTime, endTime, path, stdout)

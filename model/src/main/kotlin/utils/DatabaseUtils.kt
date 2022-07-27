@@ -35,7 +35,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.config.PostgresConnection
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 object DatabaseUtils {
     /**
@@ -99,7 +99,7 @@ object DatabaseUtils {
             if (resultSet.next()) {
                 val clientEncoding = resultSet.getString(1)
                 if (clientEncoding != expectedEncoding) {
-                    DatabaseUtils.log.warn {
+                    DatabaseUtils.logger.warn {
                         "The database's client_encoding is '$clientEncoding' but should be '$expectedEncoding'."
                     }
                 }

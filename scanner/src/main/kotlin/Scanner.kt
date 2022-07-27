@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.filterByProject
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 const val TOOL_NAME = "scanner"
 
@@ -49,7 +49,7 @@ private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): S
         // Remove all packages that have a concluded license and authors set.
         ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
-                scanner.log.debug { "Not scanning the following packages with concluded licenses: $skip" }
+                scanner.logger.debug { "Not scanning the following packages with concluded licenses: $skip" }
             }
 
             keep.toSet()
@@ -92,7 +92,7 @@ fun scanOrtResult(
     }
 
     if (ortResult.analyzer == null) {
-        Scanner.log.warn {
+        Scanner.logger.warn {
             "Cannot run the scanner as the provided ORT result does not contain an analyzer result. " +
                     "No result will be added."
         }

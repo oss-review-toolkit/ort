@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.analyzer.managers.Yarn2
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -160,7 +160,7 @@ private fun isYarnWorkspaceRoot(definitionFile: File) =
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        NodeSupport.log.error {
+        NodeSupport.logger.error {
             "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 
@@ -197,7 +197,7 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        NodeSupport.log.error {
+        NodeSupport.logger.error {
             "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 

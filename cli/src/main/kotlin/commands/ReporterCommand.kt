@@ -77,7 +77,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -226,7 +226,7 @@ class ReporterCommand : CliktCommand(
             )
         } else {
             if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
-                log.info { "Local package configurations were not applied because the feature is not enabled." }
+                logger.info { "Local package configurations were not applied because the feature is not enabled." }
             }
 
             packageConfigurationOption.createProvider()
@@ -302,7 +302,7 @@ class ReporterCommand : CliktCommand(
             }.onFailure { e ->
                 e.showStackTrace()
 
-                log.error {
+                logger.error {
                     "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
                 }
 

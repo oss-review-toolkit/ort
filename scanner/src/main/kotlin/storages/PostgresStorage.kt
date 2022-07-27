@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val TABLE_NAME = ScanResults.tableName
@@ -142,7 +142,7 @@ class PostgresStorage(
                 val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
                         it.collectMessages()
 
-                log.info { message }
+                logger.info { message }
 
                 return Result.failure(ScanStorageException(message))
             }
@@ -174,7 +174,7 @@ class PostgresStorage(
                 val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
                         "$scannerCriteria from database: ${it.collectMessages()}"
 
-                log.info { message }
+                logger.info { message }
 
                 return Result.failure(ScanStorageException(message))
             }
@@ -224,7 +224,7 @@ class PostgresStorage(
                 val message = "Could not read scan results with $scannerCriteria from database: " +
                         it.collectMessages()
 
-                log.info { message }
+                logger.info { message }
 
                 return Result.failure(ScanStorageException(message))
             }
@@ -232,7 +232,7 @@ class PostgresStorage(
     }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
-        log.info { "Storing scan result for ${id.toCoordinates()} in storage." }
+        logger.info { "Storing scan result for ${id.toCoordinates()} in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
@@ -248,7 +248,7 @@ class PostgresStorage(
 
             val message = "Could not store scan result for '${id.toCoordinates()}': ${it.collectMessages()}"
 
-            log.warn { message }
+            logger.warn { message }
 
             throw ScanStorageException(message)
         }.map { /* Unit */ }

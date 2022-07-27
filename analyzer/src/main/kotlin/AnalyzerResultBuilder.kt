@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
     private val projects = sortedSetOf<Project>()
@@ -97,11 +97,11 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
         val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
 
-        log.info { "Getting package curations took $duration." }
+        logger.info { "Getting package curations took $duration." }
 
         packages += packageSet.map { pkg ->
             curations[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-                log.debug {
+                logger.debug {
                     "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
                 }
 

@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
@@ -45,7 +45,7 @@ internal class SpdxDocumentCache {
      */
     fun load(file: File): Result<SpdxDocument> =
         documentCache.getOrPut(file) {
-            log.info { "Loading SpdxDocument from '$file'." }
+            logger.info { "Loading SpdxDocument from '$file'." }
 
             runCatching { SpdxModelMapper.read(file) }
         }

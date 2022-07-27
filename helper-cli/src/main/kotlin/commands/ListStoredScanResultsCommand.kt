@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class ListStoredScanResultsCommand : CliktCommand(
@@ -67,7 +67,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
         println("Searching for scan results of '${packageId.toCoordinates()}' in ${ScanResultsStorage.storage.name}.")
 
         val scanResults = ScanResultsStorage.storage.read(packageId).getOrElse {
-            log.error { "Could not read scan results: ${it.message}" }
+            logger.error { "Could not read scan results: ${it.message}" }
             throw ProgramResult(1)
         }
 

@@ -38,12 +38,12 @@ import java.net.InetSocketAddress
 
 import kotlin.random.Random
 
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 class HttpFileStorageFunTest : WordSpec() {
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
-        .also { log.debug { "Using port $it for HTTP server." } }
+        .also { logger.debug { "Using port $it for HTTP server." } }
 
     private val handler = object : HttpHandler {
         val requests = mutableMapOf<String, String>()

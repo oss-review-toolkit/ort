@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 import retrofit2.HttpException
 
@@ -87,7 +87,7 @@ class UploadCurationsCommand : CliktCommand(
                 val errorResponse = jsonMapper.readValue<ErrorResponse>(it.string())
                 val innerError = errorResponse.error.innererror
 
-                log.debug { innerError.stack }
+                logger.debug { innerError.stack }
 
                 "The HTTP service call failed with: ${innerError.message}"
             } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
@@ -115,7 +115,7 @@ class UploadCurationsCommand : CliktCommand(
         val definitions = service.call { getDefinitions(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
-            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: log.warn {
+            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
                 "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
                         "or upload curations for it."
             }

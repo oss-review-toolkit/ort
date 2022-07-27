@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * [Poetry](https://python-poetry.org/) package manager for Python.
@@ -59,7 +59,7 @@ class Poetry(
         val workingDir = definitionFile.parentFile
         val requirementsFile = workingDir.resolve("requirements-from-poetry.txt")
 
-        log.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
+        logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
         val req = ProcessCapture(workingDir, command(), "export", "--without-hashes", "--format=requirements.txt")
             .requireSuccess().stdout

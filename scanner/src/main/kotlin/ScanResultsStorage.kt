@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
@@ -83,7 +83,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 else -> createCompositeStorage(config)
             }
 
-            log.info { "ScanResultStorage has been configured to ${storage.name}." }
+            logger.info { "ScanResultStorage has been configured to ${storage.name}." }
 
             return storage
         }
@@ -110,7 +110,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             val readers = config.storageReaders.orEmpty().map { resolve(it) }
             val writers = config.storageWriters.orEmpty().map { resolve(it) }
 
-            log.info {
+            logger.info {
                 "Using composite storage with readers ${readers.joinToString { it.name }} and writers " +
                         "${writers.joinToString { it.name }}."
             }
@@ -136,8 +136,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             val backend = config.backend.createFileStorage()
 
             when (backend) {
-                is HttpFileStorage -> log.info { "Using file based storage with HTTP backend '${backend.url}'." }
-                is LocalFileStorage -> log.info {
+                is HttpFileStorage -> logger.info { "Using file based storage with HTTP backend '${backend.url}'." }
+                is LocalFileStorage -> logger.info {
                     "Using file based storage with local directory '${backend.directory.invariantSeparatorsPath}'."
                 }
             }
@@ -156,7 +156,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 maxPoolSize = config.connection.parallelTransactions + 3
             )
 
-            log.info {
+            logger.info {
                 "Using Postgres storage with URL '${config.connection.url}' and schema '${config.connection.schema}'."
             }
 
@@ -168,7 +168,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          */
         private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration): ScanResultsStorage =
             ClearlyDefinedStorage(config).also {
-                log.info { "Using ClearlyDefined storage with URL '${config.serverUrl}'." }
+                logger.info { "Using ClearlyDefined storage with URL '${config.serverUrl}'." }
             }
 
         /**
@@ -176,7 +176,9 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          */
         private fun createSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
             Sw360Storage(config).also {
-                log.info { "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'." }
+                logger.info {
+                    "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'."
+                }
             }
     }
 
@@ -204,7 +206,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 stats.numHits.incrementAndGet()
             }
 
-            log.info {
+            logger.info {
                 "Read ${results.size} scan result(s) for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
@@ -231,7 +233,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 stats.numHits.incrementAndGet()
             }
 
-            log.info {
+            logger.info {
                 "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
             }
@@ -259,7 +261,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         result.onSuccess { results ->
             stats.numHits.addAndGet(results.count { (_, results) -> results.isNotEmpty() })
 
-            log.info {
+            logger.info {
                 "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
             }
         }
@@ -279,14 +281,14 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         if (scanResult.provenance is UnknownProvenance) {
             val message =
                 "Not storing scan result for '${id.toCoordinates()}' because no provenance information is available."
-            log.info { message }
+            logger.info { message }
 
             return Result.failure(ScanStorageException(message))
         }
 
         val (result, duration) = measureTimedValue { addInternal(id, scanResult) }
 
-        log.info { "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in $duration." }
+        logger.info { "Added scan result for '${id.toCoordinates()}' to ${javaClass.simpleName} in $duration." }
 
         return result
     }
@@ -310,7 +312,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                 // Only keep scan results whose provenance information matches the package information.
                 scanResults.retainAll { it.provenance.matches(pkg) }
                 if (scanResults.isEmpty()) {
-                    log.debug {
+                    logger.debug {
                         "No stored scan results found for $pkg. The following entries with non-matching provenance " +
                                 "have been ignored: ${scanResults.map { it.provenance }}"
                     }
@@ -318,7 +320,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
                     // Only keep scan results from compatible scanners.
                     scanResults.retainAll { scannerCriteria.matches(it.scanner) }
                     if (scanResults.isEmpty()) {
-                        log.debug {
+                        logger.debug {
                             "No stored scan results found for $scannerCriteria. The following entries with " +
                                     "incompatible scanners have been ignored: ${scanResults.map { it.scanner }}"
                         }

@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -112,7 +112,7 @@ class Sbt(
         }
 
         if (versions.isEmpty()) {
-            log.warn { "No version match found in output:\n$output" }
+            logger.warn { "No version match found in output:\n$output" }
         }
 
         return checkForSameSbtVersion(versions)
@@ -127,7 +127,7 @@ class Sbt(
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()
         if (uniqueVersions.size > 1) {
-            log.warn { "Different sbt versions used in the same project: $uniqueVersions" }
+            logger.warn { "Different sbt versions used in the same project: $uniqueVersions" }
         }
 
         return uniqueVersions.firstOrNull()?.toString().orEmpty()
@@ -139,7 +139,7 @@ class Sbt(
         // definition file paths.
         val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
 
-        log.info { "Determined '$workingDir' as the $managerName project root directory." }
+        logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         fun runSbt(vararg command: String) =
             suppressInput {
@@ -152,7 +152,7 @@ class Sbt(
         }
 
         if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT project found inside the '$workingDir' directory." }
+            logger.warn { "No SBT project found inside the '$workingDir' directory." }
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
@@ -163,7 +163,7 @@ class Sbt(
         }
 
         if (pomFiles.isEmpty()) {
-            log.warn { "No generated POM files found inside the '$workingDir' directory." }
+            logger.warn { "No generated POM files found inside the '$workingDir' directory." }
         }
 
         return pomFiles.distinct().map { moveGeneratedPom(it) }
@@ -175,7 +175,7 @@ class Sbt(
         // definition file paths.
         val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
 
-        log.info { "Determined '$workingDir' as the $managerName project root directory." }
+        logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         // Determine the SBT version(s) being used.
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
@@ -225,7 +225,7 @@ private fun moveGeneratedPom(pomFile: File): File {
     val targetFile = targetDirParent.resolve(targetFilename)
 
     if (runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
-        Sbt.log.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
+        Sbt.logger.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
         return pomFile
     }
 

@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
@@ -129,7 +129,7 @@ class Composer(
 
                 val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-                log.info { "Reading '$lockFile'..." }
+                logger.info { "Reading '$lockFile'..." }
 
                 val json = jsonMapper.readTree(lockFile)
                 val packages = parseInstalledPackages(json)
@@ -152,7 +152,7 @@ class Composer(
                 Pair(emptyMap(), sortedSetOf())
             }
 
-            log.info { "Reading ${definitionFile.name} file in $workingDir..." }
+            logger.info { "Reading ${definitionFile.name} file in $workingDir..." }
 
             val project = parseProject(definitionFile, scopes)
 
@@ -187,7 +187,7 @@ class Composer(
                 ?: throw IOException("Could not find package info for $packageName")
 
             if (packageName in dependencyBranch) {
-                log.debug {
+                logger.debug {
                     "Not adding circular dependency '$packageName' to the tree, it is already on this branch of the " +
                             "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
                 }
@@ -254,7 +254,7 @@ class Composer(
                 // Just warn if the version is missing as Composer itself declares it as optional, see
                 // https://getcomposer.org/doc/04-schema.md#version.
                 if (version.isEmpty()) {
-                    log.warn { "No version information found for package $rawName." }
+                    logger.warn { "No version information found for package $rawName." }
                 }
 
                 packages[rawName] = Package(

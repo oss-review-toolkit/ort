@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A PostgreSQL based storage for archive files.
@@ -86,7 +86,7 @@ class PostgresFileArchiverStorage(
                     // The exception can happen when an archive with the same provenance has been inserted in parallel.
                     // That race condition is possible because [java.sql.Connection.TRANSACTION_READ_COMMITTED] is used
                     // as transaction isolation level (by default).
-                    log.warn(e) { "Could not insert archive for '${provenance.storageKey()}'." }
+                    logger.warn(e) { "Could not insert archive for '${provenance.storageKey()}'." }
                 }
             }
         }

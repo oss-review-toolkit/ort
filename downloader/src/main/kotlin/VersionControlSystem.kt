@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 abstract class VersionControlSystem {
@@ -115,7 +115,7 @@ abstract class VersionControlSystem {
                     } catch (e: IOException) {
                         e.showStackTrace()
 
-                        log.debug {
+                        logger.debug {
                             "Exception while validating ${it.vcsType} working tree, treating it as non-applicable: " +
                                     e.collectMessages()
                         }
@@ -236,7 +236,7 @@ abstract class VersionControlSystem {
         val results = mutableListOf<Result<String>>()
 
         for ((index, revision) in revisionCandidates.withIndex()) {
-            log.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
+            logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})..." }
             results += updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive)
             if (results.last().isSuccess) break
         }
@@ -254,7 +254,7 @@ abstract class VersionControlSystem {
             }
         }
 
-        log.info {
+        logger.info {
             "Successfully downloaded revision $workingTreeRevision for package '${pkg.id.toCoordinates()}.'."
         }
 
@@ -289,14 +289,14 @@ abstract class VersionControlSystem {
             pkg.vcsProcessed.revision.also {
                 if (it.isNotBlank() && (allowMovingRevisions || isFixedRevision(workingTree, it))) {
                     if (revisionCandidates.add(it)) {
-                        log.info {
+                        logger.info {
                             "Adding $type revision '$it' (taken from package metadata) as a candidate."
                         }
                     }
                 }
             }
         }.onFailure {
-            log.info {
+            logger.info {
                 "Metadata has invalid $type revision '${pkg.vcsProcessed.revision}': ${it.collectMessages()}"
             }
 
@@ -307,14 +307,14 @@ abstract class VersionControlSystem {
             runCatching {
                 workingTree.guessRevisionName(project, version).also {
                     if (revisionCandidates.add(it)) {
-                        log.info {
+                        logger.info {
                             "Adding $type revision '$it' (guessed from package '$project' and version '$version') as " +
                                     "a candidate."
                         }
                     }
                 }
             }.onFailure {
-                log.info {
+                logger.info {
                     "No $type revision for package '$project' and version '$version' found: " +
                             it.collectMessages()
                 }

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -112,7 +112,7 @@ class Subversion : VersionControlSystem() {
                 } catch (e: SVNException) {
                     e.showStackTrace()
 
-                    log.info { "Unable to list remote refs for $type repository at $remoteUrl." }
+                    logger.info { "Unable to list remote refs for $type repository at $remoteUrl." }
                 }
 
                 return refs
@@ -134,7 +134,7 @@ class Subversion : VersionControlSystem() {
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            log.debug {
+            logger.debug {
                 "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessages()}"
             }
 
@@ -229,7 +229,7 @@ class Subversion : VersionControlSystem() {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
                         it.collectMessages()
             }

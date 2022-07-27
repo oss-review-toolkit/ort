@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 import retrofit2.HttpException
 
@@ -137,7 +137,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
         components: List<NexusIqService.Component>
     ): NexusIqService.ComponentDetailsWrapper =
         try {
-            log.debug { "Querying component details from ${nexusIqConfig.serverUrl}." }
+            logger.debug { "Querying component details from ${nexusIqConfig.serverUrl}." }
             service.getComponentDetails(NexusIqService.ComponentsWrapper(components))
         } catch (e: HttpException) {
             throw IOException(e)

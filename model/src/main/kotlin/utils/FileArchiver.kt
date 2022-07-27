@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
@@ -82,7 +82,7 @@ class FileArchiver(
      * Archive all files in [directory] matching any of the configured patterns in the [storage].
      */
     fun archive(directory: File, provenance: KnownProvenance) {
-        log.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
+        logger.info { "Archiving files matching ${matcher.patterns} from '$directory'..." }
 
         val zipFile = createOrtTempFile(suffix = ".zip")
 
@@ -91,7 +91,7 @@ class FileArchiver(
                 val relativePath = file.relativeTo(directory).invariantSeparatorsPath
 
                 matcher.matches(relativePath).also { result ->
-                    log.debug {
+                    logger.debug {
                         if (result) {
                             "Adding '$relativePath' to archive."
                         } else {
@@ -102,11 +102,11 @@ class FileArchiver(
             }
         }
 
-        log.info { "Archived directory '$directory' in $zipDuration." }
+        logger.info { "Archived directory '$directory' in $zipDuration." }
 
         val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
 
-        log.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
+        logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
         zipFile.delete()
     }
@@ -117,20 +117,20 @@ class FileArchiver(
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
         val (zipFile, readDuration) = measureTimedValue { storage.getArchive(provenance) }
 
-        log.info { "Read archive of directory '$directory' from storage in $readDuration." }
+        logger.info { "Read archive of directory '$directory' from storage in $readDuration." }
 
         if (zipFile == null) return false
 
         return try {
             val unzipDuration = measureTime { zipFile.unpackZip(directory) }
 
-            log.info { "Unarchived directory '$directory' in $unzipDuration." }
+            logger.info { "Unarchived directory '$directory' in $unzipDuration." }
 
             true
         } catch (e: IOException) {
             e.showStackTrace()
 
-            log.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessages()}" }
+            logger.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessages()}" }
 
             false
         } finally {

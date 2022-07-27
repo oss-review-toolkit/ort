@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.
@@ -59,19 +59,19 @@ class DefaultNestedProvenanceResolver(
 
         if (storedResult != null) {
             if (storedResult.hasOnlyFixedRevisions) {
-                log.info {
+                logger.info {
                     "Found a stored nested provenance for $provenance with only fixed revisions, skipping resolution."
                 }
 
                 return storedResult.nestedProvenance
             } else {
-                log.info {
+                logger.info {
                     "Found a stored nested provenance for $provenance with at least one non-fixed revision, " +
                             "restarting resolution."
                 }
             }
         } else {
-            log.info {
+            logger.info {
                 "Could not find a stored nested provenance for $provenance, attempting resolution."
             }
         }

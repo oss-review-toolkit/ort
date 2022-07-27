@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is
@@ -146,7 +146,7 @@ internal data class FossIdConfig(
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
             }
 
-            log.info { "waitForResult parameter is set to '$waitForResult'" }
+            logger.info { "waitForResult parameter is set to '$waitForResult'" }
 
             return FossIdConfig(
                 serverUrl = serverUrl,
@@ -168,11 +168,11 @@ internal data class FossIdConfig(
      */
     fun createNamingProvider(): FossIdNamingProvider {
         val namingProjectPattern = options[NAMING_PROJECT_PATTERN_PROPERTY]?.also {
-            log.info { "Naming pattern for projects is $it." }
+            logger.info { "Naming pattern for projects is $it." }
         }
 
         val namingScanPattern = options[NAMING_SCAN_PATTERN_PROPERTY]?.also {
-            log.info { "Naming pattern for scans is $it." }
+            logger.info { "Naming pattern for scans is $it." }
         }
 
         val namingConventionVariables = options

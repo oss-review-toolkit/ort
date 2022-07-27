@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -86,7 +86,7 @@ class Git : VersionControlSystem(), CommandLineTool {
                     } catch (e: AgentProxyException) {
                         e.showStackTrace()
 
-                        log.error { "Could not create SSH Agent connector: ${e.collectMessages()}" }
+                        logger.error { "Could not create SSH Agent connector: ${e.collectMessages()}" }
                     }
                 }
             }
@@ -128,7 +128,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         runCatching {
             LsRemoteCommand(null).setRemote(vcsUrl).call().isNotEmpty()
         }.onFailure {
-            log.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessages()}" }
+            logger.debug { "Failed to check whether $type is applicable for $vcsUrl: ${it.collectMessages()}" }
         }.isSuccess
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
@@ -141,7 +141,7 @@ class Git : VersionControlSystem(), CommandLineTool {
                 }
 
                 if (vcs.path.isNotBlank()) {
-                    log.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
+                    logger.info { "Configuring Git to do sparse checkout of path '${vcs.path}'." }
 
                     git.repository.config.setBoolean("core", null, "sparseCheckout", true)
 
@@ -176,7 +176,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Result<String> =
         runCatching {
-            log.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
+            logger.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
             workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
 
             // The documentation for git-fetch states that "By default, any tag that points into the histories being
@@ -190,24 +190,24 @@ class Git : VersionControlSystem(), CommandLineTool {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 "Could not fetch only revision '$revision': ${it.collectMessages()}\n" +
                         "Falling back to fetching all refs."
             }
         }.recoverCatching {
-            log.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
+            logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
             workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
             workingTree.runGit("checkout", revision).isSuccess
         }.onFailure {
             it.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}\n" +
                         "Falling back to fetching everything."
             }
         }.recoverCatching {
-            log.info { "Falling back to fetch everything including tags." }
+            logger.info { "Falling back to fetch everything including tags." }
 
             if (workingTree.isShallow()) {
                 workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
@@ -219,7 +219,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }.onFailure {
             it.showStackTrace()
 
-            log.warn { "Failed to fetch everything: ${it.collectMessages()}" }
+            logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
         }.map {
             revision
         }
@@ -252,11 +252,11 @@ internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
         }
 
     override fun get(uri: URIish, vararg items: CredentialItem): Boolean {
-        log.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '${uri.host}'." }
+        logger.debug { "JGit queries credentials ${items.map { it.javaClass.simpleName }} for '${uri.host}'." }
 
         val auth = requestPasswordAuthentication(uri.host, uri.port, uri.scheme) ?: return false
 
-        log.debug { "Passing credentials for '${uri.host}' to JGit." }
+        logger.debug { "Passing credentials for '${uri.host}' to JGit." }
 
         items.forEach { item ->
             when (item) {

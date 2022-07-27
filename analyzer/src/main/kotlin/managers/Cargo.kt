@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
@@ -99,7 +99,7 @@ class Cargo(
 
     private fun readHashes(lockfile: File): Map<String, String> {
         if (!lockfile.isFile) {
-            log.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
+            logger.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
             return emptyMap()
         }
 

@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
@@ -76,7 +76,7 @@ class Askalono internal constructor(
         val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
 
         if (unpackDir.resolve(command()).isFile) {
-            log.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
+            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
             return unpackDir
         }
 
@@ -90,10 +90,10 @@ class Askalono internal constructor(
         val archive = "askalono-$platform.zip"
         val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
 
-        log.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $scannerName from $url... " }
         val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
 
-        log.info { "Unpacking '$archive' to '$unpackDir'... " }
+        logger.info { "Unpacking '$archive' to '$unpackDir'... " }
         body.bytes().unpackZip(unpackDir)
 
         return unpackDir
@@ -111,7 +111,7 @@ class Askalono internal constructor(
         val endTime = Instant.now()
 
         return with(process) {
-            if (stderr.isNotBlank()) log.debug { stderr }
+            if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
             generateSummary(startTime, endTime, path, stdout)

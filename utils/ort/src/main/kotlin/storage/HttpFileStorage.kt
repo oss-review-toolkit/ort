@@ -29,7 +29,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
@@ -78,7 +78,7 @@ class HttpFileStorage(
             .url(urlForPath(path))
             .build()
 
-        log.debug { "Reading file from storage: ${request.url}" }
+        logger.debug { "Reading file from storage: ${request.url}" }
 
         val response = OkHttpClientHelper.execute(request)
         if (response.isSuccessful) {
@@ -102,7 +102,7 @@ class HttpFileStorage(
                 .url(urlForPath(path))
                 .build()
 
-            log.debug { "Writing file to storage: ${request.url}" }
+            logger.debug { "Writing file to storage: ${request.url}" }
 
             return OkHttpClientHelper.execute(request).use { response ->
                 if (!response.isSuccessful) {

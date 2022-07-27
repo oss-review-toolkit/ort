@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class FossIdReporter : Reporter {
@@ -95,11 +95,11 @@ class FossIdReporter : Reporter {
             input.ortResult.scanner?.results?.scanResults?.values?.flatten()?.mapNotNull { result ->
                 result.additionalData[SCAN_CODE_KEY]?.let { scanCode ->
                     async {
-                        this@FossIdReporter.log.info { "Generating report for scan $scanCode." }
+                        this@FossIdReporter.logger.info { "Generating report for scan $scanCode." }
                         service.generateReport(user, apiKey, scanCode, reportType, selectionType, outputDir)
                             .onFailure {
                                 it.showStackTrace()
-                                this@FossIdReporter.log.info {
+                                this@FossIdReporter.logger.info {
                                     "Error during report generation: ${it.collectMessages()}."
                                 }
                             }.getOrNull()

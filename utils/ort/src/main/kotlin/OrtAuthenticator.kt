@@ -43,7 +43,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             } else {
                 OrtAuthenticator(current).also {
                     setDefault(it)
-                    log.info { "Authenticator was successfully installed." }
+                    logger.info { "Authenticator was successfully installed." }
                 }
             }
         }
@@ -57,10 +57,10 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
             return if (current is OrtAuthenticator) {
                 current.original.also {
                     setDefault(it)
-                    log.info { "Authenticator was successfully uninstalled." }
+                    logger.info { "Authenticator was successfully uninstalled." }
                 }
             } else {
-                log.info { "Authenticator is not installed." }
+                logger.info { "Authenticator is not installed." }
                 current
             }
         }
@@ -103,7 +103,7 @@ class OrtAuthenticator(private val original: Authenticator? = null) : Authentica
                 }
             }
 
-            null -> log.warn { "No requestor type set for password authentication." }
+            null -> logger.warn { "No requestor type set for password authentication." }
         }
 
         return super.getPasswordAuthentication()

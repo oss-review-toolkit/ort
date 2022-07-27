@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * Configuration of the storage to use for provenance information.
@@ -37,7 +37,7 @@ data class ProvenanceStorageConfiguration(
 ) {
     init {
         if (fileStorage != null && postgresStorage != null) {
-            log.warn {
+            logger.warn {
                 "'fileStorage' and 'postgresStorage' are both configured but only one storage can be used. Using " +
                         "'fileStorage'."
             }

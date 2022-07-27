@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 internal const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
@@ -165,7 +165,7 @@ class Yarn2(
             }
 
             if (!yarnExecutable.canExecute()) {
-                log.warn {
+                logger.warn {
                     "The Yarn 2+ program '${yarnExecutable.name}' should be executable. Changing its rights."
                 }
 
@@ -226,7 +226,7 @@ class Yarn2(
         jsonMapper.createParser(process.stdout).use { parser ->
             val iterator = jsonMapper.readValues<ObjectNode>(parser)
 
-            log.info { "Parsing packages..." }
+            logger.info { "Parsing packages..." }
 
             val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packagedDetails)
             val scopeNames = YarnDependencyType.values().map { it.type }.toSortedSet()
@@ -241,7 +241,7 @@ class Yarn2(
      * [iterator] should come from a NDJSON file. Return the headers mapped by package id.
      */
     private fun parsePackageHeaders(iterator: MappingIterator<ObjectNode>): Map<String, PackageHeader> {
-        log.info { "Parsing packages headers..." }
+        logger.info { "Parsing packages headers..." }
 
         return iterator.asSequence().mapNotNull { json ->
             val value = json["value"].textValue()
@@ -273,7 +273,7 @@ class Yarn2(
         workingDir: File,
         packagesHeaders: Map<String, PackageHeader>
     ): Map<String, AdditionalData> {
-        log.info { "Fetching packages details..." }
+        logger.info { "Fetching packages details..." }
 
         val chunks = packagesHeaders.filterValues { it.type != "workspace" }.values.map {
             "${it.rawName}@${cleanYarn2VersionString(it.version)}"
@@ -282,7 +282,7 @@ class Yarn2(
         return runBlocking(Dispatchers.IO) {
             chunks.mapIndexed { index, chunk ->
                 async {
-                    Yarn2.log.info { "Fetching packages details chunk #$index." }
+                    Yarn2.logger.info { "Fetching packages details chunk #$index." }
 
                     val process = run(
                         "npm",
@@ -303,7 +303,7 @@ class Yarn2(
                             processAdditionalPackageInfo(json)
                         }.toList()
                     }.also {
-                        Yarn2.log.info { "Chunk #$index packages details have been fetched." }
+                        Yarn2.logger.info { "Chunk #$index packages details have been fetched." }
                     }
                 }
             }.awaitAll().flatten().associateBy { "${it.name}@${it.version}" }
@@ -347,7 +347,7 @@ class Yarn2(
                         }
 
                         if (projectAsDependency == null) {
-                            log.warn { "Could not find project for dependency '$dependency.'" }
+                            logger.warn { "Could not find project for dependency '$dependency.'" }
                             null
                         } else {
                             val projectAsDependencyPkg = projectAsDependency.value.toPackage()
@@ -360,7 +360,7 @@ class Yarn2(
                     } else {
                         val packageDependency = allPackages[dependency]
                         if (packageDependency == null) {
-                            log.warn { "Could not find package for dependency $dependency." }
+                            logger.warn { "Could not find package for dependency $dependency." }
                             null
                         } else {
                             // As small hack here : Because the detection of dependencies per scope is limited (due to
@@ -524,13 +524,13 @@ class Yarn2(
         val dependenciesIds = allDependencies[id]
         return dependenciesIds?.mapNotNull { dependencyId ->
             if (dependencyId in ancestorPackageIds) {
-                log.debug("Not adding the dependency '$dependencyId' of package '$id' to prevent a cycle.")
+                logger.debug("Not adding the dependency '$dependencyId' of package '$id' to prevent a cycle.")
                 return@mapNotNull null
             }
 
             val dependencyPkg = allPackages[dependencyId]
             if (dependencyPkg == null) {
-                log.warn { "Could not find package for sub dependency '$dependencyId' of package '$id'." }
+                logger.warn { "Could not find package for sub dependency '$dependencyId' of package '$id'." }
                 null
             } else {
                 val subDependencies = dependencyPkg.collectDependencies(

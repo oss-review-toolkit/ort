@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RootDependencyIndex
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * Internal class to represent the result of a search in the dependency graph. The outcome of the search
@@ -185,7 +185,7 @@ class DependencyGraphBuilder<D>(
         val edgesToRemove = edges - edgesToKeep
 
         edgesToRemove.forEach {
-            this@DependencyGraphBuilder.log.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+            this@DependencyGraphBuilder.logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
         }
 
         return filter { it in edgesToKeep }
