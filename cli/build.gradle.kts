@@ -41,6 +41,7 @@ graal {
     graalVersion(libs.versions.graal.get())
     javaVersion("17")
 
+    // Build a standalone native executable or report a failure.
     option("--no-fallback")
 
     // Work-around for:
