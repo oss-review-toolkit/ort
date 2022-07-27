@@ -44,8 +44,6 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.CacheControl
 import okhttp3.Request
 
-import org.apache.logging.log4j.Level
-
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
@@ -71,7 +69,6 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.await
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.logOnce
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
@@ -249,7 +246,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                         recursive = true
                     )
                 } else {
-                    logOnce(Level.DEBUG) {
+                    log.debug {
                         "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
                     }
                 }
