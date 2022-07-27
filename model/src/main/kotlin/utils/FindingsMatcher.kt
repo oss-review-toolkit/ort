@@ -148,13 +148,13 @@ class FindingsMatcher(
             val matchedFileFindings = matchFileFindings(licenses, copyrights)
 
             matchedFindings.merge(matchedFileFindings)
-            unmatchedCopyrights += copyrights.toSet() - matchedFileFindings.values.flatten()
+            unmatchedCopyrights += copyrights.toSet() - matchedFileFindings.values.flatten().toSet()
         }
 
         val matchedRootLicenseFindings = matchWithRootLicenses(licenseFindings, unmatchedCopyrights)
 
         matchedFindings.merge(matchedRootLicenseFindings)
-        unmatchedCopyrights -= matchedRootLicenseFindings.values.flatten()
+        unmatchedCopyrights -= matchedRootLicenseFindings.values.flatten().toSet()
 
         return FindingsMatcherResult(matchedFindings, unmatchedCopyrights)
     }
