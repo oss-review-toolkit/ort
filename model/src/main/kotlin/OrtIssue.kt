@@ -28,7 +28,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.log
-import org.ossreviewtoolkit.utils.ort.logOnce
 
 /**
  * An issue that occurred while executing ORT.
@@ -77,6 +76,6 @@ inline fun <reified T : Any> T.createAndLogIssue(
 ): OrtIssue {
     val issue = severity?.let { OrtIssue(source = source, message = message, severity = it) }
         ?: OrtIssue(source = source, message = message)
-    logOnce(issue.severity.toLog4jLevel()) { message }
+    log.log(issue.severity.toLog4jLevel()) { message }
     return issue
 }
