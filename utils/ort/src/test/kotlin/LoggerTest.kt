@@ -25,18 +25,10 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 
-import io.mockk.mockk
-import io.mockk.verify
-
-import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.kotlin.KotlinLogger
-
 import test.other.OrtLogTestExtension
 
 private class DummyClass
 private class OtherClass
-
-private const val LOG_ONCE_MESSAGE = "This message should be logged only once."
 
 class LoggerTest : WordSpec({
     "A logger instance" should {
@@ -64,52 +56,6 @@ class LoggerTest : WordSpec({
             val command = OrtLogTestExtension()
 
             command.command() shouldBe "success"
-        }
-    }
-
-    "Asking to log a statement only once" should {
-        "log the statement only once for the same instance and level" {
-            val dummyInstance = DummyClass()
-
-            val mockedLogger = mockk<KotlinLogger>(relaxed = true)
-            loggerOfClass[DummyClass::class.java] = mockedLogger
-
-            // Log the same message at the same level for the same instance twice.
-            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
-            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
-
-            dummyInstance.log shouldBeSameInstanceAs mockedLogger
-            verify(exactly = 1) { mockedLogger.log(any(), any<String>()) }
-        }
-
-        "still show the statement multiple times for different levels" {
-            val dummyInstance = DummyClass()
-
-            val mockedLogger = mockk<KotlinLogger>(relaxed = true)
-            loggerOfClass[DummyClass::class.java] = mockedLogger
-
-            // Log the same message at the different levels for the same instance.
-            dummyInstance.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
-            dummyInstance.logOnce(Level.ERROR) { LOG_ONCE_MESSAGE }
-
-            dummyInstance.log shouldBeSameInstanceAs mockedLogger
-            verify(exactly = 2) { mockedLogger.log(any(), any<String>()) }
-        }
-
-        "still show the statement multiple times for different instances" {
-            val dummyInstance1 = DummyClass()
-            val dummyInstance2 = DummyClass()
-
-            val mockedLogger = mockk<KotlinLogger>(relaxed = true)
-            loggerOfClass[DummyClass::class.java] = mockedLogger
-
-            // Log the same message at the same level for different instances.
-            dummyInstance1.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
-            dummyInstance2.logOnce(Level.WARN) { LOG_ONCE_MESSAGE }
-
-            dummyInstance1.log shouldBeSameInstanceAs mockedLogger
-            dummyInstance2.log shouldBeSameInstanceAs mockedLogger
-            verify(exactly = 2) { mockedLogger.log(any(), any<String>()) }
         }
     }
 })
