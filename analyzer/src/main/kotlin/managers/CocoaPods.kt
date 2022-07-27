@@ -66,7 +66,7 @@ import org.ossreviewtoolkit.utils.ort.log
  * on any platform. Note that obtaining the dependency tree from the 'pod' command without a lock file has Xcode
  * dependencies and is not supported by this class.
  *
- * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore
+ * The only interactions with the 'pod' command happen in order to obtain metadata for dependencies. Therefore,
  * 'pod spec which' gets executed, which works also under Linux.
  */
 class CocoaPods(
