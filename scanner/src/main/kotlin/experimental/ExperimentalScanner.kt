@@ -130,7 +130,7 @@ class ExperimentalScanner(
         return ortResult.copy(scanner = scannerRun)
     }
 
-    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
+    fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
         val scanners = scannerWrappers[context.packageType].orEmpty()
         if (scanners.isEmpty()) return emptyMap()
 
