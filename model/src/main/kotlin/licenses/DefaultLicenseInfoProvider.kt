@@ -83,7 +83,7 @@ class DefaultLicenseInfoProvider(
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
         val findings = mutableListOf<Findings>()
 
-        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary) ->
+        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary, _) ->
             val (licenseFindingCurations, pathExcludes, relativeFindingsPath) = getConfiguration(id, provenance)
 
             findings += Findings(
