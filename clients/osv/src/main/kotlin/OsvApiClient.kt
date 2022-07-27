@@ -87,7 +87,7 @@ interface OsvApiClient {
 }
 
 @Serializable
-data class VulnerabilitiesForPackageRequest private constructor(
+class VulnerabilitiesForPackageRequest private constructor(
     val commit: String? = null,
     @SerialName("package")
     val pkg: Package? = null,
