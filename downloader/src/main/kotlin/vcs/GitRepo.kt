@@ -194,7 +194,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             // Switching manifest branches / revisions requires running "init" again.
             runRepo(workingTree.workingDir, "init", *manifestOptions.toTypedArray())
 
-            // Repo allows to checkout Git repositories to nested directories. If a manifest is badly configured, a
+            // Repo allows to check out Git repositories to nested directories. If a manifest is badly configured, a
             // nested Git checkout overwrites files in a directory of the upper-level Git repository. However, we still
             // want to be able to download such projects, so specify "--force-sync" to work around that issue.
             val syncArgs = mutableListOf("sync", "-c", "--force-sync")
