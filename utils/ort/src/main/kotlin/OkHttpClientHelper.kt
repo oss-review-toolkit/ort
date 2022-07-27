@@ -76,7 +76,7 @@ object OkHttpClientHelper {
         OrtAuthenticator.install()
         OrtProxySelector.install()
 
-        if (log.delegate.isDebugEnabled) {
+        if (logger.delegate.isDebugEnabled) {
             // Allow tracking down leaked connections.
             Logger.getLogger(OkHttpClient::javaClass.name).level = Level.FINE
         }
@@ -101,7 +101,7 @@ object OkHttpClientHelper {
                 }.onFailure {
                     it.showStackTrace()
 
-                    log.error {
+                    logger.error {
                         "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
                     }
                 }.getOrThrow()
@@ -254,7 +254,7 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
  */
 fun OkHttpClient.execute(request: Request): Response =
     newCall(request).execute().also { response ->
-        OkHttpClientHelper.log.debug {
+        OkHttpClientHelper.logger.debug {
             if (response.cacheResponse != null) {
                 "Retrieved ${response.request.url} from local cache."
             } else {

@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
@@ -110,13 +110,13 @@ class Gradle(
             val artifactCoordinate = "${artifact.identifier()}:${artifact.classifier}:${artifact.extension}"
 
             if (artifactFiles.size > 1) {
-                log.debug { "Multiple Gradle cache entries matching '$artifactCoordinate' found: $artifactFiles" }
+                logger.debug { "Multiple Gradle cache entries matching '$artifactCoordinate' found: $artifactFiles" }
             }
 
             // Return the most recent file, if any, as that is most likely the correct one, e.g. in case of a silent
             // update of an already published artifact.
             return artifactFiles.firstOrNull()?.also { artifactFile ->
-                log.debug { "Using Gradle cache entry at '$artifactFile' for artifact '$artifactCoordinate'." }
+                logger.debug { "Using Gradle cache entry at '$artifactFile' for artifact '$artifactCoordinate'." }
             }
         }
 
@@ -204,21 +204,21 @@ class Gradle(
                     .get()
 
                 if (stdout.size() > 0) {
-                    log.debug {
+                    logger.debug {
                         "Analyzing the project in '$projectDir' produced the following standard output:\n" +
                                 stdout.toString().prependIndent("\t")
                     }
                 }
 
                 if (stderr.size() > 0) {
-                    log.warn {
+                    logger.warn {
                         "Analyzing the project in '$projectDir' produced the following error output:\n" +
                                 stderr.toString().prependIndent("\t")
                     }
                 }
 
                 if (!initScriptFile.delete()) {
-                    log.warn { "Init script file '$initScriptFile' could not be deleted." }
+                    logger.warn { "Init script file '$initScriptFile' could not be deleted." }
                 }
 
                 val repositories = dependencyTreeModel.repositories.map {
@@ -228,7 +228,7 @@ class Gradle(
 
                 dependencyHandler.repositories = repositories
 
-                log.debug {
+                logger.debug {
                     val projectName = dependencyTreeModel.name
                     "The Gradle project '$projectName' uses the following Maven repositories: $repositories"
                 }

@@ -52,7 +52,7 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             } else {
                 OrtProxySelector(current).also {
                     setDefault(it)
-                    log.info { "Proxy selector was successfully installed." }
+                    logger.info { "Proxy selector was successfully installed." }
                 }
             }
         }
@@ -66,10 +66,10 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             return if (current is OrtProxySelector) {
                 current.fallback.also {
                     setDefault(it)
-                    log.info { "Proxy selector was successfully uninstalled." }
+                    logger.info { "Proxy selector was successfully uninstalled." }
                 }
             } else {
-                log.info { "Proxy selector is not installed." }
+                logger.info { "Proxy selector is not installed." }
                 current
             }
         }

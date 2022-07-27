@@ -24,7 +24,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [FileStorage] that stores files in a [directory] of the local file system. The [read] and [write] operations are
@@ -38,7 +38,7 @@ open class LocalFileStorage(
 ) : FileStorage {
     init {
         if (!directory.exists()) {
-            log.debug { "Creating directory '${directory.invariantSeparatorsPath}' for local file storage." }
+            logger.debug { "Creating directory '${directory.invariantSeparatorsPath}' for local file storage." }
             directory.safeMkdirs()
         } else {
             require(directory.isDirectory) {

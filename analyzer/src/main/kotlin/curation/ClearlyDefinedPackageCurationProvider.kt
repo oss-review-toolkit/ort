@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -121,7 +121,7 @@ class ClearlyDefinedPackageCurationProvider(
                     if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
                         e.showStackTrace()
 
-                        log.warn {
+                        logger.warn {
                             val message = e.response()?.errorBody()?.string() ?: e.collectMessages()
                             "Getting curations failed with code ${e.code()}: $message"
                         }
@@ -130,12 +130,12 @@ class ClearlyDefinedPackageCurationProvider(
 
                 is JsonMappingException -> {
                     e.showStackTrace()
-                    log.warn { "Deserializing the curations failed: ${e.collectMessages()}" }
+                    logger.warn { "Deserializing the curations failed: ${e.collectMessages()}" }
                 }
 
                 else -> {
                     e.showStackTrace()
-                    log.warn { "Querying curations failed: ${e.collectMessages()}" }
+                    logger.warn { "Querying curations failed: ${e.collectMessages()}" }
                 }
             }
         }.getOrNull() ?: return emptyMap()

@@ -33,22 +33,22 @@ private class OtherClass
 class LoggerTest : WordSpec({
     "A logger instance" should {
         "be shared between different instances of the same class" {
-            val a = DummyClass().log
-            val b = DummyClass().log
+            val a = DummyClass().logger
+            val b = DummyClass().logger
 
             a shouldBeSameInstanceAs b
         }
 
         "not be shared between instances of different classes" {
-            val a = DummyClass().log
-            val b = OtherClass().log
+            val a = DummyClass().logger
+            val b = OtherClass().logger
 
             a shouldNotBeSameInstanceAs b
         }
 
         "refuse to be used on a non-ORT class" {
             shouldThrow<IllegalArgumentException> {
-                String().log.info { "Hello from a String." }
+                String().logger.info { "Hello from a String." }
             }
         }
 

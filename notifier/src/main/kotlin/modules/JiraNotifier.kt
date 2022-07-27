@@ -31,7 +31,7 @@ import java.net.URI
 
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 class JiraNotifier(private val restClient: JiraRestClient) {
     constructor(config: JiraConfiguration) : this(
@@ -58,7 +58,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         return runCatching {
             restClient.issueClient.updateIssue(issueKey, input)
         }.onFailure {
-            log.error {
+            logger.error {
                 "Could not set the assignee to '$assignee' for issue '$issueKey': ${it.collectMessages()}"
             }
         }.isSuccess
@@ -75,7 +75,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             val transition = possibleTransitions.single { it.name == state }
             restClient.issueClient.transition(issue, TransitionInput(transition.id)).claim()
         }.onFailure {
-            log.error {
+            logger.error {
                 "The transition to state '$state' for the issue '$issueKey' is not possible: " +
                         it.collectMessages()
             }
@@ -89,7 +89,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         return runCatching {
             restClient.issueClient.getIssue(issueKey).claim()
         }.onFailure {
-            log.error {
+            logger.error {
                 "Could not retrieve the issue with the key '$issueKey' due to: ${it.collectMessages()}"
             }
         }.getOrNull()
@@ -152,7 +152,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                     val comment = "$summary\n$description"
 
                     if (comment in issue.comments.mapNotNull { it.body }) {
-                        log.debug {
+                        logger.debug {
                             "The comment for the issue '$summary' already exists, therefore no new one will be added."
                         }
 
@@ -162,13 +162,13 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                     return runCatching {
                         restClient.issueClient.addComment(issue.commentsUri, Comment.valueOf(comment)).claim()
                     }.map { issue }.onFailure {
-                        log.error {
+                        logger.error {
                             "The comment for the issue '${issue.key} could not be added: " +
                                     it.collectMessages()
                         }
                     }
                 } else if (searchResult.total > 1) {
-                    log.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
+                    logger.debug { "There are more than 1 duplicate issues of '$summary', which is not supported yet." }
 
                     return Result.failure(
                         IllegalArgumentException(
@@ -180,10 +180,10 @@ class JiraNotifier(private val restClient: JiraRestClient) {
 
             return runCatching {
                 restClient.issueClient.createIssue(issueInput).claim().also {
-                    log.info { "Issue ${it.key} created." }
+                    logger.info { "Issue ${it.key} created." }
                 }
             }.onFailure {
-                log.error {
+                logger.error {
                     "The issue for the project '$projectKey' could not be created: " +
                             it.collectMessages()
                 }

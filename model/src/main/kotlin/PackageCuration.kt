@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -67,7 +67,7 @@ data class PackageCuration(
             //       https://github.com/vdurmont/semver4j/issues/67.
             Requirement.buildIvy(id.version).isSatisfiedBy(Semver(pkgId.version, Semver.SemverType.LOOSE))
         }.onFailure {
-            log.warn {
+            logger.warn {
                 "Failed to check if package curation version '${id.version}' is applicable to package version " +
                         "'${pkgId.version}' of package '${pkgId.toCoordinates()}'."
             }

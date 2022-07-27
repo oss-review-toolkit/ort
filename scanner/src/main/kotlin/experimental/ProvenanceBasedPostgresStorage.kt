@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class ProvenanceBasedPostgresStorage(
@@ -115,7 +115,7 @@ class ProvenanceBasedPostgresStorage(
         } catch (e: SQLException) {
             e.showStackTrace()
 
-            log.error { "Could not read scan results: ${e.collectMessages()}" }
+            logger.error { "Could not read scan results: ${e.collectMessages()}" }
 
             throw ScanStorageException(e)
         }
@@ -158,7 +158,7 @@ class ProvenanceBasedPostgresStorage(
         } catch (e: SQLException) {
             e.showStackTrace()
 
-            log.error { "Could not write scan result: ${e.collectMessages()}" }
+            logger.error { "Could not write scan result: ${e.collectMessages()}" }
 
             throw ScanStorageException(e)
         }

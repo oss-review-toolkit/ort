@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -64,7 +64,7 @@ class FileBasedStorage(
             val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
                     it.collectMessages()
 
-            log.info { message }
+            logger.info { message }
 
             throw ScanStorageException(message)
         }
@@ -77,7 +77,7 @@ class FileBasedStorage(
             val message = "Did not store scan result for '${id.toCoordinates()}' because a scan result for the same " +
                     "scanner and provenance was already stored."
 
-            log.warn { message }
+            logger.warn { message }
 
             return Result.failure(ScanStorageException(message))
         }
@@ -90,7 +90,7 @@ class FileBasedStorage(
 
         return runCatching {
             backend.write(path, input)
-            log.debug { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
+            logger.debug { "Stored scan result for '${id.toCoordinates()}' at path '$path'." }
         }.onFailure {
             if (it is IllegalArgumentException || it is IOException) {
                 it.showStackTrace()
@@ -98,7 +98,7 @@ class FileBasedStorage(
                 val message = "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
                         it.collectMessages()
 
-                log.warn { message }
+                logger.warn { message }
 
                 return Result.failure(ScanStorageException(message))
             }

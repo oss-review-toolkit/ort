@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
@@ -167,7 +167,10 @@ class GoMod(
             val child = parseModuleEntry(columns[1])
 
             if (moduleInfo(parent.name).main && moduleInfo(child.name).indirect) {
-                log.debug { "Module '${child.name}' is an indirect dependency of '${parent.name}. Skip adding edge." }
+                logger.debug {
+                    "Module '${child.name}' is an indirect dependency of '${parent.name}. Skip adding edge."
+                }
+
                 return@forEach
             }
 
@@ -176,7 +179,9 @@ class GoMod(
 
         val vendorModules = getVendorModules(graph, projectDir)
         if (vendorModules.size < graph.size()) {
-            log.debug { "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph." }
+            logger.debug {
+                "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph."
+            }
 
             graph = graph.subgraph(vendorModules)
         }

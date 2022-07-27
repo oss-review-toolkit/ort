@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
@@ -56,7 +56,7 @@ data class FileArchiverConfiguration(
 ) {
     init {
         if (fileStorage != null && postgresStorage != null) {
-            log.warn {
+            logger.warn {
                 "'fileStorage' and 'postgresStorage' are both configured but only one storage can be used. Using " +
                         "'fileStorage'."
             }

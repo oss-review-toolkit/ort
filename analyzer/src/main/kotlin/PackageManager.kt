@@ -49,7 +49,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -110,7 +110,7 @@ abstract class PackageManager(
                 object : SimpleFileVisitor<Path>() {
                     override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
                         if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
-                            PackageManager.log.info {
+                            PackageManager.logger.info {
                                 "Not analyzing directory '$dir' as it is hard-coded to be ignored."
                             }
 
@@ -122,7 +122,7 @@ abstract class PackageManager(
                         // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions
                         // on Windows, so do a better check here.
                         if (dirAsFile.isSymbolicLink()) {
-                            PackageManager.log.info { "Not following symbolic link to directory '$dir'." }
+                            PackageManager.logger.info { "Not following symbolic link to directory '$dir'." }
                             return FileVisitResult.SKIP_SUBTREE
                         }
 
@@ -257,7 +257,7 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
-            log.info { "Resolving $managerName dependencies for path '$relativePath'..." }
+            logger.info { "Resolving $managerName dependencies for path '$relativePath'..." }
 
             val duration = measureTime {
                 runCatching {
@@ -292,7 +292,7 @@ abstract class PackageManager(
                 }
             }
 
-            log.info { "Resolving $managerName dependencies for path '$relativePath' took $duration." }
+            logger.info { "Resolving $managerName dependencies for path '$relativePath' took $duration." }
         }
 
         afterResolution(definitionFiles)
@@ -331,10 +331,13 @@ abstract class PackageManager(
                 projectResult.takeIf { projectReferences.isEmpty() }
                     ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
                         .also {
-                            this@PackageManager.log.info {
+                            this@PackageManager.logger.info {
                                 "Removing ${projectReferences.size} packages that are projects."
                             }
-                            this@PackageManager.log.debug { projectReferences.joinToString { it.id.toCoordinates() } }
+
+                            this@PackageManager.logger.debug {
+                                projectReferences.joinToString { it.id.toCoordinates() }
+                            }
                         }
             }
         }

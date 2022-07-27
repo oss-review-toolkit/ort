@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 // An arbitrary name to use for the multipart body being sent.
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
@@ -64,7 +64,7 @@ class ScanOss internal constructor(
     }
 
     private val config = ScanOssConfig.create(scannerConfig).also {
-        log.info { "The $scannerName API URL is ${it.apiUrl}." }
+        logger.info { "The $scannerName API URL is ${it.apiUrl}." }
     }
 
     private val service = ScanOssService.create(config.apiUrl)
@@ -95,7 +95,7 @@ class ScanOss internal constructor(
                 // TODO: Consider not applying the (somewhat arbitrary) blacklist.
                 .filter { !it.isDirectory && !BlacklistRules.hasBlacklistedExt(it.name) }
                 .forEach {
-                    this@ScanOss.log.info { "Computing fingerprint for file ${it.absolutePath}..." }
+                    this@ScanOss.logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
                     append(createWfpForFile(it.path))
                 }
         }

@@ -28,7 +28,7 @@ import com.sksamuel.hoplite.fp.getOrElse
 import java.io.File
 
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The configuration model for all ORT components.
@@ -111,7 +111,7 @@ data class OrtConfiguration(
         fun load(args: Map<String, String>? = null, file: File? = null): OrtConfiguration {
             val sources = listOfNotNull(
                 args?.filterKeys { it.startsWith("ort.") }?.takeUnless { it.isEmpty() }?.let {
-                    log.info {
+                    logger.info {
                         val argsList = it.map { (k, v) -> "\t$k=$v" }
                         "Using ORT configuration arguments:\n" + argsList.joinToString("\n")
                     }
@@ -119,7 +119,7 @@ data class OrtConfiguration(
                     PropertySource.map(it)
                 },
                 file?.takeIf { it.isFile }?.let {
-                    log.info { "Using ORT configuration file '$it'." }
+                    logger.info { "Using ORT configuration file '$it'." }
                     PropertySource.file(it)
                 }
             )

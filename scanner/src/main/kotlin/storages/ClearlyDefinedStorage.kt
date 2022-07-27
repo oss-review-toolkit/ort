@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import retrofit2.HttpException
@@ -135,7 +135,7 @@ class ClearlyDefinedStorage(
         } catch (e: IllegalArgumentException) {
             e.showStackTrace()
 
-            log.warn { "Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'." }
+            logger.warn { "Could not obtain ClearlyDefined coordinates for package '${id.toCoordinates()}'." }
 
             EMPTY_RESULT
         }
@@ -146,7 +146,7 @@ class ClearlyDefinedStorage(
      * identifier, as we try to lookup source code results if a GitHub repository is known.
      */
     private suspend fun readFromClearlyDefined(id: Identifier, coordinates: Coordinates): Result<List<ScanResult>> {
-        log.info { "Looking up results for '${id.toCoordinates()}'." }
+        logger.info { "Looking up results for '${id.toCoordinates()}'." }
 
         return try {
             val tools = service.harvestTools(
@@ -162,7 +162,7 @@ class ClearlyDefinedStorage(
             } ?: EMPTY_RESULT
         } catch (e: HttpException) {
             e.response()?.errorBody()?.string()?.let {
-                log.error { "Error response from ClearlyDefined is: $it" }
+                logger.error { "Error response from ClearlyDefined is: $it" }
             }
 
             handleException(id, e)
@@ -181,7 +181,7 @@ class ClearlyDefinedStorage(
         val message = "Error when reading results for package '${id.toCoordinates()}' from ClearlyDefined: " +
                 e.collectMessages()
 
-        log.error { message }
+        logger.error { message }
 
         return Result.failure(ScanStorageException(message))
     }

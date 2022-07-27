@@ -32,7 +32,7 @@ import org.eclipse.jgit.submodule.SubmoduleWalk
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
     val workingDir = (workingDirOrFile.takeIf { it.isDirectory } ?: workingDirOrFile.parentFile).absoluteFile
@@ -66,7 +66,10 @@ open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(work
                     paths += path
 
                     if (walk.repository == null) {
-                        log.info { "Git submodule at '$path' not initialized. Cannot recursively list its submodules." }
+                        logger.info {
+                            "Git submodule at '$path' not initialized. Cannot recursively list its submodules."
+                        }
+
                         continue
                     }
 

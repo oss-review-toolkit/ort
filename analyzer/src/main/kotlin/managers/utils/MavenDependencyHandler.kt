@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -75,7 +75,7 @@ class MavenDependencyHandler(
         }
 
         if (childrenWithoutToolDependencies.size < dependency.children.size) {
-            log.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
+            logger.info { "Omitting the Java < 1.9 system dependency on 'tools.jar'." }
         }
 
         return childrenWithoutToolDependencies

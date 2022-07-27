@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -154,7 +154,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
             manifestPath?.let { listOf("-m", it) }
         ).flatten()
 
-        log.info {
+        logger.info {
             val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
             val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
             "Initializing git-repo from $repoUrl$revisionDetails$pathDetails."
@@ -203,11 +203,11 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
 
             runRepo(workingTree.workingDir, *syncArgs.toTypedArray())
 
-            log.debug { runRepo(workingTree.workingDir, "info").stdout }
+            logger.debug { runRepo(workingTree.workingDir, "info").stdout }
         }.onFailure { e ->
             e.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 val revisionDetails = manifestRevision?.let { " to revision '$it'" }.orEmpty()
                 val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
                 "Failed to sync the working tree$revisionDetails$pathDetails: ${e.collectMessages()}"

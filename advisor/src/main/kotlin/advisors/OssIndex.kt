@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 import retrofit2.HttpException
 
@@ -127,7 +127,7 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
         coordinates: List<String>
     ): List<OssIndexService.ComponentReport> =
         try {
-            log.debug { "Querying component report from ${OssIndexService.DEFAULT_BASE_URL}." }
+            logger.debug { "Querying component report from ${OssIndexService.DEFAULT_BASE_URL}." }
             service.getComponentReport(OssIndexService.ComponentReportRequest(coordinates))
         } catch (e: HttpException) {
             throw IOException(e)

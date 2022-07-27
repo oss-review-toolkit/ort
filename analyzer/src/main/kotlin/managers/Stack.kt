@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
@@ -121,7 +121,7 @@ class Stack(
                 dependencies.getOrPut(parent) { mutableListOf() } += child
             }
 
-            log.debug { "Parsed ${dependencies.size} dependency relations from graph." }
+            logger.debug { "Parsed ${dependencies.size} dependency relations from graph." }
 
             return dependencies
         }
@@ -131,7 +131,7 @@ class Stack(
             return dependencies.lines().associate {
                 Pair(it.substringBefore(' '), it.substringAfter(' '))
             }.also {
-                log.debug { "Parsed ${it.size} dependency versions from list." }
+                logger.debug { "Parsed ${it.size} dependency versions from list." }
             }
         }
 
@@ -205,7 +205,7 @@ class Stack(
 
                 buildDependencyTree(childName, allPackages, childMap, versionMap, packageRef.dependencies)
             }
-        } ?: log.debug { "No dependencies found for '$parentName'." }
+        } ?: logger.debug { "No dependencies found for '$parentName'." }
     }
 
     private fun getPackageUrl(name: String, version: String) =
@@ -215,7 +215,7 @@ class Stack(
         val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
 
         return OkHttpClientHelper.downloadText(url).onFailure {
-            log.warn { "Unable to retrieve Hackage metadata for package '${pkgId.toCoordinates()}'." }
+            logger.warn { "Unable to retrieve Hackage metadata for package '${pkgId.toCoordinates()}'." }
         }.getOrNull()
     }
 

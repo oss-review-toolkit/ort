@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
@@ -95,7 +95,7 @@ internal class PubCacheReader {
 
             "git/$projectName-$resolvedRef"
         } else {
-            log.error { "Could not find projectRoot of '$packageName'." }
+            logger.error { "Could not find projectRoot of '$packageName'." }
 
             // Unsupported type.
             return null

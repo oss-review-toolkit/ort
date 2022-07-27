@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -101,7 +101,7 @@ class GoDep(
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
-            log.debug { "Importing legacy manifest file at '$definitionFile'." }
+            logger.debug { "Importing legacy manifest file at '$definitionFile'." }
             importLegacyManifest(lockfileName, workingDir, gopath)
         }
 
@@ -208,7 +208,7 @@ class GoDep(
     private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
         val destination = deduceImportPath(projectDir, vcs, gopath)
 
-        log.debug { "Copying $projectDir to temporary directory $destination" }
+        logger.debug { "Copying $projectDir to temporary directory $destination" }
 
         projectDir.safeCopyRecursively(destination)
 
@@ -229,14 +229,14 @@ class GoDep(
                 "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
             }
 
-            log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
+            logger.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
         val entries = Toml().read(lockfile).toMap()["projects"]
         if (entries == null) {
-            log.warn { "${lockfile.name} is missing any [[projects]] entries" }
+            logger.warn { "${lockfile.name} is missing any [[projects]] entries" }
             return emptyList()
         }
 
@@ -248,7 +248,7 @@ class GoDep(
             val revision = project["revision"]
 
             if (name !is String || revision !is String) {
-                log.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
+                logger.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
                 continue
             }
 

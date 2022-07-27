@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.downloadFile
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
@@ -333,7 +333,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
     baseUri: URI,
     managerName: String
 ): ResolutionResult {
-    log.info { "Downloading SPDX document from $uri (referred from $baseUri as part of '$externalDocumentId')." }
+    logger.info { "Downloading SPDX document from $uri (referred from $baseUri as part of '$externalDocumentId')." }
 
     val tempDir = createOrtTempDir()
     return try {

@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -51,7 +51,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
                     emptyList()
                 }
                 else -> {
-                    log.info {
+                    logger.info {
                         "Could not read resolved nested provenances for '$root' from path '$path': " +
                                 it.collectMessages()
                     }
@@ -73,13 +73,13 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
 
         runCatching {
             backend.write(path, input)
-            log.debug { "Stored resolved nested provenance for '$root' at path '$path'." }
+            logger.debug { "Stored resolved nested provenance for '$root' at path '$path'." }
         }.onFailure {
             when (it) {
                 is IllegalArgumentException, is IOException -> {
                     it.showStackTrace()
 
-                    log.warn {
+                    logger.warn {
                         "Could not store resolved nested provenance for '$root' at path '$path': " +
                                 it.collectMessages()
                     }

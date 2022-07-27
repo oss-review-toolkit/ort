@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.getQueryParameters
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
@@ -131,7 +131,7 @@ private fun SpdxPackage.getRemoteArtifact(): RemoteArtifact? =
         SPDX_VCS_PREFIXES.any { (prefix, _) -> downloadLocation.startsWith(prefix) } -> null
         else -> {
             if (downloadLocation.endsWith(".git")) {
-                log.warn {
+                logger.warn {
                     "The download location $downloadLocation of SPDX package '$spdxId' looks like a Git repository " +
                             "URL but it lacks the 'git+' prefix and thus will be treated as an artifact URL."
                 }
@@ -471,7 +471,7 @@ class SpdxDocumentFile(
 
             val discardedFiles = definitionFiles - remainingFiles
             if (discardedFiles.isNotEmpty()) {
-                log.info {
+                logger.info {
                     "Discarded the following ${discardedFiles.size} non-project SPDX files: " +
                             discardedFiles.joinToString { "'$it'" }
                 }
@@ -494,7 +494,7 @@ class SpdxDocumentFile(
             }
         }
 
-        log.info {
+        logger.info {
             "File '$definitionFile' contains SPDX document '${spdxDocument.name}' which describes project " +
                     "'${projectPackage.name}'."
         }

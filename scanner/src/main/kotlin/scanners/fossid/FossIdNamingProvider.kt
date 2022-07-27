@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * This class provides names for projects and scans when the FossID scanner creates them, following a given pattern.
@@ -74,7 +74,7 @@ internal class FossIdNamingProvider(
     private fun replaceNamingConventionVariables(
         namingConventionPattern: String, builtins: Map<String, String>, namingConventionVariables: Map<String, String>
     ): String {
-        log.info { "Parameterizing the name with pattern '$namingConventionPattern'." }
+        logger.info { "Parameterizing the name with pattern '$namingConventionPattern'." }
         val currentTimestamp = FORMATTER.format(LocalDateTime.now())
 
         val allVariables =

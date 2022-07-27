@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [CocoaPods](https://cocoapods.org/) package manager for Objective-C.
@@ -170,7 +170,7 @@ class CocoaPods(
 
     private fun getPackage(id: Identifier, workingDir: File): Package {
         val podspec = getPodspec(id, workingDir) ?: run {
-            log.warn { "Could not find a '.podspec' file for package '${id.toCoordinates()}'." }
+            logger.warn { "Could not find a '.podspec' file for package '${id.toCoordinates()}'." }
 
             return Package.EMPTY.copy(id = id)
         }

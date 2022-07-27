@@ -37,7 +37,7 @@ class NetRcAuthenticator : Authenticator() {
         netrcFileNames.forEach { name ->
             val netrcFile = Os.userHomeDirectory.resolve(name)
             if (netrcFile.isFile) {
-                log.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
+                logger.debug { "Parsing '$netrcFile' for machine '$requestingHost'." }
 
                 // Read the file on each function call to be up-to-date with any changes.
                 val netrcText = netrcFile.readText()
@@ -74,7 +74,7 @@ internal fun getNetrcAuthentication(contents: String, machine: String): Password
         }
 
         if (login != null && password != null) {
-            OrtAuthenticator.log.debug { "Found a '$machineFound' entry for '$machine'." }
+            OrtAuthenticator.logger.debug { "Found a '$machineFound' entry for '$machine'." }
             return PasswordAuthentication(login, password.toCharArray())
         }
     }

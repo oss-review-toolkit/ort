@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
 /**
@@ -154,7 +154,7 @@ class ScanCode internal constructor(
         val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
 
         if (scannerDir.resolve(command()).isFile) {
-            log.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
+            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
             return scannerDir
         }
 
@@ -171,15 +171,15 @@ class ScanCode internal constructor(
 
         // Download ScanCode to a file instead of unpacking directly from the response body as doing so on the > 200 MiB
         // archive causes issues.
-        log.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $scannerName from $url... " }
         unpackDir.safeMkdirs()
         val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
 
-        log.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
+        logger.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
         scannerArchive.unpack(unpackDir)
 
         if (!scannerArchive.delete()) {
-            log.warn { "Unable to delete temporary file '$scannerArchive'." }
+            logger.warn { "Unable to delete temporary file '$scannerArchive'." }
         }
 
         return scannerDir
@@ -212,7 +212,7 @@ class ScanCode internal constructor(
         mapTimeoutErrors(issues)
 
         return with(process) {
-            if (stderr.isNotBlank()) log.debug { stderr }
+            if (stderr.isNotBlank()) logger.debug { stderr }
 
             summary.copy(issues = issues)
         }

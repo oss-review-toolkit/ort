@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [PathScanner] that is executed as a [CommandLineTool] on the local machine.
@@ -48,14 +48,14 @@ abstract class CommandLineScanner(
         Os.getPathFromEnvironment(scannerExe)?.parentFile?.also {
             val actualVersion = getVersion(it)
             if (actualVersion != expectedVersion) {
-                log.warn {
+                logger.warn {
                     "ORT is currently tested with $name version $expectedVersion, but you are using version " +
                             "$actualVersion. This could lead to problems with parsing the $name output."
                 }
             }
         } ?: run {
             if (scannerExe.isNotEmpty()) {
-                log.info {
+                logger.info {
                     "Bootstrapping scanner '$scannerName' as expected version $expectedVersion was not found in PATH."
                 }
 
@@ -71,11 +71,11 @@ abstract class CommandLineScanner(
                     }
                 }
 
-                log.info { "Bootstrapped scanner '$scannerName' version $expectedVersion in $duration." }
+                logger.info { "Bootstrapped scanner '$scannerName' version $expectedVersion in $duration." }
 
                 bootstrapDirectory
             } else {
-                log.info { "Skipping to bootstrap scanner '$scannerName' as it has no executable." }
+                logger.info { "Skipping to bootstrap scanner '$scannerName' as it has no executable." }
 
                 File("")
             }

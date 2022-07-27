@@ -68,7 +68,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.await
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
@@ -137,9 +137,9 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
         val response = client.newCall(request).await()
         if (response.cacheResponse != null) {
-            log.debug { "Retrieved '$url' response from local cache." }
+            logger.debug { "Retrieved '$url' response from local cache." }
         } else {
-            log.debug { "Retrieved '$url' response from remote server." }
+            logger.debug { "Retrieved '$url' response from remote server." }
         }
 
         val body = response.body?.string()?.takeIf { response.isSuccessful }
@@ -246,7 +246,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
                         recursive = true
                     )
                 } else {
-                    log.debug {
+                    logger.debug {
                         "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
                     }
                 }
@@ -395,7 +395,7 @@ class NuGetConfigFileReader {
 
         if (locals.isNotEmpty()) {
             // TODO: Handle local package sources.
-            log.warn { "Ignoring local NuGet package sources $locals." }
+            logger.warn { "Ignoring local NuGet package sources $locals." }
         }
 
         return remotes

@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -57,7 +57,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                     emptyList()
                 }
                 else -> {
-                    log.info {
+                    logger.info {
                         "Could not read scan results for '$provenance' from path '$path': " +
                                 it.collectMessages()
                     }
@@ -94,13 +94,13 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
 
         runCatching {
             backend.write(path, input)
-            log.debug { "Stored scan result for '$provenance' at path '$path'." }
+            logger.debug { "Stored scan result for '$provenance' at path '$path'." }
         }.onFailure {
             when (it) {
                 is IllegalArgumentException, is IOException -> {
                     it.showStackTrace()
 
-                    log.warn {
+                    logger.warn {
                         "Could not store scan result for '$provenance' at path '$path': ${it.collectMessages()}"
                     }
                 }

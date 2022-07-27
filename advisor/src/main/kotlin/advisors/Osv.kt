@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 import us.springett.cvss.Cvss
 
@@ -107,7 +107,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
                 requests[i].first.id to vulnerabilities
             }
         }.onFailure {
-            log.error {
+            logger.error {
                 "Requesting vulnerabilities IDs for packages failed: ${result.exceptionOrNull()!!.collectMessages()}"
             }
         }
@@ -119,7 +119,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
         val result = service.getVulnerabilitiesForIds(ids)
 
         return result.getOrElse {
-            log.error {
+            logger.error {
                 "Requesting vulnerabilities IDs for packages failed: ${result.exceptionOrNull()!!.collectMessages()}"
             }
             emptyList()
@@ -176,7 +176,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
             // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
             it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
         } ?: run {
-            log.debug { "Could not parse CVSS vector '${it.score}'." }
+            logger.debug { "Could not parse CVSS vector '${it.score}'." }
             null to it.score
         }
     } ?: (null to null)
@@ -195,7 +195,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
         url.toUri().onFailure {
-            log.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
+            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
         }.map {
             VulnerabilityReference(
                 url = it,

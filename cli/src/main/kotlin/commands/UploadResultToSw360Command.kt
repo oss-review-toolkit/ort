@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 class UploadResultToSw360Command : CliktCommand(
     name = "upload-result-to-sw360",
@@ -123,12 +123,12 @@ class UploadResultToSw360Command : CliktCommand(
                         )
 
                         if (uploadResult.isSuccess) {
-                            log.info {
+                            logger.info {
                                 "Successfully uploaded source attachment '${zipFile.name}' to release " +
                                         "${release.id}:${release.name}"
                             }
                         } else {
-                            log.error { "Could not upload source attachment: " + uploadResult.failedUploads() }
+                            logger.error { "Could not upload source attachment: " + uploadResult.failedUploads() }
                         }
                     } finally {
                         tempDirectory.safeDeleteRecursively(force = true)
@@ -156,10 +156,10 @@ class UploadResultToSw360Command : CliktCommand(
 
         return try {
             client.createProject(sw360Project)?.also {
-                log.debug { "Project '${it.name}-${it.version}' created in SW360." }
+                logger.debug { "Project '${it.name}-${it.version}' created in SW360." }
             }
         } catch (e: SW360ClientException) {
-            log.error {
+            logger.error {
                 "Could not create the project '${project.id.toCoordinates()}' in SW360: " + e.collectMessages()
             }
 
@@ -173,7 +173,7 @@ class UploadResultToSw360Command : CliktCommand(
 
         val unmappedLicenses = pkg.declaredLicensesProcessed.unmapped.toSortedSet()
         if (unmappedLicenses.isNotEmpty()) {
-            log.warn {
+            logger.warn {
                 "The following licenses could not be mapped in order to create a SW360 release: $unmappedLicenses"
             }
         }
@@ -185,10 +185,10 @@ class UploadResultToSw360Command : CliktCommand(
 
         return try {
             client.createRelease(sw360Release)?.also {
-                log.debug { "Release '${it.name}-${it.version}' created in SW360." }
+                logger.debug { "Release '${it.name}-${it.version}' created in SW360." }
             }
         } catch (e: SW360ClientException) {
-            log.error {
+            logger.error {
                 "Could not create the release for '${pkg.id.toCoordinates()}' in SW360: " + e.collectMessages()
             }
 

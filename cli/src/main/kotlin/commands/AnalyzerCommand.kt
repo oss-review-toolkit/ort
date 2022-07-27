@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }
@@ -244,7 +244,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             if (config.enableRepositoryPackageCurations) {
                 add(SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
-                this@AnalyzerCommand.log.warn {
+                this@AnalyzerCommand.logger.warn {
                     "Existing package curations from '$ORT_REPO_CONFIG_FILENAME' are not applied because the feature " +
                             "is disabled."
                 }

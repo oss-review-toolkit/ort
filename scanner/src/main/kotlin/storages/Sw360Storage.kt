@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The SW360 storage back-end uses the SW360-client library in order to read/add attachments from the configured
@@ -98,7 +98,7 @@ class Sw360Storage(
         }.recoverCatching {
             val message = "Could not read scan results for ${id.toCoordinates()} in SW360: ${it.message}"
 
-            log.info { message }
+            logger.info { message }
 
             throw ScanStorageException(message)
         }
@@ -121,7 +121,7 @@ class Sw360Storage(
                 .map { releaseClient.uploadAttachments(it) }
 
             if (uploadResult.isPresent && uploadResult.get().isSuccess) {
-                log.debug { "Stored scan result for '${id.toCoordinates()}' in SW360." }
+                logger.debug { "Stored scan result for '${id.toCoordinates()}' in SW360." }
             } else {
                 throw ScanStorageException("Failed to upload scan results for '${id.toCoordinates()}' to SW360.")
             }
@@ -129,7 +129,7 @@ class Sw360Storage(
             val message = "Failed to add scan results for '${id.toCoordinates()}' to SW360: " +
                     it.collectMessages()
 
-            log.info { message }
+            logger.info { message }
 
             throw ScanStorageException(message)
         }

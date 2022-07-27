@@ -52,7 +52,7 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.OpossumReporter.OpossumInput
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
@@ -298,7 +298,7 @@ class OpossumReporter : Reporter {
             }
 
             paths.forEach { path ->
-                log.debug { "add signal ${signal.id} of source ${signal.source} to $path" }
+                logger.debug { "add signal ${signal.id} of source ${signal.source} to $path" }
                 resources.addResource(path)
                 pathToSignal.getOrPut(resolvePath(path)) { sortedSetOf() } += uuidOfSignal
             }
@@ -322,7 +322,7 @@ class OpossumReporter : Reporter {
             level: Int = 1
         ) {
             val dependencyId = dependency.id
-            log.debug { "$relRoot - ${dependencyId.toCoordinates()} - Dependency" }
+            logger.debug { "$relRoot - ${dependencyId.toCoordinates()} - Dependency" }
             val dependencyPath =
                 resolvePath(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
 
@@ -347,12 +347,12 @@ class OpossumReporter : Reporter {
             relRoot: String = "/"
         ) {
             val name = scope.name
-            log.debug { "$relRoot - $name - DependencyScope" }
+            logger.debug { "$relRoot - $name - DependencyScope" }
 
             val rootForScope = resolvePath(relRoot, name)
             if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
             scope.dependencies.forEachIndexed { index, dependency ->
-                log.debug { "scope -> dependency ${index + 1} of ${scope.dependencies.size}" }
+                logger.debug { "scope -> dependency ${index + 1} of ${scope.dependencies.size}" }
                 addDependency(dependency, curatedPackages, rootForScope)
             }
         }
@@ -375,7 +375,7 @@ class OpossumReporter : Reporter {
         ) {
             val projectId = project.id
             val definitionFilePath = resolvePath(relRoot, project.definitionFilePath)
-            log.debug { "$definitionFilePath - $projectId - Project" }
+            logger.debug { "$definitionFilePath - $projectId - Project" }
             val projectRoot = getRootForProject(project, relRoot)
             addPackageRoot(projectId, projectRoot, 0, project.toPackage().vcsProcessed)
             addFileWithChildren(definitionFilePath)
@@ -395,7 +395,7 @@ class OpossumReporter : Reporter {
             project.scopes
                 .filterNot { it.name in excludedScopes }
                 .forEachIndexed { index, scope ->
-                    log.debug { "analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}" }
+                    logger.debug { "analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}" }
                     addDependencyScope(scope, curatedPackages, definitionFilePath)
                 }
         }
@@ -404,11 +404,11 @@ class OpossumReporter : Reporter {
             val scanner = "${result.scanner.name}@${result.scanner.version}"
             val roots = packageToRoot[id]
             if (roots == null) {
-                log.info { "No root for $id from $scanner" }
+                logger.info { "No root for $id from $scanner" }
                 return
             }
 
-            log.debug { "add scanner results for $id from $scanner to ${roots.size} roots" }
+            logger.debug { "add scanner results for $id from $scanner to ${roots.size} roots" }
 
             val licenseFindings = result.summary.licenseFindings
             val copyrightFindings = result.summary.copyrightFindings
@@ -477,7 +477,7 @@ class OpossumReporter : Reporter {
         fun addIssue(issue: OrtIssue, id: Identifier, source: String) {
             val roots = packageToRoot[id]
             val paths = if (roots.isNullOrEmpty()) {
-                log.info { "No root for $id" }
+                logger.info { "No root for $id" }
                 mutableSetOf("/")
             } else {
                 roots.keys
@@ -497,7 +497,7 @@ class OpossumReporter : Reporter {
             }
 
             if (rootlessPackages.isNotEmpty()) {
-                log.warn { "There are ${rootlessPackages.size} packages that had no root." }
+                logger.warn { "There are ${rootlessPackages.size} packages that had no root." }
             }
         }
     }
@@ -535,7 +535,7 @@ class OpossumReporter : Reporter {
         val analyzerResultProjects = analyzerResult.projects
         val analyzerResultPackages = analyzerResult.packages
         analyzerResultProjects.forEachIndexed { index, project ->
-            log.debug { "analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}" }
+            logger.debug { "analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}" }
             opossumInput.addProject(project, analyzerResultPackages, excludedScopes)
         }
         if (excludedScopes.isEmpty()) {
@@ -554,7 +554,7 @@ class OpossumReporter : Reporter {
 
         val scannerResults = ortResult.scanner?.results?.scanResults ?: return OpossumInput()
         scannerResults.entries.forEachIndexed { index, entry ->
-            log.debug { "scannerResult ${index + 1} of ${scannerResults.entries.size}" }
+            logger.debug { "scannerResult ${index + 1} of ${scannerResults.entries.size}" }
             opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
         }
 

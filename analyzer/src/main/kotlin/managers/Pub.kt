@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -124,24 +124,24 @@ class Pub(
         gradleDefinitionFilesForPubDefinitionFiles.clear()
         gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
 
-        log.info { "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)." }
+        logger.info { "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)." }
 
         gradleDefinitionFilesForPubDefinitionFiles.forEach { (flutterDefinitionFile, gradleDefinitionFiles) ->
             if (gradleDefinitionFiles.isEmpty()) return@forEach
 
-            log.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
+            logger.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
 
             gradleDefinitionFiles.forEach { gradleDefinitionFile ->
-                log.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
+                logger.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
             }
         }
 
         if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
-            log.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
+            logger.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
             return
         }
 
-        log.info { "Bootstrapping flutter as it was not found." }
+        logger.info { "Bootstrapping flutter as it was not found." }
 
         val archive = when {
             Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
@@ -151,15 +151,15 @@ class Pub(
 
         val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
 
-        log.info { "Downloading flutter-$flutterVersion from $url... " }
+        logger.info { "Downloading flutter-$flutterVersion from $url... " }
         flutterInstallDir.safeMkdirs()
         val flutterArchive = OkHttpClientHelper.downloadFile(url, flutterInstallDir).getOrThrow()
 
-        log.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
+        logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
         flutterArchive.unpack(flutterInstallDir)
 
         if (!flutterArchive.delete()) {
-            log.warn { "Unable to delete temporary file '$flutterArchive'." }
+            logger.warn { "Unable to delete temporary file '$flutterArchive'." }
         }
 
         ProcessCapture("$flutterAbsolutePath${File.separator}$flutterCommand", "config", "--no-analytics")
@@ -222,11 +222,11 @@ class Pub(
         if (hasDependencies) {
             installDependencies(workingDir)
 
-            log.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
+            logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
             val lockFile = yamlMapper.readTree(workingDir.resolve(PUB_LOCK_FILE))
 
-            log.info { "Successfully read lockfile." }
+            logger.info { "Successfully read lockfile." }
 
             val parsePackagesResult = parseInstalledPackages(lockFile, labels, workingDir)
 
@@ -249,7 +249,7 @@ class Pub(
             packages += parsePackagesResult.packages
             issues += parsePackagesResult.issues
 
-            log.info { "Successfully parsed installed packages." }
+            logger.info { "Successfully parsed installed packages." }
 
             scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir)
             scopes += parseScope(
@@ -274,7 +274,7 @@ class Pub(
     ): Scope {
         val packageName = manifest["name"].textValue()
 
-        log.info { "Parsing scope '$scopeName' for package '$packageName'." }
+        logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
         val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence()?.toList() ?: listOf<String>()
         val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels, workingDir)
@@ -294,7 +294,7 @@ class Pub(
         val nameOfCurrentPackage = manifest["name"].textValue()
         val containsFlutter = "flutter" in dependencies
 
-        log.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
+        logger.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
 
         // Lookup the dependencies listed in pubspec.yaml file and build the dependency tree.
         dependencies.forEach { packageName ->
@@ -384,7 +384,7 @@ class Pub(
         if (!packageFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            log.info {
+            logger.info {
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION."
             }
 
@@ -454,7 +454,7 @@ class Pub(
         labels: Map<String, String>,
         workingDir: File
     ): ParsePackagesResult {
-        log.info { "Parsing installed Pub packages..." }
+        logger.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
         val issues = mutableListOf<OrtIssue>()
@@ -477,7 +477,7 @@ class Pub(
                             rawName = packageName
                             val path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
                             vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
-                                log.warn {
+                                logger.warn {
                                     "Invalid path of package $rawName: " +
                                     "'$path' is outside of the project root '$workingDir'."
                                 }
@@ -516,7 +516,7 @@ class Pub(
                     }
 
                     if (version.isEmpty()) {
-                        log.warn { "No version information found for package $rawName." }
+                        logger.warn { "No version information found for package $rawName." }
                     }
 
                     val id = Identifier(

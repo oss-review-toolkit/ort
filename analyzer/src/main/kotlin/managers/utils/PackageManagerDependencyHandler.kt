@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.utils.ort.log
+import org.ossreviewtoolkit.utils.ort.logger
 
 private const val TYPE = "PackageManagerDependency"
 
@@ -121,7 +121,7 @@ private data class PackageManagerDependency(
     fun findProjects(analyzerResult: AnalyzerResult): List<Project> =
         analyzerResult.projects.filter { it.definitionFilePath == definitionFile }.also { projects ->
             if (projects.isEmpty()) {
-                log.warn { "Could not find any project for definition file '$definitionFile'." }
+                logger.warn { "Could not find any project for definition file '$definitionFile'." }
             }
 
             projects.forEach { verify(it) }
@@ -148,7 +148,7 @@ private data class PackageManagerDependency(
         }
 
         if (scope !in project.scopeNames.orEmpty()) {
-            log.warn {
+            logger.warn {
                 "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not contain " +
                         "the requested scope '$scope'."
             }
