@@ -106,7 +106,7 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilitiesForIds(ids)
 
         result.shouldBeSuccess {
-            it.map { it.id } shouldContainExactlyInAnyOrder ids
+            it.map { vulnerability -> vulnerability.id } shouldContainExactlyInAnyOrder ids
         }
     }
 })
