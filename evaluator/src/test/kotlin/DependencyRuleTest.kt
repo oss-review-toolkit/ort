@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 
 class DependencyRuleTest : WordSpec() {
-    private val ruleSet = RuleSet(ortResult)
+    private val ruleSet = ruleSet(ortResult) { }
 
     private fun createRule(pkg: Package, dependency: PackageReference) =
         DependencyRule(

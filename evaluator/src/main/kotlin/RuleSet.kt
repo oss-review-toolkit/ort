@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.utils.ort.logger
  */
 class RuleSet(
     val ortResult: OrtResult,
-    val licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
-    val resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(ortResult)
+    val licenseInfoResolver: LicenseInfoResolver,
+    val resolutionProvider: ResolutionProvider
 ) {
     /**
      * The list of all issues created by the rules of this [RuleSet].

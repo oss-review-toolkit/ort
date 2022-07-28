@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 class PackageRuleTest : WordSpec() {
-    private val ruleSet = RuleSet(ortResult)
+    private val ruleSet = ruleSet(ortResult) { }
 
     private fun createPackageRule(pkg: Package) =
         PackageRule(ruleSet, "test", pkg, emptyList(), ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id))
