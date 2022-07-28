@@ -34,6 +34,13 @@ open class OrtResultRule(
      */
     val ortResult = ruleSet.ortResult
 
+    /**
+     * The source tree of the project. Accessing the property may trigger cloning the repository and thus may take a
+     * while.
+     */
+    val projectSourceTree: SourceTree
+        get() = ruleSet.projectSourceTree
+
     override val description = "Evaluating ORT result rule '$name'."
 
     override fun issueSource() = "$name - ORT result"

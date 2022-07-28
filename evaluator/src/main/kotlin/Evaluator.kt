@@ -40,12 +40,21 @@ class Evaluator(
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
     licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    projectSourceTree: SourceTree = SourceTree.forRemoteRepository(ortResult.repository.vcsProcessed),
     time: Instant = Instant.now()
 ) : ScriptRunner() {
     override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
 
     override val evalConfig = ScriptEvaluationConfiguration {
-        constructorArgs(ortResult, licenseInfoResolver, resolutionProvider, licenseClassifications, time)
+        constructorArgs(
+            ortResult,
+            licenseInfoResolver,
+            resolutionProvider,
+            licenseClassifications,
+            projectSourceTree,
+            time
+        )
+
         scriptsInstancesSharing(true)
     }
 

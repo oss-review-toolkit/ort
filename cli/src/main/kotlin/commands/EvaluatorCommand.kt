@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
+import org.ossreviewtoolkit.evaluator.SourceTree
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -310,7 +311,15 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         val resolutionProvider = DefaultResolutionProvider.create(ortResultInput, resolutionsFile)
         val licenseClassifications =
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
-        val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
+        val projectSourceTree = SourceTree.forRemoteRepository(ortResultInput.repository.vcsProcessed)
+
+        val evaluator = Evaluator(
+            ortResultInput,
+            licenseInfoResolver,
+            resolutionProvider,
+            licenseClassifications,
+            projectSourceTree
+        )
 
         val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
 

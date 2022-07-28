@@ -37,7 +37,8 @@ import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 class RuleSet(
     val ortResult: OrtResult,
     val licenseInfoResolver: LicenseInfoResolver,
-    val resolutionProvider: ResolutionProvider
+    val resolutionProvider: ResolutionProvider,
+    val projectSourceTree: SourceTree
 ) {
     companion object : Logging
 
@@ -152,5 +153,6 @@ fun ruleSet(
     ortResult: OrtResult,
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
+    projectSourceTree: SourceTree = SourceTree.forRemoteRepository(ortResult.repository.vcsProcessed),
     configure: RuleSet.() -> Unit = { }
-) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider).apply(configure)
+) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider, projectSourceTree).apply(configure)

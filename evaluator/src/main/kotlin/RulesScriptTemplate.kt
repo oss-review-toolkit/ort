@@ -56,6 +56,7 @@ open class RulesScriptTemplate(
     val licenseInfoResolver: LicenseInfoResolver,
     val resolutionProvider: ResolutionProvider,
     val licenseClassifications: LicenseClassifications,
+    val projectSourceTree: SourceTree,
     val time: Instant
 ) {
     val ruleViolations = mutableListOf<RuleViolation>()
