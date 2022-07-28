@@ -149,5 +149,5 @@ fun ruleSet(
     ortResult: OrtResult,
     licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
-    configure: RuleSet.() -> Unit
+    configure: RuleSet.() -> Unit = { }
 ) = RuleSet(ortResult, licenseInfoResolver, resolutionProvider).apply(configure)
