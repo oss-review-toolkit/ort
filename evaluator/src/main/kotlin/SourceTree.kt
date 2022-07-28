@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 class SourceTree private constructor(
@@ -52,9 +53,26 @@ class SourceTree private constructor(
                     downloadDir
                 }
             )
+
+        fun forLocalDir(dir: File, vcsType: VcsType) =
+            SourceTree(
+                vcsType = vcsType,
+                getRepositoryRoot = { dir }
+            )
     }
 
     val rootDir by lazy {
         getRepositoryRoot()
+    }
+
+    /**
+     * Return true if any of the given [glob expressions][patterns] match an existing file.
+     */
+    fun hasFile(vararg patterns: String): Boolean {
+        val matcher = FileMatcher(patterns.toSet())
+
+        return rootDir.walkBottomUp().filter {
+            it.isFile && matcher.matches(it.relativeTo(rootDir).path)
+        }.count() > 0
     }
 }

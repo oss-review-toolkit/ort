@@ -81,4 +81,15 @@ open class OrtResultRule(
             message = message,
             howToFix = howToFix
         )
+
+    /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one file matching any of the
+     * given [glob expressions][patterns].
+     */
+    fun sourceTreeHasFile(vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description = "sourceTreeHasFile('${patterns.joinToString()}')"
+
+            override fun matches(): Boolean = projectSourceTree.hasFile(*patterns)
+        }
 }
