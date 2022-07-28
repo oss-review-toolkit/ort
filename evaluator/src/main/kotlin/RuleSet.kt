@@ -57,6 +57,16 @@ class RuleSet(
     }
 
     /**
+     * A DSL function to configure an [ProjectSourceRule]. The rule is applied once to [ortResult].
+     */
+    fun projectSourceRule(name: String, configure: ProjectSourceRule.() -> Unit) {
+        ProjectSourceRule(this, name).apply {
+            configure()
+            evaluate()
+        }
+    }
+
+    /**
      * A DSL function to configure a [PackageRule]. The rule is applied to each [Package] and [Project] contained in
      * [ortResult].
      */

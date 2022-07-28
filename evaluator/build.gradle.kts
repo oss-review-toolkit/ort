@@ -27,6 +27,7 @@ dependencies {
     api(project(":model"))
     api(project(":utils:scripting-utils"))
 
+    implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
