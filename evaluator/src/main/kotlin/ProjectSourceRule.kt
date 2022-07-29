@@ -40,11 +40,31 @@ open class ProjectSourceRule(
     val projectSourcesDir: File by lazy { projectSourceResolver.rootDir }
 
     /**
+     * Return all directories from the project's source tree which match any of the
+     * provided [glob expressions][patterns].
+     */
+    fun projectSourceFindDirectories(vararg patterns: String): List<File> =
+        projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
+            it.isDirectory && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+        }
+
+    /**
      * Return all files from the project's source tree which match any of the provided [glob expressions][patterns].
      */
     fun projectSourceFindFiles(vararg patterns: String): List<File> =
         projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
             it.isFile && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+        }
+
+    /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one directory matching any of the
+     * provided [glob expressions][patterns].
+     */
+    fun projectSourceHasDirectory(vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description = "projectSourceHasDirectory('${patterns.joinToString()}')"
+
+            override fun matches(): Boolean = projectSourceFindDirectories(*patterns).isNotEmpty()
         }
 
     /**
