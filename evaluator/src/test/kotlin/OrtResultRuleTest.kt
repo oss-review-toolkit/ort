@@ -63,6 +63,38 @@ class OrtResultRuleTest : WordSpec({
             rule.sourceTreeHasFile("README.md").matches() shouldBe false
         }
     }
+
+    "sourceTreeHasDirectory()" should {
+        "return true if at least one directory matches the given glob pattern" {
+            val dir = createSpecTempDir().apply {
+                addDirs("a/b/c")
+            }
+            val rule = createOrtResultRule(dir)
+
+            with(rule) {
+                sourceTreeHasDirectory("a").matches() shouldBe true
+                sourceTreeHasDirectory("a/b").matches() shouldBe true
+                sourceTreeHasDirectory("**/b/**").matches() shouldBe true
+                sourceTreeHasDirectory("**/c").matches() shouldBe true
+            }
+        }
+
+        "return false if only a file matches the given glob pattern" {
+            val dir = createSpecTempDir().apply {
+                addFiles("a")
+            }
+            val rule = createOrtResultRule(dir)
+
+            rule.sourceTreeHasDirectory("a").matches() shouldBe false
+        }
+
+        "return false if neither any file nor directory matches the given glob pattern" {
+            val dir = createSpecTempDir()
+            val rule = createOrtResultRule(dir)
+
+            rule.sourceTreeHasDirectory("a").matches() shouldBe false
+        }
+    }
 })
 
 private fun createOrtResultRule(projectSourcesDir: File) =

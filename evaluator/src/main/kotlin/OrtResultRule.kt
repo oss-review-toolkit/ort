@@ -83,6 +83,17 @@ open class OrtResultRule(
         )
 
     /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one directory matching any of the
+     * provided [glob expressions][patterns].
+     */
+    fun sourceTreeHasDirectory(vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description = "sourceTreeHasDirectory('${patterns.joinToString()}')"
+
+            override fun matches(): Boolean = projectSourceTree.hasDirectory(*patterns)
+        }
+
+    /**
      * A [RuleMatcher] that checks whether the project's source tree contains at least one file matching any of the
      * given [glob expressions][patterns].
      */

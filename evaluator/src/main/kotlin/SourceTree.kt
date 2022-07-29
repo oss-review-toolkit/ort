@@ -66,7 +66,18 @@ class SourceTree private constructor(
     }
 
     /**
-     * Return true if any of the given [glob expressions][patterns] match an existing file.
+     * Return true if any of the given [glob expressions][patterns] match an existing directory.
+     */
+    fun hasDirectory(vararg patterns: String): Boolean {
+        val matcher = FileMatcher(patterns.toSet())
+
+        return rootDir.walkBottomUp().filter {
+            it.isDirectory && matcher.matches(it.relativeTo(rootDir).path)
+        }.count() > 0
+    }
+
+    /**
+     * Return true if any of the given glob expressions match an existing file.
      */
     fun hasFile(vararg patterns: String): Boolean {
         val matcher = FileMatcher(patterns.toSet())
