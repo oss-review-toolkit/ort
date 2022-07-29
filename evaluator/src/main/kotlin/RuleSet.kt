@@ -47,7 +47,7 @@ class RuleSet(
      * A DSL function to configure an [OrtResultRule]. The rule is applied once to [ortResult].
      */
     fun ortResultRule(name: String, configure: OrtResultRule.() -> Unit) {
-        OrtResultRule(this, name, ortResult).apply {
+        OrtResultRule(this, name).apply {
             configure()
             evaluate()
         }
