@@ -27,12 +27,12 @@ import org.ossreviewtoolkit.model.OrtResult
 open class OrtResultRule(
     ruleSet: RuleSet,
     name: String,
-
+) : Rule(ruleSet, name) {
     /**
      * The [OrtResult] to check.
      */
-    val ortResult: OrtResult,
-) : Rule(ruleSet, name) {
+    val ortResult = ruleSet.ortResult
+
     override val description = "Evaluating ORT result rule '$name'."
 
     override fun issueSource() = "$name - ORT result"
