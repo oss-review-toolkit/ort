@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
+import org.ossreviewtoolkit.model.utils.getRepositoryPath
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -482,22 +483,6 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
     } ?: sortedMapOf()
 
     return replaceScanResults(scanResults)
-}
-
-/**
- * Return the path where the repository given by [provenance] is linked into the source tree.
- */
-private fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
-    repository.nestedRepositories.forEach { (path, vcsInfo) ->
-        if (vcsInfo.type == provenance.vcsInfo.type
-            && vcsInfo.url == provenance.vcsInfo.url
-            && vcsInfo.revision == provenance.resolvedRevision
-        ) {
-            return "/$path/"
-        }
-    }
-
-    return "/"
 }
 
 /**

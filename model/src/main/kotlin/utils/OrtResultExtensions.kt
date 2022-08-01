@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.model.utils
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
@@ -42,6 +43,22 @@ fun OrtResult.createLicenseInfoResolver(
         archiver,
         LicenseFilenamePatterns.getInstance()
     )
+
+/**
+ * Return the path where the repository given by [provenance] is linked into the source tree.
+ */
+fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
+    repository.nestedRepositories.forEach { (path, vcsInfo) ->
+        if (vcsInfo.type == provenance.vcsInfo.type
+            && vcsInfo.url == provenance.vcsInfo.url
+            && vcsInfo.revision == provenance.resolvedRevision
+        ) {
+            return "/$path/"
+        }
+    }
+
+    return "/"
+}
 
 /**
  * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.
