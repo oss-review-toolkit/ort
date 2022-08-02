@@ -61,14 +61,9 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 // https://pip.pypa.io/en/stable/news/#id176.
 private const val PIP_VERSION = "20.3.4"
 
-// See https://github.com/naiquevin/pipdeptree.
-private const val PIPDEPTREE_VERSION = "2.2.1"
 
 private val PHONY_DEPENDENCIES = mapOf(
-    "pipdeptree" to "", // A dependency of pipdeptree itself.
     "pkg-resources" to "0.0.0", // Added by a bug with some Ubuntu distributions.
-    "setuptools" to "", // A dependency of pipdeptree itself.
-    "wheel" to "" // A dependency of pipdeptree itself.
 )
 
 private fun isPhonyDependency(name: String, version: String): Boolean =
@@ -183,6 +178,23 @@ class Pip(
 
     override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(' ')
 
+    private fun runPythonInspector(
+        workingDir: File,
+        requirementsFile: String,
+        outputFile: String,
+    ): ProcessCapture {
+        val commandLineOptions = listOf(
+            "python-inspector",
+            "--requirement", requirementsFile,
+            "--json-pdt", outputFile,
+        )
+
+        val process = ProcessCapture(workingDir, *commandLineOptions.toTypedArray())
+        process.requireSuccess()
+        return process
+    }
+
+
     private fun runPipInVirtualEnv(virtualEnvDir: File, workingDir: File, vararg commandArgs: String) =
         runInVirtualEnv(virtualEnvDir, workingDir, command(workingDir), *TRUSTED_HOSTS, *commandArgs)
 
@@ -207,10 +219,9 @@ class Pip(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
-        // 1. Install dependencies via pip (inside a virtualenv, for isolation from globally installed packages).
-        // 2. Get metadata about the local project via `python setup.py`.
-        // 3. Get the hierarchy of dependencies via pipdeptree.
-        // 4. Get additional remote package metadata via PyPIJSON.
+        // 1. Get metadata about the local project via `python setup.py`.
+        // 2. Get the hierarchy of dependencies via python-inspector.
+        // 3. Get additional remote package metadata via PyPI JSON.
 
         val workingDir = definitionFile.parentFile
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
@@ -318,18 +329,18 @@ class Pip(
 
         val workingDir = definitionFile.parentFile
 
-        // List all packages installed locally in the virtualenv.
-        val pipdeptree = runInVirtualEnv(virtualEnvDir, workingDir, "pipdeptree", "-l", "--json-tree")
+        val jsonFile = createOrtTempDir().resolve("python-inspector.json")
+        val pythonInspector = runPythonInspector(workingDir, definitionFile.absolutePath, jsonFile.absolutePath)
 
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
-        if (pipdeptree.isSuccess) {
-            val fullDependencyTree = jsonMapper.readTree(pipdeptree.stdout)
+        if (pythonInspector.isSuccess) {
+            val fullDependencyTree = jsonMapper.readTree(jsonFile)
+            jsonFile.parentFile.safeDeleteRecursively(force = true)
 
             val projectDependencies = if (definitionFile.name == "setup.py") {
-                // The tree contains a root node for the project itself and pipdeptree's dependencies are also at the
-                // root next to it, as siblings.
+                // The tree contains a root node for the project itself.
                 fullDependencyTree.find {
                     it["package_name"].textValue() == projectName
                 }?.get("dependencies") ?: run {
@@ -337,8 +348,7 @@ class Pip(
                     EMPTY_JSON_NODE
                 }
             } else {
-                // The tree does not contain a node for the project itself. Its dependencies are on the root level
-                // together with the dependencies of pipdeptree itself, which we need to filter out.
+                // The tree does not contain a node for the project itself. Its dependencies are on the root level.
                 fullDependencyTree.filterNot {
                     isPhonyDependency(it["package_name"].textValue(), it["installed_version"].textValueOrEmpty())
                 }
@@ -354,7 +364,7 @@ class Pip(
             }
         } else {
             logger.error {
-                "Unable to determine dependencies for project in directory '$workingDir':\n${pipdeptree.stderr}"
+                "Unable to determine dependencies for project in directory '$workingDir':\n${pythonInspector.stderr}"
             }
         }
 
@@ -500,14 +510,6 @@ class Pip(
         } else {
             runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pip==$PIP_VERSION")
         }
-        pip.requireSuccess()
-
-        // Install pipdeptree inside the virtualenv as that's the only way to make it report only the project's
-        // dependencies instead of those of all (globally) installed packages, see
-        // https://github.com/naiquevin/pipdeptree#known-issues.
-        // We only depend on pipdeptree to be at least version 0.5.0 for JSON output, but we stick to a fixed
-        // version to be sure to get consistent results.
-        pip = runPipInVirtualEnv(virtualEnvDir, workingDir, "install", "pipdeptree==$PIPDEPTREE_VERSION")
         pip.requireSuccess()
 
         // TODO: Find a way to make installation of packages with native extensions work on Windows where often the
