@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.JsonFactory
 import com.fasterxml.jackson.databind.ObjectMapper
 
 import java.io.File
+import java.util.LinkedList
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -186,7 +187,7 @@ class GoMod(
             graph = graph.subgraph(vendorModules)
         }
 
-        return graph
+        return graph.breakCycles()
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -373,14 +374,60 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
             idsWithoutVersion.first()
         }
 
+    private enum class NodeColor { WHITE, GRAY, BLACK }
+
+    /**
+     * Return a copy of this Graph with edges removed so that no circle remains.
+     * TODO: The code has been copied from DependencyGraphBuilder as a temporary solutions. Once GoMod is migrated to
+     * use the dependency graph, this function can be dropped and the one from DependencyGraphBuilder can be re-used,
+     * see also https://github.com/oss-review-toolkit/ort/issues/4249.
+     */
+    fun breakCycles(): Graph {
+        val outgoingEdgesForNodes = nodeMap.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+        val color = outgoingEdgesForNodes.keys.associateWithTo(mutableMapOf()) { NodeColor.WHITE }
+
+        fun visit(u: Identifier) {
+            color[u] = NodeColor.GRAY
+
+            val nodesClosingCircle = mutableSetOf<Identifier>()
+
+            outgoingEdgesForNodes[u].orEmpty().forEach { v ->
+                if (color[v] == NodeColor.WHITE) {
+                    visit(v)
+                } else if (color[v] == NodeColor.GRAY) {
+                    nodesClosingCircle += v
+                }
+            }
+
+            outgoingEdgesForNodes[u]?.removeAll(nodesClosingCircle)
+            nodesClosingCircle.forEach { v ->
+                logger.debug { "Removing edge: ${u.toCoordinates()} -> ${v.toCoordinates()}}." }
+            }
+
+            color[u] = NodeColor.BLACK
+        }
+
+        val queue = LinkedList(outgoingEdgesForNodes.keys)
+
+        while (queue.isNotEmpty()) {
+            val v = queue.removeFirst()
+
+            if (color.getValue(v) != NodeColor.WHITE) continue
+
+            visit(v)
+        }
+
+        return Graph(outgoingEdgesForNodes.mapValuesTo(mutableMapOf()) { it.value.toSet() })
+    }
+
     /**
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
-     * of the given [root] package.
+     * of the given [root] package. The graph must not contain any cycles, so [breakCycles] should be called before.
      */
     fun toPackageReferenceForest(root: Identifier): SortedSet<PackageReference> {
-        fun getPackageReference(id: Identifier, predecessorNodes: Set<Identifier> = emptySet()): PackageReference {
-            val dependencies = nodeMap.getValue(id).filter { it !in predecessorNodes }.mapTo(sortedSetOf()) {
-                getPackageReference(it, predecessorNodes + id)
+        fun getPackageReference(id: Identifier): PackageReference {
+            val dependencies = nodeMap.getValue(id).mapTo(sortedSetOf()) {
+                getPackageReference(it)
             }
 
             return PackageReference(
