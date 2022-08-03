@@ -54,9 +54,8 @@ val handledLicenses = listOf(
 }
 
 /**
- * Function to return Markdown-formatted text to aid users with resolving violations.
+ * Return the Markdown-formatted text to aid users with resolving violations.
  */
-
 fun PackageRule.howToFixDefault() = """
         A text written in MarkDown to help users resolve policy violations
         which may link to additional resources.
