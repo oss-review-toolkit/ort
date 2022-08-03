@@ -115,24 +115,25 @@ fun RuleSet.unhandledLicenseRule() = packageRule("UNHANDLED_LICENSE") {
     }
 }
 
+fun RuleSet.unmappedDeclaredLicenseRule() = packageRule("UNMAPPED_DECLARED_LICENSE") {
+    require {
+        -isExcluded()
+    }
+
+    resolvedLicenseInfo.licenseInfo.declaredLicenseInfo.processed.unmapped.forEach { unmappedLicense ->
+        warning(
+            "The declared license '$unmappedLicense' could not be mapped to a valid license or parsed as an SPDX " +
+                    "expression. The license was found in package ${pkg.id.toCoordinates()}.",
+            howToFixDefault()
+        )
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
     unhandledLicenseRule()
-
-    packageRule("UNMAPPED_DECLARED_LICENSE") {
-        require {
-            -isExcluded()
-        }
-
-        resolvedLicenseInfo.licenseInfo.declaredLicenseInfo.processed.unmapped.forEach { unmappedLicense ->
-            warning(
-                "The declared license '$unmappedLicense' could not be mapped to a valid license or parsed as an SPDX " +
-                        "expression. The license was found in package ${pkg.id.toCoordinates()}.",
-                howToFixDefault()
-            )
-        }
-    }
+    unmappedDeclaredLicenseRule()
 
     packageRule("COPYLEFT_IN_SOURCE") {
         require {
