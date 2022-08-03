@@ -129,32 +129,39 @@ fun RuleSet.unmappedDeclaredLicenseRule() = packageRule("UNMAPPED_DECLARED_LICEN
     }
 }
 
+fun RuleSet.copyleftInSourceRule() = packageRule("COPYLEFT_IN_SOURCE") {
+    require {
+        -isExcluded()
+    }
+
+    licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
+        require {
+            -isExcluded()
+            +isCopyleft()
+        }
+
+        val message = if (licenseSource == LicenseSource.DETECTED) {
+            "The ScanCode copyleft categorized license $license was ${licenseSource.name.lowercase()} " +
+                    "in package ${pkg.id.toCoordinates()}."
+        } else {
+            "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode copyleft " +
+                    "catalogized license $license."
+        }
+
+        error(message, howToFixDefault())
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
     unhandledLicenseRule()
     unmappedDeclaredLicenseRule()
+    copyleftInSourceRule()
 
-    packageRule("COPYLEFT_IN_SOURCE") {
+    packageRule("COPYLEFT_LIMITED_IN_SOURCE") {
         require {
             -isExcluded()
-        }
-
-        licenseRule("COPYLEFT_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
-            require {
-                -isExcluded()
-                +isCopyleft()
-            }
-
-            val message = if (licenseSource == LicenseSource.DETECTED) {
-                "The ScanCode copyleft categorized license $license was ${licenseSource.name.lowercase()} " +
-                        "in package ${pkg.id.toCoordinates()}."
-            } else {
-                "The package ${pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode copyleft " +
-                        "catalogized license $license."
-            }
-
-            error(message, howToFixDefault())
         }
 
         licenseRule("COPYLEFT_LIMITED_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
