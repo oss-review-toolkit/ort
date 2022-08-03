@@ -152,41 +152,42 @@ fun RuleSet.copyleftInSourceRule() = packageRule("COPYLEFT_IN_SOURCE") {
     }
 }
 
+fun RuleSet.copyleftInSourceLimitedRule() = packageRule("COPYLEFT_LIMITED_IN_SOURCE") {
+    require {
+        -isExcluded()
+    }
+
+    licenseRule("COPYLEFT_LIMITED_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
+        require {
+            -isExcluded()
+            +isCopyleftLimited()
+        }
+
+        val licenseSourceName = licenseSource.name.lowercase()
+        val message = if (licenseSource == LicenseSource.DETECTED) {
+            if (pkg.id.type == "Unmanaged") {
+                "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
+                        "${pkg.id.toCoordinates()}."
+            } else {
+                "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
+                        "${pkg.id.toCoordinates()}."
+            }
+        } else {
+            "The package ${pkg.id.toCoordinates()} has the $licenseSourceName ScanCode copyleft-limited " +
+                    "categorized license $license."
+        }
+
+        error(message, howToFixDefault())
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
     unhandledLicenseRule()
     unmappedDeclaredLicenseRule()
     copyleftInSourceRule()
-
-    packageRule("COPYLEFT_LIMITED_IN_SOURCE") {
-        require {
-            -isExcluded()
-        }
-
-        licenseRule("COPYLEFT_LIMITED_IN_SOURCE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
-            require {
-                -isExcluded()
-                +isCopyleftLimited()
-            }
-
-            val licenseSourceName = licenseSource.name.lowercase()
-            val message = if (licenseSource == LicenseSource.DETECTED) {
-                if (pkg.id.type == "Unmanaged") {
-                    "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
-                            "${pkg.id.toCoordinates()}."
-                } else {
-                    "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
-                            "${pkg.id.toCoordinates()}."
-                }
-            } else {
-                "The package ${pkg.id.toCoordinates()} has the $licenseSourceName ScanCode copyleft-limited " +
-                        "categorized license $license."
-            }
-
-            error(message, howToFixDefault())
-        }
-    }
+    copyleftInSourceLimitedRule()
 
     packageRule("VULNERABILITY_IN_PACKAGE") {
         require {
