@@ -213,6 +213,21 @@ fun RuleSet.highSeverityVulnerabilityInPackageRule() = packageRule("HIGH_SEVERIT
     )
 }
 
+fun RuleSet.copyleftInDependencyRule() = dependencyRule("COPYLEFT_IN_DEPENDENCY") {
+    licenseRule("COPYLEFT_IN_DEPENDENCY", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
+        require {
+            +isCopyleft()
+        }
+
+        issue(
+            Severity.ERROR,
+            "The project ${project.id.toCoordinates()} has a dependency licensed under the ScanCode " +
+                    "copyleft categorized license $license.",
+            howToFixDefault()
+        )
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
@@ -224,20 +239,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     highSeverityVulnerabilityInPackageRule()
 
     // Define a rule that is executed for each dependency of a project.
-    dependencyRule("COPYLEFT_IN_DEPENDENCY") {
-        licenseRule("COPYLEFT_IN_DEPENDENCY", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
-            require {
-                +isCopyleft()
-            }
-
-            issue(
-                Severity.ERROR,
-                "The project ${project.id.toCoordinates()} has a dependency licensed under the ScanCode " +
-                        "copyleft categorized license $license.",
-                howToFixDefault()
-            )
-        }
-    }
+    copyleftInDependencyRule()
 
     dependencyRule("COPYLEFT_LIMITED_STATIC_LINK_IN_DIRECT_DEPENDENCY") {
         require {
