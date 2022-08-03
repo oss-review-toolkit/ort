@@ -194,6 +194,25 @@ fun RuleSet.vulnerabilityInPackageRule() = packageRule("VULNERABILITY_IN_PACKAGE
     )
 }
 
+fun RuleSet.highSeverityVulnerabilityInPackageRule() = packageRule("HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE") {
+    val maxAcceptedSeverity = "5.0"
+    val scoringSystem = "CVSS2"
+
+    require {
+        -isExcluded()
+        +hasVulnerability(maxAcceptedSeverity, scoringSystem) { value, threshold ->
+            value.toFloat() >= threshold.toFloat()
+        }
+    }
+
+    issue(
+        Severity.ERROR,
+        "The package ${pkg.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
+                "$maxAcceptedSeverity",
+        howToFixDefault()
+    )
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
@@ -202,25 +221,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     copyleftInSourceRule()
     copyleftInSourceLimitedRule()
     vulnerabilityInPackageRule()
-
-    packageRule("HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE") {
-        val maxAcceptedSeverity = "5.0"
-        val scoringSystem = "CVSS2"
-
-        require {
-            -isExcluded()
-            +hasVulnerability(maxAcceptedSeverity, scoringSystem) { value, threshold ->
-                value.toFloat() >= threshold.toFloat()
-            }
-        }
-
-        issue(
-            Severity.ERROR,
-            "The package ${pkg.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
-                    "$maxAcceptedSeverity",
-            howToFixDefault()
-        )
-    }
+    highSeverityVulnerabilityInPackageRule()
 
     // Define a rule that is executed for each dependency of a project.
     dependencyRule("COPYLEFT_IN_DEPENDENCY") {
