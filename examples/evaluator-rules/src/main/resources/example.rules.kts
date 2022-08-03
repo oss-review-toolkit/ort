@@ -249,6 +249,22 @@ fun RuleSet.copyleftLimitedInDependencyRule() = dependencyRule("COPYLEFT_LIMITED
     }
 }
 
+fun RuleSet.deprecatedScopeExcludeReasonInOrtYmlRule() = ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
+    val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
+
+    @Suppress("DEPRECATION")
+    val deprecatedReasons = setOf(ScopeExcludeReason.TEST_TOOL_OF)
+
+    reasons.intersect(deprecatedReasons).forEach { offendingReason ->
+        warning(
+            "The repository configuration is using the deprecated scope exclude reason '$offendingReason'.",
+            "Please use only non-deprecated scope exclude reasons, see " +
+                    "https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/" +
+                    "kotlin/config/ScopeExcludeReason.kt."
+        )
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
@@ -262,22 +278,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each dependency of a project.
     copyleftInDependencyRule()
     copyleftLimitedInDependencyRule()
-
-    ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
-        val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
-
-        @Suppress("DEPRECATION")
-        val deprecatedReasons = setOf(ScopeExcludeReason.TEST_TOOL_OF)
-
-        reasons.intersect(deprecatedReasons).forEach { offendingReason ->
-            warning(
-                "The repository configuration is using the deprecated scope exclude reason '$offendingReason'.",
-                "Please use only non-deprecated scope exclude reasons, see " +
-                        "https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/" +
-                        "kotlin/config/ScopeExcludeReason.kt."
-            )
-        }
-    }
+    deprecatedScopeExcludeReasonInOrtYmlRule()
 }
 
 // Populate the list of policy rule violations to return.
