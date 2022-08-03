@@ -181,6 +181,19 @@ fun RuleSet.copyleftInSourceLimitedRule() = packageRule("COPYLEFT_LIMITED_IN_SOU
     }
 }
 
+fun RuleSet.vulnerabilityInPackageRule() = packageRule("VULNERABILITY_IN_PACKAGE") {
+    require {
+        -isExcluded()
+        +hasVulnerability()
+    }
+
+    issue(
+        Severity.WARNING,
+        "The package ${pkg.id.toCoordinates()} has a vulnerability",
+        howToFixDefault()
+    )
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
@@ -188,19 +201,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     unmappedDeclaredLicenseRule()
     copyleftInSourceRule()
     copyleftInSourceLimitedRule()
-
-    packageRule("VULNERABILITY_IN_PACKAGE") {
-        require {
-            -isExcluded()
-            +hasVulnerability()
-        }
-
-        issue(
-            Severity.WARNING,
-            "The package ${pkg.id.toCoordinates()} has a vulnerability",
-            howToFixDefault()
-        )
-    }
+    vulnerabilityInPackageRule()
 
     packageRule("HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE") {
         val maxAcceptedSeverity = "5.0"
