@@ -228,6 +228,27 @@ fun RuleSet.copyleftInDependencyRule() = dependencyRule("COPYLEFT_IN_DEPENDENCY"
     }
 }
 
+fun RuleSet.copyleftLimitedInDependencyRule() = dependencyRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE") {
+    require {
+        +isAtTreeLevel(0)
+        +isStaticallyLinked()
+    }
+
+    licenseRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
+        require {
+            +isCopyleftLimited()
+        }
+
+        // Use issue() instead of error() if you want to set the severity.
+        issue(
+            Severity.WARNING,
+            "The project ${project.id.toCoordinates()} has a statically linked direct dependency licensed " +
+                    "under the ScanCode copyleft-left categorized license $license.",
+            howToFixDefault()
+        )
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
@@ -240,27 +261,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
 
     // Define a rule that is executed for each dependency of a project.
     copyleftInDependencyRule()
-
-    dependencyRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE") {
-        require {
-            +isAtTreeLevel(0)
-            +isStaticallyLinked()
-        }
-
-        licenseRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
-            require {
-                +isCopyleftLimited()
-            }
-
-            // Use issue() instead of error() if you want to set the severity.
-            issue(
-                Severity.WARNING,
-                "The project ${project.id.toCoordinates()} has a statically linked direct dependency licensed " +
-                        "under the ScanCode copyleft-left categorized license $license.",
-                howToFixDefault()
-            )
-        }
-    }
+    copyleftLimitedInDependencyRule()
 
     ortResultRule("DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML") {
         val reasons = ortResult.repository.config.excludes.scopes.mapTo(mutableSetOf()) { it.reason }
