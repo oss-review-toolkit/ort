@@ -241,13 +241,13 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each dependency of a project.
     copyleftInDependencyRule()
 
-    dependencyRule("COPYLEFT_LIMITED_STATIC_LINK_IN_DIRECT_DEPENDENCY") {
+    dependencyRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE") {
         require {
             +isAtTreeLevel(0)
             +isStaticallyLinked()
         }
 
-        licenseRule("LINKED_WEAK_COPYLEFT", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
+        licenseRule("COPYLEFT_LIMITED_IN_DEPENDENCY_RULE", LicenseView.CONCLUDED_OR_DECLARED_OR_DETECTED) {
             require {
                 +isCopyleftLimited()
             }
