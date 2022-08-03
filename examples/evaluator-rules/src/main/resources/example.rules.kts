@@ -92,31 +92,33 @@ fun PackageRule.LicenseRule.isCopyleftLimited() =
  * Example policy rules
  */
 
+fun RuleSet.unhandledLicenseRule() = packageRule("UNHANDLED_LICENSE") {
+    // Do not trigger this rule on packages that have been excluded in the .ort.yml.
+    require {
+        -isExcluded()
+    }
+
+    // Define a rule that is executed for each license of the package.
+    licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
+        require {
+            -isExcluded()
+            -isHandled()
+        }
+
+        // Throw an error message including guidance how to fix the issue.
+        error(
+            "The license $license is currently not covered by policy rules. " +
+                    "The license was ${licenseSource.name.lowercase()} in package " +
+                    "${pkg.id.toCoordinates()}",
+            howToFixDefault()
+        )
+    }
+}
+
 // Define the set of policy rules.
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     // Define a rule that is executed for each package.
-    packageRule("UNHANDLED_LICENSE") {
-        // Do not trigger this rule on packages that have been excluded in the .ort.yml.
-        require {
-            -isExcluded()
-        }
-
-        // Define a rule that is executed for each license of the package.
-        licenseRule("UNHANDLED_LICENSE", LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED) {
-            require {
-                -isExcluded()
-                -isHandled()
-            }
-
-            // Throw an error message including guidance how to fix the issue.
-            error(
-                "The license $license is currently not covered by policy rules. " +
-                        "The license was ${licenseSource.name.lowercase()} in package " +
-                        "${pkg.id.toCoordinates()}",
-                howToFixDefault()
-            )
-        }
-    }
+    unhandledLicenseRule()
 
     packageRule("UNMAPPED_DECLARED_LICENSE") {
         require {
