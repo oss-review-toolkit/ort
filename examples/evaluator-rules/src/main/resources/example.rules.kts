@@ -265,9 +265,11 @@ fun RuleSet.deprecatedScopeExcludeReasonInOrtYmlRule() = ortResultRule("DEPRECAT
     }
 }
 
-// Define the set of policy rules.
+/**
+ * The set of policy rules.
+ */
 val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
-    // Define a rule that is executed for each package.
+    // Rules which get executed for each package:
     unhandledLicenseRule()
     unmappedDeclaredLicenseRule()
     copyleftInSourceRule()
@@ -275,9 +277,11 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     vulnerabilityInPackageRule()
     highSeverityVulnerabilityInPackageRule()
 
-    // Define a rule that is executed for each dependency of a project.
+    // Rules which get executed for each dependency (of any project):
     copyleftInDependencyRule()
     copyleftLimitedInDependencyRule()
+
+    // Rules which get executed once:
     deprecatedScopeExcludeReasonInOrtYmlRule()
 }
 
