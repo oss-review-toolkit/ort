@@ -29,6 +29,7 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.io.IOException
 import java.util.SortedSet
+import java.util.concurrent.ConcurrentHashMap
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -228,6 +229,22 @@ open class Npm(
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
     protected open fun hasLockFile(projectDir: File) = hasNpmLockFile(projectDir)
+
+    /**
+     * Load the submodule directories of the project defined in [moduleDir].
+     */
+    protected open fun loadWorkspaceSubmodules(moduleDir: File): List<File> {
+        val nodeModulesDir = moduleDir.resolve("node_modules")
+        if (!nodeModulesDir.isDirectory) return emptyList()
+
+        val searchDirs = nodeModulesDir.walk().maxDepth(1).filter {
+            it.isDirectory && it.name.startsWith("@")
+        }.toList() + nodeModulesDir
+
+        return searchDirs.flatMap { dir ->
+            dir.walk().maxDepth(1).filter { it.isDirectory && it.isSymbolicLink() }.toList()
+        }
+    }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
@@ -448,6 +465,17 @@ open class Npm(
         return jsonMapper.readTree(process.stdout)
     }
 
+    /** Cache for submodules identified by its moduleDir absolutePath */
+    private val submodulesCache: ConcurrentHashMap<String, List<File>> = ConcurrentHashMap()
+
+    /**
+     * Find the directories which are defined as submodules of the project within [moduleDir].
+     */
+    protected fun findWorkspaceSubmodules(moduleDir: File): List<File> =
+        submodulesCache.getOrPut(moduleDir.absolutePath) {
+            loadWorkspaceSubmodules(moduleDir)
+        }
+
     /**
      * Retrieve all the dependencies of [project] from the given [scopes] and add them to the dependency graph under
      * the given [targetScope]. Return the target scope name if dependencies are found; *null* otherwise.
@@ -481,19 +509,6 @@ open class Npm(
             id = Identifier(managerName, namespace, name, ""),
             issues = listOf(issue)
         )
-    }
-
-    private fun findWorkspaceSubmodules(moduleDir: File): List<File> {
-        val nodeModulesDir = moduleDir.resolve("node_modules")
-        if (!nodeModulesDir.isDirectory) return emptyList()
-
-        val searchDirs = nodeModulesDir.walk().maxDepth(1).filter {
-            it.isDirectory && it.name.startsWith("@")
-        }.toList() + nodeModulesDir
-
-        return searchDirs.flatMap { dir ->
-            dir.walk().maxDepth(1).filter { it.isDirectory && it.isSymbolicLink() }.toList()
-        }
     }
 
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
