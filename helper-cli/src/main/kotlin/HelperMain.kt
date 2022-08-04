@@ -31,6 +31,7 @@ import com.github.ajalt.clikt.parameters.options.switch
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.core.config.Configurator
 
+import org.ossreviewtoolkit.helper.commands.ConvertOrtFileCommand
 import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
 import org.ossreviewtoolkit.helper.commands.DownloadResultsFromPostgresCommand
 import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
@@ -79,6 +80,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
         }
 
         subcommands(
+            ConvertOrtFileCommand(),
             CreateAnalyzerResultCommand(),
             ExtractRepositoryConfigurationCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
