@@ -264,6 +264,14 @@ fun RuleSet.deprecatedScopeExcludeReasonInOrtYmlRule() = ortResultRule("DEPRECAT
     }
 }
 
+fun RuleSet.missingContributingFileRule() = projectSourceRule("MISSING_CONTRIBUTING_FILE") {
+    require {
+        -projectSourceHasFile("CONTRIBUTING.md")
+    }
+
+    error("The project's code repository does not contain the file 'CONTRIBUTING.md'.")
+}
+
 /**
  * The set of policy rules.
  */
@@ -282,6 +290,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
 
     // Rules which get executed once:
     deprecatedScopeExcludeReasonInOrtYmlRule()
+    missingContributingFileRule()
 }
 
 // Populate the list of policy rule violations to return.
