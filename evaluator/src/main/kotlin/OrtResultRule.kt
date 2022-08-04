@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.evaluator
 
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 
 /**
