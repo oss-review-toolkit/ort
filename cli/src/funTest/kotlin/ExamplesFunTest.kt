@@ -151,7 +151,8 @@ class ExamplesFunTest : StringSpec() {
                 "COPYLEFT_LIMITED_IN_SOURCE",
                 "VULNERABILITY_IN_PACKAGE",
                 "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
-                "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML"
+                "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML",
+                "MISSING_CONTRIBUTING_FILE"
             )
         }
 
