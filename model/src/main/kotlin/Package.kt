@@ -172,7 +172,8 @@ data class Package(
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
             vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
-            isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly }
+            isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly },
+            isModified = isModified.takeIf { it != other.isModified }
         )
     }
 
