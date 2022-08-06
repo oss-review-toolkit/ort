@@ -15,7 +15,7 @@ versionsPlugin = "0.42.0"
 # @pin this version as it needs to be aligned with "digraphParser".
 antlr = "4.9.3"
 asciidoctorj = "2.5.5"
-asciidoctorjPdf = "2.1.4"
+asciidoctorjPdf = "2.1.6"
 clikt = "3.5.0"
 commonsCompress = "1.21"
 commonsEmail = "1.5"
