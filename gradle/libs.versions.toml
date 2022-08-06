@@ -9,7 +9,7 @@ kotlinPlugin = "1.7.10"
 shadowPlugin = "7.1.2"
 svnToolsPlugin = "3.1"
 taskInfoPlugin = "1.4.0"
-versionCatalogUpdatePlugin = "0.5.1"
+versionCatalogUpdatePlugin = "0.5.3"
 versionsPlugin = "0.42.0"
 
 # @pin this version as it needs to be aligned with "digraphParser".
