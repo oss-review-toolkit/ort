@@ -253,7 +253,7 @@ private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
 
     val pnpmWorkspaceFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
 
-    return if (pnpmWorkspaceFile.isFile) {
+    return if (pnpmWorkspaceFile.isFile && pnpmWorkspaceFile.readLines().any { !it.isComment() }) {
         val workspaceMatchers = pnpmWorkspaceFile.readValue<PnpmWorkspaces>().packages
 
         workspaceMatchers.map { matcher ->
@@ -261,9 +261,13 @@ private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
             FileSystems.getDefault().getPathMatcher(pattern)
         }
     } else {
+        // Empty pnpm-workspace.yaml` files can be used for regular projects within a workspaces setup, see
+        // https://github.com/pnpm/pnpm/issues/2412.
         emptyList()
     }
 }
+
+private fun String.isComment() = trim().startsWith("#")
 
 private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     val result = mutableSetOf<File>()

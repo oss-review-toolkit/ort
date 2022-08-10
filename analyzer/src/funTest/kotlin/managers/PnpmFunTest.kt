@@ -24,11 +24,13 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.patchActualResultObject
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PnpmFunTest : WordSpec({
@@ -43,12 +45,18 @@ class PnpmFunTest : WordSpec({
         }
 
         "resolve dependencies correctly in a workspaces project" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/pnpm-workspaces").absoluteFile
+            val rootProjectDir = File("src/funTest/assets/projects/synthetic/pnpm-workspaces").absoluteFile
 
-            val result = resolveMultipleDependencies(projectDir)
-            val expectedResult = getExpectedResult(projectDir, "pnpm-workspaces-expected-output.yml")
+            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+                analyze(findManagedFiles(rootProjectDir, setOf(Pnpm.Factory())))
+            }
 
-            result shouldBe expectedResult
+            val expectedResult = getExpectedResult(rootProjectDir, "pnpm-workspaces-expected-output.yml")
+
+            patchActualResultObject(
+                ortResult,
+                patchStartAndEndTime = true
+            ).withResolvedScopes().toYaml() shouldBe expectedResult
         }
     }
 })
@@ -58,13 +66,6 @@ private fun resolveDependencies(projectDir: File): String {
     val result = createPnpm().resolveSingleProject(packageFile, resolveScopes = true)
 
     return result.toYaml()
-}
-
-private fun resolveMultipleDependencies(projectDir: File): String {
-    val packageFile = projectDir.resolve("package.json")
-    val result = createPnpm().collateMultipleProjects(packageFile)
-    // Remove the dependency graph and add scope information.
-    return result.withResolvedScopes().toYaml()
 }
 
 private fun createPnpm() = Pnpm("PNPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
