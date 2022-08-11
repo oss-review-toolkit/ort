@@ -28,6 +28,9 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
+# Set this to the Python Inspector version to use.
+ARG PYTHON_INSPECTOR_VERSION="0.6.4"
+
 FROM eclipse-temurin:11-jdk-jammy AS build
 
 COPY . /usr/local/src/ort
@@ -155,6 +158,9 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
 RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
+
+ARG PYTHON_INSPECTOR_VERSION
+RUN pip install --no-cache-dir python-inspector==$PYTHON_INSPECTOR_VERSION
 
 FROM run AS dist
 
