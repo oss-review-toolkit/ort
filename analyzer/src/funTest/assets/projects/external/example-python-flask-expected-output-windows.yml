@@ -27,7 +27,7 @@ project:
       - id: "PyPI::jinja2:2.8.1"
         dependencies:
         - id: "PyPI::markupsafe:2.1.1"
-      - id: "PyPI::werkzeug:2.2.1"
+      - id: "PyPI::werkzeug:2.2.2"
         dependencies:
         - id: "PyPI::markupsafe:2.1.1"
     - id: "PyPI::gunicorn:19.6.0"
@@ -267,8 +267,8 @@ packages:
     url: "https://github.com/pallets/markupsafe.git"
     revision: ""
     path: ""
-- id: "PyPI::werkzeug:2.2.1"
-  purl: "pkg:pypi/werkzeug@2.2.1"
+- id: "PyPI::werkzeug:2.2.2"
+  purl: "pkg:pypi/werkzeug@2.2.2"
   authors:
   - "Armin Ronacher"
   declared_licenses:
@@ -281,14 +281,14 @@ packages:
   description: "The comprehensive WSGI web application library."
   homepage_url: "https://palletsprojects.com/p/werkzeug/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/c0/93/d6d60870e47162ea6a1bbdd787649eea776b2a70618dd66ed87cb2238543/Werkzeug-2.2.1-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/c8/27/be6ddbcf60115305205de79c29004a0c6bc53cec814f733467b1bb89386d/Werkzeug-2.2.2-py3-none-any.whl"
     hash:
-      value: "e1826ff1abd57a0141e7a60ff1c583c1"
+      value: "7d1583943fb626014027b4fbd75507a0"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/32/19/a92cdbd9fb795928dfca1031278ae8a7f051e78a2c057c224ad2d4cdd95e/Werkzeug-2.2.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/f8/c1/1c8e539f040acd80f844c69a5ef8e2fccdf8b442dabb969e497b55d544e1/Werkzeug-2.2.2.tar.gz"
     hash:
-      value: "39969006359b9a968de97a7df16bebd0"
+      value: "9d7e50c5bb3a9fc12823b5faf374b90e"
       algorithm: "MD5"
   vcs:
     type: ""
