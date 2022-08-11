@@ -90,7 +90,6 @@ packages:
     url: ""
     revision: ""
     path: ""
-  is_modified: true
 - id: "Conan::libxml2:2.9.14"
   purl: "pkg:conan/libxml2@2.9.14"
   declared_licenses:
