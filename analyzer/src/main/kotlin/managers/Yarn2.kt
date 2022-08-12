@@ -119,7 +119,7 @@ class Yarn2(
         const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
 
         /**
-         * The property in `.yarnrc.yml`containing the path to the Yarn2+ executable.
+         * The property in `.yarnrc.yml` containing the path to the Yarn2+ executable.
          */
         const val YARN_PATH_PROPERTY_NAME = "yarnPath"
 
