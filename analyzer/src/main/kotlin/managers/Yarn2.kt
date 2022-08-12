@@ -264,7 +264,7 @@ class Yarn2(
 
     /**
      * Query the details of several packages. [iterator] should come from a NDJSON file. [packagesHeaders] should be
-     * the package representations as a triple : rawName/type/locator, mapped by package id.
+     * the package representations as a triple: rawName/type/locator, mapped by package id.
      * The packages are separated in chunks and queried with `npm file` in [workingDir]. Unfortunately, under the hood,
      * NPM does a request per package. However, if a solution to batch these requests arise, the code is ready for it.
      * From the response to `npm file`, package details are extracted and returned.
@@ -312,7 +312,7 @@ class Yarn2(
 
     /**
      * Parse all packages defined in [iterator], which should come from a NDJSON file. [packagesHeaders] should be
-     * the package representations as a triple : rawName/type/locator, mapped by package id.
+     * the package representations as a triple: rawName/type/locator, mapped by package id.
      * [packagesDetails] should be the package details extracted from `yarn npm view`, mapped by id.
      * Each package defined in this file is parsed and it's dependencies are computed. Finally, each dependency tree is
      * appended to the dependency graph.
@@ -363,7 +363,7 @@ class Yarn2(
                             logger.warn { "Could not find package for dependency $dependency." }
                             null
                         } else {
-                            // As small hack here : Because the detection of dependencies per scope is limited (due to
+                            // As small hack here: Because the detection of dependencies per scope is limited (due to
                             // the fact it relies on package.json parsing and only the project ones are available), the
                             // dependencies of a package are always searched in the 'Dependencies' scope, instead of
                             // the scope of this package.
@@ -499,7 +499,7 @@ class Yarn2(
 
         val dependencyToType = listDependenciesByType(definitionFile)
 
-        // Sort all dependencies per scope. Notice that the logic is somehow lenient : If a dependency is not found
+        // Sort all dependencies per scope. Notice that the logic is somehow lenient: If a dependency is not found
         // in this scope, it falls back in the 'dependencies' scope. This is due to the fact that the detection of
         // dependencies per scope is limited, because it relies on package.json parsing and only the project ones
         // are available.
@@ -666,7 +666,7 @@ class Yarn2(
         packageName: String,
         packageVersion: String
     ): AdditionalData {
-        // Notice that a ProcessCapture is directly called to avoid the `requiredSuccess` : NPM sets exit code to 1 if
+        // Notice that a ProcessCapture is directly called to avoid the `requiredSuccess`: NPM sets exit code to 1 if
         // some peer dependencies cannot be resolved (see https://github.com/npm/npm/issues/17624).
         val process = ProcessCapture(
             if (Os.isWindows) "npm.cmd" else "npm",
