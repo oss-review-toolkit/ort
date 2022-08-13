@@ -51,7 +51,7 @@ config_variables:
 
 containers:
   build:
-    image: eclipse-temurin:11-jdk-focal
+    image: eclipse-temurin:11-jdk-jammy
     <<: *common-container-config
   run:
     build_directory: <{batect.project_directory}
