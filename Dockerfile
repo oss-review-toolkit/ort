@@ -28,7 +28,7 @@ ARG CRT_FILES=""
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="30.1.0"
 
-FROM eclipse-temurin:11-jdk-focal AS build
+FROM eclipse-temurin:11-jdk-jammy AS build
 
 COPY . /usr/local/src/ort
 
@@ -42,14 +42,14 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     scripts/set_gradle_proxy.sh && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
-FROM eclipse-temurin:11-jdk-focal AS run
+FROM eclipse-temurin:11-jdk-jammy AS run
 
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.12 \
-    CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~20.04.1 \
+    CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~22.04.1 \
     COCOAPODS_VERSION=1.11.2 \
-    COMPOSER_VERSION=1.10.1-1 \
+    COMPOSER_VERSION=2.2.6-2ubuntu4 \
     CONAN_VERSION=1.48.1 \
     GO_DEP_VERSION=0.5.4 \
     GO_VERSION=1.18.3 \
@@ -103,8 +103,9 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         cargo=$CARGO_VERSION \
         composer=$COMPOSER_VERSION \
         nodejs \
-        python-dev \
+        python-is-python3 \
         python-setuptools \
+        python2-dev \
         python3-dev \
         python3-pip \
         python3-setuptools \
