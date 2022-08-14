@@ -1,0 +1,18 @@
+name: Validate Batect Wrapper
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  wrapper-validation:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Validate Wrapper
+      uses: batect/batect-wrapper-validation-action@v0.4
