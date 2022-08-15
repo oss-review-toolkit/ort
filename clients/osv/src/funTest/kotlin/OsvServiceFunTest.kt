@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import io.kotest.assertions.json.ArrayOrder
+import io.kotest.assertions.json.compareJsonOptions
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -100,7 +102,10 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
         result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
+                expectedResult,
+                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
+            )
         }
     }
 
