@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.ort.logger
  * installation directory.
  */
 internal class PubCacheReader {
-    internal val pubCacheRoot by lazy {
+    private val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
 
         if (Os.isWindows) {
