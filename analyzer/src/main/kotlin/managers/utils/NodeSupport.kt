@@ -261,7 +261,7 @@ private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
             FileSystems.getDefault().getPathMatcher(pattern)
         }
     } else {
-        // Empty pnpm-workspace.yaml` files can be used for regular projects within a workspaces setup, see
+        // Empty "pnpm-workspace.yaml" files can be used for regular projects within a workspace setup, see
         // https://github.com/pnpm/pnpm/issues/2412.
         emptyList()
     }
