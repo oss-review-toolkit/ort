@@ -80,6 +80,10 @@ class OsvServiceFunTest : StringSpec({
                 listOf("OSV-2020-484"),
                 emptyList(),
                 listOf(
+                    "GHSA-462w-v97r-4m45",
+                    "GHSA-8r7q-cvjq-x353",
+                    "GHSA-g3rq-g295-4j3m",
+                    "GHSA-hj2j-77xm-mc5v",
                     "PYSEC-2014-8",
                     "PYSEC-2014-82",
                     "PYSEC-2019-217",
