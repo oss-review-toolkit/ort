@@ -145,7 +145,7 @@ class Conan(
             conanConfig?.also { configureRemoteAuthentication(it) }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
-            run(workingDir, "info", ".", "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
+            run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
 
             val pkgInfos = jsonMapper.readTree(jsonFile)
             jsonFile.parentFile.safeDeleteRecursively(force = true)
