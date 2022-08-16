@@ -4,7 +4,7 @@
 
 [![Slack][1]][2]
 
-[![Validate Gradle Wrapper][3]][4] [![Static Analysis][5]][6]
+[![Wrapper Validation][3]][4] [![Static Analysis][5]][6]
 
 [![Build and Test][7]][8] [![JitPack build status][9]][10] [![Code coverage][11]][12]
 
@@ -12,8 +12,8 @@
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: https://join.slack.com/t/ort-talk/shared_invite/zt-1c7yi4sj6-mk7R1fAa6ZdW5MQ6DfAVRg
-[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml/badge.svg
-[4]: https://github.com/oss-review-toolkit/ort/actions/workflows/gradle-wrapper-validation.yml
+[3]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml/badge.svg
+[4]: https://github.com/oss-review-toolkit/ort/actions/workflows/wrapper-validation.yml
 [5]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml/badge.svg
 [6]: https://github.com/oss-review-toolkit/ort/actions/workflows/static-analysis.yml
 [7]: https://github.com/oss-review-toolkit/ort/actions/workflows/build-and-test.yml/badge.svg
