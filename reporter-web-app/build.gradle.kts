@@ -51,8 +51,6 @@ tasks.addRule("Pattern: yarn<Command>") {
 
             // Prepend the directory of the bootstrapped Node.js to the PATH environment.
             environment = environment + mapOf("PATH" to "$nodeBinDir${File.pathSeparator}${environment["PATH"]}")
-
-            outputs.cacheIf { true }
         }
     }
 }
