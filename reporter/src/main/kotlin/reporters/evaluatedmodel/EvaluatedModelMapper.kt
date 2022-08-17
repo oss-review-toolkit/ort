@@ -20,6 +20,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 
+import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
@@ -100,7 +101,13 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             addRuleViolation(ruleViolation)
         }
 
-        createVulnerabilities()
+        input.ortResult.advisor?.results?.advisorResults?.forEach { (id, results) ->
+            val pkg = packages.getValue(id)
+
+            results.forEach { result ->
+                addAdvisorResult(pkg, result)
+            }
+        }
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
             val pkg = packages.getValue(project.id)
@@ -200,38 +207,6 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 excludes = scopeExcludes.addIfRequired(input.ortResult.getExcludes().findScopeExcludes(scope))
             )
         }
-    }
-
-    private fun createVulnerabilities() {
-        input.ortResult.advisor
-            ?.results
-            ?.advisorResults
-            ?.flatMap { (id, results) ->
-                val pkg = packages[id] ?: createEmptyPackage(id)
-
-                results.flatMap { result ->
-                    result.vulnerabilities.map { vulnerability ->
-                        val resolutions = addResolutions(vulnerability)
-                        val evaluatedReferences = vulnerability.references.map {
-                            EvaluatedVulnerabilityReference(
-                                it.url,
-                                it.scoringSystem,
-                                it.severity,
-                                VulnerabilityReference.getSeverityString(it.scoringSystem, it.severity)
-                            )
-                        }
-
-                        vulnerabilities += EvaluatedVulnerability(
-                            pkg = pkg,
-                            id = vulnerability.id,
-                            summary = vulnerability.summary,
-                            description = vulnerability.description,
-                            references = evaluatedReferences,
-                            resolutions = resolutions
-                        )
-                    }
-                }
-            }
     }
 
     private fun TextLocation.getRelativePathToRoot(id: Identifier): String =
@@ -396,6 +371,34 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         )
 
         ruleViolations += evaluatedViolation
+    }
+
+    private fun addAdvisorResult(pkg: EvaluatedPackage, result: AdvisorResult) {
+        result.vulnerabilities.forEach { vulnerability ->
+            addVulnerability(pkg, vulnerability)
+        }
+    }
+
+    private fun addVulnerability(pkg: EvaluatedPackage, vulnerability: Vulnerability) {
+        val resolutions = addResolutions(vulnerability)
+
+        val evaluatedReferences = vulnerability.references.map {
+            EvaluatedVulnerabilityReference(
+                it.url,
+                it.scoringSystem,
+                it.severity,
+                VulnerabilityReference.getSeverityString(it.scoringSystem, it.severity)
+            )
+        }
+
+        vulnerabilities += EvaluatedVulnerability(
+            pkg = pkg,
+            id = vulnerability.id,
+            summary = vulnerability.summary,
+            description = vulnerability.description,
+            references = evaluatedReferences,
+            resolutions = resolutions
+        )
     }
 
     private fun convertScanResult(
