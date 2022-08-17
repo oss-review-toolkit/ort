@@ -162,6 +162,21 @@ private data class PackageJsonInfo(
 }
 
 private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJsonInfo> {
+    fun isPnpmWorkspaceRoot(directory: File) = directory.resolve("pnpm-workspace.yaml").isFile
+
+    fun isYarnWorkspaceRoot(definitionFile: File) =
+        try {
+            definitionFile.readTree().has("workspaces")
+        } catch (e: JsonProcessingException) {
+            e.showStackTrace()
+
+            NpmSupport.logger.error {
+                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+            }
+
+            false
+        }
+
     val pnpmWorkspaceSubmodules = getPnpmWorkspaceSubmodules(definitionFiles)
     val yarnWorkspaceSubmodules = getYarnWorkspaceSubmodules(definitionFiles)
 
@@ -182,22 +197,30 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
     }
 }
 
-private fun isPnpmWorkspaceRoot(directory: File) = directory.resolve("pnpm-workspace.yaml").isFile
+private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
+    fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
+        var workspaces = try {
+            definitionFile.readTree().get("workspaces")
+        } catch (e: JsonProcessingException) {
+            e.showStackTrace()
 
-private fun isYarnWorkspaceRoot(definitionFile: File) =
-    try {
-        definitionFile.readTree().has("workspaces")
-    } catch (e: JsonProcessingException) {
-        e.showStackTrace()
+            NpmSupport.logger.error {
+                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+            }
 
-        NpmSupport.logger.error {
-            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+            null
         }
 
-        false
+        if (workspaces != null && workspaces !is ArrayNode) {
+            workspaces = workspaces["packages"]
+        }
+
+        return workspaces?.map {
+            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+            FileSystems.getDefault().getPathMatcher(pattern)
+        }.orEmpty()
     }
 
-private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     val result = mutableSetOf<File>()
 
     definitionFiles.forEach { definitionFile ->
@@ -221,32 +244,11 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     return result
 }
 
-private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-    var workspaces = try {
-        definitionFile.readTree().get("workspaces")
-    } catch (e: JsonProcessingException) {
-        e.showStackTrace()
-
-        NpmSupport.logger.error {
-            "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
-        }
-
-        null
-    }
-
-    if (workspaces != null && workspaces !is ArrayNode) {
-        workspaces = workspaces["packages"]
-    }
-
-    return workspaces?.map {
-        val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
-        FileSystems.getDefault().getPathMatcher(pattern)
-    }.orEmpty()
-}
-
 private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class PnpmWorkspaces(val packages: List<String>)
+
+    fun String.isComment() = trim().startsWith("#")
 
     val pnpmWorkspaceFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
 
@@ -263,8 +265,6 @@ private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
         emptyList()
     }
 }
-
-private fun String.isComment() = trim().startsWith("#")
 
 private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     val result = mutableSetOf<File>()
