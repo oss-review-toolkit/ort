@@ -28,7 +28,6 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedSet
 import java.util.concurrent.ConcurrentHashMap
 
 import kotlinx.coroutines.Dispatchers
@@ -42,9 +41,13 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.managers.utils.NpmDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.NpmModuleInfo
 import org.ossreviewtoolkit.analyzer.managers.utils.expandNpmShortcutUrl
+import org.ossreviewtoolkit.analyzer.managers.utils.fixNpmDownloadUrl
 import org.ossreviewtoolkit.analyzer.managers.utils.hasNpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForNpm
-import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmAuthors
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmLicenses
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmVcsInfo
+import org.ossreviewtoolkit.analyzer.managers.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -57,7 +60,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -77,9 +79,6 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.logger
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-
-private val artifactoryApiPathPattern = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -115,111 +114,6 @@ open class Npm(
 
         /** Name of the scope with development dependencies. */
         private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
-
-        /**
-         * Parse information about licenses from the [package.json][json] file of a module.
-         */
-        internal fun parseLicenses(json: JsonNode): SortedSet<String> {
-            val declaredLicenses = mutableListOf<String>()
-
-            // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
-            // which ...
-            json["license"]?.let { licenseNode ->
-                // ... can either be a direct text value, an array of text values (which is not officially supported),
-                // or an object containing nested "type" (and "url") text nodes.
-                when {
-                    licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
-                    licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
-                    licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
-                    else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
-                }
-            }
-
-            // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
-            // text nodes.
-            json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
-                licenseNode["type"]?.textValue()
-            }
-
-            return declaredLicenses.mapNotNullTo(sortedSetOf()) { declaredLicense ->
-                when {
-                    // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
-                    // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
-                    declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
-
-                    // NPM allows declaring non-SPDX licenses only by referencing a license file. Avoid reporting an
-                    // [OrtIssue] by mapping this to a valid license identifier.
-                    declaredLicense.startsWith("SEE LICENSE IN ") -> SpdxConstants.NOASSERTION
-
-                    else -> declaredLicense.takeUnless { it.isBlank() }
-                }
-            }
-        }
-
-        /**
-         * Do various replacements in [downloadUrl]. Return the transformed URL.
-         */
-        internal fun fixDownloadUrl(downloadUrl: String): String {
-            @Suppress("HttpUrlsUsage")
-            return downloadUrl
-                // Work around the issue described at
-                // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
-                .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
-                // Work around Artifactory returning API URLs instead of download URLs.
-                // See these somewhat related issues : https://www.jfrog.com/jira/browse/RTFACT-8727
-                // https://www.jfrog.com/jira/browse/RTFACT-18463
-                .replace(artifactoryApiPathPattern, "$1/$2")
-        }
-
-        /**
-         * Parse information about the author from the [package.json][json] file of a module. According to
-         * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
-         * specify the author of a package: An object with multiple properties or a single string.
-         */
-        internal fun parseAuthors(json: JsonNode): SortedSet<String> =
-            sortedSetOf<String>().apply {
-                json["author"]?.let { authorNode ->
-                    when {
-                        authorNode.isObject -> authorNode["name"]?.textValue()
-                        authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
-                        else -> null
-                    }
-                }?.let { add(it) }
-            }
-
-        /**
-         * Parse information about the VCS from the [package.json][node] file of a module.
-         */
-        internal fun parseVcsInfo(node: JsonNode): VcsInfo {
-            // See https://github.com/npm/read-package-json/issues/7 for some background info.
-            val head = node["gitHead"].textValueOrEmpty()
-
-            return node["repository"]?.let { repo ->
-                val type = repo["type"].textValueOrEmpty()
-                val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
-                val path = repo["directory"].textValueOrEmpty()
-
-                VcsInfo(
-                    type = VcsType(type),
-                    url = expandNpmShortcutUrl(url),
-                    revision = head,
-                    path = path
-                )
-            } ?: VcsInfo(
-                type = VcsType.UNKNOWN,
-                url = "",
-                revision = head
-            )
-        }
-
-        /**
-         * Split the given [rawName] of a module to a pair with namespace and name.
-         */
-        internal fun splitNamespaceAndName(rawName: String): Pair<String, String> {
-            val name = rawName.substringAfterLast("/")
-            val namespace = rawName.removeSuffix(name).removeSuffix("/")
-            return Pair(namespace, name)
-        }
     }
 
     private val legacyPeerDeps =
@@ -384,11 +278,11 @@ open class Npm(
         // https://docs.npmjs.com/creating-a-package-json-file#required-name-and-version-fields
         val json = packageFile.readValue<ObjectNode>()
         val rawName = json["name"].textValue()
-        val (namespace, name) = splitNamespaceAndName(rawName)
+        val (namespace, name) = splitNpmNamespaceAndName(rawName)
         val version = json["version"].textValue()
 
-        val declaredLicenses = parseLicenses(json)
-        val authors = parseAuthors(json)
+        val declaredLicenses = parseNpmLicenses(json)
+        val authors = parseNpmAuthors(json)
 
         var description = json["description"].textValueOrEmpty()
         var homepageUrl = json["homepage"].textValueOrEmpty()
@@ -402,7 +296,7 @@ open class Npm(
 
         var hash = Hash.create(json["_integrity"].textValueOrEmpty())
 
-        var vcsFromPackage = parseVcsInfo(json)
+        var vcsFromPackage = parseNpmVcsInfo(json)
 
         val id = Identifier("NPM", namespace, name, version)
 
@@ -434,11 +328,11 @@ open class Npm(
                     }
                 }
 
-                vcsFromPackage = parseVcsInfo(details)
+                vcsFromPackage = parseNpmVcsInfo(details)
             }
         }
 
-        downloadUrl = fixDownloadUrl(downloadUrl)
+        downloadUrl = fixNpmDownloadUrl(downloadUrl)
 
         val vcsFromDownloadUrl = VcsHost.parseUrl(downloadUrl)
         if (vcsFromDownloadUrl.url != downloadUrl) {
@@ -514,7 +408,7 @@ open class Npm(
             severity = Severity.WARNING
         )
 
-        val (namespace, name) = splitNamespaceAndName(moduleName)
+        val (namespace, name) = splitNpmNamespaceAndName(moduleName)
 
         return PackageReference(
             id = Identifier(managerName, namespace, name, ""),
@@ -543,7 +437,7 @@ open class Npm(
     ): NpmModuleInfo? {
         val moduleInfo = parsePackageJson(moduleDir, scopes)
         val dependencies = mutableSetOf<NpmModuleInfo>()
-        val moduleId = splitNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
+        val moduleId = splitNpmNamespaceAndName(moduleInfo.name).let { (namespace, name) ->
             Identifier(packageType, namespace, name, moduleInfo.version)
         }
 
@@ -644,7 +538,7 @@ open class Npm(
         val json = jsonMapper.readTree(packageJson)
 
         val rawName = json["name"].textValueOrEmpty()
-        val (namespace, name) = splitNamespaceAndName(rawName)
+        val (namespace, name) = splitNpmNamespaceAndName(rawName)
         if (name.isBlank()) {
             logger.warn { "'$packageJson' does not define a name." }
         }
@@ -654,11 +548,11 @@ open class Npm(
             logger.warn { "'$packageJson' does not define a version." }
         }
 
-        val declaredLicenses = parseLicenses(json)
-        val authors = parseAuthors(json)
+        val declaredLicenses = parseNpmLicenses(json)
+        val authors = parseNpmAuthors(json)
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val projectDir = packageJson.parentFile
-        val vcsFromPackage = parseVcsInfo(json)
+        val vcsFromPackage = parseNpmVcsInfo(json)
 
         return Project(
             id = Identifier(

@@ -23,19 +23,26 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.JsonProcessingException
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
+import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.managers.Yarn2
+import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * A dummy object to provide a logger for top-level functions.
@@ -79,6 +86,23 @@ fun expandNpmShortcutUrl(url: String): String {
         url
     }
 }
+
+/**
+ * Do various replacements in [downloadUrl]. Return the transformed URL.
+ */
+fun fixNpmDownloadUrl(downloadUrl: String): String {
+    @Suppress("HttpUrlsUsage")
+    return downloadUrl
+        // Work around the issue described at
+        // https://npm.community/t/some-packages-have-dist-tarball-as-http-and-not-https/285/19.
+        .replace("http://registry.npmjs.org/", "https://registry.npmjs.org/")
+        // Work around Artifactory returning API URLs instead of download URLs.
+        // See these somewhat related issues : https://www.jfrog.com/jira/browse/RTFACT-8727
+        // https://www.jfrog.com/jira/browse/RTFACT-18463
+        .replace(ARTIFACTORY_API_PATH_PATTERN, "$1/$2")
+}
+
+private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)(?:/api/npm/)(.*)")
 
 /**
  * Return whether the [directory] contains an NPM lock file.
@@ -292,4 +316,94 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     }
 
     return result
+}
+
+/**
+ * Parse information about the author from the [package.json][json] file of a module. According to
+ * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
+ * specify the author of a package: An object with multiple properties or a single string.
+ */
+fun parseNpmAuthors(json: JsonNode): SortedSet<String> =
+    sortedSetOf<String>().apply {
+        json["author"]?.let { authorNode ->
+            when {
+                authorNode.isObject -> authorNode["name"]?.textValue()
+                authorNode.isTextual -> parseAuthorString(authorNode.textValue(), '<', '(')
+                else -> null
+            }
+        }?.let { add(it) }
+    }
+
+/**
+ * Parse information about licenses from the [package.json][json] file of a module.
+ */
+fun parseNpmLicenses(json: JsonNode): SortedSet<String> {
+    val declaredLicenses = mutableListOf<String>()
+
+    // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
+    // which ...
+    json["license"]?.let { licenseNode ->
+        // ... can either be a direct text value, an array of text values (which is not officially supported),
+        // or an object containing nested "type" (and "url") text nodes.
+        when {
+            licenseNode.isTextual -> declaredLicenses += licenseNode.textValue()
+            licenseNode.isArray -> licenseNode.mapNotNullTo(declaredLicenses) { it.textValue() }
+            licenseNode.isObject -> declaredLicenses += licenseNode["type"].textValue()
+            else -> throw IllegalArgumentException("Unsupported node type in '$licenseNode'.")
+        }
+    }
+
+    // New packages use a "licenses" (plural) node containing an array of objects with nested "type" (and "url")
+    // text nodes.
+    json["licenses"]?.mapNotNullTo(declaredLicenses) { licenseNode ->
+        licenseNode["type"]?.textValue()
+    }
+
+    return declaredLicenses.mapNotNullTo(sortedSetOf()) { declaredLicense ->
+        when {
+            // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
+            // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".
+            declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
+
+            // NPM allows declaring non-SPDX licenses only by referencing a license file. Avoid reporting an
+            // [OrtIssue] by mapping this to a valid license identifier.
+            declaredLicense.startsWith("SEE LICENSE IN ") -> SpdxConstants.NOASSERTION
+
+            else -> declaredLicense.takeUnless { it.isBlank() }
+        }
+    }
+}
+
+/**
+ * Parse information about the VCS from the [package.json][node] file of a module.
+ */
+fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
+    // See https://github.com/npm/read-package-json/issues/7 for some background info.
+    val head = node["gitHead"].textValueOrEmpty()
+
+    return node["repository"]?.let { repo ->
+        val type = repo["type"].textValueOrEmpty()
+        val url = repo.textValue() ?: repo["url"].textValueOrEmpty()
+        val path = repo["directory"].textValueOrEmpty()
+
+        VcsInfo(
+            type = VcsType(type),
+            url = expandNpmShortcutUrl(url),
+            revision = head,
+            path = path
+        )
+    } ?: VcsInfo(
+        type = VcsType.UNKNOWN,
+        url = "",
+        revision = head
+    )
+}
+
+/**
+ * Split the given [rawName] of a module to a pair with namespace and name.
+ */
+fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
+    val name = rawName.substringAfterLast("/")
+    val namespace = rawName.removeSuffix(name).removeSuffix("/")
+    return Pair(namespace, name)
 }
