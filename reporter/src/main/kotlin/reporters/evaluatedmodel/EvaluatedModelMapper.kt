@@ -374,6 +374,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addAdvisorResult(pkg: EvaluatedPackage, result: AdvisorResult) {
+        // TODO: Add defects from the result to the model.
+
         result.vulnerabilities.forEach { vulnerability ->
             addVulnerability(pkg, vulnerability)
         }
