@@ -70,6 +70,8 @@ class ExperimentalScanner(
 
     private val archiver = scannerConfig.archive.createFileArchiver()
 
+    // Keep the suspend modifier to prepare callers for this function to start using coroutines.
+    @Suppress("RedundantSuspendModifier")
     suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean): OrtResult {
         val startTime = Instant.now()
 
