@@ -379,6 +379,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         result.vulnerabilities.forEach { vulnerability ->
             addVulnerability(pkg, vulnerability)
         }
+
+        addIssues(result.summary.issues, EvaluatedOrtIssueType.ADVISOR, pkg, null, null)
     }
 
     private fun addVulnerability(pkg: EvaluatedPackage, vulnerability: Vulnerability) {
