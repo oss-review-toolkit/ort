@@ -595,4 +595,5 @@ open class Npm(
     }
 }
 
+/** Name of the configuration option to toggle legacy peer dependency support. */
 private const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
