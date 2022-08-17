@@ -38,7 +38,12 @@ import kotlinx.coroutines.runBlocking
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.fixNpmDownloadUrl
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn2
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmAuthors
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmLicenses
+import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmVcsInfo
+import org.ossreviewtoolkit.analyzer.managers.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -411,7 +416,7 @@ class Yarn2(
             return emptyMap()
         }
 
-        val (namespace, name) = Npm.splitNamespaceAndName(header.rawName)
+        val (namespace, name) = splitNpmNamespaceAndName(header.rawName)
         val childrenNode = json["children"]
         val version = childrenNode["Version"].textValue()
 
@@ -424,7 +429,7 @@ class Yarn2(
             manifest.set<ObjectNode>("license", it)
         }
 
-        val declaredLicenses = Npm.parseLicenses(manifest)
+        val declaredLicenses = parseNpmLicenses(manifest)
         var homepageUrl = manifest["Homepage"].textValueOrEmpty()
 
         val id = if (header.type == "workspace") {
@@ -549,14 +554,14 @@ class Yarn2(
         val name = json["name"].textValue()
         val version = json["version"].textValue()
         val description = json["description"].textValueOrEmpty()
-        val vcsFromPackage = Npm.parseVcsInfo(json)
+        val vcsFromPackage = parseNpmVcsInfo(json)
         val homepage = json["homepage"].textValueOrEmpty()
-        val author = Npm.parseAuthors(json)
+        val author = parseNpmAuthors(json)
 
         val dist = json["dist"]
         var downloadUrl = dist["tarball"].textValueOrEmpty()
 
-        downloadUrl = Npm.fixDownloadUrl(downloadUrl)
+        downloadUrl = fixNpmDownloadUrl(downloadUrl)
 
         val hash = Hash.create(dist["shasum"].textValueOrEmpty())
 
@@ -596,7 +601,7 @@ class Yarn2(
             val locatorType = locatorMatcher.groupValues[2]
             val locatorVersion = locatorMatcher.groupValues[3]
 
-            val (locatorNamespace, locatorName) = Npm.splitNamespaceAndName(locatorRawName)
+            val (locatorNamespace, locatorName) = splitNpmNamespaceAndName(locatorRawName)
             val version = cleanYarn2VersionString(locatorVersion)
 
             val identifierType = if ("workspace" in locatorType) "Yarn2" else "NPM"
@@ -678,7 +683,7 @@ class Yarn2(
         )
         val json = jsonMapper.readTree(process.stdout)
 
-        val vcsFromPackage = Npm.parseVcsInfo(json)
+        val vcsFromPackage = parseNpmVcsInfo(json)
         val name = json["name"].textValueOrEmpty()
         val version = json["version"].textValueOrEmpty()
         val description = json["description"].textValueOrEmpty()
