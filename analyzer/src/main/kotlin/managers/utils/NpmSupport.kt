@@ -45,12 +45,50 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 object NpmSupport
 
 /**
+ * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
+ * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
+ */
+fun expandNpmShortcutUrl(url: String): String {
+    // A hierarchical URI looks like
+    //     [scheme:][//authority][path][?query][#fragment]
+    // where a server-based "authority" has the syntax
+    //     [user-info@]host[:port]
+    val uri = url.toUri().getOrElse {
+        // Fall back to returning the original URL.
+        return url
+    }
+
+    val path = uri.schemeSpecificPart
+
+    // Do not mess with crazy URLs.
+    if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
+
+    return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls.
+        val revision = uri.fragment?.let { "#$it" }.orEmpty()
+
+        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository.
+        when (uri.scheme) {
+            null, "github" -> "https://github.com/$path.git$revision"
+            "gist" -> "https://gist.github.com/$path$revision"
+            "bitbucket" -> "https://bitbucket.org/$path.git$revision"
+            "gitlab" -> "https://gitlab.com/$path.git$revision"
+            else -> url
+        }
+    } else {
+        url
+    }
+}
+
+/**
  * Return whether the [directory] contains an NPM lock file.
  */
 fun hasNpmLockFile(directory: File) =
     NPM_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
+
+private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
 
 /**
  * Return whether the [directory] contains a PNPM lock file.
@@ -60,6 +98,8 @@ fun hasPnpmLockFile(directory: File) =
         File(directory, lockfile).isFile
     }
 
+private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
+
 /**
  * Return whether the [directory] contains a Yarn lock file.
  */
@@ -67,6 +107,8 @@ fun hasYarnLockFile(directory: File) =
     YARN_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
+
+private val YARN_LOCK_FILES = listOf("yarn.lock")
 
 /**
  * Return whether the [directory] contains a Yarn resource file in YAML format, specific to Yarn 2+.
@@ -105,46 +147,6 @@ fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
         .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && it.hasYarn2ResourceFile }
         .mapTo(mutableSetOf()) { it.definitionFile }
-
-/**
- * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
- * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
- */
-fun expandNpmShortcutUrl(url: String): String {
-    // A hierarchical URI looks like
-    //     [scheme:][//authority][path][?query][#fragment]
-    // where a server-based "authority" has the syntax
-    //     [user-info@]host[:port]
-    val uri = url.toUri().getOrElse {
-        // Fall back to returning the original URL.
-        return url
-    }
-
-    val path = uri.schemeSpecificPart
-
-    // Do not mess with crazy URLs.
-    if (path.startsWith("git@") || path.startsWith("github.com") || path.startsWith("gitlab.com")) return url
-
-    return if (!path.isNullOrEmpty() && listOf(uri.authority, uri.query).all { it == null }) {
-        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#github-urls.
-        val revision = uri.fragment?.let { "#$it" }.orEmpty()
-
-        // See https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository.
-        when (uri.scheme) {
-            null, "github" -> "https://github.com/$path.git$revision"
-            "gist" -> "https://gist.github.com/$path$revision"
-            "bitbucket" -> "https://bitbucket.org/$path.git$revision"
-            "gitlab" -> "https://gitlab.com/$path.git$revision"
-            else -> url
-        }
-    } else {
-        url
-    }
-}
-
-private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
-private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
-private val YARN_LOCK_FILES = listOf("yarn.lock")
 
 private data class PackageJsonInfo(
     val definitionFile: File,
@@ -197,53 +199,6 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
     }
 }
 
-private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
-    fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
-        var workspaces = try {
-            definitionFile.readTree().get("workspaces")
-        } catch (e: JsonProcessingException) {
-            e.showStackTrace()
-
-            NpmSupport.logger.error {
-                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
-            }
-
-            null
-        }
-
-        if (workspaces != null && workspaces !is ArrayNode) {
-            workspaces = workspaces["packages"]
-        }
-
-        return workspaces?.map {
-            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
-            FileSystems.getDefault().getPathMatcher(pattern)
-        }.orEmpty()
-    }
-
-    val result = mutableSetOf<File>()
-
-    definitionFiles.forEach { definitionFile ->
-        val workspaceMatchers = getWorkspaceMatchers(definitionFile)
-        workspaceMatchers.forEach { matcher ->
-            definitionFiles.forEach inner@{ other ->
-                // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
-                // cannot be used as is for matching the 'package.json' file. Thus matching against the project
-                // directory since this works out of the box. See also:
-                //   https://github.com/yarnpkg/yarn/issues/3986
-                //   https://github.com/yarnpkg/yarn/pull/5607
-                val projectDir = other.parentFile.toPath()
-                if (other != definitionFile && matcher.matches(projectDir)) {
-                    result += other
-                    return@inner
-                }
-            }
-        }
-    }
-
-    return result
-}
-
 private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class PnpmWorkspaces(val packages: List<String>)
@@ -286,6 +241,53 @@ private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
             }
         } else {
             return@forEach
+        }
+    }
+
+    return result
+}
+
+private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
+    fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
+        var workspaces = try {
+            definitionFile.readTree().get("workspaces")
+        } catch (e: JsonProcessingException) {
+            e.showStackTrace()
+
+            NpmSupport.logger.error {
+                "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
+            }
+
+            null
+        }
+
+        if (workspaces != null && workspaces !is ArrayNode) {
+            workspaces = workspaces["packages"]
+        }
+
+        return workspaces?.map {
+            val pattern = "glob:${definitionFile.parentFile.invariantSeparatorsPath}/${it.textValue()}"
+            FileSystems.getDefault().getPathMatcher(pattern)
+        }.orEmpty()
+    }
+
+    val result = mutableSetOf<File>()
+
+    definitionFiles.forEach { definitionFile ->
+        val workspaceMatchers = getWorkspaceMatchers(definitionFile)
+        workspaceMatchers.forEach { matcher ->
+            definitionFiles.forEach inner@{ other ->
+                // Since yarn workspaces matchers support '*' and '**' to match multiple directories the matcher
+                // cannot be used as is for matching the 'package.json' file. Thus matching against the project
+                // directory since this works out of the box. See also:
+                //   https://github.com/yarnpkg/yarn/issues/3986
+                //   https://github.com/yarnpkg/yarn/pull/5607
+                val projectDir = other.parentFile.toPath()
+                if (other != definitionFile && matcher.matches(projectDir)) {
+                    result += other
+                    return@inner
+                }
+            }
         }
     }
 
