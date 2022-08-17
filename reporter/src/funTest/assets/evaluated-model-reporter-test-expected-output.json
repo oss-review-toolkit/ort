@@ -91,6 +91,15 @@
     "pkg" : 0,
     "scan_result" : 0,
     "how_to_fix" : "Some how to fix text."
+  }, {
+    "_id" : 1,
+    "timestamp" : "1970-01-01T00:00:00Z",
+    "type" : "ADVISOR",
+    "source" : "VulnerableCode",
+    "message" : "A test issue.",
+    "severity" : "ERROR",
+    "pkg" : 1,
+    "how_to_fix" : "Some how to fix text."
   } ],
   "scan_results" : [ {
     "_id" : 0,
@@ -309,6 +318,50 @@
     "is_excluded" : false
   }, {
     "_id" : 1,
+    "id" : "Maven:org.apache.commons:commons-text:1.1",
+    "is_project" : false,
+    "definition_file_path" : "",
+    "purl" : "pkg:maven/org.apache.commons/commons-text@1.1",
+    "declared_licenses" : [ 14 ],
+    "declared_licenses_processed" : {
+      "spdx_expression" : "Apache-2.0",
+      "mapped_licenses" : [ 3 ]
+    },
+    "description" : "Apache Commons Text is a library focused on algorithms working on strings.",
+    "homepage_url" : "http://commons.apache.org/proper/commons-text/",
+    "binary_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar",
+      "hash" : {
+        "value" : "c336bf600f44b88af356c8a85eef4af822b06a4d",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "source_artifact" : {
+      "url" : "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar",
+      "hash" : {
+        "value" : "f0770f7f0472bf120ada47beecadce4056fbd20a",
+        "algorithm" : "SHA-1"
+      }
+    },
+    "vcs" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "vcs_processed" : {
+      "type" : "",
+      "url" : "",
+      "revision" : "",
+      "path" : ""
+    },
+    "paths" : [ 5, 6 ],
+    "levels" : [ 0, 1 ],
+    "scopes" : [ 0, 1 ],
+    "scan_results" : [ 5 ],
+    "is_excluded" : false
+  }, {
+    "_id" : 2,
     "id" : "Gradle:org.ossreviewtoolkit:nested-fake-project:1.0.0",
     "is_project" : true,
     "definition_file_path" : "project/build.gradle",
@@ -399,7 +452,7 @@
     "is_excluded" : true,
     "path_excludes" : [ 0 ]
   }, {
-    "_id" : 2,
+    "_id" : 3,
     "id" : "Ant:junit:junit:4.12",
     "is_project" : false,
     "definition_file_path" : "",
@@ -444,7 +497,7 @@
     "is_excluded" : true,
     "scope_excludes" : [ 0 ]
   }, {
-    "_id" : 3,
+    "_id" : 4,
     "id" : "Maven:com.foobar:foobar:1.0",
     "is_project" : false,
     "definition_file_path" : "",
@@ -494,7 +547,7 @@
     "is_excluded" : true,
     "scope_excludes" : [ 0 ]
   }, {
-    "_id" : 4,
+    "_id" : 5,
     "id" : "Maven:com.h2database:h2:1.4.200",
     "is_project" : false,
     "definition_file_path" : "",
@@ -547,7 +600,7 @@
     "is_excluded" : true,
     "scope_excludes" : [ 0 ]
   }, {
-    "_id" : 5,
+    "_id" : 6,
     "id" : "Maven:org.apache.commons:commons-lang3:3.5",
     "is_project" : false,
     "definition_file_path" : "",
@@ -589,50 +642,6 @@
     "levels" : [ 1, 2 ],
     "scopes" : [ 0, 1 ],
     "scan_results" : [ 4 ],
-    "is_excluded" : false
-  }, {
-    "_id" : 6,
-    "id" : "Maven:org.apache.commons:commons-text:1.1",
-    "is_project" : false,
-    "definition_file_path" : "",
-    "purl" : "pkg:maven/org.apache.commons/commons-text@1.1",
-    "declared_licenses" : [ 14 ],
-    "declared_licenses_processed" : {
-      "spdx_expression" : "Apache-2.0",
-      "mapped_licenses" : [ 3 ]
-    },
-    "description" : "Apache Commons Text is a library focused on algorithms working on strings.",
-    "homepage_url" : "http://commons.apache.org/proper/commons-text/",
-    "binary_artifact" : {
-      "url" : "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar",
-      "hash" : {
-        "value" : "c336bf600f44b88af356c8a85eef4af822b06a4d",
-        "algorithm" : "SHA-1"
-      }
-    },
-    "source_artifact" : {
-      "url" : "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar",
-      "hash" : {
-        "value" : "f0770f7f0472bf120ada47beecadce4056fbd20a",
-        "algorithm" : "SHA-1"
-      }
-    },
-    "vcs" : {
-      "type" : "",
-      "url" : "",
-      "revision" : "",
-      "path" : ""
-    },
-    "vcs_processed" : {
-      "type" : "",
-      "url" : "",
-      "revision" : "",
-      "path" : ""
-    },
-    "paths" : [ 5, 6 ],
-    "levels" : [ 0, 1 ],
-    "scopes" : [ 0, 1 ],
-    "scan_results" : [ 5 ],
     "is_excluded" : false
   }, {
     "_id" : 7,
@@ -759,43 +768,43 @@
   } ],
   "paths" : [ {
     "_id" : 0,
-    "pkg" : 2,
+    "pkg" : 3,
     "project" : 0,
     "scope" : 1,
     "path" : [ ]
   }, {
     "_id" : 1,
-    "pkg" : 3,
-    "project" : 0,
-    "scope" : 1,
-    "path" : [ 2 ]
-  }, {
-    "_id" : 2,
     "pkg" : 4,
     "project" : 0,
     "scope" : 1,
-    "path" : [ 2 ]
+    "path" : [ 3 ]
   }, {
-    "_id" : 3,
-    "pkg" : 5,
-    "project" : 0,
-    "scope" : 0,
-    "path" : [ 6 ]
-  }, {
-    "_id" : 4,
+    "_id" : 2,
     "pkg" : 5,
     "project" : 0,
     "scope" : 1,
-    "path" : [ 9, 6 ]
+    "path" : [ 3 ]
+  }, {
+    "_id" : 3,
+    "pkg" : 6,
+    "project" : 0,
+    "scope" : 0,
+    "path" : [ 1 ]
+  }, {
+    "_id" : 4,
+    "pkg" : 6,
+    "project" : 0,
+    "scope" : 1,
+    "path" : [ 9, 1 ]
   }, {
     "_id" : 5,
-    "pkg" : 6,
+    "pkg" : 1,
     "project" : 0,
     "scope" : 0,
     "path" : [ ]
   }, {
     "_id" : 6,
-    "pkg" : 6,
+    "pkg" : 1,
     "project" : 0,
     "scope" : 1,
     "path" : [ 9 ]
@@ -804,7 +813,7 @@
     "pkg" : 8,
     "project" : 0,
     "scope" : 1,
-    "path" : [ 2 ]
+    "path" : [ 3 ]
   }, {
     "_id" : 8,
     "pkg" : 9,
@@ -820,7 +829,7 @@
   } ],
   "dependency_trees" : [ {
     "key" : 0,
-    "pkg" : 1,
+    "pkg" : 2,
     "path_excludes" : [ 0 ]
   }, {
     "key" : 1,
@@ -831,11 +840,11 @@
       "children" : [ {
         "key" : 3,
         "linkage" : "DYNAMIC",
-        "pkg" : 6,
+        "pkg" : 1,
         "children" : [ {
           "key" : 4,
           "linkage" : "DYNAMIC",
-          "pkg" : 5
+          "pkg" : 6
         } ]
       }, {
         "key" : 5,
@@ -844,11 +853,11 @@
         "children" : [ {
           "key" : 6,
           "linkage" : "DYNAMIC",
-          "pkg" : 6,
+          "pkg" : 1,
           "children" : [ {
             "key" : 7,
             "linkage" : "DYNAMIC",
-            "pkg" : 5
+            "pkg" : 6
           } ]
         } ]
       } ]
@@ -859,15 +868,15 @@
       "children" : [ {
         "key" : 9,
         "linkage" : "DYNAMIC",
-        "pkg" : 2,
+        "pkg" : 3,
         "children" : [ {
           "key" : 10,
           "linkage" : "DYNAMIC",
-          "pkg" : 3
+          "pkg" : 4
         }, {
           "key" : 11,
           "linkage" : "DYNAMIC",
-          "pkg" : 4
+          "pkg" : 5
         }, {
           "key" : 12,
           "linkage" : "DYNAMIC",
@@ -880,11 +889,11 @@
         "children" : [ {
           "key" : 14,
           "linkage" : "DYNAMIC",
-          "pkg" : 6,
+          "pkg" : 1,
           "children" : [ {
             "key" : 15,
             "linkage" : "DYNAMIC",
-            "pkg" : 5
+            "pkg" : 6
           } ]
         } ]
       } ]
@@ -899,7 +908,7 @@
   "rule_violations" : [ {
     "_id" : 0,
     "rule" : "rule 1",
-    "pkg" : 2,
+    "pkg" : 3,
     "license" : 9,
     "license_source" : "DETECTED",
     "severity" : "ERROR",
@@ -908,7 +917,7 @@
   }, {
     "_id" : 1,
     "rule" : "rule 2",
-    "pkg" : 6,
+    "pkg" : 1,
     "license" : 3,
     "license_source" : "DECLARED",
     "severity" : "HINT",
@@ -929,7 +938,7 @@
   "vulnerabilities" : [ {
     "_id" : 0,
     "id" : "VULCOID-VULNERABILITY_ID",
-    "pkg" : 6,
+    "pkg" : 1,
     "summary" : "summary text",
     "description" : "description text",
     "references" : [ {

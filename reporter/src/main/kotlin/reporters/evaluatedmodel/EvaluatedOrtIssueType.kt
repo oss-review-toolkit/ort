@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,5 +24,5 @@ package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
  * The possible types of an [EvaluatedOrtIssue].
  */
 enum class EvaluatedOrtIssueType {
-    ANALYZER, SCANNER
+    ADVISOR, ANALYZER, SCANNER
 }
