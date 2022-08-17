@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.utils.ort
 
 import java.util.concurrent.ConcurrentHashMap
