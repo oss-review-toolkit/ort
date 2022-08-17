@@ -105,17 +105,6 @@ open class Npm(
         ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    companion object {
-        /** Name of the scope with the regular dependencies. */
-        private const val DEPENDENCIES_SCOPE = "dependencies"
-
-        /** Name of the scope with optional dependencies. */
-        private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
-
-        /** Name of the scope with development dependencies. */
-        private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
-    }
-
     private val legacyPeerDeps =
         analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_LEGACY_PEER_DEPS)
             .toBoolean()
@@ -597,3 +586,12 @@ open class Npm(
 
 /** Name of the configuration option to toggle legacy peer dependency support. */
 private const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
+
+/** Name of the scope with the regular dependencies. */
+private const val DEPENDENCIES_SCOPE = "dependencies"
+
+/** Name of the scope with optional dependencies. */
+private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
+
+/** Name of the scope with development dependencies. */
+private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
