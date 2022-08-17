@@ -844,7 +844,7 @@ vulnerabilities_resolutions: []
 vulnerabilities:
 - _id: 0
   id: "VULCOID-VULNERABILITY_ID"
-  pkg: 2
+  pkg: 6
   summary: "summary text"
   description: "description text"
   references:
@@ -870,7 +870,7 @@ statistics:
     errors: 1
     warnings: 1
     hints: 0
-  open_vulnerabilities: 0
+  open_vulnerabilities: 1
   dependency_tree:
     included_projects: 1
     excluded_projects: 1

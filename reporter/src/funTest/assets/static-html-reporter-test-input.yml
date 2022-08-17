@@ -610,7 +610,7 @@ advisor:
       server_url: "http://localhost:8000"
   results:
     advisor_results:
-      Ant:junit:junit:4.12:
+      Maven:org.apache.commons:commons-text:1.1:
       - advisor:
           name: "VulnerableCode"
           capabilities: []
