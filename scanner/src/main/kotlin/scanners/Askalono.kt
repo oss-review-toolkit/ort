@@ -24,7 +24,9 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -145,7 +147,13 @@ class Askalono internal constructor(
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            issues = mutableListOf()
+            issues = listOf(
+                OrtIssue(
+                    source = scannerName,
+                    message = "This scanner is not capable of detecting copyright statements.",
+                    severity = Severity.HINT
+                )
+            )
         )
     }
 
