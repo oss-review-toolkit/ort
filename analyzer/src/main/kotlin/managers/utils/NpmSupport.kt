@@ -78,33 +78,33 @@ fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOUR
  * Map [definitionFiles] to contain only files handled by NPM.
  */
 fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        !isHandledByYarn(entry) && !isHandledByPnpm(entry)
-    }.mapTo(mutableSetOf()) { it.definitionFile }
+    getPackageJsonInfo(definitionFiles.toSet())
+        .filter { !it.isHandledByYarn && !it.isHandledByPnpm }
+        .mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
  * Map [definitionFiles] to contain only files handled by PNPM.
  */
 fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
-        .filter { isHandledByPnpm(it) && !it.isPnpmWorkspaceSubmodule }
+        .filter { it.isHandledByPnpm && !it.isPnpmWorkspaceSubmodule }
         .mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
  * Map [definitionFiles] to contain only files handled by Yarn.
  */
 fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule && !entry.hasYarn2ResourceFile
-    }.mapTo(mutableSetOf()) { it.definitionFile }
+    getPackageJsonInfo(definitionFiles.toSet())
+        .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && !it.hasYarn2ResourceFile }
+        .mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
  * Map [definitionFiles] to contain only files handled by Yarn 2+.
  */
 fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
-    getPackageJsonInfo(definitionFiles.toSet()).filter { entry ->
-        isHandledByYarn(entry) && !entry.isYarnWorkspaceSubmodule && entry.hasYarn2ResourceFile
-    }.mapTo(mutableSetOf()) { it.definitionFile }
+    getPackageJsonInfo(definitionFiles.toSet())
+        .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && it.hasYarn2ResourceFile }
+        .mapTo(mutableSetOf()) { it.definitionFile }
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
@@ -156,13 +156,10 @@ private data class PackageJsonInfo(
     val isPnpmWorkspaceSubmodule: Boolean = false,
     val isYarnWorkspaceRoot: Boolean = false,
     val isYarnWorkspaceSubmodule: Boolean = false
-)
-
-private fun isHandledByPnpm(entry: PackageJsonInfo) =
-    entry.isPnpmWorkspaceRoot || entry.isPnpmWorkspaceSubmodule || entry.hasPnpmLockfile
-
-private fun isHandledByYarn(entry: PackageJsonInfo) =
-    entry.isYarnWorkspaceRoot || entry.isYarnWorkspaceSubmodule || entry.hasYarnLockfile
+) {
+    val isHandledByPnpm = isPnpmWorkspaceRoot || isPnpmWorkspaceSubmodule || hasPnpmLockfile
+    val isHandledByYarn = isYarnWorkspaceRoot || isYarnWorkspaceSubmodule || hasYarnLockfile
+}
 
 private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJsonInfo> {
     val pnpmWorkspaceSubmodules = getPnpmWorkspaceSubmodules(definitionFiles)
