@@ -27,6 +27,11 @@ import java.time.Instant
 import kotlin.io.path.moveTo
 import kotlin.time.measureTime
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
@@ -130,7 +135,7 @@ class ExperimentalScanner(
         return ortResult.copy(scanner = scannerRun)
     }
 
-    fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
+    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
         val scanners = scannerWrappers[context.packageType].orEmpty()
         if (scanners.isEmpty()) return emptyMap()
 
@@ -156,14 +161,20 @@ class ExperimentalScanner(
         return results + issueResults
     }
 
-    private fun resolvePackageProvenances(controller: ScanController) {
+    private suspend fun resolvePackageProvenances(controller: ScanController) {
         logger.info { "Resolving provenance for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
-            controller.packages.forEach { pkg ->
-                runCatching {
-                    packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
-                }.onSuccess { provenance ->
+            withContext(Dispatchers.IO) {
+                controller.packages.map { pkg ->
+                    async {
+                        pkg to runCatching {
+                            packageProvenanceResolver.resolveProvenance(pkg, downloaderConfig.sourceCodeOrigins)
+                        }
+                    }
+                }.awaitAll()
+            }.forEach { (pkg, result) ->
+                result.onSuccess { provenance ->
                     controller.addPackageProvenance(pkg.id, provenance)
                 }.onFailure {
                     controller.addProvenanceResolutionIssue(
