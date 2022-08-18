@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  *
  * TODO: Remove this once https://youtrack.jetbrains.com/issue/KT-21599 is implemented.
  */
-object NodeSupport
+object NpmSupport
 
 /**
  * Return whether the [directory] contains an NPM lock file.
@@ -193,7 +193,7 @@ private fun isYarnWorkspaceRoot(definitionFile: File) =
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        NodeSupport.logger.error {
+        NpmSupport.logger.error {
             "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 
@@ -230,7 +230,7 @@ private fun getWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
     } catch (e: JsonProcessingException) {
         e.showStackTrace()
 
-        NodeSupport.logger.error {
+        NpmSupport.logger.error {
             "Could not parse '${definitionFile.invariantSeparatorsPath}': ${e.collectMessages()}"
         }
 
