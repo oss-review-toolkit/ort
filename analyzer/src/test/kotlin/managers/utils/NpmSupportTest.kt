@@ -34,7 +34,7 @@ import java.io.File
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class NodeSupportTest : WordSpec() {
+class NpmSupportTest : WordSpec() {
     companion object {
         private fun createPackageJson(matchers: List<String>, flattenWorkspaceDefinition: Boolean) =
             if (matchers.isNotEmpty()) {
