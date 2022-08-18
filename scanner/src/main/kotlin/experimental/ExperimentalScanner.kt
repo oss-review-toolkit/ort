@@ -193,14 +193,20 @@ class ExperimentalScanner(
         logger.info { "Resolved provenance for ${controller.packages.size} package(s) in $duration." }
     }
 
-    private fun resolveNestedProvenances(controller: ScanController) {
+    private suspend fun resolveNestedProvenances(controller: ScanController) {
         logger.info { "Resolving nested provenances for ${controller.packages.size} package(s)." }
 
         val duration = measureTime {
-            controller.getPackageProvenancesWithoutVcsPath().forEach { provenance ->
-                runCatching {
-                    nestedProvenanceResolver.resolveNestedProvenance(provenance)
-                }.onSuccess { nestedProvenance ->
+            withContext(Dispatchers.IO) {
+                controller.getPackageProvenancesWithoutVcsPath().map { provenance ->
+                    async {
+                        provenance to runCatching {
+                            nestedProvenanceResolver.resolveNestedProvenance(provenance)
+                        }
+                    }
+                }.awaitAll()
+            }.forEach { (provenance, result) ->
+                result.onSuccess { nestedProvenance ->
                     controller.addNestedProvenance(provenance, nestedProvenance)
                 }.onFailure {
                     controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
