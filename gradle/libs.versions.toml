@@ -12,7 +12,7 @@ taskInfoPlugin = "1.4.0"
 versionCatalogUpdatePlugin = "0.5.3"
 versionsPlugin = "0.42.0"
 
-antlr = "4.9.3"
+antlr = "4.10.1"
 asciidoctorj = "2.5.5"
 asciidoctorjPdf = "2.1.6"
 clikt = "3.5.0"
