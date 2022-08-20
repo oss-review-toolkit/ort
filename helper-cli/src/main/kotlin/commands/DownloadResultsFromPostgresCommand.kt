@@ -34,7 +34,7 @@ import kotlin.time.measureTime
 
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 
-import org.ossreviewtoolkit.helper.common.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration

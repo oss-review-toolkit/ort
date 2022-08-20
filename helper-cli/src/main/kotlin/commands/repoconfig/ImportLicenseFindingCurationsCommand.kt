@@ -26,15 +26,15 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.VcsUrlMapping
-import org.ossreviewtoolkit.helper.common.getRepositoryPaths
-import org.ossreviewtoolkit.helper.common.importLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.orEmpty
-import org.ossreviewtoolkit.helper.common.readOrtResult
-import org.ossreviewtoolkit.helper.common.replaceLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.sortLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.write
+import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.helper.utils.getRepositoryPaths
+import org.ossreviewtoolkit.helper.utils.importLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.orEmpty
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.sortLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration

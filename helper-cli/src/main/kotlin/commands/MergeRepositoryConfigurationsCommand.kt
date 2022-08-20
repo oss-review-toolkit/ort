@@ -28,8 +28,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.common.merge
-import org.ossreviewtoolkit.helper.common.write
+import org.ossreviewtoolkit.helper.utils.merge
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde

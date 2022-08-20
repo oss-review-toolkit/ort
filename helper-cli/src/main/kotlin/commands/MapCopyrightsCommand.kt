@@ -25,8 +25,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
-import org.ossreviewtoolkit.helper.common.readOrtResult
+import org.ossreviewtoolkit.helper.utils.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 

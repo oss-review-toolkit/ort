@@ -27,10 +27,10 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.common.formatComment
-import org.ossreviewtoolkit.helper.common.getSplitCurationFile
-import org.ossreviewtoolkit.helper.common.readPackageCurations
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.utils.formatComment
+import org.ossreviewtoolkit.helper.utils.getSplitCurationFile
+import org.ossreviewtoolkit.helper.utils.readPackageCurations
+import org.ossreviewtoolkit.helper.utils.writeAsYaml
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration

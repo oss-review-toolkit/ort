@@ -20,7 +20,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.helper.common
+package org.ossreviewtoolkit.helper.utils
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator

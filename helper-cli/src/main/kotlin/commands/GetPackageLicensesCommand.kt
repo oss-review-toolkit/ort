@@ -30,8 +30,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.common.createProvider
+import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.helper.utils.createProvider
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.OrtConfiguration
