@@ -38,8 +38,8 @@ import org.jetbrains.exposed.sql.compoundOr
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.select
 
-import org.ossreviewtoolkit.helper.common.ORTH_NAME
-import org.ossreviewtoolkit.helper.common.execAndMap
+import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.execAndMap
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration

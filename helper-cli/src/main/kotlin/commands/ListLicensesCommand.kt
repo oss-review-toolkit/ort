@@ -38,14 +38,14 @@ import java.lang.IllegalArgumentException
 import java.nio.file.FileSystems
 import java.nio.file.Paths
 
-import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.common.createProvider
-import org.ossreviewtoolkit.helper.common.fetchScannedSources
-import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
-import org.ossreviewtoolkit.helper.common.getPackageOrProject
-import org.ossreviewtoolkit.helper.common.getViolatedRulesByLicense
-import org.ossreviewtoolkit.helper.common.readOrtResult
-import org.ossreviewtoolkit.helper.common.replaceConfig
+import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.helper.utils.createProvider
+import org.ossreviewtoolkit.helper.utils.fetchScannedSources
+import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
+import org.ossreviewtoolkit.helper.utils.getPackageOrProject
+import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance

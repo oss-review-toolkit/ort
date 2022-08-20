@@ -26,14 +26,14 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.RepositoryLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.VcsUrlMapping
-import org.ossreviewtoolkit.helper.common.findRepositories
-import org.ossreviewtoolkit.helper.common.getLicenseFindingCurationsByRepository
-import org.ossreviewtoolkit.helper.common.mapLicenseFindingCurationsVcsUrls
-import org.ossreviewtoolkit.helper.common.mergeLicenseFindingCurations
-import org.ossreviewtoolkit.helper.common.orEmpty
-import org.ossreviewtoolkit.helper.common.write
+import org.ossreviewtoolkit.helper.utils.RepositoryLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.helper.utils.findRepositories
+import org.ossreviewtoolkit.helper.utils.getLicenseFindingCurationsByRepository
+import org.ossreviewtoolkit.helper.utils.mapLicenseFindingCurationsVcsUrls
+import org.ossreviewtoolkit.helper.utils.mergeLicenseFindingCurations
+import org.ossreviewtoolkit.helper.utils.orEmpty
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde

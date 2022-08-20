@@ -20,7 +20,7 @@
 
 @file:Suppress("MatchingDeclarationName", "TooManyFunctions")
 
-package org.ossreviewtoolkit.helper.common
+package org.ossreviewtoolkit.helper.utils
 
 import java.io.File
 

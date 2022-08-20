@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCo
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
-import org.ossreviewtoolkit.helper.common.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 /**

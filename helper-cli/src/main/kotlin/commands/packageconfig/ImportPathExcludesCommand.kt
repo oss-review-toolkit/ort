@@ -26,14 +26,14 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.VcsUrlMapping
-import org.ossreviewtoolkit.helper.common.findFilesRecursive
-import org.ossreviewtoolkit.helper.common.findRepositoryPaths
-import org.ossreviewtoolkit.helper.common.importPathExcludes
-import org.ossreviewtoolkit.helper.common.mergePathExcludes
-import org.ossreviewtoolkit.helper.common.orEmpty
-import org.ossreviewtoolkit.helper.common.sortPathExcludes
-import org.ossreviewtoolkit.helper.common.write
+import org.ossreviewtoolkit.helper.utils.VcsUrlMapping
+import org.ossreviewtoolkit.helper.utils.findFilesRecursive
+import org.ossreviewtoolkit.helper.utils.findRepositoryPaths
+import org.ossreviewtoolkit.helper.utils.importPathExcludes
+import org.ossreviewtoolkit.helper.utils.mergePathExcludes
+import org.ossreviewtoolkit.helper.utils.orEmpty
+import org.ossreviewtoolkit.helper.utils.sortPathExcludes
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde

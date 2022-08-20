@@ -26,8 +26,8 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
-import org.ossreviewtoolkit.helper.common.readOrtResult
-import org.ossreviewtoolkit.helper.common.writeOrtResult
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 class SetCommand : CliktCommand(

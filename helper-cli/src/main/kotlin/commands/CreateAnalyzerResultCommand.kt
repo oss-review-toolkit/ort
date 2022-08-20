@@ -30,8 +30,8 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.sql.Connection
 import java.time.Instant
 
-import org.ossreviewtoolkit.helper.common.ORTH_NAME
-import org.ossreviewtoolkit.helper.common.writeOrtResult
+import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance

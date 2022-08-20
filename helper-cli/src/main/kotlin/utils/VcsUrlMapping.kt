@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.helper.common
+package org.ossreviewtoolkit.helper.utils
 
 import java.net.URI
 import java.util.SortedMap

@@ -27,9 +27,9 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.getScanIssues
-import org.ossreviewtoolkit.helper.common.readOrtResult
-import org.ossreviewtoolkit.helper.common.replaceConfig
+import org.ossreviewtoolkit.helper.utils.getScanIssues
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
