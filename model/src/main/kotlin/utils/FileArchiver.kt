@@ -25,13 +25,14 @@ import java.io.IOException
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
@@ -64,7 +65,7 @@ class FileArchiver(
         storage: FileStorage
     ) : this(patterns, FileArchiverFileStorage(storage))
 
-    companion object {
+    companion object : Logging {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
     }
 

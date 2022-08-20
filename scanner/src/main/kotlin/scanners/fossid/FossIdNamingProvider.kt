@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-import org.ossreviewtoolkit.utils.ort.logger
+import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * This class provides names for projects and scans when the FossID scanner creates them, following a given pattern.
@@ -43,7 +43,7 @@ internal class FossIdNamingProvider(
     private val namingScanPattern: String?,
     private val namingConventionVariables: Map<String, String>
 ) {
-    companion object {
+    companion object : Logging {
         @JvmStatic
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
     }

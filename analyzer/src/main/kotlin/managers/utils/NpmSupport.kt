@@ -31,6 +31,8 @@ import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.managers.Yarn2
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.model.VcsInfo
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
@@ -49,7 +50,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
  *
  * TODO: Remove this once https://youtrack.jetbrains.com/issue/KT-21599 is implemented.
  */
-object NpmSupport
+object NpmSupport : Logging
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see

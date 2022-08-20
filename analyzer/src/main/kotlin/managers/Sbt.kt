@@ -29,6 +29,8 @@ import java.util.Properties
 
 import kotlin.io.path.moveTo
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -51,7 +52,7 @@ class Sbt(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
+    companion object : Logging {
         // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
         private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
 

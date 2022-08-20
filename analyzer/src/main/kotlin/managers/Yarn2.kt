@@ -35,6 +35,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -69,7 +71,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 internal const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
@@ -94,7 +95,7 @@ class Yarn2(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
+    companion object : Logging {
         /**
          * The name of Yarn 2+ resource file.
          */
@@ -288,7 +289,7 @@ class Yarn2(
         return runBlocking(Dispatchers.IO) {
             chunks.mapIndexed { index, chunk ->
                 async {
-                    Yarn2.logger.info { "Fetching packages details chunk #$index." }
+                    logger.info { "Fetching packages details chunk #$index." }
 
                     val process = run(
                         "npm",
@@ -309,7 +310,7 @@ class Yarn2(
                             processAdditionalPackageInfo(json)
                         }.toList()
                     }.also {
-                        Yarn2.logger.info { "Chunk #$index packages details have been fetched." }
+                        logger.info { "Chunk #$index packages details have been fetched." }
                     }
                 }
             }.awaitAll().flatten().associateBy { "${it.name}@${it.version}" }

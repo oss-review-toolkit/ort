@@ -26,8 +26,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * An issue that occurred while executing ORT.
@@ -69,7 +70,7 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 /**
  * Create an [OrtIssue] and [log] the message. The log level is aligned with the [severity].
  */
-inline fun <reified T : Any> T.createAndLogIssue(
+inline fun <reified T : Logging> T.createAndLogIssue(
     source: String,
     message: String,
     severity: Severity? = null

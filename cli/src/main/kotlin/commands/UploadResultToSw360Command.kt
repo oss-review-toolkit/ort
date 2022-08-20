@@ -40,6 +40,7 @@ import org.eclipse.sw360.clients.utils.SW360ClientException
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.model.Identifier
@@ -55,7 +56,6 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 
 class UploadResultToSw360Command : CliktCommand(
     name = "upload-result-to-sw360",

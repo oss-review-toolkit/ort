@@ -28,6 +28,8 @@ import java.io.File
 import java.util.LinkedList
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
@@ -52,7 +54,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
@@ -66,7 +67,7 @@ class GoMod(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
+    companion object : Logging {
         const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
     }
 
@@ -331,6 +332,8 @@ class GoMod(
  * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
  */
 private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>> = mutableMapOf()) {
+    companion object : Logging
+
     /**
      * Return a set with all nodes (i.e. package identifiers) contained in this graph.
      */

@@ -32,6 +32,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
 import org.ossreviewtoolkit.clients.fossid.checkResponse
@@ -76,7 +78,6 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -92,7 +93,7 @@ class FossId internal constructor(
     downloaderConfig: DownloaderConfiguration,
     private val config: FossIdConfig
 ) : Scanner(name, scannerConfig, downloaderConfig), PackageScannerWrapper {
-    companion object {
+    companion object : Logging {
         @JvmStatic
         private val PROJECT_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
 
@@ -207,12 +208,12 @@ class FossId internal constructor(
         service.getProject(config.user, config.apiKey, projectCode).run {
             when {
                 error == null && data != null -> {
-                    FossId.logger.info { "Project '$projectCode' exists." }
+                    logger.info { "Project '$projectCode' exists." }
                     data
                 }
 
                 error == "Project does not exist" && status == 0 -> {
-                    FossId.logger.info { "Project '$projectCode' does not exist." }
+                    logger.info { "Project '$projectCode' does not exist." }
                     null
                 }
 
@@ -380,7 +381,7 @@ class FossId internal constructor(
                 ScanStatus.STARTED, ScanStatus.STARTING, ScanStatus.RUNNING, ScanStatus.SCANNING, ScanStatus.AUTO_ID,
 
                 ScanStatus.QUEUED -> {
-                    FossId.logger.warn {
+                    logger.warn {
                         "Found a previous scan which is still running. Will ignore the 'waitForResult' option and " +
                                 "wait..."
                     }
@@ -608,7 +609,7 @@ class FossId internal constructor(
      */
     private suspend fun waitDownloadComplete(scanCode: String) {
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
-            FossId.logger.info { "Checking download status for scan '$scanCode'." }
+            logger.info { "Checking download status for scan '$scanCode'." }
 
             val response = service.checkDownloadStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check download status")
@@ -625,7 +626,7 @@ class FossId internal constructor(
                     val message = response.message
                     if (message == null || !GIT_FETCH_DONE_REGEX.containsMatchIn(message)) return@wait false
 
-                    FossId.logger.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
+                    logger.warn { "The download is not finished but Git Fetch has completed. Carrying on..." }
 
                     return@wait true
                 }
@@ -642,7 +643,7 @@ class FossId internal constructor(
      */
     private suspend fun waitScanComplete(scanCode: String) {
         val result = wait(config.timeout.minutes, WAIT_DELAY) {
-            FossId.logger.info { "Waiting for scan '$scanCode' to complete." }
+            logger.info { "Waiting for scan '$scanCode' to complete." }
 
             val response = service.checkScanStatus(config.user, config.apiKey, scanCode)
                 .checkResponse("check scan status", false)
@@ -652,7 +653,7 @@ class FossId internal constructor(
                 ScanStatus.FAILED -> error("Scan waited for has failed.")
                 null -> false
                 else -> {
-                    FossId.logger.info {
+                    logger.info {
                         "Scan status for scan '$scanCode' is '${response.data?.status}'. Waiting..."
                     }
 

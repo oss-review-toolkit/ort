@@ -29,6 +29,8 @@ import java.io.File
 import java.io.IOException
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
@@ -63,7 +65,6 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -98,6 +99,8 @@ class Pub(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
         override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 

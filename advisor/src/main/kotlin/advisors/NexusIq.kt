@@ -23,6 +23,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 
 import retrofit2.HttpException
 
@@ -53,6 +54,8 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : AdviceProvider(name) {
+    companion object : Logging
+
     class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(providerName, config.forProvider { nexusIq })
     }

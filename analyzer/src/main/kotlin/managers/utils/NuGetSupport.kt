@@ -44,6 +44,8 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.CacheControl
 import okhttp3.Request
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
@@ -68,7 +70,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.await
-import org.ossreviewtoolkit.utils.ort.logger
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
@@ -79,7 +80,7 @@ private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
 private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
 
 class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX_URL)) {
-    companion object {
+    companion object : Logging {
         val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
         val XML_MAPPER = XmlMapper(
@@ -380,6 +381,8 @@ private fun PackageManager.getProject(
  * https://docs.microsoft.com/en-us/nuget/reference/nuget-config-file
  */
 class NuGetConfigFileReader {
+    companion object : Logging
+
     @JsonIgnoreProperties(ignoreUnknown = true)
     @XmlRootElement(name = "configuration")
     private data class NuGetConfig(

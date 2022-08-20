@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.advisor
 
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
@@ -36,6 +38,8 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * or code analysis results.
  */
 abstract class AdviceProvider(val providerName: String) {
+    companion object : Logging
+
     /**
      * For a given list of [Package]s, retrieve  findings and return a map that associates each package with a list
      * of [AdvisorResult]s. Needs to be implemented by child classes.

@@ -32,6 +32,8 @@ import java.util.SortedSet
 
 import kotlin.time.measureTime
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
 import org.jruby.embed.ScriptingContainer
@@ -60,7 +62,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -105,6 +106,8 @@ class Bundler(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")
 

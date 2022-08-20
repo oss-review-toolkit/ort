@@ -32,6 +32,8 @@ import java.io.IOException
 import java.net.Authenticator
 import java.util.regex.Pattern
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
@@ -51,7 +53,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -59,7 +60,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 const val GIT_HISTORY_DEPTH = 50
 
 class Git : VersionControlSystem(), CommandLineTool {
-    companion object {
+    companion object : Logging {
         init {
             // Make sure that JGit uses the exact same authentication information as ORT itself. This addresses
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
@@ -243,7 +244,7 @@ class Git : VersionControlSystem(), CommandLineTool {
  * [Authenticator]. An instance of this class is installed by [Git], making sure that JGit uses the exact same
  * authentication mechanism as ORT.
  */
-internal object AuthenticatorCredentialsProvider : CredentialsProvider() {
+internal object AuthenticatorCredentialsProvider : CredentialsProvider(), Logging {
     override fun isInteractive(): Boolean = false
 
     override fun supports(vararg items: CredentialItem): Boolean =

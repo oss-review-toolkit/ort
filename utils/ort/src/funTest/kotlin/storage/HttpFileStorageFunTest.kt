@@ -38,9 +38,11 @@ import java.net.InetSocketAddress
 
 import kotlin.random.Random
 
-import org.ossreviewtoolkit.utils.ort.logger
+import org.apache.logging.log4j.kotlin.Logging
 
 class HttpFileStorageFunTest : WordSpec() {
+    private companion object : Logging
+
     private val loopback = InetAddress.getLoopbackAddress()
     private val port = Random.nextInt(1024, 49152) // See https://en.wikipedia.org/wiki/Registered_port.
         .also { logger.debug { "Using port $it for HTTP server." } }

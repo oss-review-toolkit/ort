@@ -26,6 +26,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
@@ -34,11 +36,10 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class FossIdReporter : Reporter {
-    companion object {
+    companion object : Logging {
         /** Name of the configuration property for the server URL. */
         const val SERVER_URL_PROPERTY = "serverUrl"
 
@@ -95,11 +96,11 @@ class FossIdReporter : Reporter {
             input.ortResult.scanner?.results?.scanResults?.values?.flatten()?.mapNotNull { result ->
                 result.additionalData[SCAN_CODE_KEY]?.let { scanCode ->
                     async {
-                        this@FossIdReporter.logger.info { "Generating report for scan $scanCode." }
+                        logger.info { "Generating report for scan $scanCode." }
                         service.generateReport(user, apiKey, scanCode, reportType, selectionType, outputDir)
                             .onFailure {
                                 it.showStackTrace()
-                                this@FossIdReporter.logger.info {
+                                logger.info {
                                     "Error during report generation: ${it.collectMessages()}."
                                 }
                             }.getOrNull()

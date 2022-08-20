@@ -27,6 +27,8 @@ import java.time.Instant
 
 import kotlin.time.measureTimedValue
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -57,7 +59,6 @@ import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -69,7 +70,7 @@ abstract class PathScanner(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : Scanner(name, scannerConfig, downloaderConfig) {
-    companion object {
+    companion object : Logging {
         /**
          * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
          */
@@ -111,11 +112,11 @@ abstract class PathScanner(
     ): Map<Package, List<ScanResult>> {
         val scannerCriteria = getScannerCriteria()
 
-        logger.info { "Searching scan results for ${packages.size} package(s)..." }
+        logger.info { "Searching $scannerName scan results for ${packages.size} package(s)..." }
 
         val remainingPackages = packages.filterTo(mutableListOf()) { pkg ->
             !pkg.isMetaDataOnly.also {
-                if (it) PathScanner.logger.debug { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
+                if (it) logger.debug { "Skipping '${pkg.id.toCoordinates()}' as it is metadata only." }
             }
         }
 
@@ -162,13 +163,13 @@ abstract class PathScanner(
 
             val packageIndex = "($index of $size)"
 
-            PathScanner.logger.info {
+            logger.info {
                 "Scanning '${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' $packageIndex"
             }
 
             val scanResult = try {
                 scanPackage(details, pkg, downloadDirectory).also {
-                    PathScanner.logger.info {
+                    logger.info {
                         "Finished scanning '${pkg.id.toCoordinates()}' in thread '${Thread.currentThread().name}' " +
                                 "$packageIndex."
                     }
@@ -412,7 +413,7 @@ abstract class PathScanner(
 
         val duplicatesCount = size - deduplicatedResults.size
         if (duplicatesCount > 0) {
-            PathScanner.logger.debug { "Removed $duplicatesCount duplicate(s) out of $size scan result(s)." }
+            logger.debug { "Removed $duplicatesCount duplicate(s) out of $size scan result(s)." }
         }
 
         return deduplicatedResults

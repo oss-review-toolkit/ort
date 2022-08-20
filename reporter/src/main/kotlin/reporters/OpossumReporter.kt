@@ -35,6 +35,7 @@ import kotlin.math.min
 
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
 import org.apache.commons.compress.compressors.gzip.GzipParameters
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -52,7 +53,6 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.OpossumReporter.OpossumInput
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
@@ -84,7 +84,7 @@ internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> 
  * - *scopes.excluded*: Comma separated list of scopes that are excluded
  */
 class OpossumReporter : Reporter {
-    companion object {
+    companion object : Logging {
         const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
         const val OPTION_EXCLUDED_SCOPES = "scopes.excluded"
     }
@@ -220,6 +220,8 @@ class OpossumReporter : Reporter {
         val baseUrlsForSources: SortedMap<String, String> = sortedMapOf(),
         val externalAttributionSources: SortedMap<String, OpossumExternalAttributionSource> = sortedMapOf()
     ) {
+        companion object : Logging
+
         fun toJson(): Map<*, *> =
             sortedMapOf(
                 "metadata" to sortedMapOf(

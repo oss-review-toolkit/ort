@@ -25,6 +25,8 @@ import java.time.Instant
 
 import kotlin.math.max
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -46,7 +48,6 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
 /**
@@ -68,7 +69,7 @@ class ScanCode internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
-    companion object {
+    companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 
         private const val OUTPUT_FORMAT = "json-pp"

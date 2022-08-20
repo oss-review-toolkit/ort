@@ -33,6 +33,8 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -43,7 +45,6 @@ import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
-import org.ossreviewtoolkit.utils.ort.logger
 
 // An arbitrary name to use for the multipart body being sent.
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
@@ -53,6 +54,8 @@ class ScanOss internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : PathScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    companion object : Logging
+
     class ScanOssFactory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             ScanOss(scannerName, scannerConfig, downloaderConfig)
@@ -95,7 +98,7 @@ class ScanOss internal constructor(
                 // TODO: Consider not applying the (somewhat arbitrary) blacklist.
                 .filter { !it.isDirectory && !BlacklistRules.hasBlacklistedExt(it.name) }
                 .forEach {
-                    this@ScanOss.logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
+                    logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
                     append(createWfpForFile(it.path))
                 }
         }

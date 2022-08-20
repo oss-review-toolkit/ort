@@ -27,8 +27,9 @@ import com.sksamuel.hoplite.fp.getOrElse
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The configuration model for all ORT components.
@@ -98,7 +99,7 @@ data class OrtConfiguration(
      */
     val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
-    companion object {
+    companion object : Logging {
         /**
          * Load the [OrtConfiguration]. The different sources are used with this priority:
          *

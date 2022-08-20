@@ -28,6 +28,8 @@ import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -54,7 +56,6 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 // Use the most recent version that still supports Python 2. PIP 21.0.0 dropped Python 2 support, see
@@ -90,7 +91,7 @@ object VirtualEnv : CommandLineTool {
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,)")
 }
 
-object PythonVersion : CommandLineTool {
+object PythonVersion : CommandLineTool, Logging {
     // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
     // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
@@ -153,7 +154,7 @@ class Pip(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
+    companion object : Logging {
         private const val GENERIC_BSD_LICENSE = "BSD License"
         private const val SHORT_STRING_MAX_CHARS = 200
 

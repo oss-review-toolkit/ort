@@ -23,6 +23,8 @@ import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
@@ -37,7 +39,6 @@ import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 
 import retrofit2.HttpException
 
@@ -50,6 +51,8 @@ private const val BULK_REQUEST_SIZE = 128
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
 class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_URL) : AdviceProvider(name) {
+    companion object : Logging
+
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
         override fun create(config: AdvisorConfiguration) = OssIndex(providerName)
     }

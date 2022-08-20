@@ -25,6 +25,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 
 import java.nio.file.Path
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360Connection
 import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
@@ -46,7 +48,6 @@ import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The SW360 storage back-end uses the SW360-client library in order to read/add attachments from the configured
@@ -55,7 +56,7 @@ import org.ossreviewtoolkit.utils.ort.logger
 class Sw360Storage(
     configuration: Sw360StorageConfiguration
 ) : ScanResultsStorage() {
-    companion object {
+    companion object : Logging {
         fun createConnection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
             val httpClientConfig = HttpClientConfig
                 .basicConfig()

@@ -24,6 +24,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.DependencyNode
@@ -35,7 +37,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyHandler
-import org.ossreviewtoolkit.utils.ort.logger
 
 private const val TYPE = "PackageManagerDependency"
 
@@ -118,6 +119,8 @@ private data class PackageManagerDependency(
     val scope: String,
     val linkage: PackageLinkage
 ) {
+    companion object : Logging
+
     fun findProjects(analyzerResult: AnalyzerResult): List<Project> =
         analyzerResult.projects.filter { it.definitionFilePath == definitionFile }.also { projects ->
             if (projects.isEmpty()) {

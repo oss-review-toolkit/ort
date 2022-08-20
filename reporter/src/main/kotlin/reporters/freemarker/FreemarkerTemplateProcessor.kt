@@ -28,6 +28,8 @@ import freemarker.template.TemplateExceptionHandler
 import java.io.File
 import java.util.SortedMap
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -55,7 +57,6 @@ import org.ossreviewtoolkit.model.licenses.filterExcluded
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
@@ -70,7 +71,7 @@ class FreemarkerTemplateProcessor(
     private val fileExtension: String,
     private val templatesResourceDirectory: String
 ) {
-    companion object {
+    companion object : Logging {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
         const val OPTION_PROJECT_TYPES_AS_PACKAGES = "project-types-as-packages"

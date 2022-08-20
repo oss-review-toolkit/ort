@@ -23,6 +23,8 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -30,7 +32,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.ort.logger
 
 class Pipenv(
     name: String,
@@ -38,6 +39,8 @@ class Pipenv(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 

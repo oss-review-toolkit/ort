@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.utils.ort
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -31,7 +33,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-object DeclaredLicenseProcessor {
+object DeclaredLicenseProcessor : Logging {
     private val urlPrefixesToRemove = listOf(
         "choosealicense.com/licenses/",
         "gnu.org/licenses/old-licenses/",

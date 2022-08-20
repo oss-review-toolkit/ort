@@ -23,6 +23,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
@@ -32,7 +34,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
@@ -43,6 +44,8 @@ private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-too
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 open class OrtConfigPackageCurationProvider : PackageCurationProvider {
+    companion object : Logging
+
     private val curationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {
             updateOrtConfig(it)

@@ -28,6 +28,8 @@ import kotlinx.coroutines.runBlocking
 
 import okhttp3.OkHttpClient
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -44,7 +46,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -95,6 +96,8 @@ class ClearlyDefinedPackageCurationProvider(
     serverUrl: String,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {
+    companion object : Logging
+
     constructor(server: Server = Server.PRODUCTION) : this(server.url)
 
     private val service by lazy { ClearlyDefinedService.create(serverUrl, client ?: OkHttpClientHelper.buildClient()) }

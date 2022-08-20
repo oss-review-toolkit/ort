@@ -28,6 +28,8 @@ import javax.sql.DataSource
 
 import kotlinx.coroutines.Deferred
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
@@ -35,9 +37,8 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.config.PostgresConnection
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.ort.logger
 
-object DatabaseUtils {
+object DatabaseUtils : Logging {
     /**
      * This map holds the [HikariDataSource] based on the [PostgresConnection].
      */
@@ -99,7 +100,7 @@ object DatabaseUtils {
             if (resultSet.next()) {
                 val clientEncoding = resultSet.getString(1)
                 if (clientEncoding != expectedEncoding) {
-                    DatabaseUtils.logger.warn {
+                    logger.warn {
                         "The database's client_encoding is '$clientEncoding' but should be '$expectedEncoding'."
                     }
                 }

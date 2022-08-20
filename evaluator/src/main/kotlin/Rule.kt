@@ -19,13 +19,14 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
@@ -43,6 +44,8 @@ abstract class Rule(
      */
     val name: String
 ) {
+    companion object : Logging
+
     private val ruleMatcherManager = RuleMatcherManager()
 
     /**

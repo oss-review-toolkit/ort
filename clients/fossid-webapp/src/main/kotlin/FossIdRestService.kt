@@ -40,7 +40,7 @@ import java.time.Duration
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
-import org.apache.logging.log4j.kotlin.loggerOf
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
@@ -61,10 +61,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface FossIdRestService {
-    companion object {
-        @JvmStatic
-        val logger = loggerOf(FossIdRestService::class.java)
-
+    companion object : Logging {
         /**
          * The mapper for JSON (de-)serialization used by this service.
          */

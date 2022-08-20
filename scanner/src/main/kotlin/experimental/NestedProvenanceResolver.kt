@@ -22,11 +22,12 @@ package org.ossreviewtoolkit.scanner.experimental
 
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.
@@ -47,6 +48,8 @@ class DefaultNestedProvenanceResolver(
     private val storage: NestedProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : NestedProvenanceResolver {
+    companion object : Logging
+
     override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
         return when (provenance) {
             is ArtifactProvenance -> NestedProvenance(root = provenance, subRepositories = emptyMap())

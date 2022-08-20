@@ -31,6 +31,8 @@ import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.withContext
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.github.DateTime
@@ -54,7 +56,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.filterVersionNames
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -80,7 +81,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * suitable for production usage.
  */
 class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguration) : AdviceProvider(name) {
-    companion object {
+    companion object : Logging {
         /**
          * The default number of parallel requests executed by this advisor implementation. This value is used if the
          * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.

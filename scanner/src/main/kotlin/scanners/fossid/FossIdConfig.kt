@@ -19,8 +19,9 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A data class that holds the configuration options supported by the [FossId] scanner. An instance of this class is
@@ -77,7 +78,7 @@ internal data class FossIdConfig(
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
-    companion object {
+    companion object : Logging {
         /** Name of the configuration property for the server URL. */
         private const val SERVER_URL_PROPERTY = "serverUrl"
 

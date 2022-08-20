@@ -25,6 +25,8 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.utils.hasYarnLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
@@ -32,7 +34,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
@@ -43,6 +44,8 @@ class Yarn(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : Npm(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 

@@ -26,6 +26,8 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanResultContainer
@@ -33,7 +35,6 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -48,6 +49,8 @@ class FileBasedStorage(
      */
     val backend: FileStorage
 ) : ScanResultsStorage() {
+    companion object : Logging
+
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {

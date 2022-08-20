@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.utils.ort
 import java.net.Authenticator
 import java.net.PasswordAuthentication
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.nextOrNull
 
@@ -29,6 +31,8 @@ import org.ossreviewtoolkit.utils.common.nextOrNull
  * A simple non-caching authenticator that reads credentials from .netrc-style files.
  */
 class NetRcAuthenticator : Authenticator() {
+    companion object : Logging
+
     // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
     //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.
     private val netrcFileNames = listOf(".netrc", "_netrc")
@@ -74,7 +78,7 @@ internal fun getNetrcAuthentication(contents: String, machine: String): Password
         }
 
         if (login != null && password != null) {
-            OrtAuthenticator.logger.debug { "Found a '$machineFound' entry for '$machine'." }
+            NetRcAuthenticator.logger.debug { "Found a '$machineFound' entry for '$machine'." }
             return PasswordAuthentication(login, password.toCharArray())
         }
     }

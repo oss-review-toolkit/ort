@@ -25,6 +25,8 @@ import java.io.File
 import java.io.IOException
 import java.util.ServiceLoader
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -34,11 +36,10 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 abstract class VersionControlSystem {
-    companion object {
+    companion object : Logging {
         private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)!!
 
         /**

@@ -27,6 +27,8 @@ import kotlinx.coroutines.runBlocking
 
 import okhttp3.Request
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
@@ -37,7 +39,6 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -59,6 +60,8 @@ class DefaultPackageProvenanceResolver(
     private val storage: PackageProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : PackageProvenanceResolver {
+    companion object : Logging
+
     /**
      * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. For source artifacts it is
      * verified that the [RemoteArtifact] does exist. For a VCS it is verified that the revision exists. If the revision
