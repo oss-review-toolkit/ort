@@ -19,7 +19,8 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.paypal.digraph.parser.GraphParser
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
 
@@ -44,11 +45,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
@@ -64,6 +65,9 @@ class Stack(
         const val EXTERNAL_SCOPE_NAME = "external"
         const val TEST_SCOPE_NAME = "test"
         const val BENCH_SCOPE_NAME = "bench"
+
+        const val HACKAGE_PACKAGE_TYPE = "hackage"
+        const val PROJECT_PACKAGE_TYPE = "project package"
     }
 
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
@@ -75,6 +79,21 @@ class Stack(
             repoConfig: RepositoryConfiguration
         ) = Stack(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Location(
+        val url: String,
+        val type: String
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Dependency(
+        val name: String,
+        val version: String,
+        val license: String,
+        val location: Location? = null,
+        val dependencies: List<String> = emptyList()
+    )
 
     override fun command(workingDir: File?) = "stack"
 
@@ -113,57 +132,82 @@ class Stack(
             return run(workingDir, *command)
         }
 
-        fun mapParentsToChildren(scope: String): Map<String, List<String>> {
-            val dotGraph = runStack("dot", "--global-hints", "--$scope").stdout
+        fun listDependencies(scope: String): List<Dependency> {
+            val scopeOptions = listOfNotNull(
+                "--$scope",
+                // Disable the default inclusion of external dependencies if another scope than "external" is specified.
+                "--no-$EXTERNAL_SCOPE_NAME".takeIf { scope != EXTERNAL_SCOPE_NAME }
+            )
 
-            // Strip any leading garbage in case Stack was bootstrapping itself, resulting in unrelated output.
-            val dotLines = dotGraph.lineSequence().dropWhile { !it.startsWith("strict digraph deps") }
+            val dependenciesJson = runStack(
+                // Use a hints file for global packages to not require installing the Glasgow Haskell Compiler (GHC).
+                "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
+            ).stdout
 
-            val dotParser = GraphParser(dotLines.joinToString("\n").byteInputStream())
-            val dependencies = mutableMapOf<String, MutableList<String>>()
-
-            dotParser.edges.values.forEach { edge ->
-                val parent = edge.node1.id.unquote()
-                val child = edge.node2.id.unquote()
-                dependencies.getOrPut(parent) { mutableListOf() } += child
-            }
-
-            logger.debug { "Parsed ${dependencies.size} dependency relations from graph." }
-
-            return dependencies
+            return jsonMapper.readValue(dependenciesJson)
         }
 
-        fun mapNamesToVersions(scope: String): Map<String, String> {
-            val dependencies = runStack("ls", "dependencies", "--global-hints", "--$scope").stdout
-            return dependencies.lines().associate {
-                Pair(it.substringBefore(' '), it.substringAfter(' '))
-            }.also {
-                logger.debug { "Parsed ${it.size} dependency versions from list." }
+        val allDependencies = mutableSetOf<Dependency>()
+
+        val externalDependencyList = listDependencies(EXTERNAL_SCOPE_NAME).also { allDependencies += it }
+        val testDependencyList = listDependencies(TEST_SCOPE_NAME).also { allDependencies += it }
+        val benchDependencyList = listDependencies(BENCH_SCOPE_NAME).also { allDependencies += it }
+
+        val dependencyPackageMap = mutableMapOf<Dependency, Package>()
+
+        allDependencies.forEach { dependency ->
+            val id = Identifier(
+                type = "Hackage",
+                namespace = "",
+                name = dependency.name,
+                version = dependency.version
+            )
+
+            val fallback = Package.EMPTY.copy(
+                id = id,
+                purl = id.toPurl(),
+                declaredLicenses = sortedSetOf(dependency.license)
+            )
+
+            val pkg = when (dependency.location?.type) {
+                null, HACKAGE_PACKAGE_TYPE -> {
+                    // Enrich the package with additional metadata from Hackage.
+                    downloadCabalFile(id)?.let {
+                        parseCabalFile(it)
+                    } ?: fallback
+                }
+
+                PROJECT_PACKAGE_TYPE -> {
+                    // Do not add the project as a package.
+                    null
+                }
+
+                else -> fallback
             }
+
+            // Do not add the Glasgow Haskell Compiler (GHC) as a package.
+            if (pkg != null && pkg.id.name != "ghc") dependencyPackageMap[dependency] = pkg
         }
 
-        // A map of package IDs to enriched package information.
-        val allPackages = mutableMapOf<Identifier, Package>()
+        fun List<String>.toPackageReferences(): SortedSet<PackageReference> =
+            mapNotNullTo(sortedSetOf()) { name ->
+                // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
+                //       different namespaces should be handled.
+                dependencyPackageMap.entries.find { (dependency, _) -> dependency.name == name }?.let { entry ->
+                    val pkg = entry.value
+                    val dependencies = entry.key.dependencies.toPackageReferences()
 
-        val externalChildren = mapParentsToChildren(EXTERNAL_SCOPE_NAME)
-        val externalVersions = mapNamesToVersions(EXTERNAL_SCOPE_NAME)
-        val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, externalChildren, externalVersions, externalDependencies)
+                    pkg.toReference().copy(dependencies = dependencies)
+                }
+            }
 
-        val testChildren = mapParentsToChildren(TEST_SCOPE_NAME)
-        val testVersions = mapNamesToVersions(TEST_SCOPE_NAME)
-        val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, testChildren, testVersions, testDependencies)
-
-        val benchChildren = mapParentsToChildren(BENCH_SCOPE_NAME)
-        val benchVersions = mapNamesToVersions(BENCH_SCOPE_NAME)
-        val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
+        fun List<Dependency>.getProjectDependencies(): List<String> =
+            single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
 
         val scopes = sortedSetOf(
-            Scope(EXTERNAL_SCOPE_NAME, externalDependencies),
-            Scope(TEST_SCOPE_NAME, testDependencies),
-            Scope(BENCH_SCOPE_NAME, benchDependencies)
+            Scope(EXTERNAL_SCOPE_NAME, externalDependencyList.getProjectDependencies().toPackageReferences()),
+            Scope(TEST_SCOPE_NAME, testDependencyList.getProjectDependencies().toPackageReferences()),
+            Scope(BENCH_SCOPE_NAME, benchDependencyList.getProjectDependencies().toPackageReferences())
         )
 
         val project = Project(
@@ -177,42 +221,7 @@ class Stack(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, allPackages.values.toSortedSet()))
-    }
-
-    private fun buildDependencyTree(
-        parentName: String, allPackages: MutableMap<Identifier, Package>,
-        childMap: Map<String, List<String>>, versionMap: Map<String, String>,
-        scopeDependencies: SortedSet<PackageReference>
-    ) {
-        childMap[parentName]?.let { children ->
-            children.forEach { childName ->
-                val pkgId = Identifier(
-                    type = "Hackage",
-                    namespace = "",
-                    name = childName,
-                    version = versionMap[childName].orEmpty()
-                )
-
-                val pkgFallback = Package.EMPTY.copy(id = pkgId, purl = pkgId.toPurl())
-
-                val pkg = allPackages.getOrPut(pkgId) {
-                    if (pkgId.type == "Hackage") {
-                        // Enrich the package with additional metadata from Hackage.
-                        downloadCabalFile(pkgId)?.let {
-                            parseCabalFile(it)
-                        } ?: pkgFallback
-                    } else {
-                        pkgFallback
-                    }
-                }
-
-                val packageRef = pkg.toReference()
-                scopeDependencies += packageRef
-
-                buildDependencyTree(childName, allPackages, childMap, versionMap, packageRef.dependencies)
-            }
-        } ?: logger.debug { "No dependencies found for '$parentName'." }
+        return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSortedSet()))
     }
 
     private fun getPackageUrl(name: String, version: String) =

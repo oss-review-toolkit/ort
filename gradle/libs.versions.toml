@@ -12,7 +12,6 @@ taskInfoPlugin = "1.4.0"
 versionCatalogUpdatePlugin = "0.5.3"
 versionsPlugin = "0.42.0"
 
-# @pin this version as it needs to be aligned with "digraphParser".
 antlr = "4.9.3"
 asciidoctorj = "2.5.5"
 asciidoctorjPdf = "2.1.6"
@@ -22,7 +21,6 @@ commonsEmail = "1.5"
 config4k = "0.4.2"
 cvssCalculator = "1.4.1"
 cyclonedx = "7.2.0"
-digraphParser = "1.0"
 diskLruCache = "2.0.2"
 exposed = "0.39.2"
 flexmark = "0.64.0"
@@ -96,7 +94,6 @@ config4k = { module = "io.github.config4k:config4k", version.ref = "config4k" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
-digraphParser = { module = "com.paypal.digraph:digraph-parser", version.ref = "digraphParser" }
 diskLruCache = { module = "com.jakewharton:disklrucache", version.ref = "diskLruCache" }
 exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
 exposedDao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
