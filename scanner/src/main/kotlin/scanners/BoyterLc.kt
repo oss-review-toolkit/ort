@@ -53,6 +53,13 @@ class BoyterLc internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    companion object {
+        val CONFIGURATION_OPTIONS = listOf(
+            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+            "--format", "json"
+        )
+    }
+
     class BoyterLcFactory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             BoyterLc(scannerName, scannerConfig, downloaderConfig)
@@ -61,13 +68,6 @@ class BoyterLc internal constructor(
     class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             BoyterLc(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    companion object {
-        val CONFIGURATION_OPTIONS = listOf(
-            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
-            "--format", "json"
-        )
     }
 
     override val name = "BoyterLc"

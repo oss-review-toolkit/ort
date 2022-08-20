@@ -80,17 +80,17 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * suitable for production usage.
  */
 class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
-        override fun create(config: AdvisorConfiguration) =
-            GitHubDefects(providerName, config.forProvider { gitHubDefects })
-    }
-
     companion object {
         /**
          * The default number of parallel requests executed by this advisor implementation. This value is used if the
          * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.
          */
         const val DEFAULT_PARALLEL_REQUESTS = 4
+    }
+
+    class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
+        override fun create(config: AdvisorConfiguration) =
+            GitHubDefects(providerName, config.forProvider { gitHubDefects })
     }
 
     /**

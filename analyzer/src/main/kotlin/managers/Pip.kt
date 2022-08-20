@@ -153,16 +153,6 @@ class Pip(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
-        override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
-
-        override fun create(
-            analysisRoot: File,
-            analyzerConfig: AnalyzerConfiguration,
-            repoConfig: RepositoryConfiguration
-        ) = Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
     companion object {
         private const val GENERIC_BSD_LICENSE = "BSD License"
         private const val SHORT_STRING_MAX_CHARS = 200
@@ -177,6 +167,16 @@ class Pip(
             "pypi.org",
             "pypi.python.org" // Legacy
         ).flatMap { listOf("--trusted-host", it) }.toTypedArray()
+    }
+
+    class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
+        override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
+
+        override fun create(
+            analysisRoot: File,
+            analyzerConfig: AnalyzerConfiguration,
+            repoConfig: RepositoryConfiguration
+        ) = Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "pip"
