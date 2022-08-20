@@ -262,8 +262,6 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    private val spdxDocumentCache = SpdxDocumentCache()
-
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")
 
@@ -273,6 +271,8 @@ class SpdxDocumentFile(
             repoConfig: RepositoryConfiguration
         ) = SpdxDocumentFile(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    private val spdxDocumentCache = SpdxDocumentCache()
 
     /**
      * Create an [Identifier] out of this [SpdxPackage].
