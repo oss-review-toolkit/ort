@@ -92,16 +92,6 @@ class FossId internal constructor(
     downloaderConfig: DownloaderConfiguration,
     private val config: FossIdConfig
 ) : Scanner(name, scannerConfig, downloaderConfig), PackageScannerWrapper {
-    class FossIdFactory : AbstractScannerWrapperFactory<FossId>("FossId") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
-    }
-
-    class Factory : AbstractScannerFactory<FossId>("FossId") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
-    }
-
     companion object {
         @JvmStatic
         private val PROJECT_NAME_REGEX = Regex("""^.*/([\w.\-]+?)(?:\.git)?$""")
@@ -164,6 +154,16 @@ class FossId internal constructor(
                 repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
             } ?: repoUrl
         }
+    }
+
+    class FossIdFactory : AbstractScannerWrapperFactory<FossId>("FossId") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
+    }
+
+    class Factory : AbstractScannerFactory<FossId>("FossId") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            FossId(scannerName, scannerConfig, downloaderConfig, FossIdConfig.create(scannerConfig))
     }
 
     /**

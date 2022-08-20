@@ -68,16 +68,6 @@ class ScanCode internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
-    class ScanCodeFactory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(scannerName, scannerConfig, downloaderConfig)
-    }
-
     companion object {
         const val SCANNER_NAME = "ScanCode"
 
@@ -108,6 +98,16 @@ class ScanCode internal constructor(
         } else {
             "--output-$OUTPUT_FORMAT"
         }
+    }
+
+    class ScanCodeFactory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanCode(scannerName, scannerConfig, downloaderConfig)
+    }
+
+    class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            ScanCode(scannerName, scannerConfig, downloaderConfig)
     }
 
     override val name = SCANNER_NAME

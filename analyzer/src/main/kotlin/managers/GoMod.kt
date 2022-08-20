@@ -66,6 +66,10 @@ class GoMod(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object {
+        const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
+    }
+
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
         override val globsForDefinitionFiles = listOf("go.mod")
 
@@ -74,10 +78,6 @@ class GoMod(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = GoMod(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    companion object {
-        const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
     }
 
     override fun command(workingDir: File?) = "go"

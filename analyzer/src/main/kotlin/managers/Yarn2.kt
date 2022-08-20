@@ -94,6 +94,28 @@ class Yarn2(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object {
+        /**
+         * The name of Yarn 2+ resource file.
+         */
+        const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
+
+        /**
+         * The property in `.yarnrc.yml` containing the path to the Yarn2+ executable.
+         */
+        const val YARN_PATH_PROPERTY_NAME = "yarnPath"
+
+        /**
+         * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
+         */
+        private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
+
+        /**
+         * The amount of package details to query at once with `yarn npm info`.
+         */
+        private const val BULK_DETAILS_SIZE = 1000
+    }
+
     class Factory : AbstractPackageManagerFactory<Yarn2>("Yarn2") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -117,27 +139,6 @@ class Yarn2(
         ?.get(OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION)
         .toBoolean()
 
-    companion object {
-        /**
-         * The name of Yarn 2+ resource file.
-         */
-        const val YARN2_RESOURCE_FILE = ".yarnrc.yml"
-
-        /**
-         * The property in `.yarnrc.yml` containing the path to the Yarn2+ executable.
-         */
-        const val YARN_PATH_PROPERTY_NAME = "yarnPath"
-
-        /**
-         * The pattern to extract rawName, type and version from a Yarn 2+ locator e.g. @babel/preset-env@npm:7.11.0.
-         */
-        private val EXTRACT_FROM_LOCATOR_PATTERN = Regex("(.+)@(\\w+):(.+)")
-
-        /**
-         * The amount of package details to query at once with `yarn npm info`.
-         */
-        private const val BULK_DETAILS_SIZE = 1000
-    }
     // A builder to build the dependency graph of the project.
     private val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
 

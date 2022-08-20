@@ -48,6 +48,10 @@ class Licensee internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    companion object {
+        val CONFIGURATION_OPTIONS = listOf("--json")
+    }
+
     class LicenseeFactory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Licensee(scannerName, scannerConfig, downloaderConfig)
@@ -56,10 +60,6 @@ class Licensee internal constructor(
     class Factory : AbstractScannerFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
             Licensee(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    companion object {
-        val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
     override val name = "Licensee"
