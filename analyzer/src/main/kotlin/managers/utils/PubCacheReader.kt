@@ -24,12 +24,13 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.managers.flutterHome
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
@@ -37,6 +38,8 @@ import org.ossreviewtoolkit.utils.ort.logger
  * installation directory.
  */
 internal class PubCacheReader {
+    companion object : Logging
+
     private val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }
 

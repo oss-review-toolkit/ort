@@ -27,6 +27,8 @@ import java.time.Instant
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
@@ -54,7 +56,6 @@ import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import retrofit2.HttpException
@@ -106,6 +107,8 @@ class ClearlyDefinedStorage(
     /** The configuration for this storage implementation. */
     val configuration: ClearlyDefinedStorageConfiguration
 ) : ScanResultsStorage() {
+    companion object : Logging
+
     /** The service for interacting with ClearlyDefined. */
     private val service by lazy {
         ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())

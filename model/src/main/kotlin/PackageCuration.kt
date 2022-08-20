@@ -24,7 +24,8 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.vdurmont.semver4j.Requirement
 import com.vdurmont.semver4j.Semver
 
-import org.ossreviewtoolkit.utils.ort.logger
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -47,6 +48,8 @@ data class PackageCuration(
     @JsonProperty("curations")
     val data: PackageCurationData
 ) {
+    companion object : Logging
+
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId],
      * disregarding the version.

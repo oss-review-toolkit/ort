@@ -43,6 +43,8 @@ import okhttp3.ResponseBody
 import okio.buffer
 import okio.sink
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.unquote
@@ -58,7 +60,7 @@ class HttpDownloadError(val code: Int, message: String) : IOException("$message 
 /**
  * A helper class to manage OkHttp instances backed by distinct cache directories.
  */
-object OkHttpClientHelper {
+object OkHttpClientHelper : Logging {
     /**
      * A constant for the "too many requests" HTTP code as HttpURLConnection has none.
      */

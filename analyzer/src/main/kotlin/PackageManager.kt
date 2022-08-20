@@ -31,6 +31,7 @@ import java.util.ServiceLoader
 
 import kotlin.time.measureTime
 
+import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.project.ProjectBuildingException
 
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -49,7 +50,6 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -66,7 +66,7 @@ abstract class PackageManager(
     val analyzerConfig: AnalyzerConfiguration,
     val repoConfig: RepositoryConfiguration
 ) {
-    companion object {
+    companion object : Logging {
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
 
         /**
@@ -110,7 +110,7 @@ abstract class PackageManager(
                 object : SimpleFileVisitor<Path>() {
                     override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
                         if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
-                            PackageManager.logger.info {
+                            logger.info {
                                 "Not analyzing directory '$dir' as it is hard-coded to be ignored."
                             }
 
@@ -122,7 +122,7 @@ abstract class PackageManager(
                         // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions
                         // on Windows, so do a better check here.
                         if (dirAsFile.isSymbolicLink()) {
-                            PackageManager.logger.info { "Not following symbolic link to directory '$dir'." }
+                            logger.info { "Not following symbolic link to directory '$dir'." }
                             return FileVisitResult.SKIP_SUBTREE
                         }
 
@@ -331,13 +331,9 @@ abstract class PackageManager(
                 projectResult.takeIf { projectReferences.isEmpty() }
                     ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
                         .also {
-                            this@PackageManager.logger.info {
-                                "Removing ${projectReferences.size} packages that are projects."
-                            }
+                            logger.info { "Removing ${projectReferences.size} packages that are projects." }
 
-                            this@PackageManager.logger.debug {
-                                projectReferences.joinToString { it.id.toCoordinates() }
-                            }
+                            logger.debug { projectReferences.joinToString { it.id.toCoordinates() } }
                         }
             }
         }

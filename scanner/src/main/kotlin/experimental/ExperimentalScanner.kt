@@ -32,6 +32,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
@@ -54,7 +56,6 @@ import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class ExperimentalScanner(
@@ -67,6 +68,8 @@ class ExperimentalScanner(
     val nestedProvenanceResolver: NestedProvenanceResolver,
     val scannerWrappers: Map<PackageType, List<ScannerWrapper>>
 ) {
+    companion object : Logging
+
     init {
         require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {
             "At least one ScannerWrapper must be provided."
@@ -360,7 +363,7 @@ class ExperimentalScanner(
         takeUnless { scannerConfig.skipConcluded }
             ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
-                    this@ExperimentalScanner.logger.debug {
+                    logger.debug {
                         "Not scanning the following package(s) with concluded licenses: $skip"
                     }
                 }
@@ -371,7 +374,7 @@ class ExperimentalScanner(
     private fun Collection<Package>.filterNotMetaDataOnly(): List<Package> =
         partition { it.isMetaDataOnly }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
-                this@ExperimentalScanner.logger.debug {
+                logger.debug {
                     "Not scanning the following package(s) which are metadata only: $skip"
                 }
             }

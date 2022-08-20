@@ -26,6 +26,7 @@ import java.io.File
 import java.util.regex.Pattern
 
 import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -93,7 +94,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
@@ -107,7 +107,7 @@ private val File?.safePath: String
     get() = this?.invariantSeparatorsPath ?: "<unknown file>"
 
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
-    companion object {
+    companion object : Logging {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
@@ -132,7 +132,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             return DefaultPlexusContainer(configuration).apply {
                 loggerManager = object : BaseLoggerManager() {
-                    override fun createLogger(name: String) = MavenLogger(logger.delegate.level)
+                    override fun createLogger(name: String) = MavenLogger(MavenSupport.logger.delegate.level)
                 }
             }
         }
@@ -778,7 +778,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
  * [Medium article](https://medium.com/p/d069d253fe23)
  */
 private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
-    companion object {
+    companion object : Logging {
         private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
             "http://jcenter.bintray.com",
             "http://repo.maven.apache.org",

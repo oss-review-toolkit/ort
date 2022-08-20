@@ -24,11 +24,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import com.sksamuel.hoplite.ConfigAlias
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
@@ -54,6 +55,8 @@ data class FileArchiverConfiguration(
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
+    companion object : Logging
+
     init {
         if (fileStorage != null && postgresStorage != null) {
             logger.warn {

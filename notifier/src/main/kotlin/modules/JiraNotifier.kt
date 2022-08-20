@@ -29,15 +29,18 @@ import com.atlassian.jira.rest.client.internal.async.AsynchronousJiraRestClientF
 
 import java.net.URI
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.logger
 
 class JiraNotifier(private val restClient: JiraRestClient) {
     constructor(config: JiraConfiguration) : this(
         AsynchronousJiraRestClientFactory()
             .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
     )
+
+    companion object : Logging
 
     /**
      * Create a [comment] within the issue specified by the [issueKey].

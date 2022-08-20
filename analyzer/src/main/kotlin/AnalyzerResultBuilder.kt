@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.analyzer
 
 import kotlin.time.measureTimedValue
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -36,9 +38,10 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
-import org.ossreviewtoolkit.utils.ort.logger
 
 class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
+    companion object : Logging
+
     private val projects = sortedSetOf<Project>()
     private val packages = sortedSetOf<CuratedPackage>()
     private val issues = sortedMapOf<Identifier, List<OrtIssue>>()

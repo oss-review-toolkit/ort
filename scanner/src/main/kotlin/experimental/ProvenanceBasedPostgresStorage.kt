@@ -23,6 +23,8 @@ import java.sql.SQLException
 
 import javax.sql.DataSource
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -43,7 +45,6 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class ProvenanceBasedPostgresStorage(
@@ -57,6 +58,8 @@ class ProvenanceBasedPostgresStorage(
      */
     private val tableName: String = "provenance_scan_results"
 ) : ProvenanceBasedScanStorage {
+    companion object : Logging
+
     private val table = ProvenanceScanResults(tableName)
 
     /** The [Database] instance on which all operations are executed. */

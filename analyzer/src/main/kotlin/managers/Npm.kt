@@ -35,6 +35,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
@@ -78,7 +80,6 @@ import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -95,6 +96,8 @@ open class Npm(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Npm>("NPM") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -217,10 +220,10 @@ open class Npm(
 
         return runBlocking(Dispatchers.IO) {
             nodeModulesFiles.mapTo(mutableListOf()) { file ->
-                this@Npm.logger.debug { "Starting to parse '$file'..." }
+                logger.debug { "Starting to parse '$file'..." }
                 async {
                     parsePackage(rootDirectory, file).also { (id, _) ->
-                        this@Npm.logger.debug { "Finished parsing '$file' to '$id'." }
+                        logger.debug { "Finished parsing '$file' to '$id'." }
                     }
                 }
             }.awaitAll().toMap()

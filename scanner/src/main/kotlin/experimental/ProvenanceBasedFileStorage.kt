@@ -25,6 +25,8 @@ import java.io.ByteArrayInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -32,11 +34,12 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceBasedScanStorage {
+    companion object : Logging
+
     override fun read(provenance: KnownProvenance): List<ScanResult> {
         requireEmptyVcsPath(provenance)
 

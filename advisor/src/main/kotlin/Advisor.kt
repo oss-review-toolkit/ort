@@ -26,6 +26,8 @@ import java.util.ServiceLoader
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
@@ -33,7 +35,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The class to manage [AdviceProvider]s. It invokes the configured providers and adds their findings to the current
@@ -43,7 +44,7 @@ class Advisor(
     private val providerFactories: List<AdviceProviderFactory>,
     private val config: AdvisorConfiguration
 ) {
-    companion object {
+    companion object : Logging {
         private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)!!
 
         /**
@@ -80,13 +81,13 @@ class Advisor(
                     async {
                         val providerResults = provider.retrievePackageFindings(packages)
 
-                        this@Advisor.logger.info {
+                        logger.info {
                             "Found ${providerResults.values.flatten().distinct().size} distinct vulnerabilities via " +
                                 "${provider.providerName}. "
                         }
 
                         providerResults.filter { it.value.isNotEmpty() }.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
-                            this@Advisor.logger.debug {
+                            logger.debug {
                                 "Affected packages:\n\n${pkgs.joinToString("\n") { it.id.toCoordinates() }}\n"
                             }
                         }

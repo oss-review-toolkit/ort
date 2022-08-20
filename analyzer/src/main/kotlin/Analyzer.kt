@@ -35,6 +35,8 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -48,12 +50,13 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration, private val labels: Map<String, String> = emptyMap()) {
+    companion object : Logging
+
     data class ManagedFileInfo(
         val absoluteProjectPath: File,
         val managedFiles: Map<PackageManager, List<File>>,
@@ -290,16 +293,18 @@ private class PackageManagerRunner(
      */
     suspend fun start() {
         if (mustRunAfter.isNotEmpty()) {
-            manager.logger.info {
-                "Waiting for the following package managers to complete: ${mustRunAfter.joinToString()}."
+            Analyzer.logger.info {
+                "${manager.managerName} is waiting for the following package managers to complete: " +
+                        mustRunAfter.joinToString(postfix = ".")
             }
 
             finishedPackageManagersState.first { finishedPackageManagers ->
                 val remaining = mustRunAfter - finishedPackageManagers
 
                 if (remaining.isNotEmpty()) {
-                    manager.logger.info {
-                        "Still waiting for the following package managers to complete: ${remaining.joinToString()}."
+                    Analyzer.logger.info {
+                        "${manager.managerName} is still waiting for the following package managers to complete: " +
+                                remaining.joinToString(postfix = ".")
                     }
                 }
 
@@ -311,12 +316,12 @@ private class PackageManagerRunner(
     }
 
     private suspend fun run() {
-        manager.logger.info { "Starting analysis." }
+        Analyzer.logger.info { "Starting ${manager.managerName} analysis." }
 
         withContext(Dispatchers.IO) {
             val result = manager.resolveDependencies(definitionFiles, labels)
 
-            manager.logger.info { "Finished analysis." }
+            Analyzer.logger.info { "Finished ${manager.managerName} analysis." }
 
             onResult(result)
         }

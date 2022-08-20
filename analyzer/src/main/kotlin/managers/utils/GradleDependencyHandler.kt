@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import Dependency
 
+import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.project.ProjectBuildingException
 
 import org.eclipse.aether.RepositoryException
@@ -47,6 +48,8 @@ class GradleDependencyHandler(
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
 ) : DependencyHandler<Dependency> {
+    companion object : Logging
+
     /**
      * A list with repositories to use when resolving packages. This list must be set before using this handler for
      * constructing the dependency graph of a project. As different projects may use different repositories, this

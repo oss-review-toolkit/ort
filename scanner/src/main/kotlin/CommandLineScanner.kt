@@ -25,11 +25,12 @@ import java.io.IOException
 
 import kotlin.time.measureTimedValue
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [PathScanner] that is executed as a [CommandLineTool] on the local machine.
@@ -39,6 +40,8 @@ abstract class CommandLineScanner(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : PathScanner(name, scannerConfig, downloaderConfig), CommandLineTool {
+    companion object : Logging
+
     /**
      * The directory the scanner was bootstrapped to, if so.
      */

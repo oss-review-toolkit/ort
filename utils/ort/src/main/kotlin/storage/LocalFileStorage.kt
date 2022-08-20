@@ -23,8 +23,9 @@ import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [FileStorage] that stores files in a [directory] of the local file system. The [read] and [write] operations are
@@ -36,6 +37,8 @@ open class LocalFileStorage(
      */
     val directory: File
 ) : FileStorage {
+    companion object : Logging
+
     init {
         if (!directory.exists()) {
             logger.debug { "Creating directory '${directory.invariantSeparatorsPath}' for local file storage." }

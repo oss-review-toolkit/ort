@@ -21,8 +21,9 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
@@ -36,6 +37,8 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  * Implementation note: This implementation is not thread-safe.
  */
 internal class SpdxDocumentCache {
+    companion object : Logging
+
     /** A cache for the documents that have already been loaded. */
     private val documentCache = mutableMapOf<File, Result<SpdxDocument>>()
 

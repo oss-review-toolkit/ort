@@ -30,6 +30,8 @@ import com.vdurmont.semver4j.Requirement
 import java.io.File
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -55,7 +57,6 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 /**
@@ -70,7 +71,7 @@ class Conan(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
+    companion object : Logging {
         private val DUMMY_COMPILER_SETTINGS = arrayOf(
             "-s", "compiler=gcc",
             "-s", "compiler.libcxx=libstdc++",

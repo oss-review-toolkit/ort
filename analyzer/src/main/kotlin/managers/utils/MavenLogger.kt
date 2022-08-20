@@ -20,11 +20,10 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.codehaus.plexus.logging.AbstractLogger
 import org.codehaus.plexus.logging.Logger
-
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * Map a Log4j2 Level to a Plexus Logger level.
@@ -46,6 +45,8 @@ private fun toPlexusLoggerLevel(level: Level) =
  * log levels.
  */
 class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), "MavenLogger") {
+    companion object : Logging
+
     override fun getChildLogger(name: String?) = this
 
     override fun debug(message: String, throwable: Throwable?) = logger.debug(message, throwable)

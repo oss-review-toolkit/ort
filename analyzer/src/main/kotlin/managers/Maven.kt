@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.project.ProjectBuildingResult
 
 import org.eclipse.aether.artifact.Artifact
@@ -55,6 +56,8 @@ class Maven(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")
 

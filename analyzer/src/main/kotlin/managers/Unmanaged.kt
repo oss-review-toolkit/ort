@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -32,7 +34,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A fake [PackageManager] for projects that do not use any of the known package managers, or no package manager at all.
@@ -45,6 +46,8 @@ class Unmanaged(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         // The empty list returned here deliberately causes this special package manager to never be considered in
         // PackageManager.findManagedFiles(). Instead, it will only be explicitly instantiated as part of

@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.downloader.vcs
 import java.io.File
 import java.io.IOException
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.lib.BranchConfig
 import org.eclipse.jgit.lib.Constants
@@ -32,7 +34,6 @@ import org.eclipse.jgit.submodule.SubmoduleWalk
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ort.logger
 
 private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
     val workingDir = (workingDirOrFile.takeIf { it.isDirectory } ?: workingDirOrFile.parentFile).absoluteFile
@@ -50,6 +51,8 @@ private fun findGitOrSubmoduleDir(workingDirOrFile: File): Repository {
 }
 
 open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDir, vcsType) {
+    companion object : Logging
+
     private val repo = findGitOrSubmoduleDir(workingDir)
 
     override fun isValid(): Boolean = repo.objectDatabase?.exists() == true

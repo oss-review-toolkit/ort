@@ -24,6 +24,8 @@ import java.time.Instant
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.contentOrNull
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.osv.Ecosystem
@@ -44,7 +46,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 
 import us.springett.cvss.Cvss
 
@@ -52,6 +53,8 @@ import us.springett.cvss.Cvss
  * An advice provider that obtains vulnerability information from OSV.dev https://osv.dev/.
  */
 class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProvider(name) {
+    companion object : Logging
+
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
         override fun create(config: AdvisorConfiguration) = Osv(providerName, config)
     }
@@ -176,7 +179,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
             // Work around for https://github.com/stevespringett/cvss-calculator/issues/56.
             it.score.substringBefore("/") to "${cvss.calculateScore().baseScore}"
         } ?: run {
-            logger.debug { "Could not parse CVSS vector '${it.score}'." }
+            Osv.logger.debug { "Could not parse CVSS vector '${it.score}'." }
             null to it.score
         }
     } ?: (null to null)
@@ -195,7 +198,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         val url = reference.url.trim().let { if (it.startsWith("://")) "https$it" else it }
 
         url.toUri().onFailure {
-            logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
+            Osv.logger.debug { "Could not parse reference URL for vulnerability '$id': ${it.message}." }
         }.map {
             VulnerabilityReference(
                 url = it,

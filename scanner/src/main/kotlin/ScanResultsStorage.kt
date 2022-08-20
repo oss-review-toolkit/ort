@@ -27,6 +27,8 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -45,7 +47,6 @@ import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
@@ -58,7 +59,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     /**
      * A companion object that allow to configure the globally used storage backend.
      */
-    companion object {
+    companion object : Logging {
         /**
          * A successful [Result] with an empty list of [ScanResult]s.
          */

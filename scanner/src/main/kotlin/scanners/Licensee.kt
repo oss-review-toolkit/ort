@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.scanner.scanners
 import java.io.File
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(
@@ -48,7 +49,7 @@ class Licensee internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
-    companion object {
+    companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 

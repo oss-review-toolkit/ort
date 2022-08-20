@@ -26,6 +26,7 @@ import java.io.File
 import java.lang.reflect.Modifier
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -33,7 +34,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections

@@ -70,7 +70,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
             }.onSuccess { licenseFinding ->
                 licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())
             }.onFailure { spdxException ->
-                issues += createAndLogIssue(
+                issues += FossId.createAndLogIssue(
                     source = "FossId",
                     message = "Failed to parse license '${it.identifier}' as an SPDX expression: " +
                             spdxException.collectMessages()

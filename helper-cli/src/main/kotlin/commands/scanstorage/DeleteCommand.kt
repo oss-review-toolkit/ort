@@ -40,6 +40,7 @@ import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.helper.utils.execAndMap
+import org.ossreviewtoolkit.helper.utils.logger
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
@@ -49,7 +50,6 @@ import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class DeleteCommand : CliktCommand(
@@ -142,7 +142,7 @@ internal class DeleteCommand : CliktCommand(
             if (logger.delegate.isDebugEnabled) {
                 database.transaction {
                     ScanResults.slice(ScanResults.identifier).select { condition }
-                        .forEach(this@DeleteCommand.logger::debug)
+                        .forEach(logger::debug)
                 }
             }
         } else {

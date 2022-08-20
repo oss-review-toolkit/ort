@@ -26,6 +26,8 @@ import java.net.URI
 
 import kotlin.time.TimeSource
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Package
@@ -45,12 +47,13 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.unpackTryAllTypes
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
 class Downloader(private val config: DownloaderConfiguration) {
+    companion object : Logging
+
     private fun verifyOutputDirectory(outputDirectory: File) {
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {
             "The output directory '$outputDirectory' must not contain any files yet."

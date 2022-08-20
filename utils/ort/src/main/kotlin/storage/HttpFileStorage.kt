@@ -28,8 +28,9 @@ import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
@@ -59,6 +60,8 @@ class HttpFileStorage(
      */
     private val cacheMaxAgeInSeconds: Int = 0
 ) : FileStorage {
+    companion object : Logging
+
     override fun exists(path: String): Boolean {
         val request = Request.Builder()
             .headers(headers.toHeaders())

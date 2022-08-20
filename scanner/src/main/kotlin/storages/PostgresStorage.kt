@@ -30,6 +30,8 @@ import kotlin.math.max
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
@@ -53,7 +55,6 @@ import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val TABLE_NAME = ScanResults.tableName
@@ -72,7 +73,7 @@ class PostgresStorage(
      */
     private val parallelTransactions: Int
 ) : ScanResultsStorage() {
-    companion object {
+    companion object : Logging {
         /** Expression to reference the scanner version as an array. */
         private const val VERSION_ARRAY =
             "string_to_array(regexp_replace(scan_result->'scanner'->>'version', '[^0-9.]', '', 'g'), '.')"

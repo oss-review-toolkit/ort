@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model.utils
 import java.util.LinkedList
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.DependencyGraphNode
@@ -31,7 +33,6 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RootDependencyIndex
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * Internal class to represent the result of a search in the dependency graph. The outcome of the search
@@ -104,6 +105,8 @@ class DependencyGraphBuilder<D>(
      */
     private val dependencyHandler: DependencyHandler<D>
 ) {
+    companion object : Logging
+
     /**
      * A list storing the identifiers of all dependencies added to this builder. This list is then used to resolve
      * dependencies based on their indices.
@@ -185,7 +188,7 @@ class DependencyGraphBuilder<D>(
         val edgesToRemove = edges - edgesToKeep
 
         edgesToRemove.forEach {
-            this@DependencyGraphBuilder.logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
+            logger.warn { "Removing edge '${it.from} -> ${it.to}' to break a cycle." }
         }
 
         return filter { it in edgesToKeep }

@@ -22,12 +22,13 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.utils.common.getDuplicates
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
@@ -38,7 +39,7 @@ class FilePackageCurationProvider(
 ) : SimplePackageCurationProvider(readCurationFiles(curationFiles)) {
     constructor(curationFile: File) : this(listOf(curationFile))
 
-    companion object {
+    companion object : Logging {
         fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
             val curationFiles = mutableListOf<File>()
             file?.takeIf { it.isFile }?.let { curationFiles += it }

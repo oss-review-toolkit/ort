@@ -24,6 +24,8 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 import java.io.File
 import java.io.IOException
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.jgit.lib.SymbolicRef
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -66,6 +67,8 @@ private data class Include(
 )
 
 class GitRepo : VersionControlSystem(), CommandLineTool {
+    companion object : Logging
+
     override val type = VcsType.GIT_REPO
     override val priority = 50
     override val latestRevisionNames = listOf("HEAD", "@")

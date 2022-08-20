@@ -26,6 +26,8 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
@@ -55,7 +57,6 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.logger
 
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
@@ -75,6 +76,8 @@ class Gradle(
     repoConfig: RepositoryConfiguration,
     private val gradleVersion: String? = null
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a

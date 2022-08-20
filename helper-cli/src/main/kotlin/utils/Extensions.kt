@@ -25,11 +25,15 @@ package org.ossreviewtoolkit.helper.utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 
+import com.github.ajalt.clikt.core.CliktCommand
+
 import java.io.File
 import java.nio.file.Paths
 import java.sql.ResultSet
 
 import kotlin.io.path.createTempDirectory
+
+import org.apache.logging.log4j.kotlin.cachedLoggerOf
 
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 
@@ -73,6 +77,12 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+
+/**
+ * An extension property for adding a logger property to any [CliktCommand].
+ */
+val CliktCommand.logger
+    inline get() = cachedLoggerOf(javaClass)
 
 /**
  * Return an approximated minimal sublist of [this] so that the result still matches the exact same entries of the given

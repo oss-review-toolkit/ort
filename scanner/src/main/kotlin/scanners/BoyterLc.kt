@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.scanner.scanners
 import java.io.File
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
@@ -44,7 +46,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.logger
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
@@ -53,7 +54,7 @@ class BoyterLc internal constructor(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
-    companion object {
+    companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
             "--format", "json"

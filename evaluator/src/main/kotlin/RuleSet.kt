@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -28,7 +30,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.ort.logger
 
 /**
  * A set of evaluator [Rule]s, using an [ortResult] as input.
@@ -38,6 +39,8 @@ class RuleSet(
     val licenseInfoResolver: LicenseInfoResolver,
     val resolutionProvider: ResolutionProvider
 ) {
+    companion object : Logging
+
     /**
      * The list of all issues created by the rules of this [RuleSet].
      */

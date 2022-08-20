@@ -27,6 +27,8 @@ import java.util.ServiceLoader
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.downloader.consolidateProjectPackagesByVcs
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.filterByProject
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.ort.logger
 
 const val TOOL_NAME = "scanner"
 
@@ -49,7 +50,7 @@ private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): S
         // Remove all packages that have a concluded license and authors set.
         ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
-                scanner.logger.debug { "Not scanning the following packages with concluded licenses: $skip" }
+                Scanner.logger.debug { "Not scanning the following packages with concluded licenses: $skip" }
             }
 
             keep.toSet()
@@ -201,7 +202,7 @@ abstract class Scanner(
     val scannerConfig: ScannerConfiguration,
     protected val downloaderConfig: DownloaderConfiguration
 ) {
-    companion object {
+    companion object : Logging {
         private val LOADER = ServiceLoader.load(ScannerFactory::class.java)!!
 
         /**
