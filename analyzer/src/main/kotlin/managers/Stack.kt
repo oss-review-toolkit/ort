@@ -60,7 +60,11 @@ class Stack(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging
+    companion object : Logging {
+        const val EXTERNAL_SCOPE_NAME = "external"
+        const val TEST_SCOPE_NAME = "test"
+        const val BENCH_SCOPE_NAME = "bench"
+    }
 
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
@@ -141,25 +145,25 @@ class Stack(
         // A map of package IDs to enriched package information.
         val allPackages = mutableMapOf<Identifier, Package>()
 
-        val externalChildren = mapParentsToChildren("external")
-        val externalVersions = mapNamesToVersions("external")
+        val externalChildren = mapParentsToChildren(EXTERNAL_SCOPE_NAME)
+        val externalVersions = mapNamesToVersions(EXTERNAL_SCOPE_NAME)
         val externalDependencies = sortedSetOf<PackageReference>()
         buildDependencyTree(projectId.name, allPackages, externalChildren, externalVersions, externalDependencies)
 
-        val testChildren = mapParentsToChildren("test")
-        val testVersions = mapNamesToVersions("test")
+        val testChildren = mapParentsToChildren(TEST_SCOPE_NAME)
+        val testVersions = mapNamesToVersions(TEST_SCOPE_NAME)
         val testDependencies = sortedSetOf<PackageReference>()
         buildDependencyTree(projectId.name, allPackages, testChildren, testVersions, testDependencies)
 
-        val benchChildren = mapParentsToChildren("bench")
-        val benchVersions = mapNamesToVersions("bench")
+        val benchChildren = mapParentsToChildren(BENCH_SCOPE_NAME)
+        val benchVersions = mapNamesToVersions(BENCH_SCOPE_NAME)
         val benchDependencies = sortedSetOf<PackageReference>()
         buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
 
         val scopes = sortedSetOf(
-            Scope("external", externalDependencies),
-            Scope("test", testDependencies),
-            Scope("bench", benchDependencies)
+            Scope(EXTERNAL_SCOPE_NAME, externalDependencies),
+            Scope(TEST_SCOPE_NAME, testDependencies),
+            Scope(BENCH_SCOPE_NAME, benchDependencies)
         )
 
         val project = Project(
