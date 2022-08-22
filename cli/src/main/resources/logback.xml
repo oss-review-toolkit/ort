@@ -1,0 +1,20 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="WARN">
+        <appender-ref ref="STDOUT" />
+    </root>
+    <logger name="org.apache.http.headers" level="ERROR" />
+    <logger name="org.apache.http.wire" level="ERROR" />
+    <logger name="org.eclipse.jgit.internal.storage.file.FileSnapshot" level="ERROR" />
+    <logger name="org.ossreviewtoolkit.analyzer.managers.Yarn2" level="INFO" />
+    <logger name="org.ossreviewtoolkit.clients.fossid.FossIdRestService" level="INFO" />
+    <logger name="org.ossreviewtoolkit.reporter.reporters.fossid.FossIdReporter" level="INFO" />
+    <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossId" level="INFO" />
+    <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdConfig" level="INFO" />
+</configuration>
