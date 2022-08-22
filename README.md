@@ -216,9 +216,11 @@ customize the configuration to a specific environment. The following options are
 
   ```hocon
   postgres {
-    url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
-    username = ${POSTGRES_USERNAME}
-    password = ${POSTGRES_PASSWORD}
+    connection {
+      url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
+      username = ${POSTGRES_USERNAME}
+      password = ${POSTGRES_PASSWORD}
+    }
   }
   ```
 
@@ -532,11 +534,13 @@ ort {
   scanner {
     storages {
       postgresStorage {
-        url = "jdbc:postgresql://example.com:5444/database"
-        schema = "public"
-        username = "username"
-        password = "password"
-        sslmode = "verify-full"
+        connection {
+          url = "jdbc:postgresql://example.com:5444/database"
+          schema = "public"
+          username = "username"
+          password = "password"
+          sslmode = "verify-full"
+        }
       }
     }
 
