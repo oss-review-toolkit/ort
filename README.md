@@ -589,6 +589,61 @@ ort {
 }
 ```
 
+## Experimental Scanner
+
+ORT provides an alternative scanner implementation which is currently called "experimental scanner". By now, this
+implementation can be considered stable, and it will replace the default scanner implementation in the middle of
+September 2022. Therefore, we encourage all ORT users to test the new implementation and report any discovered issues.
+
+The main difference to the old implementation is that the experimental scanner groups packages by their provenance
+before scanning. This ensures that a certain revision of a VCS repository is only scanned once, and the results are
+shared for all packages that are provided by this repository. In the case of repositories that provide a lot of
+packages, this can bring a significant performance improvement.
+
+Also, the new implementation better tracks if the VCS revision provided by the metadata of a package points to a moving
+revision, like a Git branch, and resolves the revision before reusing any scan results from a storage. This fixes an
+issue where ORT would reuse scan results for a branch even if they do not match the current revision of the branch
+anymore (see https://github.com/oss-review-toolkit/ort/issues/4562).
+
+The experimental scanner can be enabled by using the `--experimental-scanners` (and optional
+`--experimental-project-scanners`) option of the `scan` command. For details run `ort scan --help`.
+
+### Storage backends
+
+To fully benefit from the experimental scanner improvements, the storages need to be configured to store scan results by
+provenance, instead of by package. This is supported by the local file storage, the HTTP storage, and the PostgreSQL
+storage (see above). To enable the feature add `type = "PROVENANCE_BASED` to the storage configuration, for example:
+
+```hocon
+postgres {
+  type = "PROVENANCE_BASED"
+
+  connection { ... }
+}
+```
+
+Existing package based storages can still be used, to avoid having to scan all sources again when switching to the
+experimental scanner. For this the old package based storage can be configured as a read-only storage, for example:
+
+```hocon
+storages {
+  postgresLegacy {
+    type = "PACKAGE_BASED"
+
+    connection { ... }
+  }
+
+  postgres {
+    type = "PROVENANCE_BASED"
+
+    connection { ... }
+  }
+}
+
+storageReaders: ["postgresLegacy", "postgres"]
+storageWriters: ["postgres"]
+```
+
 <a name="advisor">&nbsp;</a>
 
 [![Advisor](./logos/advisor.png)](./advisor/src/main/kotlin)
