@@ -156,7 +156,7 @@ dependencies {
     implementation(libs.jacksonDatabind)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jCore)
+    implementation(libs.log4jImpl)
     implementation(libs.log4jImplSlf4j)
     implementation(libs.postgres)
     implementation(libs.reflections)

@@ -243,7 +243,7 @@ subprojects {
                 jdkVersion.set(11)
 
                 val jacksonVersion = libs.versions.jackson.get()
-                val log4jVersion = libs.versions.log4j.get()
+                val log4jApiVersion = libs.versions.log4jApi.get()
 
                 externalDocumentationLink {
                     val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
@@ -265,7 +265,7 @@ subprojects {
                 }
 
                 externalDocumentationLink {
-                    val majorVersion = log4jVersion.substringBefore('.')
+                    val majorVersion = log4jApiVersion.substringBefore('.')
                     val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
                     url.set(URL(baseUrl))
                     packageListUrl.set(URL("$baseUrl/package-list"))
