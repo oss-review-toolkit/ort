@@ -133,7 +133,10 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                                 Pair("\t+ ", "Found version '$actualVersion'.")
                             }
                         }.getOrElse {
-                            statusCode = statusCode or 2
+                            if (tool.getVersionRequirement() != CommandLineTool.ANY_VERSION) {
+                                statusCode = statusCode or 2
+                            }
+
                             Pair("\t+ ", "Could not determine the version.")
                         }
                     } else {
