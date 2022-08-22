@@ -96,6 +96,6 @@ dependencies {
     implementation(libs.exposedCore)
     implementation(libs.hikari)
     implementation(libs.jslt)
-    implementation(libs.log4jImpl)
-    implementation(libs.log4jImplSlf4j)
+    implementation(libs.log4jApiToSlf4j)
+    implementation(libs.logbackClassic)
 }

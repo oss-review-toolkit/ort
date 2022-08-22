@@ -20,6 +20,9 @@
 
 package org.ossreviewtoolkit.cli
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+
 import com.github.ajalt.clikt.completion.completionOption
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
@@ -39,9 +42,6 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
-import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.core.config.Configurator
-
 import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
@@ -56,6 +56,8 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
+
+import org.slf4j.LoggerFactory
 
 /**
  * Helper class for mutually exclusive command line options of different types.
@@ -171,7 +173,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     }
 
     override fun run() {
-        Configurator.setRootLevel(logLevel)
+        val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+        rootLogger.level = logLevel
 
         logger.debug { "Used command line arguments: ${currentContext.originalArgv}" }
 

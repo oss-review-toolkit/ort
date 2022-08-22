@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.helper
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
@@ -27,9 +30,6 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
-
-import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.core.config.Configurator
 
 import org.ossreviewtoolkit.helper.commands.ConvertOrtFileCommand
 import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
@@ -57,6 +57,8 @@ import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCo
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
 import org.ossreviewtoolkit.utils.ort.printStackTrace
+
+import org.slf4j.LoggerFactory
 
 /**
  * The entry point for the application with [args] being the list of arguments.
@@ -108,7 +110,8 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     }
 
     override fun run() {
-        Configurator.setRootLevel(logLevel)
+        val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+        rootLogger.level = logLevel
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
