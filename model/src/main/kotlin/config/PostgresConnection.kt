@@ -71,4 +71,9 @@ data class PostgresConnection(
      * The number of parallel transactions to use for the storage dispatcher.
      */
     val parallelTransactions: Int = 5
+
+    /**
+     * TODO: Make additional parameters configurable, see:
+     *       https://jdbc.postgresql.org/documentation/head/connect.html
+     */
 )
