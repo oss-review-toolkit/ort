@@ -14,7 +14,7 @@ versionsPlugin = "0.42.0"
 
 antlr = "4.10.1"
 asciidoctorj = "2.5.5"
-asciidoctorjPdf = "2.1.6"
+asciidoctorjPdf = "2.3.0"
 clikt = "3.5.0"
 commonsCompress = "1.21"
 commonsEmail = "1.5"
