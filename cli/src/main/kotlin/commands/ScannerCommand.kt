@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
+import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
@@ -231,6 +232,12 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val ortResult = when (val scanner = scannerOption) {
             is ScannerOption.Stable -> {
                 val projectScannerFactory = (projectScannerOption as? ScannerOption.Stable)?.scannerFactory
+
+                logger.warn {
+                    "The scanner implementation will be replaced with the currently experimental scanner in the " +
+                            "middle of September 2022. Please see " +
+                            "https://github.com/oss-review-toolkit/ort#experimental-scanner for how to migrate."
+                }
 
                 run(scanner.scannerFactory, projectScannerFactory, config)
             }
