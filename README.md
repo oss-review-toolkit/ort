@@ -611,7 +611,7 @@ The experimental scanner can be enabled by using the `--experimental-scanners` (
 ### Storage backends
 
 To fully benefit from the experimental scanner improvements, the storages need to be configured to store scan results by
-provenance, instead of by package. This is supported by the local file storage, the HTTP storage, and the PostgreSQL
+provenance instead of by package. This is supported by the local file storage, the HTTP storage, and the PostgreSQL
 storage (see above). To enable the feature add `type = "PROVENANCE_BASED` to the storage configuration, for example:
 
 ```hocon
@@ -622,8 +622,9 @@ postgres {
 }
 ```
 
-Existing package based storages can still be used, to avoid having to scan all sources again when switching to the
-experimental scanner. For this the old package based storage can be configured as a read-only storage, for example:
+Existing package based storages can still be used to avoid having to scan all sources again when switching to the
+experimental scanner. For this purpose the old package based storage can be configured as read-only storage, for
+example:
 
 ```hocon
 storages {
