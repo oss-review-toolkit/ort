@@ -33,7 +33,7 @@ hoplite = "2.6.1"
 jackson = "2.13.3"
 jgit = "6.2.0.202206071550-r"
 jiraRestClient = "5.2.4"
-jruby = "9.3.6.0"
+jruby = "9.3.7.0"
 # @pin this version as upgrading requires more testing.
 jschAgentProxy = "0.0.7"
 jslt = "0.1.12"
