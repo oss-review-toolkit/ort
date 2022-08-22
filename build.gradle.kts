@@ -211,7 +211,7 @@ subprojects {
                 // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
                 force(rootProject.libs.okhttp)
 
-                // Ensure all API library versions match our core library version.
+                // Ensure all Log4j API versions match our version.
                 force(rootProject.libs.log4jApi)
 
                 // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
