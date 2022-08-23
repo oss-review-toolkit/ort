@@ -99,6 +99,21 @@ class PipFunTest : WordSpec() {
 
                 result.toYaml() shouldBe expectedResult
             }
+
+            "capture metadata using python-inspector" {
+                val definitionFile = projectsDir.resolve("synthetic/python-inspector/requirements.txt")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+
+                val result = createPip().resolveSingleProject(definitionFile)
+                val expectedResult = patchExpectedResult(
+                    projectsDir.resolve("synthetic/python-inspector-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
+
+                result.toYaml() shouldBe expectedResult
+            }
         }
     }
 
