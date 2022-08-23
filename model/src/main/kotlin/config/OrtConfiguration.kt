@@ -156,3 +156,8 @@ internal data class OrtConfigurationWrapper(
  * A typealias for key-value pairs, used in several configuration classes.
  */
 typealias Options = Map<String, String>
+
+/**
+ * The filename of the reference configuration file.
+ */
+const val REFERENCE_CONFIG_FILENAME = "reference.conf"

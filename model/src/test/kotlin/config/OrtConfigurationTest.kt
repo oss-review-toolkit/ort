@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 class OrtConfigurationTest : WordSpec({
     "OrtConfiguration" should {
         "be deserializable from HOCON" {
-            val refConfig = File("src/main/resources/reference.conf")
+            val refConfig = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
             with(ortConfig.analyzer) {

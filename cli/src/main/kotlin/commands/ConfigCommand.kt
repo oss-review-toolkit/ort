@@ -30,6 +30,7 @@ import io.github.config4k.toConfig
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 
 class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT configurations") {
     private val showDefault by option(
@@ -69,7 +70,7 @@ class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT c
         if (showReference) {
             println("The reference configuration is:")
             println()
-            println(javaClass.getResource("/reference.conf").readText())
+            println(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
         }
     }
 }

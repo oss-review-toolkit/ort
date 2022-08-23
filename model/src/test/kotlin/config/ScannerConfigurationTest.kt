@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempFile
 class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
-            val ortConfig = OrtConfiguration.load(file = File("src/main/resources/reference.conf"))
+            val ortConfig = OrtConfiguration.load(file = File("src/main/resources/$REFERENCE_CONFIG_FILENAME"))
             val rereadOrtConfig = createTestTempFile(suffix = ".yml").run {
                 writeValue(ortConfig)
                 readValue<OrtConfiguration>()

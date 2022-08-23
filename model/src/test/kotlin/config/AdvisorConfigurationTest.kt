@@ -94,7 +94,7 @@ class AdvisorConfigurationTest : WordSpec({
  * Load the ORT reference configuration and extract the advisor configuration.
  */
 private fun loadAdvisorConfig(): AdvisorConfiguration =
-    OrtConfiguration.load(file = File("src/main/resources/reference.conf")).advisor
+    OrtConfiguration.load(file = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")).advisor
 
 /**
  * Perform a serialization round-trip of the given advisor [config] and return the result. This is used to check
