@@ -214,14 +214,12 @@ customize the configuration to a specific environment. The following options are
   Postgres database used as scan results storage could be defined in the `POSTGRES_USERNAME` and `POSTGRES_PASSWORD`
   environment variables. The configuration file can then reference these values as follows:
 
-  ```hocon
-  postgres {
-    connection {
-      url = "jdbc:postgresql://your-postgresql-server:5444/your-database"
-      username = ${POSTGRES_USERNAME}
-      password = ${POSTGRES_PASSWORD}
-    }
-  }
+  ```yaml
+  postgres:
+    connection:
+      url: "jdbc:postgresql://your-postgresql-server:5444/your-database"
+      username: ${POSTGRES_USERNAME}
+      password: ${POSTGRES_PASSWORD}
   ```
 
 #### [Copyright garbage file](./docs/config-file-copyright-garbage-yml.md)
@@ -467,29 +465,18 @@ By default, the _scanner_ stores scan results on the local file system in the cu
 `~/.ort/scanner/scan-results`) for later reuse. Settings like the storage directory and the compression flag can be
 customized in the ORT configuration file (`-c`) with a respective storage configuration:
 
-```hocon
-ort {
-  scanner {
-    storages {
-      fileBasedStorage {
-        backend {
-          localFileStorage {
-            directory = "/tmp/ort/scan-results"
-            compression = false
-          }
-        }
-      }
-    }
+```yaml
+ort:
+  scanner:
+    storages:
+      fileBasedStorage:
+        backend:
+          localFileStorage:
+            directory: "/tmp/ort/scan-results"
+            compression: false
 
-    storageReaders: [
-      "fileBasedStorage"
-    ]
-
-    storageWriters: [
-      "fileBasedStorage"
-    ]
-  }
-}
+    storageReaders: ["fileBasedStorage"]
+    storageWriters: ["fileBasedStorage"]
 ```
 
 ### HTTP Storage
@@ -497,31 +484,19 @@ ort {
 Any HTTP file server can be used to store scan results. Custom headers can be configured to provide authentication
 credentials. For example, to use Artifactory to store scan results, use the following configuration:
 
-```hocon
-ort {
-  scanner {
-    storages {
-      artifactoryStorage {
-        backend {
-          httpFileStorage {
-            url = "https://artifactory.domain.com/artifactory/repository/scan-results"
-            headers {
-              X-JFrog-Art-Api = "api-token"
-            }
-          }
-        }
-      }
-    }
-
-    storageReaders: [
-      "artifactoryStorage"
-    ]
-
-    storageWriters: [
-      "artifactoryStorage"
-    ]
-  }
-}
+```yaml
+ort:
+  scanner:
+    storages:
+      artifactoryStorage:
+        backend:
+          httpFileStorage:
+            url: "https://artifactory.domain.com/artifactory/repository/scan-results"
+            headers:
+              X-JFrog-Art-Api: "api-token"
+              
+    storageReaders: ["artifactoryStorage"]
+    storageWriters: ["artifactoryStorage"]
 ```
 
 ### PostgreSQL Storage
@@ -529,30 +504,20 @@ ort {
 To use PostgreSQL for storing scan results you need at least version 9.4, create a database with the `client_encoding`
 set to `UTF8`, and a configuration like the following:
 
-```hocon
-ort {
-  scanner {
-    storages {
-      postgresStorage {
-        connection {
-          url = "jdbc:postgresql://example.com:5444/database"
-          schema = "public"
-          username = "username"
-          password = "password"
-          sslmode = "verify-full"
-        }
-      }
-    }
+```yaml
+ort:
+  scanner:
+    storages:
+      postgresStorage:
+        connection:
+          url: "jdbc:postgresql://example.com:5444/database"
+          schema: "public"
+          username: "username"
+          password: "password"
+          sslmode: "verify-full"
 
-    storageReaders: [
-      "postgresStorage"
-    ]
-
-    storageWriters: [
-      "postgresStorage"
-    ]
-  }
-}
+    storageReaders: ["postgresStorage"]
+    storageWriters: ["postgresStorage"]
 ```
 
 The database needs to exist. If the schema is set to something else than the default of `public`, it needs to exist and
@@ -573,20 +538,14 @@ version with a suitable configuration). This storage backend queries the Clearly
 packages to be processed. It is read-only; so it will not upload any new scan results to ClearlyDefined. In the
 configuration the URL of the ClearlyDefined service needs to be set:
 
-```hocon
-ort {
-  scanner {
-    storages {
-      clearlyDefined {
-        serverUrl = "https://api.clearlydefined.io"
-      }
-    }
+```yaml
+ort:
+  scanner:
+    storages:
+      clearlyDefined:
+        serverUrl: "https://api.clearlydefined.io"
 
-    storageReaders: [
-      "clearlyDefined"
-    ]
-  }
-}
+    storageReaders: ["clearlyDefined"]
 ```
 
 ## Experimental Scanner
@@ -614,32 +573,30 @@ To fully benefit from the experimental scanner improvements, the storages need t
 provenance instead of by package. This is supported by the local file storage, the HTTP storage, and the PostgreSQL
 storage (see above). To enable the feature add `type = "PROVENANCE_BASED` to the storage configuration, for example:
 
-```hocon
-postgres {
-  type = "PROVENANCE_BASED"
+```yaml
+postgres:
+  type: "PROVENANCE_BASED"
 
-  connection { ... }
-}
+  connection: ...
 ```
 
 Existing package based storages can still be used to avoid having to scan all sources again when switching to the
 experimental scanner. For this purpose the old package based storage can be configured as read-only storage, for
 example:
 
-```hocon
-storages {
-  postgresLegacy {
-    type = "PACKAGE_BASED"
+```yaml
+storages:
+  postgresLegacy:
+    type: "PACKAGE_BASED"
 
-    connection { ... }
-  }
+    connection:
+      ...
 
-  postgres {
-    type = "PROVENANCE_BASED"
+  postgres:
+    type: "PROVENANCE_BASED"
 
-    connection { ... }
-  }
-}
+    connection:
+      ...
 
 storageReaders: ["postgresLegacy", "postgres"]
 storageWriters: ["postgres"]
@@ -665,16 +622,13 @@ supported by the advisor:
 A security data provider that queries [Nexus IQ Server](https://help.sonatype.com/iqserver). In the configuration,
 the URL where Nexus IQ Server is running and the credentials to authenticate need to be provided:
 
-```hocon
-ort {
-  advisor {
-    nexusIq {
-      serverUrl = "https://nexusiq.ossreviewtoolkit.org"
-      username = myUser
-      password = myPassword
-    }
-  }
-}
+```yaml
+ort:
+  advisor:
+    nexusIq:
+      serverUrl: "https://nexusiq.ossreviewtoolkit.org"
+      username: myUser
+      password: myPassword
 ```
 
 To enable this provider, pass `-a NexusIQ` on the command line.
@@ -693,14 +647,11 @@ This provider obtains information about security vulnerabilities from a
 [VulnerableCode](https://github.com/nexB/vulnerablecode) instance. The configuration is limited to the server URL, as
 authentication is not required:
 
-```hocon
-ort {
-  advisor {
-    vulnerableCode {
-      serverUrl = "http://localhost:8000"
-    }
-  }
-}
+```yaml
+ort:
+  advisor:
+    vulnerableCode:
+      serverUrl: "http://localhost:8000"
 ```
 
 To enable this provider, pass `-a VulnerableCode` on the command line.
@@ -711,14 +662,11 @@ This provider obtains information about security vulnerabilities from Google [OS
 vulnerability database for Open Source. The database aggregates data from different sources for various ecosystems. The
 configuration is optional and limited to overriding the server URL.
 
-```hocon
-ort {
-  advisor {
-    osv {
-      serverUrl = "https://api-staging.osv.dev"
-    }
-  }
-}
+```yaml
+ort:
+  advisor:
+    osv:
+      serverUrl: "https://api-staging.osv.dev"
 ```
 
 To enable this provider, pass `-a OSV` on the command line.

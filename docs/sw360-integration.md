@@ -21,22 +21,18 @@ In order to be able to upload ORT results to SW360, first set the connection par
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file
 (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
-```
-ort {
-  scanner {
-    storages {
-      sw360Configuration {
-        restUrl = "https://your-sw360-rest-url"
-        authUrl = "https://your-authentication-url"
-        username = username
-        password = password
-        clientId = clientId
-        clientPassword = clientPassword
-        token = token
-      }
-    }
-  }
-}
+```yaml
+ort:
+  scanner:
+    storages:
+      sw360Configuration:
+        restUrl: "https://your-sw360-rest-url"
+        authUrl: "https://your-authentication-url"
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
 ```
 
 For a complete example of the `config.yml` file see [reference.yml](../model/src/main/resources/reference.yml).
@@ -73,20 +69,17 @@ In order to be able to use SW360 data in the ORT _analyzer_, first set the conne
 instance. You can do this by defining a `sw360Configuration` within the `analyzer` section of your `config.yml` file
 (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
-```
-ort {
-  analyzer {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
-    }
-  }
-}
+```yaml
+ort:
+  analyzer:
+    sw360Configuration:
+      restUrl: "https://your-sw360-rest-url"
+      authUrl: "https://your-authentication-url"
+      username: username
+      password: password
+      clientId: clientId
+      clientPassword: clientPassword
+      token: token
 ```
 
 For a complete example of the `config.yml` file see [reference.yml](../model/src/main/resources/reference.yml).
@@ -115,22 +108,18 @@ In order to be able to store ORT _scanner_ results SW360, first set the connecti
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file
 (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
-```
-ort {
-  scanner {
-    storages {
-      sw360Configuration {
-        restUrl = "https://your-sw360-rest-url"
-        authUrl = "https://your-authentication-url"
-        username = username
-        password = password
-        clientId = clientId
-        clientPassword = clientPassword
-        token = token
-      }
-    }
-  }
-}
+```yaml
+ort:
+  scanner:
+    storages:
+      sw360Configuration:
+        restUrl: "https://your-sw360-rest-url"
+        authUrl: "https://your-authentication-url"
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
 ```
 
 The scan results for each package will be uploaded to SW360 once you have completed the above configuration. The
