@@ -74,6 +74,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
@@ -308,19 +309,23 @@ open class Npm(
                     || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
             if (hasIncompleteData) {
-                val details = getRemotePackageDetails(workingDir, "$rawName@$version")
+                runCatching {
+                    getRemotePackageDetails(workingDir, "$rawName@$version")
+                }.onSuccess { details ->
+                    if (description.isEmpty()) description = details["description"].textValueOrEmpty()
+                    if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
 
-                if (description.isEmpty()) description = details["description"].textValueOrEmpty()
-                if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
-
-                details["dist"]?.let { dist ->
-                    if (downloadUrl.isEmpty() || hash == Hash.NONE) {
-                        downloadUrl = dist["tarball"].textValueOrEmpty()
-                        hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                    details["dist"]?.let { dist ->
+                        if (downloadUrl.isEmpty() || hash == Hash.NONE) {
+                            downloadUrl = dist["tarball"].textValueOrEmpty()
+                            hash = Hash.create(dist["shasum"].textValueOrEmpty())
+                        }
                     }
-                }
 
-                vcsFromPackage = parseNpmVcsInfo(details)
+                    vcsFromPackage = parseNpmVcsInfo(details)
+                }.onFailure { e ->
+                    logger.debug { "Unable to get package details from a remote registry: ${e.collectMessages()}" }
+                }
             }
         }
 
