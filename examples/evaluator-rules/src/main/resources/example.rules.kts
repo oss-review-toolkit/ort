@@ -264,6 +264,28 @@ fun RuleSet.deprecatedScopeExcludeReasonInOrtYmlRule() = ortResultRule("DEPRECAT
     }
 }
 
+fun RuleSet.missingCiConfigurationRule() = projectSourceRule("MISSING_CI_CONFIGURATION") {
+    require {
+        -AnyOf(
+            projectSourceHasFile(
+                ".appveyor.yml",
+                ".bitbucket-pipelines.yml",
+                ".gitlab-ci.yml",
+                ".travis.yml"
+            ),
+            projectSourceHasDirectory(
+                ".circleci",
+                ".github/workflows"
+            )
+        )
+    }
+
+    error(
+        message = "This project does not have any known CI configuration files.",
+        howToFix = "Please setup a CI. If you already have setup a CI and the error persists, please contact support."
+    )
+}
+
 fun RuleSet.missingContributingFileRule() = projectSourceRule("MISSING_CONTRIBUTING_FILE") {
     require {
         -projectSourceHasFile("CONTRIBUTING.md")
@@ -290,6 +312,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
 
     // Rules which get executed once:
     deprecatedScopeExcludeReasonInOrtYmlRule()
+    missingCiConfigurationRule()
     missingContributingFileRule()
 }
 
