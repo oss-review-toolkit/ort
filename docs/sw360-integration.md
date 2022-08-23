@@ -140,7 +140,7 @@ Note the [SW360 attachment type][sw360-attachment-type] of the uploaded scan res
 
 ### Command Line
 
-Apart from configuring your `config.yml` to use SW360 to store scanner results, no specific option needs to be passed
+Apart from configuring your `config.yml` to use SW360 to store scan results, no specific option needs to be passed to
 the _scanner_:
 
 ```bash
