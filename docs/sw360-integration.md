@@ -37,7 +37,7 @@ ort {
 }
 ```
 
-For a complete example of the `ort.conf` file see [reference.conf](../model/src/main/resources/reference.conf).
+For a complete example of the `ort.conf` file see [reference.yml](../model/src/main/resources/reference.yml).
 
 ### Command Line
 
@@ -86,7 +86,7 @@ ort {
 }
 ```
 
-For a complete example of the `ort.conf` file see [reference.conf](../model/src/main/resources/reference.conf).
+For a complete example of the `ort.conf` file see [reference.yml](../model/src/main/resources/reference.yml).
 
 ### Command Line
 

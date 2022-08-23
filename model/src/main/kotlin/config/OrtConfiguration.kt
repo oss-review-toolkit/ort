@@ -160,4 +160,4 @@ typealias Options = Map<String, String>
 /**
  * The filename of the reference configuration file.
  */
-const val REFERENCE_CONFIG_FILENAME = "reference.conf"
+const val REFERENCE_CONFIG_FILENAME = "reference.yml"
