@@ -20,6 +20,7 @@ project:
   scopes:
   - name: "dependencies"
     dependencies:
+    - id: "NPM::angular-tileview:0.6.1"
     - id: "NPM::is-win:1.0.8"
     - id: "NPM::is-windows:1.0.2"
   - name: "devDependencies"
@@ -636,6 +637,34 @@ project:
         dependencies:
         - id: "NPM::has-flag:3.0.0"
 packages:
+- id: "NPM::angular-tileview:0.6.1"
+  purl: "pkg:npm/angular-tileview@0.6.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A tileview for angular"
+  homepage_url: "https://github.com/tinydesk/angular-tileview#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git+https://github.com/tinydesk/angular-tileview.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tinydesk/angular-tileview.git"
+    revision: ""
+    path: ""
 - id: "NPM::ansi-green:0.1.1"
   purl: "pkg:npm/ansi-green@0.1.1"
   authors:
