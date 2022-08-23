@@ -17,7 +17,7 @@ To add packages found by ORT to projects and releases in SW360.
 ### Prerequisites
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```
 ort {
@@ -37,7 +37,7 @@ ort {
 }
 ```
 
-For a complete example of the `ort.conf` file see [reference.yml](../model/src/main/resources/reference.yml).
+For a complete example of the `config.yml` file see [reference.yml](../model/src/main/resources/reference.yml).
 
 ### Command Line
 
@@ -67,7 +67,7 @@ Note:
 ### Prerequisites
 
 In order to be able to use SW360 data in the ORT _analyzer_, first set the connection parameters for your SW360 instance.
-You can do this by defining a `sw360Configuration` within the `analyzer` section of your `ort.conf` file (e.g. in
+You can do this by defining a `sw360Configuration` within the `analyzer` section of your `config.yml` file (e.g. in
 `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```
@@ -86,7 +86,7 @@ ort {
 }
 ```
 
-For a complete example of the `ort.conf` file see [reference.yml](../model/src/main/resources/reference.yml).
+For a complete example of the `config.yml` file see [reference.yml](../model/src/main/resources/reference.yml).
 
 ### Command Line
 
@@ -108,7 +108,7 @@ If you prefer to use the SW360 to store the ORT _scanner_ results instead of the
 ### Prerequisites
 
 In order to be able to store ORT _scanner_ results SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file
 (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
 ```
@@ -136,7 +136,7 @@ Note the [SW360 attachment type][sw360-attachment-type] of the uploaded scan res
 
 ### Command Line
 
-Apart from configuring your `ort.conf` to use SW360 to store scanner results, no specific option needs to be passed the _scanner_:
+Apart from configuring your `config.yml` to use SW360 to store scanner results, no specific option needs to be passed the _scanner_:
 
 ```bash
 cli/build/install/ort/bin/ort scan 
