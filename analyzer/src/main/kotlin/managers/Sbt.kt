@@ -76,7 +76,9 @@ class Sbt(
         // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
         private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
 
-        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE)
+        private val FIXED_USER_HOME = "-Duser.home=${Os.fixupUserHomeProperty()}".addQuotesOnWindows()
+
+        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME)
 
         private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
     }
