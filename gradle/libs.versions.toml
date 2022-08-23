@@ -19,7 +19,6 @@ asciidoctorjPdf = "2.3.0"
 clikt = "3.5.0"
 commonsCompress = "1.21"
 commonsEmail = "1.5"
-config4k = "0.5.0"
 cvssCalculator = "1.4.1"
 cyclonedx = "7.2.0"
 diskLruCache = "2.0.2"
@@ -91,7 +90,6 @@ asciidoctorjPdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 commonsEmail = { module = "org.apache.commons:commons-email", version.ref = "commonsEmail" }
-config4k = { module = "io.github.config4k:config4k", version.ref = "config4k" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
