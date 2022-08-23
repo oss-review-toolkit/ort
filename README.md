@@ -182,7 +182,7 @@ environment variable, which in turn defaults to the `.ort` directory below the c
 
 The following provides an overview of the various configuration files that can be used to customize ORT behavior:
 
-#### [ORT configuration file](./model/src/main/resources/reference.conf)
+#### [ORT configuration file](./model/src/main/resources/reference.yml)
 
 The main configuration file for the operation of ORT. This configuration is maintained by an administrator who manages
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
@@ -192,7 +192,7 @@ operational.
 |--------|--------|----------------------------|
 | HOCON  | Global | `$ORT_CONFIG_DIR/ort.conf` |
 
-The [reference configuration file](./model/src/main/resources/reference.conf) gives a good impression about the content
+The [reference configuration file](./model/src/main/resources/reference.yml) gives a good impression about the content
 of the main ORT configuration file. It consists of sections related to different subcomponents of ORT. The meaning
 of these sections and the properties they can contain is described together with the corresponding subcomponents.
 
@@ -445,7 +445,7 @@ operation is considered successful if all writer storages could successfully per
 
 The configuration of storage backends is located in the [ORT configuration file](#ort-configuration-file). (For the
 general structure of this file and the set of options available refer to the
-[reference configuration](./model/src/main/resources/reference.conf).) The file has a section named _storages_ that
+[reference configuration](./model/src/main/resources/reference.yml).) The file has a section named _storages_ that
 lists all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be
 configured with type-specific properties. The different types of storage backends supported by ORT are described below.
 
@@ -655,7 +655,7 @@ vulnerabilities returned by these services are then stored in the output result 
 information like the source of the data and a severity (if available).
 
 Multiple providers for security advisories are available. The providers require specific configuration in the
-[ORT configuration file](./model/src/main/resources/reference.conf), which needs to be placed in the _advisor_
+[ORT configuration file](./model/src/main/resources/reference.yml), which needs to be placed in the _advisor_
 section. When executing the advisor the providers to enable are selected with the `--advisors` option (or its short
 alias `-a`); here a comma-separated list with provider IDs is expected. The following sections describe the providers
 supported by the advisor:

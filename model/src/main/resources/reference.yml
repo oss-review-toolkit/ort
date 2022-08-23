@@ -1,0 +1,234 @@
+# A reference configuration file containing all possible ORT configuration options. Some of those options are mutually
+# exclusive, so this file is only used to show all options and to validate the configuration.
+
+ort:
+  licenseFilePatterns:
+    licenseFilenames: ['license*']
+    patentFilenames: [patents]
+    rootLicenseFilenames: ['readme*']
+
+  severeIssueThreshold: ERROR
+  severeRuleViolationThreshold: ERROR
+
+  enableRepositoryPackageCurations: true
+  enableRepositoryPackageConfigurations: true
+
+  analyzer:
+    allowDynamicVersions: true
+
+    # A list of enabled package managers.
+    enabledPackageManagers: [DotNet, Gradle]
+
+    # A list of disabled package managers. Disabling a package manager here overrides enabling it in
+    # `enabledPackageManagers`.
+    disabledPackageManagers: [Maven, NPM]
+
+    packageManagers:
+      Gradle:
+        # A list of package manager names that this package manager must run after. For example, this can be used if
+        # another package manager generates files that this package manager requires to run correctly.
+        mustRunAfter: [NPM]
+
+      # Some package managers provide custom configuration options that are documented in the package manager class. At
+      # the example of DotNet, these can be set like:
+      DotNet:
+        options:
+          directDependenciesOnly: true
+
+      Yarn2:
+        options:
+          # If set to true, disable verification of HTTPS certificate of remote registries. Useful when using a proxy to
+          # intercept requests to the registry.
+          disableRegistryCertificateVerification: false
+
+    sw360Configuration:
+      restUrl: 'https://your-sw360-rest-url'
+      authUrl: 'https://your-authentication-url'
+      username: username
+      password: password
+      clientId: clientId
+      clientPassword: clientPassword
+      token: token
+
+  advisor:
+    nexusIq:
+      serverUrl: 'https://rest-api-url-of-your-nexus-iq-server'
+      browseUrl: 'https://web-browsing-url-of-your-nexus-iq-server'
+      username: username
+      password: password
+
+    vulnerableCode:
+      serverUrl: 'http://localhost:8000'
+
+    gitHubDefects:
+      token: githubAccessToken
+      labelFilter: ['!duplicate', '!enhancement', '!invalid', '!question', '!documentation', '*']
+      maxNumberOfIssuesPerRepository: 50
+      parallelRequests: 5
+
+    osv:
+      serverUrl: 'https://api.osv.dev'
+
+    options:
+      # A map of maps from advice provider names to provider-specific key-value pairs. This map can be used to provide
+      # configuration information for external advisor plugins.
+      CustomAdvisor:
+        apiKey: '<some_api_key>'
+
+  downloader:
+    allowMovingRevisions: true
+
+    # Only used if the '--license-classifications-file' option is specified.
+    includedLicenseCategories:
+      - 'category-a'
+      - 'category-b'
+
+    sourceCodeOrigins: [VCS, ARTIFACT]
+
+  scanner:
+    skipConcluded: true
+
+    archive:
+      enabled: true
+
+      fileStorage:
+        localFileStorage:
+          directory: ~/.ort/scanner/archive
+          compression: false
+
+      postgresStorage:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: required
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+          parallelTransactions: 5
+
+    createMissingArchives: false
+
+    # Map scanner license findings to valid SPDX licenses. Note that these mappings are only applied in new scans,
+    # stored scan results are not affected.
+    detectedLicenseMapping:
+      BSD (Three Clause License): 'BSD-3-clause'
+      LicenseRef-scancode-generic-cla: 'NOASSERTION'
+
+    options:
+      # A map of maps from scanner class names to scanner-specific key-value pairs.
+      ScanCode:
+        commandLine: '--copyright --license --info --strip-root --timeout 300'
+        parseLicenseExpressions: true
+
+        # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
+        # versioning. Note that the 'maxVersion' is exclusive and not part of the range of accepted versions.
+        minVersion: '3.2.1-rc2'
+        maxVersion: '30.2.0'
+
+      FossId:
+        serverUrl: 'https://fossid.example.com/instance/'
+        user: user
+        apiKey: XYZ
+
+        namingProjectPattern: '$Var1_$Var2'
+        namingScanPattern: '$Var1_#projectBaseCode_$Var3'
+        namingVariableVar1: myOrg
+        namingVariableVar2: myTeam
+        namingVariableVar3: myUnit
+
+        waitForResult: false
+        addAuthenticationToUrl: false
+
+        keepFailedScans: false
+        deltaScans: true
+        deltaScanLimit: 10
+
+        detectLicenseDeclarations: true
+        detectCopyrightStatements: true
+
+        timeout: 60
+
+    storages:
+      local:
+        backend:
+          localFileStorage:
+            directory: ~/.ort/scanner/results
+            compression: false
+
+      http:
+        backend:
+          httpFileStorage:
+            url: 'https://your-http-server'
+            query: '?username=user&password=123'
+            headers:
+              key1: value1
+              key2: value2
+
+      clearlyDefined:
+        serverUrl: 'https://api.clearlydefined.io'
+
+      postgres:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: required
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+
+      sw360Configuration:
+        restUrl: 'https://your-sw360-rest-url'
+        authUrl: 'https://your-authentication-url'
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
+
+    storageReaders: [local, postgres, http, clearlyDefined]
+
+    storageWriters: [postgres]
+
+    ignorePatterns: ['**/META-INF/DEPENDENCIES']
+
+    provenanceStorage:
+      fileStorage:
+        localFileStorage:
+          directory: ~/.ort/scanner/provenance
+          compression: false
+
+      postgresStorage:
+        connection:
+          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+          schema: public
+          username: username
+          password: password
+          sslmode: required
+          sslcert: /defaultdir/postgresql.crt
+          sslkey: /defaultdir/postgresql.pk8
+          sslrootcert: /defaultdir/root.crt
+
+  reporter:
+    options:
+      FossId:
+        serverUrl: 'https://fossid.example.com/instance/'
+        user: user
+        apiKey: XYZ
+
+  notifier:
+    mail:
+      hostName: 'localhost'
+      username: user
+      password: password
+      port: 465
+      useSsl: true
+      fromAddress: 'no-reply@oss-review-toolkit.org'
+
+    jira:
+        host: 'localhost'
+        username: user
+        password: password
