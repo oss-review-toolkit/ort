@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
@@ -31,7 +29,6 @@ import org.ossreviewtoolkit.analyzer.managers.utils.hasPnpmLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForPnpm
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.realFile
 
@@ -91,10 +88,4 @@ class Pnpm(
         // We do not actually depend on any features specific to a PNPM version, but we still want to stick to a
         // fixed major version to be sure to get consistent results.
         checkVersion()
-
-    override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
-        val process = run(workingDir, "view", "--json", packageName)
-
-        return jsonMapper.readTree(process.stdout)
-    }
 }
