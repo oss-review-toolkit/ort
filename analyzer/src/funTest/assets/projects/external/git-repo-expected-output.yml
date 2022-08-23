@@ -4317,7 +4317,7 @@ analyzer:
         message: "Resolving NPM dependencies for path 'submodules/test-data-npm/long.js/package.json'\
           \ failed with: IllegalArgumentException: No lockfile found in 'submodules/test-data-npm/long.js'.\
           \ This potentially results in unstable versions of dependencies. To support\
-          \ this, enable the 'allowDynamicVersions' option in 'ort.conf'."
+          \ this, enable the 'allowDynamicVersions' option in 'config.yml'."
         severity: "ERROR"
     has_issues: true
 scanner: null

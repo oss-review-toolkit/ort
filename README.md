@@ -188,9 +188,9 @@ The main configuration file for the operation of ORT. This configuration is main
 the ORT instance. In contrast to the configuration files in the following, this file rarely changes once ORT is
 operational.
 
-| Format | Scope  | Default location           |
-|--------|--------|----------------------------|
-| HOCON  | Global | `$ORT_CONFIG_DIR/ort.conf` |
+| Format | Scope  | Default location             |
+|--------|--------|------------------------------|
+| YAML   | Global | `$ORT_CONFIG_DIR/config.yml` |
 
 The [reference configuration file](./model/src/main/resources/reference.yml) gives a good impression about the content
 of the main ORT configuration file. It consists of sections related to different subcomponents of ORT. The meaning
