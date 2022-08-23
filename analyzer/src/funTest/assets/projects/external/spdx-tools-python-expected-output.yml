@@ -26,14 +26,13 @@ project:
   - name: "install"
     dependencies:
     - id: "PyPI::ply:3.11"
-    - id: "PyPI::rdflib:5.0.0"
+    - id: "PyPI::rdflib:6.2.0"
       dependencies:
       - id: "PyPI::isodate:0.6.1"
         dependencies:
         - id: "PyPI::six:1.16.0"
-      - id: "PyPI::pyparsing:2.4.7"
-      - id: "PyPI::six:1.16.0"
-    - id: "PyPI::six:1.16.0"
+      - id: "PyPI::pyparsing:3.0.9"
+      - id: "PyPI::setuptools:65.2.0"
 packages:
 - id: "PyPI::isodate:0.6.1"
   purl: "pkg:pypi/isodate@0.6.1"
@@ -101,27 +100,26 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::pyparsing:2.4.7"
-  purl: "pkg:pypi/pyparsing@2.4.7"
-  authors:
-  - "Paul McGuire"
+- id: "PyPI::pyparsing:3.0.9"
+  purl: "pkg:pypi/pyparsing@3.0.9"
   declared_licenses:
   - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
       MIT License: "MIT"
-  description: "Python parsing module"
-  homepage_url: "https://github.com/pyparsing/pyparsing/"
+  description: "pyparsing module - Classes and methods to define and execute parsing\
+    \ grammars"
+  homepage_url: ""
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/6c/10/a7d0fa5baea8fe7b50f448ab742f26f52b80bfca85ac2be9d35cdd9a3246/pyparsing-3.0.9-py3-none-any.whl"
     hash:
-      value: "dbfd0a241aad2595f43377ec7f1836ea"
+      value: "9b7c6d2c436bc7eba41f5f239b391b4c"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
+    url: "https://files.pythonhosted.org/packages/71/22/207523d16464c40a0310d2d4d8926daffa00ac1f5b1576170a32db749636/pyparsing-3.0.9.tar.gz"
     hash:
-      value: "f0953e47a0112f7a65aec2305ffdf7b4"
+      value: "fadc2f3bf5872bf6310576a86c3566e0"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -133,29 +131,30 @@ packages:
     url: "https://github.com/pyparsing/pyparsing.git"
     revision: ""
     path: ""
-- id: "PyPI::rdflib:5.0.0"
-  purl: "pkg:pypi/rdflib@5.0.0"
+- id: "PyPI::rdflib:6.2.0"
+  purl: "pkg:pypi/rdflib@6.2.0"
   authors:
   - "Daniel 'eikeon' Krech"
   declared_licenses:
   - "BSD License"
-  - "BSD-3-Clause"
+  - "bsd-3-clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
+      bsd-3-clause: "BSD-3-Clause"
       BSD License: "BSD-3-Clause"
   description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
     \ language for representing information."
   homepage_url: "https://github.com/RDFLib/rdflib"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/d0/6b/6454aa1db753c0f8bc265a5bd5c10b5721a4bb24160fb4faf758cf6be8a1/rdflib-5.0.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/50/fb/a0f8b6ab6598b49871a48a189dc1942fb0b0543ab4c84f689486233ef1ec/rdflib-6.2.0-py3-none-any.whl"
     hash:
-      value: "8ad1eb4d67ade138370fb45ce1cb3412"
+      value: "ef0f58b20c1423a745e4697c9f5c7cb7"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/2f/ae/a50934a7ed4f9d80bbc0e0cf725c7fd2208f2e433efbf881ed0c0317a7f1/rdflib-5.0.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/fc/8d/2d1c8a08471b4333657c98a3048642095f844f10cd1d4e28f9b08725c7bd/rdflib-6.2.0.tar.gz"
     hash:
-      value: "80d7c6adc2e4040cdd8dade2e0e61403"
+      value: "1c1cc2ba4a03d21cb65a64ad97d75b19"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -165,6 +164,38 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/RDFLib/rdflib.git"
+    revision: ""
+    path: ""
+- id: "PyPI::setuptools:65.2.0"
+  purl: "pkg:pypi/setuptools@65.2.0"
+  authors:
+  - "Python Packaging Authority"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Easily download, build, install, upgrade, and uninstall Python packages"
+  homepage_url: "https://github.com/pypa/setuptools"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/e5/6f/942e63ec2a5c881df147782b97dc4715ca082dec9de41f43e1013faef710/setuptools-65.2.0-py3-none-any.whl"
+    hash:
+      value: "832c67899e7250823fbf08c43ffaa487"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/15/a7/b4cab9eca586ed17c66b3aced23ccf945312c50742614039d0cd71c870bd/setuptools-65.2.0.tar.gz"
+    hash:
+      value: "90ce497683b81b7c9943637ea0dd6817"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pypa/setuptools.git"
     revision: ""
     path: ""
 - id: "PyPI::six:1.16.0"
