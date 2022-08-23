@@ -121,6 +121,16 @@ data class OrtConfiguration(
                 },
                 file?.takeIf { it.isFile }?.let {
                     logger.info { "Using ORT configuration file '$it'." }
+
+                    if (file.extension == "conf") {
+                        logger.warn {
+                            "The Hocon configuration file format is deprecated. Support for Hocon configuration " +
+                                    "files will be removed end of September 2022. Please migrate your configuration " +
+                                    "file to the YAML format. Run `ort config --show-active` to print your current " +
+                                    "configuration as YAML."
+                        }
+                    }
+
                     PropertySource.file(it)
                 }
             )
