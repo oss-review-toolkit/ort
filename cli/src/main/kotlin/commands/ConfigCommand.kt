@@ -19,17 +19,17 @@
 
 package org.ossreviewtoolkit.cli.commands
 
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 
-import com.typesafe.config.ConfigRenderOptions
-
-import io.github.config4k.toConfig
-
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 
 class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT configurations") {
@@ -50,21 +50,25 @@ class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT c
     ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
-    private val renderOptions = ConfigRenderOptions.defaults().setJson(false).setOriginComments(false)
 
-    private fun OrtConfiguration.renderHocon() = toConfig("ort").root().render(renderOptions)
+    private val mapper = YAMLMapper().apply {
+        registerKotlinModule()
+    }
+
+    private fun OrtConfiguration.renderYaml() =
+        mapper.writerWithDefaultPrettyPrinter().writeValueAsString(OrtConfigurationWrapper(this)).removePrefix("---\n")
 
     override fun run() {
         if (showDefault) {
             println("The default configuration is:")
             println()
-            println(OrtConfiguration().renderHocon())
+            println(OrtConfiguration().renderYaml())
         }
 
         if (showActive) {
             println("The active configuration is:")
             println()
-            println(globalOptionsForSubcommands.config.renderHocon())
+            println(globalOptionsForSubcommands.config.renderYaml())
         }
 
         if (showReference) {
