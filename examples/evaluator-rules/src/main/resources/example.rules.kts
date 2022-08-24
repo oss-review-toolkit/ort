@@ -180,6 +180,26 @@ fun RuleSet.copyleftInSourceLimitedRule() = packageRule("COPYLEFT_LIMITED_IN_SOU
     }
 }
 
+fun RuleSet.dependencyInProjectSourceRule() = projectSourceRule("DEPENDENCY_IN_PROJECT_SOURCE_RULE") {
+    val denyDirPatterns = listOf(
+        "**/node_modules" to setOf("NPM", "Yarn", "PNPM"),
+        "**/vendor" to setOf("GoMod", "GoDep")
+    )
+
+    denyDirPatterns.forEach { (pattern, packageManagers) ->
+        val offendingDirs = projectSourceFindDirectories(pattern)
+
+        if (offendingDirs.isNotEmpty()) {
+            issue(
+                Severity.ERROR,
+                "The directories ${offendingDirs.joinToString()} belong to the package manager(s) " +
+                        "${packageManagers.joinToString()} and must not be committed.",
+                "Please delete the directories: ${offendingDirs.joinToString()}."
+            )
+        }
+    }
+}
+
 fun RuleSet.vulnerabilityInPackageRule() = packageRule("VULNERABILITY_IN_PACKAGE") {
     require {
         -isExcluded()
@@ -311,6 +331,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     copyleftLimitedInDependencyRule()
 
     // Rules which get executed once:
+    dependencyInProjectSourceRule()
     deprecatedScopeExcludeReasonInOrtYmlRule()
     missingCiConfigurationRule()
     missingContributingFileRule()
