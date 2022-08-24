@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper.commands
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -33,6 +34,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.PackageType.PACKAGE
 import org.ossreviewtoolkit.model.PackageType.PROJECT
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -58,6 +60,18 @@ class ListPackagesCommand : CliktCommand(
         help = "Filter the output by package type."
     ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
+    private val offendingOnly by option(
+        "--offending-only",
+        help = "Only list packages causing at least one rule violation with an offending severity, see " +
+                "--offending-severities."
+    ).flag()
+
+    private val offendingSeverities by option(
+        "--offending-severities",
+        help = "Set the severities to use for the filtering enabled by --offending-only, specified as " +
+                "comma-separated values."
+    ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
+
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
@@ -68,10 +82,16 @@ class ListPackagesCommand : CliktCommand(
                 .filter(LicenseView.ONLY_DETECTED)
                 .map { it.license.toString() }
 
+        val packagesWithOffendingRuleViolations = ortResult.getRuleViolations().filter {
+            it.severity in offendingSeverities
+        }.mapNotNullTo(mutableSetOf()) { it.pkg }
+
         val packages = ortResult.collectProjectsAndPackages().filter { id ->
             (ortResult.isPackage(id) && PACKAGE in type) || (ortResult.isProject(id) && PROJECT in type)
         }.filter { id ->
             matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()
+        }.filter { id ->
+            !offendingOnly || id in packagesWithOffendingRuleViolations
         }.sortedBy { it }
 
         val result = buildString {
