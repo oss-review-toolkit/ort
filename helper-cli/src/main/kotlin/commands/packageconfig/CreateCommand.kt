@@ -113,25 +113,17 @@ internal class CreateCommand : CliktCommand(
     }
 
     private fun createPackageConfiguration(provenance: Provenance): PackageConfiguration =
-        when (provenance) {
-            is ArtifactProvenance -> {
-                PackageConfiguration(
-                    id = packageId,
-                    sourceArtifactUrl = provenance.sourceArtifact.url
+        PackageConfiguration(
+            id = packageId,
+            sourceArtifactUrl = provenance.let { it as? ArtifactProvenance }?.let {
+                it.sourceArtifact.url
+            },
+            vcs = provenance.let { it as? RepositoryProvenance }?.let {
+                VcsMatcher(
+                    type = it.vcsInfo.type,
+                    url = it.vcsInfo.url,
+                    revision = it.resolvedRevision
                 )
             }
-
-            is RepositoryProvenance -> {
-                PackageConfiguration(
-                    id = packageId,
-                    vcs = VcsMatcher(
-                        type = provenance.vcsInfo.type,
-                        url = provenance.vcsInfo.url,
-                        revision = provenance.resolvedRevision
-                    )
-                )
-            }
-
-            else -> throw IllegalArgumentException("Unsupported provenance $provenance.")
-        }
+        )
 }
