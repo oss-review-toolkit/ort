@@ -48,7 +48,7 @@ internal class CreateCommand : CliktCommand(
 ) {
     private val scanResultsStorageDir by option(
         "--scan-results-storage-dir",
-        help = "The scan results storage to extract the scan results to."
+        help = "The scan results storage to read the scan results from."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
