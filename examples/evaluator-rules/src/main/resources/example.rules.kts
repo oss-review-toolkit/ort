@@ -351,8 +351,10 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     copyleftLimitedInDependencyRule()
 
     // Rules which get executed once:
-    dependencyInProjectSourceRule()
     deprecatedScopeExcludeReasonInOrtYmlRule()
+
+    // Prior to open sourcing use case rules (which get executed once):
+    dependencyInProjectSourceRule()
     missingCiConfigurationRule()
     missingContributingFileRule()
     missingReadmeFileRule()
