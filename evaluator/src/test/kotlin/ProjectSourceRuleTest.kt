@@ -130,7 +130,7 @@ private fun File.addFiles(vararg paths: String, content: String = "") {
         resolve(path).apply {
             parentFile.mkdirs()
             createNewFile()
-            writeText(content)
+            if (content.isNotEmpty()) writeText(content)
         }
     }
 }
