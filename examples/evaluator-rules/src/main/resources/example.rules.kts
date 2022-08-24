@@ -329,8 +329,8 @@ fun RuleSet.missingReadmeFileLicenseSectionRule() = projectSourceRule("MISSING_R
     }
 
     error(
-        message = "This project does not seem to have any known CI configuration files.",
-        howToFix = "Please add a license section to the file 'README.md' in the root directory."
+        message = "The file 'README.md' is missing a \"License\" section.",
+        howToFix = "Please add a \"License\" section to the file 'README.md'."
     )
 }
 
@@ -351,8 +351,10 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     copyleftLimitedInDependencyRule()
 
     // Rules which get executed once:
-    dependencyInProjectSourceRule()
     deprecatedScopeExcludeReasonInOrtYmlRule()
+
+    // Prior to open sourcing use case rules (which get executed once):
+    dependencyInProjectSourceRule()
     missingCiConfigurationRule()
     missingContributingFileRule()
     missingReadmeFileRule()
