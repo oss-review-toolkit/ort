@@ -146,8 +146,6 @@ object PythonInspector : CommandLineTool {
         pythonVersion: String = "38",
     ): ProcessCapture {
         val commandLineOptions = buildList {
-            add("python-inspector")
-
             add("--python-version")
             add(pythonVersion)
 
@@ -165,9 +163,7 @@ object PythonInspector : CommandLineTool {
             }
         }
 
-        val process = ProcessCapture(workingDir, *commandLineOptions.toTypedArray())
-        process.requireSuccess()
-        return process
+        return run(workingDir, *commandLineOptions.toTypedArray())
     }
 }
 
