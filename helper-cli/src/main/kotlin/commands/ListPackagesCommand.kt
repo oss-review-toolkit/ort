@@ -70,8 +70,8 @@ class ListPackagesCommand : CliktCommand(
 
         val packages = ortResult.collectProjectsAndPackages().filter { id ->
             (ortResult.isPackage(id) && PACKAGE in type) || (ortResult.isProject(id) && PROJECT in type)
-        }.filter {
-            matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(it)).isEmpty()
+        }.filter { id ->
+            matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()
         }.sortedBy { it }
 
         val result = buildString {
