@@ -58,9 +58,8 @@ data class PackageCurationData(
     val authors: SortedSet<String>? = null,
 
     /**
-     * The concluded license as an [SpdxExpression]. It can be used to correct the [declared licenses of a package]
-     * [Package.declaredLicenses] in case the found in the packages metadata or the licenses detected by a scanner do
-     * not match reality.
+     * The concluded license as an [SpdxExpression]. It can be used to override the [declared][Package.declaredLicenses]
+     * / [detected][LicenseFinding.license] licenses of a package.
      */
     val concludedLicense: SpdxExpression? = null,
 
