@@ -60,13 +60,15 @@ open class ProjectSourceRule(
      * Return the file paths matching any of the given [glob expressions][patterns] with its file content matching
      * [contentPattern].
      */
-    fun projectSourceFindFilesWithContent(contentPattern: String, vararg patterns: String): List<File> =
-        projectSourceFindFiles(*patterns).filter { path ->
+    fun projectSourceFindFilesWithContent(contentPattern: String, vararg patterns: String): List<File> {
+        val regex = contentPattern.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+
+        return projectSourceFindFiles(*patterns).filter { path ->
             val content = projectSourcesDir.resolve(path).readText()
-            val regex = contentPattern.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
 
             content.matches(regex)
         }
+    }
 
     /**
      * A [RuleMatcher] that checks whether the project's source tree contains at least one directory matching any of the
