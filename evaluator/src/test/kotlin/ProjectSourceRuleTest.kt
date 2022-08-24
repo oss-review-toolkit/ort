@@ -96,6 +96,24 @@ class ProjectSourceRuleTest : WordSpec({
             rule.projectSourceHasDirectory("a").matches() shouldBe false
         }
     }
+
+    "projectSourceHasFileWithContent()" should {
+        "return true if there is a file matching the given glob pattern with its content matching the given regex" {
+            val dir = createSpecTempDir().apply {
+                addFiles(
+                    "README.md",
+                    content = """
+                        
+                        ## License
+                    
+                    """.trimIndent()
+                )
+            }
+            val rule = createOrtResultRule(dir)
+
+            rule.projectSourceHasFileWithContent(".*^#{1,2} License$.*", "README.md").matches() shouldBe true
+        }
+    }
 })
 
 private fun createOrtResultRule(projectSourcesDir: File): ProjectSourceRule =
@@ -105,13 +123,14 @@ private fun createOrtResultRule(projectSourcesDir: File): ProjectSourceRule =
         projectSourceResolver = SourceTreeResolver.forLocalDirectory(projectSourcesDir)
     )
 
-private fun File.addFiles(vararg paths: String) {
+private fun File.addFiles(vararg paths: String, content: String = "") {
     require(isDirectory)
 
     paths.forEach { path ->
         resolve(path).apply {
             parentFile.mkdirs()
             createNewFile()
+            writeText(content)
         }
     }
 }

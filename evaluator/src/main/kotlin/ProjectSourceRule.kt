@@ -57,6 +57,18 @@ open class ProjectSourceRule(
         }
 
     /**
+     * Return the file paths matching any of the given [glob expressions][patterns] with its file content matching
+     * [contentPattern].
+     */
+    fun projectSourceFindFilesWithContent(contentPattern: String, vararg patterns: String): List<File> =
+        projectSourceFindFiles(*patterns).filter { path ->
+            val content = projectSourcesDir.resolve(path).readText()
+            val regex = contentPattern.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+
+            content.matches(regex)
+        }
+
+    /**
      * A [RuleMatcher] that checks whether the project's source tree contains at least one directory matching any of the
      * provided [glob expressions][patterns].
      */
@@ -75,6 +87,19 @@ open class ProjectSourceRule(
         object : RuleMatcher {
             override val description = "projectSourceHasFile('${patterns.joinToString()}')"
             override fun matches(): Boolean = projectSourceFindFiles(*patterns).isNotEmpty()
+        }
+
+    /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one file matching any of the
+     * given [glob expressions][patterns] with its file content matching [contentPattern].
+     */
+    fun projectSourceHasFileWithContent(contentPattern: String, vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description =
+                "projectSourceHasFileWithContents('$contentPattern', '${patterns.joinToString()}')"
+
+            override fun matches(): Boolean =
+                projectSourceFindFilesWithContent(contentPattern, *patterns).isNotEmpty()
         }
 }
 
