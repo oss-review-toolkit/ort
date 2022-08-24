@@ -68,22 +68,34 @@ class SourceTree private constructor(
     /**
      * Return true if any of the given [glob expressions][patterns] match an existing directory.
      */
-    fun hasDirectory(vararg patterns: String): Boolean {
+    fun hasDirectory(vararg patterns: String): Boolean =
+        findDirectories(*patterns).isNotEmpty()
+
+    /**
+     * Return the directory paths matching any of the given [glob expressions][patterns].
+     */
+    fun findDirectories(vararg patterns: String): Set<String> {
         val matcher = FileMatcher(patterns.toSet())
 
-        return rootDir.walkBottomUp().filter {
-            it.isDirectory && matcher.matches(it.relativeTo(rootDir).path)
-        }.count() > 0
+        return rootDir.walkBottomUp().mapNotNull { file ->
+            file.takeIf { it.isDirectory }?.let { it.relativeTo(rootDir).path }
+        }.filterTo(mutableSetOf()) { matcher.matches(it) }
     }
 
     /**
      * Return true if any of the given glob expressions match an existing file.
      */
-    fun hasFile(vararg patterns: String): Boolean {
+    fun hasFile(vararg patterns: String): Boolean =
+        findFiles(*patterns).isNotEmpty()
+
+    /**
+     * Return the file paths matching any of the given [glob expressions][patterns].
+     */
+    fun findFiles(vararg patterns: String): Set<String> {
         val matcher = FileMatcher(patterns.toSet())
 
-        return rootDir.walkBottomUp().filter {
-            it.isFile && matcher.matches(it.relativeTo(rootDir).path)
-        }.count() > 0
+        return rootDir.walkBottomUp().mapNotNull { file ->
+            file.takeIf { it.isFile }?.let { it.relativeTo(rootDir).path }
+        }.filterTo(mutableSetOf()) { matcher.matches(it) }
     }
 }
