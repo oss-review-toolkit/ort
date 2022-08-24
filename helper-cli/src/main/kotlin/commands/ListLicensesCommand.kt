@@ -83,7 +83,8 @@ internal class ListLicensesCommand : CliktCommand(
 
     private val offendingOnly by option(
         "--offending-only",
-        help = "Only list licenses causing a rule violation of severity specified severity, see --severity."
+        help = "Only list licenses causing at least one rule violation with an offending severity, see " +
+                "--offending-severities."
     ).flag()
 
     private val offendingSeverities by option(
