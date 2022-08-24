@@ -86,8 +86,8 @@ internal class ListLicensesCommand : CliktCommand(
         help = "Only list licenses causing a rule violation of severity specified severity, see --severity."
     ).flag()
 
-    private val offendingSeverity by option(
-        "--offending-severity",
+    private val offendingSeverities by option(
+        "--offending-severities",
         help = "Set the severities to use filtering enabled by --offending-only, specified as comma-separated " +
                 "values."
     ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
@@ -175,7 +175,7 @@ internal class ListLicensesCommand : CliktCommand(
                 packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
             }.any { it.matches(path) }
 
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverity)
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
 
         val findingsByProvenance = ortResult
             .getLicenseFindingsById(
