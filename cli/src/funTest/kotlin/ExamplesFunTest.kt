@@ -152,7 +152,8 @@ class ExamplesFunTest : StringSpec() {
                 "VULNERABILITY_IN_PACKAGE",
                 "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
                 "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML",
-                "MISSING_CONTRIBUTING_FILE"
+                "MISSING_CONTRIBUTING_FILE",
+                "MISSING_README_FILE_LICENSE_SECTION"
             )
         }
 

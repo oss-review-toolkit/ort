@@ -314,6 +314,26 @@ fun RuleSet.missingContributingFileRule() = ortResultRule("MISSING_CONTRIBUTING_
     error("The project's code repository does not contain the file 'CONTRIBUTING.md'.")
 }
 
+fun RuleSet.missingReadmeFileRule() = ortResultRule("MISSING_README_FILE") {
+    require {
+        -sourceTreeHasFile("README.md")
+    }
+
+    error("The project's code repository does not contain the file 'README.md'.")
+}
+
+fun RuleSet.missingReadmeFileLicenseSectionRule() = ortResultRule("MISSING_README_FILE_LICENSE_SECTION") {
+    require {
+        +sourceTreeHasFile("README.md")
+        -sourceTreeHasFileWithContents(".*^#{1,2} License$.*", "README.md")
+    }
+
+    error(
+        message = "This project does not seem to have any known CI configuration files.",
+        howToFix = "Please add a license section to the file 'README.md' in the root directory."
+    )
+}
+
 /**
  * The set of policy rules.
  */
@@ -335,6 +355,8 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver, resolutionProvider) {
     deprecatedScopeExcludeReasonInOrtYmlRule()
     missingCiConfigurationRule()
     missingContributingFileRule()
+    missingReadmeFileRule()
+    missingReadmeFileLicenseSectionRule()
 }
 
 // Populate the list of policy rule violations to return.
