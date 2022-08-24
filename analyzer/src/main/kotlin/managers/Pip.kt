@@ -141,8 +141,7 @@ object PythonInspector : CommandLineTool {
     fun run(
         workingDir: File,
         outputFile: String,
-        requirementsFile: String?,
-        setupPyFile: String?,
+        definitionFile: File,
         pythonVersion: String = "38",
     ): ProcessCapture {
         val commandLineOptions = buildList {
@@ -152,15 +151,13 @@ object PythonInspector : CommandLineTool {
             add("--json-pdt")
             add(outputFile)
 
-            if (requirementsFile != null) {
+            if (definitionFile.name == "setup.py") {
+                add("--setup-py")
+            } else {
                 add("--requirement")
-                add(requirementsFile)
             }
 
-            if (setupPyFile != null) {
-                add("--setup-py")
-                add(setupPyFile)
-            }
+            add(definitionFile.absolutePath)
         }
 
         return run(workingDir, *commandLineOptions.toTypedArray())
@@ -345,21 +342,11 @@ class Pip(
 
         val jsonFile = createOrtTempDir().resolve("python-inspector.json")
 
-        val pythonInspector = if (definitionFile.name == "setup.py") {
-            PythonInspector.run(
-                workingDir = workingDir,
-                outputFile = jsonFile.absolutePath,
-                setupPyFile = definitionFile.absolutePath,
-                requirementsFile = null
-            )
-        } else {
-            PythonInspector.run(
-                workingDir = workingDir,
-                outputFile = jsonFile.absolutePath,
-                requirementsFile = definitionFile.absolutePath,
-                setupPyFile = null
-            )
-        }
+        val pythonInspector = PythonInspector.run(
+            workingDir = workingDir,
+            outputFile = jsonFile.absolutePath,
+            definitionFile = definitionFile
+        )
 
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
