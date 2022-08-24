@@ -147,13 +147,13 @@ class ExamplesFunTest : StringSpec() {
             val result = evaluator.run(script)
 
             result.violations.map { it.rule } shouldContainExactlyInAnyOrder listOf(
-                "UNHANDLED_LICENSE",
                 "COPYLEFT_LIMITED_IN_SOURCE",
-                "VULNERABILITY_IN_PACKAGE",
-                "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
                 "DEPRECATED_SCOPE_EXCLUDE_REASON_IN_ORT_YML",
+                "HIGH_SEVERITY_VULNERABILITY_IN_PACKAGE",
                 "MISSING_CONTRIBUTING_FILE",
-                "MISSING_README_FILE_LICENSE_SECTION"
+                "MISSING_README_FILE_LICENSE_SECTION",
+                "UNHANDLED_LICENSE",
+                "VULNERABILITY_IN_PACKAGE"
             )
         }
 
