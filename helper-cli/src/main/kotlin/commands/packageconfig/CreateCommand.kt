@@ -82,15 +82,16 @@ internal class CreateCommand : CliktCommand(
         outputDir.safeMkdirs()
 
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
-        val scanResults = scanResultsStorage.read(packageId).getOrDefault(emptyList())
+        val scanResults = scanResultsStorage.read(packageId).getOrDefault(emptyList()).run {
+            listOfNotNull(
+                find { it.provenance is RepositoryProvenance },
+                find { it.provenance is ArtifactProvenance }
+            )
+        }
 
-        scanResults.find { it.provenance is RepositoryProvenance }?.let {
-            createPackageConfiguration(it.provenance)
-        }?.writeToFile()
-
-        scanResults.find { it.provenance is ArtifactProvenance }?.let {
-            createPackageConfiguration(it.provenance)
-        }?.writeToFile()
+        scanResults.forEach { scanResult ->
+            createPackageConfiguration(scanResult.provenance).writeToFile()
+        }
     }
 
     private fun PackageConfiguration.writeToFile() {
