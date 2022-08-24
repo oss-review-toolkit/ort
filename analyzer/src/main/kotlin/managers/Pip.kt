@@ -138,7 +138,7 @@ object PythonVersion : CommandLineTool, Logging {
 object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
 
-    fun runPythonInspector(
+    fun run(
         workingDir: File,
         outputFile: String,
         requirementsFile: String?,
@@ -346,14 +346,14 @@ class Pip(
         val jsonFile = createOrtTempDir().resolve("python-inspector.json")
 
         val pythonInspector = if (definitionFile.name == "setup.py") {
-            PythonInspector.runPythonInspector(
+            PythonInspector.run(
                 workingDir = workingDir,
                 outputFile = jsonFile.absolutePath,
                 setupPyFile = definitionFile.absolutePath,
                 requirementsFile = null
             )
         } else {
-            PythonInspector.runPythonInspector(
+            PythonInspector.run(
                 workingDir = workingDir,
                 outputFile = jsonFile.absolutePath,
                 requirementsFile = definitionFile.absolutePath,
