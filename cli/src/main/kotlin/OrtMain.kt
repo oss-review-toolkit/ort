@@ -42,6 +42,8 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
@@ -80,11 +82,19 @@ data class GlobalOptions(
  */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
-    OrtMain().main(args)
+
+    try {
+        OrtMain().main(args)
+    } finally {
+        OrtMain.logger.debug { "ORT command execution terminated." }
+    }
+
     exitProcess(0)
 }
 
 class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
+    companion object : Logging
+
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
