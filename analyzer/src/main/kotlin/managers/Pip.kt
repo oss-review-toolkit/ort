@@ -145,16 +145,24 @@ object PythonInspector : CommandLineTool {
         setupPyFile: String?,
         pythonVersion: String = "38",
     ): ProcessCapture {
-        var commandLineOptions = listOf(
-            "python-inspector",
-            "--python-version", pythonVersion,
-            "--json-pdt", outputFile,
-        )
+        val commandLineOptions = buildList {
+            add("python-inspector")
 
-        if (requirementsFile != null) {
-            commandLineOptions += listOf("--requirement", requirementsFile)
-        } else if (setupPyFile != null) {
-            commandLineOptions += listOf("--setup-py", setupPyFile)
+            add("--python-version")
+            add(pythonVersion)
+
+            add("--json-pdt")
+            add(outputFile)
+
+            if (requirementsFile != null) {
+                add("--requirement")
+                add(requirementsFile)
+            }
+
+            if (setupPyFile != null) {
+                add("--setup-py")
+                add(setupPyFile)
+            }
         }
 
         val process = ProcessCapture(workingDir, *commandLineOptions.toTypedArray())
