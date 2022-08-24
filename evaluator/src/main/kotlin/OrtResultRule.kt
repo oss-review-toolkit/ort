@@ -103,4 +103,16 @@ open class OrtResultRule(
 
             override fun matches(): Boolean = projectSourceTree.hasFile(*patterns)
         }
+
+    /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one file matching any of the
+     * given [glob expressions][patterns] with its file content matching [contentPattern].
+     */
+    fun sourceTreeHasFileWithContents(contentPattern: String, vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description = "sourceTreeHasFileWithContents('$contentPattern', '${patterns.joinToString()}')"
+
+            override fun matches(): Boolean =
+                projectSourceTree.findFilesWithContent(contentPattern, *patterns).isNotEmpty()
+        }
 }

@@ -95,6 +95,24 @@ class OrtResultRuleTest : WordSpec({
             rule.sourceTreeHasDirectory("a").matches() shouldBe false
         }
     }
+
+    "hasFileWithContents()" should {
+        "return true if there is a file matching the given glob pattern with its content matching the given regex" {
+            val dir = createSpecTempDir().apply {
+                addFiles(
+                    "README.md",
+                    content = """
+                        
+                        ## License
+                    
+                    """.trimIndent()
+                )
+            }
+            val rule = createOrtResultRule(dir)
+
+            rule.sourceTreeHasFileWithContents(".*^#{1,2} License$.*", "README.md").matches() shouldBe true
+        }
+    }
 })
 
 private fun createOrtResultRule(projectSourcesDir: File) =
@@ -106,13 +124,14 @@ private fun createOrtResultRule(projectSourcesDir: File) =
         name = "RULE_NAME"
     )
 
-private fun File.addFiles(vararg paths: String) {
+private fun File.addFiles(vararg paths: String, content: String = "") {
     require(isDirectory)
 
     paths.forEach { path ->
         resolve(path).apply {
             parentFile.mkdirs()
             createNewFile()
+            writeText(content)
         }
     }
 }

@@ -98,4 +98,16 @@ class SourceTree private constructor(
             file.takeIf { it.isFile }?.let { it.relativeTo(rootDir).path }
         }.filterTo(mutableSetOf()) { matcher.matches(it) }
     }
+
+    /**
+     * Return the file paths matching any of the given [glob expressions][patterns] with its file content matching
+     * [contentPattern].
+     */
+    fun findFilesWithContent(contentPattern: String, vararg patterns: String) =
+        findFiles(*patterns).filterTo(mutableSetOf()) { path ->
+            val content = rootDir.resolve(path).readText()
+            val regex = contentPattern.toRegex(setOf(RegexOption.DOT_MATCHES_ALL, RegexOption.MULTILINE))
+
+            content.matches(regex)
+        }
 }
