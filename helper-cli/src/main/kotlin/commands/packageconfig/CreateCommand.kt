@@ -91,7 +91,7 @@ internal class CreateCommand : CliktCommand(
     }
 
     private fun Provenance.writePackageConfigurationFile(filename: String) {
-        val packageConfiguration = createPackageConfiguration(packageId, this)
+        val packageConfiguration = createPackageConfiguration(this)
         val outputFile = getOutputFile(filename)
 
         if (!forceOverwrite && outputFile.exists()) {
@@ -111,27 +111,27 @@ internal class CreateCommand : CliktCommand(
 
         return outputDir.resolve(relativeOutputFilePath)
     }
-}
 
-private fun createPackageConfiguration(id: Identifier, provenance: Provenance): PackageConfiguration =
-    when (provenance) {
-        is ArtifactProvenance -> {
-            PackageConfiguration(
-                id = id,
-                sourceArtifactUrl = provenance.sourceArtifact.url
-            )
-        }
-
-        is RepositoryProvenance -> {
-            PackageConfiguration(
-                id = id,
-                vcs = VcsMatcher(
-                    type = provenance.vcsInfo.type,
-                    url = provenance.vcsInfo.url,
-                    revision = provenance.resolvedRevision
+    private fun createPackageConfiguration(provenance: Provenance): PackageConfiguration =
+        when (provenance) {
+            is ArtifactProvenance -> {
+                PackageConfiguration(
+                    id = packageId,
+                    sourceArtifactUrl = provenance.sourceArtifact.url
                 )
-            )
-        }
+            }
 
-        else -> throw IllegalArgumentException("Unsupported provenance $provenance.")
-    }
+            is RepositoryProvenance -> {
+                PackageConfiguration(
+                    id = packageId,
+                    vcs = VcsMatcher(
+                        type = provenance.vcsInfo.type,
+                        url = provenance.vcsInfo.url,
+                        revision = provenance.resolvedRevision
+                    )
+                )
+            }
+
+            else -> throw IllegalArgumentException("Unsupported provenance $provenance.")
+        }
+}
