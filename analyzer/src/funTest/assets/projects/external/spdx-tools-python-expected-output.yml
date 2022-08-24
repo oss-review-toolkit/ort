@@ -32,7 +32,7 @@ project:
         dependencies:
         - id: "PyPI::six:1.16.0"
       - id: "PyPI::pyparsing:3.0.9"
-      - id: "PyPI::setuptools:65.2.0"
+      - id: "PyPI::setuptools:65.3.0"
 packages:
 - id: "PyPI::isodate:0.6.1"
   purl: "pkg:pypi/isodate@0.6.1"
@@ -166,8 +166,8 @@ packages:
     url: "https://github.com/RDFLib/rdflib.git"
     revision: ""
     path: ""
-- id: "PyPI::setuptools:65.2.0"
-  purl: "pkg:pypi/setuptools@65.2.0"
+- id: "PyPI::setuptools:65.3.0"
+  purl: "pkg:pypi/setuptools@65.3.0"
   authors:
   - "Python Packaging Authority"
   declared_licenses:
@@ -179,14 +179,14 @@ packages:
   description: "Easily download, build, install, upgrade, and uninstall Python packages"
   homepage_url: "https://github.com/pypa/setuptools"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/e5/6f/942e63ec2a5c881df147782b97dc4715ca082dec9de41f43e1013faef710/setuptools-65.2.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/d9/5f/2daccd14278b6b780ae6799f85998377c06019354982391245f4b58a927d/setuptools-65.3.0-py3-none-any.whl"
     hash:
-      value: "832c67899e7250823fbf08c43ffaa487"
+      value: "43614c17d9bdfa2339050634318678a1"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/15/a7/b4cab9eca586ed17c66b3aced23ccf945312c50742614039d0cd71c870bd/setuptools-65.2.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/cc/83/7ea9d9b3a6ff3225aca2fce5e4df373bee7e0a74c539711a4fbfda53374f/setuptools-65.3.0.tar.gz"
     hash:
-      value: "90ce497683b81b7c9943637ea0dd6817"
+      value: "66c6b8819c5306c12c38d7fad41b7f99"
       algorithm: "MD5"
   vcs:
     type: ""
