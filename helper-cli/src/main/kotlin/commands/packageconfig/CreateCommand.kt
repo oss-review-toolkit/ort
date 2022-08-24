@@ -84,21 +84,24 @@ internal class CreateCommand : CliktCommand(
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
         val scanResults = scanResultsStorage.read(packageId).getOrDefault(emptyList())
 
-        scanResults.find { it.provenance is RepositoryProvenance }?.provenance
-            ?.writePackageConfigurationFile("vcs.yml")
-        scanResults.find { it.provenance is ArtifactProvenance }?.provenance
-            ?.writePackageConfigurationFile("source-artifact.yml")
+        scanResults.find { it.provenance is RepositoryProvenance }?.let {
+            createPackageConfiguration(it.provenance)
+        }?.writeToFile()
+
+        scanResults.find { it.provenance is ArtifactProvenance }?.let {
+            createPackageConfiguration(it.provenance)
+        }?.writeToFile()
     }
 
-    private fun Provenance.writePackageConfigurationFile(filename: String) {
-        val packageConfiguration = createPackageConfiguration(this)
+    private fun PackageConfiguration.writeToFile() {
+        val filename = if (vcs != null) "vcs.yml" else "source-artifact.yml"
         val outputFile = getOutputFile(filename)
 
         if (!forceOverwrite && outputFile.exists()) {
             throw UsageError("The output file '${outputFile.absolutePath}' must not exist yet.", statusCode = 2)
         }
 
-        packageConfiguration.write(outputFile)
+        write(outputFile)
         println("Wrote a package configuration to '${outputFile.absolutePath}'.")
     }
 
