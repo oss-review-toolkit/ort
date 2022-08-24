@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -55,6 +56,7 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 // Use the most recent version that still supports Python 2. PIP 21.0.0 dropped Python 2 support, see
@@ -342,38 +344,41 @@ class Pip(
 
         val jsonFile = createOrtTempDir().resolve("python-inspector.json")
 
-        val pythonInspector = PythonInspector.run(
-            workingDir = workingDir,
-            outputFile = jsonFile.absolutePath,
-            definitionFile = definitionFile
-        )
+        runCatching {
+            PythonInspector.run(
+                workingDir = workingDir,
+                outputFile = jsonFile.absolutePath,
+                definitionFile = definitionFile
+            )
+        }.onFailure { e ->
+            e.showStackTrace()
+
+            logger.error {
+                "Unable to determine dependencies for definition file '${definitionFile.absolutePath}': " +
+                        e.collectMessages()
+            }
+        }.getOrThrow()
 
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
 
-        if (pythonInspector.isSuccess) {
-            val fullDependencyTree = jsonMapper.readTree(jsonFile)
-            jsonFile.parentFile.safeDeleteRecursively(force = true)
+        val fullDependencyTree = jsonMapper.readTree(jsonFile)
+        jsonFile.parentFile.safeDeleteRecursively(force = true)
 
-            val projectDependencies = fullDependencyTree.filterNot {
-                isPhonyDependency(
-                    it["package_name"].textValue(),
-                    it["installed_version"].textValueOrEmpty()
-                )
-            }
+        val projectDependencies = fullDependencyTree.filterNot {
+            isPhonyDependency(
+                it["package_name"].textValue(),
+                it["installed_version"].textValueOrEmpty()
+            )
+        }
 
-            val allIds = sortedSetOf<Identifier>()
-            parseDependencies(projectDependencies, allIds, installDependencies)
+        val allIds = sortedSetOf<Identifier>()
+        parseDependencies(projectDependencies, allIds, installDependencies)
 
-            // Enrich the package templates with additional metadata from PyPI.
-            allIds.mapTo(packages) { id ->
-                // TODO: Retrieve metadata of package not hosted on PyPI by querying the respective repository.
-                getPackageFromPyPi(id).enrichWith(installedPackages[id])
-            }
-        } else {
-            logger.error {
-                "Unable to determine dependencies for project in directory '$workingDir':\n${pythonInspector.stderr}"
-            }
+        // Enrich the package templates with additional metadata from PyPI.
+        allIds.mapTo(packages) { id ->
+            // TODO: Retrieve metadata of package not hosted on PyPI by querying the respective repository.
+            getPackageFromPyPi(id).enrichWith(installedPackages[id])
         }
 
         return packages to installDependencies
