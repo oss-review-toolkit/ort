@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
@@ -34,6 +32,8 @@ import java.io.IOException
 import java.net.URI
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
@@ -84,7 +83,7 @@ class UploadCurationsCommand : CliktCommand(
             runBlocking { block() }
         } catch (e: HttpException) {
             val errorMessage = e.response()?.errorBody()?.let {
-                val errorResponse = jsonMapper.readValue<ErrorResponse>(it.string())
+                val errorResponse = Json.Default.decodeFromString<ErrorResponse>(it.string())
                 val innerError = errorResponse.error.innererror
 
                 logger.debug { innerError.stack }
