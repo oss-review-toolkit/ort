@@ -157,7 +157,8 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
 
 # Add scanners (in versions known to work).
 ARG SCANCODE_VERSION
-RUN pip install --no-cache-dir scancode-toolkit==$SCANCODE_VERSION
+RUN wget https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
+RUN pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
 
 ARG PYTHON_INSPECTOR_VERSION
 RUN pip install --no-cache-dir python-inspector==$PYTHON_INSPECTOR_VERSION
