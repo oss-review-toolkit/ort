@@ -38,7 +38,4 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
-
-    funTestImplementation(libs.jacksonModuleKotlin)
-    funTestApi(libs.jacksonDatabind)
 }
