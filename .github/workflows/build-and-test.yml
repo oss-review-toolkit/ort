@@ -83,7 +83,8 @@ jobs:
           chmod a+x $HOME/.local/bin/repo
 
           # Install ScanCode for license texts.
-          pip install --user scancode-toolkit==$SCANCODE_VERSION
+          curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
+          pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
     - name: Checkout Repository
       uses: actions/checkout@v3
     - name: Setup Java
