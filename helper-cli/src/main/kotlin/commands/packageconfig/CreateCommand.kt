@@ -119,9 +119,7 @@ internal class CreateCommand : CliktCommand(
     private fun createPackageConfiguration(provenance: Provenance): PackageConfiguration =
         PackageConfiguration(
             id = packageId,
-            sourceArtifactUrl = (provenance as? ArtifactProvenance)?.let {
-                it.sourceArtifact.url
-            },
+            sourceArtifactUrl = (provenance as? ArtifactProvenance)?.sourceArtifact?.url,
             vcs = (provenance as? RepositoryProvenance)?.let {
                 VcsMatcher(
                     type = it.vcsInfo.type,
