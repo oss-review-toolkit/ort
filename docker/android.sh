@@ -17,6 +17,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-add_local_path ${ANDROID_HOME}/tools/bin
-add_local_path ${ANDROID_HOME}/emulator
-add_local_path ${ANDROID_HOME}/platform-tools
+add_local_path "${ANDROID_HOME}/tools/bin"
+add_local_path "${ANDROID_HOME}/emulator"
+add_local_path "${ANDROID_HOME}/platform-tools"

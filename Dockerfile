@@ -78,7 +78,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG PYTHON_VERSION=3.10.2
+ARG PYTHON_VERSION=3.10.6
 ARG PYTHON2_VERSION=""
 
 ENV PYENV_ROOT=/opt/python
@@ -89,21 +89,25 @@ RUN for pyvers in ${PYTHON_VERSION} ${PYTHON2_VERSION}; do \
 RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
 ENV PATH=/opt/python/shims:$PATH
 
-ARG CONAN_VERSION=1.44.0
+ARG CONAN_VERSION=1.52.0
+ARG PYTHON_INSPECTOR_VERSION=0.6.4
 ARG PYTHON_VIRTUALENV_VERSION=20.15.1
 ARG PIPTOOL_VERSION=22.1.2
 ARG SCANCODE_VERSION=30.1.0
 
 # Install pip and wheel ahead of regular modules as python try to generate
 # whl packages if they are not automatic available to download.
-RUN pip install -U \
+RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
+    pip install -U --cache-dir /var/cache/python \
     pip=="${PIPTOOL_VERSION}" \
     wheel
-RUN pip install -U \
+RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
+    pip install -U --cache-dir /var/cache/python \
     Mercurial \
     conan=="${CONAN_VERSION}" \
     pipenv \
     poetry \
+    python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
     scancode-toolkit==${SCANCODE_VERSION} \
     virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
@@ -294,7 +298,7 @@ COPY --from=haskellbuild /usr/bin/stack /usr/bin
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
-ENV ANDROID_API_LEVEL=29
+ARG ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild /opt/android-sdk /opt/android-sdk
