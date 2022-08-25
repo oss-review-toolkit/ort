@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.fasterxml.jackson.databind.DeserializationFeature
-
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
@@ -48,7 +46,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -89,8 +86,7 @@ class UploadResultToSw360Command : CliktCommand(
             "No SW360 storage is configured for the scanner."
         }
 
-        val sw360JsonMapper = jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-        val sw360Connection = Sw360Storage.createConnection(sw360Config, sw360JsonMapper)
+        val sw360Connection = Sw360Storage.createConnection(sw360Config)
         val sw360ReleaseClient = sw360Connection.releaseAdapter
         val sw360ProjectClient = sw360Connection.projectAdapter
         val downloader = Downloader(globalOptionsForSubcommands.config.downloader)
