@@ -57,10 +57,14 @@ class Sw360Storage(
     configuration: Sw360StorageConfiguration
 ) : ScanResultsStorage() {
     companion object : Logging {
-        fun createConnection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
+        val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+
+        fun createConnection(config: Sw360StorageConfiguration): SW360Connection {
             val httpClientConfig = HttpClientConfig
                 .basicConfig()
-                .withObjectMapper(jsonMapper)
+                .withObjectMapper(JSON_MAPPER)
+
             val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
 
             val sw360ClientConfig = SW360ClientConfig.createConfig(
@@ -72,17 +76,14 @@ class Sw360Storage(
                 config.clientPassword,
                 config.token,
                 httpClient,
-                jsonMapper
+                JSON_MAPPER
             )
 
             return SW360ConnectionFactory().newConnection(sw360ClientConfig)
         }
     }
 
-    private val connectionFactory = createConnection(
-        configuration,
-        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    )
+    private val connectionFactory = createConnection(configuration)
     private val releaseClient = connectionFactory.releaseAdapter
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> {
