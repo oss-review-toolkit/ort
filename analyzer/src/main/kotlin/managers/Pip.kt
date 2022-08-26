@@ -237,7 +237,11 @@ class Pip(
         // 3. Get additional remote package metadata via PyPI JSON.
 
         val workingDir = definitionFile.parentFile
-        val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile)
+
+        // Try to determine the Python version the project requires.
+        val pythonMajorVersion = PythonVersion.getPythonMajorVersion(workingDir)
+
+        val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile, pythonMajorVersion)
 
         val project = getProjectBasics(definitionFile, virtualEnvDir)
         val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir)
@@ -465,12 +469,11 @@ class Pip(
         return license?.takeUnless { it in licenseClassifiers }
     }
 
-    private fun setupVirtualEnv(workingDir: File, definitionFile: File): File {
+    private fun setupVirtualEnv(workingDir: File, definitionFile: File, pythonMajorVersion: Int): File {
+        var projectPythonVersion = pythonMajorVersion
+
         // Create an out-of-tree virtualenv.
         logger.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
-
-        // Try to determine the Python version the project requires.
-        var projectPythonVersion = PythonVersion.getPythonMajorVersion(workingDir)
 
         logger.info { "Trying to install dependencies using Python $projectPythonVersion..." }
 
