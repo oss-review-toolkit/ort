@@ -335,7 +335,8 @@ class Pip(
     }
 
     private fun getInstallDependencies(
-        definitionFile: File, virtualEnvDir: File,
+        definitionFile: File,
+        virtualEnvDir: File
     ): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
@@ -630,10 +631,7 @@ class Pip(
         }.getOrDefault(Package.EMPTY.copy(id = id))
     }
 
-    private fun getInstalledPackagesWithLocalMetaData(
-        virtualEnvDir: File,
-        workingDir: File
-    ): List<Package> {
+    private fun getInstalledPackagesWithLocalMetaData(virtualEnvDir: File, workingDir: File): List<Package> {
         val allPackages = listAllInstalledPackages(virtualEnvDir, workingDir)
 
         // Invoking 'pip show' once for each package separately is too slow, thus obtain the output for all packages
