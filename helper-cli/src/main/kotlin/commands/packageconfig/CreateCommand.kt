@@ -29,11 +29,12 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
@@ -78,6 +79,11 @@ internal class CreateCommand : CliktCommand(
         help = "Overwrite any output files if they already exist."
     ).flag()
 
+    private val generatePathExcludes by option(
+        "--generate-path-excludes",
+        help = "Generate path excludes."
+    ).flag()
+
     override fun run() {
         outputDir.safeMkdirs()
 
@@ -90,7 +96,7 @@ internal class CreateCommand : CliktCommand(
         }
 
         scanResults.forEach { scanResult ->
-            createPackageConfiguration(scanResult.provenance).writeToFile()
+            createPackageConfiguration(scanResult).writeToFile()
         }
     }
 
@@ -116,16 +122,27 @@ internal class CreateCommand : CliktCommand(
         return outputDir.resolve(relativeOutputFilePath)
     }
 
-    private fun createPackageConfiguration(provenance: Provenance): PackageConfiguration =
+    private fun createPackageConfiguration(scanResult: ScanResult): PackageConfiguration =
         PackageConfiguration(
             id = packageId,
-            sourceArtifactUrl = (provenance as? ArtifactProvenance)?.sourceArtifact?.url,
-            vcs = (provenance as? RepositoryProvenance)?.let {
+            sourceArtifactUrl = (scanResult.provenance as? ArtifactProvenance)?.sourceArtifact?.url,
+            vcs = (scanResult.provenance as? RepositoryProvenance)?.let {
                 VcsMatcher(
                     type = it.vcsInfo.type,
                     url = it.vcsInfo.url,
                     revision = it.resolvedRevision
                 )
+            },
+            pathExcludes = if (generatePathExcludes) {
+                PathExcludeGenerator.generatePathExcludes(scanResult.getFindingPaths())
+            } else {
+                emptyList()
             }
         )
 }
+
+private fun ScanResult.getFindingPaths(): Set<String> =
+    mutableSetOf<String>().apply {
+        summary.licenseFindings.mapTo(this) { it.location.path }
+        summary.copyrightFindings.mapTo(this) { it.location.path }
+    }
