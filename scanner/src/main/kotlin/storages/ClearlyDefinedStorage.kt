@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 import retrofit2.HttpException
 
@@ -238,7 +239,7 @@ class ClearlyDefinedStorage(
                 val startTime = SCANCODE_TIMESTAMP_FORMATTER.parse(startTimestamp).query(Instant::from)
                 val endTime = SCANCODE_TIMESTAMP_FORMATTER.parse(endTimestamp).query(Instant::from)
 
-                val summary = generateSummary(startTime, endTime, "", result)
+                val summary = generateSummary(startTime, endTime, SpdxConstants.NONE, result)
                 val details = generateScannerDetails(result)
 
                 Result.success(listOf(ScanResult(provenance, details, summary)))
