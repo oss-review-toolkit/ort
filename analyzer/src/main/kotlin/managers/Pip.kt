@@ -98,7 +98,7 @@ object PythonVersion : CommandLineTool, Logging {
      * are compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is
      * returned.
      */
-    fun getPythonVersion(workingDir: File): Int {
+    fun getPythonMajorVersion(workingDir: File): Int {
         val scriptFile = createOrtTempFile("python_compatibility", ".py")
         scriptFile.writeBytes(javaClass.getResource("/scripts/python_compatibility.py").readBytes())
 
@@ -470,7 +470,7 @@ class Pip(
         logger.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
 
         // Try to determine the Python version the project requires.
-        var projectPythonVersion = PythonVersion.getPythonVersion(workingDir)
+        var projectPythonVersion = PythonVersion.getPythonMajorVersion(workingDir)
 
         logger.info { "Trying to install dependencies using Python $projectPythonVersion..." }
 
