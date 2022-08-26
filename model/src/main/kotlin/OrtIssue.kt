@@ -68,7 +68,7 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 }
 
 /**
- * Create an [OrtIssue] and [log] the message. The log level is aligned with the [severity].
+ * Create an [OrtIssue] and log the message. The log level is aligned with the [severity].
  */
 inline fun <reified T : Logging> T.createAndLogIssue(
     source: String,
