@@ -345,11 +345,15 @@ class Pip(
         val jsonFile = createOrtTempDir().resolve("python-inspector.json")
 
         runCatching {
-            PythonInspector.run(
-                workingDir = workingDir,
-                outputFile = jsonFile.absolutePath,
-                definitionFile = definitionFile
-            )
+            try {
+                PythonInspector.run(
+                    workingDir = workingDir,
+                    outputFile = jsonFile.absolutePath,
+                    definitionFile = definitionFile
+                )
+            } finally {
+                workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+            }
         }.onFailure { e ->
             e.showStackTrace()
 
