@@ -26,48 +26,9 @@ project:
   - name: "install"
     dependencies:
     - id: "PyPI::ply:3.11"
-    - id: "PyPI::rdflib:6.2.0"
-      dependencies:
-      - id: "PyPI::isodate:0.6.1"
-        dependencies:
-        - id: "PyPI::six:1.16.0"
-      - id: "PyPI::pyparsing:3.0.9"
-      - id: "PyPI::setuptools:65.3.0"
+    - id: "PyPI::rdflib:5.0.0"
+    - id: "PyPI::six:1.16.0"
 packages:
-- id: "PyPI::isodate:0.6.1"
-  purl: "pkg:pypi/isodate@0.6.1"
-  authors:
-  - "Gerhard Weis"
-  declared_licenses:
-  - "BSD"
-  - "BSD License"
-  declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
-  description: "An ISO 8601 date/time/duration parser and formatter"
-  homepage_url: "https://github.com/gweis/isodate/"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/b6/85/7882d311924cbcfc70b1890780763e36ff0b140c7e51c110fc59a532f087/isodate-0.6.1-py2.py3-none-any.whl"
-    hash:
-      value: "c8a5fcd645030db98daa82b8e56fda89"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/db/7a/c0a56c7d56c7fa723988f122fa1f1ccf8c5c4ccc48efad0d214b49e5b1af/isodate-0.6.1.tar.gz"
-    hash:
-      value: "1a310658b30a48641bafb5652ad91c40"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/gweis/isodate.git"
-    revision: ""
-    path: ""
 - id: "PyPI::ply:3.11"
   purl: "pkg:pypi/ply@3.11"
   authors:
@@ -100,61 +61,29 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "PyPI::pyparsing:3.0.9"
-  purl: "pkg:pypi/pyparsing@3.0.9"
-  declared_licenses:
-  - "MIT License"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "pyparsing module - Classes and methods to define and execute parsing\
-    \ grammars"
-  homepage_url: ""
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/6c/10/a7d0fa5baea8fe7b50f448ab742f26f52b80bfca85ac2be9d35cdd9a3246/pyparsing-3.0.9-py3-none-any.whl"
-    hash:
-      value: "9b7c6d2c436bc7eba41f5f239b391b4c"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/71/22/207523d16464c40a0310d2d4d8926daffa00ac1f5b1576170a32db749636/pyparsing-3.0.9.tar.gz"
-    hash:
-      value: "fadc2f3bf5872bf6310576a86c3566e0"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/pyparsing/pyparsing.git"
-    revision: ""
-    path: ""
-- id: "PyPI::rdflib:6.2.0"
-  purl: "pkg:pypi/rdflib@6.2.0"
+- id: "PyPI::rdflib:5.0.0"
+  purl: "pkg:pypi/rdflib@5.0.0"
   authors:
   - "Daniel 'eikeon' Krech"
   declared_licenses:
   - "BSD License"
-  - "bsd-3-clause"
+  - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
-      bsd-3-clause: "BSD-3-Clause"
       BSD License: "BSD-3-Clause"
   description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
     \ language for representing information."
   homepage_url: "https://github.com/RDFLib/rdflib"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/50/fb/a0f8b6ab6598b49871a48a189dc1942fb0b0543ab4c84f689486233ef1ec/rdflib-6.2.0-py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/d0/6b/6454aa1db753c0f8bc265a5bd5c10b5721a4bb24160fb4faf758cf6be8a1/rdflib-5.0.0-py3-none-any.whl"
     hash:
-      value: "ef0f58b20c1423a745e4697c9f5c7cb7"
+      value: "8ad1eb4d67ade138370fb45ce1cb3412"
       algorithm: "MD5"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/fc/8d/2d1c8a08471b4333657c98a3048642095f844f10cd1d4e28f9b08725c7bd/rdflib-6.2.0.tar.gz"
+    url: "https://files.pythonhosted.org/packages/2f/ae/a50934a7ed4f9d80bbc0e0cf725c7fd2208f2e433efbf881ed0c0317a7f1/rdflib-5.0.0.tar.gz"
     hash:
-      value: "1c1cc2ba4a03d21cb65a64ad97d75b19"
+      value: "80d7c6adc2e4040cdd8dade2e0e61403"
       algorithm: "MD5"
   vcs:
     type: ""
@@ -164,38 +93,6 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/RDFLib/rdflib.git"
-    revision: ""
-    path: ""
-- id: "PyPI::setuptools:65.3.0"
-  purl: "pkg:pypi/setuptools@65.3.0"
-  authors:
-  - "Python Packaging Authority"
-  declared_licenses:
-  - "MIT License"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "Easily download, build, install, upgrade, and uninstall Python packages"
-  homepage_url: "https://github.com/pypa/setuptools"
-  binary_artifact:
-    url: "https://files.pythonhosted.org/packages/d9/5f/2daccd14278b6b780ae6799f85998377c06019354982391245f4b58a927d/setuptools-65.3.0-py3-none-any.whl"
-    hash:
-      value: "43614c17d9bdfa2339050634318678a1"
-      algorithm: "MD5"
-  source_artifact:
-    url: "https://files.pythonhosted.org/packages/cc/83/7ea9d9b3a6ff3225aca2fce5e4df373bee7e0a74c539711a4fbfda53374f/setuptools-65.3.0.tar.gz"
-    hash:
-      value: "66c6b8819c5306c12c38d7fad41b7f99"
-      algorithm: "MD5"
-  vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/pypa/setuptools.git"
     revision: ""
     path: ""
 - id: "PyPI::six:1.16.0"

@@ -25,7 +25,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -244,7 +243,7 @@ class Pip(
         val virtualEnvDir = setupVirtualEnv(workingDir, definitionFile, pythonMajorVersion)
 
         val project = getProjectBasics(definitionFile, virtualEnvDir)
-        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir)
+        val (packages, installDependencies) = getInstallDependencies(definitionFile, virtualEnvDir, pythonMajorVersion)
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
@@ -340,7 +339,8 @@ class Pip(
 
     private fun getInstallDependencies(
         definitionFile: File,
-        virtualEnvDir: File
+        virtualEnvDir: File,
+        pythonMajorVersion: Int
     ): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val packages = sortedSetOf<Package>()
         val installDependencies = sortedSetOf<PackageReference>()
@@ -349,12 +349,23 @@ class Pip(
 
         val jsonFile = createOrtTempDir().resolve("python-inspector.json")
 
+        val pythonVersion = when (pythonMajorVersion) {
+            2 -> "2.7" // 2.7 is the only 2.x version supported by python-inspector.
+            3 -> "3.10" // 3.10 is the version currently used in the ORT Docker image.
+            else -> throw IllegalArgumentException("Unsupported Python major version '$pythonMajorVersion'.")
+        }
+
+        logger.info {
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion'."
+        }
+
         runCatching {
             try {
                 PythonInspector.run(
                     workingDir = workingDir,
                     outputFile = jsonFile.absolutePath,
-                    definitionFile = definitionFile
+                    definitionFile = definitionFile,
+                    pythonVersion = pythonVersion.replace(".", "")
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)
