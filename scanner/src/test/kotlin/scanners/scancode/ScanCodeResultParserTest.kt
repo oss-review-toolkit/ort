@@ -338,6 +338,12 @@ class ScanCodeResultParserTest : FreeSpec({
                     file should beRelative()
                     file.extension shouldBeIn fileExtensions
                 }
+
+                summary.copyrightFindings.forAll {
+                    val file = File(it.location.path)
+                    file should beRelative()
+                    file.extension shouldBeIn fileExtensions
+                }
             }
         }
 

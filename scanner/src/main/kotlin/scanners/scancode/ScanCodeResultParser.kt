@@ -162,6 +162,11 @@ private fun generateScannerOptions(options: JsonNode?): String {
     }.orEmpty()
 }
 
+private fun getInputPath(result: JsonNode): String {
+    val header = result["headers"]?.singleOrNull()
+    return header?.get("options")?.get("input")?.singleOrNull()?.textValue()?.let { "$it/" }.orEmpty()
+}
+
 /**
  * Get the license findings from the given [result]. If [parseExpressions] is true and license expressions are contained
  * in the result, these are preferred over separate license findings. Otherwise, only separate license findings are
@@ -174,8 +179,7 @@ private fun getLicenseFindings(
 ): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
-    val header = result["headers"]?.singleOrNull()
-    val input = header?.get("options")?.get("input")?.singleOrNull()?.textValue()?.let { "$it/" }.orEmpty()
+    val input = getInputPath(result)
     val files = result["files"]?.asSequence().orEmpty().filter { it["type"].textValue() == "file" }
 
     files.flatMapTo(licenseFindings) { file ->
@@ -257,9 +261,11 @@ internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collect
 private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
+    val input = getInputPath(result)
     val files = result["files"]?.asSequence().orEmpty()
+
     files.flatMapTo(copyrightFindings) { file ->
-        val path = file["path"].textValue()
+        val path = file["path"].textValue().removePrefix(input)
 
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
         copyrights.flatMap { copyright ->
@@ -273,7 +279,6 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
                 CopyrightFinding(
                     statement = statement.textValue(),
                     location = TextLocation(
-                        // The path is already relative as we run ScanCode with "--strip-root".
                         path = path,
                         startLine = startLine,
                         endLine = endLine
@@ -289,9 +294,10 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
 /**
  * Get the list of [OrtIssue]s for scanned files.
  */
-private fun getIssues(result: JsonNode): List<OrtIssue> =
-    result["files"]?.flatMap { file ->
-        val path = file["path"].textValue()
+private fun getIssues(result: JsonNode): List<OrtIssue> {
+    val input = getInputPath(result)
+    return result["files"]?.flatMap { file ->
+        val path = file["path"].textValue().removePrefix(input)
         file["scan_errors"].map {
             OrtIssue(
                 source = ScanCode.SCANNER_NAME,
@@ -299,6 +305,7 @@ private fun getIssues(result: JsonNode): List<OrtIssue> =
             )
         }
     }.orEmpty()
+}
 
 /**
  * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
