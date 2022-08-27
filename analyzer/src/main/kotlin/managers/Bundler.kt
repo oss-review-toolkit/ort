@@ -165,6 +165,7 @@ class Bundler(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = authors,
+                copyrightHolders = sortedSetOf(),
                 declaredLicenses = declaredLicenses.toSortedSet(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
@@ -281,6 +282,7 @@ class Bundler(
         return Package(
             id = gemId,
             authors = gemSpec.authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = gemSpec.declaredLicenses,
             description = gemSpec.description,
             homepageUrl = gemSpec.homepageUrl,

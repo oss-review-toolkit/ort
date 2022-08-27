@@ -327,6 +327,7 @@ class Pip(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = authors,
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
@@ -740,6 +741,7 @@ private fun Package.enrichWith(other: Package?): Package =
             homepageUrl = homepageUrl.takeUnless { it.isBlank() } ?: other.homepageUrl,
             description = description.takeUnless { it.isBlank() } ?: other.description,
             authors = authors.takeUnless { it.isEmpty() } ?: other.authors,
+            copyrightHolders = copyrightHolders.takeUnless { it.isEmpty() } ?: other.copyrightHolders,
             declaredLicenses = declaredLicenses.takeUnless { it.isEmpty() } ?: other.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed.takeUnless { declaredLicenses.isEmpty() }
                 ?: other.declaredLicensesProcessed,

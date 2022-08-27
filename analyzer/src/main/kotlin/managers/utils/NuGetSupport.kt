@@ -185,6 +185,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
             Package(
                 id = getIdentifier(id, version),
                 authors = parseAuthors(all.spec),
+                copyrightHolders = sortedSetOf(),
                 declaredLicenses = parseLicenses(all.spec),
                 description = description.orEmpty(),
                 homepageUrl = homepageUrl,
@@ -368,6 +369,7 @@ private fun PackageManager.getProject(
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         authors = parseAuthors(spec),
+        copyrightHolders = sortedSetOf(),
         declaredLicenses = parseLicenses(spec),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(workingDir),

@@ -171,6 +171,7 @@ class Conan(
                         id = projectPackage.id,
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = projectPackage.authors,
+                        copyrightHolders = sortedSetOf(),
                         declaredLicenses = projectPackage.declaredLicenses,
                         vcs = projectPackage.vcs,
                         vcsProcessed = processProjectVcs(
@@ -290,6 +291,7 @@ class Conan(
         return Package(
             id = id,
             authors = parseAuthors(node),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = parseDeclaredLicenses(node),
             description = parsePackageField(node, workingDir, "description"),
             homepageUrl = homepageUrl,
@@ -429,6 +431,7 @@ class Conan(
                 version = inspectField(definitionFile.name, workingDir, "version")
             ),
             authors = parseAuthors(node),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = parseDeclaredLicenses(node),
             description = inspectField(definitionFile.name, workingDir, "description"),
             homepageUrl = node["homepage"].textValueOrEmpty(),
@@ -449,6 +452,7 @@ class Conan(
                 version = ""
             ),
             authors = parseAuthors(node),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = parseDeclaredLicenses(node),
             description = "",
             homepageUrl = node["homepage"].textValueOrEmpty(),

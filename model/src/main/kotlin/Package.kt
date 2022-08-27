@@ -63,6 +63,13 @@ data class Package(
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
+     * The list of copyright holders declared for this package. These might be different from the list of [authors]
+     * if all or parts of the copyright has been transferred.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val copyrightHolders: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -138,6 +145,7 @@ data class Package(
             id = Identifier.EMPTY,
             purl = "",
             authors = sortedSetOf(),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,
@@ -167,6 +175,7 @@ data class Package(
 
         return PackageCurationData(
             authors = authors.takeIf { it != other.authors },
+            copyrightHolders = copyrightHolders.takeIf { it != other.copyrightHolders },
             description = description.takeIf { it != other.description },
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
