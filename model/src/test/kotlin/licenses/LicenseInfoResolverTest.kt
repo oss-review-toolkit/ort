@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
+import org.ossreviewtoolkit.model.licenses.ResolvedCopyrightSource.DETERMINED_BY_SCANNER
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
@@ -149,7 +150,8 @@ class LicenseInfoResolverTest : WordSpec() {
                         ResolvedCopyrightFinding(
                             statement = "Copyright Apache-2.0",
                             location = TextLocation("LICENSE", 1),
-                            matchingPathExcludes = emptyList()
+                            matchingPathExcludes = emptyList(),
+                            copyrightSource = DETERMINED_BY_SCANNER
                         )
                     )
                 )
@@ -167,7 +169,8 @@ class LicenseInfoResolverTest : WordSpec() {
                         ResolvedCopyrightFinding(
                             statement = "Copyright MIT",
                             location = TextLocation("LICENSE", 31),
-                            matchingPathExcludes = emptyList()
+                            matchingPathExcludes = emptyList(),
+                            copyrightSource = DETERMINED_BY_SCANNER
                         )
                     )
                 )
@@ -470,7 +473,8 @@ class LicenseInfoResolverTest : WordSpec() {
                         ResolvedCopyrightFinding(
                             statement = "(c) 2010 Holder 1",
                             location = TextLocation("LICENSE", 1),
-                            matchingPathExcludes = emptyList()
+                            matchingPathExcludes = emptyList(),
+                            copyrightSource = DETERMINED_BY_SCANNER
                         )
                     )
                 )
@@ -583,6 +587,27 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containCopyrightStatementsForLicenseExactly("LicenseRef-a")
                 result should containCopyrightStatementsForLicenseExactly("LicenseRef-b")
             }
+
+            "resolve copyrights from copyright holders" {
+                val licenseInfos = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        copyrightHolders = copyrightHolders,
+                        declaredLicenses = declaredLicenses
+                    )
+                )
+                val resolver = createResolver(licenseInfos)
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-a",
+                    "Copyright, the project author"
+                )
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-b",
+                    "Copyright, the project author"
+                )
+            }
         }
 
         "resolveLicenseFiles()" should {
@@ -642,7 +667,8 @@ class LicenseInfoResolverTest : WordSpec() {
                         ResolvedCopyrightFinding(
                             statement = "Copyright 2020 Holder",
                             location = TextLocation("LICENSE", 1),
-                            matchingPathExcludes = emptyList()
+                            matchingPathExcludes = emptyList(),
+                            copyrightSource = DETERMINED_BY_SCANNER
                         )
                     )
                 )
@@ -665,6 +691,7 @@ class LicenseInfoResolverTest : WordSpec() {
     private fun createLicenseInfo(
         id: Identifier,
         authors: SortedSet<String> = sortedSetOf(),
+        copyrightHolders: SortedSet<String> = sortedSetOf(),
         declaredLicenses: Set<String> = emptySet(),
         detectedLicenses: List<Findings> = emptyList(),
         concludedLicense: SpdxExpression? = null
@@ -673,6 +700,7 @@ class LicenseInfoResolverTest : WordSpec() {
             id = id,
             declaredLicenseInfo = DeclaredLicenseInfo(
                 authors = authors,
+                copyrightHolders = copyrightHolders,
                 licenses = declaredLicenses,
                 processed = DeclaredLicenseProcessor.process(declaredLicenses),
                 appliedCurations = emptyList()

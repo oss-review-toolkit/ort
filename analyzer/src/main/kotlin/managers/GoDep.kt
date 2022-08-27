@@ -136,6 +136,7 @@ class GoDep(
             val pkg = Package(
                 id = Identifier("Go", "", name, normalizeModuleVersion(version)),
                 authors = sortedSetOf(),
+                copyrightHolders = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -175,6 +176,7 @@ class GoDep(
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = sortedSetOf(),
+                    copyrightHolders = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = projectVcs,

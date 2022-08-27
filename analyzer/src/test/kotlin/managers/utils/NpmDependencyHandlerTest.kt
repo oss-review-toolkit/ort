@@ -76,6 +76,7 @@ class NpmDependencyHandlerTest : StringSpec({
             id shouldBe Identifier("NPM", "", "bonjour", "3.5.0")
             declaredLicenses should containExactly("MIT")
             authors should containExactly("Thomas Watson Steen")
+            copyrightHolders shouldBe emptySet<String>()
             homepageUrl shouldBe "https://github.com/watson/bonjour/local"
             description shouldBe "A Bonjour/Zeroconf implementation in pure JavaScript (local)"
         }

@@ -3,6 +3,8 @@ org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
 org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
+org.ossreviewtoolkit.reporter.reporters.aosd.AOSDExcelReporter
+org.ossreviewtoolkit.reporter.reporters.aosd.AOSD2JSONReport
 org.ossreviewtoolkit.reporter.reporters.ctrlx.CtrlXAutomationReporter
 org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.fossid.FossIdReporter

@@ -133,6 +133,7 @@ class GoMod(
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = sortedSetOf(), // Go mod doesn't support author information.
+                        copyrightHolders = sortedSetOf(), // Go mod doesn't support copyright holders.
                         declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
@@ -284,6 +285,7 @@ class GoMod(
         return Package(
             id = toId(),
             authors = sortedSetOf(), // Go mod doesn't support author information.
+            copyrightHolders = sortedSetOf(), // Go mod doesn't support copyright holders
             declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",

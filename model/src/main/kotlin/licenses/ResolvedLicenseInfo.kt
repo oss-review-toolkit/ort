@@ -279,6 +279,15 @@ data class ResolvedCopyright(
 )
 
 /**
+ * Source of resolved copyright finding
+ */
+enum class ResolvedCopyrightSource {
+    DETERMINED_BY_SCANNER,
+    SYNTHESIZED_FROM_AUTHOR,
+    PROVIDED_BY_CURATION;
+}
+
+/**
  * A resolved copyright finding.
  */
 data class ResolvedCopyrightFinding(
@@ -295,7 +304,12 @@ data class ResolvedCopyrightFinding(
     /**
      * All [PathExclude]s matching this [location].
      */
-    val matchingPathExcludes: List<PathExclude>
+    val matchingPathExcludes: List<PathExclude>,
+
+    /**
+     * The source of the copyright finding
+     */
+    val copyrightSource: ResolvedCopyrightSource
 )
 
 /**
