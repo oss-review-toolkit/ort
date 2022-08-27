@@ -82,6 +82,7 @@ class Carthage(
                     ),
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = sortedSetOf(),
+                    copyrightHolders = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY),
@@ -190,6 +191,7 @@ class Carthage(
                 version = revision
             ),
             authors = sortedSetOf(),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = projectUrl.removeSuffix(".git"),
@@ -214,6 +216,7 @@ class Carthage(
                 version = revision
             ),
             authors = sortedSetOf(),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",
@@ -232,6 +235,7 @@ class Carthage(
                 version = revision
             ),
             authors = sortedSetOf(),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             description = "",
             homepageUrl = "",

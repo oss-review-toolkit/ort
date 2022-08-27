@@ -58,6 +58,13 @@ data class PackageCurationData(
     val authors: SortedSet<String>? = null,
 
     /**
+     * The list of copyright holders declared for this package. These might be different from the list of [authors]
+     * if all or parts of the copyright has been transferred.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val copyrightHolders: SortedSet<String>? = null,
+
+    /**
      * The concluded license as an [SpdxExpression]. It can be used to correct the [declared licenses of a package]
      * [Package.declaredLicenses] in case the found in the packages metadata or the licenses detected by a scanner do
      * not match reality.
@@ -124,6 +131,7 @@ data class PackageCurationData(
         } ?: original.vcsProcessed
 
         val authors = authors ?: original.authors
+        val copyrightHolders = copyrightHolders ?: original.copyrightHolders
         val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + declaredLicenseMapping
         val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
             original.declaredLicenses,
@@ -135,6 +143,7 @@ data class PackageCurationData(
             purl = purl ?: original.purl,
             cpe = cpe ?: original.cpe,
             authors = authors,
+            copyrightHolders = copyrightHolders,
             declaredLicenses = original.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             concludedLicense = concludedLicense ?: original.concludedLicense,
@@ -174,6 +183,7 @@ data class PackageCurationData(
             purl = purl ?: other.purl,
             cpe = cpe ?: other.cpe,
             authors = (authors.orEmpty() + other.authors.orEmpty()).toSortedSet(),
+            copyrightHolders = (copyrightHolders.orEmpty() + other.copyrightHolders.orEmpty()).toSortedSet(),
             concludedLicense = setOfNotNull(concludedLicense, other.concludedLicense).reduce(SpdxExpression::and),
             description = description ?: other.description,
             homepageUrl = homepageUrl ?: other.homepageUrl,

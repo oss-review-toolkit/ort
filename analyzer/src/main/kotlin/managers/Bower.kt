@@ -117,6 +117,7 @@ class Bower(
             Package(
                 id = parsePackageId(node),
                 authors = parseAuthors(node),
+                copyrightHolders = sortedSetOf(),
                 declaredLicenses = parseDeclaredLicenses(node),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
@@ -252,6 +253,7 @@ class Bower(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = projectPackage.authors,
+                copyrightHolders = sortedSetOf(),
                 declaredLicenses = projectPackage.declaredLicenses,
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),

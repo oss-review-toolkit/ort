@@ -51,6 +51,8 @@ class CarthageTest : WordSpec() {
                         id.type shouldBe "Carthage"
                         vcs.url shouldBe "https://github.com/Alamofire/AlamofireImage.git"
                         vcs.revision shouldBe "3.2.0"
+                        authors shouldBe emptySet()
+                        copyrightHolders shouldBe emptySet()
                     }
                 }
             }
@@ -67,6 +69,8 @@ class CarthageTest : WordSpec() {
                         vcs.type shouldBe VcsType.GIT
                         vcs.url shouldBe "https://host.tld/path/to/project.git"
                         vcs.revision shouldBe "1.0.0"
+                        authors shouldBe emptySet()
+                        copyrightHolders shouldBe emptySet()
                     }
                 }
             }
@@ -85,6 +89,8 @@ class CarthageTest : WordSpec() {
                         id.type shouldBe "Carthage"
                         id.name shouldBe "spec"
                         binaryArtifact.url shouldBe "https://host.tld/path/to/binary/dependency.zip"
+                        authors shouldBe emptySet()
+                        copyrightHolders shouldBe emptySet()
                     }
                 }
             }
@@ -102,6 +108,8 @@ class CarthageTest : WordSpec() {
                     size shouldBe 3
                     forEach {
                         it.id.type shouldBe "Carthage"
+                        it.authors shouldBe emptySet()
+                        it.copyrightHolders shouldBe emptySet()
                     }
                     count { "user/project" in it.vcs.url } shouldBe 1
                     count { "user-2/project_2" in it.vcs.url } shouldBe 1

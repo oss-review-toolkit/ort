@@ -583,6 +583,27 @@ class LicenseInfoResolverTest : WordSpec() {
                 result should containCopyrightStatementsForLicenseExactly("LicenseRef-a")
                 result should containCopyrightStatementsForLicenseExactly("LicenseRef-b")
             }
+
+            "resolve copyrights from copyright holders" {
+                val licenseInfos = listOf(
+                    createLicenseInfo(
+                        id = pkgId,
+                        copyrightHolders = copyrightHolders,
+                        declaredLicenses = declaredLicenses
+                    )
+                )
+                val resolver = createResolver(licenseInfos)
+
+                val result = resolver.resolveLicenseInfo(pkgId)
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-a",
+                    "Copyright, the project author"
+                )
+                result should containCopyrightStatementsForLicenseExactly(
+                    "LicenseRef-b",
+                    "Copyright, the project author"
+                )
+            }
         }
 
         "resolveLicenseFiles()" should {
@@ -665,6 +686,7 @@ class LicenseInfoResolverTest : WordSpec() {
     private fun createLicenseInfo(
         id: Identifier,
         authors: SortedSet<String> = sortedSetOf(),
+        copyrightHolders: SortedSet<String> = sortedSetOf(),
         declaredLicenses: Set<String> = emptySet(),
         detectedLicenses: List<Findings> = emptyList(),
         concludedLicense: SpdxExpression? = null
@@ -673,6 +695,7 @@ class LicenseInfoResolverTest : WordSpec() {
             id = id,
             declaredLicenseInfo = DeclaredLicenseInfo(
                 authors = authors,
+                copyrightHolders = copyrightHolders,
                 licenses = declaredLicenses,
                 processed = DeclaredLicenseProcessor.process(declaredLicenses),
                 appliedCurations = emptyList()

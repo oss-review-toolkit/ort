@@ -63,6 +63,13 @@ data class Project(
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
+     * The list of copyright holders declared for this package. These might be different from the list of [authors]
+     * if all or parts of the copyright has been transferred.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val copyrightHolders: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The list of licenses the authors have declared for this project. This does not necessarily correspond to the
      * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -115,6 +122,7 @@ data class Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
             authors = sortedSetOf(),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
@@ -173,6 +181,7 @@ data class Project(
         Package(
             id = id,
             authors = authors,
+            copyrightHolders = copyrightHolders,
             declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = homepageUrl,

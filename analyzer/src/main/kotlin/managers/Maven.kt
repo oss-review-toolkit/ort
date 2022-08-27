@@ -144,6 +144,7 @@ class Maven(
             id = projectId,
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = MavenSupport.parseAuthors(mavenProject),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             vcs = vcsFromPackage,

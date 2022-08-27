@@ -236,6 +236,7 @@ class Composer(
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = parseAuthors(json),
+            copyrightHolders = sortedSetOf(),
             declaredLicenses = parseDeclaredLicenses(json),
             vcs = vcs,
             vcsProcessed = processProjectVcs(definitionFile.parentFile, vcs, homepageUrl),
@@ -268,6 +269,7 @@ class Composer(
                         version = version
                     ),
                     authors = parseAuthors(pkgInfo),
+                    copyrightHolders = sortedSetOf(),
                     declaredLicenses = parseDeclaredLicenses(pkgInfo),
                     description = pkgInfo["description"].textValueOrEmpty(),
                     homepageUrl = homepageUrl,

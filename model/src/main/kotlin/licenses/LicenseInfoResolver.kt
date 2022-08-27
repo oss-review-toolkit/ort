@@ -117,6 +117,26 @@ class LicenseInfoResolver(
                         }
                     )
                 }
+
+                licenseInfo.declaredLicenseInfo.copyrightHolders.takeIf { it.isNotEmpty() }?.also {
+                    locations += ResolvedLicenseLocation(
+                        provenance = UnknownProvenance,
+                        location = UNDEFINED_TEXT_LOCATION,
+                        appliedCuration = null,
+                        matchingPathExcludes = emptyList(),
+                        copyrights = it.mapTo(mutableSetOf()) { copyrightHolder ->
+                            val statement = "Copyright (C) $copyrightHolder".takeUnless {
+                                copyrightHolder.contains("Copyright", ignoreCase = true)
+                            } ?: copyrightHolder
+
+                            ResolvedCopyrightFinding(
+                                statement = statement,
+                                location = UNDEFINED_TEXT_LOCATION,
+                                matchingPathExcludes = emptyList()
+                            )
+                        }
+                    )
+                }
             }
         }
 
