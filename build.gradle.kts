@@ -58,9 +58,9 @@ if (version == Project.DEFAULT_VERSION) {
         // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty", which is what is used in
         // "scripts/docker_build.sh", to make the hash match what JitPack uses.
         val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).call()
-        val isDirty = git.status().call().hasUncommittedChanges()
 
-        if (isDirty) "$description-dirty" else description
+        // Simulate the "--dirty" option with JGit.
+        description.takeUnless { git.status().call().hasUncommittedChanges() } ?: "$description-dirty"
     }
 }
 
