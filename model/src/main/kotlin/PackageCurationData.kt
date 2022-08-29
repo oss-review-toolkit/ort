@@ -122,7 +122,6 @@ data class PackageCurationData(
             ).normalize()
         } ?: original.vcsProcessed
 
-        val authors = authors ?: original.authors
         val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + declaredLicenseMapping
         val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
             original.declaredLicenses,
@@ -133,7 +132,7 @@ data class PackageCurationData(
             id = original.id,
             purl = purl ?: original.purl,
             cpe = cpe ?: original.cpe,
-            authors = authors,
+            authors = authors ?: original.authors,
             declaredLicenses = original.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
             concludedLicense = concludedLicense ?: original.concludedLicense,
