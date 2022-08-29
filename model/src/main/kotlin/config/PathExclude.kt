@@ -45,6 +45,9 @@ data class PathExclude(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {
+    /**
+     * Return true if and only if this [PathExclude] matches the given [path].
+     */
     fun matches(path: String) = FileMatcher.match(
         pattern = pattern.removePrefix("./"),
         path = path
