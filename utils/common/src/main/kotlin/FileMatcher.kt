@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2022 Bosch.IO GmbH
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,13 +40,36 @@ class FileMatcher(
 ) {
     constructor(vararg patterns: String, ignoreCase: Boolean = false) : this(patterns.asList(), ignoreCase)
 
-    private val matcher = AntPathMatcher().apply {
-        setCaseSensitive(!ignoreCase)
+    companion object {
+        private val matchCaseInsensitive = AntPathMatcher().apply { setCaseSensitive(false) }::match
+        private val matchCaseSensitive = AntPathMatcher().apply { setCaseSensitive(true) }::match
+
+        /**
+         * Return true if [path] is matched by [pattern], false otherwise. The [path] must use '/' as separators, if it
+         * contains any.
+         */
+        fun match(pattern: String, path: String, ignoreCase: Boolean = false) =
+            when (ignoreCase) {
+                true -> matchCaseInsensitive(pattern, path)
+                false -> matchCaseSensitive(pattern, path)
+            }
+
+        /**
+         * Return true if [path] is matched by any of [patterns], false otherwise. The [path] must use '/' as
+         * separators, if it contains any.
+         */
+        fun match(patterns: Collection<String>, path: String, ignoreCase: Boolean = false) =
+            when (ignoreCase) {
+                true -> patterns.any { pattern -> matchCaseInsensitive(pattern, path) }
+                false -> patterns.any { pattern -> matchCaseSensitive(pattern, path) }
+            }
     }
 
+    private val match = if (ignoreCase) matchCaseInsensitive else matchCaseSensitive
+
     /**
-     * Return true if and only if the given [path] is matched by any of the file globs passed to the
-     * constructor. The [path] must use '/' as separators, if it contains any.
+     * Return true if [path] is matched by any of [patterns], false otherwise. The [path] must use '/' as separators,
+     * if it contains any.
      */
-    fun matches(path: String): Boolean = patterns.any { pattern -> matcher.match(pattern, path) }
+    fun matches(path: String): Boolean = patterns.any { pattern -> match(pattern, path) }
 }
