@@ -22,7 +22,7 @@ repository:
       - pattern: "sub/module/project/build.gradle"
         reason: "EXAMPLE_OF"
         comment: "The project is an example."
-      - pattern: "**.java"
+      - pattern: "**/*.java"
         reason: "EXAMPLE_OF"
         comment: "These are example files."
       scopes:

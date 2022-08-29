@@ -54,7 +54,7 @@ see [excluding paths](config-file-ort-yml.md#excluding-paths) and
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
@@ -137,7 +137,7 @@ The code below shows an example for `packages.yml`:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
@@ -151,7 +151,7 @@ The code below shows an example for `packages.yml`:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"

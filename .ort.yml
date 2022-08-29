@@ -61,7 +61,7 @@ curations:
     reason: "DATA_OF"
     comment: >-
       These files are part of PHP Composer and include a mapping from human readable strings to SPDX license ids.
-  - path: "docs/**.md"
+  - path: "docs/**/*.md"
     concluded_license: "Apache-2.0"
     reason: "DOCUMENTATION_OF"
     comment: >-

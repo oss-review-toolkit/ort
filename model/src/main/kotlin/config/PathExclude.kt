@@ -21,8 +21,7 @@ package org.ossreviewtoolkit.model.config
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.nio.file.FileSystems
-import java.nio.file.Paths
+import org.ossreviewtoolkit.utils.common.FileMatcher
 
 /**
  * Defines paths which should be excluded. Each file that is matched by the [glob][pattern] is marked as excluded. If a
@@ -46,9 +45,8 @@ data class PathExclude(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val comment: String = ""
 ) {
-    private val glob by lazy {
-        FileSystems.getDefault().getPathMatcher("glob:${pattern.removePrefix("./")}")
-    }
-
-    fun matches(path: String) = glob.matches(Paths.get(path))
+    fun matches(path: String) = FileMatcher.match(
+        pattern = pattern.removePrefix("./"),
+        path = path
+    )
 }

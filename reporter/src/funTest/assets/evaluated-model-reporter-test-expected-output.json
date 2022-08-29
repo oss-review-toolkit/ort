@@ -6,7 +6,7 @@
     "comment" : "The project is an example."
   }, {
     "_id" : 1,
-    "pattern" : "**.java",
+    "pattern" : "**/*.java",
     "reason" : "EXAMPLE_OF",
     "comment" : "These are example files."
   } ],
@@ -1047,7 +1047,7 @@
   },
   "severe_issue_threshold" : "WARNING",
   "severe_rule_violation_threshold" : "WARNING",
-  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
+  "repository_configuration" : "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern: \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment: \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n    - given: \"MPL-2.0 OR EPL-1.0\"\n      choice: \"MPL-2.0\"\n",
   "labels" : {
     "job_parameters.JOB_PARAM_1" : "label job param 1",
     "job_parameters.JOB_PARAM_2" : "label job param 2",
