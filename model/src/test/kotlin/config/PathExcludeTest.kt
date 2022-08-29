@@ -25,15 +25,13 @@ import io.kotest.matchers.shouldBe
 /**
  * This class tests [PathExclude] members functions
  */
-class PathExcludeTest : WordSpec() {
-    init {
-        "isPathExcluded" should {
-            "ignore leading './' in the matching path" {
-                val pathExcludeWithLeadingDot = PathExclude("./path1", PathExcludeReason.BUILD_TOOL_OF, "")
+class PathExcludeTest : WordSpec({
+    "isPathExcluded" should {
+        "ignore leading './' in the matching path" {
+            val pathExcludeWithLeadingDot = PathExclude("./path1", PathExcludeReason.BUILD_TOOL_OF, "")
 
-                pathExcludeWithLeadingDot.matches("path1") shouldBe true
-                pathExcludeWithLeadingDot.matches("path2") shouldBe false
-            }
+            pathExcludeWithLeadingDot.matches("path1") shouldBe true
+            pathExcludeWithLeadingDot.matches("path2") shouldBe false
         }
     }
-}
+})
