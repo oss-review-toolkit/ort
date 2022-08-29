@@ -139,6 +139,10 @@ object PythonVersion : CommandLineTool, Logging {
 object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
 
+    override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
+
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.6.5,)")
+
     fun run(
         workingDir: File,
         outputFile: String,

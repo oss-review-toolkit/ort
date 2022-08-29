@@ -29,7 +29,7 @@ ARG CRT_FILES=""
 ARG SCANCODE_VERSION="30.1.0"
 
 # Set this to the Python Inspector version to use.
-ARG PYTHON_INSPECTOR_VERSION="0.6.4"
+ARG PYTHON_INSPECTOR_VERSION="0.6.5"
 
 FROM eclipse-temurin:11-jdk-jammy AS build
 
