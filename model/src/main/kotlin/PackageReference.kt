@@ -54,7 +54,7 @@ data class PackageReference(
     override val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
-     * The list of references to packages this package depends on. Note that this list depends on the scope in
+     * The set of references to packages this package depends on. Note that this list depends on the scope in
      * which this package reference is used.
      */
     val dependencies: SortedSet<PackageReference> = sortedSetOf(),

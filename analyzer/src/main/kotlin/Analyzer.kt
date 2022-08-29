@@ -278,7 +278,7 @@ private class PackageManagerRunner(
     val mustRunAfter: Set<String>,
 
     /**
-     * A [StateFlow] that updates with the list of already finished package managers.
+     * A [StateFlow] that updates with the set of already finished package managers.
      */
     val finishedPackageManagersState: StateFlow<Set<String>>,
 

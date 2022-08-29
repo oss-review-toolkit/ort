@@ -53,7 +53,7 @@ data class PackageCurationData(
     val cpe: String? = null,
 
     /**
-     * The list of authors of this package.
+     * The set of authors of this package.
      */
     val authors: SortedSet<String>? = null,
 

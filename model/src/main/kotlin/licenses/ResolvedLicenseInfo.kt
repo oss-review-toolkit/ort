@@ -147,7 +147,7 @@ data class ResolvedLicense(
     val license: SpdxSingleLicenseExpression,
 
     /**
-     * The list of original declared license that were [processed][DeclaredLicenseProcessor] to this [license], or an
+     * The set of original declared license that were [processed][DeclaredLicenseProcessor] to this [license], or an
      * empty list, if this [license] was not modified during processing.
      */
     val originalDeclaredLicenses: Set<String>,
