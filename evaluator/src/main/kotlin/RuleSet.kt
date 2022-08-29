@@ -42,7 +42,7 @@ class RuleSet(
     companion object : Logging
 
     /**
-     * The list of all issues created by the rules of this [RuleSet].
+     * The set of all issues created by the rules of this [RuleSet].
      */
     val violations = mutableSetOf<RuleViolation>()
 

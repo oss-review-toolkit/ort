@@ -57,13 +57,13 @@ data class Project(
     val definitionFilePath: String,
 
     /**
-     * The list of authors declared for this project.
+     * The set of authors declared for this project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
-     * The list of licenses declared for this project. This does not necessarily correspond to the licenses as detected
+     * The set of licenses declared for this project. This does not necessarily correspond to the licenses as detected
      * by a scanner. Both need to be taken into account for any conclusions.
      */
     val declaredLicenses: SortedSet<String>,
