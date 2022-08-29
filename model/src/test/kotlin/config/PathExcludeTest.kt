@@ -29,6 +29,14 @@ class PathExcludeTest : WordSpec({
 
             pathExclude.matches("path") shouldBe true
         }
+
+        "match zero up to multiple segments for a leading double asterisk" {
+            val pathExclude = pathExclude("**/path/file.ext")
+
+            pathExclude.matches("path/file.ext") shouldBe false // TODO: matches() should return true in this case.
+            pathExclude.matches("1/path/file.ext") shouldBe true
+            pathExclude.matches("1/2/path/file.ext") shouldBe true
+        }
     }
 })
 
