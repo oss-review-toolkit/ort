@@ -81,7 +81,7 @@ class LicenseInfoResolver(
         // Handle concluded licenses.
         concludedLicenses.forEach { license ->
             license.builder().apply {
-                licenseInfo.concludedLicenseInfo.concludedLicense?.let {
+                licenseInfo.concludedLicenseInfo.concludedLicense?.also {
                     originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.CONCLUDED)
                 }
             }
@@ -90,7 +90,7 @@ class LicenseInfoResolver(
         // Handle declared licenses.
         declaredLicenses.forEach { license ->
             license.builder().apply {
-                licenseInfo.declaredLicenseInfo.processed.spdxExpression?.let {
+                licenseInfo.declaredLicenseInfo.processed.spdxExpression?.also {
                     originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.DECLARED)
                 }
 
@@ -145,7 +145,7 @@ class LicenseInfoResolver(
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
-                resolvedLocations[license]?.let { locations += it }
+                resolvedLocations[license]?.also { locations += it }
 
                 originalExpressions += detectedLicenses.entries.filter { (expression, _) ->
                     license in expression.decompose()
