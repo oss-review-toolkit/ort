@@ -5,7 +5,7 @@ path_excludes:
   reason: "EXAMPLE_OF"
   comment: "The project is an example."
 - _id: 1
-  pattern: "**.java"
+  pattern: "**/*.java"
   reason: "EXAMPLE_OF"
   comment: "These are example files."
 scope_excludes:
@@ -943,7 +943,7 @@ severe_issue_threshold: "WARNING"
 severe_rule_violation_threshold: "WARNING"
 repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/project/build.gradle\"\
   \n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern:\
-  \ \"**.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
+  \ \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
   \n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n\
   \    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n\
   \  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment:\

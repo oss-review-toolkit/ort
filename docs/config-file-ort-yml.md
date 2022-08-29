@@ -144,7 +144,7 @@ e.g.:
 ```yaml
 curations:
   license_findings:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"

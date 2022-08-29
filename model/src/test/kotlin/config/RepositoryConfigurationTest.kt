@@ -41,7 +41,7 @@ class RepositoryConfigurationTest : WordSpec({
             val configuration = """
                 excludes:
                   paths:
-                  - pattern: "android/**build.gradle"
+                  - pattern: "android/**/build.gradle"
                     reason: "BUILD_TOOL_OF"
                     comment: "project comment"
                 """.trimIndent()
