@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-/**
- * This class tests [PathExclude] members functions
- */
 class PathExcludeTest : WordSpec({
     "isPathExcluded" should {
         "ignore leading './' in the matching path" {
