@@ -155,7 +155,7 @@ val ORT_RESULT = OrtResult(
             ),
             packages = sortedSetOf(
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("NPM:@ort:no-license-file:1.0"),
                         declaredLicenses = sortedSetOf(),
                         description = "",
@@ -166,7 +166,7 @@ val ORT_RESULT = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("NPM:@ort:license-file:1.0"),
                         declaredLicenses = sortedSetOf(),
                         description = "",
@@ -183,7 +183,7 @@ val ORT_RESULT = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
                         declaredLicenses = sortedSetOf(),
                         description = "",
@@ -200,7 +200,7 @@ val ORT_RESULT = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("NPM:@ort:concluded-license:1.0"),
                         declaredLicenses = sortedSetOf("BSD-3-Clause"),
                         concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
@@ -218,7 +218,7 @@ val ORT_RESULT = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("NPM:@ort:declared-license:1.0"),
                         declaredLicenses = sortedSetOf("MIT"),
                         description = "",

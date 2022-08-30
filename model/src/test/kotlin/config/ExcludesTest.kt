@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val pkg = CuratedPackage(pkg = Package.EMPTY.copy(id = id))
+    private val pkg = CuratedPackage(metadata = Package.EMPTY.copy(id = id))
 
     private val projectId1 = id.copy(name = "project1")
     private val projectId2 = id.copy(name = "project2")

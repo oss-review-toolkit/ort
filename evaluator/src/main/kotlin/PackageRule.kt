@@ -54,9 +54,9 @@ open class PackageRule(
     @Suppress("UNUSED") // This is intended to be used by rule implementations.
     val uncuratedPkg by lazy { pkg.toUncuratedPackage() }
 
-    override val description = "Evaluating rule '$name' for package '${pkg.pkg.id.toCoordinates()}'."
+    override val description = "Evaluating rule '$name' for package '${pkg.metadata.id.toCoordinates()}'."
 
-    override fun issueSource() = "$name - ${pkg.pkg.id.toCoordinates()}"
+    override fun issueSource() = "$name - ${pkg.metadata.id.toCoordinates()}"
 
     override fun runInternal() {
         licenseRules.forEach { it.evaluate() }
@@ -71,7 +71,7 @@ open class PackageRule(
 
             override fun matches(): Boolean {
                 val run = ruleSet.ortResult.advisor ?: return false
-                return run.results.getVulnerabilities(pkg.pkg.id).isNotEmpty()
+                return run.results.getVulnerabilities(pkg.metadata.id).isNotEmpty()
             }
         }
     }
@@ -86,7 +86,7 @@ open class PackageRule(
 
             override fun matches(): Boolean {
                 val run = ruleSet.ortResult.advisor ?: return false
-                return run.results.getVulnerabilities(pkg.pkg.id)
+                return run.results.getVulnerabilities(pkg.metadata.id)
                     .filter { vulnerability -> !ruleSet.resolutionProvider.isResolved(vulnerability) }
                     .flatMap { it.references }
                     .filter { reference -> reference.scoringSystem == scoringSystem }
@@ -112,7 +112,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isExcluded()"
 
-            override fun matches() = ruleSet.ortResult.isExcluded(pkg.pkg.id)
+            override fun matches() = ruleSet.ortResult.isExcluded(pkg.metadata.id)
         }
 
     /**
@@ -123,7 +123,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isFromOrg(${names.joinToString()})"
 
-            override fun matches() = pkg.pkg.id.isFromOrg(*names)
+            override fun matches() = pkg.metadata.id.isFromOrg(*names)
         }
 
     /**
@@ -133,7 +133,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isMetaDataOnly()"
 
-            override fun matches() = pkg.pkg.isMetaDataOnly
+            override fun matches() = pkg.metadata.isMetaDataOnly
         }
 
     /**
@@ -143,7 +143,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isProject()"
 
-            override fun matches() = ruleSet.ortResult.isProject(pkg.pkg.id)
+            override fun matches() = ruleSet.ortResult.isProject(pkg.metadata.id)
         }
 
     /**
@@ -153,7 +153,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isType($type)"
 
-            override fun matches() = pkg.pkg.id.type == type
+            override fun matches() = pkg.metadata.id.type == type
         }
 
     /**
@@ -161,7 +161,7 @@ open class PackageRule(
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
-            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.pkg.id), licenseView)
+            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.metadata.id), licenseView)
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
                 resolvedLicense.sources.forEach { licenseSource ->
                     licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
@@ -170,22 +170,22 @@ open class PackageRule(
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =
-        issue(severity, pkg.pkg.id, null, null, message, howToFix)
+        issue(severity, pkg.metadata.id, null, null, message, howToFix)
 
     /**
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
-    fun hint(message: String, howToFix: String) = hint(pkg.pkg.id, null, null, message, howToFix)
+    fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, null, null, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
-    fun warning(message: String, howToFix: String) = warning(pkg.pkg.id, null, null, message, howToFix)
+    fun warning(message: String, howToFix: String) = warning(pkg.metadata.id, null, null, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
-    fun error(message: String, howToFix: String) = error(pkg.pkg.id, null, null, message, howToFix)
+    fun error(message: String, howToFix: String) = error(pkg.metadata.id, null, null, message, howToFix)
 
     /**
      * A [Rule] to check a single license of the [package][pkg].
@@ -218,7 +218,7 @@ open class PackageRule(
                 "'${resolvedLicense.license}'."
 
         override fun issueSource() =
-            "$name - ${pkg.pkg.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
+            "$name - ${pkg.metadata.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
 
         /**
          * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is
@@ -247,21 +247,24 @@ open class PackageRule(
             }
 
         fun issue(severity: Severity, message: String, howToFix: String) =
-            issue(severity, pkg.pkg.id, license, licenseSource, message, howToFix)
+            issue(severity, pkg.metadata.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [hint][Severity.HINT] to the list of [violations].
          */
-        fun hint(message: String, howToFix: String) = hint(pkg.pkg.id, license, licenseSource, message, howToFix)
+        fun hint(message: String, howToFix: String) =
+            hint(pkg.metadata.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [warning][Severity.WARNING] to the list of [violations].
          */
-        fun warning(message: String, howToFix: String) = warning(pkg.pkg.id, license, licenseSource, message, howToFix)
+        fun warning(message: String, howToFix: String) =
+            warning(pkg.metadata.id, license, licenseSource, message, howToFix)
 
         /**
          * Add an [error][Severity.ERROR] to the list of [violations].
          */
-        fun error(message: String, howToFix: String) = error(pkg.pkg.id, license, licenseSource, message, howToFix)
+        fun error(message: String, howToFix: String) =
+            error(pkg.metadata.id, license, licenseSource, message, howToFix)
     }
 }

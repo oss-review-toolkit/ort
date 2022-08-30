@@ -48,7 +48,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {
-        val duplicateIds = (projects.map { it.id } + packages.map { it.pkg.id }).getDuplicates()
+        val duplicateIds = (projects.map { it.id } + packages.map { it.metadata.id }).getDuplicates()
         require(duplicateIds.isEmpty()) {
             "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
         }

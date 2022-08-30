@@ -65,7 +65,7 @@ projects:
       dependencies:
       - id: "NPM::node-fetch:2.6.0"
 packages:
-- package:
+- metadata:
     id: "NPM::node-fetch:2.6.0"
     purl: "pkg:npm/node-fetch@2.6.0"
     authors:
@@ -97,7 +97,7 @@ packages:
       revision: "95286f52bb866283bc69521a04efe1de37b26a33"
       path: ""
   curations: []
-- package:
+- metadata:
     id: "NPM:@here:harp-fetch:0.3.6"
     purl: "pkg:npm/%40here/harp-fetch@0.3.6"
     authors:
@@ -129,7 +129,7 @@ packages:
       revision: "0c2857f958a34ef7638384afada4fceec427d48d"
       path: "@here/harp-fetch"
   curations: []
-- package:
+- metadata:
     id: "NPM:@here:harp-fetch:0.11.0"
     purl: "pkg:npm/%40here/harp-fetch@0.11.0"
     authors:

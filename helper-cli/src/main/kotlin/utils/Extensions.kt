@@ -237,7 +237,7 @@ internal fun OrtResult.getViolatedRulesByLicense(
  * Return the Package with the given [id] denoting either a [Project] or a [Package].
  */
 internal fun OrtResult.getPackageOrProject(id: Identifier): Package? =
-    getProject(id)?.toPackage() ?: getPackage(id)?.pkg
+    getProject(id)?.toPackage() ?: getPackage(id)?.metadata
 
 /**
  * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.

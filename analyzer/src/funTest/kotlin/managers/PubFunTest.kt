@@ -129,7 +129,9 @@ class PubFunTest : WordSpec() {
                 // Reduce the analyzer result to only the Pub project and its dependencies.
                 val reducedAnalyzerResult = AnalyzerResult(
                     projects = sortedSetOf(project),
-                    packages = analyzerResult.packages.filterTo(sortedSetOf()) { it.pkg.id in projectDependencies },
+                    packages = analyzerResult.packages.filterTo(sortedSetOf()) {
+                        it.metadata.id in projectDependencies
+                    },
                     issues = analyzerResult.issues
                 )
 
@@ -176,16 +178,16 @@ class PubFunTest : WordSpec() {
         val packages = analyzer?.result?.packages?.toMutableSet()
         val aapt2Package =
             packages?.find {
-                it.pkg.id.type == "Maven" &&
-                        it.pkg.id.namespace == "com.android.tools.build" &&
-                        it.pkg.id.name == "aapt2"
+                it.metadata.id.type == "Maven" &&
+                        it.metadata.id.namespace == "com.android.tools.build" &&
+                        it.metadata.id.name == "aapt2"
             }
 
         val patchedPackages = packages?.map { pkg ->
             if (pkg == aapt2Package) {
                 aapt2Package?.copy(
-                    pkg = aapt2Package.pkg.copy(
-                        binaryArtifact = aapt2Package.pkg.binaryArtifact.copy(
+                    metadata = aapt2Package.metadata.copy(
+                        binaryArtifact = aapt2Package.metadata.binaryArtifact.copy(
                             url = "***",
                             hash = Hash("***", HashAlgorithm.SHA1)
                         )

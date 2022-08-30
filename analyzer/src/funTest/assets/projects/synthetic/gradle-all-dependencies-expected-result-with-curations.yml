@@ -262,7 +262,7 @@ analyzer:
               \ are defined."
             severity: "ERROR"
     packages:
-    - package:
+    - metadata:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
         authors:
@@ -301,7 +301,7 @@ analyzer:
           revision: "r4.12"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.commons:commons-lang3:3.5"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
         authors:
@@ -354,7 +354,7 @@ analyzer:
           revision: "LANG_3_5"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.commons:commons-text:1.1"
         purl: "pkg:maven/org.apache.commons/commons-text@1.1"
         authors:
@@ -393,7 +393,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
         purl: "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
         authors:
@@ -460,7 +460,7 @@ analyzer:
           path: ""
         is_meta_data_only: true
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
         authors:

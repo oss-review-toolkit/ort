@@ -97,7 +97,7 @@ class ExperimentalScanner(
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages(skipExcluded).map { it.pkg }.filterNotConcluded()
+            val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
                 .filterNotMetaDataOnly().toSet()
 
             logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }

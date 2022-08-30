@@ -224,7 +224,7 @@ analyzer:
         dependencies:
         - id: "Maven:org.scala-lang:scala-library:2.12.3"
     packages:
-    - package:
+    - metadata:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"
         purl: "pkg:maven/ch.qos.logback/logback-classic@1.2.3"
         authors:
@@ -262,7 +262,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:ch.qos.logback:logback-core:1.2.3"
         purl: "pkg:maven/ch.qos.logback/logback-core@1.2.3"
         authors:
@@ -300,7 +300,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.chuusai:shapeless_2.12:2.3.2"
         purl: "pkg:maven/com.chuusai/shapeless_2.12@2.3.2"
         authors:
@@ -335,7 +335,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-annotations@2.8.0"
         authors:
@@ -373,7 +373,7 @@ analyzer:
           revision: "jackson-annotations-2.8.0"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.8.9"
         authors:
@@ -410,7 +410,7 @@ analyzer:
           revision: "jackson-core-2.8.9"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
         purl: "pkg:maven/com.fasterxml.jackson.core/jackson-databind@2.8.9"
         authors:
@@ -448,7 +448,7 @@ analyzer:
           revision: "jackson-databind-2.8.9"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.github.julien-truffaut:monocle-core_2.12:1.4.0"
         purl: "pkg:maven/com.github.julien-truffaut/monocle-core_2.12@1.4.0"
         authors:
@@ -484,7 +484,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
         purl: "pkg:maven/com.github.julien-truffaut/monocle-macro_2.12@1.4.0"
         authors:
@@ -520,7 +520,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
         purl: "pkg:maven/com.github.pureconfig/pureconfig-macros_2.12@0.8.0"
         authors:
@@ -555,7 +555,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
         purl: "pkg:maven/com.github.pureconfig/pureconfig_2.12@0.8.0"
         authors:
@@ -594,7 +594,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.typesafe:config:1.3.1"
         purl: "pkg:maven/com.typesafe/config@1.3.1"
         authors:
@@ -629,7 +629,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.typesafe:ssl-config-core_2.12:0.2.2"
         purl: "pkg:maven/com.typesafe/ssl-config-core_2.12@0.2.2"
         authors:
@@ -665,7 +665,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"
         purl: "pkg:maven/com.typesafe.akka/akka-actor_2.12@2.5.6"
         authors:
@@ -700,7 +700,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"
         purl: "pkg:maven/com.typesafe.akka/akka-stream_2.12@2.5.6"
         authors:
@@ -735,7 +735,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"
         purl: "pkg:maven/com.typesafe.scala-logging/scala-logging_2.12@3.7.2"
         authors:
@@ -771,7 +771,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:net.logstash.logback:logstash-logback-encoder:4.11"
         purl: "pkg:maven/net.logstash.logback/logstash-logback-encoder@4.11"
         authors:
@@ -810,7 +810,7 @@ analyzer:
           revision: "logstash-logback-encoder-4.11"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.reactivestreams:reactive-streams:1.0.1"
         purl: "pkg:maven/org.reactivestreams/reactive-streams@1.0.1"
         authors:
@@ -844,7 +844,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang:scala-compiler:2.12.3"
         purl: "pkg:maven/org.scala-lang/scala-compiler@2.12.3"
         authors:
@@ -879,7 +879,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang:scala-library:2.12.3"
         purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
         authors:
@@ -914,7 +914,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang:scala-reflect:2.12.2"
         purl: "pkg:maven/org.scala-lang/scala-reflect@2.12.2"
         authors:
@@ -949,7 +949,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0"
         purl: "pkg:maven/org.scala-lang.modules/scala-java8-compat_2.12@0.8.0"
         authors:
@@ -985,7 +985,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
         purl: "pkg:maven/org.scala-lang.modules/scala-parser-combinators_2.12@1.0.4"
         authors:
@@ -1021,7 +1021,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
         purl: "pkg:maven/org.scala-lang.modules/scala-xml_2.12@1.0.5"
         authors:
@@ -1057,7 +1057,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scala-sbt:test-interface:1.0"
         purl: "pkg:maven/org.scala-sbt/test-interface@1.0"
         authors:
@@ -1096,7 +1096,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
         purl: "pkg:maven/org.scalacheck/scalacheck_2.12@1.13.5"
         authors:
@@ -1131,7 +1131,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
         purl: "pkg:maven/org.scalactic/scalactic_2.12@3.0.4"
         authors:
@@ -1168,7 +1168,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scalatest:scalatest_2.12:3.0.4"
         purl: "pkg:maven/org.scalatest/scalatest_2.12@3.0.4"
         authors:
@@ -1205,7 +1205,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
         purl: "pkg:maven/org.scalaz/scalaz-core_2.12@7.2.8"
         authors:
@@ -1249,7 +1249,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
         purl: "pkg:maven/org.slf4j/jcl-over-slf4j@1.7.25"
         authors:
@@ -1284,7 +1284,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.slf4j:slf4j-api:1.7.25"
         purl: "pkg:maven/org.slf4j/slf4j-api@1.7.25"
         authors:
@@ -1319,7 +1319,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.typelevel:macro-compat_2.12:1.1.1"
         purl: "pkg:maven/org.typelevel/macro-compat_2.12@1.1.1"
         authors:

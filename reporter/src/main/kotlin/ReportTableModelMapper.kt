@@ -147,7 +147,7 @@ class ReportTableModelMapper(
                     it.summary.issues
                 }.orEmpty()
 
-                val packageForId = ortResult.getPackage(id)?.pkg ?: ortResult.getProject(id)?.toPackage()
+                val packageForId = ortResult.getPackage(id)?.metadata ?: ortResult.getProject(id)?.toPackage()
 
                 DependencyRow(
                     id = id,

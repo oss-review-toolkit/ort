@@ -918,7 +918,7 @@ projects:
       dependencies:
       - id: "Pub:lints:lints:1.0.1"
 packages:
-- package:
+- metadata:
     id: "Maven:androidx.activity:activity:1.0.0"
     purl: "pkg:maven/androidx.activity/activity@1.0.0"
     authors:
@@ -953,7 +953,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.annotation:annotation:1.2.0"
     purl: "pkg:maven/androidx.annotation/annotation@1.2.0"
     authors:
@@ -990,7 +990,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.annotation:annotation-experimental:1.1.0"
     purl: "pkg:maven/androidx.annotation/annotation-experimental@1.1.0"
     authors:
@@ -1026,7 +1026,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.arch.core:core-common:2.1.0"
     purl: "pkg:maven/androidx.arch.core/core-common@2.1.0"
     authors:
@@ -1060,7 +1060,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.arch.core:core-runtime:2.0.0"
     purl: "pkg:maven/androidx.arch.core/core-runtime@2.0.0"
     authors:
@@ -1094,7 +1094,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.collection:collection:1.1.0"
     purl: "pkg:maven/androidx.collection/collection@1.1.0"
     authors:
@@ -1128,7 +1128,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.core:core:1.6.0"
     purl: "pkg:maven/androidx.core/core@1.6.0"
     authors:
@@ -1165,7 +1165,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.customview:customview:1.0.0"
     purl: "pkg:maven/androidx.customview/customview@1.0.0"
     authors:
@@ -1202,7 +1202,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.fragment:fragment:1.1.0"
     purl: "pkg:maven/androidx.fragment/fragment@1.1.0"
     authors:
@@ -1239,7 +1239,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-common:2.2.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-common@2.2.0"
     authors:
@@ -1273,7 +1273,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-common-java8:2.2.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.2.0"
     authors:
@@ -1307,7 +1307,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-livedata:2.0.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.0.0"
     authors:
@@ -1341,7 +1341,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-livedata-core:2.0.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.0.0"
     authors:
@@ -1375,7 +1375,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-runtime:2.2.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.2.0"
     authors:
@@ -1409,7 +1409,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.lifecycle:lifecycle-viewmodel:2.1.0"
     purl: "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.1.0"
     authors:
@@ -1443,7 +1443,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.loader:loader:1.0.0"
     purl: "pkg:maven/androidx.loader/loader@1.0.0"
     authors:
@@ -1480,7 +1480,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.savedstate:savedstate:1.0.0"
     purl: "pkg:maven/androidx.savedstate/savedstate@1.0.0"
     authors:
@@ -1515,7 +1515,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.tracing:tracing:1.0.0"
     purl: "pkg:maven/androidx.tracing/tracing@1.0.0"
     authors:
@@ -1549,7 +1549,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.versionedparcelable:versionedparcelable:1.1.1"
     purl: "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1"
     authors:
@@ -1584,7 +1584,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.viewpager:viewpager:1.0.0"
     purl: "pkg:maven/androidx.viewpager/viewpager@1.0.0"
     authors:
@@ -1621,7 +1621,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.window:window:1.0.0-beta04"
     purl: "pkg:maven/androidx.window/window@1.0.0-beta04"
     authors:
@@ -1656,7 +1656,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:androidx.window:window-java:1.0.0-beta04"
     purl: "pkg:maven/androidx.window/window-java@1.0.0-beta04"
     authors:
@@ -1690,7 +1690,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:io.flutter:arm64_v8a_release:1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     declared_licenses: []
@@ -1718,7 +1718,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     declared_licenses: []
@@ -1746,7 +1746,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:io.flutter:flutter_embedding_release:1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     declared_licenses: []
@@ -1774,7 +1774,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:io.flutter:x86_64_release:1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-3efdf03e73dd352873fc5a7e1c0de04e52863b3a"
     declared_licenses: []
@@ -1802,7 +1802,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains:annotations:13.0"
     purl: "pkg:maven/org.jetbrains/annotations@13.0"
     authors:
@@ -1836,7 +1836,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
     purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.5.31"
     authors:
@@ -1870,7 +1870,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
     purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.5.31"
     authors:
@@ -1904,7 +1904,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
     purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.5.30"
     authors:
@@ -1938,7 +1938,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
     purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.5.30"
     authors:
@@ -1972,7 +1972,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
     purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.5.2"
     authors:
@@ -2006,7 +2006,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
     purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.5.2"
     authors:
@@ -2041,7 +2041,7 @@ packages:
       path: ""
     is_meta_data_only: true
   curations: []
-- package:
+- metadata:
     id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
     purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.5.2"
     authors:
@@ -2075,7 +2075,7 @@ packages:
       revision: ""
       path: ""
   curations: []
-- package:
+- metadata:
     id: "Pub:cupertino_icons:cupertino_icons:1.0.3"
     purl: "pkg:pub/cupertino_icons/cupertino_icons@1.0.3"
     declared_licenses: []
@@ -2104,7 +2104,7 @@ packages:
       revision: "master"
       path: "third_party/packages/cupertino_icons"
   curations: []
-- package:
+- metadata:
     id: "Pub:flutter_lints:flutter_lints:1.0.4"
     purl: "pkg:pub/flutter_lints/flutter_lints@1.0.4"
     declared_licenses: []
@@ -2133,7 +2133,7 @@ packages:
       revision: "master"
       path: "packages/flutter_lints"
   curations: []
-- package:
+- metadata:
     id: "Pub:lints:lints:1.0.1"
     purl: "pkg:pub/lints/lints@1.0.1"
     declared_licenses: []

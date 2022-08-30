@@ -211,7 +211,7 @@ private val ortResult = OrtResult(
             ),
             packages = sortedSetOf(
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                         binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
                         concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
@@ -230,7 +230,7 @@ private val ortResult = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:second-package-group:second-package:0.0.1"),
                         binaryArtifact = RemoteArtifact.EMPTY,
                         declaredLicenses = sortedSetOf(),
@@ -241,7 +241,7 @@ private val ortResult = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:third-package-group:third-package:0.0.1"),
                         binaryArtifact = RemoteArtifact.EMPTY,
                         declaredLicenses = sortedSetOf("unmappable license"),
@@ -252,7 +252,7 @@ private val ortResult = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
                         binaryArtifact = RemoteArtifact.EMPTY,
                         declaredLicenses = sortedSetOf("unmappable license", "MIT"),
@@ -263,7 +263,7 @@ private val ortResult = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
                         binaryArtifact = RemoteArtifact.EMPTY,
                         declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
@@ -276,7 +276,7 @@ private val ortResult = OrtResult(
                     )
                 ),
                 CuratedPackage(
-                    pkg = Package(
+                    metadata = Package(
                         id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
                         binaryArtifact = RemoteArtifact.EMPTY,
                         declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),

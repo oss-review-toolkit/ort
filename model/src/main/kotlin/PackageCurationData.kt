@@ -108,7 +108,7 @@ data class PackageCurationData(
      * of this [PackageCurationData], and return the resulting [CuratedPackage].
      */
     fun apply(targetPackage: CuratedPackage): CuratedPackage {
-        val original = targetPackage.pkg
+        val original = targetPackage.metadata
 
         val vcsProcessed = vcs?.let {
             // Curation data for VCS information is handled specially, so we can curate only individual properties.
