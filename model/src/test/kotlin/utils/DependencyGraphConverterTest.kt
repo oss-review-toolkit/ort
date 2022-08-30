@@ -193,10 +193,10 @@ private fun createIssues(index: Int): List<OrtIssue> =
  * Construct an [AnalyzerResult] from the given sequence of [projectResults].
  */
 private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): AnalyzerResult {
-    val projects = projectResults.map { it.project }
-    val packages = projectResults.flatMap { it.packages }.map { CuratedPackage(it) }
+    val projects = projectResults.mapTo(sortedSetOf()) { it.project }
+    val packages = projectResults.flatMap { it.packages }.mapTo(sortedSetOf()) { CuratedPackage(it) }
 
-    return AnalyzerResult(projects.toSortedSet(), packages.toSortedSet())
+    return AnalyzerResult(projects, packages)
 }
 
 /**
