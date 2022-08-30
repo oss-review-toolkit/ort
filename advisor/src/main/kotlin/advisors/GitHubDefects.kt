@@ -154,7 +154,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      * GitHub repository  for the necessary information.
      */
     private suspend fun findDefectsForGitHubPackage(pkg: GitHubPackage): List<AdvisorResult> {
-        logger.info { "Finding defects for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.info { "Finding defects for package '${pkg.original.id.toCoordinates()}'." }
 
         val startTime = Instant.now()
         val ortIssues = mutableListOf<OrtIssue>()
@@ -165,7 +165,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
 
                 ortIssues += createAndLogIssue(
                     providerName,
-                    "Failed to load information about $itemType for package '${pkg.pkg.id.toCoordinates()}': " +
+                    "Failed to load information about $itemType for package '${pkg.original.id.toCoordinates()}': " +
                             exception.collectMessages(),
                     Severity.ERROR
                 )
@@ -176,18 +176,18 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
             "releases"
         )
 
-        logger.debug { "Found ${releases.size} releases for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Found ${releases.size} releases for package '${pkg.original.id.toCoordinates()}'." }
 
         val issues = handleError(
             fetchAll(maxDefects) { service.repositoryIssues(pkg.repoOwner, pkg.repoName, it) },
             "issues"
         )
 
-        logger.debug { "Found ${issues.size} issues for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Found ${issues.size} issues for package '${pkg.original.id.toCoordinates()}'." }
 
         val defects = if (ortIssues.isEmpty()) {
             issuesForRelease(pkg, issues.applyLabelFilters(), releases, ortIssues).also {
-                logger.debug { "Found ${it.size} defects for package '${pkg.pkg.id.toCoordinates()}'." }
+                logger.debug { "Found ${it.size} defects for package '${pkg.original.id.toCoordinates()}'." }
             }
         } else {
             emptyList()
@@ -214,16 +214,16 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         releases: List<Release>,
         ortIssues: MutableList<OrtIssue>
     ): List<Defect> {
-        val releaseDate = findReleaseFor(pkg.pkg, releases)?.publishedAt?.let(Instant::parse)
+        val releaseDate = findReleaseFor(pkg.original, releases)?.publishedAt?.let(Instant::parse)
             ?: Instant.now().also {
                 ortIssues += createAndLogIssue(
                     providerName,
-                    "Could not determine release date for package '${pkg.pkg.id.toCoordinates()}'.",
+                    "Could not determine release date for package '${pkg.original.id.toCoordinates()}'.",
                     Severity.HINT
                 )
             }
 
-        logger.debug { "Assuming release date $releaseDate for package '${pkg.pkg.id.toCoordinates()}'." }
+        logger.debug { "Assuming release date $releaseDate for package '${pkg.original.id.toCoordinates()}'." }
         return issues.filter { it.closedAfter(releaseDate) }.map { it.toDefect(releases) }
     }
 
@@ -241,7 +241,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
  */
 private data class GitHubPackage(
     /** The original package. */
-    val pkg: Package,
+    val original: Package,
 
     /** The owner of the repository. */
     val repoOwner: String,
