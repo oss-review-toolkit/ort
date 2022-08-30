@@ -19,10 +19,9 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
@@ -34,8 +33,7 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 class DependencyRule(
     ruleSet: RuleSet,
     name: String,
-    pkg: Package,
-    curations: List<PackageCurationResult>,
+    pkg: CuratedPackage,
     resolvedLicenseInfo: ResolvedLicenseInfo,
 
     /**
@@ -64,13 +62,13 @@ class DependencyRule(
      * The [Project] that contains the [dependency].
      */
     val project: Project
-) : PackageRule(ruleSet, name, pkg, curations, resolvedLicenseInfo) {
+) : PackageRule(ruleSet, name, pkg, resolvedLicenseInfo) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
                 "(project=${project.id.toCoordinates()}, scope=$scopeName, level=$level)."
 
     override fun issueSource() =
-        "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
+        "$name - ${pkg.pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
 
     /**
      * Return the direct dependencies of the [dependency].

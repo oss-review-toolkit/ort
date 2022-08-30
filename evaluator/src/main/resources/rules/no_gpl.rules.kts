@@ -41,7 +41,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
             }
 
             error(
-                "The package '${pkg.id.toCoordinates()}' has the ${licenseSource.name} license '$license'.",
+                "The package '${pkg.pkg.id.toCoordinates()}' has the ${licenseSource.name} license '$license'.",
                 "Remove the dependency on this package."
             )
         }
