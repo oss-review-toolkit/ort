@@ -93,9 +93,9 @@ data class PackageCuration(
      * @see [PackageCurationData.apply]
      */
     fun apply(targetPackage: CuratedPackage): CuratedPackage {
-        require(isApplicable(targetPackage.pkg.id)) {
+        require(isApplicable(targetPackage.metadata.id)) {
             "Package curation identifier '${id.toCoordinates()}' does not match package identifier " +
-                    "'${targetPackage.pkg.id.toCoordinates()}'."
+                    "'${targetPackage.metadata.id.toCoordinates()}'."
         }
 
         return data.apply(targetPackage)

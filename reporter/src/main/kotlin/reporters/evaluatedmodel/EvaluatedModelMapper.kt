@@ -155,7 +155,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
 
         input.ortResult.analyzer?.result?.packages?.forEach { pkg ->
-            packageExcludeInfo[pkg.pkg.id] = PackageExcludeInfo(pkg.pkg.id, true)
+            packageExcludeInfo[pkg.metadata.id] = PackageExcludeInfo(pkg.metadata.id, true)
         }
 
         input.ortResult.analyzer?.result?.projects?.forEach { project ->
@@ -284,7 +284,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addPackage(curatedPkg: CuratedPackage) {
-        val pkg = curatedPkg.pkg
+        val pkg = curatedPkg.metadata
 
         val scanResults = mutableListOf<EvaluatedScanResult>()
         val detectedLicenses = mutableSetOf<LicenseId>()

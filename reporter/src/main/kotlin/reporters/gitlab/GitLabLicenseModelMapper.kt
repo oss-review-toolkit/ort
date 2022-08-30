@@ -67,7 +67,7 @@ private fun Map<Package, List<String>>.toDependencies(): List<Dependency> =
 private fun OrtResult.getTargetPackagesWithDefinitionFiles(skipExcluded: Boolean): Map<Package, List<String>> {
     val result = mutableMapOf<Identifier, MutableList<String>>()
 
-    val packages = getPackages().associate { it.pkg.id to it.pkg }
+    val packages = getPackages().associate { it.metadata.id to it.metadata }
 
     getProjects(omitExcluded = skipExcluded).forEach { project ->
         val definitionFilePath = project.definitionFilePath

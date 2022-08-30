@@ -122,7 +122,7 @@ data class OrtResult(
      */
     private val packages: Map<Identifier, PackageEntry> by lazy {
         val projects = getProjects()
-        val packages = getPackages().associateBy { it.pkg.id }
+        val packages = getPackages().associateBy { it.metadata.id }
 
         val allDependencies = packages.keys.toMutableSet()
         val includedDependencies = mutableSetOf<Identifier>()
@@ -192,7 +192,7 @@ data class OrtResult(
         val projects = getProjects(includeSubProjects = includeSubProjects)
 
         projects.mapTo(projectsAndPackages) { it.id }
-        getPackages().mapTo(projectsAndPackages) { it.pkg.id }
+        getPackages().mapTo(projectsAndPackages) { it.metadata.id }
 
         return projectsAndPackages
     }
@@ -215,7 +215,7 @@ data class OrtResult(
         getPackages().filter { (pkg, _) ->
             pkg.id.isFromOrg(*names) && (!omitExcluded || !isPackageExcluded(pkg.id))
         }.mapTo(vendorPackages) {
-            it.pkg
+            it.metadata
         }
 
         return vendorPackages
@@ -314,7 +314,7 @@ data class OrtResult(
                     packages = getPackages().map { curatedPackage ->
                         val uncuratedPackage = CuratedPackage(curatedPackage.toUncuratedPackage())
                         curations
-                            .filter { it.isApplicable(curatedPackage.pkg.id) }
+                            .filter { it.isApplicable(curatedPackage.metadata.id) }
                             .fold(uncuratedPackage) { current, packageCuration -> packageCuration.apply(current) }
                     }.toSortedSet()
                 )
@@ -331,7 +331,7 @@ data class OrtResult(
     @JsonIgnore
     fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
         analyzer?.result?.packages.orEmpty().filterTo(mutableSetOf()) { pkg ->
-            !omitExcluded || !isExcluded(pkg.pkg.id)
+            !omitExcluded || !isExcluded(pkg.metadata.id)
         }
 
     /**

@@ -151,7 +151,7 @@ class OpossumReporterTest : WordSpec({
 
         "create a result that contains all packages in its signals" {
             result.analyzer!!.result.packages.forAll { pkg ->
-                opossumInput.signals.find { it.id == pkg.pkg.id } shouldNot beNull()
+                opossumInput.signals.find { it.id == pkg.metadata.id } shouldNot beNull()
             }
         }
 
@@ -353,7 +353,7 @@ private fun createOrtResult(): OrtResult {
                 ),
                 packages = sortedSetOf(
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                             binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
                             concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
@@ -372,7 +372,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     ),
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:second-package-group:second-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf(),
@@ -383,7 +383,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     ),
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:third-package-group:third-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("unmappable license"),
@@ -394,7 +394,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     ),
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("unmappable license", "MIT"),
@@ -405,7 +405,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     ),
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
@@ -418,7 +418,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     ),
                     CuratedPackage(
-                        pkg = Package(
+                        metadata = Package(
                             id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
@@ -438,7 +438,7 @@ private fun createOrtResult(): OrtResult {
                         Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3"),
                     ).map {
                         CuratedPackage(
-                            pkg = Package(
+                            metadata = Package(
                                 id = it,
                                 binaryArtifact = RemoteArtifact.EMPTY,
                                 declaredLicenses = sortedSetOf("MIT"),

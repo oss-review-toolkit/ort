@@ -81,7 +81,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            with(curatedPkg.pkg) {
+            with(curatedPkg.metadata) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 purl shouldBe curation.data.purl
                 cpe shouldBe curation.data.cpe
@@ -101,7 +101,7 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
@@ -142,7 +142,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            with(curatedPkg.pkg) {
+            with(curatedPkg.metadata) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
                 purl shouldBe pkg.purl
                 cpe shouldBe pkg.cpe
@@ -164,7 +164,7 @@ class PackageCurationTest : WordSpec({
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
@@ -205,7 +205,7 @@ class PackageCurationTest : WordSpec({
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.pkg.vcsProcessed shouldBe VcsInfo.EMPTY
+            curatedPkg.metadata.vcsProcessed shouldBe VcsInfo.EMPTY
         }
 
         "fail if identifiers do not match" {
@@ -269,7 +269,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.isMetaDataOnly shouldBe false
+            curatedPkg.metadata.isMetaDataOnly shouldBe false
         }
 
         "be able to clear isModified" {
@@ -299,7 +299,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.isModified shouldBe false
+            curatedPkg.metadata.isModified shouldBe false
         }
 
         "work with Ivy version ranges" {
@@ -348,19 +348,19 @@ class PackageCurationTest : WordSpec({
             val result2 = curation2.apply(result1)
             val result3 = curation3.apply(result2)
 
-            result1.pkg.description shouldBe "description 1"
+            result1.metadata.description shouldBe "description 1"
             result1.curations.size shouldBe 1
             result1.curations[0].base shouldBe PackageCurationData(description = "")
             result1.curations[0].curation shouldBe curation1.data
 
-            result2.pkg.description shouldBe "description 2"
+            result2.metadata.description shouldBe "description 2"
             result2.curations.size shouldBe 2
             result2.curations[0].base shouldBe PackageCurationData(description = "")
             result2.curations[0].curation shouldBe curation1.data
             result2.curations[1].base shouldBe PackageCurationData(description = "description 1")
             result2.curations[1].curation shouldBe curation2.data
 
-            result3.pkg.description shouldBe "description 3"
+            result3.metadata.description shouldBe "description 3"
             result3.curations.size shouldBe 3
             result3.curations[0].base shouldBe PackageCurationData(description = "")
             result3.curations[0].curation shouldBe curation1.data
@@ -393,11 +393,11 @@ class PackageCurationTest : WordSpec({
             val result2 = curation2.apply(result1)
             val result3 = curation3.apply(result2)
 
-            result1.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result1.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause".toSpdx()
-            result2.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result2.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause AND CC-BY-1.0".toSpdx()
-            result3.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result3.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause AND CC-BY-2.0".toSpdx()
 
             result3.curations[0].base.declaredLicenseMapping should beEmpty()

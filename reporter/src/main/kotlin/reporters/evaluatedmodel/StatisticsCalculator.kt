@@ -49,8 +49,8 @@ internal class StatisticsCalculator {
         dependencyTree = DependencyTreeStatistics(
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
             excludedProjects = ortResult.getProjects().count { ortResult.isExcluded(it.id) },
-            includedPackages = ortResult.getPackages().count { !ortResult.isExcluded(it.pkg.id) },
-            excludesPackages = ortResult.getPackages().count { ortResult.isExcluded(it.pkg.id) },
+            includedPackages = ortResult.getPackages().count { !ortResult.isExcluded(it.metadata.id) },
+            excludesPackages = ortResult.getPackages().count { ortResult.isExcluded(it.metadata.id) },
             totalTreeDepth = getTreeDepth(ortResult),
             includedTreeDepth = getTreeDepth(ortResult = ortResult, ignoreExcluded = true),
             includedScopes = getIncludedScopes(ortResult).toSortedSet(),

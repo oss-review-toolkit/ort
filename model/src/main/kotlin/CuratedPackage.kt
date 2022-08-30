@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
 
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -33,8 +33,8 @@ data class CuratedPackage(
     /**
      * The curated package after applying the [curations].
      */
-    @JsonProperty("package")
-    val pkg: Package,
+    @JsonAlias("package")
+    val metadata: Package,
 
     /**
      * The curations in the order they were applied.
@@ -44,7 +44,7 @@ data class CuratedPackage(
     /**
      * A comparison function to sort packages by their identifier.
      */
-    override fun compareTo(other: CuratedPackage) = pkg.id.compareTo(other.pkg.id)
+    override fun compareTo(other: CuratedPackage) = metadata.id.compareTo(other.metadata.id)
 
     /**
      * Return a [Package] representing the same package as this one but which does not have any curations applied.
@@ -52,9 +52,9 @@ data class CuratedPackage(
     fun toUncuratedPackage() =
         curations.reversed().fold(this) { current, curation ->
             curation.base.apply(current)
-        }.pkg.copy(
+        }.metadata.copy(
             // The declared license mapping cannot be reversed as it is additive.
-            declaredLicensesProcessed = DeclaredLicenseProcessor.process(pkg.declaredLicenses),
+            declaredLicensesProcessed = DeclaredLicenseProcessor.process(metadata.declaredLicenses),
 
             // It is not possible to derive the original concluded license value with the above reversed application
             // of the base curations, even if the function Package.diff() was extended to handle the concluded license,

@@ -220,7 +220,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
 
             if (PackageType.PACKAGE in packageTypes) {
-                addAll(analyzerResult.packages.map { it.pkg })
+                addAll(analyzerResult.packages.map { it.metadata })
             }
         }
 

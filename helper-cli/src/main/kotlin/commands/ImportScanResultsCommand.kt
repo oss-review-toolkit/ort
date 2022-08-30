@@ -52,7 +52,7 @@ internal class ImportScanResultsCommand : CliktCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
-        val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.pkg.id }
+        val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.metadata.id }
 
         ids.forEach { id ->
             ortResult.getScanResultsForId(id).forEach { scanResult ->

@@ -122,7 +122,7 @@ analyzer:
         dependencies:
         - id: "NPM::long:5.2.0"
     packages:
-    - package:
+    - metadata:
         id: "NPM::ansi-styles:4.3.0"
         purl: "pkg:npm/ansi-styles@4.3.0"
         authors:
@@ -154,7 +154,7 @@ analyzer:
           revision: "2d02d5bd070f733179007f0904eb5fb41090395a"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::caller-path:0.1.0"
         purl: "pkg:npm/caller-path@0.1.0"
         authors:
@@ -186,7 +186,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::callsites:0.2.0"
         purl: "pkg:npm/callsites@0.2.0"
         authors:
@@ -218,7 +218,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::chalk:4.0.0"
         purl: "pkg:npm/chalk@4.0.0"
         declared_licenses:
@@ -248,7 +248,7 @@ analyzer:
           revision: "31fa94208034cb7581a81b06045ff2cf51057b40"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::chalk:5.0.1"
         purl: "pkg:npm/chalk@5.0.1"
         declared_licenses:
@@ -278,7 +278,7 @@ analyzer:
           revision: "bccde97f8a1bb125d4fe99e8fd355182101ff4f2"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::color-convert:2.0.1"
         purl: "pkg:npm/color-convert@2.0.1"
         authors:
@@ -310,7 +310,7 @@ analyzer:
           revision: "e1cb7846258e1d7aa25873814684d4fbbbca53ed"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::color-name:1.1.4"
         purl: "pkg:npm/color-name@1.1.4"
         authors:
@@ -342,7 +342,7 @@ analyzer:
           revision: "4536ce5944f56659a2dfb2198eaf81b5ad5f2ad9"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::has-flag:4.0.0"
         purl: "pkg:npm/has-flag@4.0.0"
         authors:
@@ -374,7 +374,7 @@ analyzer:
           revision: "474aa39afca7333d356c022fc5be4d31732bbba3"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::is-buffer:1.1.6"
         purl: "pkg:npm/is-buffer@1.1.6"
         authors:
@@ -406,7 +406,7 @@ analyzer:
           revision: "1e84e7ee31cf6b660b12500f3111a05501da387f"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::is-even:1.0.0"
         purl: "pkg:npm/is-even@1.0.0"
         authors:
@@ -438,7 +438,7 @@ analyzer:
           revision: "e87c060bb1c3f5353cd49c45afbe98d1a6c22b89"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::is-number:3.0.0"
         purl: "pkg:npm/is-number@3.0.0"
         authors:
@@ -470,7 +470,7 @@ analyzer:
           revision: "af885e2e890b9ef0875edd2b117305119ee5bdc5"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::is-odd:0.1.2"
         purl: "pkg:npm/is-odd@0.1.2"
         authors:
@@ -502,7 +502,7 @@ analyzer:
           revision: "59270f5a05b03bdeb0b06c95d922deb59ae31923"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::json-stable-stringify:1.0.1"
         purl: "pkg:npm/json-stable-stringify@1.0.1"
         authors:
@@ -535,7 +535,7 @@ analyzer:
           revision: "4a3ac9cc006a91e64901f8ebe78d23bf9fc9fbd0"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::jsonify:0.0.0"
         purl: "pkg:npm/jsonify@0.0.0"
         authors:
@@ -569,7 +569,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::kind-of:3.2.2"
         purl: "pkg:npm/kind-of@3.2.2"
         authors:
@@ -601,7 +601,7 @@ analyzer:
           revision: "0ffe67cf12f5396047c1bacf04232b7deeb24063"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::long:5.2.0"
         purl: "pkg:npm/long@5.2.0"
         authors:
@@ -634,7 +634,7 @@ analyzer:
           revision: "088e44e5e3343ef967698565678384fa474b003b"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::pnpm-workspaces:1.0.1"
         purl: "pkg:npm/pnpm-workspaces@1.0.1"
         authors:
@@ -666,7 +666,7 @@ analyzer:
           revision: "<REPLACE_REVISION>"
           path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
       curations: []
-    - package:
+    - metadata:
         id: "NPM::require-uncached:2.0.0"
         purl: "pkg:npm/require-uncached@2.0.0"
         authors:
@@ -698,7 +698,7 @@ analyzer:
           revision: "c56e296e0028357629ea27c61c591c67e818db5f"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::resolve-from:1.0.1"
         purl: "pkg:npm/resolve-from@1.0.1"
         authors:
@@ -731,7 +731,7 @@ analyzer:
           revision: "bae2cf1d66c616ad2eb27e0fe85a10ff0f2dfc92"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::sax:1.2.4"
         purl: "pkg:npm/sax@1.2.4"
         authors:
@@ -763,7 +763,7 @@ analyzer:
           revision: "5aee2163d55cff24b817bbf550bac44841f9df45"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::supports-color:7.2.0"
         purl: "pkg:npm/supports-color@7.2.0"
         authors:
@@ -795,7 +795,7 @@ analyzer:
           revision: "c5edf46896d1fc1826cb1183a60d61eecb65d749"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "NPM::testing-pnpm-package-a:1.0.2"
         purl: "pkg:npm/testing-pnpm-package-a@1.0.2"
         authors:

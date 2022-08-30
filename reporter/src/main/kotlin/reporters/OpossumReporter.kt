@@ -329,8 +329,8 @@ class OpossumReporter : Reporter {
                 resolvePath(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
 
             val dependencyPackage = curatedPackages
-                .find { curatedPackage -> curatedPackage.pkg.id == dependencyId }
-                ?.pkg ?: Package.EMPTY
+                .find { curatedPackage -> curatedPackage.metadata.id == dependencyId }
+                ?.metadata ?: Package.EMPTY
 
             addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
 
@@ -490,12 +490,12 @@ class OpossumReporter : Reporter {
         }
 
         fun addPackagesThatAreRootless(analyzerResultPackages: SortedSet<CuratedPackage>) {
-            val rootlessPackages = analyzerResultPackages.filter { packageToRoot[it.pkg.id] == null }
+            val rootlessPackages = analyzerResultPackages.filter { packageToRoot[it.metadata.id] == null }
 
             rootlessPackages.forEach {
-                val path = resolvePath("/lost+found", it.pkg.id.toPurl())
-                addSignal(signalFromPkg(it.pkg), sortedSetOf(path))
-                addPackageRoot(it.pkg.id, path, Int.MAX_VALUE, it.pkg.vcsProcessed)
+                val path = resolvePath("/lost+found", it.metadata.id.toPurl())
+                addSignal(signalFromPkg(it.metadata), sortedSetOf(path))
+                addPackageRoot(it.metadata.id, path, Int.MAX_VALUE, it.metadata.vcsProcessed)
             }
 
             if (rootlessPackages.isNotEmpty()) {

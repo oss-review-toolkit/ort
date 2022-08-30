@@ -161,7 +161,7 @@ private fun createOrtResult(): OrtResult {
 
 private fun curatedPackage(id: Identifier, declaredLicenses: Collection<String>): CuratedPackage =
     CuratedPackage(
-        pkg = Package(
+        metadata = Package(
             id = id,
             binaryArtifact = RemoteArtifact.EMPTY,
             declaredLicenses = declaredLicenses.toSortedSet(),

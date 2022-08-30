@@ -117,7 +117,7 @@ class FreemarkerTemplateProcessor(
         }
 
         val packages = input.ortResult.getPackages().map { pkg ->
-            PackageModel(pkg.pkg.id, input)
+            PackageModel(pkg.metadata.id, input)
         }
 
         // Keep this in sync with "resources/templates/freemarker_implicit.ftl".
@@ -410,7 +410,7 @@ class FreemarkerTemplateProcessor(
          * identifiers of affected packages, but not the packages themselves.
          */
         fun getPackage(id: Identifier): Package =
-            input.ortResult.getPackage(id)?.pkg
+            input.ortResult.getPackage(id)?.metadata
                 ?: Package.EMPTY.also { logger.warn { "Could not resolve package '${id.toCoordinates()}'." } }
     }
 }

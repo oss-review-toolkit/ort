@@ -108,7 +108,7 @@ fun RuleSet.unhandledLicenseRule() = packageRule("UNHANDLED_LICENSE") {
         error(
             "The license $license is currently not covered by policy rules. " +
                     "The license was ${licenseSource.name.lowercase()} in package " +
-                    "${pkg.pkg.id.toCoordinates()}",
+                    "${pkg.metadata.id.toCoordinates()}",
             howToFixDefault()
         )
     }
@@ -122,7 +122,7 @@ fun RuleSet.unmappedDeclaredLicenseRule() = packageRule("UNMAPPED_DECLARED_LICEN
     resolvedLicenseInfo.licenseInfo.declaredLicenseInfo.processed.unmapped.forEach { unmappedLicense ->
         warning(
             "The declared license '$unmappedLicense' could not be mapped to a valid license or parsed as an SPDX " +
-                    "expression. The license was found in package ${pkg.pkg.id.toCoordinates()}.",
+                    "expression. The license was found in package ${pkg.metadata.id.toCoordinates()}.",
             howToFixDefault()
         )
     }
@@ -141,9 +141,9 @@ fun RuleSet.copyleftInSourceRule() = packageRule("COPYLEFT_IN_SOURCE") {
 
         val message = if (licenseSource == LicenseSource.DETECTED) {
             "The ScanCode copyleft categorized license $license was ${licenseSource.name.lowercase()} " +
-                    "in package ${pkg.pkg.id.toCoordinates()}."
+                    "in package ${pkg.metadata.id.toCoordinates()}."
         } else {
-            "The package ${pkg.pkg.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode copyleft " +
+            "The package ${pkg.metadata.id.toCoordinates()} has the ${licenseSource.name.lowercase()} ScanCode copyleft " +
                     "catalogized license $license."
         }
 
@@ -164,15 +164,15 @@ fun RuleSet.copyleftInSourceLimitedRule() = packageRule("COPYLEFT_LIMITED_IN_SOU
 
         val licenseSourceName = licenseSource.name.lowercase()
         val message = if (licenseSource == LicenseSource.DETECTED) {
-            if (pkg.pkg.id.type == "Unmanaged") {
+            if (pkg.metadata.id.type == "Unmanaged") {
                 "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
-                        "${pkg.pkg.id.toCoordinates()}."
+                        "${pkg.metadata.id.toCoordinates()}."
             } else {
                 "The ScanCode copyleft-limited categorized license $license was $licenseSourceName in package " +
-                        "${pkg.pkg.id.toCoordinates()}."
+                        "${pkg.metadata.id.toCoordinates()}."
             }
         } else {
-            "The package ${pkg.pkg.id.toCoordinates()} has the $licenseSourceName ScanCode copyleft-limited " +
+            "The package ${pkg.metadata.id.toCoordinates()} has the $licenseSourceName ScanCode copyleft-limited " +
                     "categorized license $license."
         }
 
@@ -208,7 +208,7 @@ fun RuleSet.vulnerabilityInPackageRule() = packageRule("VULNERABILITY_IN_PACKAGE
 
     issue(
         Severity.WARNING,
-        "The package ${pkg.pkg.id.toCoordinates()} has a vulnerability",
+        "The package ${pkg.metadata.id.toCoordinates()} has a vulnerability",
         howToFixDefault()
     )
 }
@@ -226,7 +226,7 @@ fun RuleSet.highSeverityVulnerabilityInPackageRule() = packageRule("HIGH_SEVERIT
 
     issue(
         Severity.ERROR,
-        "The package ${pkg.pkg.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
+        "The package ${pkg.metadata.id.toCoordinates()} has a vulnerability with $scoringSystem severity > " +
                 "$maxAcceptedSeverity",
         howToFixDefault()
     )

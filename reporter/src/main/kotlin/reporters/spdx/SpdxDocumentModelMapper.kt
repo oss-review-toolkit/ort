@@ -85,7 +85,7 @@ object SpdxDocumentModelMapper {
         }
 
         ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
-            val pkg = curatedPackage.pkg
+            val pkg = curatedPackage.metadata
             val binaryPackage = pkg.toSpdxPackage(licenseInfoResolver)
 
             ortResult.collectDependencies(pkg.id, 1).mapTo(relationships) { dependency ->
@@ -99,8 +99,9 @@ object SpdxDocumentModelMapper {
             packages += binaryPackage
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
-                val vcsScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is RepositoryProvenance }
+                val vcsScanResult = ortResult.getScanResultsForId(curatedPackage.metadata.id).find {
+                    it.provenance is RepositoryProvenance
+                }
                 val provenance = vcsScanResult?.provenance as? RepositoryProvenance
 
                 val (filesAnalyzed, packageVerificationCode) =
@@ -131,8 +132,9 @@ object SpdxDocumentModelMapper {
             }
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
-                val sourceArtifactScanResult =
-                    ortResult.getScanResultsForId(curatedPackage.pkg.id).find { it.provenance is ArtifactProvenance }
+                val sourceArtifactScanResult = ortResult.getScanResultsForId(curatedPackage.metadata.id).find {
+                    it.provenance is ArtifactProvenance
+                }
 
                 val (filesAnalyzed, packageVerificationCode) =
                     if (sourceArtifactScanResult?.summary?.packageVerificationCode?.isNotEmpty() == true) {
@@ -145,7 +147,7 @@ object SpdxDocumentModelMapper {
                 val sourceArtifactPackage = binaryPackage.copy(
                     spdxId = "${binaryPackage.spdxId}-source-artifact",
                     filesAnalyzed = filesAnalyzed,
-                    downloadLocation = curatedPackage.pkg.sourceArtifact.url.nullOrBlankToSpdxNone(),
+                    downloadLocation = curatedPackage.metadata.sourceArtifact.url.nullOrBlankToSpdxNone(),
                     licenseConcluded = SpdxConstants.NOASSERTION,
                     licenseDeclared = SpdxConstants.NOASSERTION,
                     packageVerificationCode = packageVerificationCode

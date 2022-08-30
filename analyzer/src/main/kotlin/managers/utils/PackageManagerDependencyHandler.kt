@@ -81,7 +81,7 @@ class PackageManagerDependencyHandler(
     private val navigator = DependencyGraphNavigator(analyzerResult.dependencyGraphs)
 
     override fun createPackage(dependency: ResolvableDependencyNode, issues: MutableList<OrtIssue>): Package? =
-        analyzerResult.packages.find { it.pkg.id == dependency.id }?.pkg
+        analyzerResult.packages.find { it.metadata.id == dependency.id }?.metadata
 
     override fun dependenciesFor(dependency: ResolvableDependencyNode): Collection<ResolvableDependencyNode> =
         buildList {
