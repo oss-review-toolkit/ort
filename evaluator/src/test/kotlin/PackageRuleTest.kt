@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.evaluator
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
@@ -33,7 +34,12 @@ class PackageRuleTest : WordSpec() {
     private val ruleSet = ruleSet(ortResult)
 
     private fun createPackageRule(pkg: Package) =
-        PackageRule(ruleSet, "test", pkg, emptyList(), ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id))
+        PackageRule(
+            ruleSet = ruleSet,
+            name = "test",
+            pkg = CuratedPackage(pkg),
+            resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+        )
 
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
         LicenseRule(

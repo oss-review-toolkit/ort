@@ -77,7 +77,7 @@ class RuleSet(
 
         packages.forEach { curatedPackage ->
             val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.pkg.id)
-            PackageRule(this, name, curatedPackage.pkg, curatedPackage.curations, resolvedLicenseInfo).apply {
+            PackageRule(this, name, curatedPackage, resolvedLicenseInfo).apply {
                 configure()
                 evaluate()
             }
@@ -116,8 +116,7 @@ class RuleSet(
                 DependencyRule(
                     this,
                     name,
-                    curatedPackage.pkg,
-                    curatedPackage.curations,
+                    curatedPackage,
                     resolvedLicenseInfo,
                     node,
                     ancestors,

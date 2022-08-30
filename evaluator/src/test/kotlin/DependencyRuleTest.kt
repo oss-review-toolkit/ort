@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.evaluator
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 
@@ -32,8 +33,7 @@ class DependencyRuleTest : WordSpec() {
         DependencyRule(
             ruleSet = ruleSet,
             name = "test",
-            pkg = pkg,
-            curations = emptyList(),
+            pkg = CuratedPackage(pkg),
             resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id),
             dependency = dependency,
             ancestors = emptyList(),

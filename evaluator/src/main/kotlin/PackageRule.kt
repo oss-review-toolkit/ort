@@ -23,7 +23,6 @@ import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
@@ -41,14 +40,9 @@ open class PackageRule(
     name: String,
 
     /**
-     * The [Package] to check.
+     * The [CuratedPackage] to check.
      */
-    val pkg: Package,
-
-    /**
-     * The list of curations applied to the [package][pkg].
-     */
-    val curations: List<PackageCurationResult>,
+    val pkg: CuratedPackage,
 
     /**
      * The resolved license info for the [Package].
@@ -58,11 +52,11 @@ open class PackageRule(
     private val licenseRules = mutableListOf<LicenseRule>()
 
     @Suppress("UNUSED") // This is intended to be used by rule implementations.
-    val uncuratedPkg by lazy { CuratedPackage(pkg, curations).toUncuratedPackage() }
+    val uncuratedPkg by lazy { pkg.toUncuratedPackage() }
 
-    override val description = "Evaluating rule '$name' for package '${pkg.id.toCoordinates()}'."
+    override val description = "Evaluating rule '$name' for package '${pkg.pkg.id.toCoordinates()}'."
 
-    override fun issueSource() = "$name - ${pkg.id.toCoordinates()}"
+    override fun issueSource() = "$name - ${pkg.pkg.id.toCoordinates()}"
 
     override fun runInternal() {
         licenseRules.forEach { it.evaluate() }
@@ -77,7 +71,7 @@ open class PackageRule(
 
             override fun matches(): Boolean {
                 val run = ruleSet.ortResult.advisor ?: return false
-                return run.results.getVulnerabilities(pkg.id).isNotEmpty()
+                return run.results.getVulnerabilities(pkg.pkg.id).isNotEmpty()
             }
         }
     }
@@ -92,7 +86,7 @@ open class PackageRule(
 
             override fun matches(): Boolean {
                 val run = ruleSet.ortResult.advisor ?: return false
-                return run.results.getVulnerabilities(pkg.id)
+                return run.results.getVulnerabilities(pkg.pkg.id)
                     .filter { vulnerability -> !ruleSet.resolutionProvider.isResolved(vulnerability) }
                     .flatMap { it.references }
                     .filter { reference -> reference.scoringSystem == scoringSystem }
@@ -118,7 +112,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isExcluded()"
 
-            override fun matches() = ruleSet.ortResult.isExcluded(pkg.id)
+            override fun matches() = ruleSet.ortResult.isExcluded(pkg.pkg.id)
         }
 
     /**
@@ -129,7 +123,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isFromOrg(${names.joinToString()})"
 
-            override fun matches() = pkg.id.isFromOrg(*names)
+            override fun matches() = pkg.pkg.id.isFromOrg(*names)
         }
 
     /**
@@ -139,7 +133,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isMetaDataOnly()"
 
-            override fun matches() = pkg.isMetaDataOnly
+            override fun matches() = pkg.pkg.isMetaDataOnly
         }
 
     /**
@@ -149,7 +143,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isProject()"
 
-            override fun matches() = ruleSet.ortResult.isProject(pkg.id)
+            override fun matches() = ruleSet.ortResult.isProject(pkg.pkg.id)
         }
 
     /**
@@ -159,7 +153,7 @@ open class PackageRule(
         object : RuleMatcher {
             override val description = "isType($type)"
 
-            override fun matches() = pkg.id.type == type
+            override fun matches() = pkg.pkg.id.type == type
         }
 
     /**
@@ -167,7 +161,7 @@ open class PackageRule(
      */
     fun licenseRule(name: String, licenseView: LicenseView, block: LicenseRule.() -> Unit) {
         resolvedLicenseInfo.filter(licenseView, filterSources = true)
-            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.id), licenseView)
+            .applyChoices(ruleSet.ortResult.getPackageLicenseChoices(pkg.pkg.id), licenseView)
             .applyChoices(ruleSet.ortResult.getRepositoryLicenseChoices(), licenseView).forEach { resolvedLicense ->
                 resolvedLicense.sources.forEach { licenseSource ->
                     licenseRules += LicenseRule(name, resolvedLicense, licenseSource).apply(block)
@@ -176,22 +170,22 @@ open class PackageRule(
     }
 
     fun issue(severity: Severity, message: String, howToFix: String) =
-        issue(severity, pkg.id, null, null, message, howToFix)
+        issue(severity, pkg.pkg.id, null, null, message, howToFix)
 
     /**
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
-    fun hint(message: String, howToFix: String) = hint(pkg.id, null, null, message, howToFix)
+    fun hint(message: String, howToFix: String) = hint(pkg.pkg.id, null, null, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
-    fun warning(message: String, howToFix: String) = warning(pkg.id, null, null, message, howToFix)
+    fun warning(message: String, howToFix: String) = warning(pkg.pkg.id, null, null, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
-    fun error(message: String, howToFix: String) = error(pkg.id, null, null, message, howToFix)
+    fun error(message: String, howToFix: String) = error(pkg.pkg.id, null, null, message, howToFix)
 
     /**
      * A [Rule] to check a single license of the [package][pkg].
@@ -223,7 +217,8 @@ open class PackageRule(
         override val description = "\tEvaluating license rule '$name' for $licenseSource license " +
                 "'${resolvedLicense.license}'."
 
-        override fun issueSource() = "$name - ${pkg.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
+        override fun issueSource() =
+            "$name - ${pkg.pkg.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"
 
         /**
          * A [RuleMatcher] that checks if a [detected][LicenseSource.DETECTED] license is
@@ -252,21 +247,21 @@ open class PackageRule(
             }
 
         fun issue(severity: Severity, message: String, howToFix: String) =
-            issue(severity, pkg.id, license, licenseSource, message, howToFix)
+            issue(severity, pkg.pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [hint][Severity.HINT] to the list of [violations].
          */
-        fun hint(message: String, howToFix: String) = hint(pkg.id, license, licenseSource, message, howToFix)
+        fun hint(message: String, howToFix: String) = hint(pkg.pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [warning][Severity.WARNING] to the list of [violations].
          */
-        fun warning(message: String, howToFix: String) = warning(pkg.id, license, licenseSource, message, howToFix)
+        fun warning(message: String, howToFix: String) = warning(pkg.pkg.id, license, licenseSource, message, howToFix)
 
         /**
          * Add an [error][Severity.ERROR] to the list of [violations].
          */
-        fun error(message: String, howToFix: String) = error(pkg.id, license, licenseSource, message, howToFix)
+        fun error(message: String, howToFix: String) = error(pkg.pkg.id, license, licenseSource, message, howToFix)
     }
 }
