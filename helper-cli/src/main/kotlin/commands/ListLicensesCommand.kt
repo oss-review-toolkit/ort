@@ -35,8 +35,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 import java.lang.IllegalArgumentException
-import java.nio.file.FileSystems
-import java.nio.file.Paths
 
 import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.utils.createProvider
@@ -52,6 +50,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
@@ -151,9 +150,8 @@ internal class ListLicensesCommand : CliktCommand(
     private val fileAllowList by option(
         "--file-allow-list",
         help = "Output only license findings for files whose paths matches any of the given glob expressions."
-    ).convert { csv ->
-        csv.split(',').map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
-    }.default(emptyList())
+    ).split(",")
+        .default(emptyList())
 
     override fun run() {
         val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
@@ -190,9 +188,7 @@ internal class ListLicensesCommand : CliktCommand(
                     !offendingOnly || license in violatedRulesByLicense
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
-                        val isAllowedFile = fileAllowList.isEmpty() || fileAllowList.any {
-                            it.matches(Paths.get(location.path))
-                        }
+                        val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
 
                         val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
                                 ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
