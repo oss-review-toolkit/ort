@@ -1,4 +1,4 @@
-# See https://help.sonatype.com/lift/configuration-reference.
+# See https://help.sonatype.com/lift/configuring-lift.
 
 jdk11 = true
 
