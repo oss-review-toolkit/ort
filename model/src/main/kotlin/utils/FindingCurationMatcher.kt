@@ -19,12 +19,10 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.nio.file.FileSystems
-import java.nio.file.Paths
-
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
+import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
@@ -35,10 +33,10 @@ class FindingCurationMatcher {
         finding: LicenseFinding,
         curation: LicenseFindingCuration,
         relativeFindingPath: String
-    ): Boolean =
-        FileSystems.getDefault()
-            .getPathMatcher("glob:${curation.path}")
-            .matches(Paths.get(finding.location.prependPath(relativeFindingPath)))
+    ): Boolean = FileMatcher.match(
+        pattern = curation.path,
+        path = finding.location.prependPath(relativeFindingPath)
+    )
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
         curation.startLines.isEmpty() || curation.startLines.any { it == finding.location.startLine }
