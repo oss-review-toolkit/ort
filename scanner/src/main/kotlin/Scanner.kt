@@ -107,10 +107,7 @@ fun scanOrtResult(
     val consolidatedProjects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded))
     val projectPackages = consolidatedProjects.keys
 
-    val projectPackageIds = projectPackages.map { it.id }
-    val packages = ortResult.getPackages(skipExcluded)
-        .filter { it.pkg.id !in projectPackageIds }
-        .map { it.pkg }
+    val packages = ortResult.getPackages(skipExcluded).map { it.pkg }
 
     val scanResults = runBlocking {
         val deferredProjectScan = async {
