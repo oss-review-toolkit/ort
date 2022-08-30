@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -39,6 +40,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
+@JsonIgnoreProperties("concluded_license")
 data class Package(
     /**
      * The unique identifier of this package. The [id]'s type is the name of the package type or protocol (e.g. "Maven"
@@ -74,15 +76,6 @@ data class Package(
      * concatenated with [SpdxOperator.AND].
      */
     val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
-
-    /**
-     * The concluded license as an [SpdxExpression]. It can be used to override the [declared][declaredLicenses] /
-     * [detected][LicenseFinding.license] licenses of a package.
-     *
-     * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val concludedLicense: SpdxExpression? = null,
 
     /**
      * The description of the package, as provided by the package manager.
@@ -142,7 +135,6 @@ data class Package(
             authors = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
-            concludedLicense = null,
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,

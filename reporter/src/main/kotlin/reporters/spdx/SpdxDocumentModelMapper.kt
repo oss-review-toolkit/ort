@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -71,7 +72,8 @@ object SpdxDocumentModelMapper {
         val relationships = mutableListOf<SpdxRelationship>()
 
         val projectPackages = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).map { project ->
-            val spdxProjectPackage = project.toPackage().toSpdxPackage(licenseInfoResolver, isProject = true)
+            val spdxProjectPackage = CuratedPackage(project.toPackage())
+                .toSpdxPackage(licenseInfoResolver, isProject = true)
 
             ortResult.collectDependencies(project.id, 1).mapTo(relationships) { dependency ->
                 SpdxRelationship(
@@ -85,10 +87,9 @@ object SpdxDocumentModelMapper {
         }
 
         ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
-            val pkg = curatedPackage.metadata
-            val binaryPackage = pkg.toSpdxPackage(licenseInfoResolver)
+            val binaryPackage = curatedPackage.toSpdxPackage(licenseInfoResolver)
 
-            ortResult.collectDependencies(pkg.id, 1).mapTo(relationships) { dependency ->
+            ortResult.collectDependencies(curatedPackage.metadata.id, 1).mapTo(relationships) { dependency ->
                 SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.DEPENDS_ON,
@@ -98,7 +99,7 @@ object SpdxDocumentModelMapper {
 
             packages += binaryPackage
 
-            if (pkg.vcsProcessed.url.isNotBlank()) {
+            if (curatedPackage.metadata.vcsProcessed.url.isNotBlank()) {
                 val vcsScanResult = ortResult.getScanResultsForId(curatedPackage.metadata.id).find {
                     it.provenance is RepositoryProvenance
                 }
@@ -115,7 +116,8 @@ object SpdxDocumentModelMapper {
                 val vcsPackage = binaryPackage.copy(
                     spdxId = "${binaryPackage.spdxId}-vcs",
                     filesAnalyzed = filesAnalyzed,
-                    downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision),
+                    downloadLocation = curatedPackage.metadata.vcsProcessed
+                        .toSpdxDownloadLocation(provenance?.resolvedRevision),
                     licenseConcluded = SpdxConstants.NOASSERTION,
                     licenseDeclared = SpdxConstants.NOASSERTION,
                     packageVerificationCode = packageVerificationCode
@@ -131,7 +133,7 @@ object SpdxDocumentModelMapper {
                 relationships += vcsPackageRelationShip
             }
 
-            if (pkg.sourceArtifact.url.isNotBlank()) {
+            if (curatedPackage.metadata.sourceArtifact.url.isNotBlank()) {
                 val sourceArtifactScanResult = ortResult.getScanResultsForId(curatedPackage.metadata.id).find {
                     it.provenance is ArtifactProvenance
                 }
@@ -224,19 +226,19 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     return externalRefs
 }
 
-private fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isProject: Boolean = false) =
+private fun CuratedPackage.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isProject: Boolean = false) =
     SpdxPackage(
-        spdxId = id.toSpdxId(if (isProject) "Project" else "Package"),
-        copyrightText = getSpdxCopyrightText(licenseInfoResolver, id),
-        downloadLocation = binaryArtifact.url.nullOrBlankToSpdxNone(),
-        externalRefs = if (isProject) emptyList() else toSpdxExternalReferences(),
+        spdxId = metadata.id.toSpdxId(if (isProject) "Project" else "Package"),
+        copyrightText = getSpdxCopyrightText(licenseInfoResolver, metadata.id),
+        downloadLocation = metadata.binaryArtifact.url.nullOrBlankToSpdxNone(),
+        externalRefs = if (isProject) emptyList() else metadata.toSpdxExternalReferences(),
         filesAnalyzed = false,
-        homepage = homepageUrl.nullOrBlankToSpdxNone(),
+        homepage = metadata.homepageUrl.nullOrBlankToSpdxNone(),
         licenseConcluded = concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
-        licenseDeclared = declaredLicensesProcessed.toSpdxDeclaredLicense(),
-        name = id.name,
-        summary = description.nullOrBlankToSpdxNone(),
-        versionInfo = id.version
+        licenseDeclared = metadata.declaredLicensesProcessed.toSpdxDeclaredLicense(),
+        name = metadata.id.name,
+        summary = metadata.description.nullOrBlankToSpdxNone(),
+        versionInfo = metadata.id.version
     )
 
 private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =

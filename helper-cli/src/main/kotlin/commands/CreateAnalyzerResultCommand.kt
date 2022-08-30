@@ -202,7 +202,6 @@ private fun ScannedPackage.toPackage(): Package {
     return Package(
         id = id,
         declaredLicenses = sortedSetOf(),
-        concludedLicense = null,
         description = "",
         homepageUrl = "",
         binaryArtifact = RemoteArtifact.EMPTY,

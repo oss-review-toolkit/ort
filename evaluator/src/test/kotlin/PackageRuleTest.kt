@@ -33,12 +33,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 class PackageRuleTest : WordSpec() {
     private val ruleSet = ruleSet(ortResult)
 
-    private fun createPackageRule(pkg: Package) =
+    private fun createPackageRule(pkg: CuratedPackage) =
         PackageRule(
             ruleSet = ruleSet,
             name = "test",
-            pkg = CuratedPackage(pkg),
-            resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+            pkg = pkg,
+            resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.metadata.id)
         )
 
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
@@ -91,7 +91,7 @@ class PackageRuleTest : WordSpec() {
             }
 
             "return false for non-existing packages" {
-                val rule = createPackageRule(Package.EMPTY)
+                val rule = createPackageRule(CuratedPackage(Package.EMPTY))
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe false
@@ -148,7 +148,7 @@ class PackageRuleTest : WordSpec() {
 
         "isProject()" should {
             "return true for a project" {
-                val rule = createPackageRule(projectIncluded.toPackage())
+                val rule = createPackageRule(CuratedPackage(projectIncluded.toPackage()))
                 val matcher = rule.isProject()
 
                 matcher.matches() shouldBe true

@@ -305,7 +305,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             declaredLicensesProcessed = pkg.declaredLicensesProcessed.evaluate(),
             detectedLicenses = detectedLicenses,
             detectedExcludedLicenses = detectedExcludedLicenses,
-            concludedLicense = pkg.concludedLicense,
+            concludedLicense = curatedPkg.concludedLicense,
             effectiveLicense = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded().effectiveLicense(
                 LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
                 input.ortResult.getPackageLicenseChoices(pkg.id),

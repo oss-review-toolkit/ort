@@ -89,7 +89,6 @@ class PackageCurationTest : WordSpec({
                 declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
-                concludedLicense shouldBe curation.data.concludedLicense
                 description shouldBe curation.data.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
@@ -100,6 +99,7 @@ class PackageCurationTest : WordSpec({
                 isModified shouldBe true
             }
 
+            curatedPkg.concludedLicense shouldBe curation.data.concludedLicense
             curatedPkg.curations.size shouldBe 1
             curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
@@ -148,7 +148,6 @@ class PackageCurationTest : WordSpec({
                 cpe shouldBe pkg.cpe
                 authors shouldBe pkg.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
-                concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe pkg.binaryArtifact
@@ -163,6 +162,7 @@ class PackageCurationTest : WordSpec({
                 isModified shouldBe false
             }
 
+            curatedPkg.concludedLicense shouldBe curation.data.concludedLicense
             curatedPkg.curations.size shouldBe 1
             curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data

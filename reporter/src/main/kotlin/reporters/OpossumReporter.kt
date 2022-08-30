@@ -305,13 +305,13 @@ class OpossumReporter : Reporter {
             }
         }
 
-        private fun signalFromPkg(pkg: Package, id: Identifier = pkg.id): OpossumSignal {
+        private fun signalFromPkg(pkg: CuratedPackage, id: Identifier = pkg.metadata.id): OpossumSignal {
             val source = addExternalAttributionSource("ORT-Package", "ORT-Package", 180)
             return OpossumSignal(
                 source,
                 id = id,
-                url = pkg.homepageUrl,
-                license = pkg.concludedLicense ?: pkg.declaredLicensesProcessed.spdxExpression,
+                url = pkg.metadata.homepageUrl,
+                license = pkg.concludedLicense ?: pkg.metadata.declaredLicensesProcessed.spdxExpression,
                 preselected = true
             )
         }
@@ -329,9 +329,9 @@ class OpossumReporter : Reporter {
 
             val dependencyPackage = curatedPackages
                 .find { curatedPackage -> curatedPackage.metadata.id == dependencyId }
-                ?.metadata ?: Package.EMPTY
+                ?: CuratedPackage(Package.EMPTY)
 
-            addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
+            addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.metadata.vcsProcessed)
 
             addSignal(signalFromPkg(dependencyPackage, dependencyId), sortedSetOf(dependencyPath))
 
@@ -493,7 +493,7 @@ class OpossumReporter : Reporter {
 
             rootlessPackages.forEach {
                 val path = resolvePath("/lost+found", it.metadata.id.toPurl())
-                addSignal(signalFromPkg(it.metadata), sortedSetOf(path))
+                addSignal(signalFromPkg(it), sortedSetOf(path))
                 addPackageRoot(it.metadata.id, path, Int.MAX_VALUE, it.metadata.vcsProcessed)
             }
 

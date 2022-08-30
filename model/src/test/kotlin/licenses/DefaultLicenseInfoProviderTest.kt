@@ -29,7 +29,7 @@ class DefaultLicenseInfoProviderTest : WordSpec({
 
     "declaredLicenseInfo" should {
         "contain author information for package" {
-            defaultLicenseInfoProvider.get(packageWithAuthors.id).declaredLicenseInfo.authors shouldBe authors
+            defaultLicenseInfoProvider.get(packageWithAuthors.metadata.id).declaredLicenseInfo.authors shouldBe authors
         }
 
         "contain author information for project" {

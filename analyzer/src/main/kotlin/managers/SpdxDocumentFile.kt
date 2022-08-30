@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHand
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxDocumentCache
 import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -292,7 +293,7 @@ class SpdxDocumentFile(
     /**
      * Create a [Package] out of this [SpdxPackage].
      */
-    private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): Package {
+    private fun SpdxPackage.toPackage(definitionFile: File?, doc: SpdxResolvedDocument): CuratedPackage {
         val packageDescription = description.takeUnless { it.isEmpty() } ?: summary
 
         // If the VCS information cannot be determined from the VCS working tree itself, fall back to try getting it
@@ -310,18 +311,20 @@ class SpdxDocumentFile(
         val id = toIdentifier()
         val artifact = getRemoteArtifact()
 
-        return Package(
-            id = id,
-            purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
-            cpe = locateCpe(),
-            authors = originator.wrapPresentInSortedSet(),
-            declaredLicenses = sortedSetOf(licenseDeclared),
-            concludedLicense = getConcludedLicense(),
-            description = packageDescription,
-            homepageUrl = homepage.mapNotPresentToEmpty(),
-            binaryArtifact = artifact.takeIf { isBinaryArtifact }.orEmpty(),
-            sourceArtifact = artifact.takeUnless { isBinaryArtifact }.orEmpty(),
-            vcs = vcs
+        return CuratedPackage(
+            metadata = Package(
+                id = id,
+                purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
+                cpe = locateCpe(),
+                authors = originator.wrapPresentInSortedSet(),
+                declaredLicenses = sortedSetOf(licenseDeclared),
+                description = packageDescription,
+                homepageUrl = homepage.mapNotPresentToEmpty(),
+                binaryArtifact = artifact.takeIf { isBinaryArtifact }.orEmpty(),
+                sourceArtifact = artifact.takeUnless { isBinaryArtifact }.orEmpty(),
+                vcs = vcs
+            ),
+            concludedLicense = getConcludedLicense()
         )
     }
 
@@ -333,7 +336,7 @@ class SpdxDocumentFile(
     private fun getDependencies(
         pkgId: String,
         doc: SpdxResolvedDocument,
-        packages: MutableSet<Package>
+        packages: MutableSet<CuratedPackage>
     ): SortedSet<PackageReference> =
         getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<OrtIssue>()
@@ -386,7 +389,7 @@ class SpdxDocumentFile(
     private fun getDependencies(
         pkgId: String,
         doc: SpdxResolvedDocument,
-        packages: MutableSet<Package>,
+        packages: MutableSet<CuratedPackage>,
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
     ): SortedSet<PackageReference> =
@@ -451,7 +454,7 @@ class SpdxDocumentFile(
         spdxDocument: SpdxResolvedDocument,
         projectPackageId: String,
         relation: SpdxRelationship.Type,
-        packages: MutableSet<Package>
+        packages: MutableSet<CuratedPackage>
     ): Scope? =
         getDependencies(projectPackageId, spdxDocument, packages, relation).takeUnless {
             it.isEmpty()
@@ -486,7 +489,7 @@ class SpdxDocumentFile(
 
         val spdxDocument = transitiveDocument.rootDocument.document
 
-        val packages = mutableSetOf<Package>()
+        val packages = mutableSetOf<CuratedPackage>()
         val scopes = sortedSetOf<Scope>()
 
         val projectPackage = if (!spdxDocument.isProject()) {
@@ -522,7 +525,14 @@ class SpdxDocumentFile(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, packages.toSortedSet()))
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project,
+                // TODO: How to handle concluded licenses from an SPDX package?
+                //       Maybe add a "fake" curation provider for SPDX files.
+                packages = packages.mapTo(sortedSetOf()) { it.metadata }
+            )
+        )
     }
 
     /**

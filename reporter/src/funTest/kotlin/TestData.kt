@@ -199,7 +199,6 @@ val ORT_RESULT = OrtResult(
                     metadata = Package(
                         id = Identifier("NPM:@ort:concluded-license:1.0"),
                         declaredLicenses = sortedSetOf("BSD-3-Clause"),
-                        concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
                         binaryArtifact = RemoteArtifact.EMPTY,
@@ -211,7 +210,8 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         vcs = VcsInfo.EMPTY
-                    )
+                    ),
+                    concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx()
                 ),
                 CuratedPackage(
                     metadata = Package(

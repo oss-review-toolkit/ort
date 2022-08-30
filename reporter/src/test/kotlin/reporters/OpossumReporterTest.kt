@@ -352,7 +352,6 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                             binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
-                            concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                             declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                             description = "A package with all supported attributes set, with a VCS URL containing a " +
                                     "user name, and with a scan result containing two copyright finding matched to a " +
@@ -365,7 +364,8 @@ private fun createOrtResult(): OrtResult {
                                 url = "ssh://git@github.com/path/first-package-repo.git",
                                 path = "project-path"
                             )
-                        )
+                        ),
+                        concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx()
                     ),
                     CuratedPackage(
                         metadata = Package(
@@ -405,25 +405,25 @@ private fun createOrtResult(): OrtResult {
                             id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
-                            concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
                             description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
                                     "IDs in the declared and concluded license.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        )
+                        ),
+                        concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx()
                     ),
                     CuratedPackage(
                         metadata = Package(
                             id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
                             declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
-                            concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
                             description = "A package with non-SPDX license IDs in the declared and concluded license.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
                             vcs = VcsInfo.EMPTY
-                        )
+                        ),
+                        concludedLicense = "LicenseRef-scancode-srgb".toSpdx()
                     )
                 ).plus(
                     sortedSetOf(

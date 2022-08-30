@@ -35,6 +35,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
@@ -102,8 +103,8 @@ class Scanner(
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
-            val packages = ortResult.getPackages(skipExcluded).map { it.metadata }.filterNotConcluded()
-                .filterNotMetadataOnly().toSet()
+            val packages = ortResult.getPackages(skipExcluded).filterNotConcluded().filterNotMetadataOnly()
+                .mapTo(mutableSetOf()) { it.metadata }
 
             logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
@@ -364,9 +365,9 @@ class Scanner(
         }
     }
 
-    private fun Collection<Package>.filterNotConcluded(): Collection<Package> =
+    private fun Collection<CuratedPackage>.filterNotConcluded(): Collection<CuratedPackage> =
         takeUnless { scannerConfig.skipConcluded }
-            ?: partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+            ?: partition { it.concludedLicense != null && it.metadata.authors.isNotEmpty() }.let { (skip, keep) ->
                 if (skip.isNotEmpty()) {
                     logger.debug {
                         "Not scanning the following package(s) with concluded licenses: $skip"
@@ -376,8 +377,8 @@ class Scanner(
                 keep
             }
 
-    private fun Collection<Package>.filterNotMetadataOnly(): List<Package> =
-        partition { it.isMetadataOnly }.let { (skip, keep) ->
+    private fun Collection<CuratedPackage>.filterNotMetadataOnly(): List<CuratedPackage> =
+        partition { it.metadata.isMetadataOnly }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
                 logger.debug {
                     "Not scanning the following package(s) which are metadata only: $skip"

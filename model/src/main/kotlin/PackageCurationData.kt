@@ -135,7 +135,6 @@ data class PackageCurationData(
             authors = authors ?: original.authors,
             declaredLicenses = original.declaredLicenses,
             declaredLicensesProcessed = declaredLicensesProcessed,
-            concludedLicense = concludedLicense ?: original.concludedLicense,
             description = description ?: original.description,
             homepageUrl = homepageUrl ?: original.homepageUrl,
             binaryArtifact = binaryArtifact ?: original.binaryArtifact,
@@ -158,7 +157,7 @@ data class PackageCurationData(
             curation = this
         )
 
-        return CuratedPackage(pkg, curations)
+        return CuratedPackage(pkg, concludedLicense ?: targetPackage.concludedLicense, curations)
     }
 
     /**
