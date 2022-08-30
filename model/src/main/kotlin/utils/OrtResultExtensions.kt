@@ -20,36 +20,11 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
-
-/**
- * Return a map of concluded licenses for each package [Identifier] that has a concluded license. Note that this
- * function only returns license identifiers, license exceptions associated to licenses using the SPDX `WITH` operator
- * are currently ignored.
- */
-fun OrtResult.collectConcludedLicenses(omitExcluded: Boolean = false): Map<Identifier, List<String>> =
-    getPackages(omitExcluded)
-        .filter { it.pkg.concludedLicense != null }
-        .associate {
-            Pair(it.pkg.id, it.pkg.concludedLicense?.licenses().orEmpty())
-        }
-
-/**
- * Return a map of declared licenses for each project or package [Identifier]. Only licenses contained in the SPDX
- * expression of the processed declared license are included. Note that this function only returns license identifiers,
- * license exceptions associated to licenses using the SPDX `WITH` operator are currently ignored.
- */
-fun OrtResult.collectDeclaredLicenses(omitExcluded: Boolean = false): Map<Identifier, List<String>> =
-    getProjects(omitExcluded).associate {
-        Pair(it.id, it.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty())
-    } + getPackages(omitExcluded).associate {
-        Pair(it.pkg.id, it.pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty())
-    }
 
 /**
  * Create a [LicenseInfoResolver] for [this] [OrtResult]. If the resolver is used multiple times it should be stored
