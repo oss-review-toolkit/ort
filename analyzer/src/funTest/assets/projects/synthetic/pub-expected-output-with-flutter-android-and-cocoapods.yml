@@ -553,9 +553,9 @@ projects:
                   dependencies:
                   - id: "Maven:org.jetbrains:annotations:13.0"
                   - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-      - id: "Maven:io.flutter:arm64_v8a_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-      - id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-      - id: "Maven:io.flutter:flutter_embedding_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+      - id: "Maven:io.flutter:arm64_v8a_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+      - id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+      - id: "Maven:io.flutter:flutter_embedding_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
         dependencies:
         - id: "Maven:androidx.annotation:annotation:1.2.0"
         - id: "Maven:androidx.core:core:1.6.0"
@@ -821,7 +821,7 @@ projects:
                     dependencies:
                     - id: "Maven:org.jetbrains:annotations:13.0"
                     - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-      - id: "Maven:io.flutter:x86_64_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+      - id: "Maven:io.flutter:x86_64_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
       - id: "Maven:org.jetbrains:annotations:13.0"
       - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
         dependencies:
@@ -1691,14 +1691,14 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Maven:io.flutter:arm64_v8a_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-    purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+    id: "Maven:io.flutter:arm64_v8a_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+    purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187/arm64_v8a_release-1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187.jar"
+      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3/arm64_v8a_release-1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3.jar"
       hash:
         value: ""
         algorithm: ""
@@ -1719,14 +1719,14 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-    purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+    id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+    purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187/armeabi_v7a_release-1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187.jar"
+      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3/armeabi_v7a_release-1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3.jar"
       hash:
         value: ""
         algorithm: ""
@@ -1747,19 +1747,19 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Maven:io.flutter:flutter_embedding_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-    purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+    id: "Maven:io.flutter:flutter_embedding_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+    purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187/flutter_embedding_release-1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187.jar"
+      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3/flutter_embedding_release-1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3.jar"
       hash:
         value: ""
         algorithm: ""
     source_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187/flutter_embedding_release-1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187-sources.jar"
+      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3/flutter_embedding_release-1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3-sources.jar"
       hash:
         value: ""
         algorithm: ""
@@ -1775,14 +1775,14 @@ packages:
       path: ""
   curations: []
 - package:
-    id: "Maven:io.flutter:x86_64_release:1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
-    purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187"
+    id: "Maven:io.flutter:x86_64_release:1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
+    purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3"
     declared_licenses: []
     declared_licenses_processed: {}
     description: ""
     homepage_url: ""
     binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/x86_64_release/1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187/x86_64_release-1.0.0-e85ea0e79c6d894c120cda4ee8ee10fe6745e187.jar"
+      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/x86_64_release/1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3/x86_64_release-1.0.0-5e9e0e0aa8be4ff69facadd706b713f0bb54d5b3.jar"
       hash:
         value: ""
         algorithm: ""
