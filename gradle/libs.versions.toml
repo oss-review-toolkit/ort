@@ -10,7 +10,7 @@ kotlinPlugin = "1.7.10"
 shadowPlugin = "7.1.2"
 svnToolsPlugin = "3.1"
 taskInfoPlugin = "1.4.0"
-versionCatalogUpdatePlugin = "0.6.0"
+versionCatalogUpdatePlugin = "0.6.1"
 versionsPlugin = "0.42.0"
 
 antlr = "4.10.1"
