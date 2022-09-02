@@ -57,16 +57,20 @@ internal object PathExcludeGenerator {
     }
 }
 
-private fun getAllDirs(files: Set<File>): Set<File> {
-    val result = mutableSetOf<File>()
+private fun getAllDirs(files: Set<File>): Set<File> =
+    files.flatMapTo(mutableSetOf()) { it.getAncestorFiles() }
 
-    files.forEach { file ->
-        var dir = file.parentFile
+/**
+ * Return all ancestor directories ordered from parent to root.
+ */
+private fun File.getAncestorFiles(): List<File> {
+    val result = mutableListOf<File>()
 
-        while (dir != null) {
-            result += dir
-            dir = dir.parentFile
-        }
+    var ancenstor = parentFile
+
+    while (ancenstor != null) {
+        result += ancenstor
+        ancenstor = ancenstor.parentFile
     }
 
     return result
