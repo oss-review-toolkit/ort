@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.PathExcludeReason.BUILD_TOOL_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.DOCUMENTATION_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.TEST_OF
+import org.ossreviewtoolkit.utils.common.FileMatcher
 
 /**
  * This class generates path excludes based on the set of file paths present in the source tree.
@@ -42,9 +43,11 @@ internal object PathExcludeGenerator {
         val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
 
         dirs.forEach { dir ->
-            PATH_EXCLUDES_REASON_FOR_DIR_NAME[dir.name]?.let { reason ->
-                dirsToExclude += dir to reason
-            }
+            val (_, reason) = PATH_EXCLUDES_REASON_FOR_DIR_NAME.entries.find { (pattern, _) ->
+                FileMatcher.match(pattern, dir.name, ignoreCase = true)
+            } ?: return@forEach
+
+            dirsToExclude += dir to reason
         }
 
         val result = mutableSetOf<PathExclude>()
@@ -82,33 +85,27 @@ private fun File.getAncestorFiles(): List<File> {
 }
 
 private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = mapOf(
+    "*demo" to DOCUMENTATION_OF,
+    "*demos" to DOCUMENTATION_OF,
+    "*example*" to DOCUMENTATION_OF,
+    "*test*" to TEST_OF,
     ".github" to BUILD_TOOL_OF,
     ".gradle" to BUILD_TOOL_OF,
     ".idea" to BUILD_TOOL_OF,
     ".mvn" to BUILD_TOOL_OF,
     ".travis" to BUILD_TOOL_OF,
-    "CMake" to BUILD_TOOL_OF,
-    "Example" to DOCUMENTATION_OF,
-    "Tests" to TEST_OF,
     "bench" to TEST_OF,
     "benches" to TEST_OF,
     "benchmark" to TEST_OF,
     "benchmarks" to TEST_OF,
     "build" to BUILD_TOOL_OF,
     "cmake" to BUILD_TOOL_OF,
-    "demos" to DOCUMENTATION_OF,
     "doc" to DOCUMENTATION_OF,
     "doc-files" to DOCUMENTATION_OF,
     "docs" to DOCUMENTATION_OF,
-    "example" to DOCUMENTATION_OF,
-    "examples" to DOCUMENTATION_OF,
-    "funTest" to TEST_OF,
     "javadoc" to DOCUMENTATION_OF,
     "m4" to BUILD_TOOL_OF,
     "scripts" to BUILD_TOOL_OF,
-    "test" to TEST_OF,
-    "tests" to TEST_OF,
-    "testutils" to TEST_OF,
     "tools" to BUILD_TOOL_OF,
     "tutorial" to DOCUMENTATION_OF,
     "winbuild" to BUILD_TOOL_OF
