@@ -37,5 +37,15 @@ class PathExcludeGeneratorTest : WordSpec({
                 "src/test/**"
             )
         }
+
+        "exclude only the topmost possible directory" {
+            val files = listOf(
+                "build/m4/file.ext"
+            )
+
+            generatePathExcludes(files).map { it.pattern } should containExactlyInAnyOrder(
+                "build/m4/**" // TODO: This exclude pattern should be just "build/**".
+            )
+        }
     }
 })
