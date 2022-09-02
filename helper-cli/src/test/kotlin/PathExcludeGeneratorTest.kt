@@ -20,6 +20,9 @@
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldBe
+
+import java.io.File
 
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generatePathExcludes
 
@@ -57,5 +60,19 @@ class PathExcludeGeneratorTest : WordSpec({
                 ".github/**"
             )
         }
+
+        "exclude the expected directories for a large data set" {
+            val files = getAssetFile("dir-paths.txt").readLines().map { "$it/file.ext" }
+            val expectedExcludedDirs = getAssetFile("expected-excluded-dirs.txt").readText()
+
+            val pathExcludes = generatePathExcludes(files)
+            val excludedDirs = pathExcludes.filter { it.pattern.endsWith("/**") }.joinToString("\n") {
+                it.pattern
+            }
+
+            excludedDirs shouldBe expectedExcludedDirs
+        }
     }
 })
+
+private fun getAssetFile(path: String) = File("src/test/assets/path-exclude-gen").resolve(path)
