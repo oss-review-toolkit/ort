@@ -108,7 +108,7 @@ internal fun <K, V> greedySetCover(sets: Map<K, Set<V>>): Set<K> {
     val queue = sets.entries.toMutableSet()
 
     while (queue.isNotEmpty()) {
-        val maxCover = queue.maxByOrNull { it.value.intersect(uncovered).size }!!
+        val maxCover = queue.maxBy { it.value.intersect(uncovered).size }
 
         if (uncovered.intersect(maxCover.value).isNotEmpty()) {
             uncovered.removeAll(maxCover.value)
