@@ -34,5 +34,20 @@ class UtilsTest : WordSpec({
 
             greedySetCover(sets) should containExactlyInAnyOrder("c")
         }
+
+        "resolve a tie using the given comparator" {
+            val sets = mapOf(
+                "aa" to setOf(1),
+                "b" to setOf(1)
+            )
+
+            greedySetCover(sets) { a, b ->
+                a.length - b.length
+            } should containExactlyInAnyOrder("aa")
+
+            greedySetCover(sets) { a, b ->
+                b.length - a.length
+            } should containExactlyInAnyOrder("b")
+        }
     }
 })
