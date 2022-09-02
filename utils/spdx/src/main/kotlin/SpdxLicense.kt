@@ -77,13 +77,16 @@ enum class SpdxLicense(
     APSL_1_1("APSL-1.1", "Apple Public Source License 1.1"),
     APSL_1_2("APSL-1.2", "Apple Public Source License 1.2"),
     APSL_2_0("APSL-2.0", "Apple Public Source License 2.0"),
+    ARPHIC_1999("Arphic-1999", "Arphic Public License"),
     ARTISTIC_1_0("Artistic-1.0", "Artistic License 1.0"),
     ARTISTIC_1_0_CL8("Artistic-1.0-cl8", "Artistic License 1.0 w/clause 8"),
     ARTISTIC_1_0_PERL("Artistic-1.0-Perl", "Artistic License 1.0 (Perl)"),
     ARTISTIC_2_0("Artistic-2.0", "Artistic License 2.0"),
+    BAEKMUK("Baekmuk", "Baekmuk License"),
     BAHYPH("Bahyph", "Bahyph License"),
     BARR("Barr", "Barr License"),
     BEERWARE("Beerware", "Beerware License"),
+    BITSTREAM_VERA("Bitstream-Vera", "Bitstream Vera Font License"),
     BITTORRENT_1_0("BitTorrent-1.0", "BitTorrent Open Source License v1.0"),
     BITTORRENT_1_1("BitTorrent-1.1", "BitTorrent Open Source License v1.1"),
     BLESSING("blessing", "SQLite Blessing"),
@@ -126,6 +129,7 @@ enum class SpdxLicense(
     CC_BY_3_0("CC-BY-3.0", "Creative Commons Attribution 3.0 Unported"),
     CC_BY_3_0_AT("CC-BY-3.0-AT", "Creative Commons Attribution 3.0 Austria"),
     CC_BY_3_0_DE("CC-BY-3.0-DE", "Creative Commons Attribution 3.0 Germany"),
+    CC_BY_3_0_IGO("CC-BY-3.0-IGO", "Creative Commons Attribution 3.0 IGO"),
     CC_BY_3_0_NL("CC-BY-3.0-NL", "Creative Commons Attribution 3.0 Netherlands"),
     CC_BY_3_0_US("CC-BY-3.0-US", "Creative Commons Attribution 3.0 United States"),
     CC_BY_4_0("CC-BY-4.0", "Creative Commons Attribution 4.0 International"),
@@ -340,7 +344,10 @@ enum class SpdxLicense(
     LPPL_1_2("LPPL-1.2", "LaTeX Project Public License v1.2"),
     LPPL_1_3A("LPPL-1.3a", "LaTeX Project Public License v1.3a"),
     LPPL_1_3C("LPPL-1.3c", "LaTeX Project Public License v1.3c"),
+    LZMA_SDK_9_11_TO_9_20("LZMA-SDK-9.11-to-9.20", "LZMA SDK License (versions 9.11 to 9.20)"),
+    LZMA_SDK_9_22("LZMA-SDK-9.22", "LZMA SDK License (versions 9.22 and beyond)"),
     MAKEINDEX("MakeIndex", "MakeIndex License"),
+    MINPACK("Minpack", "Minpack License"),
     MIROS("MirOS", "The MirOS Licence"),
     MIT("MIT", "MIT License"),
     MITNFA("MITNFA", "MIT +no-false-attribs license"),
@@ -353,10 +360,13 @@ enum class SpdxLicense(
     MIT_OPEN_GROUP("MIT-open-group", "MIT Open Group variant"),
     MOTOSOTO("Motosoto", "Motosoto License"),
     MPICH2("mpich2", "mpich2 License"),
+    MPI_PERMISSIVE("mpi-permissive", "mpi Permissive License"),
+    MPLUS("mplus", "mplus Font License"),
     MPL_1_0("MPL-1.0", "Mozilla Public License 1.0"),
     MPL_1_1("MPL-1.1", "Mozilla Public License 1.1"),
     MPL_2_0("MPL-2.0", "Mozilla Public License 2.0"),
     MPL_2_0_NO_COPYLEFT_EXCEPTION("MPL-2.0-no-copyleft-exception", "Mozilla Public License 2.0 (no copyleft exception)"),
+    MS_LPL("MS-LPL", "Microsoft Limited Public License"),
     MS_PL("MS-PL", "Microsoft Public License"),
     MS_RL("MS-RL", "Microsoft Reciprocal License"),
     MTLL("MTLL", "Matrix Template Library License"),
@@ -374,6 +384,7 @@ enum class SpdxLicense(
     NET_SNMP("Net-SNMP", "Net-SNMP License"),
     NEWSLETR("Newsletr", "Newsletr License"),
     NGPL("NGPL", "Nethack General Public License"),
+    NICTA_1_0("NICTA-1.0", "NICTA Public Software License, Version 1.0"),
     NIST_PD("NIST-PD", "NIST Public Domain Notice"),
     NIST_PD_FALLBACK("NIST-PD-fallback", "NIST Public Domain Notice with license fallback"),
     NLOD_1_0("NLOD-1.0", "Norwegian Licence for Open Government Data (NLOD) 1.0"),
@@ -446,6 +457,7 @@ enum class SpdxLicense(
     PSF_2_0("PSF-2.0", "Python Software Foundation License 2.0"),
     PSUTILS("psutils", "psutils License"),
     PYTHON_2_0("Python-2.0", "Python License 2.0"),
+    PYTHON_2_0_1("Python-2.0.1", "Python License 2.0.1"),
     QHULL("Qhull", "Qhull License"),
     QPL_1_0("QPL-1.0", "Q Public License 1.0"),
     RDISC("Rdisc", "Rdisc License"),
@@ -533,7 +545,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.16"
+        const val LICENSE_LIST_VERSION = "3.18"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
