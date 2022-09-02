@@ -88,6 +88,7 @@ enum class SpdxLicenseException(
     UNIVERSAL_FOSS_EXCEPTION_1_0("Universal-FOSS-exception-1.0", "Universal FOSS Exception, Version 1.0"),
     U_BOOT_EXCEPTION_2_0("u-boot-exception-2.0", "U-Boot exception 2.0"),
     WXWINDOWS_EXCEPTION_3_1("WxWindows-exception-3.1", "WxWindows Library Exception 3.1"),
+    X11VNC_OPENSSL_EXCEPTION("x11vnc-openssl-exception", "x11vnc OpenSSL Exception"),
     _389_EXCEPTION("389-exception", "389 Directory Server Exception");
 
     companion object {

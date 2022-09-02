@@ -188,6 +188,7 @@ enum class SpdxLicense(
     CERN_OHL_P_2_0("CERN-OHL-P-2.0", "CERN Open Hardware Licence Version 2 - Permissive"),
     CERN_OHL_S_2_0("CERN-OHL-S-2.0", "CERN Open Hardware Licence Version 2 - Strongly Reciprocal"),
     CERN_OHL_W_2_0("CERN-OHL-W-2.0", "CERN Open Hardware Licence Version 2 - Weakly Reciprocal"),
+    CHECKMK("checkmk", "Checkmk License"),
     CLARTISTIC("ClArtistic", "Clarified Artistic License"),
     CNRI_JYTHON("CNRI-Jython", "CNRI Jython License"),
     CNRI_PYTHON("CNRI-Python", "CNRI Python License"),
@@ -240,6 +241,7 @@ enum class SpdxLicense(
     FSFAP("FSFAP", "FSF All Permissive License"),
     FSFUL("FSFUL", "FSF Unlimited License"),
     FSFULLR("FSFULLR", "FSF Unlimited License (with License Retention)"),
+    FSFULLRWD("FSFULLRWD", "FSF Unlimited License (With License Retention    and Warranty Disclaimer)"),
     FTL("FTL", "Freetype Project License"),
     GD("GD", "GD License"),
     GFDL_1_1("GFDL-1.1", "GNU Free Documentation License v1.1", true),
@@ -311,6 +313,7 @@ enum class SpdxLicense(
     JASPER_2_0("JasPer-2.0", "JasPer License"),
     JPNIC("JPNIC", "Japan Network Information Center License"),
     JSON("JSON", "JSON License"),
+    KNUTH_CTAN("Knuth-CTAN", "Knuth CTAN License"),
     LAL_1_2("LAL-1.2", "Licence Art Libre 1.2"),
     LAL_1_3("LAL-1.3", "Licence Art Libre 1.3"),
     LATEX2E("Latex2e", "Latex2e License"),
@@ -332,6 +335,7 @@ enum class SpdxLicense(
     LIBPNG_2_0("libpng-2.0", "PNG Reference Library version 2"),
     LIBSELINUX_1_0("libselinux-1.0", "libselinux public domain notice"),
     LIBTIFF("libtiff", "libtiff License"),
+    LIBUTIL_DAVID_NUGENT("libutil-David-Nugent", "libutil David Nugent License"),
     LILIQ_P_1_1("LiLiQ-P-1.1", "Licence Libre du Québec – Permissive version 1.1"),
     LILIQ_RPLUS_1_1("LiLiQ-Rplus-1.1", "Licence Libre du Québec – Réciprocité forte version 1.1"),
     LILIQ_R_1_1("LiLiQ-R-1.1", "Licence Libre du Québec – Réciprocité version 1.1"),
@@ -545,7 +549,7 @@ enum class SpdxLicense(
         /**
          * The version of the license list.
          */
-        const val LICENSE_LIST_VERSION = "3.18"
+        const val LICENSE_LIST_VERSION = "3.19"
 
         /**
          * Return the enum value for the given [id], or null if it is no SPDX license id.
