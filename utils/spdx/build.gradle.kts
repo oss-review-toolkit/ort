@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-import at.bxm.gradleplugins.svntools.tasks.SvnExport
+import de.undercouch.gradle.tasks.download.Download
 
 import groovy.json.JsonSlurper
 
@@ -31,12 +31,12 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val spdxLicenseListVersion: String by project
 
 plugins {
-    // Apply core plugins.
     antlr
     `java-library`
 
-    // Apply third-party plugins.
-    alias(libs.plugins.svnTools)
+    // Work around the Kotlin plugin already depending on the Download plugin, see
+    // https://youtrack.jetbrains.com/issue/KT-46034.
+    id(libs.plugins.download.get().pluginId) apply false
 }
 
 tasks.withType<AntlrTask>().configureEach {
@@ -58,25 +58,52 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
 }
 
-val importScanCodeLicenseTexts by tasks.registering(SvnExport::class) {
+/**
+ * For the given [owner], [repo] and [revision], return the [path]'s contents as a list of URLs.
+ */
+fun listGitHubTree(owner: String, repo: String, revision: String, path: String): List<URL> {
+    val apiUrl = "https://api.github.com/repos/$owner/$repo/git/trees/$revision"
+    val rawUrl = "https://raw.githubusercontent.com/$owner/$repo/$revision"
+
+    logger.quiet("Fetching directory listing from $apiUrl...")
+
+    val jsonSlurper = JsonSlurper()
+
+    /** Get the tree information for a URL pointing to a tree API endpoint. */
+    fun URL.tree(): List<Map<String, Any>> {
+        val json = jsonSlurper.parse(this, "UTF-8") as Map<String, Any>
+        return json["tree"] as List<Map<String, Any>>
+    }
+
+    /** Change into the specified [path] for a URL pointing to a tree API endpoint. */
+    fun URL.cd(path: String): URL {
+        val match = requireNotNull(tree().find { it["path"] == path && it["type"] == "tree" })
+        return URL(match["url"] as String)
+    }
+
+    /** List the contents of the specified [path] and return a list of path strings. */
+    fun URL.list(path: String): List<String> {
+        val url = path.split('/').fold(this) { url, segment -> url.cd(segment) }
+        return url.tree().map { "$path/${it["path"] as String}" }
+    }
+
+    return URL(apiUrl).list(path).map { URL("$rawUrl/$it") }
+}
+
+val importScanCodeLicenseTexts by tasks.registering(Download::class) {
     description = "Imports license texts from the ScanCode repository."
     group = "SPDX"
 
-    svnUrl = "https://github.com/nexB/scancode-toolkit/trunk/src/licensedcode/data/licenses"
-    targetDir = "$buildDir/SvnExport/licenses/scancode-toolkit"
-
-    outputs.dir(targetDir)
+    src { listGitHubTree("nexB", "scancode-toolkit", "develop", "src/licensedcode/data/licenses") }
+    dest("$buildDir/download/licenses/scancode-toolkit")
 }
 
-val importSpdxLicenseTexts by tasks.registering(SvnExport::class) {
+val importSpdxLicenseTexts by tasks.registering(Download::class) {
     description = "Imports license texts from the SPDX repository."
     group = "SPDX"
 
-    svnUrl = "https://github.com/spdx/license-list-data/tags/v$spdxLicenseListVersion/text"
-    targetDir = "$buildDir/SvnExport/licenses/spdx"
-
-    inputs.property("spdxLicenseListVersion", spdxLicenseListVersion)
-    outputs.dir(targetDir)
+    src { listGitHubTree("spdx", "license-list-data", "v$spdxLicenseListVersion", "text") }
+    dest("$buildDir/download/licenses/spdx")
 }
 
 val importLicenseTexts by tasks.registering {
@@ -278,7 +305,7 @@ fun generateEnumClass(
 fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMetaData>, resourcePath: String) {
     logger.quiet("Determining SPDX $description texts...")
 
-    val scanCodeLicensePath = "$buildDir/SvnExport/licenses/scancode-toolkit"
+    val scanCodeLicensePath = "$buildDir/download/licenses/scancode-toolkit"
     val spdxIdToScanCodeKey = mutableMapOf<String, String>()
 
     file(scanCodeLicensePath).walk().maxDepth(1).filter { it.isFile && it.extension == "yml" }.forEach { file ->
@@ -304,11 +331,11 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
         val candidates = mutableListOf(
             "$scanCodeLicensePath/${spdxIdToScanCodeKey[id]}.LICENSE",
-            "$buildDir/SvnExport/licenses/spdx/$id.txt"
+            "$buildDir/download/licenses/spdx/$id.txt"
         )
 
         if (meta.deprecated) {
-            candidates += "$buildDir/SvnExport/licenses/spdx/deprecated_$id.txt"
+            candidates += "$buildDir/download/licenses/spdx/deprecated_$id.txt"
         }
 
         val i = candidates.iterator()
