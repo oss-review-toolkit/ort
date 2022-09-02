@@ -98,4 +98,7 @@ dependencies {
     implementation(libs.jslt)
     implementation(libs.log4jApiToSlf4j)
     implementation(libs.logbackClassic)
+
+    testImplementation(libs.kotestAssertionsCore)
+    testImplementation(libs.kotestRunnerJunit5)
 }
