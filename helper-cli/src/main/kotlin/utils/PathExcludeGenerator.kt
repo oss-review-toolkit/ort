@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.helper.utils
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.PathExcludeReason.BUILD_TOOL_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.DOCUMENTATION_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.TEST_OF
@@ -38,22 +39,26 @@ internal object PathExcludeGenerator {
         val files = filePaths.mapTo(mutableSetOf()) { File(it) }
         val dirs = getAllDirs(files)
 
-        val pathExcludes = mutableSetOf<PathExclude>()
+        val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
 
         dirs.forEach { dir ->
             PATH_EXCLUDES_REASON_FOR_DIR_NAME[dir.name]?.let { reason ->
-                pathExcludes += PathExclude(
-                    pattern = "${dir.path}/**",
-                    reason = reason
+                dirsToExclude += dir to reason
+            }
+        }
+
+        val result = mutableSetOf<PathExclude>()
+
+        dirsToExclude.forEach { (dir, reason) ->
+            if (dir.getAncestorFiles().intersect(dirsToExclude.keys).isEmpty()) {
+                result += PathExclude(
+                      pattern = "${dir.path}/**",
+                      reason = reason
                 )
             }
         }
 
-        val filesForPathExcludes = pathExcludes.associateWith { pathExcludeExclude ->
-            files.filter { pathExcludeExclude.matches(it.path) }.toSet()
-        }
-
-        return greedySetCover(filesForPathExcludes).toList()
+        return result.toList()
     }
 }
 
