@@ -44,7 +44,7 @@ class PathExcludeGeneratorTest : WordSpec({
             )
 
             generatePathExcludes(files).map { it.pattern } should containExactlyInAnyOrder(
-                "build/m4/**" // TODO: This exclude pattern should be just "build/**".
+                "build/**"
             )
         }
     }
