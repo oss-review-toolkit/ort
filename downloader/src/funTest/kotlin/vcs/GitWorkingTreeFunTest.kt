@@ -83,7 +83,7 @@ class GitWorkingTreeFunTest : StringSpec({
             "drop-py2.6",
             "fixing-test-setups",
             "idiot-z-add_extra_require",
-            "master",
+            "main",
             "release-0.10.1",
             "reverse-mode",
             "v2beta"
