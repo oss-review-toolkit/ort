@@ -94,4 +94,6 @@ tasks:
       - buildFunTest
     run:
       container: run
-      command: ./gradlew funTest
+      command: "'./gradlew funTest jacocoFunTestReport -p analyzer'"
+      entrypoint: /bin/bash --login -c
+
