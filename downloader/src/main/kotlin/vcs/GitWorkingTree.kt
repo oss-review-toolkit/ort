@@ -111,7 +111,7 @@ open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(work
 
     override fun getRevision(): String = repo.exactRef(Constants.HEAD)?.objectId?.name().orEmpty()
 
-    override fun getRootPath(): File = repo.workTree ?: workingDir
+    override fun getRootPath(): File = repo.workTree
 
     override fun listRemoteBranches(): List<String> =
         runCatching {
