@@ -127,7 +127,7 @@ private class DependencyRefCursor(
     val graph: DependencyGraph,
 
     /** The [DependencyGraphNode]s to traverse. */
-    val nodes: Collection<DependencyGraphNode> = emptyList(),
+    nodes: Collection<DependencyGraphNode> = emptyList(),
 
     /**
      * An optional initial value for the current node. This is mainly used it this instance acts as an adapter
