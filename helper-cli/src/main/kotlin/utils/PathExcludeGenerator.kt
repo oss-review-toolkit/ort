@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason.BUILD_TOOL_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.DOCUMENTATION_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.TEST_OF
 import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * This class generates path excludes based on the set of file paths present in the source tree.
@@ -43,7 +44,7 @@ internal object PathExcludeGenerator {
         val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
 
         dirs.forEach { dir ->
-            val (_, reason) = PATH_EXCLUDES_REASON_FOR_DIR_NAME.entries.find { (pattern, _) ->
+            val (_, reason) = PATH_EXCLUDES_REASON_FOR_DIR_NAME.find { (pattern, _) ->
                 FileMatcher.match(pattern, dir.name, ignoreCase = true)
             } ?: return@forEach
 
@@ -84,7 +85,7 @@ private fun File.getAncestorFiles(): List<File> {
     return result
 }
 
-private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = mapOf(
+private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "*demo" to DOCUMENTATION_OF,
     "*demos" to DOCUMENTATION_OF,
     "*documentation*" to DOCUMENTATION_OF,
@@ -121,4 +122,10 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = mapOf(
     "tools" to BUILD_TOOL_OF,
     "tutorial" to DOCUMENTATION_OF,
     "winbuild" to BUILD_TOOL_OF
-)
+).apply {
+    val duplicatePatterns = getDuplicates { it.first }.keys
+
+    require(duplicatePatterns.isEmpty()) {
+        "Found duplicate patterns: ${duplicatePatterns.joinToString()}."
+    }
+}
