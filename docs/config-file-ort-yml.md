@@ -154,8 +154,8 @@ curations:
  ```
 
 To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings.
-Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the `config.yml` see
-[reference.yml](../model/src/main/resources/reference.yml).
+Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
+[config.yml](../README.md#ort-configuration-file).
 ```yaml
 package_configurations:
 - id: 'Maven:com.example:package:1.2.3'
@@ -180,8 +180,8 @@ The list of available options for `reason` are defined in
 Package curations can be added if you want to correct metadata of third-party dependencies.
 
 The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.
-Note that this feature requires `enableRepositoryPackageCurations` to be enabled in the `config.yml`, see
-[reference.yml](../model/src/main/resources/reference.yml).
+Note that this feature requires `enableRepositoryPackageCurations` to be enabled in the
+[config.yml](../README.md#ort-configuration-file).
 
 e.g.:
 ```yaml
