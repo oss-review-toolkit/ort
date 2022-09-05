@@ -286,7 +286,7 @@ class Composer(
      *
      * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
      * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
-     * composer.lock we can ignore any virtual package with the same name. Since the code later depends on the virtual
+     * 'composer.lock' we can ignore any virtual package with the same name. Since the code later depends on the virtual
      * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
      * packages for which are not in the installed package map.
      */
