@@ -12,3 +12,6 @@ out/
 
 # Mac
 .DS_Store
+
+# Ignore node_modules
+**/node_modules

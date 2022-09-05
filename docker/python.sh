@@ -21,7 +21,7 @@ PYENV_ROOT="/opt/python"
 export PYENV_ROOT
 
 add_local_path "${PYENV_ROOT}/bin"
+add_local_path "${PYENV_ROOT}/shims"
 
-eval "$(pyenv init --path)";
 # shellcheck disable=1091
 . "$(pyenv root)"/completions/pyenv.bash;

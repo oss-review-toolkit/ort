@@ -72,44 +72,20 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-
-
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
 ARG PYTHON_VERSION=3.10.6
-ARG PYTHON2_VERSION=""
+ARG PYTHON2_VERSION=2.7.18
+ARG PYENV_GIT_TAG=v2.3.4
 
 ENV PYENV_ROOT=/opt/python
-RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-ENV PATH=/opt/python/bin:$PATH
+RUN curl -kSs https://pyenv.run | bash
+ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
 RUN for pyvers in ${PYTHON_VERSION} ${PYTHON2_VERSION}; do \
-    pyenv install $pyvers; done
+    pyenv install -v $pyvers; done
 RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
-ENV PATH=/opt/python/shims:$PATH
-
-ARG CONAN_VERSION=1.52.0
-ARG PYTHON_INSPECTOR_VERSION=0.6.4
-ARG PYTHON_VIRTUALENV_VERSION=20.15.1
-ARG PIPTOOL_VERSION=22.1.2
-ARG SCANCODE_VERSION=30.1.0
-
-# Install pip and wheel ahead of regular modules as python try to generate
-# whl packages if they are not automatic available to download.
-RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
-    pip install -U --cache-dir /var/cache/python \
-    pip=="${PIPTOOL_VERSION}" \
-    wheel
-RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
-    pip install -U --cache-dir /var/cache/python \
-    Mercurial \
-    conan=="${CONAN_VERSION}" \
-    pipenv \
-    poetry \
-    python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
-    scancode-toolkit==${SCANCODE_VERSION} \
-    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
 COPY docker/python.sh /etc/profile.d
 
@@ -138,9 +114,10 @@ COPY docker/ruby.sh /etc/profile.d
 FROM build AS nodebuild
 
 ARG BOWER_VERSION=1.8.12
-ARG NODEJS_VERSION=16.15.1
-ARG NPM_VERSION=7.20.6
-ARG NVM_DIR=/opt/nodejs
+ARG NODEJS_VERSION=16.17.0
+ARG NPM_VERSION=8.5.0
+ARG NVM_DIR=/opt/nvm
+ARG PNPM_VERSION=7.8.0
 ARG YARN_VERSION=1.22.10
 
 RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
@@ -148,7 +125,7 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm install "${NODEJS_VERSION}" \
     && nvm alias default "${NODEJS_VERSION}" \
     && nvm use default \
-    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION yarn@$YARN_VERSION
+    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
@@ -219,7 +196,7 @@ RUN mkdir -p /opt/ort \
 
 #------------------------------------------------------------------------
 # Main container
-FROM eclipse-temurin:11-jdk-jammy
+FROM eclipse-temurin:11-jdk-jammy as run
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -277,17 +254,41 @@ COPY docker/00-add_local_path.sh /etc/profile.d/
 # Python
 COPY --chown=$USERNAME:$USERNAME --from=pythonbuild /opt/python /opt/python
 COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
+RUN chmod -R u+rw /opt/python/
+
+ARG CONAN_VERSION=1.52.0
+ARG PYTHON_INSPECTOR_VERSION=0.6.4
+ARG PYTHON_VIRTUALENV_VERSION=20.15.1
+ARG PIPTOOL_VERSION=22.2.2
+ARG SCANCODE_VERSION=30.1.0
+ENV PYENV_ROOT=/opt/python
+ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
+
+# Install pip and wheel ahead of regular modules as python try to generate
+# whl packages if they are not automatic available to download.
+RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
+    pip install -U --cache-dir /var/cache/python \
+    pip=="${PIPTOOL_VERSION}" \
+    wheel \
+    && pip install -U --cache-dir /var/cache/python \
+    Mercurial \
+    conan=="${CONAN_VERSION}" \
+    pipenv \
+    poetry \
+    python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
+    scancode-toolkit==${SCANCODE_VERSION} \
+    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
 
 # Ruby
 COPY --chown=$USERNAME:$USERNAME --from=rubybuild /opt/rbenv /opt/rbenv
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 
 # NodeJS
-ARG NODEJS_VERSION=16.13.2
-ARG NVM_DIR=/opt/nodejs
+ARG NODEJS_VERSION=16.17.0
+ARG NVM_DIR=/opt/nvm
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
-COPY --chown=$USERNAME:$USERNAME --from=nodebuild /opt/nodejs /opt/nodejs
+COPY --chown=$USERNAME:$USERNAME --from=nodebuild /opt/nvm /opt/nvm
 
 # Golang
 COPY --chown=$USERNAME:$USERNAME --from=gobuild /opt/go /opt/go/
@@ -302,6 +303,7 @@ ARG ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild /opt/android-sdk /opt/android-sdk
+RUN chmod -R u+rw /opt/android-sdk/
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
