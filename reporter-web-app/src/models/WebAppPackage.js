@@ -29,6 +29,8 @@ class WebAppPackage {
 
     #concludedLicense;
 
+    #effectiveLicense;
+
     #curations = [];
 
     #declaredLicenses = new Set();
@@ -191,6 +193,11 @@ class WebAppPackage {
                 const detectedLicensesIndexes = obj.detected_licenses
                     || obj.detectedLicenses;
                 this.#detectedLicensesIndexes = new Set(detectedLicensesIndexes);
+            }
+
+            if (obj.effective_license || obj.effectiveLicense) {
+                this.#effectiveLicense = obj.effective_license
+                    || obj.effectiveLicense;
             }
 
             if (obj.homepage_url || obj.homepageUrl) {
@@ -375,6 +382,10 @@ class WebAppPackage {
 
     get detectedLicensesProcessed() {
         return this.#detectedLicensesProcessed;
+    }
+
+    get effectiveLicense() {
+        return this.#effectiveLicense;
     }
 
     get excludeReasons() {
@@ -635,6 +646,11 @@ class WebAppPackage {
 
     hasDetectedExcludedLicenses() {
         return this.#detectedExcludedLicenses.size !== 0;
+    }
+
+    hasEffectiveLicense() {
+        return this.#effectiveLicense
+            && this.#effectiveLicense.length !== 0;
     }
 
     hasExcludedFindings() {
