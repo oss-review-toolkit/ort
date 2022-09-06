@@ -89,6 +89,28 @@ RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
 
 COPY docker/python.sh /etc/profile.d
 
+ARG CONAN_VERSION=1.52.0
+ARG PYTHON_INSPECTOR_VERSION=0.6.4
+ARG PYTHON_PIPENV_VERSION=2018.11.26
+ARG PYTHON_POETRY_VERSION=1.1.13
+ARG PYTHON_VIRTUALENV_VERSION=20.0.26
+ARG PIPTOOL_VERSION=22.2.2
+ARG SCANCODE_VERSION=30.1.0
+ENV PYENV_ROOT=/opt/python
+ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
+
+RUN pip install -U \
+    pip=="${PIPTOOL_VERSION}" \
+    wheel \
+    && pip install -U \
+    Mercurial \
+    conan=="${CONAN_VERSION}" \
+    pipenv=="${PYTHON_PIPENV_VERSION}" \
+    poetry==${PYTHON_POETRY_VERSION} \
+    python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
+    scancode-toolkit==${SCANCODE_VERSION} \
+    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
+
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
 FROM build as rubybuild
@@ -238,7 +260,7 @@ ARG USER_GID=$USER_ID
 ARG HOMEDIR=/home/ort
 ENV HOME=$HOMEDIR
 
-# Run with non privileged user
+# Non privileged user
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd \
     --uid $USER_ID \
@@ -254,43 +276,23 @@ RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
 COPY docker/00-add_local_path.sh /etc/profile.d/
 
 # Python
-COPY --chown=$USERNAME:$USERNAME --from=pythonbuild /opt/python /opt/python
+ARG PYENV_ROOT=/opt/python
+COPY --chown=$USERNAME:$USERNAME --from=pythonbuild ${PYENV_ROOT} ${PYENV_ROOT}
 COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
-RUN chmod -R u+rw /opt/python/
-
-ARG CONAN_VERSION=1.52.0
-ARG PYTHON_INSPECTOR_VERSION=0.6.4
-ARG PYTHON_VIRTUALENV_VERSION=20.15.1
-ARG PIPTOOL_VERSION=22.2.2
-ARG SCANCODE_VERSION=30.1.0
-ENV PYENV_ROOT=/opt/python
-ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
-
-# Install pip and wheel ahead of regular modules as python try to generate
-# whl packages if they are not automatic available to download.
-RUN --mount=type=cache,target=/var/cache/python,sharing=locked \
-    pip install -U --cache-dir /var/cache/python \
-    pip=="${PIPTOOL_VERSION}" \
-    wheel \
-    && pip install -U --cache-dir /var/cache/python \
-    Mercurial \
-    conan=="${CONAN_VERSION}" \
-    pipenv \
-    poetry \
-    python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
-    scancode-toolkit==${SCANCODE_VERSION} \
-    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
+RUN chmod u+rwx ${PYENV_ROOT}
 
 # Ruby
-COPY --chown=$USERNAME:$USERNAME --from=rubybuild /opt/rbenv /opt/rbenv
+ARG RBENV_ROOT=/opt/rbenv/
+COPY --chown=$USERNAME:$USERNAME --from=rubybuild ${RBENV_ROOT} ${RBENV_ROOT}
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
+RUN chmod u+rwx ${RBENV_ROOT}
 
 # NodeJS
 ARG NODEJS_VERSION=16.17.0
 ARG NVM_DIR=/opt/nvm
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
-COPY --chown=$USERNAME:$USERNAME --from=nodebuild /opt/nvm /opt/nvm
+COPY --chown=$USERNAME:$USERNAME --from=nodebuild ${NVM_DIR} ${NVM_DIR}
 
 # Golang
 COPY --chown=$USERNAME:$USERNAME --from=gobuild /opt/go /opt/go/
@@ -304,8 +306,8 @@ ENV ANDROID_HOME=/opt/android-sdk
 ARG ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
-COPY --chown=$USERNAME:$USERNAME --from=androidbuild /opt/android-sdk /opt/android-sdk
-RUN chmod -R u+rw /opt/android-sdk/
+COPY --chown=$USERNAME:$USERNAME --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
+RUN chmod u+rwx ${ANDROID_HOME}
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
