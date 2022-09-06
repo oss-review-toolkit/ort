@@ -84,6 +84,7 @@ class GitWorkingTreeFunTest : StringSpec({
             "fixing-test-setups",
             "idiot-z-add_extra_require",
             "main",
+            "pre-commit-ci-update-config",
             "release-0.10.1",
             "reverse-mode",
             "v2beta"
