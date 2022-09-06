@@ -54,6 +54,8 @@ class WebAppOrtResult {
 
     #detectedLicensesProcessed = [];
 
+    #effectiveLicensePackages = [];
+
     #issues = [];
 
     #issuesByPackageIndexMap = new Map();
@@ -159,6 +161,11 @@ class WebAppOrtResult {
                         ...webAppPackage.detectedLicenses
                     ]);
                     this.#detectedLicenses = Array.from(detectedLicenses).sort();
+
+                    if (webAppPackage.effectiveLicense
+                        && webAppPackage.effectiveLicense.length > 0) {
+                        this.#effectiveLicensePackages.push(webAppPackage);
+                    }
                 }
             }
 
@@ -396,6 +403,10 @@ class WebAppOrtResult {
         return this.#detectedLicensesProcessed;
     }
 
+    get effectiveLicensePackages() {
+        return this.#effectiveLicensePackages;
+    }
+
     get issues() {
         return this.#issues;
     }
@@ -566,6 +577,10 @@ class WebAppOrtResult {
 
     hasDetectedLicensesProcessed() {
         return this.#detectedLicensesProcessed.length > 0;
+    }
+
+    hasEffectiveLicenses() {
+        return this.#effectiveLicensePackages.length > 0;
     }
 
     hasExcludes() {

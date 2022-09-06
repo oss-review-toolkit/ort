@@ -221,6 +221,27 @@ class TableView extends React.Component {
             }
         }
 
+        if (webAppOrtResult.hasEffectiveLicenses()) {
+            toggleColumnMenuItems.push({ text: 'Effective License', value: 'effectiveLicense' });
+
+            if (showKeys.includes('effectiveLicense')) {
+                columns.push({
+                    align: 'left',
+                    dataIndex: 'effectiveLicense',
+                    sorter: (a, b) => {
+                        const lenA = a.effectiveLicense ? a.effectiveLicense.length : 0;
+                        const lenB = b.effectiveLicense ? b.effectiveLicense.length : 0;
+
+                        return lenA - lenB;
+                    },
+                    sortOrder: sortedInfo.field === 'effectiveLicense' && sortedInfo.order,
+                    textWrap: 'word-break',
+                    title: 'Effective License',
+                    width: '18%'
+                });
+            }
+        }
+
         if (webAppOrtResult.hasDeclaredLicensesProcessed()) {
             toggleColumnMenuItems.push({ text: 'Declared Licenses', value: 'declaredLicensesProcessed' });
 

@@ -45,6 +45,17 @@ const PackageLicenses = (props) => {
                 )
             }
             {
+                webAppPackage.hasEffectiveLicense()
+                && (
+                    <Item
+                        label="Effective SPDX"
+                        key="ort-package-effective-licenses"
+                    >
+                        {webAppPackage.effectiveLicense}
+                    </Item>
+                )
+            }
+            {
                 webAppPackage.hasDeclaredLicenses()
                 && (
                     <Item
