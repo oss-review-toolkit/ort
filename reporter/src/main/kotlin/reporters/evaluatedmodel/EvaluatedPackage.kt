@@ -51,6 +51,8 @@ data class EvaluatedPackage(
     val detectedExcludedLicenses: Set<LicenseId>,
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val concludedLicense: SpdxExpression? = null,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val effectiveLicense: SpdxExpression? = null,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val description: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
