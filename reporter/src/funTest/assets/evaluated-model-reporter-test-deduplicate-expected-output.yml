@@ -266,6 +266,7 @@ packages:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
     - 3
+  effective_license: "Apache-2.0"
   description: "Apache Commons Text is a library focused on algorithms working on\
     \ strings."
   homepage_url: "http://commons.apache.org/proper/commons-text/"
@@ -403,6 +404,7 @@ packages:
     spdx_expression: "EPL-1.0"
     mapped_licenses:
     - 9
+  effective_license: "EPL-1.0"
   description: "JUnit is a unit testing framework for Java, created by Erich Gamma\
     \ and Kent Beck."
   homepage_url: "http://junit.org"
@@ -450,6 +452,7 @@ packages:
     - 11
     - 4
   concluded_license: "GPL-2.0-only OR MIT"
+  effective_license: "MIT"
   binary_artifact:
     url: ""
     hash:
@@ -497,6 +500,7 @@ packages:
     - 13
     - 9
   concluded_license: "MPL-2.0 OR EPL-1.0"
+  effective_license: "MPL-2.0"
   description: "H2 Database Engine"
   homepage_url: "https://h2database.com"
   binary_artifact:
@@ -546,6 +550,7 @@ packages:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
     - 3
+  effective_license: "Apache-2.0"
   description: "Apache Commons Lang, a package of Java utility classes for the\n \
     \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
     \ as to justify existence in java.lang."
@@ -593,6 +598,7 @@ packages:
     spdx_expression: "Apache-2.0"
     mapped_licenses:
     - 3
+  effective_license: "Apache-2.0"
   description: "A test component with no specific functionality"
   homepage_url: "http://example.org/test/component/"
   binary_artifact:
@@ -628,6 +634,7 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped_licenses:
     - 16
+  effective_license: "BSD-3-Clause"
   description: "This is the core API of hamcrest matcher framework to be used by third-party\
     \ framework providers. This includes the a foundation set of matcher implementations\
     \ for common operations."

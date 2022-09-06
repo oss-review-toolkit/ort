@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
@@ -306,6 +307,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             detectedLicenses = detectedLicenses,
             detectedExcludedLicenses = detectedExcludedLicenses,
             concludedLicense = pkg.concludedLicense,
+            effectiveLicense = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded().effectiveLicense(
+                LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
+                input.ortResult.getPackageLicenseChoices(pkg.id),
+                input.ortResult.getRepositoryLicenseChoices()
+            )?.sort(),
             description = pkg.description,
             homepageUrl = pkg.homepageUrl,
             binaryArtifact = pkg.binaryArtifact,
