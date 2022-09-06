@@ -7,7 +7,7 @@ set -l ort_subcommands 'advise analyze config download evaluate notify report re
 
 ## Options for ort
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l config -s c -r -F -d 'The path to a configuration file.'
-complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l info -l performance -l debug -d 'Set the verbosity level of log output.'
+complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l info -l debug -d 'Set the verbosity level of log output.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l stacktrace -d 'Print out the stacktrace for all exceptions.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -s P -r -d 'Override a key-value pair in the configuration file. For example: -P ort.scanner.storages.postgres.schema=testSchema'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l force-overwrite -d 'Overwrite any output files if they already exist.'
@@ -26,7 +26,7 @@ complete -c ort -n "__fish_seen_subcommand_from advise" -l output-dir -s o -r -F
 complete -c ort -n "__fish_seen_subcommand_from advise" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
-complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [GitHubDefects, NexusIQ, OssIndex, VulnerableCode].'
+complete -c ort -n "__fish_seen_subcommand_from advise" -l advisors -s a -r -d 'The comma-separated advisors to use, any of [GitHubDefects, NexusIQ, OssIndex, OSV, VulnerableCode].'
 complete -c ort -n "__fish_seen_subcommand_from advise" -l skip-excluded -d 'Do not check excluded projects or packages.'
 complete -c ort -n "__fish_seen_subcommand_from advise" -s h -l help -d 'Show this message and exit'
 
@@ -46,8 +46,8 @@ complete -c ort -n "__fish_seen_subcommand_from analyze" -l clearly-defined-cura
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l ort-curations -d 'Whether to fall back to package curation data from the ort-config repository or not.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l sw360-curations -d 'Whether to fall back to package curation data from the SW360 service or not.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
-complete -c ort -n "__fish_seen_subcommand_from analyze" -l package-managers -s m -r -d 'The comma-separated package managers to activate, any of [Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, DotNet, GoDep, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, Pub, SBT, SpdxDocumentFile, Stack, Unmanaged, Yarn]. Note that deactivation overrides activation.'
-complete -c ort -n "__fish_seen_subcommand_from analyze" -l not-package-managers -s n -r -d 'The comma-separated package managers to deactivate, any of [Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, DotNet, GoDep, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, Pub, SBT, SpdxDocumentFile, Stack, Unmanaged, Yarn]. Note that deactivation overrides activation.'
+complete -c ort -n "__fish_seen_subcommand_from analyze" -l package-managers -s m -r -d 'The comma-separated package managers to activate, any of [Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, DotNet, GoDep, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, PNPM, Poetry, Pub, SBT, SpdxDocumentFile, Stack, Unmanaged, Yarn, Yarn2]. Note that deactivation overrides activation. If set, package manager activation settings from configuration files are ignored.'
+complete -c ort -n "__fish_seen_subcommand_from analyze" -l not-package-managers -s n -r -d 'The comma-separated package managers to deactivate, any of [Bower, Bundler, Cargo, Carthage, CocoaPods, Composer, Conan, DotNet, GoDep, GoMod, Gradle, Maven, NPM, NuGet, PIP, Pipenv, PNPM, Poetry, Pub, SBT, SpdxDocumentFile, Stack, Unmanaged, Yarn, Yarn2]. Note that deactivation overrides activation. If set, package manager activation settings from configuration files are ignored.'
 complete -c ort -n "__fish_seen_subcommand_from analyze" -s h -l help -d 'Show this message and exit'
 
 
@@ -71,11 +71,12 @@ complete -c ort -n "__fish_seen_subcommand_from download" -l project-name -r -d 
 complete -c ort -n "__fish_seen_subcommand_from download" -l vcs-type -r -d 'The VCS type if \'--project-url\' points to a VCS. Ignored if \'--ort-file\' is also specified. (default: the VCS type detected by querying the project URL)'
 complete -c ort -n "__fish_seen_subcommand_from download" -l vcs-revision -r -d 'The VCS revision if \'--project-url\' points to a VCS. Ignored if \'--ort-file\' is also specified. (default: the VCS\'s default revision)'
 complete -c ort -n "__fish_seen_subcommand_from download" -l vcs-path -r -d 'The VCS path if \'--project-url\' points to a VCS. Ignored if \'--ort-file\' is also specified. (default: the empty root path)'
-complete -c ort -n "__fish_seen_subcommand_from download" -l license-classifications-file -r -F -d 'A file containing the license classifications that are used to limit downloads if the included categories are specified in the \'ort.conf\' file. If not specified, all packages are downloaded.'
+complete -c ort -n "__fish_seen_subcommand_from download" -l license-classifications-file -r -F -d 'A file containing the license classifications that are used to limit downloads if the included categories are specified in the \'config.yml\' file. If not specified, all packages are downloaded.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l output-dir -s o -r -F -d 'The output directory to download the source code to.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l archive -d 'Archive the downloaded source code as ZIP files to the output directory. Is ignored if \'--project-url\' is also specified.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l archive-all -d 'Archive all the downloaded source code as a single ZIP file to the output directory. Is ignored if \'--project-url\' is also specified.'
-complete -c ort -n "__fish_seen_subcommand_from download" -l package-types -r -fa "PACKAGE PROJECT" -d 'A comma-separated list of the package types from the ORT file\'s analyzer result to limit downloads to. If not specified, all package types are downloaded. Possible values are: PACKAGE, PROJECT'
+complete -c ort -n "__fish_seen_subcommand_from download" -l package-types -r -fa "PACKAGE PROJECT" -d 'A comma-separated list of the package types from the ORT file\'s analyzer result to limit downloads to.'
+complete -c ort -n "__fish_seen_subcommand_from download" -l package-ids -r -d 'A comma-separated list of regular expressions for matching package ids from the ORT file\'s analyzer result to limit downloads to. If not specified, all packages are downloaded.'
 complete -c ort -n "__fish_seen_subcommand_from download" -s h -l help -d 'Show this message and exit'
 
 
@@ -107,6 +108,7 @@ complete -c ort -f -n __fish_use_subcommand -a notify -d 'Create notifications b
 ## Options for notify
 complete -c ort -n "__fish_seen_subcommand_from notify" -l ort-file -s i -r -F -d 'The ORT result file to read as input.'
 complete -c ort -n "__fish_seen_subcommand_from notify" -l notifications-file -s n -r -F -d 'The name of a Kotlin script file containing notification rules.'
+complete -c ort -n "__fish_seen_subcommand_from notify" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
 complete -c ort -n "__fish_seen_subcommand_from notify" -l label -s l -r -d 'Set a label in the ORT result passed to the notifier script, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
 complete -c ort -n "__fish_seen_subcommand_from notify" -s h -l help -d 'Show this message and exit'
 
@@ -117,7 +119,7 @@ complete -c ort -f -n __fish_use_subcommand -a report -d 'Present Analyzer, Scan
 ## Options for report
 complete -c ort -n "__fish_seen_subcommand_from report" -l ort-file -s i -r -F -d 'The ORT result file to use.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l output-dir -s o -r -F -d 'The output directory to store the generated reports in.'
-complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'The comma-separated reports to generate, any of [AdocTemplate, CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, Excel, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, NoticeTemplate, Opossum, PdfTemplate, SpdxDocument, StaticHtml, WebApp, XHtmlTemplate].'
+complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'The comma-separated reports to generate, any of [AdocTemplate, CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, Excel, FossId, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, NoticeTemplate, Opossum, PdfTemplate, SpdxDocument, StaticHtml, WebApp, XHtmlTemplate].'
 complete -c ort -n "__fish_seen_subcommand_from report" -l copyright-garbage-file -r -F -d 'A file containing copyright statements which are marked as garbage.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l custom-license-texts-dir -r -F -d 'A directory which maps custom license IDs to license texts. It should contain one text file per license with the license ID as the filename. A custom license text is used only if its ID has a \'LicenseRef-\' prefix and if the respective license text is not known by ORT.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l how-to-fix-text-provider-script -r -F -d 'The path to a Kotlin script which returns an instance of a \'HowToFixTextProvider\'. That provider injects how-to-fix texts in Markdown format for ORT issues.'
@@ -146,12 +148,13 @@ complete -c ort -n "__fish_seen_subcommand_from scan" -l input-path -s p -r -F -
 complete -c ort -n "__fish_seen_subcommand_from scan" -l output-dir -s o -r -F -d 'The directory to write the ORT result file with scan results to.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l output-formats -s f -r -fa "JSON XML YAML" -d 'The list of output formats to be used for the ORT result file(s).'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l label -s l -r -d 'Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple times. For example: --label distribution=external'
-complete -c ort -n "__fish_seen_subcommand_from scan" -l scanner -s s -r -d 'The scanner to use, one of [Askalono, BoyterLc, FossId, Licensee, SCANOSS, ScanCode].'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l scanner -s s -r -d 'The scanner to use.'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l experimental-scanners -r -d 'A comma-separated list of experimental scanners to use. This option is mutually exclusive with \'--scanner\'. The experimental scanner implementation scans by provenance instead of by package. This improves reuse of stored scan results and increases performance if multiple packages are coming from the same source code repository. The experimental scanner is work in progress and it is therefore not recommended to use it in production.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l project-scanner -r -d 'The scanner to use for scanning the source code of projects. By default, projects and packages are scanned with the same scanner as specified by \'--scanner\'.'
-complete -c ort -n "__fish_seen_subcommand_from scan" -l package-types -r -fa "PACKAGE PROJECT" -d 'A comma-separated list of the package types from the ORT file\'s analyzer result to limit scans to. If not specified, all package types are scanned. Possible values are: PACKAGE, PROJECT'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l experimental-project-scanners -r -d 'A comma-separated list of experimental scanners to use for scanning the source code of projects. By default, projects and packages are scanned with the same scanner as specified by \'--experimental-scanner\'.'
+complete -c ort -n "__fish_seen_subcommand_from scan" -l package-types -r -fa "PACKAGE PROJECT" -d 'A comma-separated list of the package types from the ORT file\'s analyzer result to limit scans to.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l skip-excluded -d 'Do not scan excluded projects or packages. Works only with the \'--ort-file\' parameter.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
-complete -c ort -n "__fish_seen_subcommand_from scan" -l experimental -d 'Use a new experimental implementation of the scanner which scans by provenance instead of by package. This improves reuse of stored scan results and increases performance if multiple packages are coming from the same source code repository. The experimental scanner is work in progress and it is therefore not recommended to use it in production.'
 complete -c ort -n "__fish_seen_subcommand_from scan" -s h -l help -d 'Show this message and exit'
 
 
