@@ -39,6 +39,11 @@ internal object PathExcludeGenerator {
      */
     fun generatePathExcludes(filePaths: Collection<String>): List<PathExclude> {
         val files = filePaths.mapTo(mutableSetOf()) { File(it) }
+
+        return generateExcludesForDirectories(files).toList()
+    }
+
+    private fun generateExcludesForDirectories(files: Set<File>): Set<PathExclude> {
         val dirs = getAllDirs(files)
 
         val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
@@ -62,7 +67,7 @@ internal object PathExcludeGenerator {
             }
         }
 
-        return result.toList()
+        return result
     }
 }
 
