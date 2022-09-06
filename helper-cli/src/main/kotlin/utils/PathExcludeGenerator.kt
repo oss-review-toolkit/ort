@@ -66,7 +66,7 @@ internal object PathExcludeGenerator {
     }
 }
 
-private fun getAllDirs(files: Set<File>): Set<File> =
+private fun getAllDirs(files: Collection<File>): Set<File> =
     files.flatMapTo(mutableSetOf()) { it.getAncestorFiles() }
 
 /**
