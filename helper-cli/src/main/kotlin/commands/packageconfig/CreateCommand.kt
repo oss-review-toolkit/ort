@@ -30,6 +30,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator
+import org.ossreviewtoolkit.helper.utils.sortPathExcludes
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
@@ -134,7 +135,7 @@ internal class CreateCommand : CliktCommand(
                 )
             },
             pathExcludes = if (generatePathExcludes) {
-                PathExcludeGenerator.generatePathExcludes(scanResult.getFindingPaths())
+                PathExcludeGenerator.generatePathExcludes(scanResult.getFindingPaths()).sortPathExcludes()
             } else {
                 emptyList()
             }
