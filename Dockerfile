@@ -188,7 +188,8 @@ RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${A
     SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
-    --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
+    --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest" \
+    && chmod -R o+rw $ANDROID_HOME
 COPY docker/android.sh /etc/profile.d
 
 #------------------------------------------------------------------------
@@ -303,11 +304,10 @@ COPY --from=haskellbuild /usr/bin/stack /usr/bin
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
-ARG ANDROID_API_LEVEL=29
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
-RUN chmod u+rwx ${ANDROID_HOME}
+RUN chmod -R o+rw ${ANDROID_HOME}
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1

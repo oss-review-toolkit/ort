@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright (C) 2020 Bosch.IO GmbH
 # Copyright (C) 2021 BMW CarIT GmbH
@@ -23,10 +23,12 @@
 GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_VERSION=$(git describe --abbrev=10 --always --tags --dirty)
 ORT_DOCKER=${ORT_DOCKER:-ort}
+ARCH_TRANSLATION=""
 
 echo "Setting ORT_VERSION to $GIT_VERSION."
-DOCKER_BUILDKIT=1 docker build -f "$GIT_ROOT"/Dockerfile \
+docker buildx build -f "$GIT_ROOT"/Dockerfile \
     -t "$ORT_DOCKER" \
     --build-arg ORT_VERSION="$GIT_VERSION" \
+    --platform linux/amd64 \
     "$@" \
     "$GIT_ROOT"
