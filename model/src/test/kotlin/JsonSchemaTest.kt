@@ -99,6 +99,19 @@ class JsonSchemaTest : StringSpec() {
 
             errors should beEmpty()
         }
+
+        "reference.yml validates successfully" {
+            val ortConfigurationSchema = JsonSchemaFactory
+                .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
+                .objectMapper(mapper)
+                .build()
+                .getSchema(File("../integrations/schemas/ort-configuration-schema.json").toURI())
+            val referenceConfigFile = File("src/main/resources/reference.yml").toJsonNode()
+
+            val errors = ortConfigurationSchema.validate(referenceConfigFile)
+
+            errors should beEmpty()
+        }
     }
 
     private fun File.toJsonNode() = mapper.readTree(inputStream())
