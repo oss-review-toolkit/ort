@@ -23,7 +23,7 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Check for Detekt Issues
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: --stacktrace detekt
     - name: Upload SARIF File
