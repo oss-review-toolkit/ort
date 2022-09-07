@@ -107,8 +107,8 @@ class Subversion : VersionControlSystem() {
                         svnUrl,
                         SVNRevision.HEAD,
                         SVNRevision.HEAD,
-                        /*fetchLocks =*/ false,
-                        /*recursive =*/ false
+                        /* fetchLocks = */ false,
+                        /* recursive = */ false
                     ) { dirEntry ->
                         if (dirEntry.name.isNotEmpty()) refs += "$namespace/${dirEntry.relativePath}"
                     }
