@@ -45,7 +45,7 @@ data class PostgresConnection(
 
     /**
      * The SSL mode to use, one of "disable", "allow", "prefer", "require", "verify-ca" or "verify-full".
-     * See: https://jdbc.postgresql.org/documentation/head/ssl-client.html
+     * See: https://jdbc.postgresql.org/documentation/ssl/#configuring-the-client
      */
     val sslmode: String = "verify-full",
 

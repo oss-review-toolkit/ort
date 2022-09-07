@@ -527,8 +527,8 @@ The _scanner_ will itself create a table called `scan_results` and
 store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the
-[documentation](https://jdbc.postgresql.org/documentation/head/ssl-client.html). For other supported configuration
-options see [ScanStorageConfiguration.kt](./model/src/main/kotlin/config/ScanStorageConfiguration.kt).
+[documentation](https://jdbc.postgresql.org/documentation/ssl/#configuring-the-client). For other supported
+configuration options see [ScanStorageConfiguration.kt](./model/src/main/kotlin/config/ScanStorageConfiguration.kt).
 
 ### ClearlyDefined Storage
 
