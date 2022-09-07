@@ -56,13 +56,17 @@ data class ScanResult(
      * for [provenance]. Findings which [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterByPath(path: String): ScanResult =
-        takeIf { path.isBlank() } ?: if (provenance is RepositoryProvenance) {
-            copy(
-                provenance = provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path)),
-                summary = summary.filterByPath(path)
-            )
-        } else {
-            copy(summary = summary.filterByPath(path))
+        when {
+            path.isBlank() -> this
+
+            provenance is RepositoryProvenance -> {
+                copy(
+                    provenance = provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path)),
+                    summary = summary.filterByPath(path)
+                )
+            }
+
+            else -> copy(summary = summary.filterByPath(path))
         }
 
     /**
