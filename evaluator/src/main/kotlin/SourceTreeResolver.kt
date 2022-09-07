@@ -43,6 +43,8 @@ class SourceTreeResolver private constructor(getRepositoryRoot: () -> File) {
 
                 downloadDir
             }
+
+        fun forLocalDirectory(dir: File) = SourceTreeResolver { dir }
     }
 
     val rootDir: File by lazy {
