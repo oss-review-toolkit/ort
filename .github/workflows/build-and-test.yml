@@ -25,7 +25,7 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Build all classes
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         arguments: --stacktrace classes -x :reporter-web-app:yarnBuild
   build-reporter-web-app:
@@ -41,7 +41,7 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Build the reporter-web-app
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         job-id: build-reporter-web-app
         arguments: --stacktrace :reporter-web-app:yarnBuild
@@ -58,7 +58,7 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Run unit tests
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         job-id: test
         arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
@@ -94,7 +94,7 @@ jobs:
         java-version: 11
         cache: gradle
     - name: Run functional tests
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
         job-id: funTest-non-analyzer
         arguments: funTest jacocoFunTestReport -x :analyzer:funTest
