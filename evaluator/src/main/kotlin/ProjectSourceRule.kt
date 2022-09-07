@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.evaluator
 import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.utils.common.FileMatcher
 
 /**
  * An [OrtResultRule] which allows downloading the project's source code if needed.
@@ -36,6 +37,24 @@ open class ProjectSourceRule(
      * clone and may take a while.
      */
     val projectSourcesDir: File by lazy { projectSourceResolver.rootDir }
+
+    /**
+     * Return all files from the project's source tree which match any of the provided [glob expressions][patterns].
+     */
+    fun projectSourceFindFiles(vararg patterns: String): List<File> =
+        projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
+            it.isFile && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+        }
+
+    /**
+     * A [RuleMatcher] that checks whether the project's source tree contains at least one file matching any of the
+     * provided [glob expressions][patterns].
+     */
+    fun projectSourceHasFile(vararg patterns: String): RuleMatcher =
+        object : RuleMatcher {
+            override val description = "projectSourceHasFile('${patterns.joinToString()}')"
+            override fun matches(): Boolean = projectSourceFindFiles(*patterns).isNotEmpty()
+        }
 }
 
 private fun OrtResult.createResolver() =
