@@ -163,19 +163,18 @@ fun generateEnumClass(
     taskName: String, description: String, jsonUrl: String, className: String, resourcePath: String,
     collectIds: (Map<String, Any>) -> Map<String, LicenseMetaData>
 ): Map<String, LicenseMetaData> {
-    logger.quiet("Fetching $description list...")
+    logger.quiet("Downloading SPDX $description list...")
 
     val jsonSlurper = JsonSlurper()
     val json = jsonSlurper.parse(URL(jsonUrl), "UTF-8") as Map<String, Any>
 
     val licenseListVersion = json["licenseListVersion"] as String
-    logger.quiet("Found license list version '$licenseListVersion'.")
+    logger.quiet("Found SPDX $description list version $licenseListVersion.")
 
     val ids = collectIds(json)
-    logger.quiet("Found ${ids.size} SPDX $description identifiers.")
+    logger.quiet("Collected ${ids.size} SPDX $description identifiers.")
 
     val enumFile = file("src/main/kotlin/$className.kt")
-    logger.quiet("Writing enum entries to file '$enumFile'...")
 
     enumFile.writeText(getLicenseHeader())
     enumFile.appendText(
