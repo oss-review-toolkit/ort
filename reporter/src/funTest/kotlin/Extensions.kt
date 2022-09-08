@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.reporter
 
 fun String.patchAsciiDocTemplateResult() =
-    // Asciidoctor renders the line breaks platform dependant.
+    // Asciidoctor renders the line breaks platform dependent.
     replace("\r\n", "\n")
         .replace("""\d{4}-\d{2}-\d{2}""".toRegex(), "1970-01-01")
         .replace("""\d{2}:\d{2}:\d{2}""".toRegex(), "00:00:00")
