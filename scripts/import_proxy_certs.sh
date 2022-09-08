@@ -48,8 +48,8 @@ fi
 # its own.
 echo "Getting the certificates for proxy $PROXY_NO_AUTH..."
 
-openssl s_client -showcerts -proxy $PROXY_NO_AUTH -connect $CONNECT_SERVER | \
-    sed -n "$REGEX_BEGIN,$REGEX_END/p" > $FILE
+openssl s_client -showcerts -proxy "$PROXY_NO_AUTH" -connect "$CONNECT_SERVER" | \
+    sed -n "$REGEX_BEGIN,$REGEX_END/p" > "$FILE"
 
 if [ ! -f "$FILE" ]; then
     echo "Failed getting the certificates, no output file was created."
@@ -58,9 +58,9 @@ fi
 
 # Split the potentially multiple certificates into multiple files to avoid only the first certificate being imported.
 echo "Splitting proxy certificates to separate files..."
-csplit -f $FILE_PREFIX -b "%02d.crt" -z $FILE "$REGEX_BEGIN" "{*}"
+csplit -f $FILE_PREFIX -b "%02d.crt" -z "$FILE" "$REGEX_BEGIN" "{*}"
 
 SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
 "${SCRIPT_DIR}/import_certificates.sh" "$FILE_PREFIX"
 
-rm -fr $TEMP_DIR
+rm -fr "$TEMP_DIR"
