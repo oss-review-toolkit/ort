@@ -19,7 +19,7 @@
 
 if [ -z "$https_proxy" ]; then
     echo "Skipping the import of certificates as no HTTPS proxy is set."
-    exit
+    exit 0
 fi
 
 CONNECT_SERVER="repo.maven.apache.org:443"
@@ -41,7 +41,7 @@ PROXY_NO_AUTH=${PROXY#*@}
 
 if [ "$PROXY_NO_AUTH" != "$PROXY" ]; then
     echo "This script cannot handle proxies that require authentication."
-    exit
+    exit 2
 fi
 
 # Pick a server to connect to that is used during the Gradle build, and which reports the proxy's certificate instead of
@@ -53,7 +53,7 @@ openssl s_client -showcerts -proxy "$PROXY_NO_AUTH" -connect "$CONNECT_SERVER" |
 
 if [ ! -f "$FILE" ]; then
     echo "Failed getting the certificates, no output file was created."
-    exit
+    exit 3
 fi
 
 # Split the potentially multiple certificates into multiple files to avoid only the first certificate being imported.
