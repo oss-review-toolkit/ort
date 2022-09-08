@@ -93,17 +93,15 @@ RUN chgrp $USER /opt \
 RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-# Import certificates scripts only
-COPY scripts/import_certificates.sh /etc/scripts/import_certificates.sh
+# Copy certificates scripts only.
+COPY scripts/*_certificates.sh /etc/scripts/
 
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES="*.crt"
 COPY "$CRT_FILES" /tmp/certificates/
 
-RUN /etc/scripts/import_certificates.sh \
-    && if [ -n "$CRT_FILES" ]; then \
-        /etc/scripts/import_certificates.sh /tmp/certificates/; \
-    fi
+RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
+    &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
 ENTRYPOINT [ "/bin/bash" ]
 
@@ -348,7 +346,8 @@ WORKDIR ${HOME}/src/ort
 RUN --mount=type=cache,target=/var/tmp/gradle \
     --mount=type=bind,target=${HOME}/src/ort,rw \
     export GRADLE_USER_HOME=/var/tmp/gradle \
-    && scripts/import_proxy_certs.sh \
+    && scripts/export_proxy_certificates.sh /tmp/certificates/ \
+    && scripts/import_certificates.sh /tmp/certificates/ \
     && scripts/set_gradle_proxy.sh \
     && ./gradlew --no-daemon --stacktrace \
         -Pversion=$ORT_VERSION \

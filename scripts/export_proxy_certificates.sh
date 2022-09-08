@@ -17,15 +17,23 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+# This script exports the certificates used by a proxy server, if any, to a given directory.
+
 if [ -z "$https_proxy" ]; then
     echo "Skipping the import of certificates as no HTTPS proxy is set."
     exit 0
 fi
 
+EXPORT_DIR=$1
+
+if [ -z "$EXPORT_DIR" ]; then
+    echo "No directory to export certificates to specified."
+    exit 1
+fi
+
 CONNECT_SERVER="repo.maven.apache.org:443"
 
-TEMP_DIR="$(mktemp -d)"
-FILE="$TEMP_DIR/proxy.crt"
+FILE="$EXPORT_DIR/proxy.crt"
 FILE_PREFIX="proxy-"
 
 REGEX_BEGIN="/^-----BEGIN CERTIFICATE-----$/"
@@ -48,6 +56,7 @@ fi
 # its own.
 echo "Getting the certificates for proxy $PROXY_NO_AUTH..."
 
+mkdir -p "$EXPORT_DIR"
 openssl s_client -showcerts -proxy "$PROXY_NO_AUTH" -connect "$CONNECT_SERVER" | \
     sed -n "$REGEX_BEGIN,$REGEX_END/p" > "$FILE"
 
@@ -58,9 +67,6 @@ fi
 
 # Split the potentially multiple certificates into multiple files to avoid only the first certificate being imported.
 echo "Splitting proxy certificates to separate files..."
-csplit -f $FILE_PREFIX -b "%02d.crt" -z "$FILE" "$REGEX_BEGIN" "{*}"
+(cd "$EXPORT_DIR" && csplit -f $FILE_PREFIX -b "%02d.crt" -z "$FILE" "$REGEX_BEGIN" "{*}")
 
-SCRIPT_DIR=$(dirname "$(readlink -f "$0")")
-"${SCRIPT_DIR}/import_certificates.sh" "$FILE_PREFIX"
-
-rm -fr "$TEMP_DIR"
+rm "$FILE"
