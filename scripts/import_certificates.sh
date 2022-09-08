@@ -17,6 +17,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+# This script imports all certificate files matching the path / file prefix provided as the argument to both the JVM
+# keystore and the operating system's certificate store.
+
 FILE_PREFIX=$1
 
 if [ -z "$FILE_PREFIX" ]; then
@@ -37,7 +40,7 @@ done
 
 if [ -n "$KEYSTORE" ]; then
     for CRT_FILE in $FILE_PREFIX*; do
-        echo "Adding the following certificate from '$CRT_FILE' to the JRE's certificate store at '$KEYSTORE':"
+        echo "Adding the following certificate from '$CRT_FILE' to the JVM's certificate store at '$KEYSTORE':"
         cat $CRT_FILE
 
         ALIAS=$(basename $CRT_FILE .crt)
