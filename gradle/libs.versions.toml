@@ -31,7 +31,7 @@ greenmail = "1.6.10"
 hikari = "5.0.1"
 hoplite = "2.6.2"
 jackson = "2.13.4"
-jgit = "6.2.0.202206071550-r"
+jgit = "6.3.0.202209071007-r"
 jiraRestClient = "5.2.4"
 jruby = "9.3.7.0"
 # @pin this version as upgrading requires more testing.
