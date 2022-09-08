@@ -45,7 +45,8 @@ WORKDIR /usr/local/src/ort
 ARG ORT_VERSION
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     export GRADLE_USER_HOME=/tmp/.gradle/ && \
-    scripts/import_proxy_certs.sh && \
+    scripts/export_proxy_certificates.sh /tmp/certificates/ && \
+    scripts/import_certificates.sh /tmp/certificates/ && \
     scripts/set_gradle_proxy.sh && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:installDist :helper-cli:startScripts
 
@@ -124,10 +125,8 @@ ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
-RUN /opt/ort/bin/import_proxy_certs.sh && \
-    if [ -n "$CRT_FILES" ]; then \
-      /opt/ort/bin/import_certificates.sh /tmp/certificates/; \
-    fi && \
+RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
+    /opt/ort/bin/import_certificates.sh /tmp/certificates/ && \
     # Install VCS tools (no specific versions required here).
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
