@@ -29,22 +29,25 @@ fi
 
 echo "Import certificates $FILE_PREFIX:"
 
-KEYTOOL=$(realpath $(command -v keytool))
+KEYTOOL=$(realpath "$(command -v keytool)")
+KEYTOOL_DIR=$(dirname "$KEYTOOL")
 
-for KEYSTORE_CANDIDATE in "$(realpath -m $(dirname $KEYTOOL)/../lib/security/cacerts)" "$(realpath -m $(dirname $KEYTOOL)/../jre/lib/security/cacerts)"; do
-    if [ -f "$KEYSTORE_CANDIDATE" ]; then
-        KEYSTORE=$KEYSTORE_CANDIDATE
+for KEYSTORE_CANDIDATE in "$KEYTOOL_DIR/../lib/security/cacerts" "$KEYTOOL_DIR/../jre/lib/security/cacerts"; do
+    KEYSTORE_CANDIDATE_PATH=$(realpath -m "$KEYSTORE_CANDIDATE")
+    if [ -f "$KEYSTORE_CANDIDATE_PATH" ]; then
+        KEYSTORE=$KEYSTORE_CANDIDATE_PATH
         break
     fi
 done
 
 if [ -n "$KEYSTORE" ]; then
-    for CRT_FILE in $FILE_PREFIX*; do
+    for CRT_FILE in "$FILE_PREFIX"*; do
         echo "Adding the following certificate from '$CRT_FILE' to the JVM's certificate store at '$KEYSTORE':"
-        cat $CRT_FILE
+        cat "$CRT_FILE"
 
-        ALIAS=$(basename $CRT_FILE .crt)
-        $KEYTOOL -importcert -noprompt -trustcacerts -alias $ALIAS -file $CRT_FILE -keystore $KEYSTORE -storepass changeit
+        ALIAS=$(basename "$CRT_FILE" .crt)
+        $KEYTOOL -importcert -noprompt -trustcacerts -alias "$ALIAS" -file "$CRT_FILE" \
+            -keystore "$KEYSTORE" -storepass changeit
     done
 else
     echo "No JVM keystore found, skipping the import."
