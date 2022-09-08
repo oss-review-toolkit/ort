@@ -23,11 +23,11 @@
 FILE_PREFIX=$1
 
 if [ -z "$FILE_PREFIX" ]; then
-    echo "No certificates specified. Skipping installation."
+    echo "No certificates specified. Skipping the import."
     exit 0
 fi
 
-echo "Import certificates $FILE_PREFIX:"
+echo "Importing certificates from $FILE_PREFIX..."
 
 KEYTOOL=$(realpath "$(command -v keytool)")
 KEYTOOL_DIR=$(dirname "$KEYTOOL")
