@@ -23,8 +23,8 @@
 FILE_PREFIX=$1
 
 if [ -z "$FILE_PREFIX" ]; then
-  echo "No certificates specified. Skipping installation."
-  exit 0
+    echo "No certificates specified. Skipping installation."
+    exit 0
 fi
 
 echo "Import certificates $FILE_PREFIX:"
