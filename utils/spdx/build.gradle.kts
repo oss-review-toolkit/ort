@@ -143,7 +143,7 @@ fun getLicenseHeader(fromYear: Int = 2017, toYear: Int = Year.now().value) =
 data class LicenseInfo(
     val id: String,
     val name: String,
-    val deprecated: Boolean
+    val isDeprecated: Boolean
 )
 
 fun licenseToEnumEntry(info: LicenseInfo): String {
@@ -153,7 +153,7 @@ fun licenseToEnumEntry(info: LicenseInfo): String {
     }
 
     val fullName = info.name.replace("\"", "\\\"")
-    return if (info.deprecated) {
+    return if (info.isDeprecated) {
         "$enumEntry(\"${info.id}\", \"$fullName\", true)"
     } else {
         "$enumEntry(\"${info.id}\", \"$fullName\")"
@@ -334,7 +334,7 @@ fun generateLicenseTextResources(description: String, info: List<LicenseInfo>, r
             "$buildDir/download/licenses/spdx/${it.id}.txt"
         )
 
-        if (it.deprecated) {
+        if (it.isDeprecated) {
             candidates += "$buildDir/download/licenses/spdx/deprecated_${it.id}.txt"
         }
 
