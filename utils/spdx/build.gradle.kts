@@ -140,29 +140,30 @@ fun getLicenseHeader(fromYear: Int = 2017, toYear: Int = Year.now().value) =
     |
     """.trimMargin()
 
-data class LicenseMetaData(
+data class LicenseInfo(
+    val id: String,
     val name: String,
     val deprecated: Boolean
 )
 
-fun licenseToEnumEntry(id: String, meta: LicenseMetaData): String {
-    var enumEntry = id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
+fun licenseToEnumEntry(info: LicenseInfo): String {
+    var enumEntry = info.id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
     if (enumEntry[0].isDigit()) {
         enumEntry = "_$enumEntry"
     }
 
-    val fullName = meta.name.replace("\"", "\\\"")
-    return if (meta.deprecated) {
-        "$enumEntry(\"$id\", \"$fullName\", true)"
+    val fullName = info.name.replace("\"", "\\\"")
+    return if (info.deprecated) {
+        "$enumEntry(\"${info.id}\", \"$fullName\", true)"
     } else {
-        "$enumEntry(\"$id\", \"$fullName\")"
+        "$enumEntry(\"${info.id}\", \"$fullName\")"
     }
 }
 
 fun generateEnumClass(
     taskName: String, description: String, jsonUrl: String, className: String, resourcePath: String,
-    collectIds: (Map<String, Any>) -> Map<String, LicenseMetaData>
-): Map<String, LicenseMetaData> {
+    collectInfo: (Map<String, Any>) -> List<LicenseInfo>
+): List<LicenseInfo> {
     logger.quiet("Downloading SPDX $description list...")
 
     val jsonSlurper = JsonSlurper()
@@ -171,8 +172,8 @@ fun generateEnumClass(
     val licenseListVersion = json["licenseListVersion"] as String
     logger.quiet("Found SPDX $description list version $licenseListVersion.")
 
-    val ids = collectIds(json)
-    logger.quiet("Collected ${ids.size} SPDX $description identifiers.")
+    val info = collectInfo(json)
+    logger.quiet("Collected ${info.size} SPDX $description identifiers.")
 
     val enumFile = file("src/main/kotlin/$className.kt")
 
@@ -225,8 +226,8 @@ fun generateEnumClass(
         """.trimMargin()
     )
 
-    val enumValues = ids.map { (id, meta) ->
-        licenseToEnumEntry(id, meta)
+    val enumValues = info.map {
+        licenseToEnumEntry(it)
     }.sorted().joinToString(",\n") {
         "    $it"
     } + ";"
@@ -298,10 +299,10 @@ fun generateEnumClass(
 
     logger.quiet("Generated SPDX $description enum file '$enumFile'.")
 
-    return ids
+    return info
 }
 
-fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMetaData>, resourcePath: String) {
+fun generateLicenseTextResources(description: String, info: List<LicenseInfo>, resourcePath: String) {
     logger.quiet("Determining SPDX $description texts...")
 
     val scanCodeLicensePath = "$buildDir/download/licenses/scancode-toolkit"
@@ -324,17 +325,17 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
         mkdirs()
     }
 
-    ids.forEach { (id, meta) ->
-        val resourceFile = resourcesDir.resolve(id)
+    info.forEach {
+        val resourceFile = resourcesDir.resolve(it.id)
 
         // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
         val candidates = mutableListOf(
-            "$scanCodeLicensePath/${spdxIdToScanCodeKey[id]}.LICENSE",
-            "$buildDir/download/licenses/spdx/$id.txt"
+            "$scanCodeLicensePath/${spdxIdToScanCodeKey[it.id]}.LICENSE",
+            "$buildDir/download/licenses/spdx/${it.id}.txt"
         )
 
-        if (meta.deprecated) {
-            candidates += "$buildDir/download/licenses/spdx/deprecated_$id.txt"
+        if (it.deprecated) {
+            candidates += "$buildDir/download/licenses/spdx/deprecated_${it.id}.txt"
         }
 
         val i = candidates.iterator()
@@ -348,14 +349,14 @@ fun generateLicenseTextResources(description: String, ids: Map<String, LicenseMe
                     val lines = licenseFile.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
                         .asReversed().dropWhile { it.isEmpty() }
                     resourceFile.writeText(lines.joinToString("\n", postfix = "\n"))
-                    logger.quiet("Got $description text for id '$id' from:\n\t$licenseFile.")
+                    logger.quiet("Got $description text for id '${it.id}' from:\n\t$licenseFile.")
                 } catch (e: FileNotFoundException) {
                     continue
                 }
 
                 break
             } else {
-                throw GradleException("Failed to determine $description text for '$id' from any of $candidates.")
+                throw GradleException("Failed to determine $description text for '${it.id}' from any of $candidates.")
             }
         }
     }
@@ -371,19 +372,19 @@ val generateSpdxLicenseEnum by tasks.registering {
     doLast {
         val description = "license"
         val resourcePath = "licenses"
-        val ids = generateEnumClass(
+        val info = generateEnumClass(
             name,
             description,
             "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/licenses.json",
             "SpdxLicense",
             resourcePath
         ) { json ->
-            (json["licenses"] as List<Map<String, Any>>).associate {
+            (json["licenses"] as List<Map<String, Any>>).map {
                 val id = it["licenseId"] as String
-                id to LicenseMetaData(it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
+                LicenseInfo(id, it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
             }
         }
-        generateLicenseTextResources(description, ids, resourcePath)
+        generateLicenseTextResources(description, info, resourcePath)
     }
 }
 
@@ -397,19 +398,19 @@ val generateSpdxLicenseExceptionEnum by tasks.registering {
     doLast {
         val description = "license exception"
         val resourcePath = "exceptions"
-        val ids = generateEnumClass(
+        val info = generateEnumClass(
             name,
             description,
             "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/exceptions.json",
             "SpdxLicenseException",
             resourcePath
         ) { json ->
-            (json["exceptions"] as List<Map<String, Any>>).associate {
+            (json["exceptions"] as List<Map<String, Any>>).map {
                 val id = it["licenseExceptionId"] as String
-                id to LicenseMetaData(it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
+                LicenseInfo(id, it["name"] as String, it["isDeprecatedLicenseId"] as Boolean)
             }
         }
-        generateLicenseTextResources(description, ids, resourcePath)
+        generateLicenseTextResources(description, info, resourcePath)
     }
 }
 
