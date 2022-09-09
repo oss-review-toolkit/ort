@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 # Copyright (C) 2020 Bosch.IO GmbH
+# Copyright (C) 2022 BMW CarIT GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,4 +22,4 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty)
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
-DOCKER_BUILDKIT=1 docker build -f $GIT_ROOT/Dockerfile -t ort --build-arg ORT_VERSION=$GIT_REVISION $GIT_ROOT
+docker buildx build -f $GIT_ROOT/Dockerfile -t ort --build-arg ORT_VERSION=$GIT_REVISION --platform linux/amd64 $GIT_ROOT
