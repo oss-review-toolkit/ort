@@ -12,3 +12,9 @@ out/
 
 # Mac
 .DS_Store
+
+# Test generated
+**/node_modules
+**/lockfile
+**/bower_components
+.pnpm-store

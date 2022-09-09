@@ -46,6 +46,9 @@ config_variables:
     # Mount the source code into the container.
     - local: <{batect.project_directory}
       container: /home/ort/src
+    # Expose docker socket
+    - local: /var/run/docker.sock
+      container: /var/run/docker.sock
   working_directory: /home/ort/src
 
 containers:
@@ -93,4 +96,5 @@ tasks:
       - buildFunTest
     run:
       container: run
-      command: ./gradlew funTest
+      command: "'./gradlew funTest jacocoFunTestReport -p analyzer'"
+      entrypoint: /bin/bash --login -c

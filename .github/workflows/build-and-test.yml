@@ -112,7 +112,7 @@ jobs:
     - name: Validate Batect wrapper scripts
       uses: batect/batect-wrapper-validation-action@v0
     - name: Run functional tests
-      run: BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit --config-var gradle_console=plain funTest -- jacocoFunTestReport -p analyzer
+      run: BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit --config-var gradle_console=plain funTest
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
