@@ -85,12 +85,12 @@ tasks:
     run:
       container: run
       command: ./cli/build/install/ort/bin/ort requirements
-  funTest:
+  funTestAnalyzer:
     description: >-
-      A task to execute ORT's functional tests in the runtime container. Can be limited to e.g. the "analyzer" project
-      like `./batect funTest -- -p analyzer`.
+      A task to execute ORT's functional tests for the analyzer in the runtime container.
     prerequisites:
       - buildFunTest
     run:
       container: run
-      command: ./gradlew funTest
+      command: "'./gradlew funTest jacocoFunTestReport -p analyzer'"
+      entrypoint: /bin/bash --login -c
