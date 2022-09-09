@@ -90,6 +90,15 @@ private fun File.getAncestorFiles(): List<File> {
     return result
 }
 
+private fun <T> Collection<T>.checkNoDuplicatePatterns(keySelector: (T) -> String) =
+    apply {
+        val duplicatePatterns = getDuplicates(keySelector).keys
+
+        require(duplicatePatterns.isEmpty()) {
+            "Found duplicate patterns: ${duplicatePatterns.joinToString()}."
+        }
+    }
+
 private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "*checkstyle*" to BUILD_TOOL_OF,
     "*conformance*" to BUILD_TOOL_OF,
@@ -132,10 +141,4 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "tools" to BUILD_TOOL_OF,
     "tutorial" to DOCUMENTATION_OF,
     "winbuild" to BUILD_TOOL_OF,
-).apply {
-    val duplicatePatterns = getDuplicates { it.first }.keys
-
-    require(duplicatePatterns.isEmpty()) {
-        "Found duplicate patterns: ${duplicatePatterns.joinToString()}."
-    }
-}
+).checkNoDuplicatePatterns { it.first }
