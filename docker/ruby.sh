@@ -1,7 +1,6 @@
 #!/bin/bash
-#
-# Copyright (C) 2020 Bosch.IO GmbH
-# Copyright (C) 2022 BMW CarIT GmbH
+
+# Copyright (C) 2021-2022 BMW CarIT GmbH
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,17 +17,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-DOCKER_ARGS=$@
+RBENV_ROOT="/opt/rbenv"
+export RBENV_ROOT
 
-GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty)
-ORT_DOCKER_TAG=${ORT_DOCKER_TAG:-ort}
-
-echo "Setting ORT_VERSION to $GIT_REVISION."
-docker buildx build \
-    -f "$GIT_ROOT/Dockerfile" \
-    -t "$ORT_DOCKER_TAG" \
-    --build-arg ORT_VERSION="$GIT_REVISION" \
-    --platform linux/amd64 \
-    $DOCKER_ARGS \
-    "$GIT_ROOT"
+add_local_path "${RBENV_ROOT}/bin"
+add_local_path "${RBENV_ROOT}/shims"
+add_local_path "${RBENV_ROOT}/plugins/ruby-install/bin"
