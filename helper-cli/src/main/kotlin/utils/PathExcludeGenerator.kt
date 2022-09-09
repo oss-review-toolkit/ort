@@ -86,6 +86,8 @@ private fun File.getAncestorFiles(): List<File> {
 }
 
 private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
+    "*checkstyle*" to BUILD_TOOL_OF,
+    "*conformance*" to BUILD_TOOL_OF,
     "*demo" to DOCUMENTATION_OF,
     "*demos" to DOCUMENTATION_OF,
     "*documentation*" to DOCUMENTATION_OF,
@@ -107,6 +109,7 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "benchmarks" to TEST_OF,
     "build" to BUILD_TOOL_OF,
     "buildSrc" to BUILD_TOOL_OF,
+    "ci" to BUILD_TOOL_OF,
     "cmake" to BUILD_TOOL_OF,
     "debug" to BUILD_TOOL_OF,
     "demo" to BUILD_TOOL_OF,
@@ -117,11 +120,13 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "javadoc" to DOCUMENTATION_OF,
     "jsdoc" to DOCUMENTATION_OF,
     "m4" to BUILD_TOOL_OF,
+    "manual" to DOCUMENTATION_OF,
     "scripts" to BUILD_TOOL_OF,
     "spec" to DOCUMENTATION_OF,
+    "srcm4" to BUILD_TOOL_OF,
     "tools" to BUILD_TOOL_OF,
     "tutorial" to DOCUMENTATION_OF,
-    "winbuild" to BUILD_TOOL_OF
+    "winbuild" to BUILD_TOOL_OF,
 ).apply {
     val duplicatePatterns = getDuplicates { it.first }.keys
 
