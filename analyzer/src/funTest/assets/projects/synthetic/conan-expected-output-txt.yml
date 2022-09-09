@@ -35,11 +35,11 @@ packages:
 - id: "Conan::libcurl:7.79.1"
   purl: "pkg:conan/libcurl@7.79.1"
   declared_licenses:
-  - "MIT"
+  - "curl"
   declared_licenses_processed:
-    spdx_expression: "MIT"
+    spdx_expression: "curl"
   description: "command line tool and library for transferring data with URLs"
-  homepage_url: "https://curl.haxx.se"
+  homepage_url: "https://curl.se"
   binary_artifact:
     url: ""
     hash:
