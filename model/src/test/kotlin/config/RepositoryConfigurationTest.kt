@@ -77,7 +77,7 @@ class RepositoryConfigurationTest : WordSpec({
                     reason: "BUILD_TOOL_OF"
                     comment: "project comment"
                   scopes:
-                  - name: "scope"
+                  - pattern: "scope"
                     reason: "TEST_DEPENDENCY_OF"
                     comment: "scope comment"
                 resolutions:

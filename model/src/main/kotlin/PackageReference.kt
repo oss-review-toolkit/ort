@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.Deque
@@ -62,7 +61,6 @@ data class PackageReference(
     /**
      * A list of [OrtIssue]s that occurred handling this [PackageReference].
      */
-    @JsonAlias("errors")
     override val issues: List<OrtIssue> = emptyList()
 ) : Comparable<PackageReference>, DependencyNode {
     /**

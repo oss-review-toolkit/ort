@@ -33,8 +33,7 @@ class ScannerRunTest : StringSpec({
             environment:
               os: "Linux"
               tool_versions: {}
-            config:
-              scanner: null
+            config: {}
             results:
               scan_results: {}
               storage_stats:
@@ -57,8 +56,7 @@ class ScannerRunTest : StringSpec({
             environment:
               os: "Linux"
               tool_versions: {}
-            config:
-              scanner: null
+            config: {}
             results:
               scan_results: {}
               storage_stats:

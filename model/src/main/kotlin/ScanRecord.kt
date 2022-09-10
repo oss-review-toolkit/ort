@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.core.JsonToken
@@ -33,10 +32,7 @@ import java.util.SortedMap
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
-@JsonIgnoreProperties(
-    value = ["has_issues", /* Backwards-compatibility: */ "has_errors", "scanned_scopes", "scopes"],
-    allowGetters = true
-)
+@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class ScanRecord(
     /**
      * The [ScanResult]s for all [Package]s.
@@ -47,7 +43,6 @@ data class ScanRecord(
     /**
      * The [AccessStatistics] for the scan results storage.
      */
-    @JsonAlias("cache_stats")
     val storageStats: AccessStatistics
 ) {
     /**

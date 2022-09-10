@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -85,7 +84,6 @@ data class PackageConfiguration(
 /**
  * A matcher which matches its properties against a [RepositoryProvenance].
  */
-@JsonIgnoreProperties("path")
 data class VcsMatcher(
     /**
      * The [type] to match for equality against [VcsInfo.type].

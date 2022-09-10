@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
@@ -27,7 +26,6 @@ import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 /**
  * The result of a single scan of a single package.
  */
-@JsonIgnoreProperties("raw_result")
 data class ScanResult(
     /**
      * Provenance information about the scanned source code.

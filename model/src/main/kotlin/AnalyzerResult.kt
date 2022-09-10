@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
@@ -29,7 +28,7 @@ import java.util.SortedSet
 /**
  * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
  */
-@JsonIgnoreProperties(value = ["has_issues", /* Backwards-compatibility: */ "has_errors"], allowGetters = true)
+@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class AnalyzerResult(
     /**
      * Sorted set of the projects, as they appear in the individual analyzer results.
@@ -47,7 +46,6 @@ data class AnalyzerResult(
      * This property is not serialized if the map is empty to reduce the size of the result file. If there are no issues
      * at all, [AnalyzerResult.hasIssues] already contains that information.
      */
-    @JsonAlias("errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
 
