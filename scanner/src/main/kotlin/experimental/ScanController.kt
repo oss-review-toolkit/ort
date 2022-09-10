@@ -59,7 +59,8 @@ class ScanController(
     private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
     /**
-     * TODO: Docs
+     * A map of [Identifier]s associated with a list of [OrtIssue]s that occurred during a scan besides the issues
+     * created by the scanners themselves as part of the [ScanSummary].
      */
     private val issues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
 
