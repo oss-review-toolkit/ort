@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -39,14 +38,12 @@ data class LicenseClassifications(
      * Defines metadata for the license categories.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonAlias("license_sets")
     val categories: List<LicenseCategory> = emptyList(),
 
     /**
      * Defines metadata for licenses.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonAlias("licenses")
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
     /** A property for fast look-ups of licenses for a given category. */

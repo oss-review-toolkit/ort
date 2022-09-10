@@ -19,11 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonAlias
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
-import com.sksamuel.hoplite.ConfigAlias
-
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
@@ -36,7 +31,6 @@ import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 /**
  * The configuration model for a [FileArchiver].
  */
-@JsonIgnoreProperties(value = ["patterns"])
 data class FileArchiverConfiguration(
     /**
      * Toggle to enable or disable the file archiver functionality altogether.
@@ -46,8 +40,6 @@ data class FileArchiverConfiguration(
     /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
-    @ConfigAlias("storage")
-    @JsonAlias("storage")
     val fileStorage: FileStorageConfiguration? = null,
 
     /**

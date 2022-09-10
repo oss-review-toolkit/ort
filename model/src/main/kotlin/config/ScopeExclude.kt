@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 /**
@@ -29,7 +28,6 @@ data class ScopeExclude(
     /**
      * A regular expression to match the names of scopes to exclude.
      */
-    @JsonAlias("name")
     val pattern: String,
 
     /**

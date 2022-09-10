@@ -21,7 +21,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -38,7 +37,6 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
  */
-@JsonIgnoreProperties("data")
 @Suppress("TooManyFunctions")
 data class OrtResult(
     /**

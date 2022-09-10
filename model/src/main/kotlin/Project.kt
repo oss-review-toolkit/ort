@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -36,7 +35,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxOperator
  * metadata like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
-@JsonIgnoreProperties(value = ["aliases", "purl"])
 data class Project(
     /**
      * The unique identifier of this project. The [id]'s type is the name of the package manager that manages this

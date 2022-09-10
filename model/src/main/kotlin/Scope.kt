@@ -19,14 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
 import java.util.SortedSet
 
 /**
  * The scope class puts package dependencies into context.
  */
-@JsonIgnoreProperties("delivered", "distributed")
 data class Scope(
     /**
      * The respective package manager's native name for the scope, e.g. "compile", "provided" etc. for Maven, or

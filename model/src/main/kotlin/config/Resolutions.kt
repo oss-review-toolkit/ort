@@ -20,7 +20,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 fun Resolutions?.orEmpty() = this ?: Resolutions()
@@ -32,14 +31,12 @@ data class Resolutions(
     /**
      * Resolutions for issues with the analysis or scan of the projects in this repository and their dependencies.
      */
-    @JsonAlias("errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<IssueResolution> = emptyList(),
 
     /**
      * Resolutions for license policy violations.
      */
-    @JsonAlias("evaluator_errors")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val ruleViolations: List<RuleViolationResolution> = emptyList(),
 
