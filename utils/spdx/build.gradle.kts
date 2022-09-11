@@ -58,6 +58,12 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
 }
 
+data class LicenseInfo(
+    val id: String,
+    val name: String,
+    val isDeprecated: Boolean
+)
+
 /**
  * For the given [owner], [repo] and [revision], return the [path]'s contents as a list of URLs.
  */
@@ -139,12 +145,6 @@ fun getLicenseHeader(fromYear: Int = 2017, toYear: Int = Year.now().value) =
     |
     |
     """.trimMargin()
-
-data class LicenseInfo(
-    val id: String,
-    val name: String,
-    val isDeprecated: Boolean
-)
 
 fun licenseToEnumEntry(info: LicenseInfo): String {
     var enumEntry = info.id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
