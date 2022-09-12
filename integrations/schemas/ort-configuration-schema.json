@@ -166,17 +166,17 @@
                 "enabledPackageManagers": {
                     "type": "array",
                     "items": {
-                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/main/integrations/schemas/package-managers-schema.json"
+                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
                     }
                 },
                 "disabledPackageManagers": {
                     "type": "array",
                     "items": {
-                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/main/integrations/schemas/package-managers-schema.json"
+                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
                     }
                 },
                 "packageManagers": {
-                    "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/main/integrations/schemas/package-manager-configuration-schema.json"
+                    "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-manager-configuration-schema.json"
                 },
                 "sw360Configuration": {
                     "$ref": "#/definitions/Sw360Configuration"
