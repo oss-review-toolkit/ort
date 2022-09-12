@@ -40,12 +40,15 @@ internal data class ScanOssConfig(
         /** Name of the configuration property for the API key. */
         const val API_KEY_PROPERTY = "apiKey"
 
+        /** The default API URL to use. */
+        private const val DEFAULT_API_URL = "https://osskb.org/api/"
+
         fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
             val scanOssIdScannerOptions = scannerConfig.options?.get("ScanOss")
 
             requireNotNull(scanOssIdScannerOptions) { "No ScanOSS Scanner configuration found." }
 
-            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: "https://osskb.org/api/"
+            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: DEFAULT_API_URL
             val apiKey = scanOssIdScannerOptions[API_KEY_PROPERTY].orEmpty()
 
             return ScanOssConfig(apiURL, apiKey)
