@@ -41,7 +41,7 @@ internal data class ScanOssConfig(
         const val API_KEY_PROPERTY = "apiKey"
 
         /** The default API URL to use. */
-        private const val DEFAULT_API_URL = "https://osskb.org/api/"
+        internal const val DEFAULT_API_URL = "https://osskb.org/api/"
 
         fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
             val scanOssOptions = scannerConfig.options?.get("ScanOss")
