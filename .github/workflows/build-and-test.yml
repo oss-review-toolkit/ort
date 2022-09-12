@@ -43,7 +43,6 @@ jobs:
     - name: Build the reporter-web-app
       uses: gradle/gradle-build-action@v2
       with:
-        job-id: build-reporter-web-app
         arguments: --stacktrace :reporter-web-app:yarnBuild
   test:
     needs: build
@@ -60,7 +59,6 @@ jobs:
     - name: Run unit tests
       uses: gradle/gradle-build-action@v2
       with:
-        job-id: test
         arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
@@ -96,7 +94,6 @@ jobs:
     - name: Run functional tests
       uses: gradle/gradle-build-action@v2
       with:
-        job-id: funTest-non-analyzer
         arguments: funTest jacocoFunTestReport -x :analyzer:funTest
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
