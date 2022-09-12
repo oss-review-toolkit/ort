@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
@@ -207,7 +208,7 @@ class DownloaderFunTest : StringSpec() {
                 this should endWith("in any resulting litigation.")
             }
 
-            outputDir.walk().count() shouldBe 608
+            outputDir.walk().onEnter { it.name !in VCS_DIRECTORIES }.count() shouldBe 588
         }
 
         "Can download a TGZ source artifact from SourceForge".config(tags = setOf(ExpensiveTag)) {
