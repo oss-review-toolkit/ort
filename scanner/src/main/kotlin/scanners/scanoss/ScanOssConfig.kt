@@ -46,6 +46,9 @@ internal data class ScanOssConfig(
         /** Name of the configuration property for the list of ignored file suffixes. */
         const val IGNORED_FILE_SUFFIXES_PROPERTY = "ignoredFileSuffixes"
 
+        /** The default API URL to use. */
+        private const val DEFAULT_API_URL = "https://osskb.org/api/"
+
         /** The default list of ignored file extension. */
         private val DEFAULT_IGNORED_FILE_EXTENSIONS = listOf(
             ".1", ".2", ".3", ".4", ".5", ".6", ".7", ".8", ".9", ".ac", ".adoc", ".am", ".asciidoc", ".bmp", ".build",
@@ -73,7 +76,7 @@ internal data class ScanOssConfig(
 
             requireNotNull(scanOssIdScannerOptions) { "No ScanOSS Scanner configuration found." }
 
-            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: "https://osskb.org/api/"
+            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: DEFAULT_API_URL
             val apiKey = scanOssIdScannerOptions[API_KEY_PROPERTY].orEmpty()
             val ignoredFileSuffixes = scanOssIdScannerOptions[IGNORED_FILE_SUFFIXES_PROPERTY]
                 ?.split(',')
