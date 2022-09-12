@@ -72,13 +72,11 @@ internal data class ScanOssConfig(
         )
 
         fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
-            val scanOssIdScannerOptions = scannerConfig.options?.get("ScanOss")
+            val scanOssOptions = scannerConfig.options?.get("ScanOss")
 
-            requireNotNull(scanOssIdScannerOptions) { "No ScanOSS Scanner configuration found." }
-
-            val apiURL = scanOssIdScannerOptions[API_URL_PROPERTY] ?: DEFAULT_API_URL
-            val apiKey = scanOssIdScannerOptions[API_KEY_PROPERTY].orEmpty()
-            val ignoredFileSuffixes = scanOssIdScannerOptions[IGNORED_FILE_SUFFIXES_PROPERTY]
+            val apiURL = scanOssOptions?.get(API_URL_PROPERTY) ?: DEFAULT_API_URL
+            val apiKey = scanOssOptions?.get(API_KEY_PROPERTY).orEmpty()
+            val ignoredFileSuffixes = scanOssOptions?.get(IGNORED_FILE_SUFFIXES_PROPERTY)
                 ?.split(',')
                 ?.map { it.trim() }
                 ?: DEFAULT_IGNORED_FILE_SUFFIXES
