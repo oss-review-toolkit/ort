@@ -222,6 +222,12 @@ customize the configuration to a specific environment. The following options are
       password: ${POSTGRES_PASSWORD}
   ```
 
+To print the active configuration use:
+
+```bash
+ort config --show-active
+```
+
 #### [Copyright garbage file](./docs/config-file-copyright-garbage-yml.md)
 
 A list of copyright statements that are considered garbage, for example statements that were incorrectly classified as
