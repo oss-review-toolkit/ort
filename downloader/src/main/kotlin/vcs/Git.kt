@@ -195,7 +195,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
             workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
-            workingTree.runGit("checkout", revision).isSuccess
+            workingTree.runGit("checkout", revision)
         }.recoverCatching {
             it.showStackTrace()
 
