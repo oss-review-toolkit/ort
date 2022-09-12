@@ -5,7 +5,7 @@
     "description": "Configurations for package managers for the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/PackageManagerConfiguration.kt.",
     "type": "object",
     "propertyNames": {
-        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/main/integrations/schemas/package-managers-schema.json"
+        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
     },
     "additionalProperties": {
         "type": "object",
@@ -19,7 +19,7 @@
                 "mustRunAfter": {
                     "type": "array",
                     "items": {
-                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/main/integrations/schemas/package-managers-schema.json"
+                        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
                     }
                 },
                 "options": {
