@@ -186,8 +186,6 @@ class Git : VersionControlSystem(), CommandLineTool {
             if (revision in workingTree.listRemoteTags()) {
                 workingTree.runGit("tag", "-f", revision, "FETCH_HEAD")
             }
-
-            workingTree.runGit("checkout", revision)
         }.recoverCatching {
             it.showStackTrace()
 
@@ -195,7 +193,6 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
             workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
-            workingTree.runGit("checkout", revision)
         }.recoverCatching {
             it.showStackTrace()
 
@@ -207,13 +204,13 @@ class Git : VersionControlSystem(), CommandLineTool {
             } else {
                 workingTree.runGit("fetch", "--tags", "origin")
             }
-
-            workingTree.runGit("checkout", revision)
         }.onFailure {
             it.showStackTrace()
 
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
-        }.map {
+        }.mapCatching {
+            workingTree.runGit("checkout", revision)
+
             revision
         }
 
