@@ -38,7 +38,7 @@ expression a package can theoretically be used under.
 
 ### Effective license
 
-The effective license finally is the one that takes effect for the project, taking into account any project-specific
+The effective license finally is the one that takes effect for the package, taking into account any project-specific
 context like license choices. This is the license that should primarily be used in ORT's *evaluator* rules.
 
 ## Curating licenses
