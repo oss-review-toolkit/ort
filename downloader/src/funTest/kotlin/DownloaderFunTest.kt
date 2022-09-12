@@ -23,9 +23,10 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.file.aFile
-import io.kotest.matchers.file.haveFileSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.endWith
+import io.kotest.matchers.string.startWith
 import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
@@ -79,7 +80,11 @@ class DownloaderFunTest : StringSpec() {
             }
 
             licenseFile shouldBe aFile()
-            licenseFile should haveFileSize(11376L)
+
+            with(licenseFile.readText().trim()) {
+                this should startWith("JUnit")
+                this should endWith("in any resulting litigation.")
+            }
 
             outputDir.walk().count() shouldBe 234
         }
@@ -151,7 +156,11 @@ class DownloaderFunTest : StringSpec() {
             }
 
             licenseFile shouldBe aFile()
-            licenseFile should haveFileSize(11376L)
+
+            with(licenseFile.readText().trim()) {
+                this should startWith("JUnit")
+                this should endWith("in any resulting litigation.")
+            }
 
             outputDir.walk().count() shouldBe 234
         }
@@ -192,7 +201,11 @@ class DownloaderFunTest : StringSpec() {
             }
 
             licenseFile shouldBe aFile()
-            licenseFile should haveFileSize(11376L)
+
+            with(licenseFile.readText().trim()) {
+                this should startWith("JUnit")
+                this should endWith("in any resulting litigation.")
+            }
 
             outputDir.walk().count() shouldBe 608
         }
