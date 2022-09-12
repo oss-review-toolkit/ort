@@ -36,6 +36,7 @@ open class ProjectSourceRule(
      * The directory containing the source code of the project. Accessing the property for the first time triggers a
      * clone and may take a while.
      */
+    @Suppress("MemberVisibilityCanBePrivate") // This property is used in rules.
     val projectSourcesDir: File by lazy { projectSourceResolver.rootDir }
 
     /**
