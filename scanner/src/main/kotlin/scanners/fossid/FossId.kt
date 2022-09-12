@@ -74,6 +74,7 @@ import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PackageScannerWrapper
+import org.ossreviewtoolkit.scanner.experimental.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
@@ -86,6 +87,10 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  *
  * This scanner can be configured in [ScannerConfiguration.options]. For the options available and their documentation
  * refer to [FossIdConfig].
+ *
+ * This scanner was implemented before the introduction of [provenance based scanning][ProvenanceScannerWrapper].
+ * Therefore it implements the [PackageScannerWrapper] interface for backward compatibility, even though FossID itself
+ * gets a Git repository URL as input and would be a good match for [ProvenanceScannerWrapper].
  */
 class FossId internal constructor(
     name: String,
