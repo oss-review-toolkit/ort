@@ -47,7 +47,7 @@ internal data class ScanOssConfig(
         const val IGNORED_FILE_SUFFIXES_PROPERTY = "ignoredFileSuffixes"
 
         /** The default API URL to use. */
-        private const val DEFAULT_API_URL = "https://osskb.org/api/"
+        internal const val DEFAULT_API_URL = "https://osskb.org/api/"
 
         /** The default list of ignored file extension. */
         private val DEFAULT_IGNORED_FILE_EXTENSIONS = listOf(
@@ -66,7 +66,7 @@ internal data class ScanOssConfig(
         )
 
         /** The default list of ignored file suffixes. */
-        private val DEFAULT_IGNORED_FILE_SUFFIXES = DEFAULT_IGNORED_FILE_EXTENSIONS + listOf(
+        internal val DEFAULT_IGNORED_FILE_SUFFIXES = DEFAULT_IGNORED_FILE_EXTENSIONS + listOf(
             "-doc", "authors", "changelog", "config", "copying", "ignore", "license", "licenses", "manifest", "news",
             "notice", "readme", "sqlite", "sqlite3", "swiftdoc", "texidoc", "todo", "version"
         )
