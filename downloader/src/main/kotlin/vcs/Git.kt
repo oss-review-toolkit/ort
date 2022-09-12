@@ -188,26 +188,18 @@ class Git : VersionControlSystem(), CommandLineTool {
             }
 
             workingTree.runGit("checkout", revision)
-        }.onFailure {
+        }.recoverCatching {
             it.showStackTrace()
 
-            logger.warn {
-                "Could not fetch only revision '$revision': ${it.collectMessages()}\n" +
-                        "Falling back to fetching all refs."
-            }
-        }.recoverCatching {
+            logger.info { "Could not fetch only revision '$revision': ${it.collectMessages()}" }
             logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
             workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
             workingTree.runGit("checkout", revision).isSuccess
-        }.onFailure {
+        }.recoverCatching {
             it.showStackTrace()
 
-            logger.warn {
-                "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}\n" +
-                        "Falling back to fetching everything."
-            }
-        }.recoverCatching {
+            logger.info { "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}" }
             logger.info { "Falling back to fetch everything including tags." }
 
             if (workingTree.isShallow()) {
