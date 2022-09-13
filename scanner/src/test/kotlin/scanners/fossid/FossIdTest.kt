@@ -384,7 +384,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -400,7 +400,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -429,7 +429,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -448,7 +448,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -475,7 +475,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -559,8 +559,8 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *FossId.deltaScanRunParameters(originCode),
-                    *arrayOf(
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -600,8 +600,8 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *FossId.deltaScanRunParameters(originCode),
-                    *arrayOf(
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -648,7 +648,7 @@ class FossIdTest : WordSpec({
                     USER,
                     API_KEY,
                     scanCode,
-                    *arrayOf(
+                    mapOf(
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )

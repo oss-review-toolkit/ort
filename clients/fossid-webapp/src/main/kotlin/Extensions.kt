@@ -157,7 +157,7 @@ suspend fun FossIdRestService.runScan(
     user: String,
     apiKey: String,
     scanCode: String,
-    vararg options: Pair<String, String>
+    options: Map<String, String> = emptyMap()
 ): EntityResponseBody<Nothing> =
     runScan(
         PostRequestBody(
