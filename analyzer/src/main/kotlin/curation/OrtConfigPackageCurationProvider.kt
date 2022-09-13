@@ -80,8 +80,7 @@ private fun Identifier.toCurationPath() =
 private fun updateOrtConfig(dir: File) {
     dir.safeMkdirs()
     Git().apply {
-        val workingTree =
-            initWorkingTree(dir, VcsInfo(VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL, ORT_CONFIG_REPOSITORY_BRANCH))
+        val workingTree = initWorkingTree(dir, VcsInfo.EMPTY.copy(type = VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL))
         val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
         OrtConfigPackageCurationProvider.logger.info {
             "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
