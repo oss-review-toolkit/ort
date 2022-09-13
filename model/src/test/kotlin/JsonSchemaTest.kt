@@ -30,11 +30,9 @@ import io.kotest.matchers.should
 import java.io.File
 
 class JsonSchemaTest : StringSpec() {
-    private val mapper = FileFormat.YAML.mapper
-
     private val schemaV7 = JsonSchemaFactory
         .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-        .objectMapper(mapper)
+        .objectMapper(yamlMapper)
         .build()
 
     init {
@@ -97,7 +95,7 @@ class JsonSchemaTest : StringSpec() {
         }
     }
 
-    private fun File.toJsonNode() = mapper.readTree(inputStream())
+    private fun File.toJsonNode() = yamlMapper.readTree(inputStream())
 }
 
 private val repositoryConfigurationSchema =
