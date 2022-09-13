@@ -29,74 +29,72 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-class JsonSchemaTest : StringSpec() {
-    private val schemaV7 = JsonSchemaFactory
-        .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
-        .objectMapper(yamlMapper)
-        .build()
+class JsonSchemaTest : StringSpec({
+    ".ort.yml validates successfully" {
+        val repositoryConfiguration = File("../.ort.yml").toJsonNode()
 
-    init {
-        ".ort.yml validates successfully" {
-            val repositoryConfiguration = File("../.ort.yml").toJsonNode()
+        val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
+
+        errors should beEmpty()
+    }
+
+    ".ort.yml examples validate successfully" {
+        val examplesDir = File("../examples")
+        val exampleFiles =
+            examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(".ort.yml") }
+
+        exampleFiles.forAll {
+            val repositoryConfiguration = it.toJsonNode()
 
             val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
 
             errors should beEmpty()
         }
-
-        ".ort.yml examples validate successfully" {
-            val examplesDir = File("../examples")
-            val exampleFiles =
-                examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(".ort.yml") }
-
-            exampleFiles.forAll {
-                val repositoryConfiguration = it.toJsonNode()
-
-                val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
-
-                errors should beEmpty()
-            }
-        }
-
-        "curations.yml example validates successfully" {
-            val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
-            val curationsExample = File("../examples/curations.yml").toJsonNode()
-
-            val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample)
-
-            errors should beEmpty()
-        }
-
-        "package-configuration.yml validates successfully" {
-            val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-            val packageConfiguration = File("src/test/assets/package-configuration.yml").toJsonNode()
-
-            val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration)
-
-            errors should beEmpty()
-        }
-
-        "resolutions.yml example validates successfully" {
-            val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
-            val resolutionsExample = File("../examples/resolutions.yml").toJsonNode()
-
-            val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample)
-
-            errors should beEmpty()
-        }
-
-        "reference.yml validates successfully" {
-            val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
-            val referenceConfigFile = File("src/main/resources/reference.yml").toJsonNode()
-
-            val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile)
-
-            errors should beEmpty()
-        }
     }
 
-    private fun File.toJsonNode() = yamlMapper.readTree(inputStream())
-}
+    "curations.yml example validates successfully" {
+        val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
+        val curationsExample = File("../examples/curations.yml").toJsonNode()
+
+        val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample)
+
+        errors should beEmpty()
+    }
+
+    "package-configuration.yml validates successfully" {
+        val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
+        val packageConfiguration = File("src/test/assets/package-configuration.yml").toJsonNode()
+
+        val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration)
+
+        errors should beEmpty()
+    }
+
+    "resolutions.yml example validates successfully" {
+        val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
+        val resolutionsExample = File("../examples/resolutions.yml").toJsonNode()
+
+        val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample)
+
+        errors should beEmpty()
+    }
+
+    "reference.yml validates successfully" {
+        val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
+        val referenceConfigFile = File("src/main/resources/reference.yml").toJsonNode()
+
+        val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile)
+
+        errors should beEmpty()
+    }
+})
+
+private val schemaV7 = JsonSchemaFactory
+    .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
+    .objectMapper(yamlMapper)
+    .build()
 
 private val repositoryConfigurationSchema =
     File("../integrations/schemas/repository-configuration-schema.json").toURI()
+
+private fun File.toJsonNode() = yamlMapper.readTree(inputStream())
