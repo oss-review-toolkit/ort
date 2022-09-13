@@ -150,8 +150,11 @@ suspend fun FossIdRestService.createScan(
  * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
 suspend fun FossIdRestService.runScan(
-    user: String, apiKey: String, scanCode: String, vararg options: Pair<String, String>
-) =
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    vararg options: Pair<String, String>
+): EntityResponseBody<Nothing> =
     runScan(
         PostRequestBody(
             "run",
