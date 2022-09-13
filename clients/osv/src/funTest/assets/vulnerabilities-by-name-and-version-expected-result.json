@@ -2,7 +2,7 @@
   {
     "schema_version": "1.2.0",
     "id": "GHSA-462w-v97r-4m45",
-    "modified": "2022-08-15T08:49:16.398254Z",
+    "modified": "2022-09-13T03:29:43.909368Z",
     "published": "2019-04-10T14:30:24Z",
     "aliases": [
       "CVE-2019-10906"
@@ -168,7 +168,7 @@
   {
     "schema_version": "1.2.0",
     "id": "GHSA-8r7q-cvjq-x353",
-    "modified": "2022-09-09T03:37:28.693199Z",
+    "modified": "2022-09-13T03:33:10.380326Z",
     "published": "2022-05-14T04:04:14Z",
     "aliases": [
       "CVE-2014-1402"
@@ -304,17 +304,17 @@
       }
     ],
     "database_specific": {
+      "github_reviewed": true,
       "cwe_ids": [
         "CWE-266"
       ],
-      "github_reviewed": true,
       "severity": "MODERATE"
     }
   },
   {
     "schema_version": "1.2.0",
     "id": "GHSA-g3rq-g295-4j3m",
-    "modified": "2022-08-15T08:52:43.394662Z",
+    "modified": "2022-09-13T03:38:42.513080Z",
     "published": "2021-03-19T21:28:05Z",
     "aliases": [
       "CVE-2020-28493"
@@ -432,7 +432,7 @@
   {
     "schema_version": "1.2.0",
     "id": "GHSA-hj2j-77xm-mc5v",
-    "modified": "2022-08-15T08:44:28.014982Z",
+    "modified": "2022-09-13T03:51:16.510404Z",
     "published": "2019-04-10T14:30:13Z",
     "aliases": [
       "CVE-2016-10745"
@@ -554,10 +554,10 @@
     ],
     "database_specific": {
       "github_reviewed": true,
+      "severity": "HIGH",
       "cwe_ids": [
         "CWE-134"
-      ],
-      "severity": "HIGH"
+      ]
     }
   },
   {
