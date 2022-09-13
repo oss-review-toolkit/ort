@@ -27,7 +27,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
@@ -53,7 +53,7 @@ class FilePackageCurationProvider(
 
             curationFiles.map { curationFile ->
                 val curations = runCatching {
-                    curationFile.readValueOrDefault(emptyList<PackageCuration>())
+                    curationFile.readValue<List<PackageCuration>>()
                 }.onFailure {
                     logger.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
                 }.getOrThrow()
