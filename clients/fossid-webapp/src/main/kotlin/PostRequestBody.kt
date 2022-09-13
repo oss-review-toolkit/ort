@@ -19,16 +19,24 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-class PostRequestBody(
+data class PostRequestBody private constructor(
     val action: String,
     val group: String,
-    user: String,
-    apiKey: String,
-    options: Map<String, String> = emptyMap()
+    val data: Map<String, String>
 ) {
-    val data = buildMap {
-        put("username", user)
-        put("key", apiKey)
-        putAll(options)
-    }
+    constructor(
+        action: String,
+        group: String,
+        user: String,
+        apiKey: String,
+        options: Map<String, String> = emptyMap()
+    ) : this(
+        action,
+        group,
+        buildMap {
+            put("username", user)
+            put("key", apiKey)
+            putAll(options)
+        }
+    )
 }
