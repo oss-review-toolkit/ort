@@ -286,30 +286,16 @@ fun generateEnumClass(
 }
 
 val fixupLicenseTextResources by tasks.registering {
-    val licenseUrlMap: Map<File, URL>? by project.extra
-    val licenseExceptionUrlMap: Map<File, URL>? by project.extra
-
     doLast {
-        (licenseUrlMap.orEmpty() + licenseExceptionUrlMap.orEmpty()).forEach { (targetFile, url) ->
-            val filename = url.path.substringAfterLast('/')
+        val resourcePaths = listOf("licenses", "exceptions").map { file("src/main/resources/$it") }
 
-            val downloadedFile = targetFile.resolveSibling(filename)
-
-            // Rename files that are named differently on the server.
-            if (downloadedFile != targetFile) {
-                if (targetFile.exists() && !targetFile.delete()) {
-                    throw GradleException("Failed to delete existing file '$targetFile'.")
-                }
-
-                if (!downloadedFile.renameTo(targetFile)) {
-                    throw GradleException("Failed to rename file '$downloadedFile' to '$targetFile'.")
-                }
+        resourcePaths.forEach { path ->
+            path.listFiles().forEach { file ->
+                // Trim trailing whitespace and blank lines.
+                val lines = file.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
+                    .asReversed().dropWhile { it.isEmpty() }
+                file.writeText(lines.joinToString("\n", postfix = "\n"))
             }
-
-            // Trim trailing whitespace and blank lines.
-            val lines = targetFile.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
-                .asReversed().dropWhile { it.isEmpty() }
-            targetFile.writeText(lines.joinToString("\n", postfix = "\n"))
         }
     }
 }
@@ -333,14 +319,13 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
     }
 
     val projectResourcePath = "src/main/resources/$resourcePath"
-    val licenseUrlMap by project.extra {
-        licenseInfo.associate { info ->
-            file("$projectResourcePath/${info.id}") to providers.mapNotNull { it.getLicenseUrl(info) }.first()
-        }
+    val licenseUrlMap = licenseInfo.associate { info ->
+        providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
-    src(licenseUrlMap.values.sortedBy { it.toString().toLowerCase() })
+    src(licenseUrlMap.keys.sortedBy { it.toString().toLowerCase() })
     dest(projectResourcePath)
+    eachFile { name = licenseUrlMap[sourceURL] }
 
     finalizedBy(fixupLicenseTextResources)
 }
@@ -364,14 +349,13 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
     }
 
     val projectResourcePath = "src/main/resources/$resourcePath"
-    val licenseExceptionUrlMap by project.extra {
-        licenseInfo.associate { info ->
-            file("$projectResourcePath/${info.id}") to providers.mapNotNull { it.getLicenseUrl(info) }.first()
-        }
+    val licenseExceptionUrlMap = licenseInfo.associate { info ->
+        providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
-    src(licenseExceptionUrlMap.values.sortedBy { it.toString().toLowerCase() })
+    src(licenseExceptionUrlMap.keys.sortedBy { it.toString().toLowerCase() })
     dest(projectResourcePath)
+    eachFile { name = licenseExceptionUrlMap[sourceURL] }
 
     finalizedBy(fixupLicenseTextResources)
 }
