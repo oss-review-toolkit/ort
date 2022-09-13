@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import java.io.File
+import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -60,9 +61,9 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         return if (file.isFile) {
             runCatching {
                 file.readValue<List<PackageCuration>>().filter { it.isApplicable(pkgId) }
-            }.onFailure {
-                logger.warn { "Failed parsing package curation from '${file.absolutePath}'." }
-            }.getOrThrow()
+            }.getOrElse {
+                throw IOException("Failed parsing package curation from '${file.absolutePath}'.", it)
+            }
         } else {
             emptyList()
         }
