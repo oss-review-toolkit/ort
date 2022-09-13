@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -31,7 +29,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
@@ -61,7 +59,7 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         val file = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())
         return if (file.isFile) {
             runCatching {
-                yamlMapper.readValue<List<PackageCuration>>(file).filter { it.isApplicable(pkgId) }
+                file.readValue<List<PackageCuration>>().filter { it.isApplicable(pkgId) }
             }.onFailure {
                 logger.warn { "Failed parsing package curation from '${file.absolutePath}'." }
             }.getOrThrow()
