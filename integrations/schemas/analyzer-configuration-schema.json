@@ -1,0 +1,68 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://oss-review-toolkit.org/analyzer-configuration.yml",
+    "title": "ORT analyzer configurations",
+    "description": "Configurations for package managers used by the The OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/AnalyzerConfiguration.kt.",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "allowDynamicVersions": {
+            "type": "boolean"
+        },
+        "enabledPackageManagers": {
+            "type": "array",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
+            }
+        },
+        "disabledPackageManagers": {
+            "type": "array",
+            "items": {
+                "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-managers-schema.json"
+            }
+        },
+        "packageManagers": {
+            "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-manager-configuration-schema.json"
+        },
+        "sw360Configuration": {
+            "$ref": "#/definitions/Sw360Configuration"
+        }
+    },
+    "definitions": {
+        "Sw360Configuration": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "restUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "authUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "clientId": {
+                    "type": "string"
+                },
+                "clientPassword": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "authUrl",
+                "clientId",
+                "restUrl",
+                "username"
+            ]
+        }
+    }
+}
