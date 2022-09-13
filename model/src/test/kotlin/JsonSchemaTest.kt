@@ -61,7 +61,7 @@ class JsonSchemaTest : StringSpec() {
             }
         }
 
-        "curation.yml example validates successfully" {
+        "curations.yml example validates successfully" {
             val curationsSchema = JsonSchemaFactory
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
                 .objectMapper(mapper)
