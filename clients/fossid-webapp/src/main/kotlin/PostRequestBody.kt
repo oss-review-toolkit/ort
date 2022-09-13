@@ -24,7 +24,11 @@ class PostRequestBody(
     val group: String,
     user: String,
     apiKey: String,
-    vararg options: Pair<String, String>
+    options: Map<String, String> = emptyMap()
 ) {
-    val data = mapOf("username" to user, "key" to apiKey, *options)
+    val data = buildMap {
+        put("username", user)
+        put("key", apiKey)
+        putAll(options)
+    }
 }

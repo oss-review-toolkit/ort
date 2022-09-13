@@ -80,7 +80,7 @@ suspend fun FossIdRestService.getFossIdVersion(): String? {
  */
 suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: String) =
     getProject(
-        PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+        PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, mapOf("project_code" to projectCode))
     )
 
 /**
@@ -90,7 +90,7 @@ suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCo
  */
 suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
     listScansForProject(
-        PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+        PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, mapOf("project_code" to projectCode))
     )
 
 /**
@@ -111,9 +111,11 @@ suspend fun FossIdRestService.createProject(
             PROJECT_GROUP,
             user,
             apiKey,
-            "project_code" to projectCode,
-            "project_name" to projectName,
-            "comment" to comment
+            mapOf(
+                "project_code" to projectCode,
+                "project_name" to projectName,
+                "comment" to comment
+            )
         )
     )
 
@@ -136,11 +138,13 @@ suspend fun FossIdRestService.createScan(
             SCAN_GROUP,
             user,
             apiKey,
-            "project_code" to projectCode,
-            "scan_code" to scanCode,
-            "scan_name" to scanCode,
-            "git_repo_url" to gitRepoUrl,
-            "git_branch" to gitBranch
+            mapOf(
+                "project_code" to projectCode,
+                "scan_code" to scanCode,
+                "scan_name" to scanCode,
+                "git_repo_url" to gitRepoUrl,
+                "git_branch" to gitBranch
+            )
         )
     )
 
@@ -161,8 +165,10 @@ suspend fun FossIdRestService.runScan(
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            *options
+            buildMap {
+                put("scan_code", scanCode)
+                putAll(options)
+            }
         )
     )
 
@@ -178,9 +184,11 @@ suspend fun FossIdRestService.deleteScan(user: String, apiKey: String, scanCode:
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            "delete_identifications" to "1"
-        )
+            mapOf(
+                "scan_code" to scanCode,
+                "delete_identifications" to "1"
+            )
+         )
     )
 
 /**
@@ -195,7 +203,7 @@ suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scan
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode
+            mapOf("scan_code" to scanCode)
         )
     )
 
@@ -207,7 +215,7 @@ suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scan
 suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode: String) =
     checkDownloadStatus(
         PostRequestBody(
-            "check_status_download_content_from_git", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "check_status_download_content_from_git", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -218,7 +226,7 @@ suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, 
  */
 suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: String) =
     listScanResults(
-        PostRequestBody("get_results", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
+        PostRequestBody("get_results", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode))
     )
 
 /**
@@ -233,7 +241,7 @@ suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: 
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode
+            mapOf("scan_code" to scanCode)
         )
     )
 
@@ -245,7 +253,7 @@ suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: 
 suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listIdentifiedFiles(
         PostRequestBody(
-            "get_identified_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_identified_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -257,7 +265,7 @@ suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, 
 suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, scanCode: String) =
     listIgnoredFiles(
         PostRequestBody(
-            "get_ignored_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_ignored_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -269,7 +277,7 @@ suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, sca
 suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, scanCode: String) =
     listPendingFiles(
         PostRequestBody(
-            "get_pending_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_pending_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -281,7 +289,7 @@ suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, sca
 suspend fun FossIdRestService.listIgnoreRules(user: String, apiKey: String, scanCode: String) =
     listIgnoreRules(
         PostRequestBody(
-            "ignore_rules_show", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "ignore_rules_show", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -304,10 +312,12 @@ suspend fun FossIdRestService.createIgnoreRule(
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            "type" to type.name.lowercase(),
-            "value" to value,
-            "apply_to" to scope.name.lowercase()
+            mapOf(
+                "scan_code" to scanCode,
+                "type" to type.name.lowercase(),
+                "value" to value,
+                "apply_to" to scope.name.lowercase()
+            )
         )
     )
 
@@ -329,9 +339,11 @@ suspend fun FossIdRestService.generateReport(
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            "report_type" to reportType.toString(),
-            "selection_type" to selectionType.name.lowercase()
+            mapOf(
+                "scan_code" to scanCode,
+                "report_type" to reportType.toString(),
+                "selection_type" to selectionType.name.lowercase()
+            )
         )
     )
 

@@ -30,6 +30,6 @@ class VersionedFossIdService2021dot2(
         scanCode: String
     ): EntityResponseBody<out UnversionedScanDescription> =
         delegate.checkScanStatus2021dot2(
-            PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
+            PostRequestBody("check_status", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode))
         )
 }
