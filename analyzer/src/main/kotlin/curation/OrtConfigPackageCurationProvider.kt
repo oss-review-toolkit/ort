@@ -54,7 +54,7 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
 
     override fun getCurationsFor(pkgIds: Collection<Identifier>) =
         pkgIds.mapNotNull { pkgId ->
-            getCurationsFor(pkgId).takeIf { it.isNotEmpty() }?.let { pkgId to it }
+            getCurationsFor(pkgId).takeUnless { it.isEmpty() }?.let { pkgId to it }
         }.toMap()
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
