@@ -24,7 +24,7 @@ class PostRequestBody(
     val group: String,
     user: String,
     apiKey: String,
-    vararg pairs: Pair<String, String>
+    vararg options: Pair<String, String>
 ) {
-    val data: MutableMap<String, String> = mutableMapOf("username" to user, "key" to apiKey, *pairs)
+    val data: MutableMap<String, String> = mutableMapOf("username" to user, "key" to apiKey, *options)
 }
