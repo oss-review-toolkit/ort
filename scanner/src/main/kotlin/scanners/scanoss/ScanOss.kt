@@ -20,7 +20,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners.scanoss
 
-import com.scanoss.scanner.BlacklistRules
 import com.scanoss.scanner.Winnowing
 
 import java.io.File
@@ -95,8 +94,7 @@ class ScanOss internal constructor(
 
         val wfpString = buildString {
             path.walk()
-                // TODO: Consider not applying the (somewhat arbitrary) blacklist.
-                .filter { !it.isDirectory && !BlacklistRules.hasBlacklistedExt(it.name) }
+                .filter { it.isFile && config.ignoredFileSuffixes.none { suffix -> it.name.endsWith(suffix) } }
                 .forEach {
                     logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
                     append(createWfpForFile(it.path))
