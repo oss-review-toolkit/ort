@@ -591,7 +591,7 @@ class FossId internal constructor(
             )
 
             val scanResult = service.runScan(
-                config.user, config.apiKey, scanCode, *runOptions, *optionsFromConfig
+                config.user, config.apiKey, scanCode, mapOf(*runOptions, *optionsFromConfig)
             )
 
             // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
