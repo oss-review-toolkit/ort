@@ -21,6 +21,7 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import java.io.File
+import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -54,9 +55,9 @@ class FilePackageCurationProvider(
             curationFiles.map { curationFile ->
                 val curations = runCatching {
                     curationFile.readValue<List<PackageCuration>>()
-                }.onFailure {
-                    logger.warn { "Failed parsing package curation from '${curationFile.absoluteFile}'." }
-                }.getOrThrow()
+                }.getOrElse {
+                    throw IOException("Failed parsing package curation from '${curationFile.absolutePath}'.", it)
+                }
 
                 curations.mapTo(allCurations) { it to curationFile }
             }
