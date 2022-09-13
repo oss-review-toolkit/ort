@@ -5,6 +5,9 @@
   "description": "The OSS-Review-Toolkit (ORT) provides a possibility to configure exclusions, resolutions and more in a file called `.ort.yml`. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-ort-yml.md.",
   "type": "object",
   "properties": {
+    "analyzer": {
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"
+    },
     "excludes": {
       "type": "object",
       "description": "Defines which parts of a repository should be excluded.",
