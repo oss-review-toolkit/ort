@@ -82,6 +82,9 @@ private fun updateOrtConfig(dir: File) {
     Git().apply {
         val workingTree =
             initWorkingTree(dir, VcsInfo(VcsType.GIT, url = ORT_CONFIG_REPOSITORY_URL, ORT_CONFIG_REPOSITORY_BRANCH))
-        updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH)
+        val revision = updateWorkingTree(workingTree, ORT_CONFIG_REPOSITORY_BRANCH).getOrThrow()
+        OrtConfigPackageCurationProvider.logger.info {
+            "Successfully cloned $revision from $ORT_CONFIG_REPOSITORY_URL."
+        }
     }
 }
