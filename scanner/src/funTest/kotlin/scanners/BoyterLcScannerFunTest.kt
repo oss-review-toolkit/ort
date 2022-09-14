@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.scanner.scanners
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 
-class BoyterLcScannerFunTest : AbstractScannerFunTest() {
-    override val scanner = BoyterLc("BoyterLc", scannerConfig, downloaderConfig)
+class BoyterLcScannerFunTest : AbstractPathScannerWrapperFunTest() {
+    override val scanner = BoyterLc("BoyterLc", scannerConfig)
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 0.98388565f),

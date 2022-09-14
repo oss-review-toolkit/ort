@@ -30,15 +30,14 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.CommandLineScanner
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -51,9 +50,8 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class BoyterLc internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
@@ -61,14 +59,9 @@ class BoyterLc internal constructor(
         )
     }
 
-    class BoyterLcFactory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
+    class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            BoyterLc(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<BoyterLc>("BoyterLc") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            BoyterLc(scannerName, scannerConfig, downloaderConfig)
+            BoyterLc(scannerName, scannerConfig)
     }
 
     override val name = "BoyterLc"
@@ -102,7 +95,7 @@ class BoyterLc internal constructor(
         val archive = "lc-$expectedVersion-$platform.zip"
         val url = "https://github.com/boyter/lc/releases/download/v$expectedVersion/$archive"
 
-        logger.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $name from $url... " }
         val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
 
         logger.info { "Unpacking '$archive' to '$unpackDir'... " }
@@ -111,7 +104,9 @@ class BoyterLc internal constructor(
         return unpackDir
     }
 
-    override fun scanPathInternal(path: File): ScanSummary {
+    override fun filterSecretOptions(options: Options): Options = options
+
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val resultFile = createOrtTempDir().resolve("result.json")
@@ -162,13 +157,11 @@ class BoyterLc internal constructor(
             copyrightFindings = sortedSetOf(),
             issues = listOf(
                 OrtIssue(
-                    source = scannerName,
+                    source = name,
                     message = "This scanner is not capable of detecting copyright statements.",
                     severity = Severity.HINT
                 )
             )
         )
     }
-
-    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
