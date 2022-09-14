@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner
 import com.vdurmont.semver4j.Semver
 
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * Definition of a predicate to check whether the configuration of a scanner is compatible with the requirements
@@ -79,6 +80,21 @@ data class ScannerCriteria(
         val ALL_CONFIG_MATCHER: ScannerConfigMatcher = { true }
 
         /**
+         * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
+         */
+        const val PROP_CRITERIA_NAME = "regScannerName"
+
+        /**
+         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
+         */
+        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
+
+        /**
+         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
+         */
+        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
+
+        /**
          * A matcher for scanner configurations that accepts only exact matches of the [originalConfig]. This
          * function can be used by scanners that are extremely sensitive about their configuration.
          */
@@ -108,6 +124,25 @@ data class ScannerCriteria(
                 configMatcher = exactConfigMatcher(details.configuration)
             )
         }
+
+        /**
+         * Return a [ScannerCriteria] object to be used when looking up existing scan results from a
+         * [ScanResultsStorage]. Per default, the properties of this object are initialized to match the scanner
+         * [details]. These default can be overridden by the [ScannerConfiguration.options] property in the provided
+         * [config]: Use properties of the form `scannerName.property`, where `scannerName` is the name of the scanner
+         * the configuration applies to, and `property` is the name of a property of the [ScannerCriteria] class. For
+         * instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
+         * `options.ScanCode.minVersion=3.0.2`.
+         */
+        fun fromConfig(details: ScannerDetails, config: ScannerConfiguration): ScannerCriteria {
+            val options = config.options?.get(details.name).orEmpty()
+            val scannerVersion = Semver(normalizeVersion(details.version))
+            val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: scannerVersion
+            val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
+            val name = options[PROP_CRITERIA_NAME] ?: details.name
+
+            return ScannerCriteria(name, minVersion, maxVersion, exactConfigMatcher(details.configuration))
+        }
     }
 
     /** The regular expression to match for the scanner name. */
@@ -131,3 +166,18 @@ data class ScannerCriteria(
         return minVersion <= version && version < maxVersion && configMatcher(details.configuration)
     }
 }
+
+/**
+ * Parse the given [versionStr] to a [Semver] object, trying to be failure tolerant.
+ */
+private fun parseVersion(versionStr: String?): Semver? =
+    versionStr?.let { Semver(normalizeVersion(it)) }
+
+/**
+ * Normalize the given [versionStr] to make sure that it can be parsed to a [Semver]. The [Semver] class
+ * requires that all components of a semantic version number are present. This function enables a more lenient
+ * style when declaring a version. So for instance, the user can just write "2", and this gets expanded to
+ * "2.0.0".
+ */
+private fun normalizeVersion(versionStr: String): String =
+    versionStr.takeIf { v -> v.count { it == '.' } >= 2 } ?: normalizeVersion("$versionStr.0")

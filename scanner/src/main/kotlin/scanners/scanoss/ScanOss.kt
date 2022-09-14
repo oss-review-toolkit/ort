@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScanner
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -73,7 +74,7 @@ class ScanOss internal constructor(
     private val service = ScanOssService.create(config.apiUrl)
 
     override val name = scannerName
-    override val criteria by lazy { getScannerCriteria() }
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
 
     // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
     override val version = BuildConfig.SCANOSS_VERSION
