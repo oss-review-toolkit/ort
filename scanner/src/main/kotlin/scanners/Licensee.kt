@@ -30,15 +30,14 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.CommandLineScanner
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -46,21 +45,15 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    class LicenseeFactory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
+    class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(scannerName, scannerConfig, downloaderConfig)
+            Licensee(scannerName, scannerConfig)
     }
 
     override val name = "Licensee"
@@ -84,7 +77,9 @@ class Licensee internal constructor(
         return File(userDir, "bin")
     }
 
-    override fun scanPathInternal(path: File): ScanSummary {
+    override fun filterSecretOptions(options: Options): Options = options
+
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -132,13 +127,11 @@ class Licensee internal constructor(
             copyrightFindings = sortedSetOf(),
             issues = listOf(
                 OrtIssue(
-                    source = scannerName,
+                    source = name,
                     message = "This scanner is not capable of detecting copyright statements.",
                     severity = Severity.HINT
                 )
             )
         )
     }
-
-    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
