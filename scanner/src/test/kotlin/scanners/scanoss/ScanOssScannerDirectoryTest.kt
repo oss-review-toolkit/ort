@@ -24,7 +24,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
 
 import io.mockk.every
 import io.mockk.spyk
@@ -34,10 +33,11 @@ import java.io.File
 import java.util.UUID
 
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 
 private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/scanoss/filesToScan")
 
@@ -77,38 +77,36 @@ class ScanOssScannerDirectoryTest : StringSpec({
         } andThenAnswer {
             UUID.fromString("c198b884-f6cf-496f-95eb-0e7968dd2ec6")
         }
-        val result = scanner.scanPath(TEST_DIRECTORY_TO_SCAN)
+
+        val summary = scanner.scanPath(
+            TEST_DIRECTORY_TO_SCAN,
+            ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+        )
 
         verify(exactly = 1) {
             scanner.createWfpForFile(TEST_DIRECTORY_TO_SCAN.resolve("ArchiveUtils.kt"))
             scanner.createWfpForFile(TEST_DIRECTORY_TO_SCAN.resolve("ScannerFactory.kt"))
         }
 
-        result.scanner shouldNotBeNull {
-            results.scanResults.values shouldHaveSize 1
-
-            with(results.scanResults.values.first()) {
-                this shouldHaveSize 1
-
-                first().summary.licenseFindings.shouldContainExactlyInAnyOrder(
-                    LicenseFinding(
-                        license = "Apache-2.0",
-                        location = TextLocation(
-                            path = "utils/src/main/kotlin/ArchiveUtils.kt",
-                            line = TextLocation.UNKNOWN_LINE
-                        ),
-                        score = 99.0f
+        with(summary) {
+            licenseFindings.shouldContainExactlyInAnyOrder(
+                LicenseFinding(
+                    license = "Apache-2.0",
+                    location = TextLocation(
+                        path = "utils/src/main/kotlin/ArchiveUtils.kt",
+                        line = TextLocation.UNKNOWN_LINE
                     ),
-                    LicenseFinding(
-                        license = "Apache-2.0",
-                        location = TextLocation(
-                            path = "scanner/src/main/kotlin/ScannerFactory.kt",
-                            line = TextLocation.UNKNOWN_LINE
-                        ),
-                        score = 100.0f
-                    )
+                    score = 99.0f
+                ),
+                LicenseFinding(
+                    license = "Apache-2.0",
+                    location = TextLocation(
+                        path = "scanner/src/main/kotlin/ScannerFactory.kt",
+                        line = TextLocation.UNKNOWN_LINE
+                    ),
+                    score = 100.0f
                 )
-            }
+            )
         }
     }
 })
