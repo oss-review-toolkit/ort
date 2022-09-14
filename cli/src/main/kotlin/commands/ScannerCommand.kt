@@ -333,8 +333,26 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         projectScannerWrapperFactories: List<ScannerWrapperFactory>,
         config: OrtConfiguration
     ): OrtResult {
-        val packageScannerWrappers = scannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
-        val projectScannerWrappers = projectScannerWrapperFactories.map { it.create(config.scanner, config.downloader) }
+        val packageScannerWrappers = scannerWrapperFactories
+            .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
+            .map { it.create(config.scanner, config.downloader) }
+        val projectScannerWrappers = projectScannerWrapperFactories
+            .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
+            .map { it.create(config.scanner, config.downloader) }
+
+        if (projectScannerWrappers.isNotEmpty()) {
+            println("Scanning projects with:")
+            println(projectScannerWrappers.joinToString { "\t${it.name} (${it.details.version})" })
+        } else {
+            println("Projects will not be scanned.")
+        }
+
+        if (packageScannerWrappers.isNotEmpty()) {
+            println("Scanning packages with:")
+            println(packageScannerWrappers.joinToString { "\t${it.name} (${it.details.version})" })
+        } else {
+            println("Packages will not be scanned.")
+        }
 
         val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
 
