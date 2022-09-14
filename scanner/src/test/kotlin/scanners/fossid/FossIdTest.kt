@@ -39,6 +39,7 @@ import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
@@ -86,7 +87,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
@@ -113,7 +113,7 @@ class FossIdTest : WordSpec({
         "return the version reported by FossIdServiceWithVersion" {
             val fossId = createFossId(createConfig())
 
-            fossId.version shouldBe FOSSID_VERSION
+            fossId.details.version shouldBe FOSSID_VERSION
         }
     }
 
@@ -479,9 +479,12 @@ class FossIdTest : WordSpec({
 
             shouldThrow<TimeoutCancellationException> {
                 withTimeout(1000) {
-                    fossId.scanPackages(
-                        setOf(createPackage(createIdentifier(index = 1), vcsInfo)), emptyMap()
-                    )
+                    launch {
+                        fossId.scanPackage(
+                            createPackage(createIdentifier(index = 1), vcsInfo),
+                            ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+                        )
+                    }
                 }
             }
 
@@ -826,8 +829,7 @@ private val DEFAULT_IGNORE_RULE_SCOPE = RuleScope.SCAN
 /**
  * Create a new [FossId] instance with the specified [config].
  */
-private fun createFossId(config: FossIdConfig): FossId =
-    FossId("FossId", ScannerConfiguration(), DownloaderConfiguration(), config)
+private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", ScannerConfiguration(), config)
 
 /**
  * Create a standard [FossIdConfig] whose properties can be partly specified.
