@@ -24,7 +24,6 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
-import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -45,7 +44,6 @@ import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
@@ -63,10 +61,6 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.PathScanner
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
-import org.ossreviewtoolkit.scanner.Scanner
-import org.ossreviewtoolkit.scanner.ScannerFactory
 import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
@@ -84,12 +78,10 @@ import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.scanOrtResult
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
-import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -99,28 +91,12 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
-sealed interface ScannerOption {
-    data class Stable(val scannerFactory: ScannerFactory) : ScannerOption
-    data class Experimental(val scannerWrapperFactories: List<ScannerWrapperFactory>) : ScannerOption
-}
-
-private fun RawOption.convertToScanner() =
-    convert { scannerName ->
-        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        ScannerOption.Stable(
-            Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-                ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
-        )
-    }
-
 private fun RawOption.convertToScannerWrapperFactories() =
     convert { scannerNames ->
-        ScannerOption.Experimental(
-            scannerNames.split(",").map { name ->
-                ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
-                    ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
-            }
-        )
+        scannerNames.split(",").map { name ->
+            ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
+                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
+        }
     }
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
@@ -161,37 +137,17 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 "times. For example: --label distribution=external"
     ).associate()
 
-    private val scannerOption by mutuallyExclusiveOptions(
-        option(
-            "--scanner", "-s",
-            help = "The scanner to use.\nPossible values are: ${Scanner.ALL}"
-        ).convertToScanner(),
-        option(
-            "--experimental-scanners",
-            help = "A comma-separated list of experimental scanners to use. This option is mutually exclusive with " +
-                    "'--scanner'. The experimental scanner implementation scans by provenance instead of by package. " +
-                    "This improves reuse of stored scan results and increases performance if multiple packages are " +
-                    "coming from the same source code repository. The experimental scanner is work in progress and " +
-                    "it is therefore not recommended to use it in production.\n" +
-                    "Possible values are: ${ScannerWrapper.ALL}"
-        ).convertToScannerWrapperFactories()
-    ).single().default(ScannerOption.Stable(ScanCode.Factory()))
+    private val scanners by option(
+        "--scanners", "-s",
+        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL}"
+    ).convertToScannerWrapperFactories().default(listOf(ScanCode.ScanCodeFactory()))
 
-    private val projectScannerOption by mutuallyExclusiveOptions(
-        option(
-            "--project-scanner",
-            help = "The scanner to use for scanning the source code of projects. By default, projects and packages " +
-                    "are scanned with the same scanner as specified by '--scanner'.\n" +
-                    "Possible values are: ${Scanner.ALL}"
-        ).convertToScanner(),
-        option(
-            "--experimental-project-scanners",
-            help = "A comma-separated list of experimental scanners to use for scanning the source code of projects. " +
-                    "By default, projects and packages are scanned with the same scanner as specified by " +
-                    "'--experimental-scanner'.\n" +
-                    "Possible values are: ${ScannerWrapper.ALL}"
-        ).convertToScannerWrapperFactories()
-    ).single()
+    private val projectScanners by option(
+        "--project-scanners",
+        help = "A comma-separated list of scanners to use for scanning the source code of projects. By default, " +
+                "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
+                "Possible values are: ${ScannerWrapper.ALL}"
+    ).convertToScannerWrapperFactories()
 
     private val packageTypes by option(
         "--package-types",
@@ -228,27 +184,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val config = globalOptionsForSubcommands.config
 
-        val ortResult = when (val scanner = scannerOption) {
-            is ScannerOption.Stable -> {
-                val projectScannerFactory = (projectScannerOption as? ScannerOption.Stable)?.scannerFactory
-
-                logger.warn {
-                    "The scanner implementation will be replaced with the currently experimental scanner in the " +
-                            "middle of September 2022. Please see " +
-                            "https://github.com/oss-review-toolkit/ort#experimental-scanner for how to migrate."
-                }
-
-                run(scanner.scannerFactory, projectScannerFactory, config)
-            }
-
-            is ScannerOption.Experimental -> {
-                val projectScannerWrapperFactories =
-                    (projectScannerOption as? ScannerOption.Experimental)?.scannerWrapperFactories
-                        ?: scanner.scannerWrapperFactories
-
-                runExperimental(scanner.scannerWrapperFactories, projectScannerWrapperFactories, config)
-            }
-        }.mergeLabels(labels)
+        val ortResult = runScanners(scanners, projectScanners ?: scanners, config).mergeLabels(labels)
 
         // Write the result.
         outputDir.safeMkdirs()
@@ -269,65 +205,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         severityStats.print().conclude(config.severeIssueThreshold, 2)
     }
 
-    private fun run(
-        scannerFactory: ScannerFactory,
-        projectScannerFactory: ScannerFactory?,
-        config: OrtConfiguration
-    ): OrtResult {
-        // Configure the scan storage, which is common to all scanners.
-        ScanResultsStorage.configure(config.scanner)
-
-        val storage = ScanResultsStorage.storage
-        println("Using scan storage '${storage.name}'.")
-
-        if (storage is FileBasedStorage) {
-            val backend = storage.backend
-            if (backend is LocalFileStorage) {
-                val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
-                val fileCount = backend.directory.walk().count {
-                    it.isFile && it.name == transformedScanResultsFileName
-                }
-
-                println("Local file storage has $fileCount scan results file(s).")
-            }
-        }
-
-        // Configure the package and project scanners.
-        val defaultScanner = scannerFactory.create(config.scanner, config.downloader)
-        val packageScanner = defaultScanner.takeIf { PackageType.PACKAGE in packageTypes }
-        val projectScanner = (projectScannerFactory?.create(config.scanner, config.downloader) ?: defaultScanner)
-            .takeIf { PackageType.PROJECT in packageTypes }
-
-        if (projectScanner != packageScanner) {
-            if (projectScanner != null) {
-                println("Using project scanner '${projectScanner.scannerName}' version ${projectScanner.version}.")
-            } else {
-                println("Projects will not be scanned.")
-            }
-
-            if (packageScanner != null) {
-                println("Using package scanner '${packageScanner.scannerName}' version ${packageScanner.version}.")
-            } else {
-                println("Packages will not be scanned.")
-            }
-        } else {
-            println("Using scanner '${defaultScanner.scannerName}' version ${defaultScanner.version}.")
-        }
-
-        // Perform the scan.
-        return if (input.isFile) {
-            val ortResult = readOrtResult(input)
-            scanOrtResult(packageScanner, projectScanner, ortResult, skipExcluded)
-        } else {
-            require(projectScanner is PathScanner) {
-                "For scanning paths the chosen project scanner must be a PathScanner."
-            }
-
-            projectScanner.scanPath(input)
-        }
-    }
-
-    private fun runExperimental(
+    private fun runScanners(
         scannerWrapperFactories: List<ScannerWrapperFactory>,
         projectScannerWrapperFactories: List<ScannerWrapperFactory>,
         config: OrtConfiguration
