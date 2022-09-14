@@ -91,14 +91,6 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
-private fun RawOption.convertToScannerWrapperFactories() =
-    convert { scannerNames ->
-        scannerNames.split(",").map { name ->
-            ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
-                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
-        }
-    }
-
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
         option(
@@ -273,6 +265,14 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
     }
 }
+
+private fun RawOption.convertToScannerWrapperFactories() =
+    convert { scannerNames ->
+        scannerNames.split(",").map { name ->
+            ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
+                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
+        }
+    }
 
 private fun createDefaultStorage(): ScanStorage {
     val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
