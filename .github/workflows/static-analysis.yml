@@ -21,7 +21,6 @@ jobs:
       with:
         distribution: temurin
         java-version: 11
-        cache: gradle
     - name: Check for Detekt Issues
       uses: gradle/gradle-build-action@v2
       with:
