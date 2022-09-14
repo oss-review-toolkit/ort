@@ -206,7 +206,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
     }
 }
 
-private class DummyNestedProvenanceStorage : NestedProvenanceStorage {
+internal class DummyNestedProvenanceStorage : NestedProvenanceStorage {
     override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? = null
     override fun putNestedProvenance(root: RepositoryProvenance, result: NestedProvenanceResolutionResult) {
         /** no-op */
