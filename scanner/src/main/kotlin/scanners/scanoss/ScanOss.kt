@@ -36,11 +36,11 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.PathScanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
@@ -50,35 +50,26 @@ import org.ossreviewtoolkit.scanner.experimental.ScanContext
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 
 class ScanOss internal constructor(
-    name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : PathScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    override val name: String,
+    private val scannerConfig: ScannerConfiguration
+) : PathScannerWrapper {
     companion object : Logging
 
-    class ScanOssFactory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
+    class Factory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanOss(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<ScanOss>("SCANOSS") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanOss(scannerName, scannerConfig, downloaderConfig)
+            ScanOss(scannerName, scannerConfig)
     }
 
     private val config = ScanOssConfig.create(scannerConfig).also {
-        logger.info { "The $scannerName API URL is ${it.apiUrl}." }
+        logger.info { "The $name API URL is ${it.apiUrl}." }
     }
 
     private val service = ScanOssService.create(config.apiUrl)
 
-    override val name = scannerName
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
 
     // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
-    override val version = BuildConfig.SCANOSS_VERSION
-
-    override val configuration = ""
+    override val details = ScannerDetails(name, BuildConfig.SCANOSS_VERSION, "")
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
@@ -90,7 +81,9 @@ class ScanOss internal constructor(
      */
     private val fileNamesAnonymizationMapping = mutableMapOf<UUID, String>()
 
-    override fun scanPathInternal(path: File): ScanSummary {
+    override fun filterSecretOptions(options: Options): Options = options
+
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val wfpString = buildString {
@@ -115,7 +108,7 @@ class ScanOss internal constructor(
             val uuid = UUID.fromString(entry.key)
 
             val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
-                "The $scannerName server returned an UUID not present in the mapping."
+                "The $name server returned an UUID not present in the mapping."
             )
 
             fileName to entry.value
@@ -140,6 +133,4 @@ class ScanOss internal constructor(
             return Winnowing.wfpForFile(uuid.toString(), file.path)
         }
     }
-
-    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
