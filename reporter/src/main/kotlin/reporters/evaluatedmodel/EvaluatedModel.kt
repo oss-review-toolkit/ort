@@ -119,7 +119,7 @@ data class EvaluatedModel(
 
     val labels: Map<String, String>,
 
-    val metaData: MetaData
+    val metadata: Metadata
 ) {
     companion object {
         private val INT_ID_TYPES = listOf(

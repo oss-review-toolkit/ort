@@ -384,7 +384,7 @@ class Pip(
         }.getOrThrow()
 
         // Get the locally available metadata for all installed packages as a fallback.
-        val installedPackages = getInstalledPackagesWithLocalMetaData(virtualEnvDir, workingDir).associateBy { it.id }
+        val installedPackages = getInstalledPackagesWithLocalMetadata(virtualEnvDir, workingDir).associateBy { it.id }
 
         val fullDependencyTree = jsonMapper.readTree(jsonFile)
         jsonFile.parentFile.safeDeleteRecursively(force = true)
@@ -649,7 +649,7 @@ class Pip(
         }.getOrDefault(Package.EMPTY.copy(id = id))
     }
 
-    private fun getInstalledPackagesWithLocalMetaData(virtualEnvDir: File, workingDir: File): List<Package> {
+    private fun getInstalledPackagesWithLocalMetadata(virtualEnvDir: File, workingDir: File): List<Package> {
         val allPackages = listAllInstalledPackages(virtualEnvDir, workingDir)
 
         // Invoking 'pip show' once for each package separately is too slow, thus obtain the output for all packages

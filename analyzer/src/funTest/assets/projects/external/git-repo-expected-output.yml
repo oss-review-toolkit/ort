@@ -1673,7 +1673,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/jena.git"
           revision: "jena-3.9.0-rc1"
           path: ""
-        is_meta_data_only: true
+        is_metadata_only: true
       curations: []
     - metadata:
         id: "Maven:org.apache.jena:jena-arq:3.9.0"
@@ -2402,7 +2402,7 @@ analyzer:
           url: "https://git-wip-us.apache.org/repos/asf/thrift.git"
           revision: ""
           path: ""
-        is_meta_data_only: true
+        is_metadata_only: true
       curations: []
     - metadata:
         id: "Maven:org.apache.xmlbeans:xmlbeans:2.6.0"

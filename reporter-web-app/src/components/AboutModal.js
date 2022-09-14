@@ -49,10 +49,10 @@ const AboutModal = (props) => {
     const { repositoryConfiguration } = webAppOrtResult;
     const {
         labels,
-        metaData
+        metadata
     } = webAppOrtResult;
 
-    const { analyzerStartTime } = metaData;
+    const { analyzerStartTime } = metadata;
     const analyzerStartDate = new Date(analyzerStartTime).toLocaleDateString(
         undefined,
         {

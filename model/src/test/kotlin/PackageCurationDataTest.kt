@@ -47,7 +47,7 @@ class PackageCurationDataTest : WordSpec({
             revision = "original",
             path = "original"
         ),
-        isMetaDataOnly = true,
+        isMetadataOnly = true,
         isModified = true,
         declaredLicenseMapping = mapOf("original" to "original".toSpdx())
     )
@@ -74,7 +74,7 @@ class PackageCurationDataTest : WordSpec({
             revision = "other",
             path = "other"
         ),
-        isMetaDataOnly = false,
+        isMetadataOnly = false,
         isModified = false,
         declaredLicenseMapping = mapOf("other" to "other".toSpdx())
     )
@@ -91,7 +91,7 @@ class PackageCurationDataTest : WordSpec({
                 concludedLicense = null,
                 binaryArtifact = null,
                 vcs = null,
-                isMetaDataOnly = null,
+                isMetadataOnly = null,
                 declaredLicenseMapping = emptyMap()
             )
 
@@ -101,7 +101,7 @@ class PackageCurationDataTest : WordSpec({
                 concludedLicense = other.concludedLicense,
                 binaryArtifact = other.binaryArtifact,
                 vcs = other.vcs,
-                isMetaDataOnly = other.isMetaDataOnly,
+                isMetadataOnly = other.isMetadataOnly,
                 declaredLicenseMapping = other.declaredLicenseMapping
             )
         }

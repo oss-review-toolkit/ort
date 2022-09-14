@@ -50,7 +50,7 @@ class PackageTest : StringSpec({
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
             sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
             vcs = VcsInfo(VcsType("type"), "url", "revision"),
-            isMetaDataOnly = false,
+            isMetadataOnly = false,
             isModified = false
         )
 
@@ -68,7 +68,7 @@ class PackageTest : StringSpec({
             binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             sourceArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             vcs = VcsInfo(VcsType("other type"), "other url", "other revision"),
-            isMetaDataOnly = true,
+            isMetadataOnly = true,
             isModified = true
         )
 
@@ -80,7 +80,7 @@ class PackageTest : StringSpec({
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
         diff.vcs shouldBe pkg.vcsProcessed.toCuration()
-        diff.isMetaDataOnly shouldBe pkg.isMetaDataOnly
+        diff.isMetadataOnly shouldBe pkg.isMetadataOnly
         diff.isModified shouldBe pkg.isModified
     }
 
@@ -109,6 +109,6 @@ class PackageTest : StringSpec({
         diff.homepageUrl should beNull()
         diff.sourceArtifact should beNull()
         diff.vcs should beNull()
-        diff.isMetaDataOnly should beNull()
+        diff.isMetadataOnly should beNull()
     }
 })

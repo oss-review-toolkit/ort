@@ -129,11 +129,11 @@ open class PackageRule(
     /**
      * A [RuleMatcher] that checks whether the [package][pkg] is metadata only.
      */
-    fun isMetaDataOnly() =
+    fun isMetadataOnly() =
         object : RuleMatcher {
-            override val description = "isMetaDataOnly()"
+            override val description = "isMetadataOnly()"
 
-            override fun matches() = pkg.metadata.isMetaDataOnly
+            override fun matches() = pkg.metadata.isMetadataOnly
         }
 
     /**

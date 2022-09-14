@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,16 +18,20 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
+class Metadata {
+    #analyzerStartTime;
 
-import java.time.Instant
+    constructor(obj) {
+        if (obj instanceof Object) {
+            if (obj.analyzer_start_time || obj.analyzerStartTime) {
+                this.#analyzerStartTime = obj.analyzer_start_time || obj.analyzerStartTime;
+            }
+        }
+    }
 
-/**
- * Metadata about the ORT run itself.
- */
-data class MetaData(
-    /**
-     * The time the Analyzer started.
-     */
-    val analyzerStartTime: Instant
-)
+    get analyzerStartTime() {
+        return this.#analyzerStartTime;
+    }
+}
+
+export default Metadata;

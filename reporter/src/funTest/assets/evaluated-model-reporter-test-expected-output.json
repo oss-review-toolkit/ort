@@ -1062,7 +1062,7 @@
     "process_parameters.PROCESS_PARAM_2" : "label process param 2",
     "OTHER" : "label other"
   },
-  "meta_data" : {
+  "metadata" : {
     "analyzer_start_time" : "1970-01-01T00:00:00Z"
   }
 }
