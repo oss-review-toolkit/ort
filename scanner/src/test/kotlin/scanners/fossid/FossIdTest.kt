@@ -699,9 +699,11 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val scannerRun = fossId.scan(listOf(pkg1, pkg2, pkg3))
+            fossId.scan(listOf(pkg1))
+            val scannerRun = fossId.scan(listOf(pkg2))
+            fossId.scan(listOf(pkg3))
 
-            scannerRun.results.scanResults.keys shouldHaveSize 3
+            scannerRun.results.scanResults.keys shouldHaveSize 1
             scannerRun.results.collectIssues()[id2].shouldNotBeNull {
                 val issue = first()
                 issue.message shouldContain id2.toCoordinates()
