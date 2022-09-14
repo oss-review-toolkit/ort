@@ -19,10 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
-import io.kotest.assertions.fail
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.inspectors.forAtLeastOne
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -41,7 +39,6 @@ import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
@@ -79,25 +76,21 @@ import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.scanOrtResult
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class FossIdTest : WordSpec({
     beforeSpec {
@@ -148,7 +141,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             summary.issues shouldHaveSize 1
             with(summary.issues.first()) {
@@ -238,7 +231,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyrightMarked1", textLocation(1)),
@@ -269,7 +262,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyrightMarked1", textLocation(1))
@@ -299,7 +292,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyright1", textLocation(1)),
@@ -331,7 +324,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
                 OrtIssue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
@@ -513,14 +506,13 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val scannerRun = fossId.scan(createPackage(pkgId, vcsInfo))
+            val result = fossId.scan(createPackage(pkgId, vcsInfo))
 
-            scannerRun.results.collectIssues()[pkgId] shouldNotBeNull {
-                this shouldHaveSize 1
-                val issue = first()
-                issue.message shouldContain pkgId.toCoordinates()
-                issue.message shouldContain "asynchronous mode"
-                issue.severity shouldBe Severity.HINT
+            result.summary.issues shouldHaveSize 1
+            with(result.summary.issues.first()) {
+                message shouldContain pkgId.toCoordinates()
+                message shouldContain "asynchronous mode"
+                severity shouldBe Severity.HINT
             }
 
             coVerify(exactly = 0) {
@@ -700,14 +692,13 @@ class FossIdTest : WordSpec({
             val fossId = createFossId(config)
 
             fossId.scan(pkg1)
-            val scannerRun = fossId.scan(pkg2)
+            val result = fossId.scan(pkg2)
             fossId.scan(pkg3)
 
-            scannerRun.results.scanResults.keys shouldHaveSize 1
-            scannerRun.results.collectIssues()[id2].shouldNotBeNull {
-                val issue = first()
-                issue.message shouldContain id2.toCoordinates()
-                issue.severity shouldBe Severity.ERROR
+            result.summary.issues shouldHaveSize 1
+            with(result.summary.issues.first()) {
+                message shouldContain id2.toCoordinates()
+                severity shouldBe Severity.ERROR
             }
 
             coVerify {
@@ -799,13 +790,11 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val results = fossId.scan(createPackage(pkgId, vcsInfo)).scanResults(pkgId)
+            val result = fossId.scan(createPackage(pkgId, vcsInfo))
 
             val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode)
 
-            results.forAtLeastOne { result ->
-                result.additionalData shouldBe expectedAdditionalData
-            }
+            result.additionalData shouldBe expectedAdditionalData
         }
     }
 })
@@ -1194,32 +1183,7 @@ private fun FossIdServiceWithVersion.mockFiles(
 }
 
 /**
- * Obtain the [ScanSummary] for the package with the given [pkgId] from this [ScannerRun].
+ * Trigger a FossID scan of the given [package][pkg].
  */
-private fun ScannerRun.summary(pkgId: Identifier): ScanSummary {
-    val scanResults = scanResults(pkgId)
-    scanResults shouldHaveSize 1
-
-    return scanResults[0].summary
-}
-
-/**
- * Obtain the [ScanResult]s for the package with the given [pkgId] from this [ScannerRun] or fail if it cannot be
- * resolved.
- */
-private fun ScannerRun.scanResults(pkgId: Identifier): List<ScanResult> =
-    results.scanResults[pkgId] ?: fail("No result for package $pkgId found.")
-
-/**
- * Trigger a FossID scan of the given [packages]. Return the resulting [ScannerRun].
- */
-private fun FossId.scan(pkg: Package): ScannerRun {
-    val mockResult = spyk(OrtResult.EMPTY.copy(analyzer = mockk()))
-    val curatedPackage = CuratedPackage(pkg)
-    every { mockResult.getPackages(any()) } returns setOf(curatedPackage)
-    every { mockResult.getProjects(any()) } returns emptySet()
-
-    val newResult = runBlocking { scanOrtResult(this@scan, mockResult) }
-
-    return newResult.scanner!!
-}
+private fun FossId.scan(pkg: Package): ScanResult =
+    scanPackage(pkg, ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE))
