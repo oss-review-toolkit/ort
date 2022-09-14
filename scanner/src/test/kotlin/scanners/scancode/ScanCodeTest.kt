@@ -32,15 +32,15 @@ import io.mockk.spyk
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ScanCodeTest : WordSpec({
-    val scanner = ScanCode("ScanCode", ScannerConfiguration(), DownloaderConfiguration())
+    val scanner = ScanCode("ScanCode", ScannerConfiguration())
 
     "configuration()" should {
         "return the default values if the scanner configuration is empty" {
@@ -57,8 +57,7 @@ class ScanCodeTest : WordSpec({
                             "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                ),
-                DownloaderConfiguration()
+                )
             )
 
             scannerWithConfig.configuration shouldBe "--command --line --json-pp"
@@ -81,8 +80,7 @@ class ScanCodeTest : WordSpec({
                             "commandLineNonConfig" to "--commandLineNonConfig"
                         )
                     )
-                ),
-                DownloaderConfiguration()
+                )
             )
 
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
@@ -90,7 +88,7 @@ class ScanCodeTest : WordSpec({
         }
     }
 
-    "scanPathInternal" should {
+    "scanPath" should {
         "handle a ScanCode result with errors" {
             val path = createTestTempDir("scan-code")
 
@@ -109,12 +107,11 @@ class ScanCodeTest : WordSpec({
                 process
             }
 
-            val result = scannerSpy.scanPath(path)
+            val summary = scannerSpy.scanPath(path, ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE))
 
-            result.scanner?.results.shouldNotBeNull {
-                val summary = scanResults.iterator().next().value.single().summary
-                summary.licenseFindings shouldNot beEmpty()
-                summary.issues.find { it.message.contains("Unexpected EOF") } shouldNot beNull()
+            with(summary) {
+                licenseFindings shouldNot beEmpty()
+                issues.find { it.message.contains("Unexpected EOF") } shouldNot beNull()
             }
         }
     }
@@ -122,8 +119,7 @@ class ScanCodeTest : WordSpec({
     "transformVersion" should {
         val scanCode = ScanCode(
             "ScanCode",
-            ScannerConfiguration(),
-            DownloaderConfiguration()
+            ScannerConfiguration()
         )
 
         "work with a version output without a colon" {

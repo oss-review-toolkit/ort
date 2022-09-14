@@ -28,15 +28,14 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.CommandLineScanner
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -65,9 +64,8 @@ import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
  */
 class ScanCode internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 
@@ -100,14 +98,9 @@ class ScanCode internal constructor(
         }
     }
 
-    class ScanCodeFactory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
+    class Factory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<ScanCode>(SCANNER_NAME) {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(scannerName, scannerConfig, downloaderConfig)
+            ScanCode(scannerName, scannerConfig)
     }
 
     override val name = SCANNER_NAME
@@ -171,7 +164,7 @@ class ScanCode internal constructor(
 
         // Download ScanCode to a file instead of unpacking directly from the response body as doing so on the > 200 MiB
         // archive causes issues.
-        logger.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $name from $url... " }
         unpackDir.safeMkdirs()
         val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
 
@@ -185,7 +178,9 @@ class ScanCode internal constructor(
         return scannerDir
     }
 
-    override fun scanPathInternal(path: File): ScanSummary {
+    override fun filterSecretOptions(options: Options): Options = options
+
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val resultFile = createOrtTempDir().resolve("result.json")
         val process = runScanCode(path, resultFile)
 
@@ -237,6 +232,4 @@ class ScanCode internal constructor(
                 it
             }
         }
-
-    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
