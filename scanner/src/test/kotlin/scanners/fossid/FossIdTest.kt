@@ -148,7 +148,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
 
             summary.issues shouldHaveSize 1
             with(summary.issues.first()) {
@@ -175,7 +175,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
@@ -208,7 +208,7 @@ class FossIdTest : WordSpec({
                     EntityResponseBody(status = 1, data = DownloadStatus.FAILED)
 
             val fossId = createFossId(config)
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
@@ -238,7 +238,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyrightMarked1", textLocation(1)),
@@ -269,7 +269,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyrightMarked1", textLocation(1))
@@ -299,7 +299,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
 
             val expectedCopyrightFindings = listOf(
                 CopyrightFinding("copyright1", textLocation(1)),
@@ -331,7 +331,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val summary = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).summary(pkgId)
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary(pkgId)
 
             val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
                 OrtIssue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
@@ -359,7 +359,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createProject(USER, API_KEY, projectCode, projectCode)
@@ -393,7 +393,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.runScan(
@@ -441,7 +441,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.runScan(
@@ -513,7 +513,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val scannerRun = fossId.scan(listOf(createPackage(pkgId, vcsInfo)))
+            val scannerRun = fossId.scan(createPackage(pkgId, vcsInfo))
 
             scannerRun.results.collectIssues()[pkgId] shouldNotBeNull {
                 this shouldHaveSize 1
@@ -549,7 +549,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
@@ -590,7 +590,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
@@ -635,7 +635,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
@@ -699,9 +699,9 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(pkg1))
-            val scannerRun = fossId.scan(listOf(pkg2))
-            fossId.scan(listOf(pkg3))
+            fossId.scan(pkg1)
+            val scannerRun = fossId.scan(pkg2)
+            fossId.scan(pkg3)
 
             scannerRun.results.scanResults.keys shouldHaveSize 1
             scannerRun.results.collectIssues()[id2].shouldNotBeNull {
@@ -762,7 +762,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(listOf(createPackage(createIdentifier(index = 1), vcsInfo)))
+            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
 
             coVerify {
                 (1..(numberOfDeltaScans - deltaScanLimit + 1)).map {
@@ -799,7 +799,7 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            val results = fossId.scan(listOf(createPackage(pkgId, vcsInfo))).scanResults(pkgId)
+            val results = fossId.scan(createPackage(pkgId, vcsInfo)).scanResults(pkgId)
 
             val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode)
 
@@ -1213,10 +1213,10 @@ private fun ScannerRun.scanResults(pkgId: Identifier): List<ScanResult> =
 /**
  * Trigger a FossID scan of the given [packages]. Return the resulting [ScannerRun].
  */
-private fun FossId.scan(packages: List<Package>): ScannerRun {
+private fun FossId.scan(pkg: Package): ScannerRun {
     val mockResult = spyk(OrtResult.EMPTY.copy(analyzer = mockk()))
-    val curatedPackages = packages.map { CuratedPackage(it) }.toSet()
-    every { mockResult.getPackages(any()) } returns curatedPackages
+    val curatedPackage = CuratedPackage(pkg)
+    every { mockResult.getPackages(any()) } returns setOf(curatedPackage)
     every { mockResult.getProjects(any()) } returns emptySet()
 
     val newResult = runBlocking { scanOrtResult(this@scan, mockResult) }
