@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
@@ -96,8 +95,6 @@ class ScannerIntegrationFunTest : StringSpec() {
         override val name = "Dummy"
         override val details = ScannerDetails(name = name, version = "1.0.0", configuration = "")
         override val criteria: ScannerCriteria = ScannerCriteria.forDetails(details)
-
-        override fun filterSecretOptions(options: Options): Options = options
 
         override fun scanPath(path: File, context: ScanContext): ScanSummary {
             val time = Instant.now()

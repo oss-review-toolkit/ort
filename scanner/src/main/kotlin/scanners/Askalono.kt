@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.BuildConfig
@@ -96,8 +95,6 @@ class Askalono internal constructor(
 
         return unpackDir
     }
-
-    override fun filterSecretOptions(options: Options): Options = options
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()

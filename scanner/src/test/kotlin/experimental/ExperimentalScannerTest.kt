@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -794,8 +793,6 @@ private class FakePackageScannerWrapper(
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
         createScanResult(packageProvenanceResolver.resolveProvenance(pkg, sourceCodeOriginPriority), details)
-
-    override fun filterSecretOptions(options: Options) = options
 }
 
 /**
@@ -808,8 +805,6 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
 
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
         createScanResult(provenance, details)
-
-    override fun filterSecretOptions(options: Options) = options
 }
 
 /**
@@ -827,8 +822,6 @@ private class FakePathScannerWrapper : PathScannerWrapper {
 
         return createScanSummary(licenseFindings = licenseFindings)
     }
-
-    override fun filterSecretOptions(options: Options) = options
 }
 
 /**

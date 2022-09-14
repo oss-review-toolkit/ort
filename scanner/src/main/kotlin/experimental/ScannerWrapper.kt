@@ -72,7 +72,7 @@ sealed interface ScannerWrapper {
     /**
      * Filter the scanner-specific options to remove / obfuscate any secrets, like credentials.
      */
-    fun filterSecretOptions(options: Options): Options
+    fun filterSecretOptions(options: Options): Options = options
 }
 
 /**

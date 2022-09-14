@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -80,8 +79,6 @@ class ScanOss internal constructor(
      * TODO: This behavior should be driven by a configuration parameter enabled by default.
      */
     private val fileNamesAnonymizationMapping = mutableMapOf<UUID, String>()
-
-    override fun filterSecretOptions(options: Options): Options = options
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()

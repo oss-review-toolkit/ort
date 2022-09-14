@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.BuildConfig
@@ -76,8 +75,6 @@ class Licensee internal constructor(
 
         return File(userDir, "bin")
     }
-
-    override fun filterSecretOptions(options: Options): Options = options
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
