@@ -176,7 +176,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
     }
 }
 
-private class DummyProvenanceStorage : PackageProvenanceStorage {
+internal class DummyProvenanceStorage : PackageProvenanceStorage {
     override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
         null
 

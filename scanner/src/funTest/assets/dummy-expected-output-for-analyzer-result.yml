@@ -17,7 +17,7 @@ analyzer:
   environment:
     ort_version: "HEAD"
     java_version: "<REPLACE_JAVA>"
-    os: "Linux"
+    os: "<REPLACE_OS>"
     processors: "<REPLACE_PROCESSORS>"
     max_memory: "<REPLACE_MAX_MEMORY>"
     variables: {}
@@ -221,6 +221,7 @@ scanner:
       LicenseRef-scancode-unknown: "NOASSERTION"
       LicenseRef-scancode-unknown-license-reference: "NOASSERTION"
       LicenseRef-scancode-unknown-spdx: "NOASSERTION"
+    options: {}
     ignore_patterns:
     - "**/*.ort.yml"
     - "**/*.spdx.yml"
@@ -236,7 +237,7 @@ scanner:
       - provenance: {}
         scanner:
           name: "Dummy"
-          version: "1.0"
+          version: "1.0.0"
           configuration: ""
         summary:
           start_time: "1970-01-01T00:00:00Z"
@@ -246,13 +247,12 @@ scanner:
           copyrights: []
           issues:
           - timestamp: "1970-01-01T00:00:00Z"
-            source: "Dummy"
-            message: "Could not download 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0':\
-              \ DownloadException: Download failed for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\n\
-              Suppressed: DownloadException: No VCS URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'.\
-              \ Please make sure the published POM file includes the SCM connection,\
-              \ see: https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom\n\
-              Suppressed: DownloadException: No source artifact URL provided for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'."
+            source: "scanner"
+            message: "Could not resolve provenance for package 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0':\
+              \ IOException: Could not resolve provenance for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'\
+              \ for source code origins [VCS, ARTIFACT].\nResolution of VCS failed\
+              \ with:\nURISyntaxException: Cannot parse Git URI-ish: The uri was empty\
+              \ or null"
             severity: "ERROR"
       Maven:junit:junit:4.12:
       - provenance:
@@ -263,13 +263,33 @@ scanner:
               algorithm: "SHA-1"
         scanner:
           name: "Dummy"
-          version: "1.0"
+          version: "1.0.0"
           configuration: ""
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          package_verification_code: "a86513854c8896d354a2d84f51beeaf9b378c233"
-          licenses: []
+          package_verification_code: ""
+          licenses:
+          - license: "NONE"
+            location:
+              path: "LICENSE-junit.txt"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "META-INF"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "junit"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "org"
+              start_line: -1
+              end_line: -1
           copyrights: []
       Maven:org.apache.commons:commons-lang3:3.5:
       - provenance:
@@ -280,13 +300,23 @@ scanner:
               algorithm: "SHA-1"
         scanner:
           name: "Dummy"
-          version: "1.0"
+          version: "1.0.0"
           configuration: ""
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          package_verification_code: "bff2d5982a9b1985295c372b3ae2f90a7a860747"
-          licenses: []
+          package_verification_code: ""
+          licenses:
+          - license: "NONE"
+            location:
+              path: "META-INF"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "org"
+              start_line: -1
+              end_line: -1
           copyrights: []
       Maven:org.apache.commons:commons-text:1.1:
       - provenance:
@@ -297,13 +327,23 @@ scanner:
               algorithm: "SHA-1"
         scanner:
           name: "Dummy"
-          version: "1.0"
+          version: "1.0.0"
           configuration: ""
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          package_verification_code: "78daf07d29c2b84b09766a98c1728b2daeeb59e6"
-          licenses: []
+          package_verification_code: ""
+          licenses:
+          - license: "NONE"
+            location:
+              path: "META-INF"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "org"
+              start_line: -1
+              end_line: -1
           copyrights: []
       Maven:org.hamcrest:hamcrest-core:1.3:
       - provenance:
@@ -314,16 +354,26 @@ scanner:
               algorithm: "SHA-1"
         scanner:
           name: "Dummy"
-          version: "1.0"
+          version: "1.0.0"
           configuration: ""
         summary:
           start_time: "1970-01-01T00:00:00Z"
           end_time: "1970-01-01T00:00:00Z"
-          package_verification_code: "a42897bec728695ae0e3ecdcc891ced065dae355"
-          licenses: []
+          package_verification_code: ""
+          licenses:
+          - license: "NONE"
+            location:
+              path: "META-INF"
+              start_line: -1
+              end_line: -1
+          - license: "NONE"
+            location:
+              path: "org"
+              start_line: -1
+              end_line: -1
           copyrights: []
     storage_stats:
-      num_reads: 5
+      num_reads: 0
       num_hits: 0
     has_issues: true
 advisor: null
