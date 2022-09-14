@@ -54,7 +54,10 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
         result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
+                expectedResult,
+                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
+            )
         }
     }
 
@@ -64,7 +67,10 @@ class OsvServiceFunTest : StringSpec({
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
         result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it) shouldEqualJson expectedResult
+            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
+                expectedResult,
+                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
+            )
         }
     }
 
