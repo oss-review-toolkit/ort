@@ -26,14 +26,14 @@ import io.kotest.matchers.string.startWith
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.scanner.scanners.AbstractScannerFunTest
+import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.ScanCodeTag
 
-class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCodeTag)) {
-    override val scanner = ScanCode("ScanCode", scannerConfig, downloaderConfig)
+class ScanCodeScannerFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag, ScanCodeTag)) {
+    override val scanner = ScanCode("ScanCode", scannerConfig)
 
     override val expectedFileLicenses = listOf(
         LicenseFinding("Apache-2.0", TextLocation("LICENSE", 1, 201), 99.94f)

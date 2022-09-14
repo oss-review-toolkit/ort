@@ -132,7 +132,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
     private val scanners by option(
         "--scanners", "-s",
         help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL}"
-    ).convertToScannerWrapperFactories().default(listOf(ScanCode.ScanCodeFactory()))
+    ).convertToScannerWrapperFactories().default(listOf(ScanCode.Factory()))
 
     private val projectScanners by option(
         "--project-scanners",
