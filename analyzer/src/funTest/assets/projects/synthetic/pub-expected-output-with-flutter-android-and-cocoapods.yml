@@ -2039,7 +2039,7 @@ packages:
       url: "https://github.com/Kotlin/kotlinx.coroutines.git"
       revision: ""
       path: ""
-    is_meta_data_only: true
+    is_metadata_only: true
   curations: []
 - metadata:
     id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"

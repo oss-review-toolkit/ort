@@ -46,7 +46,7 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY,
-                isMetaDataOnly = false,
+                isMetadataOnly = false,
                 isModified = false
             )
 
@@ -74,7 +74,7 @@ class PackageCurationTest : WordSpec({
                         revision = "revision",
                         path = "path"
                     ),
-                    isMetaDataOnly = true,
+                    isMetadataOnly = true,
                     isModified = true
                 )
             )
@@ -96,7 +96,7 @@ class PackageCurationTest : WordSpec({
                 sourceArtifact shouldBe curation.data.sourceArtifact
                 vcs shouldBe pkg.vcs
                 vcsProcessed.toCuration() shouldBe curation.data.vcs
-                isMetaDataOnly shouldBe true
+                isMetadataOnly shouldBe true
                 isModified shouldBe true
             }
 
@@ -126,7 +126,7 @@ class PackageCurationTest : WordSpec({
                     revision = "revision",
                     path = "path"
                 ),
-                isMetaDataOnly = false,
+                isMetadataOnly = false,
                 isModified = false
             )
 
@@ -159,7 +159,7 @@ class PackageCurationTest : WordSpec({
                     revision = pkg.vcs.revision,
                     path = pkg.vcs.path
                 )
-                isMetaDataOnly shouldBe false
+                isMetadataOnly shouldBe false
                 isModified shouldBe false
             }
 
@@ -242,7 +242,7 @@ class PackageCurationTest : WordSpec({
             }
         }
 
-        "be able to clear isMetaDataOnly" {
+        "be able to clear isMetadataOnly" {
             val pkg = Package(
                 id = Identifier(
                     type = "Maven",
@@ -257,19 +257,19 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY,
-                isMetaDataOnly = true
+                isMetadataOnly = true
             )
 
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
-                    isMetaDataOnly = false
+                    isMetadataOnly = false
                 )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.metadata.isMetaDataOnly shouldBe false
+            curatedPkg.metadata.isMetadataOnly shouldBe false
         }
 
         "be able to clear isModified" {

@@ -242,7 +242,7 @@ packages:
     url: "https://gitbox.apache.org/repos/asf/struts.git"
     revision: "STRUTS_2_5_14_1"
     path: ""
-  is_meta_data_only: true
+  is_metadata_only: true
 - id: "Maven:org.hamcrest:hamcrest-core:1.3"
   purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
   authors:

@@ -145,7 +145,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             severeRuleViolationThreshold = input.ortConfig.severeRuleViolationThreshold,
             repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
             labels = input.ortResult.labels,
-            metaData = MetaDataCalculator().getMetaData(input.ortResult)
+            metadata = MetadataCalculator().getMetadata(input.ortResult)
         )
     }
 

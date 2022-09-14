@@ -102,7 +102,7 @@ packages:
     url: "https://gitbox.apache.org/repos/asf/beam.git"
     revision: "v2.3.0-RC3"
     path: ""
-  is_meta_data_only: true
+  is_metadata_only: true
 - id: "Maven:org.apache.commons:commons-lang3:3.5"
   purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
   authors:

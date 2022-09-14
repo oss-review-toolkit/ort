@@ -69,7 +69,7 @@ class Downloader(private val config: DownloaderConfiguration) {
     fun download(pkg: Package, outputDirectory: File): Provenance {
         verifyOutputDirectory(outputDirectory)
 
-        if (pkg.isMetaDataOnly) return UnknownProvenance
+        if (pkg.isMetadataOnly) return UnknownProvenance
 
         val exception = DownloadException("Download failed for '${pkg.id.toCoordinates()}'.")
 

@@ -116,9 +116,9 @@ val packageWithVulnerabilities = Package.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:package-with-vulnerabilities:1.0")
 )
 
-val packageMetaDataOnly = Package.EMPTY.copy(
+val packageMetadataOnly = Package.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:package-metadata-only:1.0"),
-    isMetaDataOnly = true
+    isMetadataOnly = true
 )
 
 val packageDependency = Package.EMPTY.copy(
@@ -135,7 +135,7 @@ val allPackages = listOf(
     packageWithOnlyConcludedLicense,
     packageWithOnlyDeclaredLicense,
     packageWithConcludedAndDeclaredLicense,
-    packageMetaDataOnly,
+    packageMetadataOnly,
     packageDependency
 )
 
@@ -165,7 +165,7 @@ val scopeIncluded = Scope(
         packageWithConcludedAndDeclaredLicense.toReference(),
         packageRefDynamicallyLinked,
         packageRefStaticallyLinked,
-        packageMetaDataOnly.toReference()
+        packageMetadataOnly.toReference()
     )
 )
 

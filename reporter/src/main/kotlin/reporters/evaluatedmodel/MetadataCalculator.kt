@@ -25,10 +25,10 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.OrtResult
 
 /**
- * This class calculates [MetaData] for a given [OrtResult].
+ * This class calculates [Metadata] for a given [OrtResult].
  */
-internal class MetaDataCalculator {
-    fun getMetaData(ortResult: OrtResult) = MetaData(
+internal class MetadataCalculator {
+    fun getMetadata(ortResult: OrtResult) = Metadata(
         analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
     )
 }

@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -119,8 +120,9 @@ data class Package(
      * Indicates whether the package is just metadata, like e.g. Maven BOM artifacts which only define constraints
      * for dependency versions.
      */
+    @JsonAlias("is_meta_data_only")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val isMetaDataOnly: Boolean = false,
+    val isMetadataOnly: Boolean = false,
 
     /**
      * Indicates whether the source code of the package has been modified compared to the original source code,
@@ -172,7 +174,7 @@ data class Package(
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
             vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
-            isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly },
+            isMetadataOnly = isMetadataOnly.takeIf { it != other.isMetadataOnly },
             isModified = isModified.takeIf { it != other.isModified }
         )
     }

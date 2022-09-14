@@ -18,7 +18,7 @@
  * License-Filename: LICENSE
  */
 
-import MetaData from './MetaData';
+import Metadata from './Metadata';
 import Repository from './Repository';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
@@ -70,7 +70,7 @@ class WebAppOrtResult {
 
     #licensesIndexesByNameMap = new Map();
 
-    #metaData = {};
+    #metadata = {};
 
     #packages = [];
 
@@ -130,8 +130,8 @@ class WebAppOrtResult {
                 }
             }
 
-            if (obj.meta_data || obj.metaData) {
-                this.#metaData = new MetaData(obj.meta_data || obj.metaData);
+            if (obj.meta_data || obj.metaData || obj.metadata) {
+                this.#metadata = new Metadata(obj.meta_data || obj.metaData || obj.metadata);
             }
 
             if (obj.packages) {
@@ -427,8 +427,8 @@ class WebAppOrtResult {
         return this.#licenses;
     }
 
-    get metaData() {
-        return this.#metaData;
+    get metadata() {
+        return this.#metadata;
     }
 
     get packages() {

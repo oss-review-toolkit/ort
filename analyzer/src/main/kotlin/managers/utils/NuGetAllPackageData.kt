@@ -85,11 +85,11 @@ internal class NuGetAllPackageData(
 
     // See https://docs.microsoft.com/en-us/nuget/reference/nuspec.
     data class PackageSpec(
-        val metadata: MetaData
+        val metadata: Metadata
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class MetaData(
+    data class Metadata(
         // See https://docs.microsoft.com/en-us/nuget/reference/nuspec#required-metadata-elements
         val id: String,
         val version: String,

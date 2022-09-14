@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -89,7 +90,8 @@ data class PackageCurationData(
     /**
      * Whether the package is metadata only.
      */
-    val isMetaDataOnly: Boolean? = null,
+    @JsonAlias("is_meta_data_only")
+    val isMetadataOnly: Boolean? = null,
 
     /**
      * Whether the package is modified compared to the original source
@@ -140,7 +142,7 @@ data class PackageCurationData(
             sourceArtifact = sourceArtifact ?: original.sourceArtifact,
             vcs = original.vcs,
             vcsProcessed = vcsProcessed,
-            isMetaDataOnly = isMetaDataOnly ?: original.isMetaDataOnly,
+            isMetadataOnly = isMetadataOnly ?: original.isMetadataOnly,
             isModified = isModified ?: original.isModified
         )
 
@@ -176,7 +178,7 @@ data class PackageCurationData(
             binaryArtifact = binaryArtifact ?: other.binaryArtifact,
             sourceArtifact = sourceArtifact ?: other.sourceArtifact,
             vcs = vcs?.merge(other.vcs ?: vcs) ?: other.vcs,
-            isMetaDataOnly = isMetaDataOnly ?: other.isMetaDataOnly,
+            isMetadataOnly = isMetadataOnly ?: other.isMetadataOnly,
             isModified = isModified ?: other.isModified,
             declaredLicenseMapping = declaredLicenseMapping.zip(other.declaredLicenseMapping) { value, otherValue ->
                 (value ?: otherValue)!!

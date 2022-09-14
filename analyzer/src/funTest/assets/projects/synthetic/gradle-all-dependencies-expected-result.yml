@@ -458,7 +458,7 @@ analyzer:
           url: "https://gitbox.apache.org/repos/asf/struts.git"
           revision: "STRUTS_2_5_14_1"
           path: ""
-        is_meta_data_only: true
+        is_metadata_only: true
       curations: []
     - metadata:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"

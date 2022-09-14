@@ -709,7 +709,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             PackageManager.processProjectVcs(it, vcsFromPackage, *vcsFallbackUrls)
         } ?: PackageManager.processPackageVcs(vcsFromPackage, *vcsFallbackUrls)
 
-        val isSpringMetaDataProject = with(mavenProject) {
+        val isSpringMetadataProject = with(mavenProject) {
             listOf("boot", "cloud").any {
                 groupId == "org.springframework.$it" && (
                         artifactId.startsWith("spring-$it-starter") ||
@@ -734,7 +734,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
-            isMetaDataOnly = mavenProject.packaging == "pom" || isSpringMetaDataProject,
+            isMetadataOnly = mavenProject.packaging == "pom" || isSpringMetadataProject,
             isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }
