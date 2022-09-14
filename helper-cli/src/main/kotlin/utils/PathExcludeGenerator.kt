@@ -61,8 +61,8 @@ internal object PathExcludeGenerator {
         dirsToExclude.forEach { (dir, reason) ->
             if (dir.getAncestorFiles().intersect(dirsToExclude.keys).isEmpty()) {
                 result += PathExclude(
-                      pattern = "${dir.path}/**",
-                      reason = reason
+                    pattern = "${dir.path}/**",
+                    reason = reason
                 )
             }
         }
