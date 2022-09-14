@@ -57,7 +57,7 @@ open class GitWorkingTree(
 ) : WorkingTree(workingDir, vcsType) {
     companion object : Logging
 
-    private val repo: Repository
+    val repo: Repository
         get() = findGitOrSubmoduleDir(workingDir)
 
     override fun isValid(): Boolean = repo.use { it.objectDatabase?.exists() == true }
