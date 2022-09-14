@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanException
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -72,7 +73,7 @@ class BoyterLc internal constructor(
     }
 
     override val name = "BoyterLc"
-    override val criteria by lazy { getScannerCriteria() }
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val expectedVersion = BuildConfig.BOYTER_LC_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 

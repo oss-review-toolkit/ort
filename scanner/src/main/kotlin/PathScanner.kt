@@ -20,8 +20,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.time.Instant
 
@@ -70,47 +68,15 @@ abstract class PathScanner(
     scannerConfig: ScannerConfiguration,
     downloaderConfig: DownloaderConfiguration
 ) : Scanner(name, scannerConfig, downloaderConfig) {
-    companion object : Logging {
-        /**
-         * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_NAME = "regScannerName"
-
-        /**
-         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_MIN_VERSION = "minVersion"
-
-        /**
-         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
-         */
-        const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
-    }
+    companion object : Logging
 
     private val archiver = scannerConfig.archive.createFileArchiver()
-
-    /**
-     * Return a [ScannerCriteria] object to be used when looking up existing scan results from a [ScanResultsStorage].
-     * Per default, the properties of this object are initialized to match this scanner implementation. It is,
-     * however, possible to override these defaults from the configuration, in the [ScannerConfiguration.options]
-     * property: Use properties of the form _scannerName.property_, where _scannerName_ is the name of
-     * the scanner the configuration applies to, and _property_ is the name of a property of the [ScannerCriteria]
-     * class. For instance, to specify that a specific minimum version of ScanCode is allowed, set this property:
-     * `options.ScanCode.minVersion=3.0.2`.
-     */
-    open fun getScannerCriteria(): ScannerCriteria {
-        val options = scannerConfig.options?.get(scannerName).orEmpty()
-        val minVersion = parseVersion(options[PROP_CRITERIA_MIN_VERSION]) ?: Semver(normalizeVersion(version))
-        val maxVersion = parseVersion(options[PROP_CRITERIA_MAX_VERSION]) ?: minVersion.nextMinor()
-        val name = options[PROP_CRITERIA_NAME] ?: scannerName
-        return ScannerCriteria(name, minVersion, maxVersion, ScannerCriteria.exactConfigMatcher(configuration))
-    }
 
     override suspend fun scanPackages(
         packages: Set<Package>,
         labels: Map<String, String>
     ): Map<Package, List<ScanResult>> {
-        val scannerCriteria = getScannerCriteria()
+        val scannerCriteria = ScannerCriteria.fromConfig(details, scannerConfig)
 
         logger.info { "Searching $scannerName scan results for ${packages.size} package(s)..." }
 
@@ -419,18 +385,3 @@ abstract class PathScanner(
         return deduplicatedResults
     }
 }
-
-/**
- * Parse the given [versionStr] to a [Semver] object, trying to be failure tolerant.
- */
-private fun parseVersion(versionStr: String?): Semver? =
-    versionStr?.let { Semver(normalizeVersion(it)) }
-
-/**
- * Normalize the given [versionStr] to make sure that it can be parsed to a [Semver]. The [Semver] class
- * requires that all components of a semantic version number are present. This function enables a more lenient
- * style when declaring a version. So for instance, the user can just write "2", and this gets expanded to
- * "2.0.0".
- */
-private fun normalizeVersion(versionStr: String): String =
-    versionStr.takeIf { v -> v.count { it == '.' } >= 2 } ?: normalizeVersion("$versionStr.0")

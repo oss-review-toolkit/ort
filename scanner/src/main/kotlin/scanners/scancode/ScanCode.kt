@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLineScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
@@ -111,7 +112,7 @@ class ScanCode internal constructor(
     }
 
     override val name = SCANNER_NAME
-    override val criteria by lazy { getScannerCriteria() }
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
