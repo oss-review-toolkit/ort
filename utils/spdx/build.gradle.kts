@@ -292,8 +292,8 @@ val fixupLicenseTextResources by tasks.registering {
         resourcePaths.forEach { path ->
             path.listFiles().forEach { file ->
                 // Trim trailing whitespace and blank lines.
-                val lines = file.readLines().map { it.trimEnd() }.asReversed().dropWhile { it.isEmpty() }
-                    .asReversed().dropWhile { it.isEmpty() }
+                val lines = file.readLines().map { it.trimEnd() }
+                    .dropWhile { it.isEmpty() }.dropLastWhile { it.isEmpty() }
                 file.writeText(lines.joinToString("\n", postfix = "\n"))
             }
         }
