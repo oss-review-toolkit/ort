@@ -38,10 +38,12 @@ import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.api.LsRemoteCommand
 import org.eclipse.jgit.api.errors.GitAPIException
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
+import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.lib.SymbolicRef
 import org.eclipse.jgit.transport.CredentialItem
 import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
+import org.eclipse.jgit.transport.TagOpt
 import org.eclipse.jgit.transport.URIish
 import org.eclipse.jgit.transport.ssh.jsch.JschConfigSessionFactory
 
@@ -177,48 +179,59 @@ class Git : VersionControlSystem(), CommandLineTool {
         path: String,
         recursive: Boolean
     ): Result<String> =
-        updateWorkingTreeWithoutSubmodules(workingTree, revision).mapCatching {
-            // In case this throws the exception gets encapsulated as a failure.
-            if (recursive) updateSubmodules(workingTree)
+        (workingTree as GitWorkingTree).repo.use { repo ->
+            Git(repo).use { git ->
+                updateWorkingTreeWithoutSubmodules(git, revision).mapCatching {
+                    // In case this throws the exception gets encapsulated as a failure.
+                    if (recursive) updateSubmodules(workingTree)
 
-            revision
+                    revision
+                }
+            }
         }
 
-    private fun updateWorkingTreeWithoutSubmodules(workingTree: WorkingTree, revision: String): Result<String> =
+    private fun updateWorkingTreeWithoutSubmodules(git: Git, revision: String): Result<String> =
         runCatching {
             logger.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
-            workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "origin", revision)
 
-            // The documentation for git-fetch states that "By default, any tag that points into the histories being
-            // fetched is also fetched", but that is not true for shallow fetches of a tag; then the tag itself is
-            // not fetched. So create the local tag manually afterwards.
-            if (revision in workingTree.listRemoteTags()) {
-                workingTree.runGit("tag", "-f", revision, "FETCH_HEAD")
-            }
+            val fetch = git.fetch().setDepth(GIT_HISTORY_DEPTH)
+
+            // See https://git-scm.com/docs/gitrevisions#_specifying_revisions for how Git resolves ambiguous
+            // names.
+            runCatching { fetch.setRefSpecs(revision).call() }
+                .recoverCatching {
+                    // Note that in contrast to branches / heads, Git does not namespace tags per remote.
+                    val tagRefSpec = "+${Constants.R_TAGS}$revision:${Constants.R_TAGS}$revision"
+                    fetch.setRefSpecs(tagRefSpec).call()
+                }
+                .recoverCatching {
+                    val branchRefSpec = "+${Constants.R_HEADS}$revision:${Constants.R_REMOTES}origin/$revision"
+                    fetch.setRefSpecs(branchRefSpec).call()
+                }
+                .getOrThrow()
         }.recoverCatching {
             it.showStackTrace()
 
             logger.info { "Could not fetch only revision '$revision': ${it.collectMessages()}" }
             logger.info { "Falling back to fetching all refs with depth limited to $GIT_HISTORY_DEPTH." }
 
-            workingTree.runGit("fetch", "--depth", "$GIT_HISTORY_DEPTH", "--tags", "origin")
+            git.fetch().setDepth(GIT_HISTORY_DEPTH).setTagOpt(TagOpt.FETCH_TAGS).call()
         }.recoverCatching {
             it.showStackTrace()
 
             logger.info { "Could not fetch with only a depth of $GIT_HISTORY_DEPTH: ${it.collectMessages()}" }
             logger.info { "Falling back to fetch everything including tags." }
 
-            if (workingTree.isShallow()) {
-                workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
-            } else {
-                workingTree.runGit("fetch", "--tags", "origin")
-            }
+            git.fetch().setUnshallow(true).setTagOpt(TagOpt.FETCH_TAGS).call()
         }.onFailure {
             it.showStackTrace()
 
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
-        }.mapCatching {
-            workingTree.runGit("checkout", revision)
+        }.mapCatching { fetchResult ->
+            logger.debug { "Successfully fetched ${fetchResult.advertisedRefs}." }
+
+            // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772 is implemented.
+            run("checkout", revision, workingDir = git.repository.workTree)
 
             revision
         }
