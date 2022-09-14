@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.scanner.scanners.Askalono$Factory
 org.ossreviewtoolkit.scanner.scanners.BoyterLc$Factory
 org.ossreviewtoolkit.scanner.scanners.Licensee$Factory
 org.ossreviewtoolkit.scanner.scanners.fossid.FossId$Factory

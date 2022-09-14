@@ -30,15 +30,14 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
 import org.ossreviewtoolkit.scanner.BuildConfig
-import org.ossreviewtoolkit.scanner.CommandLineScanner
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.experimental.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScanContext
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -49,19 +48,13 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Askalono internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : CommandLineScanner(name, scannerConfig, downloaderConfig), PathScannerWrapper {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging
 
-    class AskalonoFactory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
+    class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    class Factory : AbstractScannerFactory<Askalono>("Askalono") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(scannerName, scannerConfig, downloaderConfig)
+            Askalono(scannerName, scannerConfig)
     }
 
     override val name = "Askalono"
@@ -95,7 +88,7 @@ class Askalono internal constructor(
         val archive = "askalono-$platform.zip"
         val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
 
-        logger.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $name from $url... " }
         val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
 
         logger.info { "Unpacking '$archive' to '$unpackDir'... " }
@@ -104,7 +97,9 @@ class Askalono internal constructor(
         return unpackDir
     }
 
-    override fun scanPathInternal(path: File): ScanSummary {
+    override fun filterSecretOptions(options: Options): Options = options
+
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -152,13 +147,11 @@ class Askalono internal constructor(
             copyrightFindings = sortedSetOf(),
             issues = listOf(
                 OrtIssue(
-                    source = scannerName,
+                    source = name,
                     message = "This scanner is not capable of detecting copyright statements.",
                     severity = Severity.HINT
                 )
             )
         )
     }
-
-    override fun scanPath(path: File, context: ScanContext) = scanPathInternal(path)
 }
