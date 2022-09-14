@@ -643,8 +643,16 @@ class FossIdTest : WordSpec({
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
             }
 
-            coVerify(exactly = 0) {
-                service.runScan(USER, API_KEY, scanCode, any())
+            coVerify(exactly = 1) {
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    *arrayOf(
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
             }
         }
 
