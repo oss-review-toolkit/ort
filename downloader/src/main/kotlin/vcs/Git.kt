@@ -231,6 +231,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }.toTypedArray()
 
         runCatching {
+            // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=580731 is implemented.
             workingTree.runGit(
                 *configOption, "submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH"
             )
