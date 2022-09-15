@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
  * Definition of a predicate to check whether the configuration of a scanner is compatible with the requirements
- * specified by a [ScannerCriteria] object.
+ * specified by a [ScannerCriteria].
  *
  * When testing whether a scan result is compatible with specific criteria this function is invoked on the
  * scanner configuration data stored in the result. By having different, scanner-specific matcher functions, this
@@ -41,7 +41,7 @@ typealias ScannerConfigMatcher = (String) -> Boolean
  *
  * An instance of this class is passed to a [ScanResultsStorage] to define the criteria a scan result must match,
  * so that it can be used as a replacement for a result produced by an actual scanner. A scanner implementation
- * creates a criteria object with its exact properties. Users can override some or all of these properties to
+ * creates a [ScannerCriteria] with its exact properties. Users can override some or all of these properties to
  * state the criteria under which results from a storage are acceptable even if they deviate from the exact
  * properties of the scanner. That way it can be configured for instance, that results produced by an older
  * version of the scanner can be used.
@@ -68,7 +68,7 @@ data class ScannerCriteria(
     val maxVersion: Semver,
 
     /**
-     * A function to check whether the configuration of a scanner is compatible with this criteria object.
+     * A function to check whether the configuration of a scanner is compatible with this [ScannerCriteria].
      */
     val configMatcher: ScannerConfigMatcher
 ) {
@@ -101,8 +101,8 @@ data class ScannerCriteria(
         fun exactConfigMatcher(originalConfig: String): ScannerConfigMatcher = { config -> originalConfig == config }
 
         /**
-         * Generate a [ScannerCriteria] object that is compatible with the given [details] and versions that differ only
-         * in the provided [versionDiff].
+         * Generate a [ScannerCriteria] instance that is compatible with the given [details] and versions that differ
+         * only in the provided [versionDiff].
          */
         fun forDetails(
             details: ScannerDetails,
@@ -126,8 +126,8 @@ data class ScannerCriteria(
         }
 
         /**
-         * Return a [ScannerCriteria] object to be used when looking up existing scan results from a
-         * [ScanResultsStorage]. Per default, the properties of this object are initialized to match the scanner
+         * Return a [ScannerCriteria] instance that is to be used when looking up existing scan results from a
+         * [ScanResultsStorage]. By default, the properties of this instance are initialized to match the scanner
          * [details]. These default can be overridden by the [ScannerConfiguration.options] property in the provided
          * [config]: Use properties of the form `scannerName.property`, where `scannerName` is the name of the scanner
          * the configuration applies to, and `property` is the name of a property of the [ScannerCriteria] class. For
@@ -155,9 +155,8 @@ data class ScannerCriteria(
     }
 
     /**
-     * Check whether the [details] specified match the criteria stored in this object. Return true if and only if
-     * the result described by the [details] fulfills all the requirements expressed by the properties of this
-     * object.
+     * Check whether the specified [details] match this [ScannerCriteria]. Return true if and only if the result
+     * described by the [details] fulfills all the requirements expressed by the properties of this instance.
      */
     fun matches(details: ScannerDetails): Boolean {
         if (!nameRegex.matches(details.name)) return false
@@ -168,7 +167,7 @@ data class ScannerCriteria(
 }
 
 /**
- * Parse the given [versionStr] to a [Semver] object, trying to be failure tolerant.
+ * Parse the given [versionStr] to a [Semver] while trying to be failure tolerant.
  */
 private fun parseVersion(versionStr: String?): Semver? =
     versionStr?.let { Semver(normalizeVersion(it)) }
