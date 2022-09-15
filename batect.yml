@@ -36,8 +36,7 @@ config_variables:
     GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=<kotest_diff
     GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
   volumes:
-    # Mount any Gradle cache present on the host read-only into the
-    # container to speed up the build.
+    # Mount any Gradle caches present on the host as read-only into the container to speed up the build.
     - local: ~/.gradle/caches
       container: /home/ort/.gradle-ro-dep-cache
     # Cache contents written to /home/ort/.gradle between task runs.
