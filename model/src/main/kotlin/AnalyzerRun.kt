@@ -41,4 +41,16 @@ data class AnalyzerRun(
     val environment: Environment,
     val config: AnalyzerConfiguration,
     val result: AnalyzerResult
-)
+) {
+    companion object {
+        /**
+         * A constant for an [AnalyzerRun] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = AnalyzerRun(
+            environment = Environment(),
+            config = AnalyzerConfiguration(),
+            result = AnalyzerResult.EMPTY
+        )
+    }
+}
