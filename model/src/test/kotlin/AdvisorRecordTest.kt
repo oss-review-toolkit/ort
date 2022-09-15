@@ -21,10 +21,10 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -57,15 +57,14 @@ class AdvisorRecordTest : WordSpec({
     }
 
     "collectIssues" should {
-        "return a map with empty sets if no issues are present" {
+        "return a map which does not contain entries for IDs without any issues" {
             val record = advisorRecordOf(
                 langId to listOf(createResult())
             )
 
             val issues = record.collectIssues()
 
-            issues.keys should containExactlyInAnyOrder(langId)
-            issues.values.forAll { it should beEmpty() }
+            issues.keys shouldNotContain langId
         }
 
         "return a map with all issues in the record" {

@@ -73,7 +73,9 @@ data class AdvisorRecord(
 
         advisorResults.forEach { (id, results) ->
             results.forEach { result ->
-                collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
+                if (result.summary.issues.isNotEmpty()) {
+                    collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
+                }
             }
         }
 
