@@ -41,6 +41,9 @@ import java.io.IOException
 import java.time.Instant
 
 import org.ossreviewtoolkit.evaluator.Evaluator
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
@@ -162,7 +165,7 @@ class ExamplesFunTest : StringSpec() {
             greenMail.setUser("no-reply@oss-review-toolkit.org", "no-reply@oss-review-toolkit.org", "pwd")
             greenMail.start()
 
-            val ortResult = File("src/funTest/assets/semver4j-analyzer-result.yml").readValue<OrtResult>()
+            val ortResult = createOrtResultWithIssue()
             val notifier = Notifier(
                 ortResult,
                 NotifierConfiguration(
@@ -211,3 +214,16 @@ class ExamplesFunTest : StringSpec() {
         }
     }
 }
+
+private fun createOrtResultWithIssue() =
+    OrtResult.EMPTY.copy(
+        analyzer = AnalyzerRun.EMPTY.copy(
+            result = AnalyzerResult.EMPTY.copy(
+                issues = sortedMapOf(
+                    Identifier("Maven:org.oss-review-toolkit:example:1.0") to listOf(
+                        OrtIssue(source = "", message = "issue")
+                    )
+                )
+            )
+        )
+    )
