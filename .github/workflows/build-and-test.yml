@@ -26,7 +26,7 @@ jobs:
     - name: Build all classes
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: classes -x :reporter-web-app:yarnBuild
+        arguments: --scan classes -x :reporter-web-app:yarnBuild
   build-reporter-web-app:
     needs: build
     runs-on: ubuntu-22.04
@@ -41,7 +41,7 @@ jobs:
     - name: Build the reporter-web-app
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: :reporter-web-app:yarnBuild
+        arguments: --scan :reporter-web-app:yarnBuild
   test:
     needs: build
     runs-on: ubuntu-22.04
