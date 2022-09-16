@@ -34,8 +34,6 @@ dependencies {
     implementation(libs.retrofitConverterScalars)
 
     testImplementation(libs.kotestAssertionsJson)
-
-    funTestImplementation(libs.kotestAssertionsJson)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
