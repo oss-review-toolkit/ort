@@ -47,7 +47,7 @@ class AdvisorRecordTest : WordSpec({
             val record = advisorRecordOf(
                 queryId to listOf(
                     createResult(
-                        2,
+                        1,
                         issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
                     )
                 )
