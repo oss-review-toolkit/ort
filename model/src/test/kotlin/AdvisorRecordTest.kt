@@ -37,7 +37,7 @@ class AdvisorRecordTest : WordSpec({
     "hasIssues" should {
         "return false given the record has no issues" {
             val record = advisorRecordOf(
-                langId to listOf(createResult(1))
+                langId to listOf(createResult())
             )
 
             record.hasIssues shouldBe false
@@ -47,7 +47,6 @@ class AdvisorRecordTest : WordSpec({
             val record = advisorRecordOf(
                 queryId to listOf(
                     createResult(
-                        1,
                         issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
                     )
                 )
@@ -60,7 +59,7 @@ class AdvisorRecordTest : WordSpec({
     "collectIssues" should {
         "return a map with empty sets if no issues are present" {
             val record = advisorRecordOf(
-                langId to listOf(createResult(1))
+                langId to listOf(createResult())
             )
 
             val issues = record.collectIssues()
@@ -74,13 +73,8 @@ class AdvisorRecordTest : WordSpec({
             val issue2 = OrtIssue(source = "Advisor", message = "Failure2")
             val issue3 = OrtIssue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
             val record = advisorRecordOf(
-                langId to listOf(createResult(1, issues = listOf(issue3))),
-                queryId to listOf(
-                    createResult(
-                        1,
-                        issues = listOf(issue1, issue2)
-                    )
-                )
+                langId to listOf(createResult(issues = listOf(issue3))),
+                queryId to listOf(createResult(issues = listOf(issue1, issue2)))
             )
 
             val issues = record.collectIssues()
@@ -103,7 +97,7 @@ class AdvisorRecordTest : WordSpec({
             val vul2 = createVulnerability("CVE-2021-2")
 
             val record = advisorRecordOf(
-                queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
+                queryId to listOf(createResult(vulnerabilities = listOf(vul1, vul2)))
             )
 
             record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
@@ -347,7 +341,7 @@ private fun createDefect(id: String): Defect =
  * passed in [issues], [vulnerabilities], and [defects].
  */
 private fun createResult(
-    advisorIndex: Int,
+    advisorIndex: Int = 1,
     issues: List<OrtIssue> = emptyList(),
     vulnerabilities: List<Vulnerability> = emptyList(),
     defects: List<Defect> = emptyList(),
