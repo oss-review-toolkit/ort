@@ -53,6 +53,8 @@ tasks.addRule("Pattern: yarn<Command>") {
             val newPath = listOf(
                 // Prepend the directory of the bootstrapped Node.js to the PATH environment.
                 nodeBinDir.path,
+                // Prepend the directory of additional tools like "rescripts" to the PATH environment.
+                projectDir.resolve("node_modules/.bin").path,
                 oldPath
             ).joinToString(File.pathSeparator)
 
