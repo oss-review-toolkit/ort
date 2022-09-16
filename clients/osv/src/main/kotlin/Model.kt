@@ -54,8 +54,8 @@ data class Vulnerability(
     val published: Instant? = null,
     @Serializable(InstantSerializer::class)
     val withdrawn: Instant? = null,
-    val aliases: List<String> = emptyList(),
-    val related: List<String> = emptyList(),
+    val aliases: Set<String> = emptySet(),
+    val related: Set<String> = emptySet(),
     val summary: String? = null,
     val details: String? = null,
 
@@ -64,13 +64,13 @@ data class Vulnerability(
      * using different scoring systems. See https://github.com/google/osv.dev/issues/545#issuecomment-1190880767 and
      * https://ossf.github.io/osv-schema/#severity-field.
      */
-    val severity: List<Severity> = emptyList(),
+    val severity: Set<Severity> = emptySet(),
 
-    val affected: List<Affected> = emptyList(),
-    val references: List<Reference> = emptyList(),
+    val affected: Set<Affected> = emptySet(),
+    val references: Set<Reference> = emptySet(),
     @SerialName("database_specific")
     val databaseSpecific: JsonObject? = null,
-    val credits: List<Credit> = emptyList()
+    val credits: Set<Credit> = emptySet()
 )
 
 @Serializable
