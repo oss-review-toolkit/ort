@@ -21,7 +21,10 @@ package org.ossreviewtoolkit.evaluator
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.utils.getRepositoryPath
 import org.ossreviewtoolkit.utils.common.FileMatcher
 
 /**
@@ -39,6 +42,28 @@ open class ProjectSourceRule(
     @Suppress("MemberVisibilityCanBePrivate") // This property is used in rules.
     val projectSourcesDir: File by lazy { projectSourceResolver.rootDir }
 
+    private val detectedLicensesForFilePath: Map<String, Set<String>> by lazy {
+        val result = mutableMapOf<String, MutableSet<String>>()
+        val projectIds = ruleSet.ortResult.getProjects().map { it.id }
+        val licenseInfos = projectIds.map { ruleSet.licenseInfoResolver.resolveLicenseInfo(it) }
+
+        licenseInfos.forEach { licenseInfo ->
+            licenseInfo.licenses.filter {
+                LicenseSource.DETECTED in it.sources
+            }.forEach { resolvedLicense ->
+                resolvedLicense.locations.forEach { resolvedLocation ->
+                    val provenance = resolvedLocation.provenance as RepositoryProvenance
+                    val repositoryPath = ortResult.getRepositoryPath(provenance)
+                    val path = "$repositoryPath${resolvedLocation.location.path}".removePrefix("/")
+
+                    result.getOrPut(path) { mutableSetOf() } += resolvedLicense.license.simpleLicense()
+                }
+            }
+        }
+
+        result
+    }
+
     /**
      * Return all directories from the project's source tree which match any of the
      * provided [glob expressions][patterns].
@@ -54,6 +79,16 @@ open class ProjectSourceRule(
     fun projectSourceFindFiles(vararg patterns: String): List<File> =
         projectSourcesDir.walkBottomUp().filterTo(mutableListOf()) {
             it.isFile && FileMatcher.match(patterns.toList(), it.relativeTo(projectSourcesDir).path)
+        }
+
+    /**
+     * Return the detected licenses for any file matching the given [glob expressions][patterns].
+     */
+    fun projectSourceGetDetectedLicensesByFilePath(
+        vararg patterns: String
+    ): Map<String, Set<String>> =
+        detectedLicensesForFilePath.filter { (filepath, _) ->
+            FileMatcher.match(patterns.toList(), filepath)
         }
 
     /**
