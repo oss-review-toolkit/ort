@@ -36,12 +36,9 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 class AdvisorRecordTest : WordSpec({
     "hasIssues" should {
         "return false given the record has no issues" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
-                    langId to listOf(createResult(1)),
-                    queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
+                    langId to listOf(createResult(1))
                 )
             )
 
@@ -49,17 +46,12 @@ class AdvisorRecordTest : WordSpec({
         }
 
         "return true given the record has issues" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
-                    langId to listOf(createResult(1)),
                     queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
                         createResult(
                             2,
-                            issues = listOf(OrtIssue(source = "Advisor", message = "Failure")),
-                            vulnerabilities = listOf(vul2)
+                            issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
                         )
                     )
                 )
@@ -71,18 +63,15 @@ class AdvisorRecordTest : WordSpec({
 
     "collectIssues" should {
         "return a map with empty sets if no issues are present" {
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
-                    langId to listOf(createResult(1)),
-                    queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
+                    langId to listOf(createResult(1))
                 )
             )
 
             val issues = record.collectIssues()
 
-            issues.keys should containExactlyInAnyOrder(langId, queryId)
+            issues.keys should containExactlyInAnyOrder(langId)
             issues.values.forAll { it should beEmpty() }
         }
 
@@ -90,15 +79,12 @@ class AdvisorRecordTest : WordSpec({
             val issue1 = OrtIssue(source = "Advisor", message = "Failure1")
             val issue2 = OrtIssue(source = "Advisor", message = "Failure2")
             val issue3 = OrtIssue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
-            val vul1 = createVulnerability("CVE-2021-1")
-            val vul2 = createVulnerability("CVE-2021-2")
             val record = AdvisorRecord(
                 sortedMapOf(
                     langId to listOf(createResult(1, issues = listOf(issue3))),
                     queryId to listOf(
                         createResult(
                             1,
-                            vulnerabilities = listOf(vul1, vul2),
                             issues = listOf(issue1, issue2)
                         )
                     )
