@@ -23,8 +23,27 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.time.Instant
 
+import org.ossreviewtoolkit.model.AccessStatistics
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.AnalyzerRun
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanRecord
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class ProjectSourceRuleTest : WordSpec({
@@ -114,11 +133,27 @@ class ProjectSourceRuleTest : WordSpec({
             rule.projectSourceHasFileWithContent(".*^#{1,2} License$.*", "README.md").matches() shouldBe true
         }
     }
+
+    "projectSourceGetDetectedLicensesByFilePath()" should {
+        "return the detected licenses for the file matching the pattern" {
+            val rule = createOrtResultRule(
+                createSpecTempDir(),
+                ortResultWithDetectedLicenses(
+                    "LICENSE" to setOf("Apache-2.0", "MIT"),
+                    "README.md" to setOf("BSD-2-Clause")
+                )
+            )
+
+            rule.projectSourceGetDetectedLicensesByFilePath("LICENSE") shouldBe mapOf(
+                "LICENSE" to setOf("Apache-2.0", "MIT")
+            )
+        }
+    }
 })
 
-private fun createOrtResultRule(projectSourcesDir: File): ProjectSourceRule =
+private fun createOrtResultRule(projectSourcesDir: File, ortResult: OrtResult = OrtResult.EMPTY) =
     ProjectSourceRule(
-        ruleSet = ruleSet(ortResult = OrtResult.EMPTY),
+        ruleSet = ruleSet(ortResult),
         name = "RULE_NAME",
         projectSourceResolver = SourceTreeResolver.forLocalDirectory(projectSourcesDir)
     )
@@ -141,4 +176,54 @@ private fun File.addDirs(vararg paths: String) {
     paths.forEach { path ->
         resolve(path).mkdirs()
     }
+}
+
+private fun ortResultWithDetectedLicenses(vararg detectedLicensesForFilePath: Pair<String, Set<String>>): OrtResult {
+    val id = Identifier("Maven:org.oss-review-toolkit:example:1.0")
+    val vcsInfo = VcsInfo(
+        type = VcsType.GIT,
+        url = "https://github.com/oss-review-toolkit/example.git",
+        revision = "0000000000000000000000000000000000000000"
+    )
+    val licenseFindings = detectedLicensesForFilePath.flatMapTo(sortedSetOf()) { (filepath, licenses) ->
+        licenses.map { license ->
+            LicenseFinding(license, TextLocation(filepath, startLine = 1, endLine = 2))
+        }
+    }
+
+    return OrtResult.EMPTY.copy(
+        repository = Repository(vcsInfo),
+        analyzer = AnalyzerRun(
+            config = AnalyzerConfiguration(),
+            environment = Environment(),
+            result = AnalyzerResult.EMPTY.copy(
+                projects = sortedSetOf(
+                    Project.EMPTY.copy(
+                        id = id,
+                        vcsProcessed = vcsInfo
+                    )
+                )
+            )
+        ),
+        scanner = ScannerRun.EMPTY.copy(
+            results = ScanRecord(
+                scanResults = sortedMapOf(
+                    id to listOf(
+                        ScanResult(
+                            provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
+                            scanner = ScannerDetails.EMPTY,
+                            summary = ScanSummary(
+                                licenseFindings = licenseFindings,
+                                copyrightFindings = sortedSetOf(),
+                                startTime = Instant.EPOCH,
+                                endTime = Instant.EPOCH,
+                                packageVerificationCode = "0000000000000000000000000000000000000000"
+                            )
+                        )
+                    )
+                ),
+                storageStats = AccessStatistics()
+            )
+        )
+    )
 }
