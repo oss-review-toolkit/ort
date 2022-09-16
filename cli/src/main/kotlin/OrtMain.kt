@@ -91,8 +91,9 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
-        "--info" to Level.INFO,
         "--debug" to Level.DEBUG,
+        "--error" to Level.ERROR,
+        "--info" to Level.INFO,
         "--warn" to Level.WARN
     ).default(Level.WARN)
 
