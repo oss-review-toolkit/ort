@@ -36,23 +36,19 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 class AdvisorRecordTest : WordSpec({
     "hasIssues" should {
         "return false given the record has no issues" {
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    langId to listOf(createResult(1))
-                )
+            val record = advisorRecordOf(
+                langId to listOf(createResult(1))
             )
 
             record.hasIssues shouldBe false
         }
 
         "return true given the record has issues" {
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(
-                        createResult(
-                            2,
-                            issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
-                        )
+            val record = advisorRecordOf(
+                queryId to listOf(
+                    createResult(
+                        2,
+                        issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
                     )
                 )
             )
@@ -63,10 +59,8 @@ class AdvisorRecordTest : WordSpec({
 
     "collectIssues" should {
         "return a map with empty sets if no issues are present" {
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    langId to listOf(createResult(1))
-                )
+            val record = advisorRecordOf(
+                langId to listOf(createResult(1))
             )
 
             val issues = record.collectIssues()
@@ -79,14 +73,12 @@ class AdvisorRecordTest : WordSpec({
             val issue1 = OrtIssue(source = "Advisor", message = "Failure1")
             val issue2 = OrtIssue(source = "Advisor", message = "Failure2")
             val issue3 = OrtIssue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    langId to listOf(createResult(1, issues = listOf(issue3))),
-                    queryId to listOf(
-                        createResult(
-                            1,
-                            issues = listOf(issue1, issue2)
-                        )
+            val record = advisorRecordOf(
+                langId to listOf(createResult(1, issues = listOf(issue3))),
+                queryId to listOf(
+                    createResult(
+                        1,
+                        issues = listOf(issue1, issue2)
                     )
                 )
             )
@@ -101,7 +93,7 @@ class AdvisorRecordTest : WordSpec({
 
     "getVulnerabilities" should {
         "return an empty list for an unknown package" {
-            val record = AdvisorRecord(sortedMapOf())
+            val record = advisorRecordOf()
 
             record.getVulnerabilities(langId) should beEmpty()
         }
@@ -110,8 +102,8 @@ class AdvisorRecordTest : WordSpec({
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-2")
 
-            val record = AdvisorRecord(
-                sortedMapOf(queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2))))
+            val record = advisorRecordOf(
+                queryId to listOf(createResult(1, vulnerabilities = listOf(vul1, vul2)))
             )
 
             record.getVulnerabilities(queryId) should containExactly(vul1, vul2)
@@ -121,12 +113,10 @@ class AdvisorRecordTest : WordSpec({
             val vul1 = createVulnerability("CVE-2021-1")
             val vul2 = createVulnerability("CVE-2021-2")
 
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2))
-                    )
+            val record = advisorRecordOf(
+                queryId to listOf(
+                    createResult(1, vulnerabilities = listOf(vul1)),
+                    createResult(2, vulnerabilities = listOf(vul2))
                 )
             )
 
@@ -140,12 +130,10 @@ class AdvisorRecordTest : WordSpec({
             val vul3 = createVulnerability("CVE-2021-2")
             val mergedVulnerability = Vulnerability(id = vul1.id, references = vul1.references + vul2.references)
 
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2, vul3))
-                    )
+            val record = advisorRecordOf(
+                queryId to listOf(
+                    createResult(1, vulnerabilities = listOf(vul1)),
+                    createResult(2, vulnerabilities = listOf(vul2, vul3))
                 )
             )
 
@@ -163,12 +151,10 @@ class AdvisorRecordTest : WordSpec({
                 references = vul1.references + vul2.references + vul4.references
             )
 
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(
-                        createResult(1, vulnerabilities = listOf(vul1)),
-                        createResult(2, vulnerabilities = listOf(vul2, vul3, vul4))
-                    )
+            val record = advisorRecordOf(
+                queryId to listOf(
+                    createResult(1, vulnerabilities = listOf(vul1)),
+                    createResult(2, vulnerabilities = listOf(vul2, vul3, vul4))
                 )
             )
 
@@ -178,7 +164,7 @@ class AdvisorRecordTest : WordSpec({
 
     "getDefects" should {
         "return an empty list for an unknown package" {
-            val record = AdvisorRecord(sortedMapOf())
+            val record = advisorRecordOf()
 
             record.getDefects(langId) should beEmpty()
         }
@@ -190,12 +176,10 @@ class AdvisorRecordTest : WordSpec({
             val defect4 = createDefect("d4")
             val defect5 = createDefect("d5")
 
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(
-                        createResult(1, defects = listOf(defect1, defect2)),
-                        createResult(2, defects = listOf(defect3, defect4, defect5))
-                    )
+            val record = advisorRecordOf(
+                queryId to listOf(
+                    createResult(1, defects = listOf(defect1, defect2)),
+                    createResult(2, defects = listOf(defect3, defect4, defect5))
                 )
             )
 
@@ -211,11 +195,9 @@ class AdvisorRecordTest : WordSpec({
                 defects = listOf(createDefect("bug1"))
             )
 
-            val record = AdvisorRecord(
-                sortedMapOf(
-                    queryId to listOf(createResult(1), createResult(2)),
-                    langId to listOf(matchingResult, createResult(2))
-                )
+            val record = advisorRecordOf(
+                queryId to listOf(createResult(1), createResult(2)),
+                langId to listOf(matchingResult, createResult(2))
             )
 
             val filteredResults = record.filterResults { it == matchingResult }
@@ -230,7 +212,9 @@ class AdvisorRecordTest : WordSpec({
             val result3 = createResult(3)
             val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
-            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1, result2, result3, result4)))
+            val record = advisorRecordOf(
+                queryId to listOf(result1, result2, result3, result4)
+            )
 
             val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_VULNERABILITIES)
 
@@ -244,7 +228,9 @@ class AdvisorRecordTest : WordSpec({
             val result3 = createResult(3)
             val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
-            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1, result2, result3, result4)))
+            val record = advisorRecordOf(
+                queryId to listOf(result1, result2, result3, result4)
+            )
 
             val filteredResults = record.filterResults(AdvisorRecord.RESULTS_WITH_DEFECTS)
 
@@ -259,7 +245,10 @@ class AdvisorRecordTest : WordSpec({
             )
             val result2 = createResult(2)
 
-            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+            val record = advisorRecordOf(
+                queryId to listOf(result1),
+                langId to listOf(result2)
+            )
 
             val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues())
 
@@ -278,7 +267,10 @@ class AdvisorRecordTest : WordSpec({
                 capability = AdvisorCapability.DEFECTS
             )
 
-            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+            val record = advisorRecordOf(
+                queryId to listOf(result1),
+                langId to listOf(result2)
+            )
 
             val filteredResults = record.filterResults(AdvisorRecord.resultsWithIssues(minSeverity = Severity.ERROR))
 
@@ -297,7 +289,9 @@ class AdvisorRecordTest : WordSpec({
                 capability = AdvisorCapability.DEFECTS
             )
 
-            val record = AdvisorRecord(sortedMapOf(queryId to listOf(result1), langId to listOf(result2)))
+            val record = advisorRecordOf(
+                queryId to listOf(result1), langId to listOf(result2)
+            )
 
             val filteredResults = record.filterResults(
                 AdvisorRecord.resultsWithIssues(
@@ -368,3 +362,8 @@ private fun createResult(
 
     return AdvisorResult(details, summary, defects, vulnerabilities)
 }
+
+private fun advisorRecordOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRecord =
+    AdvisorRecord(
+        advisorResults = sortedMapOf(*results)
+    )
