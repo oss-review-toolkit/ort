@@ -17,20 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import io.kotest.assertions.json.ArrayOrder
-import io.kotest.assertions.json.compareJsonOptions
-import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
-import kotlinx.serialization.encodeToString
+import java.time.Instant
+
+import kotlinx.serialization.decodeFromString
 
 import org.ossreviewtoolkit.clients.osv.OsvApiClient
 import org.ossreviewtoolkit.clients.osv.OsvService
 import org.ossreviewtoolkit.clients.osv.Package
 import org.ossreviewtoolkit.clients.osv.VulnerabilitiesForPackageRequest
+import org.ossreviewtoolkit.clients.osv.Vulnerability
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 private val VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST = VulnerabilitiesForPackageRequest(
@@ -47,17 +47,19 @@ private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = Vulnerabilitie
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
 )
 
+private fun Vulnerability.patchModifiedTime() = copy(modified = Instant.EPOCH)
+
+private fun List<Vulnerability>.patchModifiedTimes() = map { it.patchModifiedTime() }
+
 class OsvServiceFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
         val expectedResult = getAssetAsString("vulnerabilities-by-commit-expected-result.json")
 
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_COMMIT_REQUEST)
 
-        result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
-                expectedResult,
-                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
-            )
+        result.shouldBeSuccess { actualData ->
+            val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
+            actualData.patchModifiedTimes() shouldBe expectedData.patchModifiedTimes()
         }
     }
 
@@ -66,11 +68,9 @@ class OsvServiceFunTest : StringSpec({
 
         val result = OsvService().getVulnerabilitiesForPackage(VULNERABILITY_FOR_PACKAGE_BY_NAME_AND_VERSION)
 
-        result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
-                expectedResult,
-                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
-            )
+        result.shouldBeSuccess { actualData ->
+            val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
+            actualData.patchModifiedTimes() shouldBe expectedData.patchModifiedTimes()
         }
     }
 
@@ -107,11 +107,9 @@ class OsvServiceFunTest : StringSpec({
 
         val result = OsvService().getVulnerabilityForId("GHSA-xvch-5gv4-984h")
 
-        result.shouldBeSuccess {
-            OsvApiClient.JSON.encodeToString(it).shouldEqualJson(
-                expectedResult,
-                compareJsonOptions { arrayOrder = ArrayOrder.Lenient }
-            )
+        result.shouldBeSuccess { actualData ->
+            val expectedData = OsvApiClient.JSON.decodeFromString<Vulnerability>(expectedResult)
+            actualData.patchModifiedTime() shouldBe expectedData.patchModifiedTime()
         }
     }
 
