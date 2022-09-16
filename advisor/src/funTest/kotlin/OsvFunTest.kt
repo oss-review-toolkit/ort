@@ -88,8 +88,8 @@ private fun Map<Identifier, List<AdvisorResult>>.patchTimes(): Map<Identifier, L
         advisorResults.map { advisorResult ->
             advisorResult.copy(
                 summary = advisorResult.summary.copy(
-                    startTime = Instant.MIN,
-                    endTime = Instant.MIN
+                    startTime = Instant.EPOCH,
+                    endTime = Instant.EPOCH
                 )
             )
         }
