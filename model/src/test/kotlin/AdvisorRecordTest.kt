@@ -109,8 +109,8 @@ class AdvisorRecordTest : WordSpec({
 
             val record = advisorRecordOf(
                 queryId to listOf(
-                    createResult(1, vulnerabilities = listOf(vul1)),
-                    createResult(2, vulnerabilities = listOf(vul2))
+                    createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
+                    createResult(advisorIndex = 2, vulnerabilities = listOf(vul2))
                 )
             )
 
@@ -126,8 +126,8 @@ class AdvisorRecordTest : WordSpec({
 
             val record = advisorRecordOf(
                 queryId to listOf(
-                    createResult(1, vulnerabilities = listOf(vul1)),
-                    createResult(2, vulnerabilities = listOf(vul2, vul3))
+                    createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
+                    createResult(advisorIndex = 2, vulnerabilities = listOf(vul2, vul3))
                 )
             )
 
@@ -147,8 +147,8 @@ class AdvisorRecordTest : WordSpec({
 
             val record = advisorRecordOf(
                 queryId to listOf(
-                    createResult(1, vulnerabilities = listOf(vul1)),
-                    createResult(2, vulnerabilities = listOf(vul2, vul3, vul4))
+                    createResult(advisorIndex = 1, vulnerabilities = listOf(vul1)),
+                    createResult(advisorIndex = 2, vulnerabilities = listOf(vul2, vul3, vul4))
                 )
             )
 
@@ -172,8 +172,8 @@ class AdvisorRecordTest : WordSpec({
 
             val record = advisorRecordOf(
                 queryId to listOf(
-                    createResult(1, defects = listOf(defect1, defect2)),
-                    createResult(2, defects = listOf(defect3, defect4, defect5))
+                    createResult(advisorIndex = 1, defects = listOf(defect1, defect2)),
+                    createResult(advisorIndex = 2, defects = listOf(defect3, defect4, defect5))
                 )
             )
 
@@ -184,14 +184,14 @@ class AdvisorRecordTest : WordSpec({
     "filterResults" should {
         "return only results matching a filter" {
             val matchingResult = createResult(
-                1,
+                advisorIndex = 1,
                 vulnerabilities = listOf(createVulnerability("CVE-1")),
                 defects = listOf(createDefect("bug1"))
             )
 
             val record = advisorRecordOf(
-                queryId to listOf(createResult(1), createResult(2)),
-                langId to listOf(matchingResult, createResult(2))
+                queryId to listOf(createResult(advisorIndex = 1), createResult(advisorIndex = 2)),
+                langId to listOf(matchingResult, createResult(advisorIndex = 2))
             )
 
             val filteredResults = record.filterResults { it == matchingResult }
@@ -201,10 +201,10 @@ class AdvisorRecordTest : WordSpec({
         }
 
         "provide a predefined filter for results with vulnerabilities" {
-            val result1 = createResult(1, vulnerabilities = listOf(createVulnerability("CVE-1")))
-            val result2 = createResult(2, defects = listOf(createDefect("BUG-1")))
-            val result3 = createResult(3)
-            val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
+            val result1 = createResult(advisorIndex = 1, vulnerabilities = listOf(createVulnerability("CVE-1")))
+            val result2 = createResult(advisorIndex = 2, defects = listOf(createDefect("BUG-1")))
+            val result3 = createResult(advisorIndex = 3)
+            val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
             val record = advisorRecordOf(
                 queryId to listOf(result1, result2, result3, result4)
@@ -217,10 +217,10 @@ class AdvisorRecordTest : WordSpec({
         }
 
         "provide a predefined filter for results with defects" {
-            val result1 = createResult(1, vulnerabilities = listOf(createVulnerability("CVE-1")))
-            val result2 = createResult(2, defects = listOf(createDefect("BUG-1")))
-            val result3 = createResult(3)
-            val result4 = createResult(4, vulnerabilities = listOf(createVulnerability("CVE-2")))
+            val result1 = createResult(advisorIndex = 1, vulnerabilities = listOf(createVulnerability("CVE-1")))
+            val result2 = createResult(advisorIndex = 2, defects = listOf(createDefect("BUG-1")))
+            val result3 = createResult(advisorIndex = 3)
+            val result4 = createResult(advisorIndex = 4, vulnerabilities = listOf(createVulnerability("CVE-2")))
 
             val record = advisorRecordOf(
                 queryId to listOf(result1, result2, result3, result4)
@@ -234,10 +234,10 @@ class AdvisorRecordTest : WordSpec({
 
         "provide a predefined filter for results with issues" {
             val result1 = createResult(
-                1,
+                advisorIndex = 1,
                 issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.HINT))
             )
-            val result2 = createResult(2)
+            val result2 = createResult(advisorIndex = 2)
 
             val record = advisorRecordOf(
                 queryId to listOf(result1),
@@ -252,11 +252,11 @@ class AdvisorRecordTest : WordSpec({
 
         "provide a predefined filter for results with issues that have a minimum severity" {
             val result1 = createResult(
-                1,
+                advisorIndex = 1,
                 issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
             )
             val result2 = createResult(
-                2,
+                advisorIndex = 2,
                 issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
                 capability = AdvisorCapability.DEFECTS
             )
@@ -274,11 +274,11 @@ class AdvisorRecordTest : WordSpec({
 
         "provide a predefined filter for results with issues for a given advisor capability" {
             val result1 = createResult(
-                1,
+                advisorIndex = 1,
                 issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
             )
             val result2 = createResult(
-                2,
+                advisorIndex = 2,
                 issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
                 capability = AdvisorCapability.DEFECTS
             )
