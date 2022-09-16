@@ -22,12 +22,6 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 
 import java.util.SortedMap
 
@@ -44,7 +38,6 @@ data class AdvisorRecord(
     /**
      * The [AdvisorResult]s for all [Package]s.
      */
-    @JsonDeserialize(using = AdvisorResultsDeserializer::class)
     val advisorResults: SortedMap<Identifier, List<AdvisorResult>>
 ) {
     companion object {
@@ -154,20 +147,4 @@ private fun Collection<Vulnerability>.mergeVulnerabilities(): List<Vulnerability
 private fun Collection<Vulnerability>.mergeReferences(): Vulnerability {
     val references = flatMapTo(mutableSetOf()) { it.references }
     return Vulnerability(id = first().id, references = references.toList())
-}
-
-/**
- * A custom deserializer to support deserialization of old [AdvisorRecord]s where [AdvisorRecord.advisorResults] was a
- * `List<AdvisorResultContainer>`.
- */
-private class AdvisorResultsDeserializer : StdDeserializer<SortedMap<Identifier, List<AdvisorResult>>>(
-    SortedMap::class.java
-) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SortedMap<Identifier, List<AdvisorResult>> =
-        if (p.currentToken == JsonToken.START_ARRAY) {
-            val containers = jsonMapper.readValue(p, jacksonTypeRef<List<AdvisorResultContainer>>())
-            containers.associateTo(sortedMapOf()) { it.id to it.results }
-        } else {
-            jsonMapper.readValue(p, jacksonTypeRef<SortedMap<Identifier, List<AdvisorResult>>>())
-        }
 }

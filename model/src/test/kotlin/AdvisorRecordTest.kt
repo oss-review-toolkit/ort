@@ -20,16 +20,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
-import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -39,53 +34,6 @@ import java.time.Instant
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class AdvisorRecordTest : WordSpec({
-    "Deserialization" should {
-        "work for a map of advisor results" {
-            val yaml = """
-            ---
-            advisor_results:
-              type:namespace:name:version:
-              - vulnerabilities: []
-                advisor:
-                  name: "advisor"
-                summary:
-                  start_time: "1970-01-01T00:00:00Z"
-                  end_time: "1970-01-01T00:00:00Z"
-            has_issues: false
-        """.trimIndent()
-
-            val record = shouldNotThrowAny { yamlMapper.readValue<AdvisorRecord>(yaml) }
-            record.advisorResults should haveSize(1)
-            record.advisorResults.entries.single().let { (id, results) ->
-                id shouldBe Identifier("type:namespace:name:version")
-                results shouldHaveSize 1
-            }
-        }
-
-        "work for a legacy AdvisorRecord with AdvisorResultContainers" {
-            val yaml = """
-            ---
-            advisor_results:
-            - id: "type:namespace:name:version"
-              results:
-              - vulnerabilities: []
-                advisor:
-                  name: "advisor"
-                summary:
-                  start_time: "1970-01-01T00:00:00Z"
-                  end_time: "1970-01-01T00:00:00Z"
-            has_issues: false
-        """.trimIndent()
-
-            val record = shouldNotThrowAny { yamlMapper.readValue<AdvisorRecord>(yaml) }
-            record.advisorResults should haveSize(1)
-            record.advisorResults.entries.single().let { (id, results) ->
-                id shouldBe Identifier("type:namespace:name:version")
-                results shouldHaveSize 1
-            }
-        }
-    }
-
     "hasIssues" should {
         "return false given the record has no issues" {
             val vul1 = createVulnerability("CVE-2021-1")
