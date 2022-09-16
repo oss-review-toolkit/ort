@@ -58,8 +58,8 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = projectDir.resolve("gradle")
 
             val stdout = runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
-                "-m", "Gradle",
                 "-i", inputDir.path,
                 "-o", outputDir.resolve("gradle").path
             )
@@ -76,8 +76,8 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = projectDir.resolve("npm/package-lock")
 
             val stdout = runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=NPM",
                 "analyze",
-                "-m", "NPM",
                 "-i", inputDir.path,
                 "-o", outputDir.resolve("package-lock").path
             )
@@ -94,8 +94,8 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = projectDir.resolve("gradle")
 
             val stdout = runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
-                "-m", "Gradle",
                 "-i", inputDir.path,
                 "-o", outputDir.resolve("gradle").path,
                 "-f", "json,yaml,json"
@@ -115,8 +115,8 @@ class OrtMainFunTest : StringSpec() {
             )
 
             runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
-                "-m", "Gradle",
                 "-i", projectDir.resolve("gradle").absolutePath,
                 "-o", analyzerOutputDir.path
             )
@@ -137,8 +137,8 @@ class OrtMainFunTest : StringSpec() {
             )
 
             runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
-                "-m", "Gradle",
                 "-i", projectDir.resolve("gradle").absolutePath,
                 "-o", analyzerOutputDir.path,
                 "--package-curations-file", projectDir.resolve("gradle/curations.yml").toString()
