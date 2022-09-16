@@ -55,7 +55,7 @@ class ProjectSourceRuleTest : WordSpec({
                     "module/docs/LICENSE.txt"
                 )
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             with(rule) {
                 projectSourceHasFile("README.md").matches() shouldBe true
@@ -69,14 +69,14 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = createSpecTempDir().apply {
                 addDirs("README.md")
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             rule.projectSourceHasFile("README.md").matches() shouldBe false
         }
 
         "return false if neither any file nor directory matches the given glob pattern" {
             val dir = createSpecTempDir()
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             rule.projectSourceHasFile("README.md").matches() shouldBe false
         }
@@ -87,7 +87,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = createSpecTempDir().apply {
                 addDirs("a/b/c")
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             with(rule) {
                 projectSourceHasDirectory("a").matches() shouldBe true
@@ -101,7 +101,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = createSpecTempDir().apply {
                 addFiles("a")
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             rule.projectSourceHasDirectory("a").matches() shouldBe false
         }
@@ -110,7 +110,7 @@ class ProjectSourceRuleTest : WordSpec({
             val dir = createSpecTempDir().apply {
                 addDirs("b")
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             rule.projectSourceHasDirectory("a").matches() shouldBe false
         }
@@ -128,7 +128,7 @@ class ProjectSourceRuleTest : WordSpec({
                     """.trimIndent()
                 )
             }
-            val rule = createOrtResultRule(dir)
+            val rule = createRule(dir)
 
             rule.projectSourceHasFileWithContent(".*^#{1,2} License$.*", "README.md").matches() shouldBe true
         }
@@ -136,7 +136,7 @@ class ProjectSourceRuleTest : WordSpec({
 
     "projectSourceGetDetectedLicensesByFilePath()" should {
         "return the detected licenses for the file matching the pattern" {
-            val rule = createOrtResultRule(
+            val rule = createRule(
                 createSpecTempDir(),
                 ortResultWithDetectedLicenses(
                     "LICENSE" to setOf("Apache-2.0", "MIT"),
@@ -151,7 +151,7 @@ class ProjectSourceRuleTest : WordSpec({
     }
 })
 
-private fun createOrtResultRule(projectSourcesDir: File, ortResult: OrtResult = OrtResult.EMPTY) =
+private fun createRule(projectSourcesDir: File, ortResult: OrtResult = OrtResult.EMPTY) =
     ProjectSourceRule(
         ruleSet = ruleSet(ortResult),
         name = "RULE_NAME",
