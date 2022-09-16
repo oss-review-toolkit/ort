@@ -41,4 +41,19 @@ data class ScannerRun(
     val environment: Environment,
     val config: ScannerConfiguration,
     val results: ScanRecord
-)
+) {
+    companion object {
+        /**
+         * A constant for a [ScannerRun] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = ScannerRun(
+            environment = Environment(),
+            config = ScannerConfiguration(),
+            results = ScanRecord(
+                scanResults = sortedMapOf(),
+                storageStats = AccessStatistics()
+            )
+        )
+    }
+}
