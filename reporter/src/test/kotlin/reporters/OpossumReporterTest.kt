@@ -489,8 +489,8 @@ private fun createOrtResult(): OrtResult {
                                 configuration = "configuration"
                             ),
                             summary = ScanSummary(
-                                startTime = Instant.MIN,
-                                endTime = Instant.MIN,
+                                startTime = Instant.EPOCH,
+                                endTime = Instant.EPOCH,
                                 packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
@@ -526,8 +526,8 @@ private fun createOrtResult(): OrtResult {
                                 configuration = "otherConfiguration"
                             ),
                             summary = ScanSummary(
-                                startTime = Instant.MIN,
-                                endTime = Instant.MIN,
+                                startTime = Instant.EPOCH,
+                                endTime = Instant.EPOCH,
                                 packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(

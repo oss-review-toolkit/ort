@@ -305,8 +305,8 @@ private val ortResult = OrtResult(
                         ),
                         scanner = ScannerDetails.EMPTY,
                         summary = ScanSummary(
-                            startTime = Instant.MIN,
-                            endTime = Instant.MIN,
+                            startTime = Instant.EPOCH,
+                            endTime = Instant.EPOCH,
                             packageVerificationCode = "0000000000000000000000000000000000000000",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -338,8 +338,8 @@ private val ortResult = OrtResult(
                         ),
                         scanner = ScannerDetails.EMPTY,
                         summary = ScanSummary(
-                            startTime = Instant.MIN,
-                            endTime = Instant.MIN,
+                            startTime = Instant.EPOCH,
+                            endTime = Instant.EPOCH,
                             packageVerificationCode = "0000000000000000000000000000000000000000",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
