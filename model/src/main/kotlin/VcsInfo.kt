@@ -104,8 +104,8 @@ fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY
 
 private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
-        val KNOWN_FIELDS by lazy {
-            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) }
+        val KNOWN_FIELDS: Set<String> by lazy {
+            VcsInfo::class.memberProperties.mapTo(mutableSetOf()) { PROPERTY_NAMING_STRATEGY.translate(it.name) }
         }
     }
 
