@@ -105,8 +105,7 @@ fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY
 private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
     companion object {
         val KNOWN_FIELDS by lazy {
-            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } +
-                    PROPERTY_NAMING_STRATEGY.translate("resolvedRevision")
+            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) }
         }
     }
 
@@ -123,9 +122,7 @@ private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java
         return VcsInfo(
             VcsType(node["type"].textValueOrEmpty()),
             node["url"].textValueOrEmpty(),
-            // For backward compatibility, if resolved_revision is set, prefer it over revision because it is more
-            // specific.
-            node["resolved_revision"]?.textValue() ?: node["revision"].textValueOrEmpty(),
+            node["revision"].textValueOrEmpty(),
             node["path"].textValueOrEmpty()
         )
     }
