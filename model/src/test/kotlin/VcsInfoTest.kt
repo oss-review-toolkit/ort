@@ -89,7 +89,6 @@ class VcsInfoTest : WordSpec({
                 type: "type"
                 url: "url"
                 revision: "revision"
-                resolved_revision: "resolved_revision"
                 path: "path"
                 unknown: "unknown"
                 """.trimIndent()
@@ -100,7 +99,7 @@ class VcsInfoTest : WordSpec({
 
             with(exception) {
                 propertyName shouldBe "unknown"
-                knownPropertyIds should containAll<Any>("type", "url", "revision", "resolved_revision", "path")
+                knownPropertyIds should containAll<Any>("type", "url", "revision", "path")
             }
         }
     }
