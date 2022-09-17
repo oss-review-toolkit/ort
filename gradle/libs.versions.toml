@@ -50,7 +50,7 @@ logbackImpl = "1.4.1"
 maven = "3.8.6"
 # @pin this version as it needs to be aligned with "maven".
 mavenResolver = "1.7.3"
-mockk = "1.12.7"
+mockk = "1.12.8"
 okhttp = "4.9.3"
 poiOoxml = "5.2.2"
 postgres = "42.5.0"
