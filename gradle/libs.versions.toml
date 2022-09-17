@@ -44,7 +44,7 @@ kotlinxHtml = "0.8.0"
 kotlinxSerialization = "1.4.0"
 # @pin this version as it needs to be aligned with "graphQlPlugin".
 ktor = "1.6.8"
-log4jApi = "2.18.0"
+log4jApi = "2.19.0"
 log4jApiKotlin = "1.2.0"
 logbackImpl = "1.4.1"
 maven = "3.8.6"
