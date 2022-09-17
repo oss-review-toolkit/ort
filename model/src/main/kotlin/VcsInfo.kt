@@ -79,10 +79,10 @@ data class VcsInfo(
         if (this == EMPTY) return other
 
         return VcsInfo(
-            type.takeUnless { it == EMPTY.type } ?: other.type,
-            url.takeUnless { it == EMPTY.url } ?: other.url,
-            revision.takeUnless { it == EMPTY.revision } ?: other.revision,
-            path.takeUnless { it == EMPTY.path } ?: other.path
+            type = type.takeUnless { it == EMPTY.type } ?: other.type,
+            url = url.takeUnless { it == EMPTY.url } ?: other.url,
+            revision = revision.takeUnless { it == EMPTY.revision } ?: other.revision,
+            path = path.takeUnless { it == EMPTY.path } ?: other.path
         )
     }
 
@@ -120,10 +120,10 @@ private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java
         }
 
         return VcsInfo(
-            VcsType(node["type"].textValueOrEmpty()),
-            node["url"].textValueOrEmpty(),
-            node["revision"].textValueOrEmpty(),
-            node["path"].textValueOrEmpty()
+            type = VcsType(node["type"].textValueOrEmpty()),
+            url = node["url"].textValueOrEmpty(),
+            revision = node["revision"].textValueOrEmpty(),
+            path = node["path"].textValueOrEmpty()
         )
     }
 }
