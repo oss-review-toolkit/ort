@@ -9,7 +9,7 @@ graphQlPlugin = "5.5.0"
 ideaExtPlugin = "1.1.6"
 kotlinPlugin = "1.7.10"
 shadowPlugin = "7.1.2"
-taskInfoPlugin = "1.4.0"
+taskInfoPlugin = "2.0.0"
 versionCatalogUpdatePlugin = "0.6.1"
 versionsPlugin = "0.42.0"
 
