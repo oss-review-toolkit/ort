@@ -660,33 +660,48 @@ class FossIdTest : WordSpec({
             val id1 = createIdentifier(index = 1)
             val vcsInfo1 = createVcsInfo()
             val pkg1 = createPackage(id1, vcsInfo1)
-            val projectCode = projectCode(PROJECT)
-            val scanCode = scanCode(PROJECT, FossId.DeltaTag.ORIGIN)
+            val projectCode1 = projectCode(PROJECT)
+            val scanCode1 = scanCode(PROJECT, FossId.DeltaTag.ORIGIN)
 
             val failedProject = "failedProject"
             val id2 = createIdentifier(index = 2)
             val failedVcsInfo = createVcsInfo(projectName = failedProject)
             val pkg2 = createPackage(id2, failedVcsInfo)
             val failedProjectCode = projectCode(failedProject)
+
+            val project3 = "project3"
+            val id3 = createIdentifier(index = 3)
+            val vcsInfo3 = createVcsInfo(projectName = project3)
+            val pkg3 = createPackage(id3, vcsInfo3)
+            val projectCode3 = projectCode(project3)
+            val scanCode3 = scanCode(project3, FossId.DeltaTag.ORIGIN, index = 2)
+
             val config = createConfig()
 
             val service = FossIdRestService.createService(config.serverUrl)
-                .expectProjectRequest(projectCode)
-                .expectListScans(projectCode, emptyList())
-                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo1)
-                .expectDownload(scanCode)
-                .mockFiles(scanCode, markedRange = 1..2)
+                .expectProjectRequest(projectCode1)
+                .expectListScans(projectCode1, emptyList())
+                .expectCheckScanStatus(scanCode1, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode1, scanCode1, vcsInfo1)
+                .expectDownload(scanCode1)
+                .mockFiles(scanCode1, markedRange = 1..2)
 
             service.expectProjectRequest(failedProjectCode)
             coEvery { service.listScansForProject(USER, API_KEY, failedProjectCode) } throws IllegalStateException()
             coEvery { service.deleteScan(any()) } returns EntityResponseBody(status = 1)
 
+            service.expectProjectRequest(projectCode3)
+                .expectListScans(projectCode3, emptyList())
+                .expectCheckScanStatus(scanCode3, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode3, scanCode3, vcsInfo3)
+                .expectDownload(scanCode3)
+                .mockFiles(scanCode3, markedRange = 1..2)
+
             val fossId = createFossId(config)
 
-            val scannerRun = fossId.scan(listOf(pkg1, pkg2))
+            val scannerRun = fossId.scan(listOf(pkg1, pkg2, pkg3))
 
-            scannerRun.results.scanResults.keys shouldHaveSize 2
+            scannerRun.results.scanResults.keys shouldHaveSize 3
             scannerRun.results.collectIssues()[id2].shouldNotBeNull {
                 val issue = first()
                 issue.message shouldContain id2.toCoordinates()
@@ -694,7 +709,12 @@ class FossIdTest : WordSpec({
             }
 
             coVerify {
-                service.deleteScan(USER, API_KEY, scanCode)
+                service.deleteScan(USER, API_KEY, scanCode1)
+            }
+
+            // This shows a bug in the current implementation where scans started after a failed scan are not deleted.
+            coVerify(exactly = 0) {
+                service.deleteScan(USER, API_KEY, scanCode3)
             }
         }
 
