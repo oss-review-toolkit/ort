@@ -56,7 +56,7 @@ object URISerializer : KSerializer<URI> by toStringSerializer(::URI)
 inline fun <reified T : Any> toStringSerializer(noinline create: (String) -> T): ToStringSerializer<T> =
     ToStringSerializer(T::class.java.name, create)
 
-open class ToStringSerializer<T : Any>(serialName: String, private val create: (String) -> T) : KSerializer<T> {
+class ToStringSerializer<T : Any>(serialName: String, private val create: (String) -> T) : KSerializer<T> {
     override val descriptor = PrimitiveSerialDescriptor(serialName, PrimitiveKind.STRING)
     override fun serialize(encoder: Encoder, value: T) = encoder.encodeString(value.toString())
     override fun deserialize(decoder: Decoder) = create(decoder.decodeString())
