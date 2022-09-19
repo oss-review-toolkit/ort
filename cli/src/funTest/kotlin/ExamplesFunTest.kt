@@ -137,7 +137,7 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "example.rules.kts can be compiled and executed" {
-            val resultFile = File("src/funTest/assets/semver4j-analyzer-result.yml")
+            val resultFile = File("src/funTest/assets/semver4j-ort-result.yml")
             val licenseFile = File("../examples/license-classifications.yml")
             val ortResult = resultFile.readValue<OrtResult>()
             val evaluator = Evaluator(
