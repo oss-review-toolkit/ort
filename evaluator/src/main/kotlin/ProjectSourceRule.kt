@@ -24,6 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.getRepositoryPath
 import org.ossreviewtoolkit.utils.common.FileMatcher
 
@@ -92,6 +93,11 @@ open class ProjectSourceRule(
         }
 
     /**
+     * Return the [VcsType] of the project's code repository.
+     */
+    fun projectSourceGetVcsType(): VcsType = ortResult.repository.vcsProcessed.type
+
+    /**
      * Return the file paths matching any of the given [glob expressions][patterns] with its file content matching
      * [contentPattern].
      */
@@ -137,6 +143,21 @@ open class ProjectSourceRule(
 
             override fun matches(): Boolean =
                 projectSourceFindFilesWithContent(contentPattern, *patterns).isNotEmpty()
+        }
+
+    /**
+     * A [RuleMatcher] that checks whether the [VcsType] of the project's code repository is contained in the given
+     * [vcsTypes].
+     */
+    fun projectSourceHasVcsType(vararg vcsTypes: VcsType): RuleMatcher =
+        object : RuleMatcher {
+            private val types = vcsTypes.toSet()
+
+            override val description =
+                "projectSourceHasVcsType('${vcsTypes.joinToString()}')"
+
+            override fun matches(): Boolean =
+                projectSourceGetVcsType() in types
         }
 }
 
