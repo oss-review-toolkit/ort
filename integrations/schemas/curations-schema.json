@@ -50,30 +50,10 @@
               },
               "hash": {
                 "$ref": "#/definitions/hash"
-              },
-              "hash_algorithm": {
-                "type": "string"
               }
-            },
-            "if": {
-              "properties": {
-                "hash": {
-                  "type": "object"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "hash"
-              ]
-            },
-            "else": {
-              "required": [
-                "hash",
-                "hash_algorithm"
-              ]
             },
             "required": [
+              "hash",
               "url"
             ]
           },
@@ -85,30 +65,10 @@
               },
               "hash": {
                 "$ref": "#/definitions/hash"
-              },
-              "hash_algorithm": {
-                "type": "string"
               }
-            },
-            "if": {
-              "properties": {
-                "hash": {
-                  "type": "object"
-                }
-              }
-            },
-            "then": {
-              "required": [
-                "hash"
-              ]
-            },
-            "else": {
-              "required": [
-                "hash",
-                "hash_algorithm"
-              ]
             },
             "required": [
+              "hash",
               "url"
             ]
           },
@@ -170,7 +130,7 @@
       "type": "object"
     },
     "hash": {
-      "type": ["string", "object"],
+      "type": ["object"],
       "properties": {
         "value": {
           "type": "string"
