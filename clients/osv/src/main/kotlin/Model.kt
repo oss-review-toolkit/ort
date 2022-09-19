@@ -106,6 +106,7 @@ object Ecosystem {
     const val NUGET = "NuGet"
     const val OSS_FUZZ = "OSS-Fuzz"
     const val PACKAGIST = "Packagist"
+    const val PUB = "Pub"
     const val PYPI = "PyPI"
     const val RUBY_GEMS = "RubyGems"
 }
