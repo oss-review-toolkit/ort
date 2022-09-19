@@ -11,12 +11,14 @@
 #    homepage_url: "http://example.com"
 #    binary_artifact:
 #      url: "http://example.com/binary.zip"
-#      hash: "ddce269a1e3d054cae349621c198dd52"
-#      hash_algorithm: "MD5"
+#      hash:
+#        value: "ddce269a1e3d054cae349621c198dd52"
+#        algorithm: "MD5"
 #    source_artifact:
 #      url: "http://example.com/sources.zip"
-#      hash: "ddce269a1e3d054cae349621c198dd52"
-#      hash_algorithm: "MD5"
+#      hash:
+#        value: "ddce269a1e3d054cae349621c198dd52"
+#        algorithm: "MD5"
 #    vcs:
 #      type: "Git"
 #      url: "http://example.com/repo.git"
