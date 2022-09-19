@@ -146,6 +146,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         "NPM" -> Ecosystem.NPM
         "NuGet" -> Ecosystem.NUGET
         "Maven" -> Ecosystem.MAVEN
+        "Pub" -> Ecosystem.PUB
         "PyPI" -> Ecosystem.PYPI
         else -> null
     }
