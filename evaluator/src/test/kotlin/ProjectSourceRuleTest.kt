@@ -149,6 +149,19 @@ class ProjectSourceRuleTest : WordSpec({
             )
         }
     }
+
+    "projectSourceHasVcsType" should {
+        "return true if and only if any of the given VCS types match the VCS type of the project's code repository" {
+            val rule = createRule(
+                createSpecTempDir(),
+                createOrtResult(projectVcsType = VcsType.GIT)
+            )
+
+            rule.projectSourceHasVcsType(VcsType.GIT).matches() shouldBe true
+            rule.projectSourceHasVcsType(VcsType.GIT_REPO).matches() shouldBe false
+            rule.projectSourceHasVcsType(VcsType.GIT, VcsType.GIT_REPO).matches() shouldBe true
+        }
+    }
 })
 
 private fun createRule(projectSourcesDir: File, ortResult: OrtResult = OrtResult.EMPTY) =
@@ -182,11 +195,12 @@ private fun ortResultWithDetectedLicenses(vararg detectedLicensesForFilePath: Pa
     createOrtResult(detectedLicensesForFilePath.toMap())
 
 private fun createOrtResult(
-    detectedLicensesForFilePath: Map<String, Set<String>> = emptyMap()
+    detectedLicensesForFilePath: Map<String, Set<String>> = emptyMap(),
+    projectVcsType: VcsType = VcsType.GIT
 ): OrtResult {
     val id = Identifier("Maven:org.oss-review-toolkit:example:1.0")
     val vcsInfo = VcsInfo(
-        type = VcsType.GIT,
+        type = projectVcsType,
         url = "https://github.com/oss-review-toolkit/example.git",
         revision = "0000000000000000000000000000000000000000"
     )
