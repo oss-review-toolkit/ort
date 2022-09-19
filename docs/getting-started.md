@@ -214,12 +214,14 @@ analyzer:
         homepage_url: "https://github.com/isaacs/abbrev-js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
-          hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "91b4792588a7738c25f35dd6f63752a2f8776135"
+            algorithm: "SHA-1"
         vcs:
           type: "Git"
           url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
