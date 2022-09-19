@@ -20,12 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.core.JsonToken
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 
 import java.util.SortedMap
 
@@ -37,7 +31,6 @@ data class ScanRecord(
     /**
      * The [ScanResult]s for all [Package]s.
      */
-    @JsonDeserialize(using = ScanResultsDeserializer::class)
     val scanResults: SortedMap<Identifier, List<ScanResult>>,
 
     /**
@@ -70,20 +63,4 @@ data class ScanRecord(
             results.any { it.summary.issues.isNotEmpty() }
         }
     }
-}
-
-/**
- * A custom deserializer to support deserialization of old [ScanRecord]s where [ScanRecord.scanResults] was a
- * `List<ScanResultContainer>`.
- */
-private class ScanResultsDeserializer : StdDeserializer<SortedMap<Identifier, List<ScanResult>>>(
-    SortedMap::class.java
-) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): SortedMap<Identifier, List<ScanResult>> =
-        if (p.currentToken == JsonToken.START_ARRAY) {
-            val containers = jsonMapper.readValue(p, jacksonTypeRef<List<ScanResultContainer>>())
-            containers.associateTo(sortedMapOf()) { it.id to it.results }
-        } else {
-            jsonMapper.readValue(p, jacksonTypeRef<SortedMap<Identifier, List<ScanResult>>>())
-        }
 }
