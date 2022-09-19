@@ -32,6 +32,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.jsonPrimitive
 
+/**
+ * A (de-)serializer for ClearlyDefined [Coordinates] instances from / to strings, or from a nested structure.
+ */
 object CoordinatesSerializer : KSerializer<Coordinates> by toStringSerializer(::Coordinates) {
     override fun deserialize(decoder: Decoder): Coordinates {
         require(decoder is JsonDecoder)
@@ -49,13 +52,26 @@ object CoordinatesSerializer : KSerializer<Coordinates> by toStringSerializer(::
     }
 }
 
+/**
+ * A (de-)serializer for Java [File] instances from / to strings.
+ */
 object FileSerializer : KSerializer<File> by toStringSerializer(::File)
 
+/**
+ * A (de-)serializer for Java [URI] instances class from / to strings.
+ */
 object URISerializer : KSerializer<URI> by toStringSerializer(::URI)
 
+/**
+ * A convenience function for creating a [ToStringSerializer] whose name is derived from the class name.
+ */
 inline fun <reified T : Any> toStringSerializer(noinline create: (String) -> T): ToStringSerializer<T> =
     ToStringSerializer(T::class.java.name, create)
 
+/**
+ * A serializer with the given [serialName] that uses [Any] instance's [toString] function for serialization and the
+ * given [create] function for deserialization.
+ */
 class ToStringSerializer<T : Any>(serialName: String, private val create: (String) -> T) : KSerializer<T> {
     override val descriptor = PrimitiveSerialDescriptor(serialName, PrimitiveKind.STRING)
     override fun serialize(encoder: Encoder, value: T) = encoder.encodeString(value.toString())
