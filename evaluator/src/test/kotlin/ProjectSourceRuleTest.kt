@@ -178,7 +178,12 @@ private fun File.addDirs(vararg paths: String) {
     }
 }
 
-private fun ortResultWithDetectedLicenses(vararg detectedLicensesForFilePath: Pair<String, Set<String>>): OrtResult {
+private fun ortResultWithDetectedLicenses(vararg detectedLicensesForFilePath: Pair<String, Set<String>>): OrtResult =
+    createOrtResult(detectedLicensesForFilePath.toMap())
+
+private fun createOrtResult(
+    detectedLicensesForFilePath: Map<String, Set<String>> = emptyMap()
+): OrtResult {
     val id = Identifier("Maven:org.oss-review-toolkit:example:1.0")
     val vcsInfo = VcsInfo(
         type = VcsType.GIT,
