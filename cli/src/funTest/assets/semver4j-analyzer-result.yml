@@ -13,8 +13,8 @@ repository:
   config:
     excludes:
       scopes:
-      - pattern: "testClasspath"
-        reason: "TEST_TOOL_OF"
+        - pattern: "testClasspath"
+          reason: "TEST_TOOL_OF"
 analyzer:
   start_time: "2020-10-26T20:00:07.677878Z"
   end_time: "2020-10-26T20:00:39.307607Z"
@@ -339,16 +339,16 @@ advisor:
   results:
     advisor_results:
       Maven:junit:junit:4.12:
-      - vulnerabilities:
-        - id: "CVE-2020-15250"
-          references:
-          - url: "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15250"
-            scoring_system: "CVSS2"
-            severity: "5.5"
-        advisor:
-          name: "NexusIQ"
-        summary:
-          start_time: "2021-04-29T14:54:17.322191Z"
-          end_time: "2021-04-29T14:54:18.966672Z"
+        - vulnerabilities:
+            - id: "CVE-2020-15250"
+              references:
+                - url: "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15250"
+                  scoring_system: "CVSS2"
+                  severity: "5.5"
+          advisor:
+            name: "NexusIQ"
+          summary:
+            start_time: "2021-04-29T14:54:17.322191Z"
+            end_time: "2021-04-29T14:54:18.966672Z"
     has_issues: false
 evaluator: null
