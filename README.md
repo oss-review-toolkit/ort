@@ -792,9 +792,7 @@ to any of your questions we recommend you
 
 # License
 
-Copyright (C) 2017-2022 HERE Europe B.V.\
-Copyright (C) 2019-2020 Bosch Software Innovations GmbH\
-Copyright (C) 2020-2022 Bosch.IO GmbH
+Copyright (C) 2017-2022 [The ORT Project Authors](./NOTICE).
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
