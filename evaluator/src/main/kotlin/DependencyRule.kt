@@ -78,7 +78,8 @@ class DependencyRule(
     fun directDependencies() = dependency.visitDependencies { it.toList() }
 
     /**
-     * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level].
+     * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level], which
+     * starts with 0 for a direct dependency.
      */
     fun isAtTreeLevel(level: Int) =
         object : RuleMatcher {
