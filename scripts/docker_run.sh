@@ -18,7 +18,7 @@
 # License-Filename: LICENSE
 
 # Usage:
-# 
+#
 # The first argument to this script is passed as-is to `docker run`. If multiple arguments shall be passed, they must
 # be quoted, like `scripts/docker_run.sh "-it --entrypoint /bin/sh"`.
 #
