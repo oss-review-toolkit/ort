@@ -86,8 +86,8 @@ class RuleSet(
 
     /**
      * A DSL function to configure a [DependencyRule]. The rule is applied to each [DependencyNode] from the
-     * dependency trees contained in [ortResult]. If the same dependency appears multiple times in the dependency tree,
-     * the rule will be applied on each occurrence.
+     * dependency trees contained in [ortResult]. If the same dependency appears multiple times in the same scope, the
+     * rule will be applied only once.
      */
     fun dependencyRule(name: String, configure: DependencyRule.() -> Unit) {
         fun traverse(
