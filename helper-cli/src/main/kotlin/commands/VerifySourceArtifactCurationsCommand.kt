@@ -51,7 +51,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
         val failed = curations.filterNot { curation ->
             curation.data.sourceArtifact?.let { sourceArtifact ->
                 println("\n-----")
-                println("Checking source artifact for ${curation.id.toCoordinates()}.")
+                println("Checking source artifact for '${curation.id.toCoordinates()}'.")
                 println("Downloading ${sourceArtifact.url}.")
 
                 val tempDir = createOrtTempDir()

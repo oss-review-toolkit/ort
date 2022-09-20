@@ -352,11 +352,11 @@ open class Npm(
         )
 
         require(module.id.name.isNotEmpty()) {
-            "Generated package info for ${id.toCoordinates()} has no name."
+            "Generated package info for '${id.toCoordinates()}' has no name."
         }
 
         require(module.id.version.isNotEmpty()) {
-            "Generated package info for ${id.toCoordinates()} has no version."
+            "Generated package info for '${id.toCoordinates()}' has no version."
         }
 
         return Pair(id.toCoordinates(), module)

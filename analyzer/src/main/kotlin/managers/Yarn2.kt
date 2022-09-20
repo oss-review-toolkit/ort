@@ -491,11 +491,11 @@ class Yarn2(
             )
 
             require(pkg.id.name.isNotEmpty()) {
-                "Generated package info for ${id.toCoordinates()} has no name."
+                "Generated package info for '${id.toCoordinates()}' has no name."
             }
 
             require(pkg.id.version.isNotEmpty()) {
-                "Generated package info for ${id.toCoordinates()} has no version."
+                "Generated package info for '${id.toCoordinates()}' has no version."
             }
             allPackages += id to pkg
             id

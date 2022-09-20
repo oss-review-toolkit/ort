@@ -140,7 +140,7 @@ class PostgresStorage(
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
-                val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
+                val message = "Could not read scan results for '${id.toCoordinates()}' from database: " +
                         it.collectMessages()
 
                 logger.info { message }
@@ -172,7 +172,7 @@ class PostgresStorage(
             if (it is JsonProcessingException || it is SQLException) {
                 it.showStackTrace()
 
-                val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
+                val message = "Could not read scan results for '${pkg.id.toCoordinates()}' with " +
                         "$scannerCriteria from database: ${it.collectMessages()}"
 
                 logger.info { message }
@@ -233,7 +233,7 @@ class PostgresStorage(
     }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
-        logger.info { "Storing scan result for ${id.toCoordinates()} in storage." }
+        logger.info { "Storing scan result for '${id.toCoordinates()}' in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 

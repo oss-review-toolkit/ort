@@ -91,14 +91,14 @@ class DefaultPackageProvenanceResolver(
                 errors[sourceCodeOrigin] = it
 
                 logger.info {
-                    "Could not resolve $sourceCodeOrigin for ${pkg.id.toCoordinates()}: ${it.collectMessages()}"
+                    "Could not resolve $sourceCodeOrigin for '${pkg.id.toCoordinates()}': ${it.collectMessages()}"
                 }
             }
         }
 
         val message = buildString {
             append(
-                "Could not resolve provenance for ${pkg.id.toCoordinates()} for source code origins " +
+                "Could not resolve provenance for '${pkg.id.toCoordinates()}' for source code origins " +
                         "$sourceCodeOriginPriority."
             )
 
@@ -116,7 +116,7 @@ class DefaultPackageProvenanceResolver(
         when (val storedResult = storage.readProvenance(pkg.id, pkg.sourceArtifact)) {
             is ResolvedArtifactProvenance -> {
                 logger.info {
-                    "Found a stored artifact resolution for package ${pkg.id.toCoordinates()}."
+                    "Found a stored artifact resolution for package '${pkg.id.toCoordinates()}'."
                 }
 
                 return storedResult.provenance
@@ -124,14 +124,14 @@ class DefaultPackageProvenanceResolver(
 
             is UnresolvedPackageProvenance -> {
                 logger.info {
-                    "Found a stored artifact resolution for package ${pkg.id.toCoordinates()} which failed " +
+                    "Found a stored artifact resolution for package '${pkg.id.toCoordinates()}' which failed " +
                             "previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
             }
 
             else -> {
                 logger.info {
-                    "Could not find a stored artifact resolution result for package ${pkg.id.toCoordinates()}," +
+                    "Could not find a stored artifact resolution result for package '${pkg.id.toCoordinates()}'," +
                             "attempting resolution."
                 }
             }
@@ -173,7 +173,7 @@ class DefaultPackageProvenanceResolver(
             is ResolvedRepositoryProvenance -> {
                 if (storedResult.isFixedRevision) {
                     logger.info {
-                        "Found a stored repository resolution for package ${pkg.id.toCoordinates()} with the fixed " +
+                        "Found a stored repository resolution for package '${pkg.id.toCoordinates()}' with the fixed " +
                                 "revision ${storedResult.clonedRevision} which was resolved to " +
                                 "${storedResult.provenance.resolvedRevision}."
                     }
@@ -181,8 +181,8 @@ class DefaultPackageProvenanceResolver(
                     return storedResult.provenance
                 } else {
                     logger.info {
-                        "Found a stored repository resolution result for package ${pkg.id.toCoordinates()} with the " +
-                                "non-fixed revision ${storedResult.clonedRevision} which was resolved to " +
+                        "Found a stored repository resolution result for package '${pkg.id.toCoordinates()}' with " +
+                                "the non-fixed revision ${storedResult.clonedRevision} which was resolved to " +
                                 "${storedResult.provenance.resolvedRevision}. Restarting resolution of the " +
                                 "non-fixed revision."
                     }
@@ -191,14 +191,14 @@ class DefaultPackageProvenanceResolver(
 
             is UnresolvedPackageProvenance -> {
                 logger.info {
-                    "Found a stored repository resolution result for package ${pkg.id.toCoordinates()} which failed " +
-                            "previously, re-attempting resolution. The error was: ${storedResult.message}"
+                    "Found a stored repository resolution result for package '${pkg.id.toCoordinates()}' which " +
+                            "failed previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
             }
 
             else -> {
                 logger.info {
-                    "Could not find a stored repository resolution result for package ${pkg.id.toCoordinates()}," +
+                    "Could not find a stored repository resolution result for package '${pkg.id.toCoordinates()}'," +
                             "attempting resolution."
                 }
             }
@@ -210,8 +210,8 @@ class DefaultPackageProvenanceResolver(
             }.getOrDefault(emptySet())
 
             if (revisionCandidates.isEmpty()) {
-                val message = "Could not find any revision candidates for package ${pkg.id.toCoordinates()} with VCS " +
-                        "${pkg.vcsProcessed}."
+                val message = "Could not find any revision candidates for package '${pkg.id.toCoordinates()}' with " +
+                        "VCS ${pkg.vcsProcessed}."
 
                 storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
 
@@ -225,7 +225,7 @@ class DefaultPackageProvenanceResolver(
                     val resolvedRevision = workingTree.getRevision()
 
                     logger.info {
-                        "Resolved revision for package ${pkg.id.toCoordinates()} to $resolvedRevision based on " +
+                        "Resolved revision for package '${pkg.id.toCoordinates()}' to $resolvedRevision based on " +
                                 "guessed revision $revision."
                     }
 
@@ -244,7 +244,7 @@ class DefaultPackageProvenanceResolver(
             }
 
             val message = "Could not resolve any of the revision candidates $revisionCandidates for package " +
-                    "${pkg.id.toCoordinates()} with VCS ${pkg.vcsProcessed}."
+                    "'${pkg.id.toCoordinates()}' with VCS ${pkg.vcsProcessed}."
 
             storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
 

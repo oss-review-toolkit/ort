@@ -613,7 +613,7 @@ class Pip(
                 declaredLicensesProcessed.spdxExpression?.decompose()?.singleOrNull {
                     it is SpdxLicenseIdExpression && it.isValid() && it.toString().startsWith("BSD-")
                 }?.let { license ->
-                    logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for ${id.toCoordinates()}." }
+                    logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
 
                     declaredLicensesProcessed = declaredLicensesProcessed.copy(
                         mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),

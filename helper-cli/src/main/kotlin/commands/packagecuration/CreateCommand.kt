@@ -60,7 +60,7 @@ internal class CreateCommand : CliktCommand(
         val curations = readPackageCurations(outputFile).toMutableSet()
 
         if (curations.any { it.id == packageId }) {
-            println("Curation for ${packageId.toCoordinates()} already exists in '${outputFile.absolutePath}'.")
+            println("Curation for '${packageId.toCoordinates()}' already exists in '${outputFile.absolutePath}'.")
 
             return
         }
