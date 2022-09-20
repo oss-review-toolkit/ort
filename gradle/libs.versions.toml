@@ -14,7 +14,7 @@ versionCatalogUpdatePlugin = "0.6.1"
 versionsPlugin = "0.42.0"
 
 antlr = "4.11.1"
-asciidoctorj = "2.5.5"
+asciidoctorj = "2.5.6"
 asciidoctorjPdf = "2.3.0"
 clikt = "3.5.0"
 commonsCompress = "1.21"
