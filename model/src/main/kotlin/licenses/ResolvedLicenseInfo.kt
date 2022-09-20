@@ -122,9 +122,9 @@ data class ResolvedLicenseInfo(
         licenseChoices: List<SpdxLicenseChoice>,
         licenseView: LicenseView = LicenseView.ALL
     ): ResolvedLicenseInfo {
-        val licenses = effectiveLicense(licenseView, licenseChoices)?.decompose().orEmpty()
+        val effectiveLicenses = effectiveLicense(licenseView, licenseChoices)?.decompose().orEmpty()
 
-        return this.copy(licenses = this.licenses.filter { it.license in licenses })
+        return copy(licenses = licenses.filter { it.license in effectiveLicenses })
     }
 
     /**

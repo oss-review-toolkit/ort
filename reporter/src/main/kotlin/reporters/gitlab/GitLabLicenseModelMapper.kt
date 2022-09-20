@@ -94,7 +94,7 @@ private fun SpdxSingleLicenseExpression.toLicenseName(): String {
     // TODO: Get the full name also for non-SPDX / ScanCode licenses.
     val spdxLicenseId = when (this) {
         is SpdxLicenseWithExceptionExpression -> license.simpleLicense()
-        is SpdxLicenseIdExpression -> this.simpleLicense()
+        is SpdxLicenseIdExpression -> simpleLicense()
         else -> ""
     }
 

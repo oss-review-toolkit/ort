@@ -87,7 +87,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
             results.scanResults shouldHaveSize 1
             results.scanResults[results.scanResults.firstKey()] shouldNotBeNull {
                 this shouldHaveSize 1
-                this.first() shouldNotBeNull {
+                first() shouldNotBeNull {
                     summary.packageVerificationCode shouldBe "07c881ae4fcc30a69f5d66453d54d194f062252e"
                     summary.licenseFindings shouldHaveSize 2
                     summary.licenseFindings.first().license.toString() shouldBe "Apache-2.0"

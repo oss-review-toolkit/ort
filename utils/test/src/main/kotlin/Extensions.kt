@@ -39,7 +39,7 @@ fun Proxy.toGenericString() =
 
 infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()
-    this.block()
+    block()
 }
 
 fun FileArchiver.Companion.createDefault(): FileArchiver =
