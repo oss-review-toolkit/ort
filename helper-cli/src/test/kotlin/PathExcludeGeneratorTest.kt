@@ -51,7 +51,7 @@ class PathExcludeGeneratorTest : WordSpec({
             )
         }
 
-        "return excludes for a dir containing a regex special characters, e.g. the dot" {
+        "return excludes for a directory which contains regex special characters, e.g. the dot" {
             val files = listOf(
                 ".github/file.ext"
             )
