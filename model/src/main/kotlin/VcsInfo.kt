@@ -19,23 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-
-import kotlin.reflect.full.memberProperties
-
-import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * Bundles general Version Control System information.
  */
-@JsonDeserialize(using = VcsInfoDeserializer::class)
 data class VcsInfo(
     /**
      * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
@@ -101,32 +89,3 @@ data class VcsInfo(
  * Return this [VcsInfo] if not null or else [VcsInfo.EMPTY].
  */
 fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY
-
-private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
-    companion object {
-        val KNOWN_FIELDS by lazy {
-            VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } +
-                    PROPERTY_NAMING_STRATEGY.translate("resolvedRevision")
-        }
-    }
-
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
-        val node = p.codec.readTree<JsonNode>(p)
-
-        val fields = node.fieldNamesOrEmpty().asSequence().toList()
-        (fields - KNOWN_FIELDS).let { unknownFields ->
-            if (unknownFields.isNotEmpty()) {
-                throw UnrecognizedPropertyException.from(p, VcsInfo::class.java, unknownFields.first(), KNOWN_FIELDS)
-            }
-        }
-
-        return VcsInfo(
-            VcsType(node["type"].textValueOrEmpty()),
-            node["url"].textValueOrEmpty(),
-            // For backward compatibility, if resolved_revision is set, prefer it over revision because it is more
-            // specific.
-            node["resolved_revision"]?.textValue() ?: node["revision"].textValueOrEmpty(),
-            node["path"].textValueOrEmpty()
-        )
-    }
-}

@@ -32,7 +32,6 @@ dependencies {
     api(libs.jacksonDataformatXml)
     api(libs.jacksonDataformatYaml)
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
