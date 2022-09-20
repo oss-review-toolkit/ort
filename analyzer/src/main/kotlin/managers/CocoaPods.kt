@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
@@ -172,11 +173,7 @@ class CocoaPods(
     }
 
     private fun getPackage(id: Identifier, workingDir: File): Package {
-        val podspec = getPodspec(id, workingDir) ?: run {
-            logger.warn { "Could not find a '.podspec' file for package '${id.toCoordinates()}'." }
-
-            return Package.EMPTY.copy(id = id)
-        }
+        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id)
 
         val vcs = podspec.source["git"]?.let { url ->
             VcsInfo(
@@ -204,9 +201,21 @@ class CocoaPods(
 
         val podspecName = id.name.substringBefore("/")
 
-        val podspecCommand = run(
-            "spec", "which", podspecName, "--version=${id.version}", "--allow-root", "--regex", workingDir = workingDir
-        ).takeIf { it.isSuccess } ?: return null
+        val podspecCommand = runCatching {
+            run(
+                "spec", "which", podspecName,
+                "--version=${id.version}",
+                "--allow-root",
+                "--regex",
+                workingDir = workingDir
+            )
+        }.getOrElse {
+            logger.warn {
+                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': ${it.collectMessages()}"
+            }
+
+            return null
+        }
 
         val podspecFile = File(podspecCommand.stdout.trim())
 
