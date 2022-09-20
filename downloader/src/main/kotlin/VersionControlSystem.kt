@@ -256,7 +256,7 @@ abstract class VersionControlSystem {
         }
 
         logger.info {
-            "Successfully downloaded revision '$workingTreeRevision' for package '${pkg.id.toCoordinates()}.'."
+            "Successfully downloaded revision '$workingTreeRevision' for package '${pkg.id.toCoordinates()}'."
         }
 
         return workingTree

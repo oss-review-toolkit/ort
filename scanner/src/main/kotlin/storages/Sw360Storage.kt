@@ -98,7 +98,7 @@ class Sw360Storage(
                     path.toFile().readValue<ScanResult>()
                 }
         }.recoverCatching {
-            val message = "Could not read scan results for ${id.toCoordinates()} in SW360: ${it.message}"
+            val message = "Could not read scan results for '${id.toCoordinates()}' in SW360: ${it.message}"
 
             logger.info { message }
 
