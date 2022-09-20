@@ -24,4 +24,10 @@ GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty)
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
-docker buildx build -f "$GIT_ROOT/Dockerfile" -t "${ORT_DOCKER_TAG:-ort}" --build-arg ORT_VERSION="$GIT_REVISION" --platform linux/amd64 $DOCKER_ARGS "$GIT_ROOT"
+docker buildx build \
+    -f "$GIT_ROOT/Dockerfile" \
+    -t "${ORT_DOCKER_TAG:-ort}" \
+    --build-arg ORT_VERSION="$GIT_REVISION" \
+    --platform linux/amd64 \
+    $DOCKER_ARGS \
+    "$GIT_ROOT"
