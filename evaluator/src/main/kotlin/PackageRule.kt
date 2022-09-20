@@ -123,7 +123,7 @@ open class PackageRule(
 
     /**
      * A [RuleMatcher] that checks if the [identifier][Package.id] of the [package][pkg] belongs to one of the provided
-     * [orgs][Identifier.isFromOrg].
+     * organization [names][Identifier.isFromOrg].
      */
     fun isFromOrg(vararg names: String) =
         object : RuleMatcher {
