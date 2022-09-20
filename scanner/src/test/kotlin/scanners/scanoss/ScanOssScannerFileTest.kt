@@ -84,7 +84,7 @@ class ScanOssScannerFileTest : StringSpec({
             results.scanResults shouldHaveSize 1
             results.scanResults[results.scanResults.firstKey()] shouldNotBeNull {
                 this shouldHaveSize 1
-                this.first() shouldNotBeNull {
+                first() shouldNotBeNull {
                     summary.packageVerificationCode shouldBe "027fef3ecf34d1069b3cd60dad127195aeb069be"
                     summary.licenseFindings shouldHaveSize 1
                     summary.licenseFindings.first().license.toString() shouldBe "Apache-2.0"

@@ -171,7 +171,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
     // However, only one representation is actually possible currently, because the enum 'Severity.Type' contains just a
     // single element / scoring system. So, picking first severity is fine, in particular because ORT only supports a
     // single severity representation.
-    var (scoringSystem, severity) = this.severity.firstOrNull()?.let {
+    var (scoringSystem, severity) = severity.firstOrNull()?.let {
         require(it.type == Severity.Type.CVSS_V3) {
             "The severity mapping for type '${it.type}' is not implemented."
         }
