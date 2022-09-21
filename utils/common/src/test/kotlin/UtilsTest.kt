@@ -30,22 +30,22 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 class UtilsTest : WordSpec({
-    "getCommonFileParent" should {
+    "getCommonParentFile" should {
         "return null for an empty list" {
-            getCommonFileParent(emptyList()) should beNull()
+            getCommonParentFile(emptyList()) should beNull()
         }
 
         "return null for files that have no directory in common".config(enabled = Os.isWindows) {
             // On non-Windows, all files have the root directory in common.
-            getCommonFileParent(listOf(File("C:/foo"), File("D:/bar"))) should beNull()
+            getCommonParentFile(listOf(File("C:/foo"), File("D:/bar"))) should beNull()
         }
 
         "return the absolute common directory for relative files" {
-            getCommonFileParent(listOf(File("foo"), File("bar"))) shouldBe File(".").absoluteFile.normalize()
+            getCommonParentFile(listOf(File("foo"), File("bar"))) shouldBe File(".").absoluteFile.normalize()
         }
 
         "return the absolute parent directory for a single file" {
-            getCommonFileParent(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
+            getCommonParentFile(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
         }
     }
 

@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.getCommonFileParent
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
@@ -140,7 +140,7 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles) ?: analysisRoot
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
@@ -176,7 +176,7 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles) ?: analysisRoot
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
