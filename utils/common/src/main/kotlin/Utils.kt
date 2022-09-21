@@ -90,7 +90,7 @@ fun getAllAncestorDirectories(file: String): List<String> {
 /**
  * Return the longest parent directory that is common to all [files], or null if they have no directory in common.
  */
-fun getCommonFileParent(files: Collection<File>): File? =
+fun getCommonParentFile(files: Collection<File>): File? =
     files.map {
         it.normalize().absolutePath
     }.reduceOrNull { prefix, path ->
