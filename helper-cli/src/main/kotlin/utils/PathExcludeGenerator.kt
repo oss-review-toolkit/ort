@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason.BUILD_TOOL_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.DOCUMENTATION_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.TEST_OF
 import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
@@ -99,7 +100,7 @@ internal object PathExcludeGenerator {
             ?: return emptySet()
 
         return createExcludePattern(
-            directory = getClosestCommonAncestor(matchingFiles).invariantSeparatorsPath,
+            directory = getCommonParentFile(matchingFiles).invariantSeparatorsPath,
             filenamePattern = if (matchingFiles.distinctBy { it.name }.size == 1) {
                 matchingFiles.first().name
             } else {
@@ -133,20 +134,6 @@ private fun File.getAncestorFiles(): List<File> {
     }
 
     return result
-}
-
-private fun getClosestCommonAncestor(files: Collection<File>): File {
-    require(files.isNotEmpty())
-
-    val candidates = HashSet(files.first().getAncestorFiles()).apply {
-        files.forEach {
-            val ancestorFiles = it.getAncestorFiles()
-            retainAll(ancestorFiles)
-        }
-        add(File(""))
-    }
-
-    return candidates.maxBy { it.path.length }
 }
 
 private fun <T> Collection<T>.checkNoDuplicatePatterns(keySelector: (T) -> String) =
