@@ -37,13 +37,15 @@ internal object PathExcludeGenerator {
      * Return path excludes which likely but not necessarily apply to a source tree containing all given [filePaths]
      * which must be relative to the root directory of the source tree.
      */
-    fun generatePathExcludes(filePaths: Collection<String>): Set<PathExclude> {
+    fun generatePathExcludes(filePaths: Collection<String>): Set<PathExclude> =
+        generateExcludesForDirectories(filePaths)
+
+    /**
+     * Return path excludes matching entire directories which likely but not necessarily apply to a source tree
+     * containing all given [filePaths] which must be relative to the root directory of the source tree.
+     */
+    fun generateExcludesForDirectories(filePaths: Collection<String>): Set<PathExclude> {
         val files = filePaths.mapTo(mutableSetOf()) { File(it) }
-
-        return generateExcludesForDirectories(files)
-    }
-
-    private fun generateExcludesForDirectories(files: Set<File>): Set<PathExclude> {
         val dirs = getAllDirectories(files)
 
         val dirsToExclude = mutableMapOf<File, PathExcludeReason>()

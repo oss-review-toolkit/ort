@@ -24,10 +24,10 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generatePathExcludes
+import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateExcludesForDirectories
 
 class PathExcludeGeneratorTest : WordSpec({
-    "generatePathExcludes()" should {
+    "generateExcludesForDirectories()" should {
         "return the expected excludes for directories" {
             val files = listOf(
                 "docs/file.ext",
@@ -35,7 +35,7 @@ class PathExcludeGeneratorTest : WordSpec({
                 "src/test/file.ext"
             )
 
-            generatePathExcludes(files).map { it.pattern } should containExactlyInAnyOrder(
+            generateExcludesForDirectories(files).map { it.pattern } should containExactlyInAnyOrder(
                 "docs/**",
                 "src/test/**"
             )
@@ -46,7 +46,7 @@ class PathExcludeGeneratorTest : WordSpec({
                 "build/m4/file.ext"
             )
 
-            generatePathExcludes(files).map { it.pattern } should containExactlyInAnyOrder(
+            generateExcludesForDirectories(files).map { it.pattern } should containExactlyInAnyOrder(
                 "build/**"
             )
         }
@@ -56,7 +56,7 @@ class PathExcludeGeneratorTest : WordSpec({
                 ".github/file.ext"
             )
 
-            generatePathExcludes(files).map { it.pattern } should containExactlyInAnyOrder(
+            generateExcludesForDirectories(files).map { it.pattern } should containExactlyInAnyOrder(
                 ".github/**"
             )
         }
@@ -65,10 +65,8 @@ class PathExcludeGeneratorTest : WordSpec({
             val files = getAssetFile("dir-paths.txt").readLines().map { "$it/file.ext" }
             val expectedExcludedDirs = getAssetFile("expected-excluded-dirs.txt").readText()
 
-            val pathExcludes = generatePathExcludes(files)
-            val excludedDirs = pathExcludes.filter { it.pattern.endsWith("/**") }.joinToString("\n") {
-                it.pattern
-            }
+            val pathExcludes = generateExcludesForDirectories(files)
+            val excludedDirs = pathExcludes.joinToString("\n") { it.pattern }
 
             excludedDirs shouldBe expectedExcludedDirs
         }
