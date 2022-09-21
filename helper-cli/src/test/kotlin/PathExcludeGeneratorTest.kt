@@ -25,12 +25,12 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.createExcludePatterns
-import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateExcludesForDirectories
+import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateDirectoryExcludes
 
 class PathExcludeGeneratorTest : WordSpec({
-    "generateExcludesForDirectories()" should {
+    "generateDirectoryExcludes()" should {
         fun generateExcludesForDirectories(vararg files: String): Set<String> =
-            generateExcludesForDirectories(files.toList()).mapTo(mutableSetOf()) { it.pattern }
+            generateDirectoryExcludes(files.toList()).mapTo(mutableSetOf()) { it.pattern }
 
         "return the expected excludes for directories" {
             generateExcludesForDirectories(
