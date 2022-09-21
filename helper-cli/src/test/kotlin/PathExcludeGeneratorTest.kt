@@ -65,7 +65,7 @@ class PathExcludeGeneratorTest : WordSpec({
 
             val patterns = generateDirectoryExcludes(*files.toTypedArray())
 
-            patterns.joinToString("\n") shouldBe expectedPatterns
+            patterns.sorted().joinToString("\n") shouldBe expectedPatterns
         }
     }
 
