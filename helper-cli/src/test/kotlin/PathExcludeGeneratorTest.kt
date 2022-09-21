@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.createExcludePatterns
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateDirectoryExcludes
+import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateFileExcludes
 
 class PathExcludeGeneratorTest : WordSpec({
     "generateDirectoryExcludes()" should {
@@ -64,6 +65,17 @@ class PathExcludeGeneratorTest : WordSpec({
             val expectedPatterns = getAssetFile("expected-directory-exclude-patterns.txt").readText()
 
             val patterns = generateDirectoryExcludes(*files.toTypedArray())
+
+            patterns.sorted().joinToString("\n") shouldBe expectedPatterns
+        }
+    }
+
+    "generateFileExcludes()" should {
+        "exclude the expected files for a large data set" {
+            val files = getAssetFile("file-paths.txt").readLines()
+            val expectedPatterns = getAssetFile("expected-file-exclude-patterns.txt").readText()
+
+            val patterns = generateFileExcludes(files).map { it.pattern }
 
             patterns.sorted().joinToString("\n") shouldBe expectedPatterns
         }

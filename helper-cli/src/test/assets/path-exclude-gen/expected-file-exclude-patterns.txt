@@ -1,0 +1,10 @@
+**/*.cmake
+**/*.csproj
+**/*.gemspec
+**/*.mk
+**/*_test.go
+*.podspec
+BUILD.bazel
+curl-7.79.1/CMakeLists.txt
+tasks/gem.rake
+zlib-1.2.12/zconf.h.cmakein
