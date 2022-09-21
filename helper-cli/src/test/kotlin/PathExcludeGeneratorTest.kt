@@ -54,7 +54,7 @@ class PathExcludeGeneratorTest : WordSpec({
         "return excludes for a directory which contains regex special characters, e.g. the dot" {
             generateDirectoryExcludes(
                 ".github/file.ext"
-            )should containExactlyInAnyOrder(
+            ) should containExactlyInAnyOrder(
                 ".github/**"
             )
         }
@@ -71,10 +71,11 @@ class PathExcludeGeneratorTest : WordSpec({
     }
 
     "createExcludePatterns()" should {
-        fun getPatternsForFiles(vararg files: String) = createExcludePatterns(
-            filenamePattern = "*_test.go",
-            files = files.mapTo(mutableSetOf()) { File(it) }
-        )
+        fun getPatternsForFiles(vararg files: String) =
+            createExcludePatterns(
+                filenamePattern = "*_test.go",
+                files = files.mapTo(mutableSetOf()) { File(it) }
+            )
 
         "return the expected pattern if only a single file matches" {
             getPatternsForFiles(
