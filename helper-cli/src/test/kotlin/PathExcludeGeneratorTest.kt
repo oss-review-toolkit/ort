@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.createExcludePatterns
 import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateExcludesForDirectories
 
 class PathExcludeGeneratorTest : WordSpec({
@@ -69,6 +70,75 @@ class PathExcludeGeneratorTest : WordSpec({
             val excludedDirs = pathExcludes.joinToString("\n") { it.pattern }
 
             excludedDirs shouldBe expectedExcludedDirs
+        }
+    }
+
+    "createExcludePatterns()" should {
+        fun getPatternsForFiles(vararg files: String) = createExcludePatterns(
+            filenamePattern = "*_test.go",
+            files = files.mapTo(mutableSetOf()) { File(it) }
+        )
+
+        "return the expected pattern if only a single file matches" {
+            getPatternsForFiles(
+                "src/some_test.go"
+            ) should containExactlyInAnyOrder(
+                "src/some_test.go"
+            )
+
+            getPatternsForFiles(
+                "some_test.go"
+            ) should containExactlyInAnyOrder(
+                "some_test.go"
+            )
+        }
+
+        "return the expected pattern if matching files have identical names but are in different directories" {
+            getPatternsForFiles(
+                "src/some_test.go",
+                "src/module/some_test.go"
+            ) should containExactlyInAnyOrder(
+                "src/**/some_test.go"
+            )
+
+            getPatternsForFiles(
+                "some_test.go",
+                "module/some_test.go"
+            ) should containExactlyInAnyOrder(
+                "**/some_test.go"
+            )
+        }
+
+        "return the expected pattern if matching files have different names but are in the same directory" {
+            getPatternsForFiles(
+                "src/some_test.go",
+                "src/other_test.go"
+            ) should containExactlyInAnyOrder(
+                "src/*_test.go"
+            )
+
+            getPatternsForFiles(
+                "some_test.go",
+                "other_test.go"
+            ) should containExactlyInAnyOrder(
+                "*_test.go"
+            )
+        }
+
+        "return the expected pattern if matching file have different names and are in different directories" {
+            getPatternsForFiles(
+                "src/some_test.go",
+                "src/module/other_test.go"
+            ) should containExactlyInAnyOrder(
+                "src/**/*_test.go"
+            )
+
+            getPatternsForFiles(
+                "some_test.go",
+                "module/other_test.go"
+            ) should containExactlyInAnyOrder(
+                "**/*_test.go"
+            )
         }
     }
 })
