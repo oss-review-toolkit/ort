@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.utils.common
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -31,21 +30,24 @@ import java.io.File
 
 class UtilsTest : WordSpec({
     "getCommonParentFile" should {
-        "return null for an empty list" {
-            getCommonParentFile(emptyList()) should beNull()
+        "return a file with an empty path for an empty list" {
+            getCommonParentFile(emptyList()) shouldBe File("")
         }
 
-        "return null for files that have no directory in common".config(enabled = Os.isWindows) {
-            // On non-Windows, all files have the root directory in common.
-            getCommonParentFile(listOf(File("C:/foo"), File("D:/bar"))) should beNull()
+        "return the parent file for a single file" {
+            getCommonParentFile(listOf(File("/foo/bar"))) shouldBe File("/foo")
         }
 
-        "return the absolute common directory for relative files" {
-            getCommonParentFile(listOf(File("foo"), File("bar"))) shouldBe File(".").absoluteFile.normalize()
+        "return a file with an empty path for files that have no parent in common".config(enabled = Os.isWindows) {
+            getCommonParentFile(listOf(File("C:/foo"), File("D:/bar"))) shouldBe File("")
         }
 
-        "return the absolute parent directory for a single file" {
-            getCommonParentFile(listOf(File("/foo/bar"))) shouldBe File("/foo").absoluteFile
+        "return the root directory for different files with absolute paths".config(enabled = !Os.isWindows) {
+            getCommonParentFile(listOf(File("/foo"), File("/bar"))) shouldBe File("/")
+        }
+
+        "return the common parent for relative files" {
+            getCommonParentFile(listOf(File("common/foo"), File("common/bar"))) shouldBe File("common")
         }
     }
 

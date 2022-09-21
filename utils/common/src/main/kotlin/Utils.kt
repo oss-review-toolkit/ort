@@ -88,16 +88,16 @@ fun getAllAncestorDirectories(file: String): List<String> {
 }
 
 /**
- * Return the longest parent directory that is common to all [files], or null if they have no directory in common.
+ * Return the longest parent file that all [files] have in common, or a [File] with an empty path if they have no common
+ * parent file.
  */
-fun getCommonParentFile(files: Collection<File>): File? =
+fun getCommonParentFile(files: Collection<File>): File =
     files.map {
-        it.normalize().absolutePath
+        it.normalize().parent
     }.reduceOrNull { prefix, path ->
-        prefix.commonPrefixWith(path)
-    }?.let {
-        val commonPrefix = File(it)
-        if (commonPrefix.isDirectory) commonPrefix else commonPrefix.parentFile
+        prefix?.commonPrefixWith(path)
+    }.orEmpty().let {
+        File(it)
     }
 
 private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
