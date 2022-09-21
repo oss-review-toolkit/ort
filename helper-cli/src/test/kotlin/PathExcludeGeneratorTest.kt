@@ -29,11 +29,11 @@ import org.ossreviewtoolkit.helper.utils.PathExcludeGenerator.generateDirectoryE
 
 class PathExcludeGeneratorTest : WordSpec({
     "generateDirectoryExcludes()" should {
-        fun generateExcludesForDirectories(vararg files: String): Set<String> =
+        fun generateDirectoryExcludes(vararg files: String): Set<String> =
             generateDirectoryExcludes(files.toList()).mapTo(mutableSetOf()) { it.pattern }
 
         "return the expected excludes for directories" {
-            generateExcludesForDirectories(
+            generateDirectoryExcludes(
                 "docs/file.ext",
                 "src/main/file.ext",
                 "src/test/file.ext"
@@ -44,7 +44,7 @@ class PathExcludeGeneratorTest : WordSpec({
         }
 
         "exclude only the topmost possible directory" {
-            generateExcludesForDirectories(
+            generateDirectoryExcludes(
                 "build/m4/file.ext"
             ) should containExactlyInAnyOrder(
                 "build/**"
@@ -52,7 +52,7 @@ class PathExcludeGeneratorTest : WordSpec({
         }
 
         "return excludes for a directory which contains regex special characters, e.g. the dot" {
-            generateExcludesForDirectories(
+            generateDirectoryExcludes(
                 ".github/file.ext"
             )should containExactlyInAnyOrder(
                 ".github/**"
@@ -63,7 +63,7 @@ class PathExcludeGeneratorTest : WordSpec({
             val files = getAssetFile("dir-paths.txt").readLines().map { "$it/file.ext" }
             val expectedExcludedDirs = getAssetFile("expected-excluded-dirs.txt").readText()
 
-            val pathExcludes = generateExcludesForDirectories(*files.toTypedArray())
+            val pathExcludes = generateDirectoryExcludes(*files.toTypedArray())
             val excludedDirs = pathExcludes.joinToString("\n")
 
             excludedDirs shouldBe expectedExcludedDirs
