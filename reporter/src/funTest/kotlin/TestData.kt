@@ -179,7 +179,8 @@ val ORT_RESULT = OrtResult(
                                 algorithm = HashAlgorithm.SHA1
                             )
                         ),
-                        vcs = VcsInfo.EMPTY
+                        vcs = VcsInfo.EMPTY,
+                        concludedCopyrights = sortedSetOf("Copyright Seb")
                     )
                 ),
                 CuratedPackage(
