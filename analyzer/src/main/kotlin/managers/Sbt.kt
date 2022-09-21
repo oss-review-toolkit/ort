@@ -140,7 +140,7 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonParentFile(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles)
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
@@ -176,7 +176,7 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonParentFile(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles)
 
         logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
