@@ -34,12 +34,10 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 fun OrtResult.createLicenseInfoResolver(
     packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
-    addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
 ) = LicenseInfoResolver(
         DefaultLicenseInfoProvider(this, packageConfigurationProvider),
         copyrightGarbage,
-        addAuthorsToCopyrights,
         archiver,
         LicenseFilenamePatterns.getInstance()
     )

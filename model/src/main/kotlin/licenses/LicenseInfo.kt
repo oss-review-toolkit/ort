@@ -78,11 +78,6 @@ data class ConcludedLicenseInfo(
  */
 data class DeclaredLicenseInfo(
     /**
-     * The set of authors.
-     */
-    val authors: SortedSet<String>,
-
-    /**
      * The unmodified set of declared licenses.
      */
     val licenses: Set<String>,
