@@ -60,13 +60,12 @@ class PathExcludeGeneratorTest : WordSpec({
         }
 
         "exclude the expected directories for a large data set" {
-            val files = getAssetFile("dir-paths.txt").readLines().map { "$it/file.ext" }
-            val expectedExcludedDirs = getAssetFile("expected-excluded-dirs.txt").readText()
+            val files = getAssetFile("directory-paths.txt").readLines().map { "$it/file.ext" }
+            val expectedPatterns = getAssetFile("expected-directory-exclude-patterns.txt").readText()
 
-            val pathExcludes = generateDirectoryExcludes(*files.toTypedArray())
-            val excludedDirs = pathExcludes.joinToString("\n")
+            val patterns = generateDirectoryExcludes(*files.toTypedArray())
 
-            excludedDirs shouldBe expectedExcludedDirs
+            patterns.joinToString("\n") shouldBe expectedPatterns
         }
     }
 
