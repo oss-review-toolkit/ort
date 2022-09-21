@@ -55,18 +55,18 @@ data class LicenseInfo(
     /**
      * Information about the concluded license.
      */
-    val concludedLicenseInfo: ConcludedLicenseInfo
+    val concludedLicenseInfo: ConcludedLicenseInfo,
+
+    /**
+     * The concluded copyright statements, or null if no copyrights were concluded.
+     */
+    val concludedCopyrights: SortedSet<String>?
 )
 
 /**
  * Information about the concluded license of a package or project.
  */
 data class ConcludedLicenseInfo(
-    /**
-     * The concluded copyright statements, or null if no copyrights were concluded.
-     */
-    val concludedCopyrights: SortedSet<String>?,
-
     /**
      * The concluded license, or null if no license was concluded.
      */

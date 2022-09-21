@@ -75,7 +75,7 @@ class LicenseInfoResolver(
         val resolvedLicenses = mutableMapOf<SpdxSingleLicenseExpression, ResolvedLicenseBuilder>()
 
         fun SpdxSingleLicenseExpression.builder() =
-            resolvedLicenses.getOrPut(this) { ResolvedLicenseBuilder(this) }
+            resolvedLicenses.getOrPut(this) { ResolvedLicenseBuilder(this, licenseInfo) }
 
         // Handle concluded licenses.
         concludedLicenses.forEach { license ->
