@@ -68,7 +68,7 @@ internal object PathExcludeGenerator {
         dirsToExclude.forEach { (dir, reason) ->
             if (dir.getAncestorFiles().intersect(dirsToExclude.keys).isEmpty()) {
                 result += PathExclude(
-                    pattern = "${dir.path}/**",
+                    pattern = "${dir.invariantSeparatorsPath}/**",
                     reason = reason
                 )
             }
@@ -99,7 +99,7 @@ internal object PathExcludeGenerator {
             ?: return emptySet()
 
         return createExcludePattern(
-            directory = getClosestCommonAncestor(matchingFiles).path,
+            directory = getClosestCommonAncestor(matchingFiles).invariantSeparatorsPath,
             filenamePattern = if (matchingFiles.distinctBy { it.name }.size == 1) {
                 matchingFiles.first().name
             } else {
