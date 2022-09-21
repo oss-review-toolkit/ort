@@ -236,6 +236,10 @@ subprojects {
                 // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
                 force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
                 force("org.jetbrains.kotlin:kotlin-script-runtime:${rootProject.libs.versions.kotlinPlugin.get()}")
+
+                // Starting with version 1.32 the YAML file size is limited to 3 MiB, which is not configurable yet via
+                // Hoplite or Jackson.
+                force("org.yaml:snakeyaml:1.31")
             }
         }
     }
