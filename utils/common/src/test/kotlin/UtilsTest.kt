@@ -48,6 +48,10 @@ class UtilsTest : WordSpec({
             getCommonParentFile("/foo", "/bar") shouldBe File("/")
         }
 
+        "return the relative root directory for different files with relative paths" {
+            getCommonParentFile("foo/bar.ext", "bar.ext") shouldBe File("")
+        }
+
         "return the common parent for relative files" {
             getCommonParentFile("common/foo", "common/bar") shouldBe File("common")
         }
