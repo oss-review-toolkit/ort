@@ -30,24 +30,26 @@ import java.io.File
 
 class UtilsTest : WordSpec({
     "getCommonParentFile" should {
+        fun getCommonParentFile(vararg files: String) = getCommonParentFile(files.map { File(it) })
+
         "return a file with an empty path for an empty list" {
-            getCommonParentFile(emptyList()) shouldBe File("")
+            getCommonParentFile() shouldBe File("")
         }
 
         "return the parent file for a single file" {
-            getCommonParentFile(listOf(File("/foo/bar"))) shouldBe File("/foo")
+            getCommonParentFile("/foo/bar") shouldBe File("/foo")
         }
 
         "return a file with an empty path for files that have no parent in common".config(enabled = Os.isWindows) {
-            getCommonParentFile(listOf(File("C:/foo"), File("D:/bar"))) shouldBe File("")
+            getCommonParentFile("C:/foo", "D:/bar") shouldBe File("")
         }
 
         "return the root directory for different files with absolute paths".config(enabled = !Os.isWindows) {
-            getCommonParentFile(listOf(File("/foo"), File("/bar"))) shouldBe File("/")
+            getCommonParentFile("/foo", "/bar") shouldBe File("/")
         }
 
         "return the common parent for relative files" {
-            getCommonParentFile(listOf(File("common/foo"), File("common/bar"))) shouldBe File("common")
+            getCommonParentFile("common/foo", "common/bar") shouldBe File("common")
         }
     }
 
