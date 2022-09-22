@@ -274,7 +274,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             "Finished downloading source code revision '$resolvedRevision' to '${outputDirectory.absolutePath}'."
         }
 
-        return RepositoryProvenance(pkg.vcsProcessed, resolvedRevision)
+        return RepositoryProvenance(pkg.vcsProcessed.copy(url = workingTree.getRemoteUrl()), resolvedRevision)
     }
 
     /**
