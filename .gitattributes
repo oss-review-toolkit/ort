@@ -20,7 +20,8 @@ reporter/src/funTest/assets/*-expected-*	text eol=lf
 reporter/src/main/resources/**/*.ftl	text eol=lf
 
 # Use Unix line endings for scan results which are misused for also testing the calculation of the SPDX package verification code.
-scanner/src/test/assets/*.json	text eol=lf
+scanner/src/test/assets/*.json				text eol=lf
+scanner/src/test/assets/scanoss/filesToScan/*.kt	text eol=lf
 
 # Use Unix line endings for JavaScript source code to avoid problems with eslint.
 reporter-web-app/**/*.js	text eol=lf
