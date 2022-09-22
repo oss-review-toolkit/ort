@@ -95,7 +95,7 @@ fun getCommonParentFile(files: Collection<File>): File =
     files.map {
         it.normalize().parent
     }.reduceOrNull { prefix, path ->
-        prefix?.commonPrefixWith(path)
+        prefix?.commonPrefixWith(path.orEmpty())
     }.orEmpty().let {
         File(it)
     }
