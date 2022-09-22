@@ -3,6 +3,7 @@
 .mvn/**
 .teamcity/**
 .travis/**
+.yarn/**
 CMake/**
 Carthage/Checkouts/CwlPreconditionTesting/**
 Documentation/**
@@ -147,6 +148,7 @@ compiler/visualizer/tests/**
 components/layout/__tests__/**
 components/layout/demo/**
 config/checkstyle/**
+config/codenarc/**
 config/src/test/**
 conformance-checkers/**
 conformance/**
