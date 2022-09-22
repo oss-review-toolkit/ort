@@ -100,7 +100,7 @@ class ScanOss internal constructor(
                 .filter { !it.isDirectory && !BlacklistRules.hasBlacklistedExt(it.name) }
                 .forEach {
                     logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
-                    append(createWfpForFile(it.path))
+                    append(createWfpForFile(it))
                 }
         }
 
@@ -134,11 +134,11 @@ class ScanOss internal constructor(
 
     internal fun generateRandomUUID() = UUID.randomUUID()
 
-    internal fun createWfpForFile(filePath: String): String {
+    internal fun createWfpForFile(file: File): String {
         generateRandomUUID().let { uuid ->
             // TODO: Let's keep the original file extension to give SCANOSS some hint about the mime type.
-            fileNamesAnonymizationMapping[uuid] = filePath
-            return Winnowing.wfpForFile(uuid.toString(), filePath)
+            fileNamesAnonymizationMapping[uuid] = file.path
+            return Winnowing.wfpForFile(uuid.toString(), file.path)
         }
     }
 

@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-const val TEST_FILE_TO_SCAN = "src/test/assets/scanoss/filesToScan/ScannerFactory.kt"
+private val TEST_FILE_TO_SCAN = File("src/test/assets/scanoss/filesToScan/ScannerFactory.kt")
 
 /**
  * A test for scanning a single file with the [ScanOss] scanner.
@@ -74,7 +74,7 @@ class ScanOssScannerFileTest : StringSpec({
         } answers {
             UUID.fromString("bf5401e9-03b3-4c91-906c-cadb90487b8c")
         }
-        val result = scanner.scanPath(File(TEST_FILE_TO_SCAN))
+        val result = scanner.scanPath(TEST_FILE_TO_SCAN)
 
         verify(exactly = 1) {
             scanner.createWfpForFile(TEST_FILE_TO_SCAN)
