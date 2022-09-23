@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.test.ortResult
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
         "succeed if the script can be compiled" {
-            val script = javaClass.getResource("/rules/no_gpl.rules.kts").readText()
+            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(ortResult).checkSyntax(script)
 
