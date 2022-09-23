@@ -22,9 +22,11 @@ package org.ossreviewtoolkit.helper.commands.packageconfig
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.convert
+import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
@@ -38,10 +40,13 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
+import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 internal class CreateCommand : CliktCommand(
     help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +
@@ -84,6 +89,20 @@ internal class CreateCommand : CliktCommand(
         "--generate-path-excludes",
         help = "Generate path excludes."
     ).flag()
+
+    private val licenseClassificationsFile by option(
+        "--license-classifications-file", "-i",
+        help = "The license classifications file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+
+    private val nonOffendingLicenseCategories by option(
+        "--non-offending-license-categories",
+        help = "Configure the path exclude generation to not create excludes for files or directories which only " +
+                "contain non-offending licenses specified by this comma separated list of license category names. " +
+                "Each category name must be present in the given license classifications file."
+    ).split(",").default(emptyList())
 
     override fun run() {
         outputDir.safeMkdirs()
@@ -140,10 +159,37 @@ internal class CreateCommand : CliktCommand(
                 emptyList()
             }
         )
-}
 
-private fun ScanResult.getFindingPaths(): Set<String> =
-    mutableSetOf<String>().apply {
-        summary.licenseFindings.mapTo(this) { it.location.path }
-        summary.copyrightFindings.mapTo(this) { it.location.path }
+    private fun ScanResult.getFindingPaths(): Set<String> =
+        buildSet {
+            val nonOffendingLicenses = getNonOffendingLicenses()
+
+            summary.licenseFindings.filter {
+                nonOffendingLicenses.isEmpty() || !nonOffendingLicenses.containsAll(it.license.decompose())
+            }.mapTo(this) { it.location.path }
+
+            summary.copyrightFindings.filter {
+                nonOffendingLicenses.isEmpty()
+            }.mapTo(this) { it.location.path }
+        }
+
+    private fun getNonOffendingLicenses(): Set<SpdxSingleLicenseExpression> {
+        // Filter blanks to allow passing an empty list as argument to simplify caller code.
+        if (nonOffendingLicenseCategories.all { it.isBlank() }) return emptySet()
+
+        val licenseClassifications = licenseClassificationsFile?.readValue<LicenseClassifications>()
+            ?: throw UsageError(
+                text = "The license classifications file must be specified in order to resolve the given " +
+                        "non-offending license category names to license IDs.",
+                statusCode = 2
+            )
+
+        return nonOffendingLicenseCategories.flatMapTo(mutableSetOf()) { categoryName ->
+            licenseClassifications.licensesByCategory[categoryName] ?: throw UsageError(
+                text = "The given license category '$categoryName' was not found in " +
+                        "'${licenseClassificationsFile!!.absolutePath}'.",
+                statusCode = 2
+            )
+        }
     }
+}
