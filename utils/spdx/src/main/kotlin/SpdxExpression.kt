@@ -436,7 +436,7 @@ sealed class SpdxSingleLicenseExpression : SpdxExpression() {
     abstract fun exception(): String?
 
     /**
-     * Return the URL for the licence if this is [SpdxLicenseIdExpression] or [SpdxLicenseWithExceptionExpression].
+     * Return the URL for the licence if this is an [SpdxLicenseIdExpression] or [SpdxLicenseWithExceptionExpression].
      * Otherwise, return null.
      */
     abstract fun getLicenseUrl(): String?
