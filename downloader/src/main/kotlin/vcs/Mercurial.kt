@@ -62,41 +62,7 @@ class Mercurial : VersionControlSystem() {
 
     override fun getDefaultBranchName(url: String) = "default"
 
-    override fun getWorkingTree(vcsDirectory: File) =
-        object : WorkingTree(vcsDirectory, type) {
-            override fun isValid(): Boolean {
-                if (!workingDir.isDirectory) return false
-
-                // Do not use runMercurialCommand() here as we do not require the command to succeed.
-                val hgRootPath = ProcessCapture(workingDir, "hg", "root")
-                return hgRootPath.isSuccess && workingDir.path.startsWith(hgRootPath.stdout.trimEnd())
-            }
-
-            override fun isShallow() = false
-
-            override fun getRemoteUrl() = MercurialCommand.run(workingDir, "paths", "default").stdout.trimEnd()
-
-            override fun getRevision() = MercurialCommand.run(workingDir, "--debug", "id", "-i").stdout.trimEnd()
-
-            override fun getRootPath() = File(MercurialCommand.run(workingDir, "root").stdout.trimEnd())
-
-            override fun listRemoteBranches(): List<String> {
-                val branches = MercurialCommand.run(workingDir, "branches").stdout.trimEnd()
-                return branches.lines().map {
-                    it.split(' ').first()
-                }.sorted()
-            }
-
-            override fun listRemoteTags(): List<String> {
-                // Mercurial does not have the concept of global remote tags. Its "regular tags" are defined per
-                // branch as part of the committed ".hgtags" file. See https://stackoverflow.com/a/2059189/1127485.
-                MercurialCommand.run(workingDir, "pull", "-r", "default")
-                val tags = MercurialCommand.run(workingDir, "cat", "-r", "default", ".hgtags").stdout.trimEnd()
-                return tags.lines().map {
-                    it.split(' ').last()
-                }.sorted()
-            }
-        }
+    override fun getWorkingTree(vcsDirectory: File) = MercurialWorkingTree(vcsDirectory, type)
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         ProcessCapture("hg", "identify", vcsUrl).isSuccess
