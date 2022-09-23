@@ -108,7 +108,7 @@ internal class CreateCommand : CliktCommand(
         outputDir.safeMkdirs()
 
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
-        val scanResults = scanResultsStorage.read(packageId).getOrDefault(emptyList()).run {
+        val scanResults = scanResultsStorage.read(packageId).getOrThrow().run {
             listOfNotNull(
                 find { it.provenance is RepositoryProvenance },
                 find { it.provenance is ArtifactProvenance }
