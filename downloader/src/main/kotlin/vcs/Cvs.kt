@@ -35,17 +35,10 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 
 typealias CvsFileRevisions = List<Pair<String, String>>
 
-class Cvs : VersionControlSystem(), CommandLineTool {
+object CvsCommand : CommandLineTool {
     private val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
-    override val type = VcsType.CVS
-    override val latestRevisionNames = emptyList<String>()
-
     override fun command(workingDir: File?) = "cvs"
-
-    override fun getVersion() = getVersion(null)
-
-    override fun getDefaultBranchName(url: String): String? = null
 
     override fun transformVersion(output: String): String =
         versionRegex.matcher(output.lineSequence().first()).let {
@@ -55,6 +48,15 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 ""
             }
         }
+}
+
+class Cvs : VersionControlSystem() {
+    override val type = VcsType.CVS
+    override val latestRevisionNames = emptyList<String>()
+
+    override fun getVersion() = CvsCommand.getVersion(null)
+
+    override fun getDefaultBranchName(url: String): String? = null
 
     override fun getWorkingTree(vcsDirectory: File) =
         object : WorkingTree(vcsDirectory, type) {
@@ -79,7 +81,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
                 getFileRevisionsHash(getFileRevisions())
 
             private fun getFileRevisions(): CvsFileRevisions {
-                val cvsLog = run(workingDir, "log", "-h")
+                val cvsLog = CvsCommand.run(workingDir, "log", "-h")
 
                 var currentWorkingFile = ""
                 return cvsLog.stdout.lines().mapNotNull { line ->
@@ -115,9 +117,9 @@ class Cvs : VersionControlSystem(), CommandLineTool {
             private fun listSymbolicNames(): Map<String, String> =
                 try {
                     // Create all working tree directories in order to be able to query the log.
-                    run(workingDir, "update", "-d")
+                    CvsCommand.run(workingDir, "update", "-d")
 
-                    val cvsLog = run(workingDir, "log", "-h")
+                    val cvsLog = CvsCommand.run(workingDir, "log", "-h")
                     var tagsSectionStarted = false
 
                     cvsLog.stdout.lines().mapNotNull { line ->
@@ -175,7 +177,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
 
     override fun initWorkingTree(targetDir: File, vcs: VcsInfo): WorkingTree {
         // Create a "fake" checkout as described at https://stackoverflow.com/a/3448891/1127485.
-        run(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
+        CvsCommand.run(targetDir, "-z3", "-d", vcs.url, "checkout", "-l", ".")
 
         return getWorkingTree(targetDir)
     }
@@ -183,7 +185,7 @@ class Cvs : VersionControlSystem(), CommandLineTool {
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
         runCatching {
             // Checkout the working tree of the desired revision.
-            run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
+            CvsCommand.run(workingTree.workingDir, "checkout", "-r", revision, path.takeUnless { it.isEmpty() } ?: ".")
         }.map {
             revision
         }
