@@ -102,23 +102,19 @@ class OrtConfigurationTest : WordSpec({
             with(ortConfig.scanner) {
                 archive shouldNotBeNull {
                     fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/archive")
-                        }
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
+                        directory shouldBe File("~/.ort/scanner/archive")
                     }
 
                     postgresStorage shouldNotBeNull {
-                        with(connection) {
-                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                            schema shouldBe "public"
-                            username shouldBe "username"
-                            password shouldBe "password"
-                            sslmode shouldBe "required"
-                            sslcert shouldBe "/defaultdir/postgresql.crt"
-                            sslkey shouldBe "/defaultdir/postgresql.pk8"
-                            sslrootcert shouldBe "/defaultdir/root.crt"
-                        }
+                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                        schema shouldBe "public"
+                        username shouldBe "username"
+                        password shouldBe "password"
+                        sslmode shouldBe "required"
+                        sslcert shouldBe "/defaultdir/postgresql.crt"
+                        sslkey shouldBe "/defaultdir/postgresql.pk8"
+                        sslrootcert shouldBe "/defaultdir/root.crt"
                     }
                 }
 
@@ -128,14 +124,16 @@ class OrtConfigurationTest : WordSpec({
                     )
                     val httpStorage = this["http"]
                     httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    httpStorage.backend.httpFileStorage shouldNotBeNull {
+                    httpStorage.connection shouldNotBeNull {
+                        this.shouldBeInstanceOf<HttpFileBasedConnection>()
                         url shouldBe "https://your-http-server"
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                     }
 
                     val localStorage = this["local"]
                     localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    localStorage.backend.localFileStorage shouldNotBeNull {
+                    localStorage.connection shouldNotBeNull {
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
                         directory shouldBe File("~/.ort/scanner/results")
                     }
 
@@ -158,13 +156,15 @@ class OrtConfigurationTest : WordSpec({
 
                     val sw360Storage = this["sw360Configuration"]
                     sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
-                    sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
-                    sw360Storage.authUrl shouldBe "https://your-authentication-url"
-                    sw360Storage.username shouldBe "username"
-                    sw360Storage.password shouldBe "password"
-                    sw360Storage.clientId shouldBe "clientId"
-                    sw360Storage.clientPassword shouldBe "clientPassword"
-                    sw360Storage.token shouldBe "token"
+                    with(sw360Storage.connection) {
+                        restUrl shouldBe "https://your-sw360-rest-url"
+                        authUrl shouldBe "https://your-authentication-url"
+                        username shouldBe "username"
+                        password shouldBe "password"
+                        clientId shouldBe "clientId"
+                        clientPassword shouldBe "clientPassword"
+                        token shouldBe "token"
+                    }
                 }
 
                 options shouldNot beNull()
@@ -175,23 +175,19 @@ class OrtConfigurationTest : WordSpec({
 
                 provenanceStorage shouldNotBeNull {
                     fileStorage shouldNotBeNull {
-                        httpFileStorage should beNull()
-                        localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/provenance")
-                        }
+                        this.shouldBeInstanceOf<LocalFileBasedConnection>()
+                        directory shouldBe File("~/.ort/scanner/provenance")
                     }
 
                     postgresStorage shouldNotBeNull {
-                        with(connection) {
-                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
-                            schema shouldBe "public"
-                            username shouldBe "username"
-                            password shouldBe "password"
-                            sslmode shouldBe "required"
-                            sslcert shouldBe "/defaultdir/postgresql.crt"
-                            sslkey shouldBe "/defaultdir/postgresql.pk8"
-                            sslrootcert shouldBe "/defaultdir/root.crt"
-                        }
+                        url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                        schema shouldBe "public"
+                        username shouldBe "username"
+                        password shouldBe "password"
+                        sslmode shouldBe "required"
+                        sslcert shouldBe "/defaultdir/postgresql.crt"
+                        sslkey shouldBe "/defaultdir/postgresql.pk8"
+                        sslrootcert shouldBe "/defaultdir/root.crt"
                     }
                 }
             }

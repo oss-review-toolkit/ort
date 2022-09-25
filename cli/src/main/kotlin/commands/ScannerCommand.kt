@@ -412,8 +412,8 @@ private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
 
 private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
     when (config.type) {
-        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
+        StorageType.PACKAGE_BASED -> FileBasedStorage(config.connection.createFileStorage())
+        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.connection.createFileStorage())
     }
 
 private fun createPostgresStorage(config: PostgresStorageConfiguration) =
@@ -438,7 +438,7 @@ private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguratio
 
     config?.postgresStorage?.let { postgresStorageConfiguration ->
         return PostgresPackageProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration)
         )
     }
 
@@ -454,7 +454,7 @@ private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration
 
     config?.postgresStorage?.let { postgresStorageConfiguration ->
         return PostgresNestedProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration)
         )
     }
 

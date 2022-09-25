@@ -92,21 +92,19 @@ ort:
       enabled: true
 
       fileStorage:
-        localFileStorage:
-          directory: ~/.ort/scanner/archive
-          compression: false
+        directory: ~/.ort/scanner/archive
+        compression: false
 
       postgresStorage:
-        connection:
-          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
-          schema: public
-          username: username
-          password: password
-          sslmode: required
-          sslcert: /defaultdir/postgresql.crt
-          sslkey: /defaultdir/postgresql.pk8
-          sslrootcert: /defaultdir/root.crt
-          parallelTransactions: 5
+        url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+        schema: public
+        username: username
+        password: password
+        sslmode: required
+        sslcert: /defaultdir/postgresql.crt
+        sslkey: /defaultdir/postgresql.pk8
+        sslrootcert: /defaultdir/root.crt
+        parallelTransactions: 5
 
     createMissingArchives: false
 
@@ -152,19 +150,17 @@ ort:
 
     storages:
       local:
-        backend:
-          localFileStorage:
-            directory: ~/.ort/scanner/results
-            compression: false
+        connection:
+          directory: ~/.ort/scanner/results
+          compression: false
 
       http:
-        backend:
-          httpFileStorage:
-            url: 'https://your-http-server'
-            query: '?username=user&password=123'
-            headers:
-              key1: value1
-              key2: value2
+        connection:
+          url: 'https://your-http-server'
+          query: '?username=user&password=123'
+          headers:
+            key1: value1
+            key2: value2
 
       clearlyDefined:
         serverUrl: 'https://api.clearlydefined.io'
@@ -181,13 +177,14 @@ ort:
           sslrootcert: /defaultdir/root.crt
 
       sw360Configuration:
-        restUrl: 'https://your-sw360-rest-url'
-        authUrl: 'https://your-authentication-url'
-        username: username
-        password: password
-        clientId: clientId
-        clientPassword: clientPassword
-        token: token
+        connection:
+          restUrl: 'https://your-sw360-rest-url'
+          authUrl: 'https://your-authentication-url'
+          username: username
+          password: password
+          clientId: clientId
+          clientPassword: clientPassword
+          token: token
 
     storageReaders: [local, postgres, http, clearlyDefined]
 
@@ -197,20 +194,18 @@ ort:
 
     provenanceStorage:
       fileStorage:
-        localFileStorage:
-          directory: ~/.ort/scanner/provenance
-          compression: false
+        directory: ~/.ort/scanner/provenance
+        compression: false
 
       postgresStorage:
-        connection:
-          url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
-          schema: public
-          username: username
-          password: password
-          sslmode: required
-          sslcert: /defaultdir/postgresql.crt
-          sslkey: /defaultdir/postgresql.pk8
-          sslrootcert: /defaultdir/root.crt
+        url: 'jdbc:postgresql://your-postgresql-server:5444/your-database'
+        schema: public
+        username: username
+        password: password
+        sslmode: required
+        sslcert: /defaultdir/postgresql.crt
+        sslkey: /defaultdir/postgresql.pk8
+        sslrootcert: /defaultdir/root.crt
 
   reporter:
     options:

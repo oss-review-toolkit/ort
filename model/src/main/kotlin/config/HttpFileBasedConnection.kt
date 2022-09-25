@@ -23,8 +23,11 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
+import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
+
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
-data class HttpFileStorageConfiguration(
+data class HttpFileBasedConnection(
     /**
      * The URL of the HTTP server, e.g. "https://example.com/storage".
      */
@@ -45,7 +48,9 @@ data class HttpFileStorageConfiguration(
      */
     @JsonSerialize(contentConverter = MaskStringConverter::class)
     val headers: Map<String, String>
-)
+) : FileBasedConnection {
+    override fun createFileStorage(): FileStorage = HttpFileStorage(url, query, headers)
+}
 
 class MaskStringConverter : StdConverter<String, String>() {
     override fun convert(value: String) = if (value.isNotEmpty()) "***" else ""

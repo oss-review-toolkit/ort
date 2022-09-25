@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2019 HERE Europe B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +19,16 @@
 
 package org.ossreviewtoolkit.model.config
 
-import java.io.File
+import com.fasterxml.jackson.annotation.JsonSubTypes
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 
-/**
- * A class to hold the configuration for using local files as a storage.
- */
-data class LocalFileStorageConfiguration(
-    /**
-     * The directory to use as a storage root.
-     */
-    val directory: File,
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
-    /**
-     * Whether to use compression for storing files or not. Defaults to true.
-     */
-    val compression: Boolean = true
+@JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
+@JsonSubTypes(
+    JsonSubTypes.Type(HttpFileBasedConnection::class),
+    JsonSubTypes.Type(LocalFileBasedConnection::class)
 )
+sealed interface FileBasedConnection : StorageConnection {
+    fun createFileStorage(): FileStorage
+}

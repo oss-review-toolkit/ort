@@ -134,7 +134,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
          * Create a [FileBasedStorage] based on the [config] passed in.
          */
         private fun createFileBasedStorage(config: FileBasedStorageConfiguration): ScanResultsStorage {
-            val backend = config.backend.createFileStorage()
+            val backend = config.connection.createFileStorage()
 
             when (backend) {
                 is HttpFileStorage -> logger.info { "Using file based storage with HTTP backend '${backend.url}'." }
@@ -178,7 +178,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         private fun createSw360Storage(config: Sw360StorageConfiguration): ScanResultsStorage =
             Sw360Storage(config).also {
                 logger.info {
-                    "Using SW360 storage with auth URL '${config.authUrl}' and REST URL '${config.restUrl}'."
+                    "Using SW360 storage with auth URL '${config.connection.authUrl}' and REST URL " +
+                            "'${config.connection.restUrl}'."
                 }
             }
     }

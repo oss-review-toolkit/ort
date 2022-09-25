@@ -54,7 +54,7 @@ data class AnalyzerConfiguration(
     /**
      * Configuration of the SW360 package curation provider.
      */
-    val sw360Configuration: Sw360StorageConfiguration? = null
+    val sw360Configuration: Sw360Connection? = null
 ) {
     /**
      * A copy of [packageManagers] with case-insensitive keys.

@@ -179,7 +179,7 @@ scanner:
     options: null
     storages:
       postgresStorage: !<.PostgresStorageConfiguration>
-        connection:
+        connection: !<.PostgresConnection>
           url: "jdbc:postgresql://172.17.0.1:5432/ort"
           schema: "scan_storage"
           username: "ort"
