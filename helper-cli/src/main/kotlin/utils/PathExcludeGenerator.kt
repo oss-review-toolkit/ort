@@ -239,7 +239,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "ChangeLog*" to DOCUMENTATION_OF,
     "Configure" to BUILD_TOOL_OF,
     "DOCS.md" to DOCUMENTATION_OF,
-    "Dockerfile" to DOCUMENTATION_OF,
+    "Dockerfile" to BUILD_TOOL_OF,
     "HISTORY.md" to DOCUMENTATION_OF,
     "History.md" to DOCUMENTATION_OF,
     "INSTALL" to DOCUMENTATION_OF,
