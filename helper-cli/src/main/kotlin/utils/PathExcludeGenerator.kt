@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * This class generates path excludes based on the set of file paths present in the source tree.
+ * The generated patterns are targeting dependencies (not projects), as they also exclude definition files.
  */
 internal object PathExcludeGenerator {
     /**
