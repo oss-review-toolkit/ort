@@ -222,8 +222,9 @@ class Conan(
 
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
-                    val userAuth = run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
-                    if (userAuth.isError) {
+                    runCatching {
+                        run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
+                    }.onFailure {
                         logger.error { "Failed to configure user authentication for remote '$remoteName'." }
                     }
                 }
