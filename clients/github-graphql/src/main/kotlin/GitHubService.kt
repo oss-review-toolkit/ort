@@ -70,7 +70,7 @@ class GitHubService private constructor(
 
         /**
          * Create a new [GitHubService] instance that uses the given [token] to authenticate against the GitHub API.
-         * Optionally, the [url] for the GitHub GraphQL endpoint can be configured, and a HTTP [client] can be
+         * Optionally, the [url] for the GitHub GraphQL endpoint can be configured, and an HTTP [client] can be
          * specified.
          */
         fun create(token: String, url: URI = ENDPOINT, client: HttpClient? = null): GitHubService {
