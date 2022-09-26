@@ -185,7 +185,6 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "cmake" to BUILD_TOOL_OF,
     "codenarc" to BUILD_TOOL_OF,
     "debug" to BUILD_TOOL_OF,
-    "demo" to BUILD_TOOL_OF,
     "doc" to DOCUMENTATION_OF,
     "doc-files" to DOCUMENTATION_OF,
     "docs" to DOCUMENTATION_OF,
