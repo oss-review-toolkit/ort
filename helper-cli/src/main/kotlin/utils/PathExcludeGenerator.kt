@@ -140,9 +140,9 @@ private fun File.getAncestorFiles(): List<File> {
     return result
 }
 
-private fun <T> Collection<T>.checkNoDuplicatePatterns(keySelector: (T) -> String) =
+private fun <T> Collection<T>.checkNoDuplicatePatterns(patternSelector: (T) -> String) =
     apply {
-        val duplicatePatterns = getDuplicates(keySelector).keys
+        val duplicatePatterns = getDuplicates(patternSelector).keys
 
         require(duplicatePatterns.isEmpty()) {
             "Found duplicate patterns: ${duplicatePatterns.joinToString()}."
