@@ -140,12 +140,17 @@ private fun File.getAncestorFiles(): List<File> {
     return result
 }
 
-private fun <T> Collection<T>.checkNoDuplicatePatterns(patternSelector: (T) -> String) =
+private fun <T> Collection<T>.checkPatterns(patternSelector: (T) -> String) =
     apply {
         val duplicatePatterns = getDuplicates(patternSelector).keys
 
         require(duplicatePatterns.isEmpty()) {
             "Found duplicate patterns: ${duplicatePatterns.joinToString()}."
+        }
+
+        val sorted = sortedBy(patternSelector)
+        require(toList() == sorted) {
+            "The patterns are not sorted alphabetically."
         }
     }
 
@@ -193,7 +198,7 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "tools" to BUILD_TOOL_OF,
     "tutorial" to DOCUMENTATION_OF,
     "winbuild" to BUILD_TOOL_OF
-).checkNoDuplicatePatterns { it.first }
+).checkPatterns { it.first }
 
 private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "*.bazel" to BUILD_TOOL_OF,
@@ -269,4 +274,4 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "setup.cfg" to BUILD_TOOL_OF,
     "setup.py" to BUILD_TOOL_OF,
     "test_*.c" to BUILD_TOOL_OF
-).checkNoDuplicatePatterns { it.first }
+).checkPatterns { it.first }
