@@ -393,7 +393,7 @@ fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged 
 
 Taking an ORT result file with an _analyzer_ result as the input (`-i`), the _downloader_ retrieves the source code of
 all contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing
-URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to checkout source code from version
+URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to check out source code from version
 control.
 
 Currently, the following Version Control Systems (VCS) are supported:
