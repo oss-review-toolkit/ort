@@ -143,7 +143,7 @@ class Conan(
         val directoryToStash = conanConfig?.let { conanHome } ?: conanStoragePath
 
         stashDirectories(directoryToStash).use {
-            conanConfig?.also { configureRemoteAuthentication(it) }
+            configureRemoteAuthentication(conanConfig)
 
             val jsonFile = createOrtTempDir().resolve("info.json")
             run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
@@ -187,9 +187,11 @@ class Conan(
         }
     }
 
-    private fun configureRemoteAuthentication(conanConfig: File) {
-        // Install configuration from a local directory.
-        run("config", "install", conanConfig.absolutePath)
+    private fun configureRemoteAuthentication(conanConfig: File?) {
+        // Install configuration from a local directory if available.
+        conanConfig?.let {
+            run("config", "install", it.absolutePath)
+        }
 
         // List configured remotes in "remotes.txt" format.
         val remoteList = run("remote", "list", "--raw")
