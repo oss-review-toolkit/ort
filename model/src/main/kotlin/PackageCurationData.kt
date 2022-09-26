@@ -46,7 +46,7 @@ data class PackageCurationData(
     val purl: String? = null,
 
     /**
-     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     * An additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
      */
     val cpe: String? = null,
 
