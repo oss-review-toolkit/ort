@@ -57,7 +57,7 @@ data class PackageCurationData(
 
     /**
      * The concluded license as an [SpdxExpression]. It can be used to override the [declared][Package.declaredLicenses]
-     * / [detected][LicenseFinding.license] licenses of a package.
+     * / [detected][LicenseFinding.license] licenses of the package.
      */
     val concludedLicense: SpdxExpression? = null,
 
