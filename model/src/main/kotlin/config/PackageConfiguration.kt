@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
- * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
+ * A configuration for a specific package and provenance. It allows to set up [PathExclude]s and
  * [LicenseFindingCuration]s, similar to how it is done via the [RepositoryConfiguration] for projects.
  */
 data class PackageConfiguration(
