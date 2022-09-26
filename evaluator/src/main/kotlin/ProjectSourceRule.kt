@@ -88,8 +88,8 @@ open class ProjectSourceRule(
     fun projectSourceGetDetectedLicensesByFilePath(
         vararg patterns: String
     ): Map<String, Set<String>> =
-        detectedLicensesForFilePath.filter { (filepath, _) ->
-            FileMatcher.match(patterns.toList(), filepath)
+        detectedLicensesForFilePath.filter { (filePath, _) ->
+            FileMatcher.match(patterns.toList(), filePath)
         }
 
     /**
