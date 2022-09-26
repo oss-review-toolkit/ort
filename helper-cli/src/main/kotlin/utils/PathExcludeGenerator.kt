@@ -154,6 +154,7 @@ private fun <T> Collection<T>.checkPatterns(patternSelector: (T) -> String) =
         }
     }
 
+/** Case-insensitive glob patterns matched against directory names. */
 private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "*checkstyle*" to BUILD_TOOL_OF,
     "*conformance*" to BUILD_TOOL_OF,
@@ -200,6 +201,7 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
     "winbuild" to BUILD_TOOL_OF
 ).checkPatterns { it.first }
 
+/** Case-sensitive glob patterns matched against filenames. */
 private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "*.bazel" to BUILD_TOOL_OF,
     "*.cmake" to BUILD_TOOL_OF,
