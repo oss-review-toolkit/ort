@@ -56,7 +56,7 @@ jobs:
     - name: Run unit tests
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: test jacocoTestReport -x :reporter-web-app:yarnBuild
+        arguments: --scan test jacocoTestReport -x :reporter-web-app:yarnBuild
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
@@ -90,7 +90,7 @@ jobs:
     - name: Run functional tests
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: funTest jacocoFunTestReport -x :analyzer:funTest
+        arguments: --scan funTest jacocoFunTestReport -x :analyzer:funTest
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
