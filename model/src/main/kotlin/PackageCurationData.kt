@@ -104,8 +104,8 @@ data class PackageCurationData(
     val declaredLicenseMapping: Map<String, SpdxExpression> = emptyMap()
 ) {
     /**
-     * Apply the curation data to the provided [targetPackage] by overriding all values of the original package with
-     * non-null values of the curation data, and return the curated package.
+     * Apply this [PackageCuration] to [targetPackage] by overriding all values of [targetPackage] with non-null values
+     * of this [PackageCurationData], and return the resulting [CuratedPackage].
      */
     fun apply(targetPackage: CuratedPackage): CuratedPackage {
         val original = targetPackage.pkg
