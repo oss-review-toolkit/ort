@@ -59,7 +59,7 @@ class CvsWorkingTreeFunTest : StringSpec({
         cvs.isApplicableUrl("https://svn.code.sf.net/p/grepwin/code/") shouldBe false
     }
 
-    "Detected CVS working tree information is correct".config(enabled = false /* Failing due to SF issues. */) {
+    "Detected CVS working tree information is correct" {
         val workingTree = cvs.getWorkingTree(zipContentDir)
 
         workingTree.isValid() shouldBe true
@@ -74,7 +74,7 @@ class CvsWorkingTreeFunTest : StringSpec({
         workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
     }
 
-    "CVS correctly lists remote branches".config(enabled = false /* Failing due to SF issues. */) {
+    "CVS correctly lists remote branches" {
         val expectedBranches = listOf(
             "JHOVE_1_7",
             "branch_lpeer",
@@ -86,7 +86,7 @@ class CvsWorkingTreeFunTest : StringSpec({
         workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
     }
 
-    "CVS correctly lists remote tags".config(enabled = false /* Failing due to SF issues. */) {
+    "CVS correctly lists remote tags" {
         val expectedTags = listOf(
             "JHOVE_1_1",
             "JHOVE_1_11",
