@@ -29,10 +29,9 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
@@ -74,14 +73,13 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                         )
                     }
 
-                    Scanner::class.java.isAssignableFrom(it) -> {
+                    CommandLinePathScannerWrapper::class.java.isAssignableFrom(it) -> {
                         category = "Scanner"
                         logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
-                            ScannerConfiguration::class.java,
-                            DownloaderConfiguration::class.java
-                        ).newInstance("", ScannerConfiguration(), DownloaderConfiguration())
+                            ScannerConfiguration::class.java
+                        ).newInstance("", ScannerConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
