@@ -17,10 +17,11 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.utils
 
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 
 /**
  * Throw a [ScanStorageException] if [provenance] is a [RepositoryProvenance] with a non-empty VCS path.

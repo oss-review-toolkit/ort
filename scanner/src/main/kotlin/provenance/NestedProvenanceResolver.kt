@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.scanner.experimental.WorkingTreeCache
+import org.ossreviewtoolkit.scanner.utils.WorkingTreeCache
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.

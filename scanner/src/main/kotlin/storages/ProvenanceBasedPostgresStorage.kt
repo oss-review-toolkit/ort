@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
-import org.ossreviewtoolkit.scanner.experimental.requireEmptyVcsPath
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
+import org.ossreviewtoolkit.scanner.utils.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 

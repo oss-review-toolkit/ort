@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
+import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 
 class DefaultPackageProvenanceResolverFunTest : WordSpec() {
     private val workingTreeCache = DefaultWorkingTreeCache()
