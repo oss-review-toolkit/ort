@@ -1,0 +1,49 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 27
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions 'type'
+
+    productFlavors {
+        demo {
+            dimension 'type'
+        }
+
+        full {
+            dimension 'type'
+        }
+    }
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-compress:1.17'
+
+    demoImplementation 'org.apache.commons:commons-text:1.2'
+    fullImplementation 'org.apache.commons:commons-text:1.3'
+}
+
+configurations {
+    // Exclude the lint dependency to reduce the size of the dependency tree for testing, because this dependency has
+    // a lot of transitive dependencies and is not required to test the variant-aware dependency resolution.
+    lintClassPath.exclude module: 'lint-gradle'
+}
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])
