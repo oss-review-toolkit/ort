@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.experimental.ScanContext
+import org.ossreviewtoolkit.scanner.ScanContext
 
 private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/scanoss/filesToScan")
 

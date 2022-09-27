@@ -61,11 +61,11 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
-import org.ossreviewtoolkit.scanner.experimental.ScanStorage
-import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
-import org.ossreviewtoolkit.scanner.experimental.ScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.experimental.TOOL_NAME
+import org.ossreviewtoolkit.scanner.ExperimentalScanner
+import org.ossreviewtoolkit.scanner.ScanStorage
+import org.ossreviewtoolkit.scanner.ScannerWrapper
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
