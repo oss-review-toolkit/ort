@@ -45,9 +45,9 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
+import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedScanStorage
-import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 
 abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: ProvenanceBasedScanStorage

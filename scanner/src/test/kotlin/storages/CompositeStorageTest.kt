@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 
 private val ID = Identifier(type = "Gradle", namespace = "testNS", name = "test", version = "1.0.9")
 

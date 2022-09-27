@@ -27,7 +27,6 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.scanner.experimental.PathScannerWrapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 

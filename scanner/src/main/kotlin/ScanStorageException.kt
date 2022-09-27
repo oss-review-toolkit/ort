@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner
 
 class ScanStorageException : Exception {
     constructor(message: String?, cause: Throwable?) : super(message, cause)
