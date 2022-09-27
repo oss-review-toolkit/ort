@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.storages
 
 import java.sql.SQLException
 
@@ -43,6 +43,9 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
+import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedScanStorage
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.scanner.experimental.requireEmptyVcsPath
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.showStackTrace
