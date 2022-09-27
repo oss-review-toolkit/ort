@@ -18,6 +18,10 @@
 forbid_telemetry: true
 
 config_variables:
+  gradle_build_scan:
+    description: Enabling of Gradle build scans
+    # Supported values: "true", "false"
+    default: false
   gradle_console:
     description: Gradle console mode
     # Supported values: "auto", "plain", "rich", "verbose"
@@ -35,6 +39,7 @@ config_variables:
   environment:
     GRADLE_OPTS: -Dorg.gradle.console=<gradle_console -Dorg.gradle.daemon=false -Dkotest.assertions.multi-line-diff=<kotest_diff
     GRADLE_RO_DEP_CACHE: /home/ort/.gradle-ro-dep-cache
+    GRADLE_BUILD_SCAN: <gradle_build_scan
   volumes:
     # Mount any Gradle caches present on the host as read-only into the container to speed up the build.
     - local: ~/.gradle/caches
@@ -92,5 +97,5 @@ tasks:
       - buildFunTest
     run:
       container: run
-      command: "'./gradlew funTest jacocoFunTestReport -p analyzer'"
+      command: "'./gradlew funTest jacocoFunTestReport -p analyzer $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
       entrypoint: /bin/bash --login -c
