@@ -40,12 +40,12 @@ import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
-import org.ossreviewtoolkit.scanner.experimental.NestedProvenance
-import org.ossreviewtoolkit.scanner.experimental.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
 import org.ossreviewtoolkit.scanner.experimental.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage

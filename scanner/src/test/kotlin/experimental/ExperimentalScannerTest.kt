@@ -61,6 +61,11 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
+import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
+import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

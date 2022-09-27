@@ -31,6 +31,8 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 
 /**
  * A controller for the data related to a run of the [ExperimentalScanner].

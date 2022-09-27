@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.provenance
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
