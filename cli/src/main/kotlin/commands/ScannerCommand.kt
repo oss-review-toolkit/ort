@@ -61,8 +61,8 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.ExperimentalScanner
 import org.ossreviewtoolkit.scanner.ScanStorage
+import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.TOOL_NAME
@@ -239,7 +239,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
-            val scanner = ExperimentalScanner(
+            val scanner = Scanner(
                 scannerConfig = config.scanner,
                 downloaderConfig = config.downloader,
                 provenanceDownloader = DefaultProvenanceDownloader(config.downloader, workingTreeCache),
