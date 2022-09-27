@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class FileBasedPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorageFunTest() {
-    override fun createStorage(): PackageProvenanceStorage =
-        FileBasedPackageProvenanceStorage(LocalFileStorage(createTestTempDir()))
+class FileBasedNestedProvenanceStorageFunTest : AbstractNestedProvenanceStorageFunTest() {
+    override fun createStorage(): NestedProvenanceStorage =
+        FileBasedNestedProvenanceStorage(LocalFileStorage(createTestTempDir()))
 }

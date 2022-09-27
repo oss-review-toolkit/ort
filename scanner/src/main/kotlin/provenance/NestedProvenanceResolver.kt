@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.provenance
 
 import kotlinx.coroutines.runBlocking
 
@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.scanner.experimental.WorkingTreeCache
 
 /**
  * The [NestedProvenanceResolver] provides a function to resolve nested provenances.

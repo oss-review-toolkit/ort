@@ -17,12 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.provenance
 
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.PostgresListener
 
-class FileBasedNestedProvenanceStorageFunTest : AbstractNestedProvenanceStorageFunTest() {
-    override fun createStorage(): NestedProvenanceStorage =
-        FileBasedNestedProvenanceStorage(LocalFileStorage(createTestTempDir()))
+private val postgresListener = PostgresListener()
+
+class PostgresPackageProvenanceStorageFunTest : AbstractPackageProvenanceStorageFunTest(postgresListener) {
+    override fun createStorage() = PostgresPackageProvenanceStorage(postgresListener.dataSource)
 }
