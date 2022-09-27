@@ -21,7 +21,7 @@
 DOCKER_ARGS=$@
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty)
+GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty --match=[0-9]*)
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
 docker buildx build \
