@@ -41,11 +41,6 @@ data class OrtConfiguration(
     val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
 
     /**
-     * A flag to indicate whether authors should be considered as copyright holders.
-     */
-    val addAuthorsToCopyrights: Boolean = false,
-
-    /**
      * The threshold from which on issues count as severe.
      */
     val severeIssueThreshold: Severity = Severity.WARNING,

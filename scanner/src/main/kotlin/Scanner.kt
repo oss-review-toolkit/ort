@@ -46,15 +46,18 @@ import org.ossreviewtoolkit.utils.ort.Environment
 const val TOOL_NAME = "scanner"
 
 private fun removeConcludedPackages(packages: Set<Package>, scanner: Scanner): Set<Package> =
-    packages.takeUnless { scanner.scannerConfig.skipConcluded }
-        // Remove all packages that have a concluded license and authors set.
-        ?: packages.partition { it.concludedLicense != null && it.authors.isNotEmpty() }.let { (skip, keep) ->
+    packages.takeUnless { scanner.scannerConfig.skipConcluded } ?: run {
+        // Remove all packages that have a concluded license and concluded copyrights set.
+        packages.partition { it.concludedLicense != null && it.concludedCopyrights.isNotEmpty() }.let { (skip, keep) ->
             if (skip.isNotEmpty()) {
-                Scanner.logger.debug { "Not scanning the following packages with concluded licenses: $skip" }
+                Scanner.logger.debug {
+                    "Not scanning the following packages with concluded licenses and concluded copyrights: $skip"
+                }
             }
 
             keep.toSet()
         }
+    }
 
 /**
  * Use the [scanner] to scan the [Project]s and [Package]s specified in the [ortResult].  If [skipExcluded] is true,

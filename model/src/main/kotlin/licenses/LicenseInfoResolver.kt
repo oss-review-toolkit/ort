@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 class LicenseInfoResolver(
     private val provider: LicenseInfoProvider,
     private val copyrightGarbage: CopyrightGarbage,
-    val addAuthorsToCopyrights: Boolean,
     val archiver: FileArchiver?,
     val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
 ) {
@@ -98,17 +97,13 @@ class LicenseInfoResolver(
                     it == license
                 }.keys
 
-                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
+                licenseInfo.concludedLicenseInfo.concludedCopyrights?.takeIf { it.isNotEmpty() }?.also {
                     locations += ResolvedLicenseLocation(
                         provenance = UnknownProvenance,
                         location = UNDEFINED_TEXT_LOCATION,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
-                        copyrights = it.mapTo(mutableSetOf()) { author ->
-                            val statement = "Copyright (C) $author".takeUnless {
-                                author.contains("Copyright", ignoreCase = true)
-                            } ?: author
-
+                        copyrights = it.mapTo(mutableSetOf()) { statement ->
                             ResolvedCopyrightFinding(
                                 statement = statement,
                                 location = UNDEFINED_TEXT_LOCATION,

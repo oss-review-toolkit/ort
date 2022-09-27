@@ -63,6 +63,16 @@ data class Package(
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
+     * The set of concluded copyright statements for this package. It can be used to override the [detected copyright
+     * statements][CopyrightFinding.statement] (note that there is no such thing as *declared* copyright statements
+     * because package managers do not support declaring them explicitly).
+     *
+     * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val concludedCopyrights: SortedSet<String> = sortedSetOf(),
+
+    /**
      * The set of licenses declared for this package. This does not necessarily correspond to the licenses as detected
      * by a scanner. Both need to be taken into account for any conclusions.
      */
@@ -138,6 +148,7 @@ data class Package(
             id = Identifier.EMPTY,
             purl = "",
             authors = sortedSetOf(),
+            concludedCopyrights = sortedSetOf(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,

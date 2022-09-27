@@ -237,7 +237,6 @@ class ReporterCommand : CliktCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
             archiver = config.scanner.archive.createFileArchiver(),
             licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
         )

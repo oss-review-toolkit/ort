@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 val authors = sortedSetOf("The Author", "The Other Author")
 val projectAuthors = sortedSetOf("The Project Author")
 
+val concludedCopyrights = sortedSetOf("Copyright (C) 2017 foo", "Copyright (C) 2022 bar")
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)

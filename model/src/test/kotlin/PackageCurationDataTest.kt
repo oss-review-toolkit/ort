@@ -30,6 +30,7 @@ class PackageCurationDataTest : WordSpec({
         purl = "original",
         cpe = "original",
         authors = sortedSetOf("original"),
+        concludedCopyrights = sortedSetOf("original"),
         concludedLicense = "original".toSpdx(),
         description = "original",
         homepageUrl = "original",
@@ -57,6 +58,7 @@ class PackageCurationDataTest : WordSpec({
         purl = "other",
         cpe = "other",
         authors = sortedSetOf("other"),
+        concludedCopyrights = sortedSetOf("other"),
         concludedLicense = "other".toSpdx(),
         description = "other",
         homepageUrl = "other",
@@ -88,6 +90,7 @@ class PackageCurationDataTest : WordSpec({
             val originalWithSomeUnsetData = original.copy(
                 comment = null,
                 authors = null,
+                concludedCopyrights = null,
                 concludedLicense = null,
                 binaryArtifact = null,
                 vcs = null,
@@ -98,6 +101,7 @@ class PackageCurationDataTest : WordSpec({
             originalWithSomeUnsetData.merge(other) shouldBe originalWithSomeUnsetData.copy(
                 comment = other.comment,
                 authors = other.authors,
+                concludedCopyrights = other.concludedCopyrights,
                 concludedLicense = other.concludedLicense,
                 binaryArtifact = other.binaryArtifact,
                 vcs = other.vcs,
@@ -110,6 +114,7 @@ class PackageCurationDataTest : WordSpec({
             original.merge(other) shouldBe original.copy(
                 comment = "original\nother",
                 authors = sortedSetOf("original", "other"),
+                concludedCopyrights = sortedSetOf("original", "other"),
                 concludedLicense = "original AND other".toSpdx(),
                 declaredLicenseMapping = mapOf(
                     "original" to "original".toSpdx(),
@@ -122,6 +127,7 @@ class PackageCurationDataTest : WordSpec({
             val otherWithSomeOriginalData = other.copy(
                 comment = original.comment,
                 authors = original.authors,
+                concludedCopyrights = original.concludedCopyrights,
                 concludedLicense = original.concludedLicense,
                 declaredLicenseMapping = original.declaredLicenseMapping
             )

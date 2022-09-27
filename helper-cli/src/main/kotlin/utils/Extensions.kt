@@ -124,7 +124,6 @@ internal fun OrtResult.fetchScannedSources(id: Identifier): File {
 internal fun OrtResult.processAllCopyrightStatements(
     omitExcluded: Boolean = true,
     copyrightGarbage: Set<String> = emptySet(),
-    addAuthorsToCopyrights: Boolean = false,
     packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
@@ -133,8 +132,7 @@ internal fun OrtResult.processAllCopyrightStatements(
 
     val licenseInfoResolver = createLicenseInfoResolver(
         packageConfigurationProvider = packageConfigurationProvider,
-        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
-        addAuthorsToCopyrights = addAuthorsToCopyrights
+        copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet())
     )
 
     collectProjectsAndPackages().forEach { id ->

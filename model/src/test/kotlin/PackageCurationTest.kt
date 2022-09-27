@@ -56,7 +56,7 @@ class PackageCurationTest : WordSpec({
                     purl = "pkg:maven/org.hamcrest/hamcrest-core@1.3#subpath=src/main/java/org/hamcrest/core",
                     cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
                     authors = sortedSetOf("author 1", "author 2"),
-                    declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
+                    concludedCopyrights = sortedSetOf("copyright 1", "copyright 2"),
                     concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
                     homepageUrl = "http://home.page",
@@ -75,7 +75,8 @@ class PackageCurationTest : WordSpec({
                         path = "path"
                     ),
                     isMetaDataOnly = true,
-                    isModified = true
+                    isModified = true,
+                    declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx())
                 )
             )
 
@@ -86,6 +87,7 @@ class PackageCurationTest : WordSpec({
                 purl shouldBe curation.data.purl
                 cpe shouldBe curation.data.cpe
                 authors shouldBe curation.data.authors
+                concludedCopyrights shouldBe curation.data.concludedCopyrights
                 declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
@@ -147,6 +149,7 @@ class PackageCurationTest : WordSpec({
                 purl shouldBe pkg.purl
                 cpe shouldBe pkg.cpe
                 authors shouldBe pkg.authors
+                concludedCopyrights shouldBe pkg.concludedCopyrights
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
                 description shouldBe pkg.description
