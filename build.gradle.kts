@@ -64,9 +64,9 @@ buildscript {
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
     version = Git.open(rootDir).use { git ->
-        // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty", which is what is used in
-        // "scripts/docker_build.sh", to make the hash match what JitPack uses.
-        val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).call()
+        // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty --match=[0-9]*", which is
+        // what is used in "scripts/docker_build.sh", to make the hash match what JitPack uses.
+        val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).setMatch("[0-9]*").call()
 
         // Simulate the "--dirty" option with JGit.
         description.takeUnless { git.status().call().hasUncommittedChanges() } ?: "$description-dirty"
