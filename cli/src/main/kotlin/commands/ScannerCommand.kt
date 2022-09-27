@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.experimental.DefaultProvenanceDownloader
@@ -78,6 +77,7 @@ import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.experimental.TOOL_NAME
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage

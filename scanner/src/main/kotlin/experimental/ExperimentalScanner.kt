@@ -51,11 +51,12 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
-import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+const val TOOL_NAME = "scanner"
 
 class ExperimentalScanner(
     val scannerConfig: ScannerConfiguration,
