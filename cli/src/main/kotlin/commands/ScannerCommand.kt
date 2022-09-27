@@ -63,8 +63,6 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
-import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedFileStorage
-import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapperFactory
@@ -82,6 +80,8 @@ import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
+import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedFileStorage
+import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs

@@ -17,11 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.storages
 
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.PostgresListener
 
-class ProvenanceBasedFileStorageFunTest : AbstractProvenanceBasedStorageFunTest() {
-    override fun createStorage() = ProvenanceBasedFileStorage(LocalFileStorage(createTestTempDir()))
+private val postgresListener = PostgresListener()
+
+class ProvenanceBasedPostgresStorageFunTest : AbstractProvenanceBasedStorageFunTest(postgresListener) {
+    override fun createStorage() = ProvenanceBasedPostgresStorage(postgresListener.dataSource)
 }

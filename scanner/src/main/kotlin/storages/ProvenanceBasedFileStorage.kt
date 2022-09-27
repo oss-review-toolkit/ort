@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.experimental
+package org.ossreviewtoolkit.scanner.storages
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
@@ -32,6 +32,9 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.scanner.experimental.ProvenanceBasedScanStorage
+import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.scanner.experimental.requireEmptyVcsPath
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fileSystemEncode
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -112,8 +115,6 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
         }
     }
 }
-
-private const val SCAN_RESULTS_FILE_NAME = "scan-results.yml"
 
 private fun storagePath(provenance: KnownProvenance) =
     when (provenance) {
