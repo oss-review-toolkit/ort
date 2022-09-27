@@ -35,7 +35,10 @@ import io.mockk.verify
 
 import java.net.Authenticator
 import java.net.PasswordAuthentication
+import java.net.URL
 import java.nio.file.Paths
+
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class UtilsTest : WordSpec({
     "filterVersionNames" should {
@@ -408,6 +411,29 @@ class UtilsTest : WordSpec({
             verify {
                 OrtAuthenticator.install()
                 OrtProxySelector.install()
+            }
+        }
+
+        "return the credentials present in the URL if any" {
+            val host = "www.example.org"
+            val port = 442
+            val scheme = "https"
+            val url = URL("https://foo:bar@www.example.org")
+
+            val auth = OrtAuthenticator().requestPasswordAuthenticationInstance(
+                host,
+                null,
+                port,
+                null,
+                null,
+                scheme,
+                url,
+                Authenticator.RequestorType.SERVER
+            )
+
+            auth shouldNotBeNull {
+                userName shouldBe "foo"
+                String(password) shouldBe "bar"
             }
         }
     }
