@@ -61,7 +61,6 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.experimental.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.scanner.experimental.ExperimentalScanner
 import org.ossreviewtoolkit.scanner.experimental.ScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScannerWrapper
@@ -83,6 +82,7 @@ import org.ossreviewtoolkit.scanner.storages.PostgresStorage
 import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedFileStorage
 import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedPostgresStorage
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
+import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
