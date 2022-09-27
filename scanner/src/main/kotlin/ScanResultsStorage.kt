@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.scanner.experimental.NestedProvenance
 import org.ossreviewtoolkit.scanner.experimental.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.experimental.PackageBasedScanStorage
 import org.ossreviewtoolkit.scanner.experimental.ScanStorageException
+import org.ossreviewtoolkit.scanner.experimental.TOOL_NAME
 import org.ossreviewtoolkit.scanner.experimental.toNestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.storages.*
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
