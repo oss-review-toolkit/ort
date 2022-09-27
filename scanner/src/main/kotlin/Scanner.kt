@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 const val TOOL_NAME = "scanner"
 
-class ExperimentalScanner(
+class Scanner(
     val scannerConfig: ScannerConfiguration,
     val downloaderConfig: DownloaderConfiguration,
     val provenanceDownloader: ProvenanceDownloader,

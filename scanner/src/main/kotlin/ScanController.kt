@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 
 /**
- * A controller for the data related to a run of the [ExperimentalScanner].
+ * A controller for the data related to a run of the [Scanner].
  */
 @Suppress("TooManyFunctions")
 class ScanController(

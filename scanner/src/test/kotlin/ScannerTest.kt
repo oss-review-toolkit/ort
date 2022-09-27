@@ -68,8 +68,8 @@ import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
-class ExperimentalScannerTest : WordSpec({
-    "Creating the experimental scanner" should {
+class ScannerTest : WordSpec({
+    "Creating the scanner" should {
         "throw an exception if no scanner wrappers are provided" {
             shouldThrow<IllegalArgumentException> {
                 createScanner()
@@ -926,7 +926,7 @@ private fun createScanner(
     packageScannerWrappers: List<ScannerWrapper> = emptyList(),
     projectScannerWrappers: List<ScannerWrapper> = emptyList()
 ) =
-    ExperimentalScanner(
+    Scanner(
         ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
         DownloaderConfiguration(),
         provenanceDownloader,
