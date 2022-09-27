@@ -17,10 +17,10 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("Filename", "MatchingDeclarationName")
+
 package org.ossreviewtoolkit.utils.test
 
 import io.kotest.core.Tag
-
-object AndroidTag : Tag()
 
 object ExpensiveTag : Tag()
