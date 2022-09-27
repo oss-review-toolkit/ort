@@ -24,5 +24,3 @@ import io.kotest.core.Tag
 object AndroidTag : Tag()
 
 object ExpensiveTag : Tag()
-
-object ScanCodeTag : Tag()
