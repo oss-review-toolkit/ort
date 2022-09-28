@@ -26,6 +26,9 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import java.net.URL
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.Constants
+import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.treewalk.TreeWalk
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -424,5 +427,128 @@ tasks.register("allDependencies").configure {
         b.configure {
             mustRunAfter(a)
         }
+    }
+}
+
+fun getCommittedFilePaths(rootDir: File): List<String> {
+    val filePaths = mutableListOf<String>()
+
+    Git.open(rootDir).use { git ->
+        TreeWalk(git.repository).use { treeWalk ->
+            val headCommit = RevWalk(git.repository).use {
+                val head = git.repository.resolve(Constants.HEAD)
+                it.parseCommit(head)
+            }
+
+            with(treeWalk) {
+                addTree(headCommit.tree)
+                isRecursive = true
+            }
+
+            while (treeWalk.next()) {
+                filePaths += treeWalk.pathString
+            }
+        }
+    }
+
+    return filePaths
+}
+
+fun getCopyrightableFiles(rootDir: File): List<File> {
+    val excludedPaths = listOf(
+        "LICENSE",
+        "NOTICE",
+        "batect",
+        "gradlew",
+        "gradle/",
+        "examples/",
+        "integrations/completions/",
+        "reporter/src/main/resources/",
+        "reporter-web-app/yarn.lock",
+        "resources/META-INF/",
+        "resources/exceptions/",
+        "resources/licenses/",
+        "resources/licenserefs/",
+        "test/assets/",
+        "funTest/assets/"
+    )
+
+    val excludedExtensions = listOf(
+        "css",
+        "graphql",
+        "json",
+        "md",
+        "png",
+        "svg"
+    )
+
+    return getCommittedFilePaths(rootDir).map { filePath ->
+        rootDir.resolve(filePath)
+    }.filter { file ->
+        val isHidden = file.toPath().any { it.toString().startsWith(".") }
+
+        !isHidden && excludedPaths.none { it in file.path } && file.extension !in excludedExtensions
+    }
+}
+
+fun extractCopyrights(file: File): List<String> {
+    val copyrights = mutableListOf<String>()
+
+    val maxLines = 50
+    var lineCounter = 0
+
+    file.useLines { lines ->
+        lines.forEach { line ->
+            if (++lineCounter > maxLines) return@forEach
+            val copyright = line.replaceBefore(" Copyright ", "", "").trim()
+            if (copyright.isNotEmpty() && !copyright.endsWith("\"")) copyrights += copyright
+        }
+    }
+
+    return copyrights
+}
+
+fun extractCopyrightHolders(statements: Collection<String>): List<String> {
+    val holders = mutableListOf<String>()
+    val prefixRegex = Regex("Copyright .*\\d{2,}(-\\d{2,})? ", RegexOption.IGNORE_CASE)
+
+    statements.mapNotNullTo(holders) { statement ->
+        val holder = statement.replace(prefixRegex, "")
+        holder.takeUnless { it == statement }?.trim()
+    }
+
+    return holders
+}
+
+tasks.register("checkCopyrightsInNoticeFile").configure {
+    val files = getCopyrightableFiles(rootDir)
+    val noticeFile = rootDir.resolve("NOTICE")
+    val genericHolderPrefix = "The ORT Project Authors"
+
+    inputs.files(files)
+
+    doLast {
+        val allCopyrights = mutableSetOf<String>()
+        var hasViolations = false
+
+        files.forEach { file ->
+            val copyrights = extractCopyrights(file)
+            if (copyrights.isNotEmpty()) {
+                allCopyrights += copyrights
+            } else {
+                hasViolations = true
+                logger.error("The file '$file' has no Copyright statement.")
+            }
+        }
+
+        val notices = noticeFile.readLines()
+        extractCopyrightHolders(allCopyrights).forEach { holder ->
+            if (!holder.startsWith(genericHolderPrefix) && notices.none { holder in it }) {
+                hasViolations = true
+                logger.error("The '$holder' Copyright holder is not captured in '$noticeFile'.")
+            }
+        }
+
+        if (hasViolations) throw GradleException("There were errors in Copyright statements.")
     }
 }
