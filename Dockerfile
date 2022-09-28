@@ -127,7 +127,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG PYTHON_VERSION=3.10.6
+ARG PYTHON_VERSION=3.9.5
 ARG PYTHON2_VERSION=2.7.18
 ARG PYENV_GIT_TAG=v2.3.4
 
