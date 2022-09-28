@@ -23,7 +23,6 @@ import de.undercouch.gradle.tasks.download.Download
 import groovy.json.JsonSlurper
 
 import java.net.URL
-import java.time.Year
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -103,10 +102,10 @@ class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
 // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
 val providers = sequenceOf(ScanCodeLicenseTextProvider(), SpdxLicenseListDataProvider())
 
-fun getLicenseHeader(fromYear: Int = 2017, toYear: Int = Year.now().value) =
+fun getLicenseHeader(year: Int = 2017) =
     """
     |/*
-    | * Copyright (C) $fromYear-$toYear HERE Europe B.V.
+    | * Copyright (C) $year The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
     | *
     | * Licensed under the Apache License, Version 2.0 (the "License");
     | * you may not use this file except in compliance with the License.
