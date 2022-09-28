@@ -1,5 +1,4 @@
 .cpyskip.txt
-.detekt.license.template
 .editorconfig
 .ort.yml
 .reuse/dep5
