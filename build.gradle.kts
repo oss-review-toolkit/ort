@@ -523,7 +523,7 @@ fun extractCopyrightHolders(statements: Collection<String>): List<String> {
     return holders
 }
 
-tasks.register("checkCopyrightsInNoticeFile").configure {
+val checkCopyrightsInNoticeFile by tasks.registering {
     val files = getCopyrightableFiles(rootDir)
     val noticeFile = rootDir.resolve("NOTICE")
     val genericHolderPrefix = "The ORT Project Authors"
@@ -553,5 +553,77 @@ tasks.register("checkCopyrightsInNoticeFile").configure {
         }
 
         if (hasViolations) throw GradleException("There were errors in Copyright statements.")
+    }
+}
+
+val lastLicenseHeaderLine = "License-Filename: LICENSE"
+
+val expectedCopyrightHolder =
+    "The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)"
+
+// The header without `lastLicenseHeaderLine` as that line is used as a marker.
+val expectedLicenseHeader = """
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        https://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+    SPDX-License-Identifier: Apache-2.0
+""".trimIndent()
+
+fun extractLicenseHeader(file: File): List<String> {
+    var headerLines = file.useLines { lines ->
+        lines.takeWhile { !it.endsWith(lastLicenseHeaderLine) }.toList()
+    }
+
+    while (true) {
+        val uniqueColumnChars = headerLines.mapNotNullTo(mutableSetOf()) { it.firstOrNull() }
+
+        // If there are very few different chars in a column, assume that column to consist of comment chars /
+        // indentation only.
+        if (uniqueColumnChars.size < 3) {
+            val trimmedHeaderLines = headerLines.mapTo(mutableListOf()) { it.drop(1) }
+            headerLines = trimmedHeaderLines
+        } else {
+            break
+        }
+    }
+
+    return headerLines
+}
+
+val checkLicenseHeaders by tasks.registering {
+    val files = getCopyrightableFiles(rootDir)
+
+    inputs.files(files)
+
+    // To be on the safe side in case any called helper functions are not thread safe.
+    mustRunAfter(checkCopyrightsInNoticeFile)
+
+    doLast {
+        var hasViolations = false
+
+        files.forEach { file ->
+            val headerLines = extractLicenseHeader(file)
+
+            val holders = extractCopyrightHolders(headerLines)
+            if (holders.singleOrNull() != expectedCopyrightHolder) {
+                logger.error("Unexpected copyright holder(s) in file '$file': $holders")
+            }
+
+            if (!headerLines.joinToString("\n").endsWith(expectedLicenseHeader)) {
+                hasViolations = true
+                logger.error("Unexpected license header in file '$file'.")
+            }
+        }
+
+        if (hasViolations) throw GradleException("There were errors in license headers.")
     }
 }
