@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
- * Copyright (C) 2021 Sonatype, Inc.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
