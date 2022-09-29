@@ -146,7 +146,7 @@ open class Npm(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("6.* - 8.5.*")
+    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("6.* - 8.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 
