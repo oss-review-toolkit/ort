@@ -189,7 +189,7 @@ COPY docker/ruby.sh /etc/profile.d
 FROM build AS nodebuild
 
 ARG BOWER_VERSION=1.8.12
-ARG NODEJS_VERSION=16.17.0
+ARG NODEJS_VERSION=16.17.1
 ARG NPM_VERSION=8.5.0
 ARG NVM_DIR=/opt/nvm
 ARG PNPM_VERSION=7.8.0
@@ -288,7 +288,7 @@ COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 RUN chmod o+rwx ${RBENV_ROOT}
 
 # NodeJS
-ARG NODEJS_VERSION=16.17.0
+ARG NODEJS_VERSION=16.17.1
 ARG NVM_DIR=/opt/nvm
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
