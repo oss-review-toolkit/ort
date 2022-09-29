@@ -48,15 +48,13 @@ data class LicenseClassifications(
 ) {
     /** A property for fast look-ups of licenses for a given category. */
     val licensesByCategory: Map<String, Set<SpdxSingleLicenseExpression>> by lazy {
-        val result = mutableMapOf<String, MutableSet<SpdxSingleLicenseExpression>>()
-
-        categorizations.forEach { license ->
-            license.categories.forEach { category ->
-                result.getOrPut(category) { mutableSetOf() } += license.id
+        buildMap<String, MutableSet<SpdxSingleLicenseExpression>> {
+            categorizations.forEach { license ->
+                license.categories.forEach { category ->
+                    getOrPut(category) { mutableSetOf() } += license.id
+                }
             }
         }
-
-        result
     }
 
     /** A property for fast look-ups of categories for a given license. */
