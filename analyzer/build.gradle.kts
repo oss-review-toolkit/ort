@@ -17,9 +17,14 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply core plugins.
     `java-library`
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 repositories {
@@ -63,10 +68,21 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.jruby)
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinxSerialization)
     implementation(libs.semver4j)
     implementation(libs.sw360Client)
     implementation(libs.toml4j)
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+    }
 }
