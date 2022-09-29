@@ -26,7 +26,7 @@ import java.io.File
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
-object PythonInspector : CommandLineTool {
+internal object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
