@@ -31,6 +31,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspector
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -134,41 +135,6 @@ object PythonVersion : CommandLineTool, Logging {
         } else {
             Os.getPathFromEnvironment("python$version")?.path
         }
-}
-
-object PythonInspector : CommandLineTool {
-    override fun command(workingDir: File?) = "python-inspector"
-
-    override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
-
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.7.1,)")
-
-    fun run(
-        workingDir: File,
-        outputFile: String,
-        definitionFile: File,
-        pythonVersion: String = "38",
-    ): ProcessCapture {
-        val commandLineOptions = buildList {
-            add("--python-version")
-            add(pythonVersion)
-
-            add("--json-pdt")
-            add(outputFile)
-
-            add("--analyze-setup-py-insecurely")
-
-            if (definitionFile.name == "setup.py") {
-                add("--setup-py")
-            } else {
-                add("--requirement")
-            }
-
-            add(definitionFile.absolutePath)
-        }
-
-        return run(workingDir, *commandLineOptions.toTypedArray())
-    }
 }
 
 /**
