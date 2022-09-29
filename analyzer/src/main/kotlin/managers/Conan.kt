@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.masked
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -223,7 +224,7 @@ class Conan(
                 if (auth != null) {
                     // Configure Conan's authentication based on ORT's authentication for the remote.
                     runCatching {
-                        run("user", "-r", remoteName, "-p", String(auth.password), auth.userName)
+                        run("user", "-r", remoteName, "-p", String(auth.password).masked(), auth.userName.masked())
                     }.onFailure {
                         logger.error { "Failed to configure user authentication for remote '$remoteName'." }
                     }
