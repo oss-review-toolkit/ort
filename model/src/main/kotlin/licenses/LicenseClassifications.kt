@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
@@ -47,6 +48,7 @@ data class LicenseClassifications(
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
     /** A property for fast look-ups of licenses for a given category. */
+    @get:JsonIgnore
     val licensesByCategory: Map<String, Set<SpdxSingleLicenseExpression>> by lazy {
         buildMap<String, MutableSet<SpdxSingleLicenseExpression>> {
             categorizations.forEach { license ->
@@ -58,11 +60,13 @@ data class LicenseClassifications(
     }
 
     /** A property for fast look-ups of categories for a given license. */
+    @get:JsonIgnore
     val categoriesByLicense: Map<SpdxSingleLicenseExpression, Set<String>> by lazy {
         categorizations.associate { it.id to it.categories }
     }
 
     /** A property allowing convenient access to the names of all categories defined. */
+    @get:JsonIgnore
     val categoryNames: SortedSet<String> by lazy {
         categories.mapTo(sortedSetOf()) { it.name }
     }
