@@ -206,4 +206,9 @@ internal data class FossIdConfig(
 
         return FossIdNamingProvider(namingProjectPattern, namingScanPattern, namingConventionVariables)
     }
+
+    /**
+     * Create a [FossIdUrlProvider] helper object based on the configuration stored in this object.
+     */
+    fun createUrlProvider() = FossIdUrlProvider.create(addAuthenticationToUrl)
 }

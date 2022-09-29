@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import java.io.IOException
-import java.net.Authenticator
 import java.time.Instant
 
 import kotlin.time.Duration
@@ -77,8 +76,6 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
-import org.ossreviewtoolkit.utils.common.toUri
-import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -140,24 +137,6 @@ class FossId internal constructor(
                 "identification_reuse_type" to "specific_scan",
                 "specific_code" to existingScanCode
             )
-
-        /**
-         * This function fetches credentials for [repoUrl] and insert them between the URL scheme and the host. If no
-         * matching host is found by [Authenticator], the [repoUrl] is returned untouched.
-         */
-        private fun queryAuthenticator(repoUrl: String): String {
-            val repoUri = repoUrl.toUri().getOrElse {
-                logger.warn { "The repository URL '$repoUrl' is not valid." }
-                return repoUrl
-            }
-
-            logger.info { "Requesting authentication for host ${repoUri.host} ..." }
-
-            val creds = requestPasswordAuthentication(repoUri)
-            return creds?.let {
-                repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
-            } ?: repoUrl
-        }
     }
 
     class Factory : AbstractScannerWrapperFactory<FossId>("FossId") {
@@ -182,6 +161,7 @@ class FossId internal constructor(
 
     private val secretKeys = listOf("serverUrl", "apiKey", "user")
     private val namingProvider = config.createNamingProvider()
+    private val urlProvider = config.createUrlProvider()
 
     // A list of all scans created in an ORT run, to be able to delete them in case of error.
     // The reasoning is that either all these scans are successful, either none is created at all (clean slate).
@@ -386,7 +366,7 @@ class FossId internal constructor(
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
-            val newUrl = if (config.addAuthenticationToUrl) queryAuthenticator(url) else url
+            val newUrl = urlProvider.getUrl(url)
             createScan(projectCode, scanCode, newUrl, revision)
 
             logger.info { "Initiating the download..." }
@@ -434,11 +414,7 @@ class FossId internal constructor(
             namingProvider.createScanCode(projectName, DeltaTag.DELTA)
         }
 
-        val newUrl = if (config.addAuthenticationToUrl) {
-            queryAuthenticator(urlWithoutCredentials)
-        } else {
-            urlWithoutCredentials
-        }
+        val newUrl = urlProvider.getUrl(urlWithoutCredentials)
 
         createScan(projectCode, scanCode, newUrl, revision)
 

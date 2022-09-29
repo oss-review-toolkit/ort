@@ -180,6 +180,35 @@ class FossIdConfigTest : WordSpec({
         }
     }
 
+    "createUrlProvider" should {
+        "create a URL provider with a disabled add authentication flag" {
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "user" to USER,
+                "apiKey" to API_KEY
+            ).toScannerConfig()
+
+            val fossIdConfig = FossIdConfig.create(scannerConfig)
+            val urlProvider = fossIdConfig.createUrlProvider()
+
+            urlProvider.addAuthenticationToUrl shouldBe false
+        }
+
+        "create a URL provider with an enabled add authentication flag" {
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "user" to USER,
+                "apiKey" to API_KEY,
+                "addAuthenticationToUrl" to "true"
+            ).toScannerConfig()
+
+            val fossIdConfig = FossIdConfig.create(scannerConfig)
+            val urlProvider = fossIdConfig.createUrlProvider()
+
+            urlProvider.addAuthenticationToUrl shouldBe true
+        }
+    }
+
     "createService" should {
         "create a correctly configured FossIdRestService" {
             val loginPage = "Welcome to FossID"
