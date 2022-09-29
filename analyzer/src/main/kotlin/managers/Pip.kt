@@ -141,7 +141,7 @@ object PythonInspector : CommandLineTool {
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.6.5,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.7.1,)")
 
     fun run(
         workingDir: File,
@@ -155,6 +155,8 @@ object PythonInspector : CommandLineTool {
 
             add("--json-pdt")
             add(outputFile)
+
+            add("--analyze-setup-py-insecurely")
 
             if (definitionFile.name == "setup.py") {
                 add("--setup-py")
@@ -386,7 +388,7 @@ class Pip(
         // Get the locally available metadata for all installed packages as a fallback.
         val installedPackages = getInstalledPackagesWithLocalMetadata(virtualEnvDir, workingDir).associateBy { it.id }
 
-        val fullDependencyTree = jsonMapper.readTree(jsonFile)
+        val fullDependencyTree = jsonMapper.readTree(jsonFile)["resolved_dependencies"]
         jsonFile.parentFile.safeDeleteRecursively(force = true)
 
         val projectDependencies = fullDependencyTree.filterNot {

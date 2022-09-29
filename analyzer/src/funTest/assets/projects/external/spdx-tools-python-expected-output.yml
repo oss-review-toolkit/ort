@@ -27,8 +27,47 @@ project:
     dependencies:
     - id: "PyPI::ply:3.11"
     - id: "PyPI::rdflib:5.0.0"
-    - id: "PyPI::six:1.16.0"
+      dependencies:
+      - id: "PyPI::isodate:0.6.1"
+        dependencies:
+        - id: "PyPI::six:1.16.0"
+      - id: "PyPI::pyparsing:2.4.7"
+      - id: "PyPI::six:1.16.0"
 packages:
+- id: "PyPI::isodate:0.6.1"
+  purl: "pkg:pypi/isodate@0.6.1"
+  authors:
+  - "Gerhard Weis"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "An ISO 8601 date/time/duration parser and formatter"
+  homepage_url: "https://github.com/gweis/isodate/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/b6/85/7882d311924cbcfc70b1890780763e36ff0b140c7e51c110fc59a532f087/isodate-0.6.1-py2.py3-none-any.whl"
+    hash:
+      value: "c8a5fcd645030db98daa82b8e56fda89"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/db/7a/c0a56c7d56c7fa723988f122fa1f1ccf8c5c4ccc48efad0d214b49e5b1af/isodate-0.6.1.tar.gz"
+    hash:
+      value: "1a310658b30a48641bafb5652ad91c40"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/gweis/isodate.git"
+    revision: ""
+    path: ""
 - id: "PyPI::ply:3.11"
   purl: "pkg:pypi/ply@3.11"
   authors:
@@ -59,6 +98,38 @@ packages:
   vcs_processed:
     type: ""
     url: ""
+    revision: ""
+    path: ""
+- id: "PyPI::pyparsing:2.4.7"
+  purl: "pkg:pypi/pyparsing@2.4.7"
+  authors:
+  - "Paul McGuire"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
+  description: "Python parsing module"
+  homepage_url: "https://github.com/pyparsing/pyparsing/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl"
+    hash:
+      value: "dbfd0a241aad2595f43377ec7f1836ea"
+      algorithm: "MD5"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
+    hash:
+      value: "f0953e47a0112f7a65aec2305ffdf7b4"
+      algorithm: "MD5"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pyparsing/pyparsing.git"
     revision: ""
     path: ""
 - id: "PyPI::rdflib:5.0.0"
