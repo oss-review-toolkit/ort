@@ -65,7 +65,7 @@ interface CommandLineTool {
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args] and the given [environment].
      */
-    fun run(vararg args: String, workingDir: File? = null, environment: Map<String, String> = emptyMap()) =
+    fun run(vararg args: CharSequence, workingDir: File? = null, environment: Map<String, String> = emptyMap()) =
         ProcessCapture(
             *command(workingDir).split(' ').toTypedArray(),
             *args,
@@ -76,7 +76,7 @@ interface CommandLineTool {
     /**
      * Run the command in the [workingDir] directory with arguments as specified by [args].
      */
-    fun run(workingDir: File?, vararg args: String) =
+    fun run(workingDir: File?, vararg args: CharSequence) =
         ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
 
     /**
