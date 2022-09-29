@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 class ProcessCaptureTest : StringSpec({
     "Environment variables should be passed correctly" {
@@ -33,5 +34,19 @@ class ProcessCaptureTest : StringSpec({
 
         proc.exitValue shouldBe 0
         proc.stdout.trimEnd() shouldBe "This is some path: /foo/bar"
+    }
+
+    "Masked strings should be processed correctly" {
+        val masked = MaskedString("echo unmasked")
+        val proc = if (Os.isWindows) {
+            ProcessCapture("cmd.exe", "/c", masked)
+        } else {
+            ProcessCapture("sh", "-c", masked)
+        }
+
+        proc.exitValue shouldBe 0
+        proc.stdout.trimEnd() shouldBe "unmasked"
+
+        proc.commandLine shouldContain MaskedString.DEFAULT_MASK
     }
 })
