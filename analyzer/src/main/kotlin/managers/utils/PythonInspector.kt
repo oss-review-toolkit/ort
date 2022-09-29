@@ -23,6 +23,9 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 
@@ -60,3 +63,53 @@ internal object PythonInspector : CommandLineTool {
         return run(workingDir, *commandLineOptions.toTypedArray())
     }
 }
+
+@Serializable
+internal data class PythonInspectorResult(
+    @SerialName("resolved_dependencies") val resolvedDependencies: List<PythonInspectorResolvedDependency>,
+    val packages: List<PythonInspectorPackage>
+)
+
+@Serializable
+internal data class PythonInspectorResolvedDependency(
+    val key: String,
+    @SerialName("package_name") val packageName: String,
+    @SerialName("installed_version") val installedVersion: String,
+    val dependencies: List<PythonInspectorResolvedDependency>
+)
+
+@Serializable
+internal data class PythonInspectorPackage(
+    val type: String,
+    val namespace: String?,
+    val name: String,
+    val version: String,
+    val description: String,
+    val parties: List<PythonInspectorParty>,
+    @SerialName("homepage_url") val homepageUrl: String,
+    @SerialName("download_url") val downloadUrl: String,
+    val size: Long,
+    val sha1: String?,
+    val md5: String?,
+    val sha256: String?,
+    val sha512: String?,
+    @SerialName("code_view_url") val codeViewUrl: String?,
+    @SerialName("vcs_url") val vcsUrl: String?,
+    val copyright: String?,
+    @SerialName("license_expression") val licenseExpression: String?,
+    @SerialName("declared_license") val declaredLicense: String,
+    @SerialName("source_packages") val sourcePackages: List<String>,
+    @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
+    @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
+    @SerialName("api_data_url") val apiDataUrl: String,
+    val purl: String
+)
+
+@Serializable
+internal class PythonInspectorParty(
+    val type: String,
+    val role: String,
+    val name: String?,
+    val email: String?,
+    val url: String?
+)
