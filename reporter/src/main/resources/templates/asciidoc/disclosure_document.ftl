@@ -75,6 +75,7 @@ The applicable license information is listed below:
 [/#if]
 <<<
 [#-- Add the licenses of all dependencies. --]
+
 == Dependencies
 
 [#if packages?has_content]
