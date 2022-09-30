@@ -31,26 +31,65 @@ import java.net.URI
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class FossIdUrlProviderTest : StringSpec({
-    "URLs are not changed if no credentials need to be added" {
-        val urlProvider = FossIdUrlProvider.create(addAuthenticationToUrl = false)
+    "URLs are not changed if no mapping is provided" {
+        val urlProvider = FossIdUrlProvider.create()
 
         urlProvider.getUrl(REPO_URL) shouldBe REPO_URL
     }
 
     "Credentials should be added to URLs" {
-        mockAuthenticator()
-        val expectedUrl = "https://$USER:$PASSWORD@$HOST:$PORT/$PATH"
-        val urlProvider = FossIdUrlProvider.create(addAuthenticationToUrl = true)
+        val repoUrl = "https://$HOST/$PATH"
+        mockAuthenticator(port = -1)
+        val expectedUrl = "https://$USER:$PASSWORD@$HOST/$PATH"
+        val urlProvider = FossIdUrlProvider.create(listOf(ADD_CREDENTIALS_MAPPING))
 
-        val url = urlProvider.getUrl(REPO_URL)
+        val url = urlProvider.getUrl(repoUrl)
 
         url shouldBe expectedUrl
     }
 
     "Missing credentials should be handled" {
         mockAuthenticator(authentication = null)
-        val urlProvider = FossIdUrlProvider.create(addAuthenticationToUrl = true)
+        val urlProvider = FossIdUrlProvider.create(listOf(ADD_CREDENTIALS_MAPPING))
 
+        val url = urlProvider.getUrl(REPO_URL)
+
+        url shouldBe REPO_URL
+    }
+
+    "URL mapping should be applied" {
+        val otherHost = "mapped.example.org"
+        val otherPort = 8765
+        val otherScheme = "ssh"
+        val regex = "https://$HOST:(\\d+)(?<path>.*)"
+        val replace = "$otherScheme://$otherHost:$otherPort\${path}"
+        val urlMapping = listOf("$regex -> $replace", "foo  ->  bar", ADD_CREDENTIALS_MAPPING)
+
+        val urlProvider = FossIdUrlProvider.create(urlMapping)
+        val url = urlProvider.getUrl(REPO_URL)
+
+        url shouldBe "$otherScheme://$otherHost:$otherPort/$PATH"
+    }
+
+    "URL mapping with credentials should be applied" {
+        val otherHost = "mapped-auth.example.org"
+        val regex = "(?<scheme>)://$HOST:(?<port>\\d+)(?<path>.*)"
+        val replace = "\${scheme}://#username:#password@$otherHost:\${port}\${path}"
+        val expectedUrl = "https://$USER:$PASSWORD@$otherHost:$PORT/$PATH"
+        val urlMapping = listOf("$regex  ->  $replace", "foo -> bar")
+        mockAuthenticator(host = otherHost)
+
+        val urlProvider = FossIdUrlProvider.create(urlMapping)
+        val url = urlProvider.getUrl(REPO_URL)
+
+        url shouldBe expectedUrl
+    }
+
+    "Invalid URL mappings are ignored" {
+        val invalidMapping = ADD_CREDENTIALS_MAPPING.replace("->", "=>")
+        val urlMapping = listOf(invalidMapping)
+
+        val urlProvider = FossIdUrlProvider.create(urlMapping)
         val url = urlProvider.getUrl(REPO_URL)
 
         url shouldBe REPO_URL
@@ -65,10 +104,22 @@ private const val USER = "scott"
 private const val PASSWORD = "tiger"
 private val AUTHENTICATION = PasswordAuthentication(USER, PASSWORD.toCharArray())
 
+/** A URL mapping that adds credentials to arbitrary URLs. */
+private const val ADD_CREDENTIALS_MAPPING = "(?<scheme>)://(?<host>)(?<port>:\\d+)?(?<path>.*) -> " +
+        "\${scheme}://#username:#password@\${host}\${port}\${path}"
+
 /**
- * Mock a request for authentication for the given [url] to return the specified [authentication].
+ * Mock a request for authentication for the given [host] and [port] to return the specified
+ * [authentication].
  */
-private fun mockAuthenticator(url: String = REPO_URL, authentication: PasswordAuthentication? = AUTHENTICATION) {
+private fun mockAuthenticator(
+    host: String = HOST,
+    port: Int = PORT,
+    authentication: PasswordAuthentication? = AUTHENTICATION
+) {
     mockkStatic("org.ossreviewtoolkit.utils.ort.UtilsKt")
-    every { requestPasswordAuthentication(URI(url)) } returns authentication
+    every { requestPasswordAuthentication(any()) } answers {
+        val uri = firstArg<URI>()
+        authentication.takeIf { uri.host == host && uri.port == port && uri.scheme == "https" }
+    }
 }

@@ -210,5 +210,5 @@ internal data class FossIdConfig(
     /**
      * Create a [FossIdUrlProvider] helper object based on the configuration stored in this object.
      */
-    fun createUrlProvider() = FossIdUrlProvider.create(addAuthenticationToUrl)
+    fun createUrlProvider() = FossIdUrlProvider.create()
 }
