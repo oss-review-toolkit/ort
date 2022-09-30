@@ -293,6 +293,7 @@ private fun <T> createPromise(value: T): Promise<T> =
         every { claim() } returns value
     }
 
+@Suppress("ForbiddenVoid")
 private fun createVoidPromise(): Promise<Void> =
     mockk {
         every { claim() } returns null
