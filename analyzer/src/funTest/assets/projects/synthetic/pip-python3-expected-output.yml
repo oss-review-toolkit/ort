@@ -26,28 +26,26 @@ packages:
 - id: "PyPI::django:2.2.20"
   purl: "pkg:pypi/django@2.2.20"
   authors:
-  - "Django Software Foundation"
+  - "Django Software Foundation <foundation@djangoproject.com>"
   declared_licenses:
   - "BSD"
-  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
-  description: "A high-level Python Web framework that encourages rapid development\
-    \ and clean, pragmatic design."
+  description: "Django is a high-level Python Web framework that encourages rapid\
+    \ development"
   homepage_url: "https://www.djangoproject.com/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/b1/88/bd220ea3e4e12c42f2215285cb101d925f95e42b093f390c823e61c94f00/Django-2.2.20-py3-none-any.whl"
     hash:
-      value: "97add963ed8a45386a704b494a8c59a2"
-      algorithm: "MD5"
+      value: "2484f115891ab1a0e9ae153602a641fbc15d7894c036d79fb78662c0965d7954"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/3c/e0/2ab562729727dc25d800134f811f8e15e56fb28c44dfab5222a51b9d2b20/Django-2.2.20.tar.gz"
     hash:
-      value: "947060d96ccc0a05e8049d839e541b25"
-      algorithm: "MD5"
+      value: "2569f9dc5f8e458a5e988b03d6b7a02bda59b006d6782f4ea0fd590ed7336a64"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -61,26 +59,23 @@ packages:
 - id: "PyPI::pytz:2022.4"
   purl: "pkg:pypi/pytz@2022.4"
   authors:
-  - "Stuart Bishop"
+  - "Stuart Bishop <stuart@stuartbishop.net>"
   declared_licenses:
   - "MIT"
-  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "World timezone definitions, modern and historical"
+  description: "pytz - World Timezone Definitions for Python"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/d8/66/309545413162bc8271c73e622499a41cdc37217b499febe26155ff9f93ed/pytz-2022.4-py2.py3-none-any.whl"
     hash:
-      value: "24bcf3f123fd3538b25b96905fc44e00"
-      algorithm: "MD5"
+      value: "2c0784747071402c6e99f0bafdb7da0fa22645f06554c7ae06bf6358897e9c91"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/31/da/2d48d3499b59c7f3c5d5e1c79fcee5537c320c8ab7b7a0cd2db578bc34b3/pytz-2022.4.tar.gz"
     hash:
-      value: "b1d2ed6592bbdf6002ef52b4ab8e2efe"
-      algorithm: "MD5"
+      value: "48ce799d83b6f8aab2020e369b627446696619e79645419610b9facd909b3174"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -94,26 +89,23 @@ packages:
 - id: "PyPI::sqlparse:0.4.3"
   purl: "pkg:pypi/sqlparse@0.4.3"
   authors:
-  - "Andi Albrecht"
+  - "Andi Albrecht <albrecht.andi@gmail.com>"
   declared_licenses:
-  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "A non-validating SQL parser."
+  description: "python-sqlparse - Parse SQL statements"
   homepage_url: "https://github.com/andialbrecht/sqlparse"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/97/d3/31dd2c3e48fc2060819f4acb0686248250a0f2326356306b38a42e059144/sqlparse-0.4.3-py3-none-any.whl"
     hash:
-      value: "7f21dd4bc74215d68702b8de53dd92a3"
-      algorithm: "MD5"
+      value: "0323c0ec29cd52bceabc1b4d9d579e311f3e4961b98d174201d5622a23b85e34"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/ba/fa/5b7662b04b69f3a34b8867877e4dbf2a37b7f2a5c0bbb5a9eed64efd1ad1/sqlparse-0.4.3.tar.gz"
     hash:
-      value: "180fb4e11a3f79b119868d7c102d7816"
-      algorithm: "MD5"
+      value: "69ca804846bb114d2ec380e4360a8a340db83f0ccf3afceeb1404df028f57268"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""

@@ -22,12 +22,25 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+import java.util.SortedSet
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 
+import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+private val json = Json { ignoreUnknownKeys = true }
 
 internal object PythonInspector : CommandLineTool {
     override fun command(workingDir: File?) = "python-inspector"
@@ -38,16 +51,17 @@ internal object PythonInspector : CommandLineTool {
 
     fun run(
         workingDir: File,
-        outputFile: String,
         definitionFile: File,
         pythonVersion: String = "38",
-    ): ProcessCapture {
+    ): PythonInspectorResult {
+        val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
+
         val commandLineOptions = buildList {
             add("--python-version")
             add(pythonVersion)
 
             add("--json-pdt")
-            add(outputFile)
+            add(outputFile.absolutePath)
 
             add("--analyze-setup-py-insecurely")
 
@@ -60,7 +74,13 @@ internal object PythonInspector : CommandLineTool {
             add(definitionFile.absolutePath)
         }
 
-        return run(workingDir, *commandLineOptions.toTypedArray())
+        return try {
+            run(workingDir, *commandLineOptions.toTypedArray())
+
+            outputFile.inputStream().use { json.decodeFromStream(it) }
+        } finally {
+            outputFile.delete()
+        }
     }
 }
 
@@ -113,3 +133,68 @@ internal class PythonInspectorParty(
     val email: String?,
     val url: String?
 )
+
+private const val TYPE = "PyPI"
+
+internal fun List<PythonInspectorPackage>.toOrtPackages(): SortedSet<Package> =
+    groupBy { "${it.name}:${it.version}" }.mapTo(sortedSetOf()) { (_, packages) ->
+        // The python inspector currently often contains two entries for a package where the only difference is the
+        // download URL. In this case, one package contains the URL of the binary artifact, the other for the source
+        // artifact. So take all metadata from the first package except for the artifacts.
+        val pkg = packages.first()
+
+        fun PythonInspectorPackage.getHash(): Hash = Hash.create(sha512 ?: sha256 ?: sha1 ?: md5 ?: "")
+
+        fun getArtifact(fileExtension: String) =
+            packages.find { it.downloadUrl.endsWith(fileExtension) }?.let {
+                RemoteArtifact(
+                    url = it.downloadUrl,
+                    hash = it.getHash()
+                )
+            } ?: RemoteArtifact.EMPTY
+
+        fun PythonInspectorPackage.getDeclaredLicenses() =
+            listOfNotNull(declaredLicense.takeIf { it.isNotBlank() && it != "UNKNOWN" }).toSortedSet()
+
+        Package(
+            // The package has a namespace property which is currently always empty. Deliberately set the namespace to
+            // an empty string here to be consistent with the resolved packages which do not have a namespace property.
+            id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version),
+            purl = pkg.purl,
+            authors = pkg.parties.toAuthors(),
+            declaredLicenses = pkg.getDeclaredLicenses(),
+            // Only use the first line of the description because the descriptions provided by python-inspector are
+            // currently far too long, see: https://github.com/nexB/python-inspector/issues/74
+            description = pkg.description.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty(),
+            homepageUrl = pkg.homepageUrl,
+            binaryArtifact = getArtifact(".whl"),
+            sourceArtifact = getArtifact(".tar.gz"),
+            vcs = VcsInfo.EMPTY.copy(url = pkg.vcsUrl.orEmpty()),
+            vcsProcessed = PackageManager.processPackageVcs(
+                VcsInfo(VcsType.UNKNOWN, pkg.vcsUrl.orEmpty(), revision = ""),
+                fallbackUrls = listOfNotNull(
+                    pkg.codeViewUrl,
+                    pkg.homepageUrl
+                ).toTypedArray()
+            )
+        )
+    }
+
+private fun List<PythonInspectorParty>.toAuthors(): SortedSet<String> =
+    filter { it.role == "author" }.mapNotNullTo(sortedSetOf()) { party ->
+        buildString {
+            party.name?.let { append(it) }
+            party.email?.let {
+                append(if (party.name != null) " <$it>" else it)
+            }
+        }.takeIf { it.isNotBlank() }
+    }
+
+internal fun List<PythonInspectorResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
+    mapTo(sortedSetOf()) { it.toPackageReference() }
+
+private fun PythonInspectorResolvedDependency.toPackageReference() =
+    PackageReference(
+        id = Identifier(type = TYPE, namespace = "", name = packageName, version = installedVersion),
+        dependencies = dependencies.toPackageReferences()
+    )

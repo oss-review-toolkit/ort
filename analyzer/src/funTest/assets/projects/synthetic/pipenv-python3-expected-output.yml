@@ -25,28 +25,26 @@ packages:
 - id: "PyPI::django:2.1.11"
   purl: "pkg:pypi/django@2.1.11"
   authors:
-  - "Django Software Foundation"
+  - "Django Software Foundation <foundation@djangoproject.com>"
   declared_licenses:
   - "BSD"
-  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
-  description: "A high-level Python Web framework that encourages rapid development\
-    \ and clean, pragmatic design."
+  description: "Django is a high-level Python Web framework that encourages rapid\
+    \ development"
   homepage_url: "https://www.djangoproject.com/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/8c/49/d5038239995594281478bf209f8d93524ad342d500009a697b27f884668a/Django-2.1.11-py3-none-any.whl"
     hash:
-      value: "5419065b487d22f584ca9d42df971092"
-      algorithm: "MD5"
+      value: "305b6c4fce9e03bb746e35780c2c4d52f29ea1669f15633cfd41bc8821c74c76"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/e0/e9/7e6008abee3eb2a40704c95a5cfc8a9627012df1580289d3df0f34c99766/Django-2.1.11.tar.gz"
     hash:
-      value: "42f0d3ccdcd89c566a30765ee0e25d42"
-      algorithm: "MD5"
+      value: "1a41831eace203fd1939edf899e07d7abd12ce9bafc3d9a5a63a24a8d1d12bd5"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -60,26 +58,23 @@ packages:
 - id: "PyPI::pytz:2019.3"
   purl: "pkg:pypi/pytz@2019.3"
   authors:
-  - "Stuart Bishop"
+  - "Stuart Bishop <stuart@stuartbishop.net>"
   declared_licenses:
   - "MIT"
-  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "World timezone definitions, modern and historical"
+  description: "pytz - World Timezone Definitions for Python"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/e7/f9/f0b53f88060247251bf481fa6ea62cd0d25bf1b11a87888e53ce5b7c8ad2/pytz-2019.3-py2.py3-none-any.whl"
     hash:
-      value: "cb3da4cc0427d718d2478350e0b4b169"
-      algorithm: "MD5"
+      value: "1c557d7d0e871de1f5ccd5833f60fb2550652da6be2693c1e02300743d21500d"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/82/c3/534ddba230bd4fbbd3b7a3d35f3341d014cca213f369a9940925e7e5f691/pytz-2019.3.tar.gz"
     hash:
-      value: "c3d84a465fc56a4edd52cca8873ac0df"
-      algorithm: "MD5"
+      value: "b02c06db6cf09c12dd25137e563b31700d3b80fcc4ad23abb7a315f2789819be"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""

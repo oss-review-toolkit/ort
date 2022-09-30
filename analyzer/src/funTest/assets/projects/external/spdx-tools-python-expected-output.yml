@@ -37,27 +37,25 @@ packages:
 - id: "PyPI::isodate:0.6.1"
   purl: "pkg:pypi/isodate@0.6.1"
   authors:
-  - "Gerhard Weis"
+  - "Gerhard Weis <gerhard.weis@proclos.com>"
   declared_licenses:
   - "BSD"
-  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-      BSD License: "BSD-3-Clause"
-  description: "An ISO 8601 date/time/duration parser and formatter"
+  description: "ISO 8601 date/time parser"
   homepage_url: "https://github.com/gweis/isodate/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/b6/85/7882d311924cbcfc70b1890780763e36ff0b140c7e51c110fc59a532f087/isodate-0.6.1-py2.py3-none-any.whl"
     hash:
-      value: "c8a5fcd645030db98daa82b8e56fda89"
-      algorithm: "MD5"
+      value: "0751eece944162659049d35f4f549ed815792b38793f07cf73381c1c87cbed96"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/db/7a/c0a56c7d56c7fa723988f122fa1f1ccf8c5c4ccc48efad0d214b49e5b1af/isodate-0.6.1.tar.gz"
     hash:
-      value: "1a310658b30a48641bafb5652ad91c40"
-      algorithm: "MD5"
+      value: "48c5881de7e8b0a0d648cb024c8062dc84e7b840ed81e864c7614fd3c127bde9"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -71,25 +69,26 @@ packages:
 - id: "PyPI::ply:3.11"
   purl: "pkg:pypi/ply@3.11"
   authors:
-  - "David Beazley"
+  - "David Beazley <dave@dabeaz.com>"
   declared_licenses:
   - "BSD"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "Python Lex & Yacc"
+  description: "PLY is yet another implementation of lex and yacc for Python. Some\
+    \ notable"
   homepage_url: "http://www.dabeaz.com/ply/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl"
     hash:
-      value: "62b6ad5affddc9926ab5571f390cc840"
-      algorithm: "MD5"
+      value: "096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/e5/69/882ee5c9d017149285cab114ebeab373308ef0f874fcdac9beb90e0ac4da/ply-3.11.tar.gz"
     hash:
-      value: "6465f602e656455affcd7c5734c638f8"
-      algorithm: "MD5"
+      value: "00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -103,25 +102,25 @@ packages:
 - id: "PyPI::pyparsing:2.4.7"
   purl: "pkg:pypi/pyparsing@2.4.7"
   authors:
-  - "Paul McGuire"
+  - "Paul McGuire <ptmcg@users.sourceforge.net>"
   declared_licenses:
   - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
     mapped:
       MIT License: "MIT"
-  description: "Python parsing module"
+  description: "PyParsing -- A Python Parsing Module"
   homepage_url: "https://github.com/pyparsing/pyparsing/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl"
     hash:
-      value: "dbfd0a241aad2595f43377ec7f1836ea"
-      algorithm: "MD5"
+      value: "ef9d7589ef3c200abe66653d3f1ab1033c3c419ae9b9bdb1240a85b024efc88b"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/c1/47/dfc9c342c9842bbe0036c7f763d2d6686bcf5eb1808ba3e170afdb282210/pyparsing-2.4.7.tar.gz"
     hash:
-      value: "f0953e47a0112f7a65aec2305ffdf7b4"
-      algorithm: "MD5"
+      value: "c203ec8783bf771a155b207279b9bccb8dea02d8f0c9e5f8ead507bc3246ecc1"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -135,27 +134,23 @@ packages:
 - id: "PyPI::rdflib:5.0.0"
   purl: "pkg:pypi/rdflib@5.0.0"
   authors:
-  - "Daniel 'eikeon' Krech"
+  - "Daniel 'eikeon' Krech <eikeon@eikeon.com>"
   declared_licenses:
-  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
-  description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
-    \ language for representing information."
+  description: "RDFLib is a Python library for working with"
   homepage_url: "https://github.com/RDFLib/rdflib"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/d0/6b/6454aa1db753c0f8bc265a5bd5c10b5721a4bb24160fb4faf758cf6be8a1/rdflib-5.0.0-py3-none-any.whl"
+    url: ""
     hash:
-      value: "8ad1eb4d67ade138370fb45ce1cb3412"
-      algorithm: "MD5"
+      value: ""
+      algorithm: ""
   source_artifact:
     url: "https://files.pythonhosted.org/packages/2f/ae/a50934a7ed4f9d80bbc0e0cf725c7fd2208f2e433efbf881ed0c0317a7f1/rdflib-5.0.0.tar.gz"
     hash:
-      value: "80d7c6adc2e4040cdd8dade2e0e61403"
-      algorithm: "MD5"
+      value: "78149dd49d385efec3b3adfbd61c87afaf1281c30d3fcaf1b323b34f603fb155"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -169,26 +164,23 @@ packages:
 - id: "PyPI::six:1.16.0"
   purl: "pkg:pypi/six@1.16.0"
   authors:
-  - "Benjamin Peterson"
+  - "Benjamin Peterson <benjamin@python.org>"
   declared_licenses:
   - "MIT"
-  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
-  description: "Python 2 and 3 compatibility utilities"
+  description: ".. image:: https://img.shields.io/pypi/v/six.svg"
   homepage_url: "https://github.com/benjaminp/six"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl"
     hash:
-      value: "529d7fd7e14612ccde86417b4402d6f3"
-      algorithm: "MD5"
+      value: "8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/71/39/171f1c67cd00715f190ba0b100d606d440a28c93c7714febeca8b79af85e/six-1.16.0.tar.gz"
     hash:
-      value: "a7c927740e4964dd29b72cebfc1429bb"
-      algorithm: "MD5"
+      value: "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""

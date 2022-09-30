@@ -25,38 +25,23 @@ import io.kotest.matchers.should
 
 import java.io.File
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class PythonInspectorFunTest : StringSpec({
     val projectsDir = File("src/funTest/assets/projects").absoluteFile
-    val json = Json { ignoreUnknownKeys = true }
 
     "python-inspector output can be deserialized" {
         val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
         val workingDir = definitionFile.parentFile
-        val outputFile = createSpecTempDir().resolve("python-inspector.json")
 
-        try {
+        val result = try {
             PythonInspector.run(
                 workingDir = workingDir,
-                outputFile = outputFile.absolutePath,
                 definitionFile = definitionFile,
                 pythonVersion = "27"
             )
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
-        }
-
-        val result = withContext(Dispatchers.IO) {
-            outputFile.inputStream().use {
-                json.decodeFromStream<PythonInspectorResult>(it)
-            }
         }
 
         result.resolvedDependencies should haveSize(1)
