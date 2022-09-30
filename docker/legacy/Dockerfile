@@ -50,7 +50,7 @@ FROM eclipse-temurin:11-jdk-jammy AS run
 ENV \
     # Package manager versions.
     BOWER_VERSION=1.8.12 \
-    CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~22.04.1 \
+    CARGO_VERSION=0.62.0ubuntu0libgit2-0ubuntu0.22.04.1 \
     COCOAPODS_VERSION=1.11.2 \
     COMPOSER_VERSION=2.2.6-2ubuntu4 \
     CONAN_VERSION=1.52.0 \

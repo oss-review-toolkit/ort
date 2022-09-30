@@ -324,7 +324,7 @@ RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
     && echo "add_local_path /usr/lib/dart/bin:\$PATH" > /etc/profile.d/dart.sh
 
 # Apt install commands.
-ARG CARGO_VERSION=0.60.0ubuntu1-0ubuntu1~22.04.1
+ARG CARGO_VERSION=0.62.0ubuntu0libgit2-0ubuntu0.22.04.1
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
