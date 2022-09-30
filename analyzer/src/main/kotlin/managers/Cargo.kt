@@ -108,9 +108,22 @@ class Cargo(
         }
 
         val contents = Toml().read(lockfile)
-        val metadata = contents.getTable("metadata")?.toMap().orEmpty()
-        return metadata.mapNotNull { (k, v) ->
-            (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
+        return when (contents.getLong("version")) {
+            3L -> {
+                contents.getTables("package").orEmpty().mapNotNull { pkg ->
+                    pkg.getString("checksum")?.let { checksum ->
+                        val key = "${pkg.getString("name")} ${pkg.getString("version")} (${pkg.getString("source")})"
+                        key to checksum
+                    }
+                }
+            }
+
+            else -> {
+                val metadata = contents.getTable("metadata")?.toMap().orEmpty()
+                metadata.mapNotNull { (k, v) ->
+                    (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
+                }
+            }
         }.toMap()
     }
 
