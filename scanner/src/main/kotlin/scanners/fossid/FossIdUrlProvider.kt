@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.fossid
 
 import java.net.Authenticator
+import java.net.PasswordAuthentication
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -31,31 +32,94 @@ import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
  * An internal helper class that generates the URLs used by [FossId] to check out the repositories to be scanned.
  *
  * The URLs used by FossId can sometimes be different from the normal package URLs. For instance, credentials may need
- * to be added. This class takes care of such mappings.
+ * to be added, or a different protocol may be used. This class takes care of such mappings.
  */
 internal class FossIdUrlProvider private constructor(
-    /** Flag whether credentials should be passed to FossID in URLs. */
-    val addAuthenticationToUrl: Boolean
+    /**
+     * The URL mapping. URLs matched by a key [Regex] are replaced by the URL in the value. The replacement string can
+     * refer to matched groups of the [Regex]. It can also contain the variables [VAR_USERNAME] and [VAR_PASSWORD] to
+     * allow the injection of credentials.
+     */
+    private val urlMapping: Map<Regex, String>
 ) {
     companion object : Logging {
-        fun create(addAuthenticationToUrl: Boolean): FossIdUrlProvider = FossIdUrlProvider(addAuthenticationToUrl)
+        /** Variable in the mapping replacement string that references the username. */
+        private const val VAR_USERNAME = "#username"
+
+        /** Variable in the mapping replacement string that references the password. */
+        private const val VAR_PASSWORD = "#password"
+
+        /** The separator regex to split URL mappings. */
+        private val MAPPING_SEPARATOR = Regex("\\s+->\\s+")
+
+        /** A credentials object to be used if the Authenticator does not yield results. */
+        private val UNKNOWN_CREDENTIALS = PasswordAuthentication("unknown", CharArray(0))
 
         /**
-         * This function fetches credentials for [repoUrl] and insert them between the URL scheme and the host. If no
-         * matching host is found by [Authenticator], the [repoUrl] is returned untouched.
+         * Create a new instance of [FossIdUrlProvider] that applies the given [urlMapping]. The strings in
+         * [urlMapping] must contain a regular expression to match URLs and a replacement string, separated by
+         * [MAPPING_SEPARATOR].
          */
-        private fun queryAuthenticator(repoUrl: String): String {
+        fun create(
+            urlMapping: Collection<String> = emptyList()
+        ): FossIdUrlProvider = FossIdUrlProvider(urlMapping.toRegexMapping())
+
+        /**
+         * Try to fetch credentials for [repoUrl] from the current [Authenticator]. Return *null* if no matching host
+         * is found.
+         */
+        private fun queryAuthenticator(repoUrl: String): PasswordAuthentication? {
             val repoUri = repoUrl.toUri().getOrElse {
                 logger.warn { "The repository URL '$repoUrl' is not valid." }
-                return repoUrl
+                return null
             }
 
             logger.info { "Requesting authentication for host ${repoUri.host} ..." }
 
-            val creds = requestPasswordAuthentication(repoUri)
-            return creds?.let {
-                repoUrl.replaceCredentialsInUri("${creds.userName}:${String(creds.password)}")
-            } ?: repoUrl
+            return requestPasswordAuthentication(repoUri)
+        }
+
+        /**
+         * Handle the variables referencing credentials if they occur in the [replacement string][replaced].
+         */
+        private fun replaceVariables(replaced: String): String =
+            replaced.takeUnless { VAR_USERNAME in it || VAR_PASSWORD in it }
+                ?: insertCredentials(replaced)
+
+        /**
+         * Query the [Authenticator] and populate the corresponding variables in [replaced]. If no credentials are
+         * known for this host, strip the credentials part from [replaced].
+         */
+        private fun insertCredentials(replaced: String): String {
+            // In order to have a valid URL, the variables must be replaced by some credentials first.
+            val replacedUrl = replaced.insertCredentials(UNKNOWN_CREDENTIALS)
+
+            return queryAuthenticator(replacedUrl)?.let { replaced.insertCredentials(it) }
+                ?: replacedUrl.replaceCredentialsInUri()
+        }
+
+        /**
+         * Replace the variables related to credentials with the values in [auth].
+         */
+        private fun String.insertCredentials(auth: PasswordAuthentication): String =
+            replace(VAR_USERNAME, auth.userName).replace(VAR_PASSWORD, String(auth.password))
+
+        /**
+         * Construct a URL mapping from the elements in this [Collection]. The resulting [Map] contains regular
+         * expressions as keys to match for URLs and the corresponding replacement strings as values.
+         */
+        private fun Collection<String>.toRegexMapping(): Map<Regex, String> {
+            val (mappings, invalid) = map { it to it.split(MAPPING_SEPARATOR) }.partition { it.second.size == 2 }
+
+            if (invalid.isNotEmpty()) {
+                logger.warn { "Found the following invalid URL mappings: ${invalid.map { it.first }}." }
+            }
+
+            return mappings.associate { pair ->
+                val regex = pair.second[0].toRegex()
+                val replace = pair.second[1]
+                regex to replace
+            }
         }
     }
 
@@ -63,8 +127,14 @@ internal class FossIdUrlProvider private constructor(
      * Return the URL to be passed to FossID when creating a scan from the given [repoUrl].
      */
     fun getUrl(repoUrl: String): String {
-        if (!addAuthenticationToUrl) return repoUrl
+        for ((regex, replace) in urlMapping) {
+            val replaced = regex.replace(repoUrl, replace)
+            if (replaced != repoUrl) {
+                logger.info { "URL mapping applied to $repoUrl: Mapped to $replaced." }
+                return replaceVariables(replaced)
+            }
+        }
 
-        return queryAuthenticator(repoUrl)
+        return repoUrl
     }
 }
