@@ -131,7 +131,7 @@ private fun getScannedPackages(
 ): List<ScannedPackage> {
     val whereClause = listOfNotNull(
         "s.identifier = ANY(?)",
-        scanCodeVersion?.takeIf { it.isNotEmpty() }.let { "s.scan_result->'scanner'->>'version' = '$it'" }
+        scanCodeVersion?.takeUnless { it.isEmpty() }?.let { "s.scan_result->'scanner'->>'version' = '$it'" }
     ).joinToString(" AND ")
 
     val query = """
