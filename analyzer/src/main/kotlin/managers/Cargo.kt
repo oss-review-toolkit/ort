@@ -107,17 +107,8 @@ class Cargo(
         }
 
         val contents = Toml().read(lockfile)
-        val metadata = contents.getTable("metadata") ?: return emptyMap()
-        val metadataMap = metadata.toMap()
-
-        val metadataMapNotNull = mutableMapOf<String, String>()
-        metadataMap.forEach { (key, value) ->
-            if (key != null && (value as? String) != null) {
-                metadataMapNotNull[key] = value
-            }
-        }
-
-        return metadataMapNotNull
+        val metadata = contents.getTable("metadata")?.toMap().orEmpty()
+        return metadata.mapNotNull { (k, v) -> (v as? String)?.let { k to v } }.toMap()
     }
 
     /**
