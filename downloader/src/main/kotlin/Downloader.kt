@@ -59,7 +59,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             "The output directory '$outputDirectory' must not contain any files yet."
         }
 
-        outputDirectory.apply { safeMkdirs() }
+        outputDirectory.safeMkdirs()
     }
 
     /**
