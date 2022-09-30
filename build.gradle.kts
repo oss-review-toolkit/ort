@@ -460,52 +460,52 @@ fun getCommittedFilePaths(rootDir: File): List<String> {
     return filePaths
 }
 
-fun getCopyrightableFiles(rootDir: File): List<File> {
-    val excludedPaths = listOf(
-        "LICENSE",
-        "NOTICE",
-        "batect",
-        "gradlew",
-        "gradle/",
-        "examples/",
-        "integrations/completions/",
-        "reporter/src/main/resources/",
-        "reporter-web-app/yarn.lock",
-        "resources/META-INF/",
-        "resources/exceptions/",
-        "resources/licenses/",
-        "resources/licenserefs/",
-        "test/assets/",
-        "funTest/assets/"
-    )
+val copyrightExcludedPaths = listOf(
+    "LICENSE",
+    "NOTICE",
+    "batect",
+    "gradlew",
+    "gradle/",
+    "examples/",
+    "integrations/completions/",
+    "reporter/src/main/resources/",
+    "reporter-web-app/yarn.lock",
+    "resources/META-INF/",
+    "resources/exceptions/",
+    "resources/licenses/",
+    "resources/licenserefs/",
+    "test/assets/",
+    "funTest/assets/"
+)
 
-    val excludedExtensions = listOf(
-        "css",
-        "graphql",
-        "json",
-        "md",
-        "png",
-        "svg"
-    )
+val copyrightExcludedExtensions = listOf(
+    "css",
+    "graphql",
+    "json",
+    "md",
+    "png",
+    "svg"
+)
 
-    return getCommittedFilePaths(rootDir).map { filePath ->
+fun getCopyrightableFiles(rootDir: File): List<File> =
+    getCommittedFilePaths(rootDir).map { filePath ->
         rootDir.resolve(filePath)
     }.filter { file ->
         val isHidden = file.toPath().any { it.toString().startsWith(".") }
 
-        !isHidden && excludedPaths.none { it in file.path } && file.extension !in excludedExtensions
+        !isHidden && copyrightExcludedPaths.none { it in file.path } && file.extension !in copyrightExcludedExtensions
     }
-}
+
+val maxCopyrightLines = 50
 
 fun extractCopyrights(file: File): List<String> {
     val copyrights = mutableListOf<String>()
 
-    val maxLines = 50
     var lineCounter = 0
 
     file.useLines { lines ->
         lines.forEach { line ->
-            if (++lineCounter > maxLines) return@forEach
+            if (++lineCounter > maxCopyrightLines) return@forEach
             val copyright = line.replaceBefore(" Copyright ", "", "").trim()
             if (copyright.isNotEmpty() && !copyright.endsWith("\"")) copyrights += copyright
         }
@@ -514,12 +514,13 @@ fun extractCopyrights(file: File): List<String> {
     return copyrights
 }
 
+val copyrightPrefixRegex = Regex("Copyright .*\\d{2,}(-\\d{2,})? ", RegexOption.IGNORE_CASE)
+
 fun extractCopyrightHolders(statements: Collection<String>): List<String> {
     val holders = mutableListOf<String>()
-    val prefixRegex = Regex("Copyright .*\\d{2,}(-\\d{2,})? ", RegexOption.IGNORE_CASE)
 
     statements.mapNotNullTo(holders) { statement ->
-        val holder = statement.replace(prefixRegex, "")
+        val holder = statement.replace(copyrightPrefixRegex, "")
         holder.takeUnless { it == statement }?.trim()
     }
 
