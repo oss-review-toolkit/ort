@@ -620,11 +620,12 @@ class LicenseInfoResolverTest : WordSpec({
 
             val result = resolver.resolveLicenseFiles(pkgId)
 
-            archiver.storage.shouldBeTypeOf<FileArchiverFileStorage>().apply {
-                withClue(archiveDir.resolve(getArchivePath(provenance))) {
-                    hasArchive(provenance) shouldBe true
-                }
+            archiver.storage.shouldBeTypeOf<FileArchiverFileStorage>()
+
+            withClue(archiveDir.resolve(getArchivePath(provenance))) {
+                archiver.storage.hasArchive(provenance) shouldBe true
             }
+
             result.id shouldBe pkgId
             result.files should haveSize(1)
 
