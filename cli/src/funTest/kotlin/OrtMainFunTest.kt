@@ -114,6 +114,7 @@ class OrtMainFunTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
+            @Suppress("IgnoredReturnValue")
             runMain(
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
@@ -136,6 +137,7 @@ class OrtMainFunTest : StringSpec() {
                 urlProcessed = normalizeVcsUrl(vcsUrl)
             )
 
+            @Suppress("IgnoredReturnValue")
             runMain(
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
