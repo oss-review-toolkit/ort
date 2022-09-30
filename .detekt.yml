@@ -43,6 +43,8 @@ formatting:
     active: false
 
 naming:
+  ConstructorParameterNaming:
+    excludes: ["**/clients/github-graphql/build/generated/**"]
   InvalidPackageDeclaration:
     active: false
 
@@ -59,6 +61,8 @@ style:
     active: false
   MagicNumber:
     active: false
+  MaxLineLength:
+    excludes: ["**/clients/github-graphql/build/generated/**"]
   ReturnCount:
     active: false
   SpacingBetweenPackageAndImports:
@@ -85,5 +89,6 @@ style:
 ORT:
   OrtImportOrder:
     active: true
+    excludes: ["**/clients/github-graphql/build/generated/**"]
   OrtPackageNaming:
     active: true
