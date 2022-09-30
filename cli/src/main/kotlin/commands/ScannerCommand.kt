@@ -285,9 +285,9 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             val backend = storage.backend
             if (backend is LocalFileStorage) {
                 val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
-                val fileCount = backend.directory.walk().filter {
+                val fileCount = backend.directory.walk().count {
                     it.isFile && it.name == transformedScanResultsFileName
-                }.count()
+                }
 
                 println("Local file storage has $fileCount scan results file(s).")
             }
