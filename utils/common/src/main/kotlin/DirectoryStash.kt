@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("Filename")
+
 package org.ossreviewtoolkit.utils.common
 
 import java.io.Closeable
