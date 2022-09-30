@@ -279,7 +279,7 @@ class Pub(
 
         logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
-        val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence()?.toList() ?: listOf<String>()
+        val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence().orEmpty().toList()
         val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
