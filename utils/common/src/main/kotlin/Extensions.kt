@@ -277,7 +277,7 @@ fun <K, V : Collection<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Ma
     zip(other) { a, b ->
         when {
             // When iterating over the combined key set, not both values can be null.
-            a == null -> b!!
+            a == null -> checkNotNull(b)
             b == null -> a
             else -> {
                 @Suppress("UNCHECKED_CAST")
@@ -295,7 +295,7 @@ fun <K, V : Set<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V>
     zip(other) { a, b ->
         when {
             // When iterating over the combined key set, not both values can be null.
-            a == null -> b!!
+            a == null -> checkNotNull(b)
             b == null -> a
             else -> {
                 @Suppress("UNCHECKED_CAST")

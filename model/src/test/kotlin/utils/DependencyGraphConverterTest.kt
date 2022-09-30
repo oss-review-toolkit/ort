@@ -112,7 +112,7 @@ class DependencyGraphConverterTest : WordSpec({
 
             val convertedResult = DependencyGraphConverter.convert(result)
 
-            val graph = convertedResult.dependencyGraphs["Maven"]!!
+            val graph = convertedResult.dependencyGraphs.getValue("Maven")
             val issues = mutableListOf<OrtIssue>()
 
             fun collectIssues(node: DependencyGraphNode) {

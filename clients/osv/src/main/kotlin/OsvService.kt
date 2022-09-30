@@ -43,10 +43,12 @@ class OsvService(serverUrl: String = OsvApiClient.SERVER_URL_PRODUCTION, httpCli
         request: VulnerabilitiesForPackageRequest
     ): Result<List<Vulnerability>> {
         val response = client.getVulnerabilitiesForPackage(request).execute()
+        val body = response.body()
 
-        return when (response.isSuccessful) {
-            true -> Result.success(response.body()!!.vulnerabilities)
-            else -> Result.failure(IOException(response.message()))
+        return if (response.isSuccessful && body != null) {
+            Result.success(body.vulnerabilities)
+        } else {
+            Result.failure(IOException(response.message()))
         }
     }
 
@@ -63,10 +65,11 @@ class OsvService(serverUrl: String = OsvApiClient.SERVER_URL_PRODUCTION, httpCli
         requests.chunked(OsvApiClient.BATCH_REQUEST_MAX_SIZE).forEach { requestsChunk ->
             val batchRequest = VulnerabilitiesForPackageBatchRequest(requestsChunk)
             val response = client.getVulnerabilityIdsForPackages(batchRequest).execute()
+            val body = response.body()
 
-            if (!response.isSuccessful) return Result.failure(IOException(response.message()))
+            if (!response.isSuccessful || body == null) return Result.failure(IOException(response.message()))
 
-            result += response.body()!!.results.map { batchResponse ->
+            result += body.results.map { batchResponse ->
                 batchResponse.vulnerabilities.mapTo(mutableListOf()) { it.id }
             }
         }
@@ -79,10 +82,12 @@ class OsvService(serverUrl: String = OsvApiClient.SERVER_URL_PRODUCTION, httpCli
      */
     fun getVulnerabilityForId(id: String): Result<Vulnerability> {
         val response = client.getVulnerabilityForId(id).execute()
+        val body = response.body()
 
-        return when (response.isSuccessful) {
-            true -> Result.success(response.body()!!)
-            else -> Result.failure(IOException(response.message()))
+        return if (response.isSuccessful && body != null) {
+            Result.success(body)
+        } else {
+            Result.failure(IOException(response.message()))
         }
     }
 

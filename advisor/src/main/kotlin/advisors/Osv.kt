@@ -111,7 +111,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
             }
         }.onFailure {
             logger.error {
-                "Requesting vulnerabilities IDs for packages failed: ${result.exceptionOrNull()!!.collectMessages()}"
+                "Requesting vulnerabilities IDs for packages failed: ${it.collectMessages()}"
             }
         }
 
@@ -123,7 +123,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
 
         return result.getOrElse {
             logger.error {
-                "Requesting vulnerabilities IDs for packages failed: ${result.exceptionOrNull()!!.collectMessages()}"
+                "Requesting vulnerabilities IDs for packages failed: ${it.collectMessages()}"
             }
             emptyList()
         }
@@ -185,13 +185,12 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
         }
     } ?: (null to null)
 
-    if (severity == null && databaseSpecific != null) {
+    val specificSeverity = databaseSpecific?.get("severity")
+    if (severity == null && specificSeverity != null) {
         // Fallback to the 'severity' property of the unspecified 'databaseSpecific' object.
         // See also https://github.com/google/osv.dev/issues/484.
-        databaseSpecific!!["severity"]?.let {
-            if (it is JsonPrimitive) {
-                severity = it.contentOrNull
-            }
+        if (specificSeverity is JsonPrimitive) {
+            severity = specificSeverity.contentOrNull
         }
     }
 
