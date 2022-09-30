@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -108,7 +109,9 @@ class Cargo(
 
         val contents = Toml().read(lockfile)
         val metadata = contents.getTable("metadata")?.toMap().orEmpty()
-        return metadata.mapNotNull { (k, v) -> (v as? String)?.let { k to v } }.toMap()
+        return metadata.mapNotNull { (k, v) ->
+            (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
+        }.toMap()
     }
 
     /**
@@ -229,11 +232,6 @@ class Cargo(
 
 private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
 
-private fun checksumKeyOf(metadata: JsonNode): String {
-    val id = parseCargoId(metadata)
-    return "\"checksum $id\""
-}
-
 private fun parseCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
 private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
@@ -299,8 +297,8 @@ private fun parseSourceArtifact(
     val name = node["name"]?.textValue() ?: return null
     val version = node["version"]?.textValue() ?: return null
     val url = "https://crates.io/api/v1/crates/$name/$version/download"
-    val checksum = checksumKeyOf(node)
-    val hash = Hash.create(hashes[checksum].orEmpty())
+    val id = parseCargoId(node)
+    val hash = Hash.create(hashes[id].orEmpty())
     return RemoteArtifact(url, hash)
 }
 
