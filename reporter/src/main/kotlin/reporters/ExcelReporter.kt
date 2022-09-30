@@ -209,6 +209,7 @@ class ExcelReporter : Reporter {
 
         var currentRow = 0
 
+        @Suppress("UnnecessaryApply")
         sheet.createRow(currentRow).apply {
             CellUtil.createCell(this, 0, "Labels", headerStyle)
         }
@@ -411,6 +412,7 @@ class ExcelReporter : Reporter {
 
         var rows = 2
 
+        @Suppress("UnnecessaryApply")
         sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "VCS", headerStyle)
         }
