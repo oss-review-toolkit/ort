@@ -49,5 +49,5 @@ fi
 
 # Also add the certificates to the system certificates, e.g. for curl to work.
 echo "Adding certificates to the system certificates..."
-cp -r "$FILE_PREFIX" /usr/local/share/ca-certificates/
+cp -r "$FILE_PREFIX"* /usr/local/share/ca-certificates/
 update-ca-certificates
