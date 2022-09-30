@@ -156,7 +156,6 @@ ort:
         namingVariableVar3: myUnit
 
         waitForResult: false
-        addAuthenticationToUrl: false
 
         keepFailedScans: false
         deltaScans: true
@@ -166,6 +165,8 @@ ort:
         detectCopyrightStatements: true
 
         timeout: 60
+
+        urlMappingExample: "https://my-repo.example.org(?<repoPath>.*) -> ssh://my-mapped-repo.example.org${repoPath}"
 
     storages:
       local:
