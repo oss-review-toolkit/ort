@@ -43,6 +43,9 @@ internal class FossIdUrlProvider private constructor(
     private val urlMapping: Map<Regex, String>
 ) {
     companion object : Logging {
+        /** The prefix of option keys that define a URL mapping. */
+        internal const val PREFIX_URL_MAPPING = "urlMapping"
+
         /** Variable in the mapping replacement string that references the username. */
         private const val VAR_USERNAME = "#username"
 
@@ -63,6 +66,13 @@ internal class FossIdUrlProvider private constructor(
         fun create(
             urlMapping: Collection<String> = emptyList()
         ): FossIdUrlProvider = FossIdUrlProvider(urlMapping.toRegexMapping())
+
+        /**
+         * Create a new instance of [FossIdUrlProvider] and configure the URL mappings from the given configuration
+         * [options].
+         */
+        fun create(options: Map<String, String>): FossIdUrlProvider =
+            create(options.filter { it.key.startsWith(PREFIX_URL_MAPPING) }.values)
 
         /**
          * Try to fetch credentials for [repoUrl] from the current [Authenticator]. Return *null* if no matching host

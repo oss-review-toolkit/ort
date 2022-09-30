@@ -49,7 +49,6 @@ class FossIdConfigTest : WordSpec({
                 "user" to USER,
                 "apiKey" to API_KEY,
                 "waitForResult" to "false",
-                "addAuthenticationToUrl" to "false",
                 "keepFailedScans" to "true",
                 "deltaScans" to "true",
                 "deltaScanLimit" to "42",
@@ -66,7 +65,6 @@ class FossIdConfigTest : WordSpec({
                 user = USER,
                 apiKey = API_KEY,
                 waitForResult = false,
-                addAuthenticationToUrl = false,
                 keepFailedScans = true,
                 deltaScans = true,
                 deltaScanLimit = 42,
@@ -92,7 +90,6 @@ class FossIdConfigTest : WordSpec({
                 user = USER,
                 apiKey = API_KEY,
                 waitForResult = true,
-                addAuthenticationToUrl = false,
                 keepFailedScans = false,
                 deltaScans = false,
                 deltaScanLimit = Int.MAX_VALUE,
@@ -177,6 +174,23 @@ class FossIdConfigTest : WordSpec({
             val scanCode = namingProvider.createScanCode("TestProject", FossId.DeltaTag.DELTA)
 
             scanCode shouldBe "TestProject_TestOrganization_TestUnit_delta"
+        }
+    }
+
+    "createUrlProvider" should {
+        "initialize correct URL mappings" {
+            val url = "https://changeit.example.org/foo"
+            val scannerConfig = mapOf(
+                "serverUrl" to SERVER_URL,
+                "user" to USER,
+                "apiKey" to API_KEY,
+                "urlMappingChangeHost" to "$url -> $SERVER_URL"
+            ).toScannerConfig()
+
+            val fossIdConfig = FossIdConfig.create(scannerConfig)
+            val urlProvider = fossIdConfig.createUrlProvider()
+
+            urlProvider.getUrl(url) shouldBe SERVER_URL
         }
     }
 

@@ -31,7 +31,6 @@ import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeInstanceOf
 
 import java.io.File
@@ -166,7 +165,13 @@ class OrtConfigurationTest : WordSpec({
                     sw360Storage.token shouldBe "token"
                 }
 
-                options shouldNot beNull()
+                options shouldNotBeNull {
+                    val fossIdOptions = getValue("FossId")
+                    val mapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
+                            "ssh://my-mapped-repo.example.org\${repoPath}"
+                    fossIdOptions["urlMappingExample"] shouldBe mapping
+                }
+
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
 
