@@ -285,9 +285,9 @@ class LicenseInfoResolver(
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
-    var originalDeclaredLicenses = mutableSetOf<String>()
-    var originalExpressions = mutableSetOf<ResolvedOriginalExpression>()
-    var locations = mutableSetOf<ResolvedLicenseLocation>()
+    val originalDeclaredLicenses = mutableSetOf<String>()
+    val originalExpressions = mutableSetOf<ResolvedOriginalExpression>()
+    val locations = mutableSetOf<ResolvedLicenseLocation>()
 
     fun build() = ResolvedLicense(license, originalDeclaredLicenses, originalExpressions, locations)
 }
