@@ -33,9 +33,7 @@ plugins {
     antlr
     `java-library`
 
-    // Work around the Kotlin plugin already depending on the Download plugin, see
-    // https://youtrack.jetbrains.com/issue/KT-46034.
-    id(libs.plugins.download.get().pluginId) apply false
+    alias(libs.plugins.download)
 }
 
 tasks.withType<AntlrTask>().configureEach {

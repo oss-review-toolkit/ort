@@ -7,7 +7,7 @@ graalPlugin = "0.12.0"
 # @pin this version until https://github.com/ExpediaGroup/graphql-kotlin/issues/1526 is resolved.
 graphQlPlugin = "5.5.0"
 ideaExtPlugin = "1.1.6"
-kotlinPlugin = "1.7.10"
+kotlinPlugin = "1.7.20"
 shadowPlugin = "7.1.2"
 taskInfoPlugin = "2.0.0"
 versionCatalogUpdatePlugin = "0.6.1"
