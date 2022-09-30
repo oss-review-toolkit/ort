@@ -143,11 +143,14 @@ data class Project(
      * graph. Otherwise, result is this same object.
      */
     fun withResolvedScopes(graph: DependencyGraph?): Project =
-        takeUnless { graph != null && scopeNames != null }
-            ?: copy(
-                scopeDependencies = graph!!.createScopes(qualifiedScopeNames()),
+        if (graph != null && scopeNames != null) {
+            copy(
+                scopeDependencies = graph.createScopes(qualifiedScopeNames()),
                 scopeNames = null
             )
+        } else {
+            this
+        }
 
     /**
      * A comparison function to sort projects by their identifier.

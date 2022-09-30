@@ -65,7 +65,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                 )
 
                 val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
-                val paths = navigator.getShortestPaths(project)[scope.name]!!
+                val paths = navigator.getShortestPaths(project).getValue(scope.name)
 
                 paths should containExactly(
                     Identifier("A") to emptyList(),

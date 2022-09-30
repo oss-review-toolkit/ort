@@ -43,24 +43,22 @@ data class FileStorageConfiguration(
      * Create a [FileStorage] based on this configuration.
      */
     fun createFileStorage(): FileStorage {
-        require((httpFileStorage == null) xor (localFileStorage == null)) {
+        val storage = requireNotNull(listOfNotNull(httpFileStorage, localFileStorage).singleOrNull()) {
             "Exactly one implementation must be configured for a FileStorage."
         }
 
-        return httpFileStorage?.let { httpFileStorageConfiguration ->
-            HttpFileStorage(
-                httpFileStorageConfiguration.url,
-                httpFileStorageConfiguration.query,
-                httpFileStorageConfiguration.headers
-            )
-        } ?: localFileStorage!!.let { localFileStorageConfiguration ->
-            val directory = localFileStorageConfiguration.directory.expandTilde()
+        if (storage is HttpFileStorageConfiguration) {
+            return HttpFileStorage(storage.url, storage.query, storage.headers)
+        }
 
-            if (localFileStorageConfiguration.compression) {
-                XZCompressedLocalFileStorage(directory)
-            } else {
-                LocalFileStorage(directory)
-            }
+        check(storage is LocalFileStorageConfiguration)
+
+        val directory = storage.directory.expandTilde()
+
+        return if (storage.compression) {
+            XZCompressedLocalFileStorage(directory)
+        } else {
+            LocalFileStorage(directory)
         }
     }
 }

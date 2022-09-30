@@ -66,7 +66,7 @@ data class IdentifiedFile(
         )
     }
 
-    override fun getFileName(): String = file.path!!
+    override fun getFileName(): String = checkNotNull(file.path)
 
     override fun getCopyright(): String = identificationCopyright
 }
