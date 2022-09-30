@@ -59,7 +59,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
                 "http://www.gnu.org/copyleft/lesser.html"
             )
 
-            SpdxDeclaredLicenseMapping.rawMapping.asSequence().forAll { (key, license) ->
+            SpdxDeclaredLicenseMapping.rawMapping.forAll { (key, license) ->
                 if (key !in keysWithImpliedVersion && license.licenses().any { it.endsWith("-only") }) {
                     key should containADigit()
                 }
@@ -97,7 +97,7 @@ class SpdxDeclaredLicenseMappingTest : WordSpec({
         }
 
         "be case-insensitive" {
-            SpdxDeclaredLicenseMapping.mapping.asSequence().forAll { (key, license) ->
+            SpdxDeclaredLicenseMapping.mapping.forAll { (key, license) ->
                 SpdxDeclaredLicenseMapping.map(key.lowercase()) shouldBe license
                 SpdxDeclaredLicenseMapping.map(key.uppercase()) shouldBe license
                 SpdxDeclaredLicenseMapping.map(key.titlecase()) shouldBe license
