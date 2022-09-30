@@ -25,7 +25,7 @@ import java.io.File
  * Create a temporary directory with a name specific to ORT, and optional [infixes].
  */
 fun createOrtTempDir(vararg infixes: String): File {
-    val prefix = listOfNotNull(ORT_NAME, *infixes).joinToString("-")
+    val prefix = listOf(ORT_NAME, *infixes).joinToString("-")
     return kotlin.io.path.createTempDirectory(prefix).toFile()
 }
 

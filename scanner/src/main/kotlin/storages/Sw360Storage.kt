@@ -159,8 +159,7 @@ private fun isAttachmentAScanResult(attachment: SW360SparseAttachment) =
     attachment.attachmentType == SW360AttachmentType.SCAN_RESULT_REPORT
             && attachment.filename == SCAN_RESULTS_FILE_NAME
 
-private fun createReleaseName(id: Identifier) =
-    listOfNotNull(id.namespace, id.name).joinToString("/")
+private fun createReleaseName(id: Identifier) = "${id.namespace}/${id.name}"
 
 private fun createAttachmentOfScanResult(release: SW360Release, cachedScanResult: Path) =
     AttachmentUploadRequest.builder(release)
