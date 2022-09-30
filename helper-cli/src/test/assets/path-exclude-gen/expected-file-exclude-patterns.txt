@@ -51,6 +51,7 @@ curl-7.79.1/config.sub
 curl-7.79.1/configure
 curl-7.79.1/configure.ac
 curl-7.79.1/depcomp
+curl-7.79.1/ltmain.sh
 curl-7.79.1/packages/OS400/make-tests.sh
 curl-7.79.1/projects/checksrc.bat
 gradlew.bat
@@ -62,4 +63,5 @@ runtime/Perl5/Build.PL
 setup.cfg
 setup.py
 tasks/gem.rake
+zlib-1.2.12/FAQ
 zlib-1.2.12/zconf.h.cmakein

@@ -215,6 +215,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "*.pdf" to DOCUMENTATION_OF,
     "*.podspec" to BUILD_TOOL_OF,
     "*.rake" to BUILD_TOOL_OF,
+    "*.test.js" to TEST_OF,
     "*_test.go" to TEST_OF,
     "*coverage*.sh" to BUILD_TOOL_OF,
     ".editorconfig" to PathExcludeReason.OTHER,
@@ -239,6 +240,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "Configure" to BUILD_TOOL_OF,
     "DOCS.md" to DOCUMENTATION_OF,
     "Dockerfile" to BUILD_TOOL_OF,
+    "FAQ" to DOCUMENTATION_OF,
     "HISTORY.md" to DOCUMENTATION_OF,
     "History.md" to DOCUMENTATION_OF,
     "INSTALL" to DOCUMENTATION_OF,
@@ -265,6 +267,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "generate*.sh" to BUILD_TOOL_OF,
     "gradlew.bat" to BUILD_TOOL_OF,
     "jitpack.yml" to BUILD_TOOL_OF,
+    "ltmain.sh" to BUILD_TOOL_OF, // GNU Libtool script, see https://www.gnu.org/software/libtool/.
     "make-tests.sh" to BUILD_TOOL_OF,
     "makefile.*" to BUILD_TOOL_OF,
     "mkdocs.yml" to BUILD_TOOL_OF,
@@ -275,6 +278,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "settings.gradle" to BUILD_TOOL_OF,
     "setup.cfg" to BUILD_TOOL_OF,
     "setup.py" to BUILD_TOOL_OF,
+    "test.js" to TEST_OF,
     "test_*.c" to BUILD_TOOL_OF
 ).checkPatterns { it.first }
 
