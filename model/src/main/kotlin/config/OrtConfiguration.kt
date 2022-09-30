@@ -144,8 +144,8 @@ data class OrtConfiguration(
             val config = loader.loadConfig<OrtConfigurationWrapper>()
 
             return config.getOrElse { failure ->
-                if (sources.isNotEmpty()) {
-                    throw IllegalArgumentException("Failed to load ORT configuration: ${failure.description()}")
+                require(sources.isEmpty()) {
+                    "Failed to load ORT configuration: ${failure.description()}"
                 }
 
                 OrtConfigurationWrapper(OrtConfiguration())

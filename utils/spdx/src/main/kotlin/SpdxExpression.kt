@@ -361,11 +361,11 @@ class SpdxCompoundExpression(
             val dismissedLicense = subExpression.validChoices().first { it != choice }
             val unchosenLicenses = validChoices().filter { it != dismissedLicense }
 
-            if (unchosenLicenses.isEmpty()) {
-                throw IllegalArgumentException("No licenses left after applying choice $choice to $subExpression")
-            } else {
-                unchosenLicenses.reduce(SpdxExpression::or)
+            require(unchosenLicenses.isNotEmpty()) {
+                "No licenses left after applying choice $choice to $subExpression."
             }
+
+            unchosenLicenses.reduce(SpdxExpression::or)
         }
     }
 
