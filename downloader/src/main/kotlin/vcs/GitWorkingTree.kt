@@ -97,10 +97,10 @@ open class GitWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(work
         }
 
     override fun getRemoteUrl(): String =
-        repo.use {
+        repo.use { repo ->
             runCatching {
-                val remotes = org.eclipse.jgit.api.Git(it).use { it.remoteList().call() }
-                val remoteForCurrentBranch = BranchConfig(it.config, it.branch).remote
+                val remotes = org.eclipse.jgit.api.Git(repo).use { it.remoteList().call() }
+                val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
 
                 val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
                     remotes.find { it.name == "origin" } ?: remotes.firstOrNull()

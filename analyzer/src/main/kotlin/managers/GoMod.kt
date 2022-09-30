@@ -99,7 +99,7 @@ class GoMod(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val projectDir = definitionFile.parentFile
 
-        stashDirectories(projectDir.resolve("vendor")).use {
+        stashDirectories(projectDir.resolve("vendor")).use { _ ->
             val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy({ it.path }, { it })
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
