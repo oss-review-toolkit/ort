@@ -44,7 +44,7 @@ data class File(
 
     val licenseName: String?,
 
-    val licenses: MutableMap<Int, License >?,
+    val licenses: MutableMap<Int, License>?,
 
     val md5: String?,
 
