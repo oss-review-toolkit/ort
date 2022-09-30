@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.vdurmont.semver4j.Requirement
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
 
@@ -32,6 +33,11 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+
+/**
+ * The version that introduced the requirements command.
+ */
+private val REQUIREMENTS_COMMAND_VERSION = Semver("2022.4.8")
 
 class Pipenv(
     name: String,
@@ -72,7 +78,12 @@ class Pipenv(
 
         logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        val requirements = ProcessCapture(workingDir, command(), "lock", "--requirements").requireSuccess().stdout
+        val requirements = if (Semver(getVersion()) >= REQUIREMENTS_COMMAND_VERSION) {
+            ProcessCapture(workingDir, command(), "requirements")
+        } else {
+            ProcessCapture(workingDir, command(), "lock", "--requirements")
+        }.requireSuccess().stdout
+
         requirementsFile.writeText(requirements)
 
         return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
