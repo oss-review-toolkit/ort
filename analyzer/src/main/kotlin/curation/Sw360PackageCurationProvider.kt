@@ -85,7 +85,7 @@ class Sw360PackageCurationProvider(configuration: Sw360StorageConfiguration) : P
         }.toMap()
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
-        val name = listOfNotNull(pkgId.namespace, pkgId.name).joinToString("/")
+        val name = "${pkgId.namespace}/${pkgId.name}"
 
         return releaseClient.getSparseReleaseByNameAndVersion(name, pkgId.version)
             .flatMap { releaseClient.enrichSparseRelease(it) }
