@@ -9,6 +9,22 @@ on:
       - main
 
 jobs:
+  copyright-license:
+    runs-on: ubuntu-22.04
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Check copyright and license information
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: checkCopyrightsInNoticeFile checkLicenseHeaders
   detekt-issues:
     runs-on: ubuntu-22.04
     env:
