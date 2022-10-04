@@ -120,6 +120,10 @@ private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
 private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
 private val OPERATING_SYSTEMS = listOf("linux", "mac", "windows")
 
+private const val OPTION_PYTHON_VERSION = "pythonVersion"
+private const val OPTION_PYTHON_VERSION_DEFAULT = "3.10"
+private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10")
+
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
@@ -128,6 +132,7 @@ private val OPERATING_SYSTEMS = listOf("linux", "mac", "windows")
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "mac", or
  *   "windows". Defaults to "linux".
+ * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.10".
  */
 @Suppress("TooManyFunctions")
 class Pip(
@@ -154,6 +159,13 @@ class Pip(
         .also { os ->
             require(os.isEmpty() || os in OPERATING_SYSTEMS) {
                 "The 'operatingSystem' option must be one of ${OPERATING_SYSTEMS.joinToString { "'$it'" }}."
+            }
+        }
+
+    private val pythonVersionOption = (options[OPTION_PYTHON_VERSION] ?: OPTION_PYTHON_VERSION_DEFAULT)
+        .also { pythonVersion ->
+            require(pythonVersion in PYTHON_VERSIONS) {
+                "The 'pythonVersion' option must be one of ${PYTHON_VERSIONS.joinToString { "'$it'" }}."
             }
         }
 
@@ -193,7 +205,7 @@ class Pip(
         val virtualEnvDir = setupVirtualEnv(workingDir, pythonMajorVersion)
 
         val project = getProjectBasics(definitionFile, virtualEnvDir)
-        val (packages, installDependencies) = getInstallDependencies(definitionFile, pythonMajorVersion)
+        val (packages, installDependencies) = getInstallDependencies(definitionFile)
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
@@ -287,21 +299,12 @@ class Pip(
         )
     }
 
-    private fun getInstallDependencies(
-        definitionFile: File,
-        pythonMajorVersion: Int
-    ): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
+    private fun getInstallDependencies(definitionFile: File): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val workingDir = definitionFile.parentFile
 
-        val pythonVersion = when (pythonMajorVersion) {
-            2 -> "2.7" // 2.7 is the only 2.x version supported by python-inspector.
-            3 -> "3.10" // 3.10 is the version currently used in the ORT Docker image.
-            else -> throw IllegalArgumentException("Unsupported Python major version '$pythonMajorVersion'.")
-        }
-
         logger.info {
-            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' and " +
-                    "operating system '$operatingSystemOption'."
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersionOption' " +
+                    "and operating system '$operatingSystemOption'."
         }
 
         val pythonInspectorResult = runCatching {
@@ -309,7 +312,7 @@ class Pip(
                 PythonInspector.run(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
-                    pythonVersion = pythonVersion.replace(".", ""),
+                    pythonVersion = pythonVersionOption.replace(".", ""),
                     operatingSystem = operatingSystemOption
                 )
             } finally {

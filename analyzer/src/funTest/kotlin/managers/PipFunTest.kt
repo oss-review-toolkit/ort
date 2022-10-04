@@ -26,6 +26,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -42,7 +43,7 @@ class PipFunTest : WordSpec({
         "resolve setup.py dependencies correctly for spdx-tools-python" {
             val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
             val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
 
             result.toYaml() shouldBe expectedResult
@@ -59,7 +60,7 @@ class PipFunTest : WordSpec({
                 path = vcsPath
             )
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -116,4 +117,14 @@ class PipFunTest : WordSpec({
     }
 })
 
-private fun createPip() = Pip("PIP", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createPip(pythonVersion: String = "3.10") =
+    Pip("PIP", USER_DIR, createAnalyzerConfiguration(pythonVersion), RepositoryConfiguration())
+
+private fun createAnalyzerConfiguration(pythonVersion: String) =
+    AnalyzerConfiguration(
+        packageManagers = mapOf(
+            Pip.Factory().managerName to PackageManagerConfiguration(
+                options = mapOf("pythonVersion" to pythonVersion)
+            )
+        )
+    )
