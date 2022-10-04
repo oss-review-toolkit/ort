@@ -220,7 +220,19 @@ class DefaultPackageProvenanceResolver(
 
             revisionCandidates.forEachIndexed { index, revision ->
                 logger.info { "Trying revision candidate '$revision' (${index + 1} of ${revisionCandidates.size})." }
-                val result = vcs.updateWorkingTree(workingTree, revision, pkg.vcsProcessed.path, recursive = false)
+                val result = vcs.updateWorkingTree(workingTree, revision, recursive = false)
+
+                if (pkg.vcsProcessed.path.isNotBlank() &&
+                    !workingTree.workingDir.resolve(pkg.vcsProcessed.path).exists()
+                ) {
+                    logger.info {
+                        "Discarding revision '$revision' because the requested VCS path '${pkg.vcsProcessed.path}' " +
+                                "does not exist."
+                    }
+
+                    return@forEachIndexed
+                }
+
                 if (result.isSuccess) {
                     val resolvedRevision = workingTree.getRevision()
 

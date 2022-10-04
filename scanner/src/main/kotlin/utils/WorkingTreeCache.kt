@@ -38,8 +38,9 @@ interface WorkingTreeCache {
     /**
      * Apply the [block] to the working tree defined by [vcsInfo]. The [VcsInfo.revision] is ignored during
      * initialization of the working tree, it is the caller's responsibility to update the working tree to the correct
-     * revision. It is ensured that only one [block] at a time can access a single working tree, separate working trees
-     * can be accessed in parallel.
+     * revision. The [VcsInfo.path] is also ignored, so the caller needs to verify that the expected path exists. It is
+     * ensured that only one [block] at a time can access a single working tree, separate working trees can be accessed
+     * in parallel.
      *
      * Throws an [IllegalStateException] if the cache was already [shut down][shutdown].
      */
@@ -64,7 +65,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
         return getWorkingTreeMutex(vcsInfo).withLock { block(vcs, getWorkingTree(vcsInfo, vcs)) }
     }
 
-    private fun getKey(vcsInfo: VcsInfo) = "${vcsInfo.type}|${vcsInfo.url}|${vcsInfo.path}"
+    private fun getKey(vcsInfo: VcsInfo) = "${vcsInfo.type}|${vcsInfo.url}"
 
     private suspend fun getWorkingTreeMutex(vcsInfo: VcsInfo) =
         mutex.withLock {
@@ -81,7 +82,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
     private fun getWorkingTree(vcsInfo: VcsInfo, vcs: VersionControlSystem) =
         workingTrees.getOrPut(getKey(vcsInfo)) {
             val dir = createOrtTempDir()
-            vcs.initWorkingTree(dir, vcsInfo.copy(revision = ""))
+            vcs.initWorkingTree(dir, vcsInfo.copy(path = "", revision = ""))
         }
 
     override suspend fun shutdown() {

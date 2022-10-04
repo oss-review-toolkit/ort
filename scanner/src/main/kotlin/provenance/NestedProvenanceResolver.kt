@@ -83,7 +83,6 @@ class DefaultNestedProvenanceResolver(
             vcs.updateWorkingTree(
                 workingTree,
                 provenance.resolvedRevision,
-                path = provenance.vcsInfo.path,
                 recursive = true
             ).onFailure { throw it }
 
