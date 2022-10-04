@@ -110,7 +110,7 @@ class Pip(
         // 1. Get metadata about the local project via `python setup.py`.
         // 2. Get the dependency tree and dependency metadata via python-inspector.
 
-        val project = getProjectBasics(definitionFile)
+        val project = getProjectMetadata(definitionFile)
         val (packages, installDependencies) = getInstallDependencies(definitionFile)
 
         // TODO: Handle "extras" and "tests" dependencies.
@@ -121,7 +121,7 @@ class Pip(
         return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
     }
 
-    private fun getProjectBasics(definitionFile: File): Project {
+    private fun getProjectMetadata(definitionFile: File): Project {
         val authors = sortedSetOf<String>()
         val declaredLicenses = sortedSetOf<String>()
 
