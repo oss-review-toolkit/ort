@@ -27,12 +27,11 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspector
+import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspectorResult
 import org.ossreviewtoolkit.analyzer.managers.utils.toOrtPackages
 import org.ossreviewtoolkit.analyzer.managers.utils.toPackageReferences
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
@@ -111,11 +110,14 @@ class Pip(
         // 2. Get the dependency tree and dependency metadata via python-inspector.
 
         val project = getProjectMetadata(definitionFile)
-        val (packages, installDependencies) = runPythonInspector(definitionFile)
+        val result = runPythonInspector(definitionFile)
+
+        val packages = result.packages.toOrtPackages()
+        val packageReferences = result.resolvedDependencies.toPackageReferences()
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
-            Scope("install", installDependencies)
+            Scope("install", packageReferences)
         )
 
         return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
@@ -202,7 +204,7 @@ class Pip(
         )
     }
 
-    private fun runPythonInspector(definitionFile: File): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
+    private fun runPythonInspector(definitionFile: File): PythonInspectorResult {
         val workingDir = definitionFile.parentFile
 
         logger.info {
@@ -210,7 +212,7 @@ class Pip(
                     "and operating system '$operatingSystemOption'."
         }
 
-        val pythonInspectorResult = runCatching {
+        return runCatching {
             try {
                 PythonInspector.run(
                     workingDir = workingDir,
@@ -229,11 +231,6 @@ class Pip(
                         e.collectMessages()
             }
         }.getOrThrow()
-
-        val packages = pythonInspectorResult.packages.toOrtPackages()
-        val packageReferences = pythonInspectorResult.resolvedDependencies.toPackageReferences()
-
-        return packages to packageReferences
     }
 
     private fun parseAuthorString(author: String?): SortedSet<String> =
