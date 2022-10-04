@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -200,6 +201,11 @@ abstract class PackageManager(
             return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, *fallbackUrls))
         }
     }
+
+    /**
+     * The [Options] from the [PackageManagerConfiguration] for this [package manager][managerName].
+     */
+    protected val options: Options = analyzerConfig.getPackageManagerConfiguration(managerName)?.options.orEmpty()
 
     /**
      * Optional mapping of found [definitionFiles] before dependency resolution.

@@ -135,10 +135,8 @@ class Yarn2(
      */
     private val yarn2ExecutablesByPath: MutableMap<File, String> = mutableMapOf()
 
-    private val disableRegistryCertificateVerification = analyzerConfig.getPackageManagerConfiguration(managerName)
-        ?.options
-        ?.get(OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION)
-        .toBoolean()
+    private val disableRegistryCertificateVerification =
+        options[OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION].toBoolean()
 
     // A builder to build the dependency graph of the project.
     private val graphBuilder = DependencyGraphBuilder(Yarn2DependencyHandler())
