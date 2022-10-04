@@ -23,9 +23,8 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.maps.shouldHaveSize
-import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.spyk
@@ -34,6 +33,8 @@ import io.mockk.verify
 import java.io.File
 import java.util.UUID
 
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -84,15 +85,29 @@ class ScanOssScannerDirectoryTest : StringSpec({
         }
 
         result.scanner shouldNotBeNull {
-            results.scanResults shouldHaveSize 1
-            results.scanResults[results.scanResults.firstKey()] shouldNotBeNull {
+            results.scanResults.values shouldHaveSize 1
+
+            with(results.scanResults.values.first()) {
                 this shouldHaveSize 1
-                first() shouldNotBeNull {
-                    summary.packageVerificationCode shouldBe "07c881ae4fcc30a69f5d66453d54d194f062252e"
-                    summary.licenseFindings shouldHaveSize 2
-                    summary.licenseFindings.first().license.toString() shouldBe "Apache-2.0"
-                    summary.licenseFindings.last().license.toString() shouldBe "Apache-2.0"
-                }
+
+                first().summary.licenseFindings.shouldContainExactlyInAnyOrder(
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation(
+                            path = "utils/src/main/kotlin/ArchiveUtils.kt",
+                            line = TextLocation.UNKNOWN_LINE
+                        ),
+                        score = 99.0f
+                    ),
+                    LicenseFinding(
+                        license = "Apache-2.0",
+                        location = TextLocation(
+                            path = "scanner/src/main/kotlin/ScannerFactory.kt",
+                            line = TextLocation.UNKNOWN_LINE
+                        ),
+                        score = 100.0f
+                    )
+                )
             }
         }
     }
