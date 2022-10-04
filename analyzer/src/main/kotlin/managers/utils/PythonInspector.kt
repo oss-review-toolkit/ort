@@ -53,12 +53,16 @@ internal object PythonInspector : CommandLineTool {
         workingDir: File,
         definitionFile: File,
         pythonVersion: String = "38",
+        operatingSystem: String = "linux"
     ): PythonInspectorResult {
         val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
 
         val commandLineOptions = buildList {
             add("--python-version")
             add(pythonVersion)
+
+            add("--operating-system")
+            add(operatingSystem)
 
             add("--json-pdt")
             add(outputFile.absolutePath)
