@@ -76,7 +76,7 @@ class Pip(
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
-) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     companion object : Logging {
         private const val SHORT_STRING_MAX_CHARS = 200
     }
@@ -104,10 +104,6 @@ class Pip(
                 "The 'pythonVersion' option must be one of ${PYTHON_VERSIONS.joinToString { "'$it'" }}."
             }
         }
-
-    override fun command(workingDir: File?) = "pip"
-
-    override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(' ')
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
