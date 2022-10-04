@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.SortedSet
 
@@ -44,76 +42,14 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-object VirtualEnv : CommandLineTool {
-    override fun command(workingDir: File?) = "virtualenv"
-
-    override fun transformVersion(output: String) =
-        // The version string can be something like:
-        // 16.6.1
-        // virtualenv 20.0.14 from /usr/local/lib/python2.7/dist-packages/virtualenv/__init__.pyc
-        output.removePrefix("virtualenv ").substringBefore(' ')
-
-    // Ensure a minimum version known to work. Note that virtualenv bundles a version of pip, and as of pip 20.3 a new
-    // dependency resolver is used, see http://pyfound.blogspot.com/2020/11/pip-20-3-new-resolver.html.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[15.1,)")
-}
-
-object PythonVersion : CommandLineTool, Logging {
-    // To use a specific version of Python on Windows we can use the "py" command with argument "-2" or "-3", see
-    // https://docs.python.org/3/installing/#work-with-multiple-versions-of-python-installed-in-parallel.
+object Python : CommandLineTool, Logging {
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
 
     override fun transformVersion(output: String) = output.removePrefix("Python ")
-
-    /**
-     * Check all Python files in [workingDir] and return which version of Python they are compatible with. If all files
-     * are compatible with Python 3, "3" is returned. If at least one file is incompatible with Python 3, "2" is
-     * returned.
-     */
-    fun getPythonMajorVersion(workingDir: File): Int {
-        val scriptFile = createOrtTempFile("python_compatibility", ".py")
-        scriptFile.writeBytes(javaClass.getResource("/scripts/python_compatibility.py").readBytes())
-
-        try {
-            // The helper script itself always has to be run with Python 3.
-            val scriptCmd = if (Os.isWindows) {
-                run("-3", scriptFile.path, "-d", workingDir.path)
-            } else {
-                run(scriptFile.path, "-d", workingDir.path)
-            }
-
-            return scriptCmd.stdout.toInt()
-        } finally {
-            if (!scriptFile.delete()) {
-                logger.warn { "Helper script file '$scriptFile' could not be deleted." }
-            }
-        }
-    }
-
-    /**
-     * Return the absolute path to the Python interpreter for the given [version]. This is helpful as esp. on Windows
-     * different Python versions can be installed in arbitrary locations, and the Python executable is even usually
-     * called the same in those locations. Return `null` if no matching Python interpreter is available.
-     */
-    fun getPythonInterpreter(version: Int): String? =
-        if (Os.isWindows) {
-            val installedVersions = run("--list-paths").stdout
-            val versionAndPath = installedVersions.lines().find { line ->
-                line.startsWith(" -$version")
-            }
-
-            // Parse a line like " -2.7-32        C:\Python27\python.exe".
-            versionAndPath?.split(' ', limit = 3)?.last()?.trimStart()
-        } else {
-            Os.getPathFromEnvironment("python$version")?.path
-        }
 }
 
 private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
@@ -173,38 +109,12 @@ class Pip(
 
     override fun transformVersion(output: String) = output.removePrefix("pip ").substringBefore(' ')
 
-    private fun runInVirtualEnv(
-        virtualEnvDir: File,
-        workingDir: File,
-        commandName: String,
-        vararg commandArgs: String
-    ): ProcessCapture {
-        val binDir = if (Os.isWindows) "Scripts" else "bin"
-        val command = virtualEnvDir.resolve(binDir).resolve(commandName)
-        val resolvedCommand = Os.resolveWindowsExecutable(command)?.takeIf { Os.isWindows } ?: command
-
-        // TODO: Maybe work around long shebang paths in generated scripts within a virtualenv by calling the Python
-        //       executable in the virtualenv directly, see https://github.com/pypa/virtualenv/issues/997.
-        val process = ProcessCapture(workingDir, resolvedCommand.path, *commandArgs)
-        logger.debug { process.stdout }
-        return process
-    }
-
-    override fun beforeResolution(definitionFiles: List<File>) = VirtualEnv.checkVersion()
-
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Get metadata about the local project via `python setup.py`.
         // 2. Get the dependency tree and dependency metadata via python-inspector.
 
-        val workingDir = definitionFile.parentFile
-
-        // Try to determine the Python version the project requires.
-        val pythonMajorVersion = PythonVersion.getPythonMajorVersion(workingDir)
-
-        val virtualEnvDir = setupVirtualEnv(workingDir, pythonMajorVersion)
-
-        val project = getProjectBasics(definitionFile, virtualEnvDir)
+        val project = getProjectBasics(definitionFile)
         val (packages, installDependencies) = getInstallDependencies(definitionFile)
 
         // TODO: Handle "extras" and "tests" dependencies.
@@ -212,13 +122,10 @@ class Pip(
             Scope("install", installDependencies)
         )
 
-        // Remove the virtualenv by simply deleting the directory.
-        virtualEnvDir.safeDeleteRecursively()
-
         return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
     }
 
-    private fun getProjectBasics(definitionFile: File, virtualEnvDir: File): Project {
+    private fun getProjectBasics(definitionFile: File): Project {
         val authors = sortedSetOf<String>()
         val declaredLicenses = sortedSetOf<String>()
 
@@ -228,7 +135,7 @@ class Pip(
         val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
             // See https://docs.python.org/3.8/distutils/setupscript.html#additional-meta-data.
             fun getSetupPyMetadata(option: String): String? {
-                val process = runInVirtualEnv(virtualEnvDir, workingDir, "python", "setup.py", option)
+                val process = Python.run(workingDir, "setup.py", option)
                 val metadata = process.stdout.trim()
                 return metadata.takeUnless { process.isError || metadata == "UNKNOWN" }
             }
@@ -361,19 +268,5 @@ class Pip(
         val licenseClassifiers = listOf("License", "OSI Approved")
         val license = classifiers.takeIf { it.first() in licenseClassifiers }?.last()
         return license?.takeUnless { it in licenseClassifiers }
-    }
-
-    private fun setupVirtualEnv(workingDir: File, pythonMajorVersion: Int): File {
-        // Create an out-of-tree virtualenv.
-        logger.info { "Creating a virtualenv for the '${workingDir.name}' project directory..." }
-
-        val virtualEnvDir = createOrtTempDir("${workingDir.name}-virtualenv")
-        val pythonInterpreter = requireNotNull(PythonVersion.getPythonInterpreter(pythonMajorVersion)) {
-            "No Python interpreter found for version $pythonMajorVersion."
-        }
-
-        ProcessCapture(workingDir, "virtualenv", virtualEnvDir.path, "-p", pythonInterpreter).requireSuccess()
-
-        return virtualEnvDir
     }
 }
