@@ -80,4 +80,13 @@ class FileMatcherTest : StringSpec({
             matches("license") shouldBe true
         }
     }
+
+    "Groups of subpatterns can be matched" {
+        FileMatcher("*.{:java|class}", ignoreCase = false).apply {
+            matches("x.java") shouldBe true
+            matches("x.class") shouldBe true
+            matches("x.cpp") shouldBe false
+            matches("dir/x.java") shouldBe false
+        }
+    }
 })
