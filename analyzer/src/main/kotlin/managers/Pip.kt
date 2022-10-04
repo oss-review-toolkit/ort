@@ -105,10 +105,6 @@ class Pip(
         }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        // For an overview, dependency resolution involves the following steps:
-        // 1. Get metadata about the local project via `python setup.py`.
-        // 2. Get the dependency tree and dependency metadata via python-inspector.
-
         val project = getProjectMetadata(definitionFile)
         val result = runPythonInspector(definitionFile)
 
