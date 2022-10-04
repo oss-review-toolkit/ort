@@ -487,7 +487,9 @@ fun getCopyrightableFiles(rootDir: File): List<File> =
     }.filter { file ->
         val isHidden = file.toPath().any { it.toString().startsWith(".") }
 
-        !isHidden && copyrightExcludedPaths.none { it in file.path } && file.extension !in copyrightExcludedExtensions
+        !isHidden
+                && copyrightExcludedPaths.none { it in file.invariantSeparatorsPath }
+                && file.extension !in copyrightExcludedExtensions
     }
 
 val maxCopyrightLines = 50
