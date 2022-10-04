@@ -111,7 +111,7 @@ class Pip(
         // 2. Get the dependency tree and dependency metadata via python-inspector.
 
         val project = getProjectMetadata(definitionFile)
-        val (packages, installDependencies) = getInstallDependencies(definitionFile)
+        val (packages, installDependencies) = runPythonInspector(definitionFile)
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
@@ -202,7 +202,7 @@ class Pip(
         )
     }
 
-    private fun getInstallDependencies(definitionFile: File): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
+    private fun runPythonInspector(definitionFile: File): Pair<SortedSet<Package>, SortedSet<PackageReference>> {
         val workingDir = definitionFile.parentFile
 
         logger.info {
