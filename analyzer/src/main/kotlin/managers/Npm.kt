@@ -109,9 +109,7 @@ open class Npm(
         ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val legacyPeerDeps =
-        analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_LEGACY_PEER_DEPS)
-            .toBoolean()
+    private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
 
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 

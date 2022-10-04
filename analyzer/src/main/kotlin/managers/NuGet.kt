@@ -61,9 +61,7 @@ class NuGet(
         ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val directDependenciesOnly =
-        analyzerConfig.getPackageManagerConfiguration(managerName)?.options?.get(OPTION_DIRECT_DEPENDENCIES_ONLY)
-            .toBoolean()
+    private val directDependenciesOnly = options[OPTION_DIRECT_DEPENDENCIES_ONLY].toBoolean()
 
     private val reader = NuGetPackageFileReader()
 
