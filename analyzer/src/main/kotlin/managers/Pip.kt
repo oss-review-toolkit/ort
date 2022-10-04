@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -115,10 +116,18 @@ object PythonVersion : CommandLineTool, Logging {
         }
 }
 
+private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
+private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
+private val OPERATING_SYSTEMS = listOf("linux", "mac", "windows")
+
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
  * [install_requires vs requirements files](https://packaging.python.org/discussions/install-requires-vs-requirements/)
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "mac", or
+ *   "windows". Defaults to "linux".
  */
 @Suppress("TooManyFunctions")
 class Pip(
@@ -140,6 +149,13 @@ class Pip(
             repoConfig: RepositoryConfiguration
         ) = Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    private val operatingSystemOption = (options[OPTION_OPERATING_SYSTEM] ?: OPTION_OPERATING_SYSTEM_DEFAULT)
+        .also { os ->
+            require(os.isEmpty() || os in OPERATING_SYSTEMS) {
+                "The 'operatingSystem' option must be one of ${OPERATING_SYSTEMS.joinToString { "'$it'" }}."
+            }
+        }
 
     override fun command(workingDir: File?) = "pip"
 
@@ -284,7 +300,8 @@ class Pip(
         }
 
         logger.info {
-            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion'."
+            "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersion' and " +
+                    "operating system '$operatingSystemOption'."
         }
 
         val pythonInspectorResult = runCatching {
@@ -292,7 +309,8 @@ class Pip(
                 PythonInspector.run(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
-                    pythonVersion = pythonVersion.replace(".", "")
+                    pythonVersion = pythonVersion.replace(".", ""),
+                    operatingSystem = operatingSystemOption
                 )
             } finally {
                 workingDir.resolve(".cache").safeDeleteRecursively(force = true)
