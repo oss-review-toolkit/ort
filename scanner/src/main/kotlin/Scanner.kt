@@ -228,6 +228,9 @@ class Scanner(
                             )
                         )
                     }
+
+                    // If resolving the nested repositories failed, we can still scan the main repository.
+                    controller.addNestedProvenance(provenance, NestedProvenance(provenance, emptyMap()))
                 }
             }
         }
