@@ -166,6 +166,12 @@ allprojects {
 
         reports {
             html.required.set(false)
+
+            // TODO: Enable this once https://github.com/detekt/detekt/issues/5034 is resolved and use the merged
+            //       Markdown file as a GitHub Action job summary, see
+            //       https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/.
+            md.required.set(false)
+
             sarif.required.set(true)
             txt.required.set(false)
             xml.required.set(false)
