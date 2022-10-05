@@ -22,6 +22,10 @@ complexity:
     thresholdInClasses: 19
     thresholdInObjects: 14
 
+coroutines:
+  InjectDispatcher:
+    active: false
+
 # Formatting rules are implemented via the ktlint plugin. As ktlint does not allow exceptions, we need to disable
 # respective rules completely.
 formatting:
