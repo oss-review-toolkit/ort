@@ -59,6 +59,11 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
 
+// Replace prefixes of Git submodule repository URLs.
+private val REPOSITORY_URL_PREFIX_REPLACEMENTS = mapOf(
+    "git://" to "https://"
+)
+
 class Git : VersionControlSystem(), CommandLineTool {
     companion object : Logging {
         init {
@@ -123,7 +128,11 @@ class Git : VersionControlSystem(), CommandLineTool {
             }
         }
 
-    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(vcsDirectory, type)
+    override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(
+        workingDir = vcsDirectory,
+        vcsType = type,
+        repositoryUrlPrefixReplacements = REPOSITORY_URL_PREFIX_REPLACEMENTS
+    )
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {
@@ -217,11 +226,17 @@ class Git : VersionControlSystem(), CommandLineTool {
     private fun updateSubmodules(workingTree: WorkingTree) {
         if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
 
+        val configOption = REPOSITORY_URL_PREFIX_REPLACEMENTS.flatMap { (prefix, replacement) ->
+            listOf("-c", "url.$replacement.insteadOf=$prefix")
+        }.toTypedArray()
+
         runCatching {
-            workingTree.runGit("submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH")
+            workingTree.runGit(
+                *configOption, "submodule", "update", "--init", "--recursive", "--depth", "$GIT_HISTORY_DEPTH"
+            )
         }.recover {
             // As Git's dumb HTTP transport does not support shallow capabilities, also try to not limit the depth.
-            workingTree.runGit("submodule", "update", "--recursive")
+            workingTree.runGit(*configOption, "submodule", "update", "--recursive")
         }
     }
 
