@@ -64,7 +64,7 @@ class ScanCodeScannerFunTest : AbstractScannerFunTest(setOf(ExpensiveTag, ScanCo
             val id = "LicenseRef-scancode-here-proprietary"
             val text = "x\ny\n"
 
-            val outputDir = createOrtTempDir().apply { resolve(id).apply { writeText(text) } }
+            val outputDir = createOrtTempDir().apply { resolve(id).writeText(text) }
 
             getLicenseText(id, true, listOf(outputDir)) shouldBe getLicenseText(id, true)
         }
