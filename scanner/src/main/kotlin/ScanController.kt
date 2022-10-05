@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.scanner
 
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtIssue
@@ -54,6 +56,8 @@ class ScanController(
      */
     val config: ScannerConfiguration
 ) {
+    companion object : Logging
+
     /**
      * A map of package [Identifier]s to a list of [OrtIssue]s that occurred during provenance resolution for the
      * respective package.
@@ -89,10 +93,14 @@ class ScanController(
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
     fun addProvenanceResolutionIssue(id: Identifier, issue: OrtIssue) {
+        logger.log(issue.severity.toLog4jLevel()) { issue.message }
+
         provenanceResolutionIssues.getOrPut(id) { mutableListOf() } += issue
     }
 
     fun addIssue(id: Identifier, issue: OrtIssue) {
+        logger.log(issue.severity.toLog4jLevel()) { issue.message }
+
         issues.getOrPut(id) { mutableListOf() } += issue
     }
 
