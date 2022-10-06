@@ -22,7 +22,7 @@ commonsEmail = "1.5"
 cvssCalculator = "1.4.1"
 cyclonedx = "7.2.0"
 diskLruCache = "2.0.2"
-exposed = "0.39.2"
+exposed = "0.40.1"
 flexmark = "0.64.0"
 freemarker = "2.3.31"
 # @keep this version which is only being used via get().
