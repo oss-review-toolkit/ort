@@ -200,6 +200,16 @@ RUN . $NVM_DIR/nvm.sh \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
 #------------------------------------------------------------------------
+# RUST - Build as a separate component
+FROM build AS rustbuild
+
+ARG RUST_HOME=/opt/rust
+ARG CARGO_HOME=${RUST_HOME}/cargo
+ARG RUSTUP_HOME=${RUST_HOME}/rustup
+ARG RUST_VERSION=1.64.0
+RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain ${RUST_VERSION}
+
+#------------------------------------------------------------------------
 # GOLANG - Build as a separate component
 FROM build AS gobuild
 
@@ -292,6 +302,13 @@ ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
 COPY --chown=$USERNAME:$USERNAME --from=nodebuild ${NVM_DIR} ${NVM_DIR}
 RUN chmod o+rwx ${NVM_DIR}
 
+# Rust
+ARG RUST_HOME=/opt/rust
+ARG CARGO_HOME=${RUST_HOME}/cargo
+COPY --chown=$USERNAME:$USERNAME --from=rustbuild /opt/rust /opt/rust
+COPY docker/rust.sh /etc/profile.d/
+RUN chmod o+rwx ${CARGO_HOME}
+
 # Golang
 COPY --chown=$USERNAME:$USERNAME --from=gobuild /opt/go /opt/go/
 COPY --from=gobuild  /etc/profile.d/go.sh /etc/profile.d/
@@ -321,12 +338,10 @@ RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
     && echo "add_local_path /usr/lib/dart/bin:\$PATH" > /etc/profile.d/dart.sh
 
 # Apt install commands.
-ARG CARGO_VERSION=0.62.0ubuntu0libgit2-0ubuntu0.22.04.1
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        cargo=$CARGO_VERSION \
         dart \
         php \
         sbt=$SBT_VERSION \
