@@ -32,7 +32,6 @@ import io.kotest.matchers.types.beInstanceOf
 
 import java.lang.IllegalArgumentException
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
@@ -42,7 +41,6 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.RuleViolationResolutionReason
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OrtResultTest : WordSpec({
@@ -110,9 +108,7 @@ class OrtResultTest : WordSpec({
                         "path/2" to nestedVcs2
                     )
                 ),
-                AnalyzerRun(
-                    environment = Environment(),
-                    config = AnalyzerConfiguration(),
+                AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project1, project2, project3))
                 )
             )
@@ -139,9 +135,7 @@ class OrtResultTest : WordSpec({
                         "path/1" to nestedVcs1
                     )
                 ),
-                AnalyzerRun(
-                    environment = Environment(),
-                    config = AnalyzerConfiguration(),
+                AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project))
                 )
             )
@@ -170,9 +164,7 @@ class OrtResultTest : WordSpec({
                         )
                     )
                 ),
-                analyzer = AnalyzerRun(
-                    environment = Environment(),
-                    config = AnalyzerConfiguration(),
+                analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
                         projects = sortedSetOf(),
                         packages = sortedSetOf(),
@@ -197,9 +189,7 @@ class OrtResultTest : WordSpec({
 
         "omit issues with violation below threshold" {
             val ortResult = OrtResult.EMPTY.copy(
-                analyzer = AnalyzerRun(
-                    environment = Environment(),
-                    config = AnalyzerConfiguration(),
+                analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
                         projects = sortedSetOf(),
                         packages = sortedSetOf(),
@@ -244,9 +234,7 @@ class OrtResultTest : WordSpec({
                         )
                     )
                 ),
-                analyzer = AnalyzerRun(
-                    environment = Environment(),
-                    config = AnalyzerConfiguration(),
+                analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
                         projects = sortedSetOf(
                             Project.EMPTY.copy(

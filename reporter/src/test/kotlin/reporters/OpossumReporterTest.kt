@@ -63,7 +63,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -271,8 +270,7 @@ private fun createOrtResult(): OrtResult {
             vcs = analyzedVcs,
             vcsProcessed = analyzedVcs
         ),
-        analyzer = AnalyzerRun(
-            environment = Environment(),
+        analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),
             result = AnalyzerResult(
                 projects = sortedSetOf(
