@@ -89,21 +89,9 @@ class PubFunTest : WordSpec() {
                     workingDir
                 )
 
-                val analyzerResult = analyze(workingDir).patchAapt2Result()
+                val analyzerResult = analyze(workingDir).patchAapt2Result().reduceToPubProjects()
 
-                val project = analyzerResult.projects.single { it.id.type == "Pub" }
-                val projectDependencies = project.scopes.flatMap { it.collectDependencies() }
-
-                // Reduce the analyzer result to only the Pub project and its dependencies.
-                val reducedAnalyzerResult = AnalyzerResult(
-                    projects = sortedSetOf(project),
-                    packages = analyzerResult.packages.filterTo(sortedSetOf()) {
-                        it.metadata.id in projectDependencies
-                    },
-                    issues = analyzerResult.issues
-                )
-
-                reducedAnalyzerResult.toYaml() shouldBe expectedResult
+                analyzerResult.toYaml() shouldBe expectedResult
             }
 
             "show an error if no lockfile is present" {
@@ -138,6 +126,17 @@ class PubFunTest : WordSpec() {
     }
 }
 
+private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
+    val projects = projects.filterTo(sortedSetOf()) { it.id.type == "Pub" }
+    val scopes = projects.flatMap { it.scopes }
+    val dependencies = scopes.flatMap { it.collectDependencies() }
+
+    return AnalyzerResult(
+        projects = projects,
+        packages = packages.filterTo(sortedSetOf()) { it.metadata.id in dependencies },
+        issues = issues
+    )
+}
 private fun analyze(workingDir: File): AnalyzerResult {
     val analyzer = Analyzer(AnalyzerConfiguration())
     val managedFiles = analyzer.findManagedFiles(workingDir)
