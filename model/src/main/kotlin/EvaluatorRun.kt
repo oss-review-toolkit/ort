@@ -26,12 +26,12 @@ import java.time.Instant
  */
 data class EvaluatorRun(
     /**
-     * The [Instant] the scanner was started.
+     * The [Instant] the evaluator was started.
      */
     val startTime: Instant,
 
     /**
-     * The [Instant] the scanner has finished.
+     * The [Instant] the evaluator has finished.
      */
     val endTime: Instant,
 
