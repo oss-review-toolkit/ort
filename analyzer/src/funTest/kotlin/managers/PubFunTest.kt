@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
@@ -92,11 +91,7 @@ class PubFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("multi-module")
                 val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-multi-module.yml")
 
-                val analyzer = Analyzer(AnalyzerConfiguration())
-                val managedFiles = analyzer.findManagedFiles(workingDir)
-
-                val analyzerRun = analyzer.analyze(managedFiles).analyzer
-                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes().patchAapt2Result()
+                val analyzerResult = analyze(workingDir).patchAapt2Result()
 
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
@@ -114,11 +109,8 @@ class PubFunTest : WordSpec() {
                 val expectedResultFile =
                     projectsDir.parentFile.resolve("pub-expected-output-with-flutter-android-and-cocoapods.yml")
 
-                val analyzer = Analyzer(AnalyzerConfiguration())
-                val managedFiles = analyzer.findManagedFiles(workingDir)
+                val analyzerResult = analyze(workingDir).patchAapt2Result()
 
-                val analyzerRun = analyzer.analyze(managedFiles).analyzer
-                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes().patchAapt2Result()
                 val project = analyzerResult.projects.single { it.id.type == "Pub" }
                 val projectDependencies = project.scopes.flatMap { it.collectDependencies() }
 
@@ -158,6 +150,14 @@ class PubFunTest : WordSpec() {
             }
         }
     }
+}
+
+private fun analyze(workingDir: File): AnalyzerResult {
+    val analyzer = Analyzer(AnalyzerConfiguration())
+    val managedFiles = analyzer.findManagedFiles(workingDir)
+    val analyzerRun = analyzer.analyze(managedFiles).analyzer
+
+    return checkNotNull(analyzerRun).result.withResolvedScopes()
 }
 
 private fun getAssetFile(path: String) = File("src/funTest/assets").resolve(path)
