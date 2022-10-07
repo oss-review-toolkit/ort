@@ -73,7 +73,7 @@ class ExcludesTest : WordSpec() {
             repository = Repository.EMPTY,
             analyzer = AnalyzerRun(
                 environment = Environment(),
-                config = AnalyzerConfiguration(allowDynamicVersions = false),
+                config = AnalyzerConfiguration(),
                 result = AnalyzerResult.EMPTY
             )
         )
