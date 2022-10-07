@@ -26,14 +26,14 @@ import java.time.Instant
  */
 data class EvaluatorRun(
     /**
-     * The [Instant] the scanner was started. The default value exists only for backward compatibility.
+     * The [Instant] the scanner was started.
      */
-    val startTime: Instant = Instant.EPOCH,
+    val startTime: Instant,
 
     /**
-     * The [Instant] the scanner has finished. The default value exists only for backward compatibility.
+     * The [Instant] the scanner has finished.
      */
-    val endTime: Instant = Instant.EPOCH,
+    val endTime: Instant,
 
     /**
      * The list of [RuleViolation]s found by the evaluator.
