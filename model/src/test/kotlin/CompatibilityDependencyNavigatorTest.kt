@@ -235,23 +235,18 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 /**
  * Construct an [OrtResult] that contains the given [projects].
  */
-private fun createOrtResult(vararg projects: Project): OrtResult {
-    val graph = DependencyGraph()
-
-    val analyzerResult = AnalyzerResult(
-        projects = sortedSetOf(*projects),
-        packages = sortedSetOf(),
-        dependencyGraphs = mapOf("test" to graph)
+private fun createOrtResult(vararg projects: Project): OrtResult =
+    OrtResult.EMPTY.copy(
+        analyzer = AnalyzerRun(
+            result = AnalyzerResult(
+                projects = sortedSetOf(*projects),
+                packages = sortedSetOf(),
+                dependencyGraphs = mapOf("test" to DependencyGraph())
+            ),
+            environment = Environment(),
+            config = AnalyzerConfiguration()
+        )
     )
-
-    val analyzerRun = AnalyzerRun(
-        result = analyzerResult,
-        environment = Environment(),
-        config = AnalyzerConfiguration()
-    )
-
-    return OrtResult.EMPTY.copy(analyzer = analyzerRun)
-}
 
 /**
  * Create a [Project] with an identifier derived from the given [name] that has the dependency information passed as
