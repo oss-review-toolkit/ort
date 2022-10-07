@@ -28,10 +28,10 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -125,5 +125,5 @@ class MavenFunTest : StringSpec() {
     }
 
     private fun createMaven() =
-        Maven("Maven", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Maven("Maven", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
 }

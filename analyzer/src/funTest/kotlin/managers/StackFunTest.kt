@@ -24,8 +24,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
@@ -49,4 +49,4 @@ class StackFunTest : StringSpec({
 private val projectsDir = File("src/funTest/assets/projects").absoluteFile
 
 private fun createStack() =
-    Stack("Stack", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    Stack("Stack", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)

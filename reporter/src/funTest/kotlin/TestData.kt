@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
@@ -65,7 +66,6 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
 val ORT_RESULT = OrtResult(
@@ -90,7 +90,7 @@ val ORT_RESULT = OrtResult(
     ),
     analyzer = AnalyzerRun(
         environment = Environment(),
-        config = DEFAULT_ANALYZER_CONFIGURATION,
+        config = AnalyzerConfiguration(),
         result = AnalyzerResult(
             projects = sortedSetOf(
                 Project(
