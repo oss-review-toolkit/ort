@@ -120,8 +120,7 @@ class PubFunTest : WordSpec() {
 
                 val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
                 val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes()
-                val project = analyzerResult.projects
-                    .single { it.id.type == "Pub" }
+                val project = analyzerResult.projects.single { it.id.type == "Pub" }
                 val projectDependencies = project.scopes.flatMap { it.collectDependencies() }
 
                 // Reduce the analyzer result to only the Pub project and its dependencies.
