@@ -29,14 +29,14 @@ import org.ossreviewtoolkit.utils.ort.Environment
  */
 data class ScannerRun(
     /**
-     * The [Instant] the scanner was started. The default value exists only for backward compatibility.
+     * The [Instant] the scanner was started.
      */
-    val startTime: Instant = Instant.EPOCH,
+    val startTime: Instant,
 
     /**
-     * The [Instant] the scanner has finished. The default value exists only for backward compatibility.
+     * The [Instant] the scanner has finished.
      */
-    val endTime: Instant = Instant.EPOCH,
+    val endTime: Instant,
 
     val environment: Environment,
     val config: ScannerConfiguration,
@@ -48,6 +48,8 @@ data class ScannerRun(
          */
         @JvmField
         val EMPTY = ScannerRun(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
             environment = Environment(),
             config = ScannerConfiguration(),
             results = ScanRecord(
