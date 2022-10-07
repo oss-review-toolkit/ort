@@ -236,7 +236,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
  * Construct an [OrtResult] that contains the given [projects].
  */
 private fun createOrtResult(vararg projects: Project): OrtResult {
-    val graph = DependencyGraph(packages = emptyList(), scopeRoots = sortedSetOf(), scopes = emptyMap())
+    val graph = DependencyGraph()
 
     val analyzerResult = AnalyzerResult(
         projects = sortedSetOf(*projects),
