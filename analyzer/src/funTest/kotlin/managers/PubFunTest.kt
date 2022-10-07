@@ -175,32 +175,25 @@ private fun createPubForExternal(): Pub {
  * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
  */
 private fun OrtResult.patchAapt2Result(): OrtResult {
-    val packages = analyzer?.result?.packages?.toMutableSet()
-    val aapt2Package =
-        packages?.find {
-            it.metadata.id.type == "Maven" &&
-                    it.metadata.id.namespace == "com.android.tools.build" &&
-                    it.metadata.id.name == "aapt2"
-        }
+    val analyzerRun = analyzer ?: return this
 
-    val patchedPackages = packages?.map { pkg ->
-        if (pkg == aapt2Package) {
-            aapt2Package?.copy(
-                metadata = aapt2Package.metadata.copy(
-                    binaryArtifact = aapt2Package.metadata.binaryArtifact.copy(
+    val patchedPackages = analyzerRun.result.packages.mapTo(sortedSetOf()) { pkg ->
+        pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
+            ?: pkg.copy(
+                metadata = pkg.metadata.copy(
+                    binaryArtifact = pkg.metadata.binaryArtifact.copy(
                         url = "***",
                         hash = Hash("***", HashAlgorithm.SHA1)
                     )
                 )
-            ) ?: pkg
-        } else pkg
-    }?.toSortedSet() ?: sortedSetOf()
+            )
+    }
 
     return copy(
-        analyzer = analyzer?.result?.copy(packages = patchedPackages)?.let { analyzerResult ->
-            analyzer?.copy(
-                result = analyzerResult
+        analyzer = analyzerRun.copy(
+            result = analyzerRun.result.copy(
+                packages = patchedPackages
             )
-        }
+        )
     )
 }
