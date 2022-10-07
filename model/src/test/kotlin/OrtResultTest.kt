@@ -307,7 +307,7 @@ class OrtResultTest : WordSpec({
                         )
                     )
                 ),
-                evaluator = EvaluatorRun(
+                evaluator = EvaluatorRun.EMPTY.copy(
                     violations = listOf(
                         RuleViolation(
                             rule = "rule id",
@@ -341,7 +341,7 @@ class OrtResultTest : WordSpec({
                         )
                     )
                 ),
-                evaluator = EvaluatorRun(
+                evaluator = EvaluatorRun.EMPTY.copy(
                     violations = listOf(
                         RuleViolation(
                             rule = "Resolved rule violation",
