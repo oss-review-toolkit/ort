@@ -31,12 +31,12 @@ import java.net.URL
 
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class CarthageTest : WordSpec() {
     private val carthage =
-        Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
+        Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 
     init {
         "resolveDependencies" should {

@@ -26,9 +26,9 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.AndroidTag
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -99,5 +99,5 @@ class GradleAndroidFunTest : StringSpec() {
     }
 
     private fun createGradle() =
-        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
+        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }

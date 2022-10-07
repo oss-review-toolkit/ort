@@ -29,8 +29,8 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -132,5 +132,5 @@ class ComposerFunTest : StringSpec() {
     }
 
     private fun createComposer() =
-        Composer("Composer", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
+        Composer("Composer", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }

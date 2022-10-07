@@ -28,9 +28,9 @@ import java.time.Instant
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -80,7 +80,7 @@ private fun createCocoaPods(): CocoaPods =
     CocoaPods.Factory().create(
         analysisRoot = USER_DIR,
         analyzerConfig = AnalyzerConfiguration(),
-        repoConfig = DEFAULT_REPOSITORY_CONFIGURATION
+        repoConfig = RepositoryConfiguration()
     )
 
 private fun getExpectedResult(definitionFile: File, expectedResultFile: File): String {
