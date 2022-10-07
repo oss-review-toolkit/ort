@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -102,4 +102,4 @@ private fun createModuleInfo(
  * Creates an [NpmDependencyHandler] instance to be used by test cases.
  */
 private fun createHandler() =
-    NpmDependencyHandler(Npm("NPM", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION))
+    NpmDependencyHandler(Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration()))

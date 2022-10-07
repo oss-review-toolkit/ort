@@ -40,8 +40,8 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -272,5 +272,5 @@ private fun createSpdxDocumentFile() =
         "SpdxDocumentFile",
         USER_DIR,
         AnalyzerConfiguration(),
-        DEFAULT_REPOSITORY_CONFIGURATION
+        RepositoryConfiguration()
     )

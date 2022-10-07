@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -148,5 +148,5 @@ class GoDepFunTest : WordSpec() {
     }
 
     private fun createGoDep(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
-        GoDep("GoDep", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
+        GoDep("GoDep", USER_DIR, config, RepositoryConfiguration())
 }

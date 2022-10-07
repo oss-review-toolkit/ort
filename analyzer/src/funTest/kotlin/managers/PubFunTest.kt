@@ -34,8 +34,8 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -162,11 +162,11 @@ class PubFunTest : WordSpec() {
     }
 
     private fun createPub() =
-        Pub("Pub", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
+        Pub("Pub", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 
     private fun createPubForExternal(): Pub {
         val config = AnalyzerConfiguration(allowDynamicVersions = true)
-        return Pub("Pub", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
+        return Pub("Pub", USER_DIR, config, RepositoryConfiguration())
     }
 
     /**
