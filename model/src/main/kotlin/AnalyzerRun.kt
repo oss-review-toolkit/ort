@@ -25,7 +25,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
- * To summary of a single run of the analyzer.
+ * The summary of a single run of the analyzer.
  */
 data class AnalyzerRun(
     /**
