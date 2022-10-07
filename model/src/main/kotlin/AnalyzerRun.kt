@@ -38,8 +38,19 @@ data class AnalyzerRun(
      */
     val endTime: Instant = Instant.EPOCH,
 
+    /**
+     * The [Environment] in which the analyzer was executed.
+     */
     val environment: Environment,
+
+    /**
+     * The [AnalyzerConfiguration] used for this run.
+     */
     val config: AnalyzerConfiguration,
+
+    /**
+     * The result of this run.
+     */
     val result: AnalyzerResult
 ) {
     companion object {
