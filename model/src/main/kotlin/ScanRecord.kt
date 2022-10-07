@@ -58,9 +58,5 @@ data class ScanRecord(
     /**
      * True if any of the [scanResults] contain [OrtIssue]s.
      */
-    val hasIssues by lazy {
-        scanResults.any { (_, results) ->
-            results.any { it.summary.issues.isNotEmpty() }
-        }
-    }
+    val hasIssues by lazy { collectIssues().isNotEmpty() }
 }
