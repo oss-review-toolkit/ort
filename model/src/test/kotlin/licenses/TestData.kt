@@ -179,7 +179,7 @@ val ortResult = OrtResult(
     ),
     analyzer = AnalyzerRun(
         environment = Environment(),
-        config = AnalyzerConfiguration(allowDynamicVersions = true),
+        config = AnalyzerConfiguration(),
         result = AnalyzerResult(
             projects = sortedSetOf(project),
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
