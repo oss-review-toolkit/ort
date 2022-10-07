@@ -175,7 +175,7 @@ data class OrtResult(
      */
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
-        val scannerIssues = scanner?.results?.collectIssues().orEmpty()
+        val scannerIssues = scanner?.collectIssues().orEmpty()
         val advisorIssues = advisor?.results?.collectIssues().orEmpty()
 
         val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)

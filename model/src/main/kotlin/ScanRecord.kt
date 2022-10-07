@@ -19,14 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
 import java.util.SortedMap
 
 /**
  * A record of a single run of the scanner tool, containing the input and the scan results for all scanned packages.
  */
-@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class ScanRecord(
     /**
      * The [ScanResult]s for all [Package]s.
@@ -37,26 +34,4 @@ data class ScanRecord(
      * The [AccessStatistics] for the scan results storage.
      */
     val storageStats: AccessStatistics
-) {
-    /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
-     */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
-
-        scanResults.forEach { (id, results) ->
-            results.forEach { result ->
-                if (result.summary.issues.isNotEmpty()) {
-                    collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
-                }
-            }
-        }
-
-        return collectedIssues
-    }
-
-    /**
-     * True if any of the [scanResults] contain [OrtIssue]s.
-     */
-    val hasIssues by lazy { collectIssues().isNotEmpty() }
-}
+)
