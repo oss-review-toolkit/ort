@@ -84,11 +84,7 @@ data class AdvisorRecord(
     /**
      * True if any of the [advisorResults] contain [OrtIssue]s.
      */
-    val hasIssues by lazy {
-        advisorResults.any { (_, results) ->
-            results.any { it.summary.issues.isNotEmpty() }
-        }
-    }
+    val hasIssues by lazy { collectIssues().isNotEmpty() }
 
     /**
      * Return a map of all [Package]s and the associated [Vulnerabilities][Vulnerability].
