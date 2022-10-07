@@ -57,12 +57,13 @@ open class GitWorkingTree(
 ) : WorkingTree(workingDir, vcsType) {
     companion object : Logging
 
-    val repo: Repository
-        get() = findGitOrSubmoduleDir(workingDir)
+    private val repo by lazy { findGitOrSubmoduleDir(workingDir) }
 
-    override fun isValid(): Boolean = repo.use { it.objectDatabase?.exists() == true }
+    fun <T> useRepo(block: Repository.() -> T): T = repo.use(block)
 
-    override fun isShallow(): Boolean = repo.use { it.directory?.resolve("shallow")?.isFile == true }
+    override fun isValid(): Boolean = useRepo { objectDatabase?.exists() == true }
+
+    override fun isShallow(): Boolean = useRepo { directory?.resolve("shallow")?.isFile == true }
 
     private fun listSubmodulePaths(repo: Repository): List<String> {
         fun listSubmodules(parent: String, repo: Repository, paths: MutableList<String>) {
@@ -94,9 +95,9 @@ open class GitWorkingTree(
     }
 
     override fun getNested(): Map<String, VcsInfo> =
-        repo.use {
-            listSubmodulePaths(it).associateWith { path ->
-                GitWorkingTree(it.workTree.resolve(path), vcsType).getInfo()
+        useRepo {
+            listSubmodulePaths(this).associateWith { path ->
+                GitWorkingTree(workTree.resolve(path), vcsType).getInfo()
             }
         }.mapValues { it.value.replaceUrlPrefixes() }
 
@@ -111,10 +112,10 @@ open class GitWorkingTree(
     }
 
     override fun getRemoteUrl(): String =
-        repo.use { repo ->
+        useRepo {
             runCatching {
-                val remotes = org.eclipse.jgit.api.Git(repo).use { it.remoteList().call() }
-                val remoteForCurrentBranch = BranchConfig(repo.config, repo.branch).remote
+                val remotes = org.eclipse.jgit.api.Git(this).use { it.remoteList().call() }
+                val remoteForCurrentBranch = BranchConfig(config, branch).remote
 
                 val remote = if (remotes.size <= 1 || remoteForCurrentBranch == null) {
                     remotes.find { it.name == "origin" } ?: remotes.firstOrNull()
@@ -130,14 +131,14 @@ open class GitWorkingTree(
             }
         }
 
-    override fun getRevision(): String = repo.use { it.exactRef(Constants.HEAD)?.objectId?.name().orEmpty() }
+    override fun getRevision(): String = useRepo { exactRef(Constants.HEAD)?.objectId?.name().orEmpty() }
 
-    override fun getRootPath(): File = repo.use { it.workTree }
+    override fun getRootPath(): File = useRepo { workTree }
 
     override fun listRemoteBranches(): List<String> =
-        repo.use {
+        useRepo {
             runCatching {
-                LsRemoteCommand(it).setHeads(true).call().map { branch ->
+                LsRemoteCommand(this).setHeads(true).call().map { branch ->
                     branch.name.removePrefix("refs/heads/")
                 }
             }.getOrElse { e ->
@@ -146,9 +147,9 @@ open class GitWorkingTree(
         }
 
     override fun listRemoteTags(): List<String> =
-        repo.use {
+        useRepo {
             runCatching {
-                LsRemoteCommand(repo).setTags(true).call().map { tag ->
+                LsRemoteCommand(this).setTags(true).call().map { tag ->
                     tag.name.removePrefix("refs/tags/")
                 }
             }.getOrElse { e ->
