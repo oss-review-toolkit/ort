@@ -30,13 +30,13 @@ import java.io.File
 import java.net.URL
 
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
 class CarthageTest : WordSpec() {
     private val carthage =
-        Carthage("Carthage", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
 
     init {
         "resolveDependencies" should {

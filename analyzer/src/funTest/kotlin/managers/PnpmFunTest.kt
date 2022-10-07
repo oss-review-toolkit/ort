@@ -26,8 +26,8 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResultObject
@@ -47,7 +47,7 @@ class PnpmFunTest : WordSpec({
         "resolve dependencies correctly in a workspaces project" {
             val rootProjectDir = File("src/funTest/assets/projects/synthetic/pnpm-workspaces").absoluteFile
 
-            val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+            val ortResult = Analyzer(AnalyzerConfiguration()).run {
                 analyze(findManagedFiles(rootProjectDir, setOf(Pnpm.Factory())))
             }
 
@@ -68,7 +68,7 @@ private fun resolveDependencies(projectDir: File): String {
     return result.toYaml()
 }
 
-private fun createPnpm() = Pnpm("PNPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+private fun createPnpm() = Pnpm("PNPM", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
 
 private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!

@@ -39,8 +39,8 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -202,7 +202,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                 revision = vcsRevision
             )
 
-            val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+            val analyzer = Analyzer(AnalyzerConfiguration())
             val managedFiles = analyzer.findManagedFiles(testProjectDir)
 
             val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
@@ -271,6 +271,6 @@ private fun createSpdxDocumentFile() =
     SpdxDocumentFile(
         "SpdxDocumentFile",
         USER_DIR,
-        DEFAULT_ANALYZER_CONFIGURATION,
+        AnalyzerConfiguration(),
         DEFAULT_REPOSITORY_CONFIGURATION
     )

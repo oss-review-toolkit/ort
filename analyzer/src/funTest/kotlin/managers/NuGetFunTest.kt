@@ -29,9 +29,9 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -98,7 +98,7 @@ class NuGetFunTest : StringSpec() {
         NuGet(
             "NuGet",
             USER_DIR,
-            DEFAULT_ANALYZER_CONFIGURATION.copy(
+            AnalyzerConfiguration(
                 packageManagers = mapOf(
                     "NuGet" to PackageManagerConfiguration(
                         options = mapOf(

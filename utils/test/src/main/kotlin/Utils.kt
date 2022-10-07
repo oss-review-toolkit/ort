@@ -29,12 +29,10 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.yamlMapper
 
-val DEFAULT_ANALYZER_CONFIGURATION = AnalyzerConfiguration(allowDynamicVersions = false)
 val DEFAULT_REPOSITORY_CONFIGURATION = RepositoryConfiguration()
 
 val USER_DIR = File(System.getProperty("user.dir"))

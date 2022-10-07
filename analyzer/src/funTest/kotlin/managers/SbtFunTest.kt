@@ -30,9 +30,9 @@ import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResultObject
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -46,7 +46,7 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+        val ortResult = Analyzer(AnalyzerConfiguration()).run {
             analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
         }
 
@@ -66,7 +66,7 @@ class SbtFunTest : StringSpec({
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+        val ortResult = Analyzer(AnalyzerConfiguration()).run {
             analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
         }
 

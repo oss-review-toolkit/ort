@@ -27,9 +27,9 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -79,7 +79,7 @@ class CocoaPodsFunTest : WordSpec({
 private fun createCocoaPods(): CocoaPods =
     CocoaPods.Factory().create(
         analysisRoot = USER_DIR,
-        analyzerConfig = DEFAULT_ANALYZER_CONFIGURATION,
+        analyzerConfig = AnalyzerConfiguration(),
         repoConfig = DEFAULT_REPOSITORY_CONFIGURATION
     )
 

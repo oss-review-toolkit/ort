@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -81,7 +82,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 
 private fun scanResults(
     vcsInfo: VcsInfo,
@@ -129,7 +129,7 @@ private val ORT_RESULT = OrtResult(
     ),
     analyzer = AnalyzerRun(
         environment = Environment(),
-        config = DEFAULT_ANALYZER_CONFIGURATION,
+        config = AnalyzerConfiguration(),
         result = AnalyzerResult.EMPTY.copy(
             projects = sortedSetOf(
                 Project.EMPTY.copy(

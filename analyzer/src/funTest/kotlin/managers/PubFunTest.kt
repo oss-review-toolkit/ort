@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -94,7 +93,7 @@ class PubFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("multi-module")
                 val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-multi-module.yml")
 
-                val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+                val analyzer = Analyzer(AnalyzerConfiguration())
                 val managedFiles = analyzer.findManagedFiles(workingDir)
 
                 val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
@@ -116,7 +115,7 @@ class PubFunTest : WordSpec() {
                 val expectedResultFile =
                     projectsDir.parentFile.resolve("pub-expected-output-with-flutter-android-and-cocoapods.yml")
 
-                val analyzer = Analyzer(DEFAULT_ANALYZER_CONFIGURATION)
+                val analyzer = Analyzer(AnalyzerConfiguration())
                 val managedFiles = analyzer.findManagedFiles(workingDir)
 
                 val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
@@ -163,7 +162,7 @@ class PubFunTest : WordSpec() {
     }
 
     private fun createPub() =
-        Pub("Pub", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Pub("Pub", USER_DIR, AnalyzerConfiguration(), DEFAULT_REPOSITORY_CONFIGURATION)
 
     private fun createPubForExternal(): Pub {
         val config = AnalyzerConfiguration(allowDynamicVersions = true)

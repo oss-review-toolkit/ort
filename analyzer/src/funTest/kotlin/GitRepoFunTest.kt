@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -61,7 +61,7 @@ class GitRepoFunTest : StringSpec({
     "Analyzer correctly reports VcsInfo for git-repo projects" {
         beforeSpec()
 
-        val ortResult = Analyzer(DEFAULT_ANALYZER_CONFIGURATION).run {
+        val ortResult = Analyzer(AnalyzerConfiguration()).run {
             analyze(findManagedFiles(outputDir))
         }
 
