@@ -49,7 +49,7 @@ data class AdvisorRun(
     val config: AdvisorConfiguration,
 
     /**
-     * The result of the [AdvisorRun].
+     * The result of this run.
      */
     val results: AdvisorRecord
 )
