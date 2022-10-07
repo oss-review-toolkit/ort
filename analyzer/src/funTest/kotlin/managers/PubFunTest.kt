@@ -160,46 +160,46 @@ class PubFunTest : WordSpec() {
             }
         }
     }
+}
 
-    private fun createPub() =
-        Pub("Pub", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createPub() =
+    Pub("Pub", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 
-    private fun createPubForExternal(): Pub {
-        val config = AnalyzerConfiguration(allowDynamicVersions = true)
-        return Pub("Pub", USER_DIR, config, RepositoryConfiguration())
-    }
+private fun createPubForExternal(): Pub {
+    val config = AnalyzerConfiguration(allowDynamicVersions = true)
+    return Pub("Pub", USER_DIR, config, RepositoryConfiguration())
+}
 
-    /**
-     * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
-     */
-    private fun OrtResult.patchAapt2Result(): OrtResult {
-        val packages = analyzer?.result?.packages?.toMutableSet()
-        val aapt2Package =
-            packages?.find {
-                it.metadata.id.type == "Maven" &&
-                        it.metadata.id.namespace == "com.android.tools.build" &&
-                        it.metadata.id.name == "aapt2"
-            }
+/**
+ * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
+ */
+private fun OrtResult.patchAapt2Result(): OrtResult {
+    val packages = analyzer?.result?.packages?.toMutableSet()
+    val aapt2Package =
+        packages?.find {
+            it.metadata.id.type == "Maven" &&
+                    it.metadata.id.namespace == "com.android.tools.build" &&
+                    it.metadata.id.name == "aapt2"
+        }
 
-        val patchedPackages = packages?.map { pkg ->
-            if (pkg == aapt2Package) {
-                aapt2Package?.copy(
-                    metadata = aapt2Package.metadata.copy(
-                        binaryArtifact = aapt2Package.metadata.binaryArtifact.copy(
-                            url = "***",
-                            hash = Hash("***", HashAlgorithm.SHA1)
-                        )
+    val patchedPackages = packages?.map { pkg ->
+        if (pkg == aapt2Package) {
+            aapt2Package?.copy(
+                metadata = aapt2Package.metadata.copy(
+                    binaryArtifact = aapt2Package.metadata.binaryArtifact.copy(
+                        url = "***",
+                        hash = Hash("***", HashAlgorithm.SHA1)
                     )
-                ) ?: pkg
-            } else pkg
-        }?.toSortedSet() ?: sortedSetOf()
-
-        return copy(
-            analyzer = analyzer?.result?.copy(packages = patchedPackages)?.let { analyzerResult ->
-                analyzer?.copy(
-                    result = analyzerResult
                 )
-            }
-        )
-    }
+            ) ?: pkg
+        } else pkg
+    }?.toSortedSet() ?: sortedSetOf()
+
+    return copy(
+        analyzer = analyzer?.result?.copy(packages = patchedPackages)?.let { analyzerResult ->
+            analyzer?.copy(
+                result = analyzerResult
+            )
+        }
+    )
 }
