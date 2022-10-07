@@ -56,11 +56,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ort.Environment
 
 private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
 private const val API_KEY_SAMPLE = "XYZ"
@@ -277,10 +275,8 @@ private fun createReporterInput(scanCodes: List<String> = emptyList()): Reporter
                 vcs = analyzedVcs,
                 vcsProcessed = analyzedVcs
             ),
-            scanner = ScannerRun(
-                results = ScanRecord(results, AccessStatistics()),
-                environment = Environment(),
-                config = ScannerConfiguration()
+            scanner = ScannerRun.EMPTY.copy(
+                results = ScanRecord(results, AccessStatistics())
             )
         )
     )

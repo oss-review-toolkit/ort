@@ -60,7 +60,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.enumSetOf
@@ -237,9 +236,7 @@ val ORT_RESULT = OrtResult(
             )
         )
     ),
-    scanner = ScannerRun(
-        environment = Environment(),
-        config = ScannerConfiguration(),
+    scanner = ScannerRun.EMPTY.copy(
         results = ScanRecord(
             scanResults = sortedMapOf(
                 Identifier("NPM:@ort:project-with-findings:1.0") to listOf(

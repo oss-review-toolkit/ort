@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -186,9 +185,7 @@ val ortResult = OrtResult(
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
         )
     ),
-    scanner = ScannerRun(
-        environment = Environment(),
-        config = ScannerConfiguration(),
+    scanner = ScannerRun.EMPTY.copy(
         results = ScanRecord(
             scanResults = scanResults,
             storageStats = AccessStatistics()
