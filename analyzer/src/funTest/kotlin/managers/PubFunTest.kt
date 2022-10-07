@@ -55,7 +55,9 @@ class PubFunTest : WordSpec() {
                     val packageFile = workingDir.resolve("pubspec.yaml")
                     val expectedResult = getExpectedResult("dart-http-expected-output.yml", workingDir)
 
-                    val result = createPubForExternal().resolveSingleProject(packageFile)
+                    val result = createPub(
+                        AnalyzerConfiguration(allowDynamicVersions = true)
+                    ).resolveSingleProject(packageFile)
 
                     result.toYaml() shouldBe expectedResult
                 } finally {
@@ -147,13 +149,8 @@ private fun analyze(workingDir: File): AnalyzerResult {
 
 private fun getAssetFile(path: String) = File("src/funTest/assets").resolve(path)
 
-private fun createPub() =
-    Pub("Pub", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-
-private fun createPubForExternal(): Pub {
-    val config = AnalyzerConfiguration(allowDynamicVersions = true)
-    return Pub("Pub", USER_DIR, config, RepositoryConfiguration())
-}
+private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
+    Pub("Pub", USER_DIR, config, RepositoryConfiguration())
 
 /**
  * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
