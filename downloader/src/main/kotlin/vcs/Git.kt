@@ -179,8 +179,8 @@ class Git : VersionControlSystem(), CommandLineTool {
         path: String,
         recursive: Boolean
     ): Result<String> =
-        (workingTree as GitWorkingTree).repo.use { repo ->
-            Git(repo).use { git ->
+        (workingTree as GitWorkingTree).useRepo {
+            Git(this).use { git ->
                 updateWorkingTreeWithoutSubmodules(git, revision).mapCatching {
                     // In case this throws the exception gets encapsulated as a failure.
                     if (recursive) updateSubmodules(workingTree)
