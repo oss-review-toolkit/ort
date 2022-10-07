@@ -53,16 +53,9 @@ class PubFunTest : WordSpec() {
 
                 try {
                     val packageFile = workingDir.resolve("pubspec.yaml")
-                    val expectedResultFile = projectsDirExternal.resolve("dart-http-expected-output.yml")
+                    val expectedResult = getExpectedResult("dart-http-expected-output.yml", workingDir)
 
                     val result = createPubForExternal().resolveSingleProject(packageFile)
-                    val vcsPath = vcsDir.getPathToRoot(workingDir)
-                    val expectedResult = patchExpectedResult(
-                        expectedResultFile,
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
-                    )
 
                     result.toYaml() shouldBe expectedResult
                 } finally {
@@ -73,41 +66,28 @@ class PubFunTest : WordSpec() {
             "resolve dependencies for a project with dependencies without a static version" {
                 val workingDir = projectsDir.resolve("any-version")
                 val packageFile = workingDir.resolve("pubspec.yaml")
-                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-any-version.yml")
+                val expectedResult = getExpectedResult("pub-expected-output-any-version.yml", workingDir)
 
                 val result = createPub().resolveSingleProject(packageFile)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
                 result.toYaml() shouldBe expectedResult
             }
 
             "resolve multi-module dependencies correctly" {
                 val workingDir = projectsDir.resolve("multi-module")
-                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-multi-module.yml")
+                val expectedResult = getExpectedResult("pub-expected-output-multi-module.yml", workingDir)
 
                 val analyzerResult = analyze(workingDir).patchAapt2Result()
-
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
                 analyzerResult.toYaml() shouldBe expectedResult
             }
 
             "resolve dependencies for a project with Flutter, Android and Cocoapods" {
                 val workingDir = projectsDir.resolve("flutter-project-with-android-and-cocoapods")
-                val expectedResultFile =
-                    projectsDir.parentFile.resolve("pub-expected-output-with-flutter-android-and-cocoapods.yml")
+                val expectedResult = getExpectedResult(
+                    "pub-expected-output-with-flutter-android-and-cocoapods.yml",
+                    workingDir
+                )
 
                 val analyzerResult = analyze(workingDir).patchAapt2Result()
 
@@ -121,14 +101,6 @@ class PubFunTest : WordSpec() {
                         it.metadata.id in projectDependencies
                     },
                     issues = analyzerResult.issues
-                )
-
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
                 )
 
                 reducedAnalyzerResult.toYaml() shouldBe expectedResult
@@ -149,6 +121,22 @@ class PubFunTest : WordSpec() {
                 }
             }
         }
+    }
+
+    private fun getExpectedResult(expectedResultFilename: String, workingDir: File): String {
+        val vcsPath = vcsDir.getPathToRoot(workingDir)
+        val expectedResultDir = if (workingDir.startsWith(projectsDirExternal)) {
+            projectsDirExternal
+        } else {
+            projectsDir.parentFile
+        }
+
+        return patchExpectedResult(
+            expectedResultDir.resolve(expectedResultFilename),
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
     }
 }
 
