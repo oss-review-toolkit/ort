@@ -29,14 +29,14 @@ import org.ossreviewtoolkit.utils.ort.Environment
  */
 data class AnalyzerRun(
     /**
-     * The [Instant] the analyzer was started. The default value exists only for backward compatibility.
+     * The [Instant] the analyzer was started..
      */
-    val startTime: Instant = Instant.EPOCH,
+    val startTime: Instant,
 
     /**
-     * The [Instant] the analyzer has finished. The default value exists only for backward compatibility.
+     * The [Instant] the analyzer has finished.
      */
-    val endTime: Instant = Instant.EPOCH,
+    val endTime: Instant,
 
     /**
      * The [Environment] in which the analyzer was executed.
@@ -59,6 +59,8 @@ data class AnalyzerRun(
          */
         @JvmField
         val EMPTY = AnalyzerRun(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
             environment = Environment(),
             config = AnalyzerConfiguration(),
             result = AnalyzerResult.EMPTY
