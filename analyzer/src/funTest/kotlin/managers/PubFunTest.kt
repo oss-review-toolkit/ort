@@ -40,8 +40,8 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PubFunTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/pub").absoluteFile
-    private val projectsDirExternal = File("src/funTest/assets/projects/external").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic/pub").absoluteFile
+    private val projectsDirExternal = getAssetFile("projects/external").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -161,6 +161,8 @@ class PubFunTest : WordSpec() {
         }
     }
 }
+
+private fun getAssetFile(path: String) = File("src/funTest/assets").resolve(path)
 
 private fun createPub() =
     Pub("Pub", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
