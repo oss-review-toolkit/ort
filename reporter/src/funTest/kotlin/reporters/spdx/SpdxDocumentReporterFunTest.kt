@@ -59,7 +59,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
@@ -290,9 +289,7 @@ private val ortResult = OrtResult(
             )
         )
     ),
-    scanner = ScannerRun(
-        environment = Environment(),
-        config = ScannerConfiguration(),
+    scanner = ScannerRun.EMPTY.copy(
         results = ScanRecord(
             scanResults = sortedMapOf(
                 Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(

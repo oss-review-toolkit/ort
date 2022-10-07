@@ -57,7 +57,6 @@ import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
@@ -260,9 +259,7 @@ val ortResult = OrtResult(
             )
         )
     ),
-    scanner = ScannerRun(
-        environment = Environment(),
-        config = ScannerConfiguration(),
+    scanner = ScannerRun.EMPTY.copy(
         results = ScanRecord(
             scanResults = sortedMapOf(
                 Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
