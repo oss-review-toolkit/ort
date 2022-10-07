@@ -39,4 +39,16 @@ data class EvaluatorRun(
      * The list of [RuleViolation]s found by the evaluator.
      */
     val violations: List<RuleViolation>
-)
+) {
+    companion object {
+        /**
+         * A constant for an [EvaluatorRun] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = EvaluatorRun(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
+            violations = emptyList()
+        )
+    }
+}
