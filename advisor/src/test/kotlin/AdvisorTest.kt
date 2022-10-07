@@ -39,8 +39,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AdvisorTest : WordSpec({
@@ -132,9 +130,7 @@ private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
  */
 private fun createOrtResultWithPackages(packages: List<Package>): OrtResult =
     OrtResult.EMPTY.copy(
-        analyzer = AnalyzerRun(
-            environment = Environment(),
-            config = AnalyzerConfiguration(),
+        analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(
                 projects = sortedSetOf(Project.EMPTY.copy(id = Identifier.EMPTY.copy(name = "test-project"))),
                 packages = packages.map { CuratedPackage(it) }.toSortedSet()

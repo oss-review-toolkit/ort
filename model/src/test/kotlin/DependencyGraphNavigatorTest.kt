@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.types.shouldBeTypeOf
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
@@ -41,10 +39,8 @@ class DependencyGraphNavigatorTest : AbstractDependencyNavigatorTest() {
 
             "fail if the map with dependency graphs is empty" {
                 val result = OrtResult.EMPTY.copy(
-                    analyzer = AnalyzerRun(
-                        result = AnalyzerResult.EMPTY,
-                        environment = Environment(),
-                        config = AnalyzerConfiguration()
+                    analyzer = AnalyzerRun.EMPTY.copy(
+                        result = AnalyzerResult.EMPTY
                     )
                 )
 

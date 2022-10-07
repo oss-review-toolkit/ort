@@ -29,9 +29,6 @@ import io.mockk.mockk
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.ort.Environment
-
 class CompatibilityDependencyNavigatorTest : WordSpec() {
     private val treeProject = createProject("tree", scopes = sortedSetOf(createScope("scope")))
     private val graphProject = createProject("graph", scopeNames = sortedSetOf("scope"))
@@ -87,11 +84,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
                     packages = sortedSetOf(),
                     dependencyGraphs = mapOf()
                 )
-                val analyzerRun = AnalyzerRun(
-                    result = analyzerResult,
-                    environment = Environment(),
-                    config = AnalyzerConfiguration()
-                )
+                val analyzerRun = AnalyzerRun.EMPTY.copy(result = analyzerResult)
                 val result = OrtResult.EMPTY.copy(analyzer = analyzerRun)
 
                 val navigator = CompatibilityDependencyNavigator.create(result)
@@ -237,14 +230,12 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
  */
 private fun createOrtResult(vararg projects: Project): OrtResult =
     OrtResult.EMPTY.copy(
-        analyzer = AnalyzerRun(
+        analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(
                 projects = sortedSetOf(*projects),
                 packages = sortedSetOf(),
                 dependencyGraphs = mapOf("test" to DependencyGraph())
-            ),
-            environment = Environment(),
-            config = AnalyzerConfiguration()
+            )
         )
     )
 

@@ -40,13 +40,11 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 val authors = sortedSetOf("The Author", "The Other Author")
@@ -177,9 +175,7 @@ val ortResult = OrtResult(
             )
         )
     ),
-    analyzer = AnalyzerRun(
-        environment = Environment(),
-        config = AnalyzerConfiguration(),
+    analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
             projects = sortedSetOf(project),
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }

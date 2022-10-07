@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class GitLabLicenseModelReporterFunTest : WordSpec({
@@ -90,8 +89,7 @@ private fun createOrtResult(): OrtResult {
                 )
             )
         ),
-        analyzer = AnalyzerRun(
-            environment = Environment(),
+        analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),
             result = AnalyzerResult(
                 projects = sortedSetOf(

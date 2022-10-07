@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
@@ -88,9 +87,7 @@ val ORT_RESULT = OrtResult(
             )
         )
     ),
-    analyzer = AnalyzerRun(
-        environment = Environment(),
-        config = AnalyzerConfiguration(),
+    analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
             projects = sortedSetOf(
                 Project(

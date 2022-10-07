@@ -28,7 +28,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
@@ -38,7 +37,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.utils.ort.Environment
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
@@ -71,11 +69,7 @@ class ExcludesTest : WordSpec() {
     override suspend fun beforeEach(testCase: TestCase) {
         ortResult = OrtResult(
             repository = Repository.EMPTY,
-            analyzer = AnalyzerRun(
-                environment = Environment(),
-                config = AnalyzerConfiguration(),
-                result = AnalyzerResult.EMPTY
-            )
+            analyzer = AnalyzerRun.EMPTY
         )
     }
 

@@ -42,8 +42,6 @@ import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class ProjectSourceRuleTest : WordSpec({
@@ -212,9 +210,7 @@ private fun createOrtResult(
 
     return OrtResult.EMPTY.copy(
         repository = Repository(vcsInfo),
-        analyzer = AnalyzerRun(
-            config = AnalyzerConfiguration(),
-            environment = Environment(),
+        analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult.EMPTY.copy(
                 projects = sortedSetOf(
                     Project.EMPTY.copy(

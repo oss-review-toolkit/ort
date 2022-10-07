@@ -67,7 +67,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -127,9 +126,7 @@ private val ORT_RESULT = OrtResult(
         config = RepositoryConfiguration(),
         nestedRepositories = mapOf("nested-vcs-dir" to NESTED_VCS_INFO)
     ),
-    analyzer = AnalyzerRun(
-        environment = Environment(),
-        config = AnalyzerConfiguration(),
+    analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult.EMPTY.copy(
             projects = sortedSetOf(
                 Project.EMPTY.copy(
