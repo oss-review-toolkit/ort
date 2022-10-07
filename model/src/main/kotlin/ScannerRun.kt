@@ -38,8 +38,19 @@ data class ScannerRun(
      */
     val endTime: Instant,
 
+    /**
+     * The [Environment] in which the scanner was executed.
+     */
     val environment: Environment,
+
+    /**
+     * The [ScannerConfiguration] used for this run.
+     */
     val config: ScannerConfiguration,
+
+    /**
+     * The result of this run.
+     */
     val results: ScanRecord
 ) {
     companion object {
