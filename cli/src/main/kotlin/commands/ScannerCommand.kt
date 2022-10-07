@@ -182,16 +182,17 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "scan")
 
-        val scanResults = ortResult.scanner?.results
+        val scannerRun = ortResult.scanner
 
-        if (scanResults == null) {
+        if (scannerRun == null) {
             println("There was an error creating the scan results.")
             throw ProgramResult(1)
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) =
-            scanResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }.partition {
+            resolutionProvider.isResolved(it)
+        }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
         severityStats.print().conclude(config.severeIssueThreshold, 2)

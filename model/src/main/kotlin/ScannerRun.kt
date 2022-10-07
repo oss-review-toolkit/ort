@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -27,6 +29,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 /**
  * The summary of a single run of the scanner.
  */
+@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class ScannerRun(
     /**
      * The [Instant] the scanner was started.
@@ -69,4 +72,26 @@ data class ScannerRun(
             )
         )
     }
+
+    /**
+     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     */
+    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+
+        results.scanResults.forEach { (id, results) ->
+            results.forEach { result ->
+                if (result.summary.issues.isNotEmpty()) {
+                    collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
+                }
+            }
+        }
+
+        return collectedIssues
+    }
+
+    /**
+     * True if any of the [scanResults] contain [OrtIssue]s.
+     */
+    val hasIssues by lazy { collectIssues().isNotEmpty() }
 }
