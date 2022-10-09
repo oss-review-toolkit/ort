@@ -30,7 +30,7 @@ plugins {
 graphql {
     client {
         packageName = "org.ossreviewtoolkit.clients.github"
-        schemaFile = file("${project.projectDir}/src/main/assets/schema.docs.graphql")
+        schemaFile = file("${project.projectDir}/src/main/assets/schema.graphql")
         queryFileDirectory = "${project.projectDir}/src/main/assets/"
         serializer = GraphQLSerializer.KOTLINX
     }
