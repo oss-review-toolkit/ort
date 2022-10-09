@@ -102,7 +102,7 @@ Files: gradle/*
 Copyright: 2007-2020 The original author or authors <info@gradle.com>
 License: Apache-2.0
 
-Files: clients/github-graphql/src/main/assets/schema.docs.graphql
+Files: clients/github-graphql/src/main/assets/schema.graphql
 Copyright: 2017 Gregor Martynus
 License: MIT
 
