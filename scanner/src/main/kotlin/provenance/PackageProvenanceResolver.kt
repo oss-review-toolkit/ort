@@ -209,13 +209,18 @@ class DefaultPackageProvenanceResolver(
                 vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true)
             }.getOrDefault(emptySet())
 
+            val messages = mutableListOf<String>()
+
+            fun addAndLogMessage(message: String) {
+                logger.info { message }
+                messages += message
+            }
+
             if (revisionCandidates.isEmpty()) {
-                val message = "Could not find any revision candidates for package '${pkg.id.toCoordinates()}' with " +
-                        "VCS ${pkg.vcsProcessed}."
-
-                storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
-
-                throw IOException(message)
+                addAndLogMessage(
+                    "Could not find any revision candidates for package '${pkg.id.toCoordinates()}' with VCS " +
+                            "${pkg.vcsProcessed}."
+                )
             }
 
             revisionCandidates.forEachIndexed { index, revision ->
@@ -225,15 +230,15 @@ class DefaultPackageProvenanceResolver(
                 if (pkg.vcsProcessed.path.isNotBlank() &&
                     !workingTree.workingDir.resolve(pkg.vcsProcessed.path).exists()
                 ) {
-                    logger.info {
+                    addAndLogMessage(
                         "Discarding revision '$revision' because the requested VCS path '${pkg.vcsProcessed.path}' " +
                                 "does not exist."
-                    }
+                    )
 
                     return@forEachIndexed
                 }
 
-                if (result.isSuccess) {
+                result.onSuccess {
                     val resolvedRevision = workingTree.getRevision()
 
                     logger.info {
@@ -252,11 +257,13 @@ class DefaultPackageProvenanceResolver(
                     )
 
                     return@use repositoryProvenance
+                }.onFailure {
+                    addAndLogMessage("Could not resolve revision candidate '$revision': ${it.collectMessages()}")
                 }
             }
 
-            val message = "Could not resolve any of the revision candidates $revisionCandidates for package " +
-                    "'${pkg.id.toCoordinates()}' with VCS ${pkg.vcsProcessed}."
+            val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with VCS " +
+                    "${pkg.vcsProcessed}:\n${messages.joinToString("\n") { "\t$it" }}"
 
             storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
 
