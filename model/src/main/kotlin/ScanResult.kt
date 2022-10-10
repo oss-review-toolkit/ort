@@ -68,12 +68,6 @@ data class ScanResult(
         }
 
     /**
-     * Return a [ScanResult] whose [summary] contains only findings from the [provenance]'s [VcsInfo.path].
-     */
-    fun filterByVcsPath(): ScanResult =
-        if (provenance is RepositoryProvenance) filterByPath(provenance.vcsInfo.path) else this
-
-    /**
      * Return a [ScanResult] whose [summary] contains only findings whose location / path is not matched by any glob
      * expression in [ignorePatterns].
      */
