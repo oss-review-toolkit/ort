@@ -114,12 +114,12 @@ class Scanner(
             emptyMap()
         }
 
-        val results = (projectResults + packageResults).toSortedMap()
+        val scanResults = (projectResults + packageResults).toSortedMap()
 
         val endTime = Instant.now()
 
         val scanRecord = ScanRecord(
-            scanResults = results,
+            scanResults = scanResults,
             storageStats = AccessStatistics() // TODO: Record access statistics.
         )
 
