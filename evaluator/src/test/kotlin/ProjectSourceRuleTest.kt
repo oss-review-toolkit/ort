@@ -24,7 +24,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
@@ -33,7 +32,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -220,20 +218,17 @@ private fun createOrtResult(
             )
         ),
         scanner = ScannerRun.EMPTY.copy(
-            results = ScanRecord(
-                scanResults = sortedMapOf(
-                    id to listOf(
-                        ScanResult(
-                            provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
-                            scanner = ScannerDetails.EMPTY,
-                            summary = ScanSummary.EMPTY.copy(
-                                licenseFindings = licenseFindings,
-                                packageVerificationCode = "0000000000000000000000000000000000000000"
-                            )
+            scanResults = sortedMapOf(
+                id to listOf(
+                    ScanResult(
+                        provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
+                        scanner = ScannerDetails.EMPTY,
+                        summary = ScanSummary.EMPTY.copy(
+                            licenseFindings = licenseFindings,
+                            packageVerificationCode = "0000000000000000000000000000000000000000"
                         )
                     )
-                ),
-                storageStats = AccessStatistics()
+                )
             )
         )
     )

@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -29,7 +28,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -176,9 +174,6 @@ val ortResult = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        results = ScanRecord(
-            scanResults = scanResults,
-            storageStats = AccessStatistics()
-        )
+        scanResults = scanResults
     )
 )

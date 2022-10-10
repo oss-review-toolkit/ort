@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
@@ -115,13 +114,9 @@ class Scanner(
         }
 
         val scanResults = (projectResults + packageResults).toSortedMap()
+        val storageStats = AccessStatistics() // TODO: Record access statistics.
 
         val endTime = Instant.now()
-
-        val scanRecord = ScanRecord(
-            scanResults = scanResults,
-            storageStats = AccessStatistics() // TODO: Record access statistics.
-        )
 
         val filteredScannerOptions = mutableMapOf<String, Options>()
 
@@ -138,7 +133,7 @@ class Scanner(
         }
 
         val filteredScannerConfig = scannerConfig.copy(options = filteredScannerOptions)
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanRecord)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanResults, storageStats)
 
         return ortResult.copy(scanner = scannerRun)
     }

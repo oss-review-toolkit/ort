@@ -41,11 +41,9 @@ import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
 import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -278,9 +276,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
                 vcs = analyzedVcs,
                 vcsProcessed = analyzedVcs
             ),
-            scanner = ScannerRun.EMPTY.copy(
-                results = ScanRecord(results, AccessStatistics())
-            )
+            scanner = ScannerRun.EMPTY.copy(scanResults = results)
         )
     )
 }

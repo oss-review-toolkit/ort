@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import java.time.Instant
+import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -52,9 +53,14 @@ data class ScannerRun(
     val config: ScannerConfiguration,
 
     /**
-     * The result of this run.
+     * The [ScanResult]s for all [Package]s.
      */
-    val results: ScanRecord
+    val scanResults: SortedMap<Identifier, List<ScanResult>>,
+
+    /**
+     * The [AccessStatistics] for the scan results storage.
+     */
+    val storageStats: AccessStatistics
 ) {
     companion object {
         /**
@@ -66,10 +72,8 @@ data class ScannerRun(
             endTime = Instant.EPOCH,
             environment = Environment(),
             config = ScannerConfiguration(),
-            results = ScanRecord(
-                scanResults = sortedMapOf(),
-                storageStats = AccessStatistics()
-            )
+            scanResults = sortedMapOf(),
+            storageStats = AccessStatistics()
         )
     }
 
@@ -79,7 +83,7 @@ data class ScannerRun(
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
 
-        results.scanResults.forEach { (id, results) ->
+        scanResults.forEach { (id, results) ->
             results.forEach { result ->
                 if (result.summary.issues.isNotEmpty()) {
                     collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues

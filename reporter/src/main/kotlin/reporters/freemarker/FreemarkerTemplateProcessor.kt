@@ -460,7 +460,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 
     val projectsToFilter = getProjects().mapTo(mutableSetOf()) { it.id } - targetProjects
 
-    val scanResults = scanner?.results?.scanResults?.mapValuesTo(sortedMapOf()) { (id, results) ->
+    val scanResults = scanner?.scanResults?.mapValuesTo(sortedMapOf()) { (id, results) ->
         if (id !in projectsToFilter) {
             results
         } else {
@@ -491,9 +491,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 private fun OrtResult.replaceScanResults(scanResults: SortedMap<Identifier, List<ScanResult>>): OrtResult =
     copy(
         scanner = scanner?.copy(
-            results = scanner!!.results.copy(
-                scanResults = scanResults
-            )
+            scanResults = scanResults
         )
     )
 

@@ -119,7 +119,7 @@ class ReportTableModelMapper(
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
 
         val analyzerResult = ortResult.analyzer?.result
-        val scanRecord = ortResult.scanner?.results
+        val scanResults = ortResult.scanner?.scanResults
         val excludes = ortResult.getExcludes()
 
         val projectTables = analyzerResult?.projects?.associateWith { project ->
@@ -131,7 +131,7 @@ class ReportTableModelMapper(
 
             val projectIssues = ortResult.dependencyNavigator.projectIssues(project)
             val tableRows = allIds.map { id ->
-                val scanResult = scanRecord?.scanResults?.get(id)
+                val scanResult = scanResults?.get(id)
 
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
 
