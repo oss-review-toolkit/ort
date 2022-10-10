@@ -28,6 +28,7 @@ import io.mockk.mockkStatic
 import java.net.PasswordAuthentication
 import java.net.URI
 
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class FossIdUrlProviderTest : StringSpec({
@@ -78,6 +79,20 @@ class FossIdUrlProviderTest : StringSpec({
         val expectedUrl = "https://$USER:$PASSWORD@$otherHost:$PORT/$PATH"
         val urlMapping = listOf("$regex  ->  $replace", "foo -> bar")
         mockAuthenticator(host = otherHost)
+
+        val urlProvider = FossIdUrlProvider.create(urlMapping)
+        val url = urlProvider.getUrl(REPO_URL)
+
+        url shouldBe expectedUrl
+    }
+
+    "URL encoding should be applied for credentials" {
+        val username = "test/user"
+        val password = "se#@et?boh"
+        val auth = PasswordAuthentication(username, password.toCharArray())
+        val expectedUrl = REPO_URL.replaceCredentialsInUri("$username:$password")
+        val urlMapping = listOf(ADD_CREDENTIALS_MAPPING)
+        mockAuthenticator(authentication = auth)
 
         val urlProvider = FossIdUrlProvider.create(urlMapping)
         val url = urlProvider.getUrl(REPO_URL)

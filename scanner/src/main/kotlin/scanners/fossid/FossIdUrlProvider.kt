@@ -24,6 +24,7 @@ import java.net.PasswordAuthentication
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.ossreviewtoolkit.utils.common.percentEncode
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
@@ -112,7 +113,8 @@ internal class FossIdUrlProvider private constructor(
          * Replace the variables related to credentials with the values in [auth].
          */
         private fun String.insertCredentials(auth: PasswordAuthentication): String =
-            replace(VAR_USERNAME, auth.userName).replace(VAR_PASSWORD, String(auth.password))
+            replace(VAR_USERNAME, auth.userName.percentEncode())
+                .replace(VAR_PASSWORD, String(auth.password).percentEncode())
 
         /**
          * Construct a URL mapping from the elements in this [Collection]. The resulting [Map] contains regular
