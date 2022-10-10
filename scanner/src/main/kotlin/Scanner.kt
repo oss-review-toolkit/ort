@@ -332,7 +332,7 @@ class Scanner(
                 storeProvenanceScanResult(provenance, scanResult)
 
                 completedPackages.forEach { pkg ->
-                    storePackageScanResult(pkg, controller.getNestedScanResult(pkg.id))
+                    controller.getNestedScanResult(pkg.id)?.let { storePackageScanResult(pkg, it) }
                 }
             }
         }
@@ -358,7 +358,7 @@ class Scanner(
                 storeProvenanceScanResult(provenance, scanResult)
 
                 completedPackages.forEach { pkg ->
-                    storePackageScanResult(pkg, controller.getNestedScanResult(pkg.id))
+                    controller.getNestedScanResult(pkg.id)?.let { storePackageScanResult(pkg, it) }
                 }
             }
         }
