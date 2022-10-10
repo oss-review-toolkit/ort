@@ -79,7 +79,7 @@ class PubFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("multi-module")
                 val expectedResult = getExpectedResult("pub-expected-output-multi-module.yml", workingDir)
 
-                val analyzerResult = analyze(workingDir).patchAapt2Result()
+                val analyzerResult = analyze(workingDir).patchPackages()
 
                 analyzerResult.toYaml() shouldBe expectedResult
             }
@@ -91,7 +91,7 @@ class PubFunTest : WordSpec() {
                     workingDir
                 )
 
-                val analyzerResult = analyze(workingDir).patchAapt2Result().reduceToPubProjects()
+                val analyzerResult = analyze(workingDir).patchPackages().reduceToPubProjects()
 
                 analyzerResult.toYaml() shouldBe expectedResult
             }
@@ -155,7 +155,7 @@ private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
 /**
  * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
  */
-private fun AnalyzerResult.patchAapt2Result(): AnalyzerResult {
+private fun AnalyzerResult.patchPackages(): AnalyzerResult {
     val patchedPackages = packages.mapTo(sortedSetOf()) { pkg ->
         pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
