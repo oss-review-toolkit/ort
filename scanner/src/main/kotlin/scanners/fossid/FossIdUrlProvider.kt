@@ -66,7 +66,14 @@ internal class FossIdUrlProvider private constructor(
          */
         fun create(
             urlMapping: Collection<String> = emptyList()
-        ): FossIdUrlProvider = FossIdUrlProvider(urlMapping.toRegexMapping())
+        ): FossIdUrlProvider {
+            val mappings = urlMapping.toRegexMapping()
+            mappings.forEach {
+                logger.info { "Mapping ${it.key} -> ${it.value}." }
+            }
+
+            return FossIdUrlProvider(mappings)
+        }
 
         /**
          * Create a new instance of [FossIdUrlProvider] and configure the URL mappings from the given configuration
@@ -144,8 +151,12 @@ internal class FossIdUrlProvider private constructor(
             if (replaced != repoUrl) {
                 logger.info { "URL mapping applied to $repoUrl: Mapped to $replaced." }
                 return replaceVariables(replaced)
+            } else {
+                logger.debug { "Mapping $regex did not match." }
             }
         }
+
+        logger.info { "No matching URL mapping could be found for '$repoUrl'." }
 
         return repoUrl
     }
