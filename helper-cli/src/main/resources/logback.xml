@@ -36,4 +36,5 @@
     <logger name="org.ossreviewtoolkit.reporter.reporters.fossid.FossIdReporter" level="INFO" />
     <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossId" level="INFO" />
     <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdConfig" level="INFO" />
+    <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdUrlProvider" level="INFO" />
 </configuration>
