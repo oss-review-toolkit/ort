@@ -32,7 +32,6 @@ import io.kotest.matchers.string.shouldContain
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -49,7 +48,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -467,87 +465,84 @@ private fun createOrtResult(): OrtResult {
             ),
         ),
         scanner = ScannerRun.EMPTY.copy(
-            results = ScanRecord(
-                scanResults = sortedMapOf(
-                    Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
-                        ScanResult(
-                            provenance = ArtifactProvenance(
-                                sourceArtifact = RemoteArtifact(
-                                    url = "https://some-host/first-package-sources.jar",
-                                    hash = Hash.NONE
-                                )
-                            ),
-                            scanner = ScannerDetails(
-                                name = "SCANNER",
-                                version = "1.2.3",
-                                configuration = "configuration"
-                            ),
-                            summary = ScanSummary.EMPTY.copy(
-                                packageVerificationCode = "0000000000000000000000000000000000000000",
-                                licenseFindings = sortedSetOf(
-                                    LicenseFinding(
-                                        license = "Apache-2.0",
-                                        location = TextLocation("LICENSE", 1)
-                                    )
-                                ),
-                                copyrightFindings = sortedSetOf(
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some copyright holder in source artifact",
-                                        location = TextLocation("some/file", 1)
-                                    ),
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                        location = TextLocation("some/file", 7)
-                                    )
-                                )
+            scanResults = sortedMapOf(
+                Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+                    ScanResult(
+                        provenance = ArtifactProvenance(
+                            sourceArtifact = RemoteArtifact(
+                                url = "https://some-host/first-package-sources.jar",
+                                hash = Hash.NONE
                             )
                         ),
-                        ScanResult(
-                            provenance = RepositoryProvenance(
-                                vcsInfo = VcsInfo(
-                                    type = VcsType.GIT,
-                                    revision = "master",
-                                    url = "ssh://git@github.com/path/first-package-repo.git",
-                                    path = "project-path"
-                                ),
-                                resolvedRevision = "deadbeef"
+                        scanner = ScannerDetails(
+                            name = "SCANNER",
+                            version = "1.2.3",
+                            configuration = "configuration"
+                        ),
+                        summary = ScanSummary.EMPTY.copy(
+                            packageVerificationCode = "0000000000000000000000000000000000000000",
+                            licenseFindings = sortedSetOf(
+                                LicenseFinding(
+                                    license = "Apache-2.0",
+                                    location = TextLocation("LICENSE", 1)
+                                )
                             ),
-                            scanner = ScannerDetails(
-                                name = "otherSCANNER",
-                                version = "1.2.3",
-                                configuration = "otherConfiguration"
+                            copyrightFindings = sortedSetOf(
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some copyright holder in source artifact",
+                                    location = TextLocation("some/file", 1)
+                                ),
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some other copyright holder in source artifact",
+                                    location = TextLocation("some/file", 7)
+                                )
+                            )
+                        )
+                    ),
+                    ScanResult(
+                        provenance = RepositoryProvenance(
+                            vcsInfo = VcsInfo(
+                                type = VcsType.GIT,
+                                revision = "master",
+                                url = "ssh://git@github.com/path/first-package-repo.git",
+                                path = "project-path"
                             ),
-                            summary = ScanSummary.EMPTY.copy(
-                                startTime = Instant.EPOCH,
-                                endTime = Instant.EPOCH,
-                                packageVerificationCode = "0000000000000000000000000000000000000000",
-                                licenseFindings = sortedSetOf(
-                                    LicenseFinding(
-                                        license = "BSD-2-Clause",
-                                        location = TextLocation("LICENSE", 1)
-                                    )
+                            resolvedRevision = "deadbeef"
+                        ),
+                        scanner = ScannerDetails(
+                            name = "otherSCANNER",
+                            version = "1.2.3",
+                            configuration = "otherConfiguration"
+                        ),
+                        summary = ScanSummary.EMPTY.copy(
+                            startTime = Instant.EPOCH,
+                            endTime = Instant.EPOCH,
+                            packageVerificationCode = "0000000000000000000000000000000000000000",
+                            licenseFindings = sortedSetOf(
+                                LicenseFinding(
+                                    license = "BSD-2-Clause",
+                                    location = TextLocation("LICENSE", 1)
+                                )
+                            ),
+                            copyrightFindings = sortedSetOf(
+                                CopyrightFinding(
+                                    statement = "Copyright 2020 Some copyright holder in VCS",
+                                    location = TextLocation("some/file", 1)
+                                )
+                            ),
+                            issues = listOf(
+                                OrtIssue(
+                                    source = "Source-4",
+                                    message = "Message-4"
                                 ),
-                                copyrightFindings = sortedSetOf(
-                                    CopyrightFinding(
-                                        statement = "Copyright 2020 Some copyright holder in VCS",
-                                        location = TextLocation("some/file", 1)
-                                    )
-                                ),
-                                issues = listOf(
-                                    OrtIssue(
-                                        source = "Source-4",
-                                        message = "Message-4"
-                                    ),
-                                    OrtIssue(
-                                        source = "Source-5",
-                                        message = "Message-5"
-                                    )
+                                OrtIssue(
+                                    source = "Source-5",
+                                    message = "Message-5"
                                 )
                             )
                         )
                     )
-                ),
-                storageStats = AccessStatistics()
+                )
             )
         )
     )

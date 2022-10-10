@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.evaluator
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -38,7 +37,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -259,22 +257,19 @@ val ortResult = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        results = ScanRecord(
-            scanResults = sortedMapOf(
-                Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
-                    ScanResult(
-                        provenance = UnknownProvenance,
-                        scanner = ScannerDetails.EMPTY,
-                        summary = ScanSummary.EMPTY.copy(
-                            licenseFindings = sortedSetOf(
-                                LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
-                                LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
-                            )
+        scanResults = sortedMapOf(
+            Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
+                ScanResult(
+                    provenance = UnknownProvenance,
+                    scanner = ScannerDetails.EMPTY,
+                    summary = ScanSummary.EMPTY.copy(
+                        licenseFindings = sortedSetOf(
+                            LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
+                            LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
                         )
                     )
                 )
-            ),
-            storageStats = AccessStatistics()
+            )
         )
     ),
     labels = mapOf(

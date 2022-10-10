@@ -35,7 +35,6 @@ import io.mockk.mockk
 import java.time.Instant
 import java.util.SortedMap
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorRecord
@@ -56,7 +55,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -145,30 +143,27 @@ private val ORT_RESULT = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        results = ScanRecord(
-            scanResults = sortedMapOf(
-                idRootProject to scanResults(
-                    vcsInfo = PROJECT_VCS_INFO,
-                    findingsPaths = listOf(
-                        "src/main.js",
-                        "sub-dir/src/main.cpp",
-                        "nested-vcs-dir/src/main.cpp"
-                    )
-                ),
-                idSubProject to scanResults(
-                    vcsInfo = PROJECT_VCS_INFO,
-                    findingsPaths = listOf(
-                        "sub-dir/src/main.cpp"
-                    )
-                ),
-                idNestedProject to scanResults(
-                    vcsInfo = NESTED_VCS_INFO,
-                    findingsPaths = listOf(
-                        "src/main.cpp"
-                    )
+        scanResults = sortedMapOf(
+            idRootProject to scanResults(
+                vcsInfo = PROJECT_VCS_INFO,
+                findingsPaths = listOf(
+                    "src/main.js",
+                    "sub-dir/src/main.cpp",
+                    "nested-vcs-dir/src/main.cpp"
                 )
             ),
-            storageStats = AccessStatistics()
+            idSubProject to scanResults(
+                vcsInfo = PROJECT_VCS_INFO,
+                findingsPaths = listOf(
+                    "sub-dir/src/main.cpp"
+                )
+            ),
+            idNestedProject to scanResults(
+                vcsInfo = NESTED_VCS_INFO,
+                findingsPaths = listOf(
+                    "src/main.cpp"
+                )
+            )
         )
     )
 )

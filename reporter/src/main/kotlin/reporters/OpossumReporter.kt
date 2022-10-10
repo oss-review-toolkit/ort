@@ -553,7 +553,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        val scannerResults = ortResult.scanner?.results?.scanResults ?: return OpossumInput()
+        val scannerResults = ortResult.scanner?.scanResults ?: return OpossumInput()
         scannerResults.entries.forEachIndexed { index, entry ->
             logger.debug { "scannerResult ${index + 1} of ${scannerResults.entries.size}" }
             opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
