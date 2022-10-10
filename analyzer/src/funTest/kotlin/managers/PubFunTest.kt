@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -96,8 +95,8 @@ class PubFunTest : WordSpec() {
                 val analyzer = Analyzer(AnalyzerConfiguration())
                 val managedFiles = analyzer.findManagedFiles(workingDir)
 
-                val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
-                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes()
+                val analyzerRun = analyzer.analyze(managedFiles).analyzer
+                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes().patchAapt2Result()
 
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
@@ -118,8 +117,8 @@ class PubFunTest : WordSpec() {
                 val analyzer = Analyzer(AnalyzerConfiguration())
                 val managedFiles = analyzer.findManagedFiles(workingDir)
 
-                val analyzerRun = analyzer.analyze(managedFiles).patchAapt2Result().analyzer
-                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes()
+                val analyzerRun = analyzer.analyze(managedFiles).analyzer
+                val analyzerResult = analyzerRun.shouldNotBeNull().result.withResolvedScopes().patchAapt2Result()
                 val project = analyzerResult.projects.single { it.id.type == "Pub" }
                 val projectDependencies = project.scopes.flatMap { it.collectDependencies() }
 
@@ -174,10 +173,8 @@ private fun createPubForExternal(): Pub {
 /**
  * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
  */
-private fun OrtResult.patchAapt2Result(): OrtResult {
-    val analyzerRun = analyzer ?: return this
-
-    val patchedPackages = analyzerRun.result.packages.mapTo(sortedSetOf()) { pkg ->
+private fun AnalyzerResult.patchAapt2Result(): AnalyzerResult {
+    val patchedPackages = packages.mapTo(sortedSetOf()) { pkg ->
         pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
                 metadata = pkg.metadata.copy(
@@ -189,11 +186,5 @@ private fun OrtResult.patchAapt2Result(): OrtResult {
             )
     }
 
-    return copy(
-        analyzer = analyzerRun.copy(
-            result = analyzerRun.result.copy(
-                packages = patchedPackages
-            )
-        )
-    )
+    return copy(packages = patchedPackages)
 }
