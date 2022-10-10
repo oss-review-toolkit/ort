@@ -169,7 +169,7 @@ class ScanController(
     /**
      * Get the [NestedProvenanceScanResult] for the provided [id].
      */
-    fun getNestedScanResult(id: Identifier): NestedProvenanceScanResult =
+    fun getNestedScanResult(id: Identifier): NestedProvenanceScanResult? =
         buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id), emptyList())
 
     /**
@@ -178,10 +178,12 @@ class ScanController(
      */
     fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
         // TODO: Return map containing all packages with issues for packages that could not be completely scanned.
-        packageProvenancesWithoutVcsPath.entries.associate { (id, provenance) ->
+        packageProvenancesWithoutVcsPath.mapNotNull { (id, provenance) ->
             val issues = issues[id].orEmpty()
-            packages.first { it.id == id } to buildNestedProvenanceScanResult(provenance, issues)
-        }.filterByVcsPath().filterByIgnorePatterns()
+            buildNestedProvenanceScanResult(provenance, issues)?.let { scanResult ->
+                packages.first { it.id == id } to scanResult
+            }
+        }.toMap().filterByVcsPath().filterByIgnorePatterns()
 
     /**
      * Return all [Package]s for which adding a scan result for [scanner] and [provenance] would complete the scan of
@@ -292,8 +294,9 @@ class ScanController(
     private fun buildNestedProvenanceScanResult(
         root: KnownProvenance,
         issues: List<OrtIssue>
-    ): NestedProvenanceScanResult {
-        val nestedProvenance = nestedProvenances.getValue(root)
+    ): NestedProvenanceScanResult? {
+        val nestedProvenance = nestedProvenances[root] ?: return null
+
         val scanResults = nestedProvenance.getProvenances().associateWith { provenance ->
             getScanResults(provenance).map { it.copy(summary = it.summary.copy(issues = it.summary.issues + issues)) }
         }
