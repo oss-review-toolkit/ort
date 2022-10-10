@@ -22,16 +22,13 @@ package org.ossreviewtoolkit.reporter
 import java.io.File
 import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
- * A reporter that creates a human-readable report from the [AnalyzerResult] and [ScanRecord] contained in an
- * [OrtResult]. The signatures of public functions in this class define the library API.
+ * A reporter that creates a human-readable report from a given [OrtResult].
  */
 interface Reporter {
     companion object {
