@@ -19,19 +19,15 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.io.File
 import java.net.URI
 
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
-import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.utils.common.percentEncode
@@ -218,22 +214,6 @@ fun createPurl(
     if (subpath.isNotEmpty()) {
         val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
         append(value)
-    }
-}
-
-/**
- * Return a list of [ScanResult]s where all results contain only findings from the same directory as the [project]'s
- * definition file.
- */
-fun List<ScanResult>.filterByProject(project: Project): List<ScanResult> {
-    val parentPath = File(project.definitionFilePath).parent ?: return this
-
-    return map { result ->
-        if (result.provenance is ArtifactProvenance) {
-            result
-        } else {
-            result.filterByPath(parentPath)
-        }
     }
 }
 
