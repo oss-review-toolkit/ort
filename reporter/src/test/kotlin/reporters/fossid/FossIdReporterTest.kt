@@ -286,9 +286,12 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
     )
 }
 
-private fun createScanResult(scanCode: String): ScanResult {
-    val summary = ScanSummary(
-        Instant.now(), Instant.now(), "", sortedSetOf(), sortedSetOf()
+private fun createScanResult(scanCode: String): ScanResult =
+    ScanResult(
+        provenance = UnknownProvenance,
+        scanner = ScannerDetails.EMPTY,
+        summary = ScanSummary(
+            Instant.now(), Instant.now(), "", sortedSetOf(), sortedSetOf()
+        ),
+        additionalData = mapOf(FossIdReporter.SCAN_CODE_KEY to scanCode)
     )
-    return ScanResult(UnknownProvenance, ScannerDetails.EMPTY, summary, mapOf(FossIdReporter.SCAN_CODE_KEY to scanCode))
-}
