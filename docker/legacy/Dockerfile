@@ -105,8 +105,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         composer=$COMPOSER_VERSION \
         nodejs \
         python-is-python3 \
-        python-setuptools \
-        python2-dev \
         python3-dev \
         python3-pip \
         python3-setuptools \
