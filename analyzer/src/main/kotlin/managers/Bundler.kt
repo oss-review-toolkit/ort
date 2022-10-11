@@ -74,9 +74,9 @@ private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.
 private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_dependencies.rb"
 
 /**
- * Gems that the helper scripts depend upon.
+ * The name of the Bundler Gem.
  */
-private val HELPER_SCRIPT_DEPENDENCIES = listOf("bundler")
+private const val BUNDLER_GEM_NAME = "bundler"
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
@@ -143,20 +143,19 @@ class Bundler(
             it.name.substringBeforeLast('-')
         }
 
-        if (installedGems.containsAll(HELPER_SCRIPT_DEPENDENCIES)) {
-            logger.info { "Already installed the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s)." }
+        if (BUNDLER_GEM_NAME in installedGems) {
+            logger.info { "Already installed the '$BUNDLER_GEM_NAME' Gem." }
         } else {
             // Install the Gems the helper scripts depend on.
             val duration = measureTime {
                 org.jruby.Main().run(
                     arrayOf(
-                        "-S", "gem", "install", "--no-document", "--user-install",
-                        *HELPER_SCRIPT_DEPENDENCIES.toTypedArray()
+                        "-S", "gem", "install", "--no-document", "--user-install", BUNDLER_GEM_NAME
                     )
                 )
             }
 
-            logger.info { "Installing the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s) took $duration." }
+            logger.info { "Installing the '$BUNDLER_GEM_NAME' Gem took $duration." }
         }
     }
 
@@ -189,10 +188,10 @@ class Bundler(
             )
 
             val allProjectDeps = groupedDeps.values.flatten().toSet()
-            val helperOnlyDeps = HELPER_SCRIPT_DEPENDENCIES.filterNot { it in allProjectDeps }
+            val hasBundlerDep = BUNDLER_GEM_NAME in allProjectDeps
 
             val packages = gemSpecs.values.mapNotNullTo(sortedSetOf()) { gemSpec ->
-                getPackageFromGemspec(gemSpec).takeUnless { gemSpec.name in helperOnlyDeps }
+                getPackageFromGemspec(gemSpec).takeUnless { gemSpec.name == BUNDLER_GEM_NAME && !hasBundlerDep }
             }
 
             listOf(ProjectAnalyzerResult(project, packages, issues))
