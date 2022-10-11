@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -227,11 +226,8 @@ private fun createOrtResult(
                         ScanResult(
                             provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
                             scanner = ScannerDetails.EMPTY,
-                            summary = ScanSummary(
+                            summary = ScanSummary.EMPTY.copy(
                                 licenseFindings = licenseFindings,
-                                copyrightFindings = sortedSetOf(),
-                                startTime = Instant.EPOCH,
-                                endTime = Instant.EPOCH,
                                 packageVerificationCode = "0000000000000000000000000000000000000000"
                             )
                         )

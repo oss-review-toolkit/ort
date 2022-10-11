@@ -28,8 +28,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -226,13 +224,9 @@ private fun createScanResult(
     ScanResult(
         provenance,
         scannerDetails,
-        ScanSummary(
-            startTime = Instant.EPOCH,
-            endTime = Instant.EPOCH,
-            packageVerificationCode = "",
+        ScanSummary.EMPTY.copy(
             licenseFindings = sortedSetOf(
                 LicenseFinding(license, TextLocation("file.txt", 1, 2))
-            ),
-            copyrightFindings = sortedSetOf()
+            )
         )
     )

@@ -93,10 +93,7 @@ private fun scanResults(
         ScanResult(
             provenance = RepositoryProvenance(vcsInfo = vcsInfo, resolvedRevision = vcsInfo.revision),
             scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-            summary = ScanSummary(
-                startTime = Instant.EPOCH,
-                endTime = Instant.EPOCH,
-                packageVerificationCode = "",
+            summary = ScanSummary.EMPTY.copy(
                 licenseFindings = licenseFindings,
                 copyrightFindings = copyrightFindings,
             )

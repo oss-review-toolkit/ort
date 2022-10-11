@@ -23,7 +23,6 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.time.Instant
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
@@ -104,13 +103,8 @@ class ScannerIntegrationFunTest : StringSpec() {
                 )
             }
 
-            return ScanSummary(
-                startTime = Instant.EPOCH,
-                endTime = Instant.EPOCH,
-                packageVerificationCode = "",
-                licenseFindings = licenseFindings,
-                copyrightFindings = sortedSetOf(),
-                issues = mutableListOf()
+            return ScanSummary.EMPTY.copy(
+                licenseFindings = licenseFindings
             )
         }
     }

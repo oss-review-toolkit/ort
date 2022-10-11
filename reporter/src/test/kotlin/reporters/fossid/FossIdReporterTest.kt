@@ -35,7 +35,6 @@ import io.mockk.mockkStatic
 import io.mockk.spyk
 
 import java.io.File
-import java.time.Instant
 
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
@@ -290,8 +289,6 @@ private fun createScanResult(scanCode: String): ScanResult =
     ScanResult(
         provenance = UnknownProvenance,
         scanner = ScannerDetails.EMPTY,
-        summary = ScanSummary(
-            Instant.now(), Instant.now(), "", sortedSetOf(), sortedSetOf()
-        ),
+        summary = ScanSummary.EMPTY,
         additionalData = mapOf(FossIdReporter.SCAN_CODE_KEY to scanCode)
     )

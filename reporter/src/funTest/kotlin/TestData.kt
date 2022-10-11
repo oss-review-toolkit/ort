@@ -240,10 +240,7 @@ val ORT_RESULT = OrtResult(
                     ScanResult(
                         provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "MIT",
@@ -263,23 +260,14 @@ val ORT_RESULT = OrtResult(
                     ScanResult(
                         provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
-                            licenseFindings = sortedSetOf(),
-                            copyrightFindings = sortedSetOf()
-                        )
+                        summary = ScanSummary.EMPTY
                     )
                 ),
                 Identifier("NPM:@ort:no-license-file:1.0") to listOf(
                     ScanResult(
                         provenance = UnknownProvenance,
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "MIT",
@@ -304,10 +292,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "MIT",
@@ -340,10 +325,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "MIT",
@@ -384,10 +366,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "MIT",
@@ -420,10 +399,7 @@ val ORT_RESULT = OrtResult(
                             )
                         ),
                         scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
                                     license = "BSD-3-Clause",

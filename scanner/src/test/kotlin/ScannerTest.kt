@@ -35,7 +35,6 @@ import io.mockk.verify
 
 import java.io.File
 import java.io.IOException
-import java.time.Instant
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -824,7 +823,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
             LicenseFinding("Apache-2.0", TextLocation(file.relativeTo(path).path, 1, 2))
         }.toSortedSet()
 
-        return createScanSummary(licenseFindings = licenseFindings)
+        return ScanSummary.EMPTY.copy(licenseFindings = licenseFindings)
     }
 }
 
@@ -963,9 +962,6 @@ private fun VcsInfo.Companion.valid() =
         revision = "f42e41a8fedc1e0acd78fab147e91fa047cb2853"
     )
 
-private fun createScanSummary(licenseFindings: Set<LicenseFinding> = emptySet()) =
-    ScanSummary(Instant.EPOCH, Instant.EPOCH, "", licenseFindings.toSortedSet(), sortedSetOf())
-
 private fun createScanResult(
     provenance: Provenance,
     scannerDetails: ScannerDetails,
@@ -976,7 +972,7 @@ private fun createScanResult(
     ScanResult(
         provenance,
         scannerDetails,
-        createScanSummary(licenseFindings)
+        ScanSummary.EMPTY.copy(licenseFindings = licenseFindings)
     )
 
 private fun createNestedScanResult(
@@ -995,7 +991,7 @@ private fun createStoredScanResult(provenance: Provenance, scannerDetails: Scann
     ScanResult(
         provenance,
         scannerDetails,
-        createScanSummary(
+        ScanSummary.EMPTY.copy(
             licenseFindings = sortedSetOf(
                 LicenseFinding("Apache-2.0", TextLocation("storage.txt", 1, 2))
             )
