@@ -47,7 +47,7 @@ internal object PythonInspector : CommandLineTool {
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.7.1,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.8.1,)")
 
     fun run(
         workingDir: File,
@@ -90,7 +90,7 @@ internal object PythonInspector : CommandLineTool {
 
 @Serializable
 internal data class PythonInspectorResult(
-    @SerialName("resolved_dependencies") val resolvedDependencies: List<PythonInspectorResolvedDependency>,
+    @SerialName("resolved_dependencies_graph") val resolvedDependenciesGraph: List<PythonInspectorResolvedDependency>,
     val packages: List<PythonInspectorPackage>
 )
 
