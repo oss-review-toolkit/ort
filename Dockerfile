@@ -125,15 +125,13 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 FROM build as pythonbuild
 
 ARG PYTHON_VERSION=3.10.6
-ARG PYTHON2_VERSION=2.7.18
 ARG PYENV_GIT_TAG=v2.3.4
 
 ENV PYENV_ROOT=/opt/python
 RUN curl -kSs https://pyenv.run | bash
 ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
-RUN for pyvers in ${PYTHON_VERSION} ${PYTHON2_VERSION}; do \
-    pyenv install -v $pyvers; done
-RUN pyenv global ${PYTHON_VERSION} ${PYTHON2_VERSION}
+RUN pyenv install -v ${PYTHON_VERSION}
+RUN pyenv global ${PYTHON_VERSION}
 
 COPY docker/python.sh /etc/profile.d
 
