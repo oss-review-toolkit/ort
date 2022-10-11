@@ -97,8 +97,6 @@ class ScannerIntegrationFunTest : StringSpec() {
         override val criteria: ScannerCriteria = ScannerCriteria.forDetails(details)
 
         override fun scanPath(path: File, context: ScanContext): ScanSummary {
-            val time = Instant.now()
-
             val licenseFindings = path.listFiles().orEmpty().mapTo(sortedSetOf()) { file ->
                 LicenseFinding(
                     license = SpdxConstants.NONE,
@@ -107,8 +105,8 @@ class ScannerIntegrationFunTest : StringSpec() {
             }
 
             return ScanSummary(
-                startTime = time,
-                endTime = time,
+                startTime = Instant.EPOCH,
+                endTime = Instant.EPOCH,
                 packageVerificationCode = "",
                 licenseFindings = licenseFindings,
                 copyrightFindings = sortedSetOf(),
