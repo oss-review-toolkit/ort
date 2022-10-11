@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -77,6 +78,21 @@ private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_depende
  * Gems that the helper scripts depend upon.
  */
 private val HELPER_SCRIPT_DEPENDENCIES = listOf("bundler")
+
+private fun runScriptCode(code: String, workingDir: File): String {
+    val bytes = ByteArrayOutputStream()
+
+    with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
+        output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
+        currentDirectory = workingDir.path
+        runScriptlet(code)
+    }
+
+    val stdout = bytes.toString()
+    if (stdout.isEmpty()) throw IOException("Failed to run script code '$code'.")
+
+    return stdout
+}
 
 private fun runScriptResource(resource: String, workingDir: File): String {
     val bytes = ByteArrayOutputStream()
@@ -118,10 +134,12 @@ class Bundler(
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val gemHome = Os.env["GEM_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gem")
-        val jrubyGems = gemHome.resolve("jruby/${Constants.RUBY_MAJOR_VERSION}.0/gems")
-        val installedGems = jrubyGems.walk().maxDepth(1).filter {
-            it.isDirectory && it != jrubyGems
+        val jrubyUserDir = Os.env["GEM_HOME"]?.let { "$it/jruby/${Constants.RUBY_MAJOR_VERSION}.0" }
+            ?: runScriptCode("puts(Gem.user_dir)", getCommonParentFile(definitionFiles)).trim()
+        val jrubyGemsDir = File(jrubyUserDir).resolve("gems")
+
+        val installedGems = jrubyGemsDir.walk().maxDepth(1).filter {
+            it.isDirectory && it != jrubyGemsDir
         }.mapTo(mutableListOf()) {
             it.name.substringBeforeLast('-')
         }
