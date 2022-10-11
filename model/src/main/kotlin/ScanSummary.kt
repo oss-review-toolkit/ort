@@ -74,6 +74,20 @@ data class ScanSummary(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
 ) {
+    companion object {
+        /**
+         * A constant for a [ScannerRun] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = ScanSummary(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
+            packageVerificationCode = "",
+            licenseFindings = sortedSetOf(),
+            copyrightFindings = sortedSetOf()
+        )
+    }
+
     @get:JsonIgnore
     val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 
