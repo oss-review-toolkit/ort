@@ -136,7 +136,7 @@ class FossIdReporterTest : WordSpec({
 
         "use HTML_DYNAMIC as default report type" {
             val (serviceMock, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1))
+            val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
 
@@ -154,7 +154,7 @@ class FossIdReporterTest : WordSpec({
 
         "allow to specify a report type" {
             val (serviceMock, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1))
+            val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(
                 input, DIRECTORY_SAMPLE,
@@ -175,7 +175,7 @@ class FossIdReporterTest : WordSpec({
 
         "use INCLUDE_ALL_LICENSES as default selection type" {
             val (serviceMock, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1))
+            val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
 
@@ -193,7 +193,7 @@ class FossIdReporterTest : WordSpec({
 
         "allow to specify a selection type" {
             val (serviceMock, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1))
+            val input = createReporterInput(SCANCODE_1)
 
             reporterMock.generateReport(
                 input, DIRECTORY_SAMPLE,
@@ -214,7 +214,7 @@ class FossIdReporterTest : WordSpec({
 
         "generate a report for each given scancode" {
             val (serviceMock, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1, SCANCODE_2))
+            val input = createReporterInput(SCANCODE_1, SCANCODE_2)
 
             reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
 
@@ -226,7 +226,7 @@ class FossIdReporterTest : WordSpec({
 
         "return the generated file(s)" {
             val (_, reporterMock) = createReporterMock()
-            val input = createReporterInput(listOf(SCANCODE_1))
+            val input = createReporterInput(SCANCODE_1)
 
             val result = reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
 
@@ -248,7 +248,7 @@ private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
     return serviceMock to reporterMock
 }
 
-private fun createReporterInput(scanCodes: List<String> = emptyList()): ReporterInput {
+private fun createReporterInput(vararg scanCodes: String): ReporterInput {
     val analyzedVcs = VcsInfo(
         type = VcsType.GIT,
         revision = "master",
