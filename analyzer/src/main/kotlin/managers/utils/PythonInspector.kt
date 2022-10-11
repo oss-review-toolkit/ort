@@ -76,6 +76,15 @@ internal object PythonInspector : CommandLineTool {
             }
 
             add(definitionFile.absolutePath)
+
+            if (definitionFile.name != "setup.py") {
+                // If a setup.py file exists, add it to the analysis to capture additional project metadata.
+                val setupFile = definitionFile.resolveSibling("setup.py")
+                if (setupFile.isFile) {
+                    add("--setup-py")
+                    add(setupFile.absolutePath)
+                }
+            }
         }
 
         return try {
