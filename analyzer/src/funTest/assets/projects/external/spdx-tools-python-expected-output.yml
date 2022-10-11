@@ -3,7 +3,7 @@ project:
   id: "PIP::spdx-tools:0.5.4"
   definition_file_path: "setup.py"
   authors:
-  - "Ahmed H. Ismail"
+  - "Ahmed H. Ismail <ahm3d.hisham@gmail.com>"
   declared_licenses:
   - "Apache Software License"
   - "Apache-2.0"

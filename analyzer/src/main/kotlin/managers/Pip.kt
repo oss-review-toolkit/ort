@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -28,13 +27,8 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspector
 import org.ossreviewtoolkit.analyzer.managers.utils.toOrtPackages
-import org.ossreviewtoolkit.analyzer.managers.utils.toPackageReferences
-import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.analyzer.managers.utils.toOrtProject
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -75,9 +69,7 @@ class Pip(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging {
-        private const val SHORT_STRING_MAX_CHARS = 200
-    }
+    companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Pip>("PIP") {
         override val globsForDefinitionFiles = listOf("*requirements*.txt", "setup.py")
@@ -104,99 +96,12 @@ class Pip(
         }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val project = getProjectMetadata(definitionFile)
         val result = runPythonInspector(definitionFile)
 
+        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
         val packages = result.packages.toOrtPackages()
-        val packageReferences = result.resolvedDependenciesGraph.toPackageReferences()
 
-        // TODO: Handle "extras" and "tests" dependencies.
-        val scopes = sortedSetOf(
-            Scope("install", packageReferences)
-        )
-
-        return listOf(ProjectAnalyzerResult(project.copy(scopeDependencies = scopes), packages))
-    }
-
-    private fun getProjectMetadata(definitionFile: File): Project {
-        val authors = sortedSetOf<String>()
-        val declaredLicenses = sortedSetOf<String>()
-
-        val workingDir = definitionFile.parentFile
-
-        // First try to get metadata from "setup.py" in any case, even for "requirements.txt" projects.
-        val (setupName, setupVersion, setupHomepage) = if (workingDir.resolve("setup.py").isFile) {
-            // See https://docs.python.org/3.8/distutils/setupscript.html#additional-meta-data.
-            fun getSetupPyMetadata(option: String): String? {
-                val process = Python.run(workingDir, "setup.py", option)
-                val metadata = process.stdout.trim()
-                return metadata.takeUnless { process.isError || metadata == "UNKNOWN" }
-            }
-
-            parseAuthorString(getSetupPyMetadata("--author")).also { authors += it }
-            getLicenseFromLicenseField(getSetupPyMetadata("--license"))?.also { declaredLicenses += it }
-            getSetupPyMetadata("--classifiers")?.lines()?.mapNotNullTo(declaredLicenses) {
-                getLicenseFromClassifier(it)
-            }
-
-            listOf(
-                getSetupPyMetadata("--name").orEmpty(),
-                getSetupPyMetadata("--version").orEmpty(),
-                getSetupPyMetadata("--url").orEmpty()
-            )
-        } else {
-            listOf("", "", "")
-        }
-
-        // Try to get additional information from any "requirements.txt" file.
-        val (requirementsName, requirementsVersion, requirementsSuffix) = if (definitionFile.name != "setup.py") {
-            val pythonVersionLines = definitionFile.readLines().filter { "python_version" in it }
-            if (pythonVersionLines.isNotEmpty()) {
-                logger.debug {
-                    "Some dependencies have Python version requirements:\n$pythonVersionLines"
-                }
-            }
-
-            // In case of "requirements*.txt" there is no metadata at all available, so use the parent directory name
-            // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
-            val suffix = definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
-            val name = definitionFile.parentFile.name + suffix
-
-            val version = VersionControlSystem.getCloneInfo(workingDir).revision
-
-            listOf(name, version, suffix)
-        } else {
-            listOf("", "", "")
-        }
-
-        // Amend information from "setup.py" with that from "requirements.txt".
-        val hasSetupName = setupName.isNotEmpty()
-        val hasRequirementsName = requirementsName.isNotEmpty()
-
-        val projectName = when {
-            hasSetupName && !hasRequirementsName -> setupName
-            // In case of only a requirements file without further metadata, use the relative path to the analyzer
-            // root as a unique project name.
-            !hasSetupName && hasRequirementsName -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
-            hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
-            else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
-        }
-        val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
-
-        return Project(
-            id = Identifier(
-                type = managerName,
-                namespace = "",
-                name = projectName,
-                version = projectVersion
-            ),
-            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = authors,
-            declaredLicenses = declaredLicenses,
-            vcs = VcsInfo.EMPTY,
-            vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, setupHomepage),
-            homepageUrl = setupHomepage
-        )
+        return listOf(ProjectAnalyzerResult(project, packages))
     }
 
     private fun runPythonInspector(definitionFile: File): PythonInspector.Result {
@@ -226,35 +131,5 @@ class Pip(
                         e.collectMessages()
             }
         }.getOrThrow()
-    }
-
-    private fun parseAuthorString(author: String?): SortedSet<String> =
-        author?.takeIf(::isValidAuthor)?.let { sortedSetOf(it) } ?: sortedSetOf()
-
-    /**
-     * Check if the given [author] string represents a valid author name. There are some non-null strings that
-     * indicate that no author information is available. For instance, setup.py files can contain empty strings;
-     * the "pip show" command prints the string "None" in this case.
-     */
-    private fun isValidAuthor(author: String): Boolean = author.isNotBlank() && author != "None"
-
-    private fun getLicenseFromLicenseField(value: String?): String? {
-        if (value.isNullOrBlank() || value == "UNKNOWN") return null
-
-        // See https://docs.python.org/3/distutils/setupscript.html#additional-meta-data for what a "short string" is.
-        val isShortString = value.length <= SHORT_STRING_MAX_CHARS && value.lines().size == 1
-        if (!isShortString) return null
-
-        // Apply a work-around for projects that declare licenses in classifier-syntax in the license field.
-        return getLicenseFromClassifier(value) ?: value
-    }
-
-    private fun getLicenseFromClassifier(classifier: String): String? {
-        // Example license classifier (also see https://pypi.org/classifiers/):
-        // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-        val classifiers = classifier.split(" :: ").map { it.trim() }
-        val licenseClassifiers = listOf("License", "OSI Approved")
-        val license = classifiers.takeIf { it.first() in licenseClassifiers }?.last()
-        return license?.takeUnless { it in licenseClassifiers }
     }
 }

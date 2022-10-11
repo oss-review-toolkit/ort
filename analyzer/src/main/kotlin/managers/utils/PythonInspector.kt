@@ -30,15 +30,20 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
+import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+private const val SHORT_STRING_MAX_CHARS = 200
 
 private val json = Json { ignoreUnknownKeys = true }
 
@@ -173,6 +178,85 @@ internal object PythonInspector : CommandLineTool {
 
 private const val TYPE = "PyPI"
 
+internal fun PythonInspector.Result.toOrtProject(
+    managerName: String,
+    analysisRoot: File,
+    definitionFile: File
+): Project {
+    val id = resolveIdentifier(managerName, analysisRoot, definitionFile)
+
+    val setupProject = projects.find { it.path.endsWith("/setup.py") }
+    val projectData = setupProject?.packageData?.singleOrNull()
+    val homepageUrl = projectData?.homepageUrl.orEmpty()
+
+    val scopes = sortedSetOf(Scope("install", resolvedDependenciesGraph.toPackageReferences()))
+
+    return Project(
+        id = id,
+        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+        authors = projectData?.parties?.toAuthors() ?: sortedSetOf(),
+        declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses() ?: sortedSetOf(),
+        vcs = VcsInfo.EMPTY,
+        vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl),
+        homepageUrl = homepageUrl,
+        scopeDependencies = scopes
+    )
+}
+
+private fun PythonInspector.Result.resolveIdentifier(
+    managerName: String,
+    analysisRoot: File,
+    definitionFile: File
+): Identifier {
+    // First try to get identifier components from "setup.py" in any case, even for "requirements.txt" projects.
+    val (setupName, setupVersion) = projects.find { it.path.endsWith("/setup.py") }
+        ?.let { project ->
+            listOf(
+                project.packageData.single().name.orEmpty(),
+                project.packageData.single().version.orEmpty()
+            )
+        } ?: listOf("", "")
+
+    val (requirementsName, requirementsVersion, requirementsSuffix) = projects.find { !it.path.endsWith("/setup.py") }
+        ?.let {
+            // In case of "requirements*.txt" there is no metadata at all available, so use the parent directory name
+            // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
+            val suffix = definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
+            val name = definitionFile.parentFile.name + suffix
+
+            val version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
+
+            listOf(name, version, suffix)
+        } ?: listOf("", "", "")
+
+    val hasSetupName = setupName.isNotEmpty()
+    val hasRequirementsName = requirementsName.isNotEmpty()
+
+    val projectName = when {
+        hasSetupName && !hasRequirementsName -> setupName
+        // In case of only a requirements file without further metadata, use the relative path to the analyzer
+        // root as a unique project name.
+        !hasSetupName && hasRequirementsName -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
+        hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
+        else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
+    }
+
+    val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
+
+    return Identifier(
+        type = managerName,
+        namespace = "",
+        name = projectName,
+        version = projectVersion
+    )
+}
+
+private fun PythonInspector.DeclaredLicense.getDeclaredLicenses() =
+    buildList {
+        getLicenseFromLicenseField(license)?.let { add(it) }
+        addAll(classifiers.mapNotNull { getLicenseFromClassifier(it) })
+    }.toSortedSet()
+
 internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(sortedSetOf()) { (_, packages) ->
         // The python inspector currently often contains two entries for a package where the only difference is the
@@ -227,7 +311,7 @@ private fun List<PythonInspector.Party>.toAuthors(): SortedSet<String> =
         }.takeIf { it.isNotBlank() }
     }
 
-internal fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
+private fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
     mapTo(sortedSetOf()) { it.toPackageReference() }
 
 private fun PythonInspector.ResolvedDependency.toPackageReference() =
@@ -235,3 +319,23 @@ private fun PythonInspector.ResolvedDependency.toPackageReference() =
         id = Identifier(type = TYPE, namespace = "", name = packageName, version = installedVersion),
         dependencies = dependencies.toPackageReferences()
     )
+
+private fun getLicenseFromClassifier(classifier: String): String? {
+    // Example license classifier (also see https://pypi.org/classifiers/):
+    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
+    val classifiers = classifier.split(" :: ").map { it.trim() }
+    val licenseClassifiers = listOf("License", "OSI Approved")
+    val license = classifiers.takeIf { it.first() in licenseClassifiers }?.last()
+    return license?.takeUnless { it in licenseClassifiers }
+}
+
+private fun getLicenseFromLicenseField(value: String?): String? {
+    if (value.isNullOrBlank() || value == "UNKNOWN") return null
+
+    // See https://docs.python.org/3/distutils/setupscript.html#additional-meta-data for what a "short string" is.
+    val isShortString = value.length <= SHORT_STRING_MAX_CHARS && value.lines().size == 1
+    if (!isShortString) return null
+
+    // Apply a work-around for projects that declare licenses in classifier-syntax in the license field.
+    return getLicenseFromClassifier(value) ?: value
+}
