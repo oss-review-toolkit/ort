@@ -275,7 +275,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
             } ?: RemoteArtifact.EMPTY
 
         fun PythonInspector.Package.getDeclaredLicenses() =
-            listOfNotNull(declaredLicense.takeIf { it.isNotBlank() && it != "UNKNOWN" }).toSortedSet()
+            listOfNotNull(getLicenseFromLicenseField(declaredLicense)).toSortedSet()
 
         Package(
             // The package has a namespace property which is currently always empty. Deliberately set the namespace to
