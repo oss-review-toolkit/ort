@@ -54,7 +54,7 @@ internal object PythonInspector : CommandLineTool {
         definitionFile: File,
         pythonVersion: String = "38",
         operatingSystem: String = "linux"
-    ): PythonInspectorResult {
+    ): Result {
         val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
 
         val commandLineOptions = buildList {
@@ -86,68 +86,68 @@ internal object PythonInspector : CommandLineTool {
             outputFile.delete()
         }
     }
+
+    @Serializable
+    internal data class Result(
+        @SerialName("resolved_dependencies_graph") val resolvedDependenciesGraph: List<ResolvedDependency>,
+        val packages: List<Package>
+    )
+
+    @Serializable
+    internal data class ResolvedDependency(
+        val key: String,
+        @SerialName("package_name") val packageName: String,
+        @SerialName("installed_version") val installedVersion: String,
+        val dependencies: List<ResolvedDependency>
+    )
+
+    @Serializable
+    internal data class Package(
+        val type: String,
+        val namespace: String?,
+        val name: String,
+        val version: String,
+        val description: String,
+        val parties: List<Party>,
+        @SerialName("homepage_url") val homepageUrl: String,
+        @SerialName("download_url") val downloadUrl: String,
+        val size: Long,
+        val sha1: String?,
+        val md5: String?,
+        val sha256: String?,
+        val sha512: String?,
+        @SerialName("code_view_url") val codeViewUrl: String?,
+        @SerialName("vcs_url") val vcsUrl: String?,
+        val copyright: String?,
+        @SerialName("license_expression") val licenseExpression: String?,
+        @SerialName("declared_license") val declaredLicense: String,
+        @SerialName("source_packages") val sourcePackages: List<String>,
+        @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
+        @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
+        @SerialName("api_data_url") val apiDataUrl: String,
+        val purl: String
+    )
+
+    @Serializable
+    internal class Party(
+        val type: String,
+        val role: String,
+        val name: String?,
+        val email: String?,
+        val url: String?
+    )
 }
-
-@Serializable
-internal data class PythonInspectorResult(
-    @SerialName("resolved_dependencies_graph") val resolvedDependenciesGraph: List<PythonInspectorResolvedDependency>,
-    val packages: List<PythonInspectorPackage>
-)
-
-@Serializable
-internal data class PythonInspectorResolvedDependency(
-    val key: String,
-    @SerialName("package_name") val packageName: String,
-    @SerialName("installed_version") val installedVersion: String,
-    val dependencies: List<PythonInspectorResolvedDependency>
-)
-
-@Serializable
-internal data class PythonInspectorPackage(
-    val type: String,
-    val namespace: String?,
-    val name: String,
-    val version: String,
-    val description: String,
-    val parties: List<PythonInspectorParty>,
-    @SerialName("homepage_url") val homepageUrl: String,
-    @SerialName("download_url") val downloadUrl: String,
-    val size: Long,
-    val sha1: String?,
-    val md5: String?,
-    val sha256: String?,
-    val sha512: String?,
-    @SerialName("code_view_url") val codeViewUrl: String?,
-    @SerialName("vcs_url") val vcsUrl: String?,
-    val copyright: String?,
-    @SerialName("license_expression") val licenseExpression: String?,
-    @SerialName("declared_license") val declaredLicense: String,
-    @SerialName("source_packages") val sourcePackages: List<String>,
-    @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
-    @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
-    @SerialName("api_data_url") val apiDataUrl: String,
-    val purl: String
-)
-
-@Serializable
-internal class PythonInspectorParty(
-    val type: String,
-    val role: String,
-    val name: String?,
-    val email: String?,
-    val url: String?
-)
 
 private const val TYPE = "PyPI"
 
-internal fun List<PythonInspectorPackage>.toOrtPackages(): SortedSet<Package> =
+internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(sortedSetOf()) { (_, packages) ->
         // The python inspector currently often contains two entries for a package where the only difference is the
         // download URL. In this case, one package contains the URL of the binary artifact, the other for the source
         // artifact. So take all metadata from the first package except for the artifacts.
         val pkg = packages.first()
 
-        fun PythonInspectorPackage.getHash(): Hash = Hash.create(sha512 ?: sha256 ?: sha1 ?: md5 ?: "")
+        fun PythonInspector.Package.getHash(): Hash = Hash.create(sha512 ?: sha256 ?: sha1 ?: md5 ?: "")
 
         fun getArtifact(fileExtension: String) =
             packages.find { it.downloadUrl.endsWith(fileExtension) }?.let {
@@ -157,7 +157,7 @@ internal fun List<PythonInspectorPackage>.toOrtPackages(): SortedSet<Package> =
                 )
             } ?: RemoteArtifact.EMPTY
 
-        fun PythonInspectorPackage.getDeclaredLicenses() =
+        fun PythonInspector.Package.getDeclaredLicenses() =
             listOfNotNull(declaredLicense.takeIf { it.isNotBlank() && it != "UNKNOWN" }).toSortedSet()
 
         Package(
@@ -184,7 +184,7 @@ internal fun List<PythonInspectorPackage>.toOrtPackages(): SortedSet<Package> =
         )
     }
 
-private fun List<PythonInspectorParty>.toAuthors(): SortedSet<String> =
+private fun List<PythonInspector.Party>.toAuthors(): SortedSet<String> =
     filter { it.role == "author" }.mapNotNullTo(sortedSetOf()) { party ->
         buildString {
             party.name?.let { append(it) }
@@ -194,10 +194,10 @@ private fun List<PythonInspectorParty>.toAuthors(): SortedSet<String> =
         }.takeIf { it.isNotBlank() }
     }
 
-internal fun List<PythonInspectorResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
+internal fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
     mapTo(sortedSetOf()) { it.toPackageReference() }
 
-private fun PythonInspectorResolvedDependency.toPackageReference() =
+private fun PythonInspector.ResolvedDependency.toPackageReference() =
     PackageReference(
         id = Identifier(type = TYPE, namespace = "", name = packageName, version = installedVersion),
         dependencies = dependencies.toPackageReferences()
