@@ -27,7 +27,6 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspector
-import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspectorResult
 import org.ossreviewtoolkit.analyzer.managers.utils.toOrtPackages
 import org.ossreviewtoolkit.analyzer.managers.utils.toPackageReferences
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -200,7 +199,7 @@ class Pip(
         )
     }
 
-    private fun runPythonInspector(definitionFile: File): PythonInspectorResult {
+    private fun runPythonInspector(definitionFile: File): PythonInspector.Result {
         val workingDir = definitionFile.parentFile
 
         logger.info {
