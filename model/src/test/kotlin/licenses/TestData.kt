@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -149,12 +147,8 @@ val scanResults = listOf(
         ScanResult(
             provenance = provenance,
             scanner = ScannerDetails.EMPTY,
-            summary = ScanSummary(
-                startTime = Instant.EPOCH,
-                endTime = Instant.EPOCH,
-                packageVerificationCode = "",
+            summary = ScanSummary.EMPTY.copy(
                 licenseFindings = licenseFindings,
-                copyrightFindings = sortedSetOf()
             )
         )
     )

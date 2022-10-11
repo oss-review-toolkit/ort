@@ -70,7 +70,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                             "--package true --processes 2 --strip-root true --summary true --summary-key-files true " +
                             "--timeout 1000.0 --url true"
                 ),
-                summary = ScanSummary(
+                summary = ScanSummary.EMPTY.copy(
                     startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
                     endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
                     packageVerificationCode = SpdxConstants.NONE,
@@ -84,9 +84,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                             ),
                             score = 60.87f
                         )
-                    ),
-                    copyrightFindings = sortedSetOf(),
-                    issues = emptyList()
+                    )
                 )
             )
         }
@@ -115,13 +113,10 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                             "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
                             "--summary true --summary-key-files true --timeout 1000.0 --url true"
                 ),
-                summary = ScanSummary(
+                summary = ScanSummary.EMPTY.copy(
                     startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
                     endTime = Instant.parse("2022-05-02T07:34:59.000958218Z"),
-                    packageVerificationCode = SpdxConstants.NONE,
-                    licenseFindings = sortedSetOf(),
-                    copyrightFindings = sortedSetOf(),
-                    issues = emptyList()
+                    packageVerificationCode = SpdxConstants.NONE
                 )
             )
         }

@@ -32,8 +32,6 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -81,12 +79,9 @@ private fun licenseFinding(index: Int): LicenseFinding =
  */
 private fun createScanResult(resultCount: Int): ScanResult {
     val licenseFindings = List(resultCount) { licenseFinding(it) }
-    val summary = ScanSummary(
-        startTime = Instant.now(),
-        endTime = Instant.now(),
+    val summary = ScanSummary.EMPTY.copy(
         packageVerificationCode = "test$resultCount",
-        licenseFindings = licenseFindings.toSortedSet(),
-        copyrightFindings = sortedSetOf()
+        licenseFindings = licenseFindings.toSortedSet()
     )
     val provenance = ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY)
     val scanner = ScannerDetails("scanner$resultCount", "v$resultCount", "testConfig")

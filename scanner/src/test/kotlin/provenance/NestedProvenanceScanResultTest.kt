@@ -25,8 +25,6 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.shouldBe
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -118,12 +116,12 @@ private val scannerDetails = ScannerDetails(name = "scanner", version = "1.0.0",
 private val scanResultRoot = ScanResult(
     provenance = provenanceRoot,
     scanner = scannerDetails,
-    summary = createScanSummary(
-        licenseFindings = listOf(
+    summary = ScanSummary.EMPTY.copy(
+        licenseFindings = sortedSetOf(
             LicenseFinding("Apache-2.0", TextLocation("file", 1)),
             LicenseFinding("Apache-2.0", TextLocation("submodules/file", 1))
         ),
-        copyrightFindings = listOf(
+        copyrightFindings = sortedSetOf(
             CopyrightFinding("Copyright", TextLocation("file", 1)),
             CopyrightFinding("Copyright", TextLocation("submodules/file", 1))
         )
@@ -133,12 +131,12 @@ private val scanResultRoot = ScanResult(
 private val scanResultSubmoduleA = ScanResult(
     provenance = provenanceSubmoduleA,
     scanner = scannerDetails,
-    summary = createScanSummary(
-        licenseFindings = listOf(
+    summary = ScanSummary.EMPTY.copy(
+        licenseFindings = sortedSetOf(
             LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
             LicenseFinding("Apache-2.0", TextLocation("dir/fileA", 1))
         ),
-        copyrightFindings = listOf(
+        copyrightFindings = sortedSetOf(
             CopyrightFinding("Copyright", TextLocation("fileA", 1)),
             CopyrightFinding("Copyright", TextLocation("dir/fileA", 1))
         )
@@ -148,12 +146,12 @@ private val scanResultSubmoduleA = ScanResult(
 private val scanResultSubmoduleB = ScanResult(
     provenance = provenanceSubmoduleA,
     scanner = scannerDetails,
-    summary = createScanSummary(
-        licenseFindings = listOf(
+    summary = ScanSummary.EMPTY.copy(
+        licenseFindings = sortedSetOf(
             LicenseFinding("Apache-2.0", TextLocation("fileB", 1)),
             LicenseFinding("Apache-2.0", TextLocation("dir/fileB", 1))
         ),
-        copyrightFindings = listOf(
+        copyrightFindings = sortedSetOf(
             CopyrightFinding("Copyright", TextLocation("fileB", 1)),
             CopyrightFinding("Copyright", TextLocation("dir/fileB", 1))
         )
@@ -168,14 +166,5 @@ private val nestedProvenanceScanResult = NestedProvenanceScanResult(
         provenanceSubmoduleB to listOf(scanResultSubmoduleB)
     )
 )
-
-private fun createScanSummary(licenseFindings: List<LicenseFinding>, copyrightFindings: List<CopyrightFinding>) =
-    ScanSummary(
-        startTime = Instant.now(),
-        endTime = Instant.now(),
-        packageVerificationCode = "",
-        licenseFindings = licenseFindings.toSortedSet(),
-        copyrightFindings = copyrightFindings.toSortedSet()
-    )
 
 private fun NestedProvenance.getRepositoryUrls() = getProvenances().map { (it as RepositoryProvenance).vcsInfo.url }

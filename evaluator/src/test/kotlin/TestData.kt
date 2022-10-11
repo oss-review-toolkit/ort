@@ -265,15 +265,11 @@ val ortResult = OrtResult(
                     ScanResult(
                         provenance = UnknownProvenance,
                         scanner = ScannerDetails.EMPTY,
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "",
+                        summary = ScanSummary.EMPTY.copy(
                             licenseFindings = sortedSetOf(
                                 LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
                                 LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
-                            ),
-                            copyrightFindings = sortedSetOf()
+                            )
                         )
                     )
                 )

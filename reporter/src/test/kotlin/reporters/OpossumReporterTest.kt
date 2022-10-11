@@ -482,9 +482,7 @@ private fun createOrtResult(): OrtResult {
                                 version = "1.2.3",
                                 configuration = "configuration"
                             ),
-                            summary = ScanSummary(
-                                startTime = Instant.EPOCH,
-                                endTime = Instant.EPOCH,
+                            summary = ScanSummary.EMPTY.copy(
                                 packageVerificationCode = "0000000000000000000000000000000000000000",
                                 licenseFindings = sortedSetOf(
                                     LicenseFinding(
@@ -519,7 +517,7 @@ private fun createOrtResult(): OrtResult {
                                 version = "1.2.3",
                                 configuration = "otherConfiguration"
                             ),
-                            summary = ScanSummary(
+                            summary = ScanSummary.EMPTY.copy(
                                 startTime = Instant.EPOCH,
                                 endTime = Instant.EPOCH,
                                 packageVerificationCode = "0000000000000000000000000000000000000000",

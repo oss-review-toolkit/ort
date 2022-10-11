@@ -29,7 +29,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
-import java.time.Instant
 
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -298,9 +297,7 @@ private val ortResult = OrtResult(
                             )
                         ),
                         scanner = ScannerDetails.EMPTY,
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
+                        summary = ScanSummary.EMPTY.copy(
                             packageVerificationCode = "0000000000000000000000000000000000000000",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(
@@ -331,9 +328,7 @@ private val ortResult = OrtResult(
                             resolvedRevision = "deadbeef"
                         ),
                         scanner = ScannerDetails.EMPTY,
-                        summary = ScanSummary(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
+                        summary = ScanSummary.EMPTY.copy(
                             packageVerificationCode = "0000000000000000000000000000000000000000",
                             licenseFindings = sortedSetOf(
                                 LicenseFinding(

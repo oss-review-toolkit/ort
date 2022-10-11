@@ -99,7 +99,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
     private val scannerCriteriaForDetails1 = ScannerCriteria.forDetails(scannerDetails1, Semver.VersionDiff.PATCH)
 
-    private val scanSummaryWithFiles = ScanSummary(
+    private val scanSummaryWithFiles = ScanSummary.EMPTY.copy(
         startTime = Instant.EPOCH + Duration.ofMinutes(1),
         endTime = Instant.EPOCH + Duration.ofMinutes(2),
         packageVerificationCode = "packageVerificationCode",
@@ -107,7 +107,6 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
             LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
-        copyrightFindings = sortedSetOf(),
         issues = mutableListOf(
             OrtIssue(source = "source-1", message = "error-1"),
             OrtIssue(source = "source-2", message = "error-2")
