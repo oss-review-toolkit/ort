@@ -29,7 +29,6 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.ScanResultContainer
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
@@ -109,3 +108,18 @@ class FileBasedStorage(
 
     private fun storagePath(id: Identifier) = "${id.toPath()}/$SCAN_RESULTS_FILE_NAME"
 }
+
+/**
+ * A container for [ScanResult]s for the package identified by [id].
+ */
+private data class ScanResultContainer(
+    /**
+     * The [Identifier] of the package these [results] belong to.
+     */
+    val id: Identifier,
+
+    /**
+     * The list of [ScanResult]s from potentially multiple scanners and / or with different package provenance.
+     */
+    val results: List<ScanResult>
+)
