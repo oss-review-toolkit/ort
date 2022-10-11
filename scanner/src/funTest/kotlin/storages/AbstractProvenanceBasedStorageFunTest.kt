@@ -218,9 +218,6 @@ private fun createScannerDetails(
     configuration: String = "configuration"
 ) = ScannerDetails(name, version, configuration)
 
-private fun createScanSummary(licenseFindings: Set<LicenseFinding> = emptySet()) =
-    ScanSummary(Instant.EPOCH, Instant.EPOCH, "", licenseFindings.toSortedSet(), sortedSetOf())
-
 private fun createScanResult(
     provenance: Provenance = createKnownProvenance(),
     scannerDetails: ScannerDetails = createScannerDetails(),
@@ -229,9 +226,13 @@ private fun createScanResult(
     ScanResult(
         provenance,
         scannerDetails,
-        createScanSummary(
+        ScanSummary(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
+            packageVerificationCode = "",
             licenseFindings = sortedSetOf(
                 LicenseFinding(license, TextLocation("file.txt", 1, 2))
-            )
+            ),
+            copyrightFindings = sortedSetOf()
         )
     )
