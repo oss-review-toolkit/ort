@@ -88,7 +88,7 @@ private fun runScriptResource(resource: String, workingDir: File): String {
     }
 
     val stdout = bytes.toString()
-    if (stdout.isEmpty()) throw IOException("Failed to run script '$resource'.")
+    if (stdout.isEmpty()) throw IOException("Failed to run script resource '$resource'.")
 
     return stdout
 }
