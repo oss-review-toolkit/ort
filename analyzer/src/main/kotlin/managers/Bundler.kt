@@ -36,7 +36,6 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.jruby.embed.LocalContextScope
 import org.jruby.embed.PathType
 import org.jruby.embed.ScriptingContainer
-import org.jruby.runtime.Constants
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -56,7 +55,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
@@ -77,6 +75,11 @@ private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_depende
  * The name of the Bundler Gem.
  */
 private const val BUNDLER_GEM_NAME = "bundler"
+
+/**
+ * The name of the option to specify the Bundler version.
+ */
+private const val OPTION_BUNDLER_VERSION = "bundlerVersion"
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
@@ -133,29 +136,32 @@ class Bundler(
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        val jrubyUserDir = Os.env["GEM_HOME"]?.let { "$it/jruby/${Constants.RUBY_MAJOR_VERSION}.0" }
-            ?: runScriptCode("puts(Gem.user_dir)").trim()
-        val jrubyGemsDir = File(jrubyUserDir).resolve("gems")
+        // JRuby comes with Bundler as a default Gem, see e.g. [1]. Any manually installed Bundler version will only
+        // take precedence if it is newer than JRuby's default version.
+        //
+        // TODO: Find a way to customize the Bundler version to an older version than JRuby's, see [2].
+        //
+        // [1]: https://github.com/jruby/jruby/blob/9.3.8.0/lib/pom.rb#L21
+        // [2]: https://github.com/jruby/jruby/discussions/7403
 
-        val installedGems = jrubyGemsDir.walk().maxDepth(1).filter {
-            it.isDirectory && it != jrubyGemsDir
-        }.mapTo(mutableListOf()) {
-            it.name.substringBeforeLast('-')
-        }
-
-        if (BUNDLER_GEM_NAME in installedGems) {
-            logger.info { "Already installed the '$BUNDLER_GEM_NAME' Gem." }
-        } else {
-            // Install the Gems the helper scripts depend on.
+        options[OPTION_BUNDLER_VERSION]?.let { bundlerVersion ->
             val duration = measureTime {
                 org.jruby.Main().run(
                     arrayOf(
-                        "-S", "gem", "install", "--no-document", "--user-install", BUNDLER_GEM_NAME
+                        "-S", "gem", "install", "--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"
                     )
                 )
             }
 
-            logger.info { "Installing the '$BUNDLER_GEM_NAME' Gem took $duration." }
+            logger.info { "Installing the '$BUNDLER_GEM_NAME' Gem in version $bundlerVersion took $duration." }
+        }
+
+        runCatching {
+            runScriptCode("puts(Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version)").trim()
+        }.onSuccess { bundlerVersion ->
+            logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $bundlerVersion." }
+        }.onFailure {
+            logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' Gem version." }
         }
     }
 
