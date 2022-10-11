@@ -256,7 +256,11 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
         path = "sub/path"
     )
 
-    val results = scanCodes.groupBy({ Identifier.EMPTY.copy(name = it) }) { createScanResult(it) }.toSortedMap()
+    val results = scanCodes.associateByTo(
+        destination = sortedMapOf(),
+        keySelector = { Identifier.EMPTY.copy(name = it) },
+        valueTransform = { listOf(createScanResult(it)) }
+    )
 
     return ReporterInput(
         OrtResult(
