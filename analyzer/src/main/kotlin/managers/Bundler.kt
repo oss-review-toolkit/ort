@@ -120,13 +120,13 @@ class Bundler(
     override fun beforeResolution(definitionFiles: List<File>) {
         val gemHome = Os.env["GEM_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gem")
         val jrubyGems = gemHome.resolve("jruby/${Constants.RUBY_MAJOR_VERSION}.0/gems")
-        val bundlerGems = jrubyGems.walk().maxDepth(1).filter {
+        val installedGems = jrubyGems.walk().maxDepth(1).filter {
             it.isDirectory && it != jrubyGems
         }.mapTo(mutableListOf()) {
             it.name.substringBeforeLast('-')
         }
 
-        if (bundlerGems.containsAll(HELPER_SCRIPT_DEPENDENCIES)) {
+        if (installedGems.containsAll(HELPER_SCRIPT_DEPENDENCIES)) {
             logger.info { "Already installed the ${HELPER_SCRIPT_DEPENDENCIES.joinToString()} gem(s)." }
         } else {
             // Install the Gems the helper scripts depend on.
