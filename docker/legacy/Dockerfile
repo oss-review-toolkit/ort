@@ -59,7 +59,6 @@ ENV \
     PNPM_VERSION=7.8.0 \
     PYTHON_PIPENV_VERSION=2022.9.24 \
     PYTHON_POETRY_VERSION=1.1.13 \
-    PYTHON_VIRTUALENV_VERSION=20.0.26 \
     SBT_VERSION=1.6.1 \
     YARN_VERSION=1.22.10 \
     # SDK versions.
@@ -129,7 +128,7 @@ RUN /opt/ort/bin/import_proxy_certs.sh && \
     # Install package managers (in versions known to work).
     npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION && \
     pip install --no-cache-dir wheel && \
-    pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION virtualenv==$PYTHON_VIRTUALENV_VERSION && \
+    pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
     tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \

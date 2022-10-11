@@ -139,7 +139,6 @@ ARG CONAN_VERSION=1.52.0
 ARG PYTHON_INSPECTOR_VERSION=0.8.2
 ARG PYTHON_PIPENV_VERSION=2022.9.24
 ARG PYTHON_POETRY_VERSION=1.1.13
-ARG PYTHON_VIRTUALENV_VERSION=20.0.26
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=30.1.0
 ENV PYENV_ROOT=/opt/python
@@ -156,8 +155,7 @@ RUN pip install -U \
     pipenv=="${PYTHON_PIPENV_VERSION}" \
     poetry==${PYTHON_POETRY_VERSION} \
     python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
-    scancode-toolkit==${SCANCODE_VERSION} \
-    virtualenv=="${PYTHON_VIRTUALENV_VERSION}"
+    scancode-toolkit==${SCANCODE_VERSION}
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
