@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -79,12 +78,12 @@ private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_depende
  */
 private val HELPER_SCRIPT_DEPENDENCIES = listOf("bundler")
 
-private fun runScriptCode(code: String, workingDir: File): String {
+private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
 
     with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
-        currentDirectory = workingDir.path
+        if (workingDir != null) currentDirectory = workingDir.path
         runScriptlet(code)
     }
 
@@ -94,12 +93,12 @@ private fun runScriptCode(code: String, workingDir: File): String {
     return stdout
 }
 
-private fun runScriptResource(resource: String, workingDir: File): String {
+private fun runScriptResource(resource: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
 
     with(ScriptingContainer(LocalContextScope.THREADSAFE)) {
         output = PrintStream(bytes, /* autoFlush = */ true, "UTF-8")
-        currentDirectory = workingDir.path
+        if (workingDir != null) currentDirectory = workingDir.path
         runScriptlet(PathType.CLASSPATH, resource)
     }
 
@@ -135,7 +134,7 @@ class Bundler(
 
     override fun beforeResolution(definitionFiles: List<File>) {
         val jrubyUserDir = Os.env["GEM_HOME"]?.let { "$it/jruby/${Constants.RUBY_MAJOR_VERSION}.0" }
-            ?: runScriptCode("puts(Gem.user_dir)", getCommonParentFile(definitionFiles)).trim()
+            ?: runScriptCode("puts(Gem.user_dir)").trim()
         val jrubyGemsDir = File(jrubyUserDir).resolve("gems")
 
         val installedGems = jrubyGemsDir.walk().maxDepth(1).filter {
