@@ -44,7 +44,7 @@ class PythonInspectorFunTest : StringSpec({
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
         }
 
-        result.resolvedDependencies should haveSize(1)
+        result.resolvedDependenciesGraph should haveSize(1)
         result.packages should haveSize(10)
     }
 })

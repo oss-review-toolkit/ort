@@ -109,7 +109,7 @@ class Pip(
         val result = runPythonInspector(definitionFile)
 
         val packages = result.packages.toOrtPackages()
-        val packageReferences = result.resolvedDependencies.toPackageReferences()
+        val packageReferences = result.resolvedDependenciesGraph.toPackageReferences()
 
         // TODO: Handle "extras" and "tests" dependencies.
         val scopes = sortedSetOf(
