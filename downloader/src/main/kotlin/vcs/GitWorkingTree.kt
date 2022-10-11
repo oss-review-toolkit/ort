@@ -57,9 +57,7 @@ open class GitWorkingTree(
 ) : WorkingTree(workingDir, vcsType) {
     companion object : Logging
 
-    private val repo by lazy { findGitOrSubmoduleDir(workingDir) }
-
-    fun <T> useRepo(block: Repository.() -> T): T = repo.use(block)
+    fun <T> useRepo(block: Repository.() -> T): T = findGitOrSubmoduleDir(workingDir).use(block)
 
     override fun isValid(): Boolean = useRepo { objectDatabase?.exists() == true }
 
