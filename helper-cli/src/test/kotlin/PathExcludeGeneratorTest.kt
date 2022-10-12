@@ -80,6 +80,19 @@ class PathExcludeGeneratorTest : WordSpec({
 
             patterns.sorted().joinToString("\n") shouldBe expectedPatterns
         }
+
+        "prefer the pattern with least amount of wildcards" {
+            // Candidate patterns are 'build*.sh' and '*coverage*.sh' as both match.
+            // TODO: The result should be 'build*.sh' as it has fewer wildcards.
+            val files = listOf(
+                "build-coverage.sh",
+                "build-coverage-e2e.sh"
+            )
+
+            val patterns = generateFileExcludes(files).map { it.pattern }
+
+            patterns should containExactlyInAnyOrder("*coverage*.sh")
+        }
     }
 
     "generatePathExcludes()" should {
