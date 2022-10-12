@@ -547,7 +547,7 @@ analyzer:
           mapped:
             Public Domain: "LicenseRef-scancode-public-domain-disclaimer"
         description: "JSON without touching any globals"
-        homepage_url: ""
+        homepage_url: "https://github.com/ljharb/jsonify#readme"
         binary_artifact:
           url: ""
           hash:
