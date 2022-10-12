@@ -180,6 +180,12 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                             scm.connection = parentScm.connection
                         }
                     }
+
+                    parentScm.url?.let { parentUrl ->
+                        if (parentUrl.isNotBlank() && scm.url.startsWith(parentUrl)) {
+                            scm.url = parentScm.url
+                        }
+                    }
                 }
 
                 parent = parent.parent

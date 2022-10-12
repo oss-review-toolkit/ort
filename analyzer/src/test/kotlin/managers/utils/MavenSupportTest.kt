@@ -49,6 +49,25 @@ class MavenSupportTest : WordSpec({
                     "scm:git:https://github.com/spring-projects/spring-boot.git"
             MavenSupport.getOriginalScm(mavenProject)?.url shouldBe "https://github.com/oss-review-toolkit/correctUrl"
         }
+
+        "return the parent's SCM URL if the child SCM uses the parent's SCM URL implicitly" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git:https://github.com/oss-review-toolkit/childConnection.git"
+                    url = "https://github.com/spring-projects/spring-boot/childArtifactName"
+                }
+                parent = MavenProject().apply {
+                    scm = Scm().apply {
+                        connection = "scm:git:https://github.com/oss-review-toolkit/parentConnection.git"
+                        url = "https://github.com/spring-projects/spring-boot"
+                    }
+                }
+            }
+
+            MavenSupport.getOriginalScm(mavenProject)?.connection shouldBe
+                    "scm:git:https://github.com/oss-review-toolkit/childConnection.git"
+            MavenSupport.getOriginalScm(mavenProject)?.url shouldBe "https://github.com/spring-projects/spring-boot"
+        }
     }
 
     "parseVcsInfo()" should {
