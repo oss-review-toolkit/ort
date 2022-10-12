@@ -97,7 +97,7 @@ internal object PathExcludeGenerator {
             files.filter { pathExcludeExclude.matches(it.path) }.toSet()
         }
 
-        return greedySetCover(filesForPathExcludes).toSet()
+        return greedySetCover(filesForPathExcludes, FILE_EXCLUDE_COMPARATOR).toSet()
     }
 
     internal fun createExcludePatterns(filenamePattern: String, files: Set<File>): Set<String> {
@@ -277,3 +277,11 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "setup.py" to BUILD_TOOL_OF,
     "test_*.c" to BUILD_TOOL_OF
 ).checkPatterns { it.first }
+
+/** Prefer filename patterns with fewer wildcards, then shorter ones. **/
+private val FILE_EXCLUDE_COMPARATOR =
+    compareByDescending<PathExclude> {
+        it.pattern.substringAfterLast('/').count { c -> c == '*' }
+    }.thenByDescending { exclude ->
+        exclude.pattern.length
+    }
