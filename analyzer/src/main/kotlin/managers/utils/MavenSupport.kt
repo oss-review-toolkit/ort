@@ -189,10 +189,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
 
         private fun parseScm(scm: Scm?): VcsInfo {
-            val connection = scm?.connection.orEmpty()
-            val tag = scm?.tag?.takeIf { it != "HEAD" }.orEmpty()
+            val connection = scm?.connection
+            if (connection.isNullOrEmpty()) return VcsInfo.EMPTY
 
-            if (connection.isEmpty()) return VcsInfo.EMPTY
+            val tag = scm.tag?.takeIf { it != "HEAD" }.orEmpty()
 
             return SCM_REGEX.matcher(connection).let { matcher ->
                 if (matcher.matches()) {
