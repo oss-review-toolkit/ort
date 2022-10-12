@@ -146,11 +146,16 @@ class Bundler(
 
         options[OPTION_BUNDLER_VERSION]?.let { bundlerVersion ->
             val duration = measureTime {
-                org.jruby.Main().run(
-                    arrayOf(
-                        "-S", "gem", "install", "--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"
-                    )
-                )
+                val output = runScriptCode(
+                    """
+                    require 'rubygems/commands/install_command'
+                    cmd = Gem::Commands::InstallCommand.new
+                    cmd.handle_options ["--no-document", "--user-install", "$BUNDLER_GEM_NAME:$bundlerVersion"]
+                    cmd.execute
+                    """.trimIndent()
+                ).trim()
+
+                output.lines().forEach(logger::info)
             }
 
             logger.info { "Installing the '$BUNDLER_GEM_NAME' Gem in version $bundlerVersion took $duration." }
