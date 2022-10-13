@@ -112,10 +112,14 @@ private fun runScriptResource(resource: String, workingDir: File? = null): Strin
 }
 
 /**
- * The [Bundler](https://bundler.io/) package manager for Ruby. Also see
- * [Clarifying the Roles of the .gemspec and Gemfile][1].
+ * The [Bundler][1] package manager for Ruby. Also see [Clarifying the Roles of the .gemspec and Gemfile][2].
  *
- * [1]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *bundlerVersion*: The Bundler version to resolve dependencies for. Defaults to the version that ships with JRuby,
+ *   and can currently only be set to a higher version than the default version.
+ *
+ * [1]: https://bundler.io/
+ * [2]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
  */
 class Bundler(
     name: String,
