@@ -2527,7 +2527,7 @@ packages:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "git://git.coolaj86.com/coolaj86/atob.js.git"
+    url: "https://git.coolaj86.com/coolaj86/atob.js.git"
     revision: "755cfea7899074a17e83a248c7cfc3960d956d82"
     path: ""
 - id: "NPM::babel-cli:6.26.0"
