@@ -601,7 +601,7 @@ class Pub(
     override fun getVersion(workingDir: File?): String {
         val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
 
-        return transformVersion(result.stderr)
+        return transformVersion(result.stdout)
     }
 
     override fun command(workingDir: File?): String =
