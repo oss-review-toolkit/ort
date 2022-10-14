@@ -170,14 +170,14 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          * SCM URL still is a prefix of the child POM's SCM URL.
          */
         fun getOriginalScm(mavenProject: MavenProject): Scm? {
-            var scm = mavenProject.scm
+            val scm = mavenProject.scm
             var parent = mavenProject.parent
 
             while (parent != null) {
                 parent.scm?.let { parentScm ->
                     parentScm.connection?.let { parentConnection ->
                         if (parentConnection.isNotBlank() && scm.connection.startsWith(parentConnection)) {
-                            scm = parentScm
+                            scm.connection = parentScm.connection
                         }
                     }
                 }
