@@ -181,6 +181,9 @@ fun normalizeVcsUrl(vcsUrl: String): String {
     if (url.startsWith("git://")) {
         url = "https://${url.removePrefix("git://")}"
     }
+    if (url.startsWith("git@") && url.count { it == ':' } == 1) {
+        url = "https://${url.replace(':', '/').removePrefix("git@")}"
+    }
 
     // URLs to Git repos may omit the scheme and use an SCP-like URL that uses ":" to separate the host from the path,
     // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL, so it can be parsed
