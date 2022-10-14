@@ -12,8 +12,8 @@ project:
     mapped:
       Apache License, Version 2.0: "Apache-2.0"
   vcs:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://example.com/git/repository.git"
     revision: ""
     path: ""
   vcs_processed:
