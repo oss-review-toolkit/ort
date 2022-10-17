@@ -504,6 +504,7 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/com.foobar/foobar@1.0",
+    "authors" : [ "Jane Doe" ],
     "declared_licenses" : [ 10 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "GPL-2.0-only OR MIT",
@@ -555,6 +556,7 @@
     "is_project" : false,
     "definition_file_path" : "",
     "purl" : "pkg:maven/com.h2database/h2@1.4.200",
+    "authors" : [ "Thomas Mueller" ],
     "declared_licenses" : [ 12 ],
     "declared_licenses_processed" : {
       "spdx_expression" : "MPL-2.0 OR EPL-1.0",
