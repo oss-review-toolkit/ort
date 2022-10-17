@@ -84,14 +84,14 @@ class Pip(
     private val operatingSystemOption = (options[OPTION_OPERATING_SYSTEM] ?: OPTION_OPERATING_SYSTEM_DEFAULT)
         .also { os ->
             require(os.isEmpty() || os in OPERATING_SYSTEMS) {
-                "The 'operatingSystem' option must be one of ${OPERATING_SYSTEMS.joinToString { "'$it'" }}."
+                "The '$OPTION_OPERATING_SYSTEM' option must be one of ${OPERATING_SYSTEMS.joinToString { "'$it'" }}."
             }
         }
 
     private val pythonVersionOption = (options[OPTION_PYTHON_VERSION] ?: OPTION_PYTHON_VERSION_DEFAULT)
         .also { pythonVersion ->
             require(pythonVersion in PYTHON_VERSIONS) {
-                "The 'pythonVersion' option must be one of ${PYTHON_VERSIONS.joinToString { "'$it'" }}."
+                "The '$OPTION_PYTHON_VERSION' option must be one of ${PYTHON_VERSIONS.joinToString { "'$it'" }}."
             }
         }
 
