@@ -40,7 +40,7 @@ jsonSchemaValidator = "1.0.73"
 kotest = "5.5.1"
 kotlinxCoroutines = "1.6.4"
 kotlinxHtml = "0.8.0"
-kotlinxSerialization = "1.4.0"
+kotlinxSerialization = "1.4.1"
 # @pin this version as it needs to be aligned with "graphQlPlugin".
 ktor = "1.6.8"
 log4jApi = "2.19.0"
