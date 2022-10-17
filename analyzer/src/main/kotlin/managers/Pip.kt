@@ -46,11 +46,11 @@ object Python : CommandLineTool, Logging {
 
 private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
 private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
-private val OPERATING_SYSTEMS = listOf("linux", "mac", "windows")
+private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "mac", "windows")
 
 private const val OPTION_PYTHON_VERSION = "pythonVersion"
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.10"
-private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", "3.10")
+private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", OPTION_PYTHON_VERSION_DEFAULT)
 
 /**
  * The [PIP](https://pip.pypa.io/) package manager for Python. Also see
