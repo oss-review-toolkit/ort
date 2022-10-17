@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-object Python : CommandLineTool, Logging {
+object Python : CommandLineTool {
     override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
 
     override fun transformVersion(output: String) = output.removePrefix("Python ")
