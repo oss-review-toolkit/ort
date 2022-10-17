@@ -25,6 +25,8 @@ import { randomStringGenerator } from '../utils';
 class WebAppPackage {
     #_id;
 
+    #authors = new Set();
+
     #binaryArtifact;
 
     #concludedLicense;
@@ -123,6 +125,10 @@ class WebAppPackage {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
+            }
+
+            if (obj.authors) {
+                this.#authors = new Set(obj.authors);
             }
 
             if (obj.binary_artifact || obj.binaryArtifact) {
@@ -322,6 +328,10 @@ class WebAppPackage {
 
     get _id() {
         return this.#_id;
+    }
+
+    get authors() {
+        return this.#authors;
     }
 
     get binaryArtifact() {
@@ -614,6 +624,10 @@ class WebAppPackage {
 
     get vcsProcessed() {
         return this.#vcsProcessed;
+    }
+
+    hasAuthors() {
+        return this.#authors.size !== 0;
     }
 
     hasConcludedLicense() {
