@@ -43,6 +43,8 @@ data class EvaluatedPackage(
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val purl: String? = null,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val authors: Set<String>,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val declaredLicenses: List<LicenseId>,
     val declaredLicensesProcessed: EvaluatedProcessedDeclaredLicense,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
