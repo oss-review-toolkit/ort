@@ -11,7 +11,7 @@ kotlinPlugin = "1.7.20"
 shadowPlugin = "7.1.2"
 taskInfoPlugin = "2.0.0"
 versionCatalogUpdatePlugin = "0.6.1"
-versionsPlugin = "0.42.0"
+versionsPlugin = "0.43.0"
 
 antlr = "4.11.1"
 asciidoctorj = "2.5.6"
