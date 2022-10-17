@@ -32,6 +32,7 @@ const PackageDetails = (props) => {
         isProject,
         definitionFilePath,
         purl,
+        authors,
         description,
         homepageUrl,
         binaryArtifact,
@@ -86,6 +87,17 @@ const PackageDetails = (props) => {
                         key="ort-package-definition-file-path"
                     >
                         {definitionFilePath}
+                    </Item>
+                )
+            }
+            {
+                webAppPackage.hasAuthors()
+                && (
+                    <Item
+                        label="Authors"
+                        key="ort-package-authors"
+                    >
+                        {Array.from(authors).join(', ')}
                     </Item>
                 )
             }
