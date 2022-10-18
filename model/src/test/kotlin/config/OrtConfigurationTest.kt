@@ -230,20 +230,15 @@ class OrtConfigurationTest : WordSpec({
         "correctly prioritize the sources" {
             val configFile = createTestConfig(
                 """
-                ort {
-                  scanner {
-                    storages {
-                      postgresStorage {
-                        connection {
-                          url = "postgresql://your-postgresql-server:5444/your-database"
-                          schema = "public"
-                          username = username
-                          password = password
-                        }
-                      }
-                    }
-                  }
-                }
+                ort:
+                  scanner:
+                    storages:
+                      postgresStorage:
+                        connection:
+                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          schema: public
+                          username: username
+                          password: password
                 """.trimIndent()
             )
 
@@ -274,13 +269,10 @@ class OrtConfigurationTest : WordSpec({
         "fail for an invalid configuration" {
             val configFile = createTestConfig(
                 """
-                ort {
-                  scanner {
-                    storages {
-                      foo = baz
-                    }
-                  }
-                }
+                ort:
+                  scanner:
+                    storages:
+                      foo: baz
                 """.trimIndent()
             )
 
@@ -310,20 +302,15 @@ class OrtConfigurationTest : WordSpec({
         "support references to environment variables" {
             val configFile = createTestConfig(
                 """
-                ort {
-                  scanner {
-                    storages {
-                      postgresStorage {
-                        connection {
-                          url = "postgresql://your-postgresql-server:5444/your-database"
-                          schema = "public"
-                          username = ${'$'}{POSTGRES_USERNAME}
-                          password = ${'$'}{POSTGRES_PASSWORD}
-                        }
-                      }
-                    }
-                  }
-                }
+                ort:
+                  scanner:
+                    storages:
+                      postgresStorage:
+                        connection:
+                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          schema: public
+                          username: ${'$'}{POSTGRES_USERNAME}
+                          password: ${'$'}{POSTGRES_PASSWORD}
                 """.trimIndent()
             )
             val user = "scott"
@@ -378,6 +365,6 @@ class OrtConfigurationTest : WordSpec({
  * Create a test configuration with the [data] specified.
  */
 private fun TestConfiguration.createTestConfig(data: String): File =
-    createTestTempFile(suffix = ".conf").apply {
+    createTestTempFile(suffix = ".yml").apply {
         writeText(data)
     }
