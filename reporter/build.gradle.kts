@@ -57,7 +57,11 @@ dependencies {
     implementation(project(":clients:fossid-webapp"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
+    implementation(project(":utils:scripting-utils"))
     implementation(project(":utils:spdx-utils"))
+
+    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
+    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     implementation(libs.asciidoctorj)
     implementation(libs.asciidoctorjPdf)
