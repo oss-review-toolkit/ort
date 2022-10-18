@@ -19,9 +19,15 @@
 
 package org.ossreviewtoolkit.reporter
 
+import kotlin.script.experimental.api.ResultValue
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.scriptsInstancesSharing
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.common.ScriptRunner
+import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 /**
  * Provides how-to-fix texts in Markdown format for any given [OrtIssue].
@@ -48,23 +54,15 @@ fun interface HowToFixTextProvider {
 }
 
 private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
-    override val preface = """
-            import org.ossreviewtoolkit.model.*
-            import org.ossreviewtoolkit.model.config.*
-            import org.ossreviewtoolkit.model.licenses.*
-            import org.ossreviewtoolkit.model.utils.*
-            import org.ossreviewtoolkit.reporter.HowToFixTextProvider
-            import org.ossreviewtoolkit.utils.common.*
-            import org.ossreviewtoolkit.utils.ort.*
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<HowToFixTextProviderScriptTemplate>()
 
-        """.trimIndent()
-
-    override val postface = """
-        """.trimIndent()
-
-    init {
-        engine.put("ortResult", ortResult)
+    override val evalConfig = ScriptEvaluationConfiguration {
+        constructorArgs(ortResult)
+        scriptsInstancesSharing(true)
     }
 
-    override fun run(script: String): HowToFixTextProvider = super.run(script) as HowToFixTextProvider
+    fun run(script: String): HowToFixTextProvider {
+        val scriptValue = runScript(script) as ResultValue.Value
+        return scriptValue.value as HowToFixTextProvider
+    }
 }
