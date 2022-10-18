@@ -93,26 +93,28 @@ object Os {
      * Return the full path to the given executable file if it is in the system's PATH environment, or null otherwise.
      */
     fun getPathFromEnvironment(executable: String): File? {
-        fun String.expandVariable(referencePattern: Regex, groupName: String): String =
+        fun String.expandVariable(referencePattern: Regex): String =
             replace(referencePattern) {
-                val variableName = it.groups[groupName]!!.value
+                // After dropping the first group, which always is the match for the full pattern, there must be only a
+                // single real match group.
+                val variableName = checkNotNull(it.groups.drop(1).singleOrNull()).value
                 env[variableName] ?: variableName
             }
 
         val paths = env["PATH"]?.splitToSequence(File.pathSeparatorChar).orEmpty()
 
         return if (isWindows) {
-            val referencePattern = Regex("%(?<reference>\\w+)%")
+            val referencePattern = Regex("%(\\w+)%")
 
             paths.firstNotNullOfOrNull { path ->
-                val expandedPath = path.expandVariable(referencePattern, "reference")
+                val expandedPath = path.expandVariable(referencePattern)
                 resolveWindowsExecutable(File(expandedPath, executable))
             }
         } else {
-            val referencePattern = Regex("\\$\\{?(?<reference>\\w+)}?")
+            val referencePattern = Regex("\\$\\{?(\\w+)}?")
 
             paths.map { path ->
-                val expandedPath = path.expandVariable(referencePattern, "reference")
+                val expandedPath = path.expandVariable(referencePattern)
                 File(expandedPath, executable)
             }.find { it.isFile }
         }
