@@ -31,8 +31,6 @@ class WebAppPackage {
 
     #concludedLicense;
 
-    #effectiveLicense;
-
     #curations = [];
 
     #declaredLicenses = new Set();
@@ -62,7 +60,9 @@ class WebAppPackage {
     #detectedLicensesIndexes = new Set();
 
     #detectedLicensesProcessed = new Set();
-    
+
+    #effectiveLicense;
+
     #excludedFindings;
 
     #excludedFindingsIndexes = [];
