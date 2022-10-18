@@ -26,7 +26,7 @@ import kotlin.script.experimental.api.defaultImports
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.utils.scripting.OrtScriptCompilationConfiguration
 
-class NotificationScriptCompilationConfiguration : ScriptCompilationConfiguration(
+class NotificationsScriptCompilationConfiguration : ScriptCompilationConfiguration(
     OrtScriptCompilationConfiguration(),
     body = {
         defaultImports(
@@ -42,7 +42,7 @@ class NotificationScriptCompilationConfiguration : ScriptCompilationConfiguratio
 @KotlinScript(
     displayName = "ORT Notifications Script",
     fileExtension = "notifications.kts",
-    compilationConfiguration = NotificationScriptCompilationConfiguration::class
+    compilationConfiguration = NotificationsScriptCompilationConfiguration::class
 )
 open class NotificationsScriptTemplate(
     val ortResult: OrtResult
