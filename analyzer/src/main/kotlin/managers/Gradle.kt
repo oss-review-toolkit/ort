@@ -34,6 +34,7 @@ import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -201,6 +202,7 @@ class Gradle(
                 val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
                     .addJvmArguments(jvmArgs)
+                    .addProgressListener(ProgressListener { logger.debug { it.displayName } })
                     .setStandardOutput(stdout)
                     .setStandardError(stderr)
                     .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
