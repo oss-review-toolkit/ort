@@ -20,11 +20,38 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.TOOL_NAME
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 /**
  * A storage for resolved [NestedProvenance]s.
  */
 interface NestedProvenanceStorage {
+    companion object {
+        /**
+         * Create a [NestedProvenanceStorage] from a [ScannerConfiguration]. If no provenance storage is configured, a
+         * local [FileBasedNestedProvenanceStorage] is created.
+         */
+        fun createFromConfig(config: ScannerConfiguration): NestedProvenanceStorage {
+            config.provenanceStorage?.fileStorage?.let { fileStorageConfiguration ->
+                return FileBasedNestedProvenanceStorage(fileStorageConfiguration.createFileStorage())
+            }
+
+            config.provenanceStorage?.postgresStorage?.let { postgresStorageConfiguration ->
+                return PostgresNestedProvenanceStorage(
+                    DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+                )
+            }
+
+            return FileBasedNestedProvenanceStorage(
+                LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/nested_provenance"))
+            )
+        }
+    }
+
     /**
      * Return the [NestedProvenanceResolutionResult] for the [root] provenance, or null if no result was stored.
      */
