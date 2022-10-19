@@ -51,30 +51,23 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.ProvenanceStorageConfiguration
-import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.TOOL_NAME
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
-import org.ossreviewtoolkit.scanner.provenance.FileBasedNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
-import org.ossreviewtoolkit.scanner.provenance.PostgresNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -211,7 +204,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
         val scanStorages = ScanStorages.createFromConfig(config.scanner)
         val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config.scanner)
-        val nestedProvenanceStorage = createNestedProvenanceStorage(config.scanner.provenanceStorage)
+        val nestedProvenanceStorage = NestedProvenanceStorage.createFromConfig(config.scanner)
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
@@ -249,19 +242,3 @@ private fun RawOption.convertToScannerWrapperFactories() =
                 ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
         }
     }
-
-private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration?): NestedProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedNestedProvenanceStorage(fileStorageConfiguration.createFileStorage())
-    }
-
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
-        return PostgresNestedProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
-        )
-    }
-
-    return FileBasedNestedProvenanceStorage(
-        LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/nested_provenance"))
-    )
-}
