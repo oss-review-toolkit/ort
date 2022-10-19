@@ -28,11 +28,38 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.TOOL_NAME
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 /**
  * A storage for the resolved [RepositoryProvenance]s of [Package]s.
  */
 interface PackageProvenanceStorage {
+    companion object {
+        /**
+         * Create a [PackageProvenanceStorage] from a [ScannerConfiguration]. If no provenance storage is configured, a
+         * local [FileBasedPackageProvenanceStorage] is created.
+         */
+        fun createFromConfig(config: ScannerConfiguration): PackageProvenanceStorage {
+            config.provenanceStorage?.fileStorage?.let { fileStorageConfiguration ->
+                return FileBasedPackageProvenanceStorage(fileStorageConfiguration.createFileStorage())
+            }
+
+            config.provenanceStorage?.postgresStorage?.let { postgresStorageConfiguration ->
+                return PostgresPackageProvenanceStorage(
+                    DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
+                )
+            }
+
+            return FileBasedPackageProvenanceStorage(
+                LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
+            )
+        }
+    }
+
     /**
      * Return the [PackageProvenanceResolutionResult] for the [id] and [sourceArtifact], or null if no result was
      * stored.
