@@ -160,7 +160,7 @@ class GitRepo : VersionControlSystem(), CommandLineTool {
         logger.info {
             val revisionDetails = manifestRevision?.let { " with revision '$it'" }.orEmpty()
             val pathDetails = manifestPath?.let { " using manifest '$it'" }.orEmpty()
-            "Initializing git-repo from $repoUrl$revisionDetails$pathDetails."
+            "Initializing $type working tree from $repoUrl$revisionDetails$pathDetails."
         }
 
         runRepo(
