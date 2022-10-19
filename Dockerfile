@@ -259,7 +259,7 @@ COPY . /usr/local/src/ort
 WORKDIR /usr/local/src/ort
 
 # Prepare Gradle
-RUN scripts/import_proxy_certs.sh \
+RUN scripts/import_proxy_certs.sh /usr/local/src/ort/gradle.properties \
     && scripts/set_gradle_proxy.sh \
     && ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
 
