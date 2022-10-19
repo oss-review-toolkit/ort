@@ -142,7 +142,7 @@ class Downloader(private val config: DownloaderConfiguration) {
         val sourceArtifactMark = TimeSource.Monotonic.markNow()
 
         try {
-            val result = downloadSourceArtifact(pkg, outputDirectory)
+            val result = downloadSourceArtifact(pkg.sourceArtifact, outputDirectory)
 
             logger.info {
                 "Downloaded source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} in " +
@@ -276,43 +276,43 @@ class Downloader(private val config: DownloaderConfiguration) {
     }
 
     /**
-     * Download the source code of the [package][pkg] to the [outputDirectory] using its source artifact. A
-     * [Provenance] is returned on success or a [DownloadException] is thrown in case of failure.
+     * Download the [sourceArtifact] and unpack it to the [outputDirectory]. A [Provenance] is returned on success or a
+     * [DownloadException] is thrown in case of failure.
      */
-    fun downloadSourceArtifact(pkg: Package, outputDirectory: File): Provenance {
+    fun downloadSourceArtifact(sourceArtifact: RemoteArtifact, outputDirectory: File): Provenance {
+        if (sourceArtifact.url.isBlank()) {
+            throw DownloadException("No source artifact URL provided.")
+        }
+
         verifyOutputDirectory(outputDirectory)
 
         logger.info {
-            "Trying to download source artifact for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact.url}..."
-        }
-
-        if (pkg.sourceArtifact.url.isBlank()) {
-            throw DownloadException("No source artifact URL provided for '${pkg.id.toCoordinates()}'.")
+            "Trying to download source artifact from ${sourceArtifact.url}..."
         }
 
         // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
-        val isLocalFileUrl = pkg.sourceArtifact.url.startsWith("file:/")
+        val isLocalFileUrl = sourceArtifact.url.startsWith("file:/")
 
         var tempDir: File? = null
 
         val sourceArchive = if (isLocalFileUrl) {
-            File(URI(pkg.sourceArtifact.url))
+            File(URI(sourceArtifact.url))
         } else {
             tempDir = createOrtTempDir()
-            OkHttpClientHelper.downloadFile(pkg.sourceArtifact.url, tempDir).getOrElse {
+            OkHttpClientHelper.downloadFile(sourceArtifact.url, tempDir).getOrElse {
                 tempDir.safeDeleteRecursively(force = true)
                 throw DownloadException("Failed to download source artifact.", it)
             }
         }
 
-        if (pkg.sourceArtifact.hash.algorithm != HashAlgorithm.NONE) {
-            if (pkg.sourceArtifact.hash.algorithm == HashAlgorithm.UNKNOWN) {
+        if (sourceArtifact.hash.algorithm != HashAlgorithm.NONE) {
+            if (sourceArtifact.hash.algorithm == HashAlgorithm.UNKNOWN) {
                 logger.warn {
-                    "Cannot verify source artifact with ${pkg.sourceArtifact.hash}, skipping verification."
+                    "Cannot verify source artifact with ${sourceArtifact.hash}, skipping verification."
                 }
-            } else if (!pkg.sourceArtifact.hash.verify(sourceArchive)) {
+            } else if (!sourceArtifact.hash.verify(sourceArchive)) {
                 tempDir?.safeDeleteRecursively(force = true)
-                throw DownloadException("Source artifact does not match expected ${pkg.sourceArtifact.hash}.")
+                throw DownloadException("Source artifact does not match expected ${sourceArtifact.hash}.")
             }
         }
 
@@ -341,12 +341,11 @@ class Downloader(private val config: DownloaderConfiguration) {
         }
 
         logger.info {
-            "Successfully downloaded source artifact for '${pkg.id.toCoordinates()}' to " +
-                    "'${outputDirectory.absolutePath}'..."
+            "Successfully unpacked ${sourceArtifact.url} to '${outputDirectory.absolutePath}'..."
         }
 
         tempDir?.safeDeleteRecursively(force = true)
-        return ArtifactProvenance(pkg.sourceArtifact)
+        return ArtifactProvenance(sourceArtifact)
     }
 }
 

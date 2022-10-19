@@ -62,10 +62,9 @@ class DefaultProvenanceDownloader(
         val downloadDir = createOrtTempDir()
 
         when (provenance) {
-            // TODO: Add dedicated download functions for VcsInfo and RemoteArtifact to the Downloader.
+            // TODO: Add dedicated download functions for VcsInfo to the Downloader.
             is ArtifactProvenance -> {
-                val pkg = Package.EMPTY.copy(sourceArtifact = provenance.sourceArtifact)
-                downloader.downloadSourceArtifact(pkg, downloadDir)
+                downloader.downloadSourceArtifact(provenance.sourceArtifact, downloadDir)
             }
 
             is RepositoryProvenance -> {
