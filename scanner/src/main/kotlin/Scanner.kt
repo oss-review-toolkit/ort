@@ -338,12 +338,13 @@ class Scanner(
      */
     private fun runPathScanners(controller: ScanController, context: ScanContext) {
         controller.getAllProvenances().forEach { provenance ->
-            val scannersForProvenance =
-                controller.getPathScanners().filterNot { controller.hasScanResult(it, provenance) }
+            val scannersWithoutResults = controller.getPathScanners().filterNot {
+                controller.hasScanResult(it, provenance)
+            }
 
-            if (scannersForProvenance.isEmpty()) return@forEach
+            if (scannersWithoutResults.isEmpty()) return@forEach
 
-            val scanResults = scanPath(provenance, scannersForProvenance, context)
+            val scanResults = scanPath(provenance, scannersWithoutResults, context)
 
             scanResults.forEach { (scanner, scanResult) ->
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
