@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -409,6 +410,24 @@ class PackageCurationTest : WordSpec({
     }
 
     "isApplicable()" should {
+        "accept an empty name and / or version" {
+            val curation = PackageCuration(
+                id = Identifier("Maven:com.android.tools"),
+
+                // Hint: Curation data could set authors and a concluded license here to implement the concept of a
+                // "trusted framework" (as [identified][id] by only the type and namespace) with
+                // [ScannerConfiguration.skipConcluded] enabled.
+                data = PackageCurationData()
+            )
+
+            assertSoftly {
+                curation.isApplicable(Identifier("Maven:com.android.tools:common:25.3.0")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools:common")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools::25.3.0")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools")) shouldBe true
+            }
+        }
+
         "comply to the ivy version matchers specifications" {
             packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
             packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
