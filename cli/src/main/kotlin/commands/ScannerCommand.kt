@@ -50,18 +50,12 @@ import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
-import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.ProvenanceStorageConfiguration
-import org.ossreviewtoolkit.model.config.ScanStorageConfiguration
-import org.ossreviewtoolkit.model.config.StorageType
-import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.ScanStorage
+import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
@@ -76,12 +70,6 @@ import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PostgresNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PostgresPackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
-import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
-import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.scanner.storages.PostgresStorage
-import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedFileStorage
-import org.ossreviewtoolkit.scanner.storages.ProvenanceBasedPostgresStorage
-import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -89,7 +77,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -224,17 +211,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             println("Packages will not be scanned.")
         }
 
-        val storages = config.scanner.storages.orEmpty().mapValues { createStorage(it.value) }
-
-        fun resolve(name: String): ScanStorage = requireNotNull(storages[name]) { "Could not resolve storage '$name'." }
-
-        val defaultStorage = createDefaultStorage()
-
-        val readers = config.scanner.storageReaders.orEmpty().map { resolve(it) }
-            .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
-        val writers = config.scanner.storageWriters.orEmpty().map { resolve(it) }
-            .takeIf { it.isNotEmpty() } ?: listOf(defaultStorage)
-
+        val scanStorages = ScanStorages.createFromConfig(config.scanner)
         val packageProvenanceStorage = createPackageProvenanceStorage(config.scanner.provenanceStorage)
         val nestedProvenanceStorage = createNestedProvenanceStorage(config.scanner.provenanceStorage)
         val workingTreeCache = DefaultWorkingTreeCache()
@@ -244,8 +221,8 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 scannerConfig = config.scanner,
                 downloaderConfig = config.downloader,
                 provenanceDownloader = DefaultProvenanceDownloader(config.downloader, workingTreeCache),
-                storageReaders = readers,
-                storageWriters = writers,
+                storageReaders = scanStorages.readers,
+                storageWriters = scanStorages.writers,
                 packageProvenanceResolver = DefaultPackageProvenanceResolver(
                     packageProvenanceStorage,
                     workingTreeCache
@@ -274,40 +251,6 @@ private fun RawOption.convertToScannerWrapperFactories() =
                 ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
         }
     }
-
-private fun createDefaultStorage(): ScanStorage {
-    val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
-    return ProvenanceBasedFileStorage(localFileStorage)
-}
-
-private fun createStorage(config: ScanStorageConfiguration): ScanStorage =
-    when (config) {
-        is FileBasedStorageConfiguration -> createFileBasedStorage(config)
-        is PostgresStorageConfiguration -> createPostgresStorage(config)
-        is ClearlyDefinedStorageConfiguration -> createClearlyDefinedStorage(config)
-        is Sw360StorageConfiguration -> createSw360Storage(config)
-    }
-
-private fun createFileBasedStorage(config: FileBasedStorageConfiguration) =
-    when (config.type) {
-        StorageType.PACKAGE_BASED -> FileBasedStorage(config.backend.createFileStorage())
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedFileStorage(config.backend.createFileStorage())
-    }
-
-private fun createPostgresStorage(config: PostgresStorageConfiguration) =
-    when (config.type) {
-        StorageType.PACKAGE_BASED -> PostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME),
-            config.connection.parallelTransactions
-        )
-        StorageType.PROVENANCE_BASED -> ProvenanceBasedPostgresStorage(
-            DatabaseUtils.createHikariDataSource(config = config.connection, applicationNameSuffix = TOOL_NAME)
-        )
-    }
-
-private fun createClearlyDefinedStorage(config: ClearlyDefinedStorageConfiguration) = ClearlyDefinedStorage(config)
-
-private fun createSw360Storage(config: Sw360StorageConfiguration) = Sw360Storage(config)
 
 private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
     config?.fileStorage?.let { fileStorageConfiguration ->
