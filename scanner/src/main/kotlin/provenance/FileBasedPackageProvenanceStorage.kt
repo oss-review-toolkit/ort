@@ -45,6 +45,9 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
     override fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult? =
         readResults(id).find { it.vcs == vcs }?.result
 
+    override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> =
+        readResults(id).map { it.result }
+
     private fun readResults(id: Identifier): List<StorageEntry> {
         val path = storagePath(id)
 
