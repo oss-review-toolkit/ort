@@ -64,11 +64,9 @@ import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.provenance.FileBasedNestedProvenanceStorage
-import org.ossreviewtoolkit.scanner.provenance.FileBasedPackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PostgresNestedProvenanceStorage
-import org.ossreviewtoolkit.scanner.provenance.PostgresPackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -212,7 +210,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         val scanStorages = ScanStorages.createFromConfig(config.scanner)
-        val packageProvenanceStorage = createPackageProvenanceStorage(config.scanner.provenanceStorage)
+        val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config.scanner)
         val nestedProvenanceStorage = createNestedProvenanceStorage(config.scanner.provenanceStorage)
         val workingTreeCache = DefaultWorkingTreeCache()
 
@@ -251,22 +249,6 @@ private fun RawOption.convertToScannerWrapperFactories() =
                 ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
         }
     }
-
-private fun createPackageProvenanceStorage(config: ProvenanceStorageConfiguration?): PackageProvenanceStorage {
-    config?.fileStorage?.let { fileStorageConfiguration ->
-        return FileBasedPackageProvenanceStorage(fileStorageConfiguration.createFileStorage())
-    }
-
-    config?.postgresStorage?.let { postgresStorageConfiguration ->
-        return PostgresPackageProvenanceStorage(
-            DatabaseUtils.createHikariDataSource(postgresStorageConfiguration.connection)
-        )
-    }
-
-    return FileBasedPackageProvenanceStorage(
-        LocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/package_provenance"))
-    )
-}
 
 private fun createNestedProvenanceStorage(config: ProvenanceStorageConfiguration?): NestedProvenanceStorage {
     config?.fileStorage?.let { fileStorageConfiguration ->
