@@ -58,7 +58,7 @@ private data class Manifest(
 )
 
 /**
- * The include tag of a wrapping "manifest.xml" file, see
+ * The "include" tag of a "manifest.xml" file, see
  * https://gerrit.googlesource.com/git-repo/+/refs/heads/master/docs/manifest-format.md#Element-include.
  */
 private data class Include(
