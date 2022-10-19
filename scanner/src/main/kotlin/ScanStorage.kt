@@ -94,7 +94,7 @@ interface PackageBasedScanStorageWriter : ScanStorageWriter {
      *
      * A [ScanStorageException] is thrown if:
      * * An error occurs while writing to the storage.
-     * * The storage already contains a result for the same provenance and scanner
+     * * The storage already contains a result for the same provenance and scanner.
      * * The provenance of the package is [unknown][UnknownProvenance].
      */
     fun write(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult)
