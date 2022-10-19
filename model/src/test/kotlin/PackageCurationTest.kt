@@ -422,7 +422,7 @@ class PackageCurationTest : WordSpec({
 private fun packageCurationForVersion(version: String) =
     PackageCuration(identifierForVersion(version), PackageCurationData())
 
-private fun identifierForVersion(version: String) = Identifier(type = "", namespace = "", name = "", version = version)
+private fun identifierForVersion(version: String) = Identifier.EMPTY.copy(version = version)
 
 private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
     PackageCuration(
