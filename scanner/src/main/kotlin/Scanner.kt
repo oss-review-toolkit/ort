@@ -234,7 +234,11 @@ class Scanner(
      * Run package scanners for packages with incomplete scan results.
      */
     private fun runPackageScanners(controller: ScanController, context: ScanContext) {
-        controller.getPackagesConsolidatedByProvenance().forEach { (provenance, packages) ->
+        val packagesByProvenance = controller.getPackagesConsolidatedByProvenance()
+
+        packagesByProvenance.onEachIndexed { index, (provenance, packages) ->
+            logger.info { "Scanning $provenance (${index + 1} of ${packagesByProvenance.size})..." }
+
             controller.getPackageScanners().forEach scanner@{ scanner ->
                 val packagesWithIncompleteScanResult = packages.filter { pkg ->
                     val hasNestedProvenance = controller.getNestedProvenance(pkg.id) != null
@@ -256,7 +260,10 @@ class Scanner(
                     hasNestedProvenance && !hasCompleteScanResult
                 }
 
-                if (packagesWithIncompleteScanResult.isEmpty()) return@scanner
+                if (packagesWithIncompleteScanResult.isEmpty()) {
+                    logger.info { "Skipping scan with package scanner '${scanner.name}' as all packages have results." }
+                    return@scanner
+                }
 
                 // Create a reference package with any VCS path removed, to ensure the full repository is scanned.
                 val referencePackage = packagesWithIncompleteScanResult.first().let { pkg ->
@@ -304,19 +311,24 @@ class Scanner(
      * Run provenance scanners for provenances with missing scan results.
      */
     private fun runProvenanceScanners(controller: ScanController, context: ScanContext) {
-        controller.getAllProvenances().forEach { provenance ->
+        val provenances = controller.getAllProvenances()
+
+        provenances.forEachIndexed { index, provenance ->
             // TODO: Use coroutines to execute scanners in parallel.
             controller.getProvenanceScanners().forEach scanner@{ scanner ->
                 if (controller.hasScanResult(scanner, provenance)) {
                     logger.debug {
-                        "Skipping $provenance scan with provenance scanner '${scanner.name}' as a result is already " +
-                                "available."
+                        "Skipping $provenance scan (${index + 1} of ${provenances.size}) with provenance scanner " +
+                                "'${scanner.name}' as a result is already available."
                     }
 
                     return@scanner
                 }
 
-                logger.info { "Scanning $provenance with provenance scanner '${scanner.name}'." }
+                logger.info {
+                    "Scanning $provenance (${index + 1} of ${provenances.size}) with provenance scanner " +
+                            "'${scanner.name}'."
+                }
 
                 val scanResult = scanner.scanProvenance(provenance, context)
 
@@ -337,12 +349,22 @@ class Scanner(
      * Run path scanners for provenances with missing scan results.
      */
     private fun runPathScanners(controller: ScanController, context: ScanContext) {
-        controller.getAllProvenances().forEach { provenance ->
+        val provenances = controller.getAllProvenances()
+
+        provenances.forEachIndexed { index, provenance ->
             val scannersWithoutResults = controller.getPathScanners().filterNot {
                 controller.hasScanResult(it, provenance)
             }
 
-            if (scannersWithoutResults.isEmpty()) return@forEach
+            if (scannersWithoutResults.isEmpty()) {
+                logger.info {
+                    "Skipping $provenance (${index + 1} of ${provenances.size}) as all scanners have results."
+                }
+
+                return@forEachIndexed
+            }
+
+            logger.info { "Scanning $provenance (${index + 1} of ${provenances.size})..." }
 
             val scanResults = scanPath(provenance, scannersWithoutResults, context)
 
