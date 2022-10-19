@@ -86,6 +86,13 @@ class PostgresPackageProvenanceStorage(
             }.map { it[table.result] }.firstOrNull()
         }
 
+    override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> =
+        database.transaction {
+            table.select {
+                table.identifier eq id.toCoordinates()
+            }.map { it[table.result] }
+        }
+
     override fun putProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,

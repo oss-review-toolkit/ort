@@ -72,6 +72,11 @@ interface PackageProvenanceStorage {
     fun readProvenance(id: Identifier, vcs: VcsInfo): PackageProvenanceResolutionResult?
 
     /**
+     * Return all [PackageProvenanceResolutionResult]s for the [id].
+     */
+    fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult>
+
+    /**
      * Put the resolution [result] for the [id] and [sourceArtifact] into the storage. If the storage already contains
      * an entry for [id] and [sourceArtifact] it is overwritten.
      */

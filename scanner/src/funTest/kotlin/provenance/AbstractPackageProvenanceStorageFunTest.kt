@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.scanner.provenance
 
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -85,6 +87,22 @@ abstract class AbstractPackageProvenanceStorageFunTest(vararg listeners: TestLis
                 storage.putProvenance(id, vcs, result2)
 
                 storage.readProvenance(id, vcs) shouldBe result2
+            }
+        }
+
+        "Reading all results" should {
+            "return all stored results" {
+                val id = createIdentifier()
+
+                val sourceArtifact = createRemoteArtifact()
+                val artifactResult = ResolvedArtifactProvenance(createArtifactProvenance(sourceArtifact))
+                storage.putProvenance(id, sourceArtifact, artifactResult)
+
+                val vcs = createVcsInfo()
+                val vcsResult = ResolvedRepositoryProvenance(createRepositoryProvenance(vcs), vcs.revision, true)
+                storage.putProvenance(id, vcs, vcsResult)
+
+                storage.readProvenances(id) should containExactlyInAnyOrder(artifactResult, vcsResult)
             }
         }
     }
