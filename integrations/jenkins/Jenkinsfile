@@ -195,7 +195,7 @@ pipeline {
                     fi
 
                     /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION --version
-                '''
+                '''.trim()
             }
         }
 
@@ -230,7 +230,7 @@ pipeline {
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
 
                         rm -f $HOME/.netrc
-                    '''
+                    '''.trim()
                 }
             }
         }
@@ -274,7 +274,7 @@ pipeline {
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
                         rm -f $HOME/.netrc
-                    '''
+                    '''.trim()
                 }
             }
         }
@@ -308,7 +308,7 @@ pipeline {
 
                         rm -fr out/results
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
-                    '''
+                    '''.trim()
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
                     else if (status != 0) error('Error executing the analyzer.')
@@ -378,7 +378,7 @@ pipeline {
                             echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
                             /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION scan -i out/results/current-result.yml -o out/results/scanner
                             rm -f $HOME/.netrc
-                        '''
+                        '''.trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Scanner issues found.')
                         else if (status != 0) error('Error executing the scanner.')
@@ -428,7 +428,7 @@ pipeline {
                             fi
 
                             /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION advise -a OSV -i out/results/current-result.yml -o out/results/advisor
-                        '''
+                        '''.trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Advisor issues found.')
                         else if (status != 0) error('Error executing the advisor.')
@@ -478,7 +478,7 @@ pipeline {
                             fi
 
                             /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION evaluate -i out/results/current-result.yml --rules-resource /rules/no_gpl.rules.kts -o out/results/evaluator
-                        '''
+                        '''.trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
                         else if (status != 0) error('Error executing the evaluator.')
@@ -530,7 +530,7 @@ pipeline {
                         -O NoticeTemplate=template.id=default,summary \
                         -i out/results/current-result.yml \
                         -o out/results/reporter
-                '''
+                '''.trim()
             }
 
             post {
