@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
 // An arbitrary name to use for the multipart body being sent.
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
@@ -85,6 +86,7 @@ class ScanOss internal constructor(
 
         val wfpString = buildString {
             path.walk()
+                .onEnter { it.name !in VCS_DIRECTORIES }
                 // TODO: Consider not applying the (somewhat arbitrary) blacklist.
                 .filterNot { it.isDirectory || BlacklistRules.hasBlacklistedExt(it.name) }
                 .forEach {
