@@ -86,7 +86,7 @@ class ScanOss internal constructor(
         val wfpString = buildString {
             path.walk()
                 // TODO: Consider not applying the (somewhat arbitrary) blacklist.
-                .filter { !it.isDirectory && !BlacklistRules.hasBlacklistedExt(it.name) }
+                .filterNot { it.isDirectory || BlacklistRules.hasBlacklistedExt(it.name) }
                 .forEach {
                     logger.info { "Computing fingerprint for file ${it.absolutePath}..." }
                     append(createWfpForFile(it))
