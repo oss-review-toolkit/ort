@@ -31,60 +31,60 @@ data class ScanResponse(
     val id: IdentificationType,
 
     /** Status of the file match. */
-    val status: FileMatchStatus,
+    val status: FileMatchStatus? = null,
 
     /** Matching line numbers of a snippet in the source file. */
-    val lines: String,
+    val lines: String? = null,
 
     /** Matching line numbers for the snippet in the open source file. */
     @SerialName("oss_lines")
-    val ossLines: String,
+    val ossLines: String? = null,
 
     /** Percentage of the source file that matches the open source file. */
-    val matched: String,
+    val matched: String? = null,
 
     /** List of possible Package URLs identifying the OSS component. */
-    val purl: List<String>,
+    val purl: List<String>? = null,
 
     /** Vendor for the matched OSS component */
-    val vendor: String,
+    val vendor: String? = null,
 
     /** Name for the matched OSS component. */
-    val component: String,
+    val component: String? = null,
 
     /** Earliest matched OSS component version. */
-    val version: String,
+    val version: String? = null,
 
     /** Latest matched OSS component version. */
-    val latest: String,
+    val latest: String? = null,
 
     /** URL of the OSS component. */
-    val url: String,
+    val url: String? = null,
 
     /** Release date of the component. */
     @SerialName("release_date")
-    val releaseDate: String,
+    val releaseDate: String? = null,
 
     /** Name of the matching OSS file. */
-    val file: String,
+    val file: String? = null,
 
     /** MD5 hash of the project zip that was mined from. */
     @SerialName("url_hash")
-    val urlHash: String,
+    val urlHash: String? = null,
 
     /** Unique hash for the matching OSS file stored in the KB. */
     @SerialName("file_hash")
-    val fileHash: String,
+    val fileHash: String? = null,
 
     /** URL to download the matching OSS file from the KB. */
     @SerialName("file_url")
-    val fileUrl: String,
+    val fileUrl: String? = null,
 
     /** List of declared dependencies for the detected component. */
     val dependencies: List<Dependency> = emptyList(),
 
     /** List of licenses associated with the OSS component. */
-    val licenses: List<License>,
+    val licenses: List<License> = emptyList(),
 
     /** List of copyrights found in the OSS file. */
     val copyrights: List<Copyright> = emptyList(),
