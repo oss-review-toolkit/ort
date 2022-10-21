@@ -72,7 +72,7 @@ pipeline {
         string(
             name: 'ORT_CONFIG_VCS_URL',
             description: 'Optional VCS clone URL of the ORT configuration',
-            defaultValue: ''
+            defaultValue: 'https://github.com/oss-review-toolkit/ort-config.git'
         )
 
         string(
