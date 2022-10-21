@@ -125,6 +125,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
+# This commoncode version is required for Scancode 30.1.0: https://github.com/nexB/scancode-toolkit/issues/3107
+ARG COMMONCODE_VERSION=30.0.0
 ARG CONAN_VERSION=1.52.0
 ARG PYTHON_INSPECTOR_VERSION=0.8.2
 ARG PYTHON_PIPENV_VERSION=2022.9.24
@@ -132,13 +134,12 @@ ARG PYTHON_POETRY_VERSION=1.1.13
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=30.1.0
 
-# Scancode need restrict commoncode  version
 RUN pip install -U \
     pip=="${PIPTOOL_VERSION}" \
     wheel \
     && pip install -U \
     Mercurial \
-    commoncode==30.0.0 \
+    commoncode=="${COMMONCODE_VERSION}" \
     conan=="${CONAN_VERSION}" \
     pipenv=="${PYTHON_PIPENV_VERSION}" \
     poetry==${PYTHON_POETRY_VERSION} \
