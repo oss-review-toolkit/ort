@@ -32,17 +32,9 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-
-object Python : CommandLineTool {
-    override fun command(workingDir: File?) = if (Os.isWindows) "py" else "python3"
-
-    override fun transformVersion(output: String) = output.removePrefix("Python ")
-}
 
 private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
 private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
