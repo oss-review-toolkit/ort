@@ -27,6 +27,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 val spdxLicenseListVersion: String by project
 
+@Suppress("DSL_SCOPE_VIOLATION") // See https://youtrack.jetbrains.com/issue/KTIJ-19369.
 plugins {
     antlr
     `java-library`
