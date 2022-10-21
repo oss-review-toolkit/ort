@@ -58,5 +58,8 @@ data class NestedProvenance(
      */
     @JsonIgnore
     fun getProvenances(): Set<KnownProvenance> =
-        subRepositories.values.toMutableSet<KnownProvenance>().also { it += root }
+        buildSet {
+            add(root)
+            addAll(subRepositories.values)
+        }
 }
