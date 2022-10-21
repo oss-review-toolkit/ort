@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.reporter.Reporter
  * [2]: https://asciidoc.org/
  * [3]: https://github.com/asciidoctor/asciidoctorj
  * [4]: https://github.com/asciidoctor/asciidoctorj-pdf
- * [5]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc
+ * [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
  */
 class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
     companion object {
