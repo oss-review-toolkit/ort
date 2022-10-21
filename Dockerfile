@@ -49,6 +49,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     openssh-client \
     openssl \
     procps \
+    python3-pip \
     rsync \
     sudo \
     tzdata \
@@ -124,25 +125,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PYTHON - Build Python as a separate component with pyenv
 FROM build as pythonbuild
 
-ARG PYTHON_VERSION=3.10.6
-ARG PYENV_GIT_TAG=v2.3.4
-
-ENV PYENV_ROOT=/opt/python
-RUN curl -kSs https://pyenv.run | bash
-ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
-RUN pyenv install -v ${PYTHON_VERSION}
-RUN pyenv global ${PYTHON_VERSION}
-
-COPY docker/python.sh /etc/profile.d
-
 ARG CONAN_VERSION=1.52.0
 ARG PYTHON_INSPECTOR_VERSION=0.8.2
 ARG PYTHON_PIPENV_VERSION=2022.9.24
 ARG PYTHON_POETRY_VERSION=1.1.13
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=30.1.0
-ENV PYENV_ROOT=/opt/python
-ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
 
 # Scancode need restrict commoncode  version
 RUN pip install -U \
@@ -277,12 +265,6 @@ FROM ort-base-image as run
 
 # Remove ort build scripts
 RUN rm -rf /etc/scripts
-
-# Python
-ARG PYENV_ROOT=/opt/python
-COPY --chown=$USERNAME:$USERNAME --from=pythonbuild ${PYENV_ROOT} ${PYENV_ROOT}
-COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
-RUN chmod o+rwx ${PYENV_ROOT}
 
 # Ruby
 ARG RBENV_ROOT=/opt/rbenv/
