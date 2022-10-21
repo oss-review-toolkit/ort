@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
@@ -116,7 +117,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
                     "with '--rules-file'."
         ).convert { StringType(it) },
         name = OPTION_GROUP_RULE
-    ).single()
+    ).single().default(FileType(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)))
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
@@ -242,16 +243,6 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
                 val rulesResource = (rules as StringType).string
                 javaClass.getResource(rulesResource)?.readText()
                     ?: throw UsageError("Invalid rules resource '$rulesResource'.")
-            }
-
-            null -> {
-                val rulesFile = ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)
-
-                if (!rulesFile.isFile) {
-                    throw UsageError("No rule option specified and no default rule found at '$rulesFile'.")
-                }
-
-                rulesFile.readText()
             }
         }
 
