@@ -53,6 +53,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -172,7 +173,7 @@ class CocoaPods(
     }
 
     private fun getPackage(id: Identifier, workingDir: File): Package {
-        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id)
+        val podspec = getPodspec(id, workingDir) ?: return Package.EMPTY.copy(id = id, purl = id.toPurl())
 
         val vcs = podspec.source["git"]?.let { url ->
             VcsInfo(
