@@ -697,7 +697,7 @@ following formats are supported (reporter names are case-insensitive):
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and
     [AsciiDoc](https://asciidoc.org/)
   * PDF style customizable with Asciidoctor
-    [PDF themes](https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc)
+    [PDF themes](https://docs.asciidoctor.org/pdf-converter/latest/theme/)
   * Supports multiple AsciiDoc backends:
     * PDF (`-f PdfTemplate`)
     * HTML (`-f HtmlTemplate`)

@@ -110,8 +110,8 @@ cli/build/install/ort/bin/ort report
 [2]: https://asciidoc.org/
 [3]: https://github.com/asciidoctor/asciidoctorj
 [4]: https://github.com/asciidoctor/asciidoctorj-pdf
-[5]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc
-[6]: https://github.com/asciidoctor/asciidoctor-pdf/blob/master/docs/theming-guide.adoc#configuring-the-font-search-path
+[5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
+[6]: https://docs.asciidoctor.org/pdf-converter/latest/theme/font-support/
 [7]: https://docs.asciidoctor.org/asciidoctor/latest/html-backend
 [8]: https://docs.asciidoctor.org/asciidoctor/latest/html-backend/#xhtml
 [9]: https://docbook.org
