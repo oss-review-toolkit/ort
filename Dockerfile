@@ -142,9 +142,9 @@ RUN pip install -U \
     commoncode=="${COMMONCODE_VERSION}" \
     conan=="${CONAN_VERSION}" \
     pipenv=="${PYTHON_PIPENV_VERSION}" \
-    poetry==${PYTHON_POETRY_VERSION} \
+    poetry=="${PYTHON_POETRY_VERSION}" \
     python-inspector=="${PYTHON_INSPECTOR_VERSION}" \
-    scancode-toolkit==${SCANCODE_VERSION}
+    scancode-toolkit=="${SCANCODE_VERSION}"
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
