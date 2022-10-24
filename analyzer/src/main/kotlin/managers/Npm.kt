@@ -113,6 +113,8 @@ open class Npm(
 
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
+    private val npmViewCache = ConcurrentHashMap<String, JsonNode>()
+
     /**
      * Search depth in the `node_modules` directory for `package.json` files used for collecting all packages of the
      * projects.
@@ -360,10 +362,11 @@ open class Npm(
         return Pair(id.toCoordinates(), module)
     }
 
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
-        val process = run(workingDir, "view", "--json", packageName)
-        return jsonMapper.readTree(process.stdout)
-    }
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode =
+        npmViewCache.getOrPut(packageName) {
+            val process = run(workingDir, "view", "--json", packageName)
+            jsonMapper.readTree(process.stdout)
+        }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache: ConcurrentHashMap<String, List<File>> = ConcurrentHashMap()
