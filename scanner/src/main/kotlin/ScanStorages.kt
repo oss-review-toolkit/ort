@@ -27,6 +27,8 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceStorage
+import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
@@ -41,7 +43,9 @@ import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
  */
 class ScanStorages(
     val readers: List<ScanStorageReader>,
-    val writers: List<ScanStorageWriter>
+    val writers: List<ScanStorageWriter>,
+    val packageProvenanceStorage: PackageProvenanceStorage,
+    val nestedProvenanceStorage: NestedProvenanceStorage
 ) {
     companion object {
         /**
@@ -62,7 +66,10 @@ class ScanStorages(
             val writers = config.storageWriters.orEmpty().map { resolve(it) }.takeIf { it.isNotEmpty() }
                 ?: listOf(defaultStorage)
 
-            return ScanStorages(readers, writers)
+            val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config)
+            val nestedProvenanceStorage = NestedProvenanceStorage.createFromConfig(config)
+
+            return ScanStorages(readers, writers, packageProvenanceStorage, nestedProvenanceStorage)
         }
     }
 }

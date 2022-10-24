@@ -60,8 +60,6 @@ import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
-import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceStorage
-import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -203,8 +201,6 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
 
         val scanStorages = ScanStorages.createFromConfig(config.scanner)
-        val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config.scanner)
-        val nestedProvenanceStorage = NestedProvenanceStorage.createFromConfig(config.scanner)
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
@@ -215,10 +211,13 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
                 storageReaders = scanStorages.readers,
                 storageWriters = scanStorages.writers,
                 packageProvenanceResolver = DefaultPackageProvenanceResolver(
-                    packageProvenanceStorage,
+                    scanStorages.packageProvenanceStorage,
                     workingTreeCache
                 ),
-                nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache),
+                nestedProvenanceResolver = DefaultNestedProvenanceResolver(
+                    scanStorages.nestedProvenanceStorage,
+                    workingTreeCache
+                ),
                 scannerWrappers = mapOf(
                     PackageType.PACKAGE to packageScannerWrappers,
                     PackageType.PROJECT to projectScannerWrappers
