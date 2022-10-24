@@ -77,7 +77,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
             storage = when {
                 configuredStorages.isNullOrEmpty() -> createDefaultStorage()
                 configuredStorages.size == 1 -> createStorage(configuredStorages.values.first())
-                else -> createCompositeStorage(config)
+                else -> NoStorage()
             }
 
             logger.info { "ScanResultStorage has been configured to ${storage.name}." }
@@ -91,28 +91,6 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         private fun createDefaultStorage(): ScanResultsStorage {
             val localFileStorage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("$TOOL_NAME/results"))
             return FileBasedStorage(localFileStorage)
-        }
-
-        /**
-         * Create a [CompositeStorage] that manages all storages defined in the given [config].
-         */
-        private fun createCompositeStorage(config: ScannerConfiguration): ScanResultsStorage {
-            val storages = config.storages.orEmpty().mapValues { createStorage(it.value) }
-
-            fun resolve(name: String): ScanResultsStorage =
-                requireNotNull(storages[name]) {
-                    "Could not resolve storage '$name'."
-                }
-
-            val readers = config.storageReaders.orEmpty().map { resolve(it) }
-            val writers = config.storageWriters.orEmpty().map { resolve(it) }
-
-            logger.info {
-                "Using composite storage with readers ${readers.joinToString { it.name }} and writers " +
-                        "${writers.joinToString { it.name }}."
-            }
-
-            return CompositeStorage(readers, writers)
         }
 
         /**
