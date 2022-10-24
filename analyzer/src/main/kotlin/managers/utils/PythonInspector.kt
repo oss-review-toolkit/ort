@@ -149,7 +149,7 @@ internal object PythonInspector : CommandLineTool {
         val version: String,
         val description: String,
         val parties: List<Party>,
-        @SerialName("homepage_url") val homepageUrl: String,
+        @SerialName("homepage_url") val homepageUrl: String?,
         @SerialName("download_url") val downloadUrl: String,
         val size: Long,
         val sha1: String?,
@@ -160,7 +160,7 @@ internal object PythonInspector : CommandLineTool {
         @SerialName("vcs_url") val vcsUrl: String?,
         val copyright: String?,
         @SerialName("license_expression") val licenseExpression: String?,
-        @SerialName("declared_license") val declaredLicense: String,
+        @SerialName("declared_license") val declaredLicense: String?,
         @SerialName("source_packages") val sourcePackages: List<String>,
         @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
         @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
@@ -289,7 +289,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
             // Only use the first line of the description because the descriptions provided by python-inspector are
             // currently far too long, see: https://github.com/nexB/python-inspector/issues/74
             description = pkg.description.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty(),
-            homepageUrl = pkg.homepageUrl,
+            homepageUrl = pkg.homepageUrl.orEmpty(),
             binaryArtifact = getArtifact(".whl"),
             sourceArtifact = getArtifact(".tar.gz"),
             vcs = VcsInfo.EMPTY.copy(url = pkg.vcsUrl.orEmpty()),
