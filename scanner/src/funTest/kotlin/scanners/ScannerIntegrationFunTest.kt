@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
@@ -85,8 +84,6 @@ class ScannerIntegrationFunTest : StringSpec() {
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
-
-            ScanResultsStorage.storage.stats.reset()
         }
     }
 
