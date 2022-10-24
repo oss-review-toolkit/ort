@@ -358,8 +358,8 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
      */
     protected abstract fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit>
 
-    override fun read(pkg: Package, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
-        read(pkg.id).toNestedProvenanceScanResult(nestedProvenance)
+    override fun read(id: Identifier, nestedProvenance: NestedProvenance): List<NestedProvenanceScanResult> =
+        read(id).toNestedProvenanceScanResult(nestedProvenance)
 
     override fun read(
         pkg: Package,
