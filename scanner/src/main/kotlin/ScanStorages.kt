@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.config.FileBasedStorageConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
@@ -27,8 +29,13 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
+import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceStorage
+import org.ossreviewtoolkit.scanner.provenance.ResolvedArtifactProvenance
+import org.ossreviewtoolkit.scanner.provenance.ResolvedRepositoryProvenance
+import org.ossreviewtoolkit.scanner.provenance.UnresolvedPackageProvenance
 import org.ossreviewtoolkit.scanner.storages.ClearlyDefinedStorage
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
 import org.ossreviewtoolkit.scanner.storages.PostgresStorage
@@ -71,6 +78,43 @@ class ScanStorages(
 
             return ScanStorages(readers, writers, packageProvenanceStorage, nestedProvenanceStorage)
         }
+    }
+
+    /**
+     * Read all [ScanResult]s for the provided [id]. Returns an empty list if no stored scan results or no stored
+     * provenance can be found.
+     */
+    fun read(id: Identifier): List<ScanResult> {
+        val packageProvenances = packageProvenanceStorage.readProvenances(id)
+
+        val nestedProvenances = packageProvenances.mapNotNull { result ->
+            when (result) {
+                is ResolvedArtifactProvenance -> {
+                    NestedProvenance(root = result.provenance, subRepositories = emptyMap())
+                }
+
+                is ResolvedRepositoryProvenance -> {
+                    nestedProvenanceStorage.readNestedProvenance(result.provenance)?.nestedProvenance
+                }
+
+                is UnresolvedPackageProvenance -> null
+            }
+        }
+
+        val results = mutableListOf<ScanResult>()
+
+        nestedProvenances.forEach { nestedProvenance ->
+            results += readers.filterIsInstance<PackageBasedScanStorageReader>().flatMap { reader ->
+                reader.read(id, nestedProvenance).flatMap { it.merge() }
+            }
+
+            results += readers.filterIsInstance<ProvenanceBasedScanStorageReader>().mapNotNull { reader ->
+                val scanResults = nestedProvenance.getProvenances().associateWith { reader.read(it) }
+                NestedProvenanceScanResult(nestedProvenance, scanResults).takeIf { it.isComplete() }?.merge()
+            }.flatten()
+        }
+
+        return results
     }
 }
 
