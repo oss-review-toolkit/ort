@@ -259,7 +259,7 @@ private fun createVulnerableCode(server: WireMockServer): VulnerableCode =
 /**
  * Return the test file with an analyzer result.
  */
-private fun resultFile(): File = File(TEST_FILES_ROOT).resolve(TEST_RESULT_NAME)
+private fun resultFile(): File = File(TEST_FILES_ROOT, TEST_RESULT_NAME)
 
 /**
  * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.

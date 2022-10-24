@@ -147,7 +147,7 @@ private fun analyze(workingDir: File): AnalyzerResult {
     return checkNotNull(analyzerRun).result.withResolvedScopes()
 }
 
-private fun getAssetFile(path: String) = File("src/funTest/assets").resolve(path)
+private fun getAssetFile(path: String) = File("src/funTest/assets", path)
 
 private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
     Pub("Pub", USER_DIR, config, RepositoryConfiguration())

@@ -176,4 +176,4 @@ class PathExcludeGeneratorTest : WordSpec({
     }
 })
 
-private fun getAssetFile(path: String) = File("src/test/assets/path-exclude-gen").resolve(path)
+private fun getAssetFile(path: String) = File("src/test/assets/path-exclude-gen", path)
