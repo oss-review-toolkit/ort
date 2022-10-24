@@ -33,11 +33,12 @@ import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.utils.createProvider
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -84,7 +85,7 @@ class GetPackageLicensesCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val scanResults = getScanResultStorage().read(packageId).getOrDefault(emptyList())
+        val scanResults = getStoredScanResults(packageId)
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
@@ -115,10 +116,10 @@ class GetPackageLicensesCommand : CliktCommand(
         println(result.toYaml())
     }
 
-    private fun getScanResultStorage(): ScanResultsStorage {
+    private fun getStoredScanResults(id: Identifier): List<ScanResult> {
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
-        ScanResultsStorage.configure(ortConfiguration.scanner)
-        return ScanResultsStorage.storage
+        val scanStorages = ScanStorages.createFromConfig(ortConfiguration.scanner)
+        return runCatching { scanStorages.read(id) }.getOrDefault(emptyList())
     }
 }
 
