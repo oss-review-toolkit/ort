@@ -222,7 +222,7 @@ class GoMod(
      * directive applied.
      */
     private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
-        val list = run("list", "-m", "-json", "all", workingDir = projectDir)
+        val list = run("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
         list.stdout.byteInputStream().use { inputStream ->
             val result = mutableListOf<ModuleInfo>()
@@ -265,7 +265,8 @@ class GoMod(
         val result = mutableSetOf<String>()
 
         val list = run(
-            "list", "-deps", "-f", "{{with .Module}}{{.Path}} {{.Version}}{{end}}", "./...", workingDir = projectDir
+            "list", "-deps", "-f", "{{with .Module}}{{.Path}} {{.Version}}{{end}}", "-buildvcs=false", "./...",
+            workingDir = projectDir
         )
 
         list.stdout.lines().forEach { line ->
