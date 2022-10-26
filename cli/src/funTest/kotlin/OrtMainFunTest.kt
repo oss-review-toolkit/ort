@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.redirectStdout
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.createSpecTempFile
@@ -201,6 +202,18 @@ class OrtMainFunTest : StringSpec() {
                     "--rules-resource", "DUMMY"
                 )
             }
+        }
+
+        "EnvironmentVariableFilter is correctly initialized" {
+            val referenceConfigFile = File("../model/src/main/resources/reference.yml").absolutePath
+            runMain(
+                "-c",
+                referenceConfigFile,
+                "config"
+            )
+
+            EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
+            EnvironmentVariableFilter.isAllowed("DB_PASS") shouldBe false
         }
     }
 
