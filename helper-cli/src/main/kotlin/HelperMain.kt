@@ -31,6 +31,8 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
 
+import kotlin.system.exitProcess
+
 import org.ossreviewtoolkit.helper.commands.ConvertOrtFileCommand
 import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
 import org.ossreviewtoolkit.helper.commands.DownloadResultsFromPostgresCommand
@@ -66,7 +68,8 @@ import org.slf4j.LoggerFactory
  */
 fun main(args: Array<String>) {
     Os.fixupUserHomeProperty()
-    return HelperMain().main(args)
+    HelperMain().main(args)
+    exitProcess(0)
 }
 
 internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
