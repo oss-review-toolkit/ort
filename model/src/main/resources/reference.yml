@@ -30,6 +30,15 @@ ort:
   enableRepositoryPackageCurations: true
   enableRepositoryPackageConfigurations: true
 
+  deniedProcessEnvironmentVariablesSubstrings:
+    - PASS
+    - SECRET
+    - TOKEN
+    - USER
+  allowedProcessEnvironmentVariableNames:
+    - PASSPORT
+    - USER_HOME
+
   analyzer:
     allowDynamicVersions: true
 
