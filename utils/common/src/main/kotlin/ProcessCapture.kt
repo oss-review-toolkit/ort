@@ -84,7 +84,9 @@ class ProcessCapture(
         .redirectOutput(stdoutFile)
         .redirectError(stderrFile)
         .apply {
-            environment().putAll(environment)
+            // Apply the environment filter to the map with inherited variables, but not to the variables added
+            // explicitly via the environment parameter, since these are expected to be always relevant for the command.
+            EnvironmentVariableFilter.filter(environment()).putAll(environment)
         }
 
     val commandLine = command.joinToString(" ")

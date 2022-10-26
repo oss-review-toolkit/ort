@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.utils.common
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -34,6 +35,21 @@ class ProcessCaptureTest : StringSpec({
 
         proc.exitValue shouldBe 0
         proc.stdout.trimEnd() shouldBe "This is some path: /foo/bar"
+    }
+
+    "Only allowed environment variables should be passed" {
+        val env = mapOf("DB_USER" to "scott", "DB_PASSWORD" to "tiger", "DB_CONN" to "my-db.example.org")
+
+        withEnvironment(env) {
+            val proc = if (Os.isWindows) {
+                ProcessCapture("cmd.exe", "/c", "echo %DB_USER%:%DB_PASSWORD%.%DB_CONN%")
+            } else {
+                ProcessCapture("sh", "-c", "echo \$DB_USER:\$DB_PASSWORD.\$DB_CONN")
+            }
+
+            proc.exitValue shouldBe 0
+            proc.stdout.trimEnd() shouldBe ":.my-db.example.org"
+        }
     }
 
     "Masked strings should be processed correctly" {
