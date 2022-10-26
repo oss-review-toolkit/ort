@@ -250,7 +250,7 @@ class CopyrightStatementsProcessor {
          */
         val unprocessedStatements: SortedSet<String>
     ) {
-        fun getAllStatements(): Set<String> = (unprocessedStatements + processedStatements.keys).toSet()
+        fun getAllStatements(): Set<String> = unprocessedStatements + processedStatements.keys
     }
 
     fun process(copyrightStatements: Collection<String>): Result {
