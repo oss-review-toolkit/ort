@@ -99,9 +99,15 @@ internal class CreateCommand : CliktCommand(
 
     private val nonOffendingLicenseCategories by option(
         "--non-offending-license-categories",
-        help = "Configure the path exclude generation to not create excludes for files or directories which only " +
-                "contain non-offending licenses specified by this comma separated list of license category names. " +
-                "Each category name must be present in the given license classifications file."
+        help = "Specify licenses by their category which should be considered non-offending. Path excludes are not" +
+                "generated for files or directories which only contain non-offending licenses. Each category name " +
+                "must be present in the given license classifications file."
+    ).split(",").default(emptyList())
+
+    private val nonOffendingLicenseIds by option(
+        "--non-offending-license-ids",
+        help = "Specify license IDs which should be considered non-offending. Path excludes are not generated for " +
+                "files or directories which only contain non-offending licenses."
     ).split(",").default(emptyList())
 
     override fun run() {
@@ -174,8 +180,15 @@ internal class CreateCommand : CliktCommand(
         }
 
     private fun getNonOffendingLicenses(): Set<SpdxSingleLicenseExpression> {
+        val result = mutableSetOf<SpdxSingleLicenseExpression>()
+
         // Filter blanks to allow passing an empty list as argument to simplify caller code.
-        if (nonOffendingLicenseCategories.all { it.isBlank() }) return emptySet()
+        nonOffendingLicenseIds.filterNot { it.isBlank() }.mapTo(result) {
+            SpdxSingleLicenseExpression.parse(it)
+        }
+
+        // Filter blanks to allow passing an empty list as argument to simplify caller code.
+        if (nonOffendingLicenseCategories.all { it.isBlank() }) return result
 
         val licenseClassifications = licenseClassificationsFile?.readValue<LicenseClassifications>()
             ?: throw UsageError(
@@ -184,12 +197,14 @@ internal class CreateCommand : CliktCommand(
                 statusCode = 2
             )
 
-        return nonOffendingLicenseCategories.flatMapTo(mutableSetOf()) { categoryName ->
+        nonOffendingLicenseCategories.flatMapTo(result) { categoryName ->
             licenseClassifications.licensesByCategory[categoryName] ?: throw UsageError(
                 text = "The given license category '$categoryName' was not found in " +
                         "'${licenseClassificationsFile!!.absolutePath}'.",
                 statusCode = 2
             )
         }
+
+        return result
     }
 }
