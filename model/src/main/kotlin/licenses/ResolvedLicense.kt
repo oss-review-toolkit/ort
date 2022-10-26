@@ -125,7 +125,7 @@ private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: B
     val processedStatements = if (process) {
         CopyrightStatementsProcessor().process(allStatements).toMap()
     } else {
-        allStatements.associateBy({ it }, { mutableSetOf(it) })
+        allStatements.associateBy({ it }, { setOf(it) })
     }
 
     return processedStatements.mapValues { (_, originalStatements) ->
