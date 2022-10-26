@@ -267,8 +267,8 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             ortResultInput = ortResultInput.replaceConfig(config)
         }
 
-        val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
-        if (curations.isNotEmpty()) {
+        if (packageConfigurationOption != null) {
+            val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 
