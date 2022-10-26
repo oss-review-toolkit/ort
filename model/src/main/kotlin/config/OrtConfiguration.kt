@@ -29,6 +29,7 @@ import java.io.File
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 
 /**
  * The configuration model for all ORT components.
@@ -67,6 +68,19 @@ data class OrtConfiguration(
      * configurations from the .ort.yml take precedence.
      */
     val enableRepositoryPackageConfigurations: Boolean = false,
+
+    /**
+     * A set with substrings to filter out environment variables before creating child processes to prevent that those
+     * processes can access sensitive information. See [EnvironmentVariableFilter] for further details.
+     */
+    val deniedProcessEnvironmentVariablesSubstrings: Set<String> = EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS,
+
+    /**
+     * A set with the names of environment variables that are explicitly allowed to be passed to child processes,
+     * even if they are matched by one of the [deniedProcessEnvironmentVariablesSubstrings].
+     * See [EnvironmentVariableFilter] for further details.
+     */
+    val allowedProcessEnvironmentVariableNames: Set<String> = EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES,
 
     /**
      * The configuration of the analyzer.

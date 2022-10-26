@@ -24,6 +24,7 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
@@ -37,6 +38,7 @@ import java.io.File
 import java.lang.IllegalArgumentException
 
 import org.ossreviewtoolkit.model.SourceCodeOrigin
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -45,6 +47,11 @@ class OrtConfigurationTest : WordSpec({
         "be deserializable from YAML" {
             val refConfig = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")
             val ortConfig = OrtConfiguration.load(file = refConfig)
+
+            ortConfig.deniedProcessEnvironmentVariablesSubstrings should containExactlyInAnyOrder(
+                "PASS", "SECRET", "TOKEN", "USER"
+            )
+            ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")
 
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
@@ -356,6 +363,15 @@ class OrtConfigurationTest : WordSpec({
                         schema shouldBe schema
                     }
                 }
+            }
+        }
+
+        "use defaults for propagating environment variables to child processes" {
+            val config = OrtConfiguration()
+
+            with(config) {
+                deniedProcessEnvironmentVariablesSubstrings shouldBe EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS
+                allowedProcessEnvironmentVariableNames shouldBe EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES
             }
         }
     }
