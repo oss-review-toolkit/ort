@@ -129,7 +129,7 @@ internal object PythonInspector : CommandLineTool {
 
     @Serializable
     internal data class DeclaredLicense(
-        val license: String,
+        val license: String? = null,
         val classifiers: List<String> = emptyList()
     )
 
