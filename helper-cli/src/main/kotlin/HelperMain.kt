@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsComm
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.scanstorage.ScanStorageCommand
 import org.ossreviewtoolkit.helper.utils.ORTH_NAME
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
@@ -64,6 +65,7 @@ import org.slf4j.LoggerFactory
  * The entry point for the application with [args] being the list of arguments.
  */
 fun main(args: Array<String>) {
+    Os.fixupUserHomeProperty()
     return HelperMain().main(args)
 }
 
