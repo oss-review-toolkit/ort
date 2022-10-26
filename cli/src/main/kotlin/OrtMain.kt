@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -186,6 +187,11 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
         LicenseFilePatterns.configure(ortConfiguration.licenseFilePatterns)
+
+        EnvironmentVariableFilter.reset(
+            ortConfiguration.deniedProcessEnvironmentVariablesSubstrings,
+            ortConfiguration.allowedProcessEnvironmentVariableNames
+        )
 
         if (helpAll) {
             registeredSubcommands().forEach {
