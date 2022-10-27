@@ -128,8 +128,6 @@ internal fun OrtResult.processAllCopyrightStatements(
 ): List<ProcessedCopyrightStatement> {
     val result = mutableListOf<ProcessedCopyrightStatement>()
 
-    val processor = CopyrightStatementsProcessor()
-
     val licenseInfoResolver = createLicenseInfoResolver(
         packageConfigurationProvider = packageConfigurationProvider,
         copyrightGarbage = CopyrightGarbage(copyrightGarbage.toSortedSet()),
@@ -147,7 +145,7 @@ internal fun OrtResult.processAllCopyrightStatements(
                 resolvedCopyright.findings.map { it.statement }
             }
 
-            val processResult = processor.process(copyrights)
+            val processResult = CopyrightStatementsProcessor.process(copyrights)
 
             processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
                 result += ProcessedCopyrightStatement(

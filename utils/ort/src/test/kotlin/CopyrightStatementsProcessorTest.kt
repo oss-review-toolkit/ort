@@ -26,21 +26,17 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.yamlMapper
 
-class CopyrightStatementsProcessorTest : WordSpec() {
-    private val processor = CopyrightStatementsProcessor()
+class CopyrightStatementsProcessorTest : WordSpec({
+    "process" should {
+        "return a result with items merged by owner and prefix, sorted by owner and year" {
+            val input = File("src/test/assets/copyright-statements.txt").readLines()
 
-    init {
-        "process" should {
-            "return a result with items merged by owner and prefix, sorted by owner and year" {
-                val input = File("src/test/assets/copyright-statements.txt").readLines()
+            val result = CopyrightStatementsProcessor.process(input).toYaml()
 
-                val result = processor.process(input).toYaml()
-
-                val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
-                result shouldBe expectedResult
-            }
+            val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
+            result shouldBe expectedResult
         }
     }
-}
+})
 
 private fun CopyrightStatementsProcessor.Result.toYaml() = yamlMapper.writeValueAsString(this)
