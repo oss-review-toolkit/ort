@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.utils.sanitizeMessage
+import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 /**
  * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified
@@ -44,10 +44,10 @@ data class RuleViolationResolution(
      */
     val comment: String
 ) {
-    private val regex = Regex(message.sanitizeMessage(), RegexOption.DOT_MATCHES_ALL)
+    private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
     /**
      * True if [message] matches the message of [error].
      */
-    fun matches(violation: RuleViolation) = regex.matches(violation.message.sanitizeMessage())
+    fun matches(violation: RuleViolation) = regex.matches(violation.message.collapseWhitespace())
 }

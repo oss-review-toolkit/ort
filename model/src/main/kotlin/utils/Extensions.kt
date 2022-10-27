@@ -232,9 +232,3 @@ fun String.parseRepoManifestPath() =
             ?.get(1)
             ?.takeUnless { it.isEmpty() }
     }.getOrNull()
-
-/**
- * Messages are not rendered using additional white spaces and newlines in the reports. However, resolutions are based
- * on the messages. Therefore, characters that are not shown in the reports need to be replaced in the comparison.
- */
-fun String.sanitizeMessage() = replace(Regex("\\s+"), " ").trim()

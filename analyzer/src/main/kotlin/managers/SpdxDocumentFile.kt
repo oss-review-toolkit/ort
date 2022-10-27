@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.collapseWhitespace
 import org.ossreviewtoolkit.utils.common.getQueryParameters
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -193,7 +194,7 @@ private fun String.mapNotPresentToEmpty(): String = takeUnless { SpdxConstants.i
  * Sanitize a string for use as an [Identifier] property where colons are not supported by replacing them with spaces,
  * trimming, and finally collapsing multiple consecutive spaces.
  */
-private fun String.sanitize(): String = replace(':', ' ').trim().replace(Regex("\\s{2,}"), " ")
+private fun String.sanitize(): String = replace(':', ' ').collapseWhitespace()
 
 /**
  * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.

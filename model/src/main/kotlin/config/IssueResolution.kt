@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import org.ossreviewtoolkit.model.OrtIssue
-import org.ossreviewtoolkit.model.utils.sanitizeMessage
+import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 /**
  * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been
@@ -43,10 +43,10 @@ data class IssueResolution(
      */
     val comment: String
 ) {
-    private val regex = Regex(message.sanitizeMessage(), RegexOption.DOT_MATCHES_ALL)
+    private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
     /**
      * True if [message] matches the message of [issue].
      */
-    fun matches(issue: OrtIssue) = regex.matches(issue.message.sanitizeMessage())
+    fun matches(issue: OrtIssue) = regex.matches(issue.message.collapseWhitespace())
 }

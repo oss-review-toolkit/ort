@@ -326,6 +326,23 @@ class ExtensionsTest : WordSpec({
         }
     }
 
+    "String.collapseWhitespace()" should {
+        "remove additional white spaces" {
+            "String with additional   white spaces. ".collapseWhitespace() shouldBe
+                    "String with additional white spaces."
+        }
+
+        "remove newlines" {
+            "String\nwith\n\nnewlines.".collapseWhitespace() shouldBe "String with newlines."
+        }
+
+        "remove indentations" {
+            """
+                String with indentation.
+            """.collapseWhitespace() shouldBe "String with indentation."
+        }
+    }
+
     "String.isSemanticVersion" should {
         "return true for a semantic version" {
             "1.0.0".isSemanticVersion() shouldBe true
