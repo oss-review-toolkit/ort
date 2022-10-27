@@ -369,7 +369,7 @@ open class Npm(
         }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
-    private val submodulesCache: ConcurrentHashMap<String, List<File>> = ConcurrentHashMap()
+    private val submodulesCache = ConcurrentHashMap<String, List<File>>()
 
     /**
      * Find the directories which are defined as submodules of the project within [moduleDir].
