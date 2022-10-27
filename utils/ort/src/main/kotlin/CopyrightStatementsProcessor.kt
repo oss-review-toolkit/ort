@@ -24,6 +24,8 @@ package org.ossreviewtoolkit.utils.ort
 import java.util.SortedMap
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.utils.common.collapseWhitespace
+
 private data class Parts(
     val prefix: String,
     val years: Set<Int>,
@@ -37,8 +39,6 @@ private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') 
 private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
 
 private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b( *, *)\\b(\\d{4})\\b".toRegex()
-
-private val DUPLICATE_WHITESPACES_REGEX = "\\s+".toRegex()
 
 private val KNOWN_PREFIX_REGEX = listOf(
     "^(?:\\(c\\))",
@@ -97,8 +97,7 @@ private fun determineParts(copyrightStatement: String): Parts? {
         years = yearsStripResult.second,
         owner = yearsStripResult.first
             .trimStart(*INVALID_OWNER_START_CHARS)
-            .removeDuplicateWhitespaces()
-            .trim(),
+            .collapseWhitespace(),
         originalStatements = listOf(copyrightStatement)
     )
 }
@@ -206,8 +205,6 @@ private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
     replaceYears(copyrightStatement).let {
         it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
     }
-
-private fun String.removeDuplicateWhitespaces() = replace(DUPLICATE_WHITESPACES_REGEX, " ")
 
 private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
 

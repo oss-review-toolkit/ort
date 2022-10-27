@@ -41,20 +41,4 @@ class ExtensionsTest : WordSpec({
             "^invalid-uri?manifest=default.xml".parseRepoManifestPath() shouldBe null
         }
     }
-
-    "sanitizeMessage()" should {
-        "remove additional white spaces" {
-            "String with additional   white spaces. ".sanitizeMessage() shouldBe "String with additional white spaces."
-        }
-
-        "remove newlines" {
-            "String\nwith\n\nnewlines.".sanitizeMessage() shouldBe "String with newlines."
-        }
-
-        "remove indentations" {
-            """
-                String with indentation.
-            """.sanitizeMessage() shouldBe "String with indentation."
-        }
-    }
 })

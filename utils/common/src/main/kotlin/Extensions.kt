@@ -310,6 +310,13 @@ fun <K, V : Set<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V>
 fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
 
 /**
+ * Trim leading and trailing whitespace, and collapse consecutive inner whitespace to a single space.
+ */
+fun String.collapseWhitespace() = trim().replace(CONSECUTIVE_WHITESPACE_REGEX, " ")
+
+private val CONSECUTIVE_WHITESPACE_REGEX = Regex("\\s+")
+
+/**
  * Decode a hex-string and return the value as a [ByteArray].
  */
 fun String.decodeHex(): ByteArray {
