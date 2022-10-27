@@ -70,9 +70,6 @@ fun Identifier.toClearlyDefinedCoordinates(): Coordinates? =
         )
     }
 
-/** Regular expression to match VCS URLs supported by ClearlyDefined. */
-private val REG_GIT_URL = Regex(".+://github.com/(.+)/(.+).git")
-
 /**
  * Create a ClearlyDefined [SourceLocation] from an [Identifier]. Prefer a [VcsInfoCurationData], but eventually fall
  * back to a [RemoteArtifact], or return null if not enough information is available.
@@ -116,6 +113,9 @@ fun Identifier.toClearlyDefinedSourceLocation(
         else -> null
     }
 }
+
+/** Regular expression to match VCS URLs supported by ClearlyDefined. */
+private val REG_GIT_URL = Regex(".+://github.com/(.+)/(.+).git")
 
 /**
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
