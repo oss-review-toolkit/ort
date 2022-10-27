@@ -258,6 +258,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "changelog*" to BUILD_TOOL_OF,
     "checksrc.bat" to BUILD_TOOL_OF,
     "codenarc.groovy" to BUILD_TOOL_OF,
+    "compile" to BUILD_TOOL_OF,
     "conanfile.py" to BUILD_TOOL_OF,
     "config.guess" to BUILD_TOOL_OF,
     "config.sub" to BUILD_TOOL_OF,
@@ -266,6 +267,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "depcomp" to BUILD_TOOL_OF,
     "generate*.sh" to BUILD_TOOL_OF,
     "gradlew.bat" to BUILD_TOOL_OF,
+    "install-sh" to BUILD_TOOL_OF,
     "jitpack.yml" to BUILD_TOOL_OF,
     "ltmain.sh" to BUILD_TOOL_OF, // GNU Libtool script, see https://www.gnu.org/software/libtool/.
     "make-tests.sh" to BUILD_TOOL_OF,
@@ -279,6 +281,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "setup.cfg" to BUILD_TOOL_OF,
     "setup.py" to BUILD_TOOL_OF,
     "test.js" to TEST_OF,
+    "test.py" to TEST_OF,
     "test_*.c" to BUILD_TOOL_OF
 ).checkPatterns { it.first }
 
