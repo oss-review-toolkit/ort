@@ -93,7 +93,7 @@ data class ResolvedLicenseInfo(
         }
 
         return copyrightStatements.takeIf { !process }
-            ?: CopyrightStatementsProcessor().process(copyrightStatements).allStatements
+            ?: CopyrightStatementsProcessor.process(copyrightStatements).allStatements
     }
 
     /**

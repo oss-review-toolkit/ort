@@ -238,7 +238,7 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
  * Future improvement ideas:
  *   -URLs could be treated similar to years, e.g. entries which differ only in terms of URLs and year can be merged.
  */
-class CopyrightStatementsProcessor {
+object CopyrightStatementsProcessor {
     data class Result(
         /**
          * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original

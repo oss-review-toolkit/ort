@@ -124,7 +124,7 @@ private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: B
     if (!process) return map { ResolvedCopyright(it.statement, setOf(it)) }
 
     val statementToFinding = associateBy { it.statement }
-    val result = CopyrightStatementsProcessor().process(statementToFinding.keys)
+    val result = CopyrightStatementsProcessor.process(statementToFinding.keys)
 
     val processedCopyrights = result.processedStatements.map { (statement, originalStatements) ->
         val findings = originalStatements.mapTo(mutableSetOf()) { statementToFinding.getValue(statement) }
