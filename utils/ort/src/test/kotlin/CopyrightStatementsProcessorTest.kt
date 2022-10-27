@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect
-import com.fasterxml.jackson.annotation.PropertyAccessor
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -46,9 +43,4 @@ class CopyrightStatementsProcessorTest : WordSpec() {
     }
 }
 
-private fun CopyrightStatementsProcessor.Result.toYaml(): String =
-    yamlMapper.copy()
-        // Disable getter serialization without changing field serialization.
-        .setVisibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
-        .setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
-        .writeValueAsString(this)
+private fun CopyrightStatementsProcessor.Result.toYaml() = yamlMapper.writeValueAsString(this)

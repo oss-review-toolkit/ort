@@ -21,6 +21,8 @@
 
 package org.ossreviewtoolkit.utils.ort
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import java.util.SortedMap
 import java.util.SortedSet
 
@@ -250,7 +252,8 @@ class CopyrightStatementsProcessor {
          */
         val unprocessedStatements: SortedSet<String>
     ) {
-        fun getAllStatements(): Set<String> = unprocessedStatements + processedStatements.keys
+        @get:JsonIgnore
+        val allStatements by lazy { unprocessedStatements + processedStatements.keys }
     }
 
     fun process(copyrightStatements: Collection<String>): Result {
