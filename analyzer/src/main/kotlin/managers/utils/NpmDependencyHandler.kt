@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.io.File
 
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -79,5 +81,7 @@ class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleIn
     override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
 
     override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<OrtIssue>): Package =
-        npm.parsePackage(dependency.workingDir, dependency.packageFile).second
+        runBlocking {
+            npm.parsePackage(dependency.workingDir, dependency.packageFile).second
+        }
 }
