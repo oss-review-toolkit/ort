@@ -30,10 +30,12 @@ import java.io.File
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -113,7 +115,7 @@ open class Npm(
 
     private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
 
-    private val npmViewCache = ConcurrentHashMap<String, JsonNode>()
+    private val npmViewCache = ConcurrentHashMap<String, Deferred<JsonNode>>()
 
     /**
      * Search depth in the `node_modules` directory for `package.json` files used for collecting all packages of the
@@ -262,7 +264,7 @@ open class Npm(
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
      */
-    internal fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
+    internal suspend fun parsePackage(workingDir: File, packageFile: File): Pair<String, Package> {
         val packageDir = packageFile.parentFile
 
         logger.debug { "Found a 'package.json' file in '$packageDir'." }
@@ -310,7 +312,7 @@ open class Npm(
 
             if (hasIncompleteData) {
                 runCatching {
-                    getRemotePackageDetails(workingDir, "$rawName@$version")
+                    getRemotePackageDetailsAsync(workingDir, "$rawName@$version").await()
                 }.onSuccess { details ->
                     if (description.isEmpty()) description = details["description"].textValueOrEmpty()
                     if (homepageUrl.isEmpty()) homepageUrl = details["homepage"].textValueOrEmpty()
@@ -362,11 +364,19 @@ open class Npm(
         return Pair(id.toCoordinates(), module)
     }
 
-    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode =
-        npmViewCache.getOrPut(packageName) {
-            val process = run(workingDir, "view", "--json", packageName)
-            jsonMapper.readTree(process.stdout)
+    private suspend fun getRemotePackageDetailsAsync(workingDir: File, packageName: String): Deferred<JsonNode> =
+        withContext(Dispatchers.IO) {
+            npmViewCache.getOrPut(packageName) {
+                async {
+                    getRemotePackageDetails(workingDir, packageName)
+                }
+            }
         }
+
+    protected open fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+        val process = run(workingDir, "view", "--json", packageName)
+        return jsonMapper.readTree(process.stdout)
+    }
 
     /** Cache for submodules identified by its moduleDir absolutePath */
     private val submodulesCache = ConcurrentHashMap<String, List<File>>()
