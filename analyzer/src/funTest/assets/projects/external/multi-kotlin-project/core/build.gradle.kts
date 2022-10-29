@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    compile(kotlin("stdlib"))
+    implementation(kotlin("stdlib"))
 }

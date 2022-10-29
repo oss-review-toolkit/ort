@@ -1,6 +1,6 @@
 plugins {
     id 'java-library'
-    id 'maven'
+    id 'maven-publish'
 }
 
 repositories {
@@ -13,12 +13,16 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-configure(install.repositories.mavenInstaller) {
-    pom.project {
-        licenses {
-            license {
-                name 'The Apache License, Version 2.0'
-                url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
             }
         }
     }
