@@ -8,6 +8,6 @@ application {
 }
 
 dependencies {
-    compile(project(":core"))
-    compile(kotlin("stdlib"))
+    implementation(project(":core"))
+    implementation(kotlin("stdlib"))
 }

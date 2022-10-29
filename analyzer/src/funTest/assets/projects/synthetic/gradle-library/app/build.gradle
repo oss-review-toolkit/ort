@@ -8,25 +8,19 @@ repositories {
 }
 
 dependencies {
-    compile project(':lib')
-}
-
-def pomConfig = {
-    licenses {
-        license {
-            name 'The Apache License, Version 2.0'
-            url 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-        }
-    }
+    implementation project(':lib')
 }
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java
-
-            pom.withXml {
-                asNode().children().last() + pomConfig
+            pom {
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
             }
         }
     }
