@@ -23,6 +23,7 @@ import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 import com.github.ajalt.clikt.core.ProgramResult
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
@@ -32,9 +33,13 @@ import java.io.File
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.redirectStdout
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -48,7 +53,13 @@ class OrtMainFunTest : StringSpec() {
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
 
+    private lateinit var configFile: File
     private lateinit var outputDir: File
+
+    override suspend fun beforeSpec(spec: Spec) {
+        configFile = createSpecTempFile(suffix = ".yml")
+        configFile.writeValue(OrtConfigurationWrapper(OrtConfiguration()))
+    }
 
     override suspend fun beforeTest(testCase: TestCase) {
         outputDir = createTestTempDir()
@@ -59,6 +70,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = createTestTempDir()
 
             val stdout = runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
@@ -77,6 +89,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = createTestTempDir()
 
             val stdout = runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
@@ -97,6 +110,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = createTestTempDir()
 
             val stdout = runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
@@ -116,6 +130,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = projectDir.resolve("gradle")
 
             val stdout = runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
@@ -138,6 +153,7 @@ class OrtMainFunTest : StringSpec() {
 
             @Suppress("IgnoredReturnValue")
             runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", projectDir.resolve("gradle").absolutePath,
@@ -161,6 +177,7 @@ class OrtMainFunTest : StringSpec() {
 
             @Suppress("IgnoredReturnValue")
             runMain(
+                "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", projectDir.resolve("gradle").absolutePath,
@@ -177,6 +194,7 @@ class OrtMainFunTest : StringSpec() {
         "Passing mutually exclusive evaluator options fails" {
             shouldThrow<MutuallyExclusiveGroupException> {
                 runMain(
+                    "-c", configFile.path,
                     "evaluate",
                     "-i", "build.gradle.kts",
                     "--rules-file", "build.gradle.kts",
