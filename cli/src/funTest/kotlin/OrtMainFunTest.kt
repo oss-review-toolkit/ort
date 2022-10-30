@@ -55,7 +55,7 @@ class OrtMainFunTest : StringSpec() {
 
     init {
         "Activating only Gradle works" {
-            val inputDir = projectDir.resolve("gradle")
+            val inputDir = createTestTempDir()
 
             val stdout = runMain(
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
