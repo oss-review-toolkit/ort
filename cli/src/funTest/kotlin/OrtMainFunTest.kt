@@ -54,7 +54,7 @@ class OrtMainFunTest : StringSpec() {
     }
 
     init {
-        "Activating only Gradle works" {
+        "Enabling only Gradle works" {
             val inputDir = createTestTempDir()
 
             val stdout = runMain(
