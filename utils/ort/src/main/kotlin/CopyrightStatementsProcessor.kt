@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.annotation.JsonIgnore
@@ -67,35 +65,58 @@ private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\
 
 private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
-/**
- * Collapse consecutive [years] to a list of pairs that each denote a year range. A single year is represented as a
- * range whose first and last years are equal.
- */
-private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
-    if (years.isEmpty()) return emptyList()
+private fun prettyPrintYears(years: Collection<Int>): String {
+    /**
+     * Collapse consecutive [years] to a list of pairs that each denote a year range. A single year is represented as a
+     * range whose first and last years are equal.
+     */
+    fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
+        if (years.isEmpty()) return emptyList()
 
-    val yearRanges = mutableListOf<Pair<Int, Int>>()
+        val yearRanges = mutableListOf<Pair<Int, Int>>()
 
-    val sortedYears = years.toSortedSet()
-    val rangeBreaks = sortedYears.zipWithNext { a, b -> (a to b).takeIf { b != a + 1 } }.filterNotNull()
+        val sortedYears = years.toSortedSet()
+        val rangeBreaks = sortedYears.zipWithNext { a, b -> (a to b).takeIf { b != a + 1 } }.filterNotNull()
 
-    var current = sortedYears.first()
+        var current = sortedYears.first()
 
-    rangeBreaks.mapTo(yearRanges) { (last, first) ->
-        (current to last).also { current = first }
+        rangeBreaks.mapTo(yearRanges) { (last, first) ->
+            (current to last).also { current = first }
+        }
+
+        yearRanges += current to sortedYears.last()
+
+        return yearRanges
     }
 
-    yearRanges += current to sortedYears.last()
-
-    return yearRanges
-}
-
-private fun prettyPrintYears(years: Collection<Int>) =
-    getYearRanges(years).joinToString { (fromYear, toYear) ->
+    return getYearRanges(years).joinToString { (fromYear, toYear) ->
         if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
     }
+}
 
 private fun determineParts(copyrightStatement: String): Parts? {
+    /**
+     * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of the
+     * copyright statement without the prefix and the prefix that was stripped from it.
+     */
+    fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
+        val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
+            copyrightStatement.replace(regex, "")
+        }.minByOrNull {
+            it.length
+        } ?: return Pair(first = copyrightStatement, second = "")
+
+        return Pair(
+            first = copyrightStatementWithoutPrefix,
+            second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
+        )
+    }
+
+    fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
+        replaceYears(copyrightStatement).let {
+            it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
+        }
+
     val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
     if (prefixStripResult.second.isEmpty()) return null
 
@@ -111,28 +132,53 @@ private fun determineParts(copyrightStatement: String): Parts? {
 }
 
 /**
- * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of the
- * copyright statement without the prefix and the prefix that was stripped from it.
- */
-private fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
-    val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
-        copyrightStatement.replace(regex, "")
-    }.minByOrNull {
-        it.length
-    } ?: return Pair(first = copyrightStatement, second = "")
-
-    return Pair(
-        first = copyrightStatementWithoutPrefix,
-        second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
-    )
-}
-
-/**
  * This function removes all found years from the given string and replaces the first match
  * with a placeholder. While replacement is not necessary for implementing the needed functionality
  * it is helpful for debugging.
  */
 private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
+    fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
+        YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
+            val fromGroup = matchResult.groups[1]!!
+            val separatorGroup = matchResult.groups[2]!!
+            val toGroup = matchResult.groups[3]!!
+
+            val fromYearString = fromGroup.value
+            val fromYear = fromGroup.value.toInt()
+
+            // Handle also the following cases: '2008 - 9' and '2001 - 10'.
+            val toYear = toGroup.value.let { fromYearRaw ->
+                "${fromYearString.substring(0, fromYearString.length - fromYearRaw.length)}$fromYearRaw".toInt()
+            }
+
+            if (fromYear <= toYear) {
+                return Pair(
+                    copyrightStatement
+                        .removeRange(toGroup.range)
+                        .removeRange(separatorGroup.range)
+                        .replaceRange(fromGroup.range, YEAR_PLACEHOLDER),
+                    (fromYear..toYear).toSet()
+                )
+            }
+        }
+
+        return Pair(copyrightStatement, emptySet())
+    }
+
+    fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
+        val years = mutableSetOf<Int>()
+        var currentStatement = copyrightStatement
+
+        while (true) {
+            val replaceResult = replaceYearRange(currentStatement)
+            if (replaceResult.second.isEmpty()) {
+                return Pair(currentStatement, years)
+            }
+            years += replaceResult.second
+            currentStatement = replaceResult.first
+        }
+    }
+
     val resultYears = mutableSetOf<Int>()
 
     // Fix up strings containing e.g.: 'copyright u'2013'
@@ -167,56 +213,9 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     return Pair(currentStatement, resultYears)
 }
 
-private fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
-    val years = mutableSetOf<Int>()
-    var currentStatement = copyrightStatement
-
-    while (true) {
-        val replaceResult = replaceYearRange(currentStatement)
-        if (replaceResult.second.isEmpty()) {
-            return Pair(currentStatement, years)
-        }
-        years += replaceResult.second
-        currentStatement = replaceResult.first
-    }
-}
-
-private fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
-    YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
-        val fromGroup = matchResult.groups[1]!!
-        val separatorGroup = matchResult.groups[2]!!
-        val toGroup = matchResult.groups[3]!!
-
-        val fromYearString = fromGroup.value
-        val fromYear = fromGroup.value.toInt()
-
-        // Handle also the following cases: '2008 - 9' and '2001 - 10'.
-        val toYear = toGroup.value.let { fromYearRaw ->
-            "${fromYearString.substring(0, fromYearString.length - fromYearRaw.length)}$fromYearRaw".toInt()
-        }
-
-        if (fromYear <= toYear) {
-            return Pair(
-                copyrightStatement
-                    .removeRange(toGroup.range)
-                    .removeRange(separatorGroup.range)
-                    .replaceRange(fromGroup.range, YEAR_PLACEHOLDER),
-                (fromYear..toYear).toSet()
-            )
-        }
-    }
-
-    return Pair(copyrightStatement, emptySet())
-}
-
-private fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-    replaceYears(copyrightStatement).let {
-        it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
-    }
-
-private fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
-
 private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
+    fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
+
     val map = mutableMapOf<String, Parts>()
 
     forEach { part ->
