@@ -72,24 +72,6 @@ class OrtMainFunTest : StringSpec() {
             iterator.next() shouldBe "\tGradle"
         }
 
-        "Activating only NPM works" {
-            val inputDir = projectDir.resolve("npm/package-lock")
-
-            val stdout = runMain(
-                "-P", "ort.analyzer.enabledPackageManagers=NPM",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.resolve("package-lock").path
-            )
-            val iterator = stdout.iterator()
-            while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are enabled:") break
-            }
-
-            iterator.hasNext() shouldBe true
-            iterator.next() shouldBe "\tNPM"
-        }
-
         "Output formats are deduplicated" {
             val inputDir = projectDir.resolve("gradle")
 
