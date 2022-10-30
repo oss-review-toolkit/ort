@@ -230,33 +230,6 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
 }
 
 /**
- * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original statements
- * merged accordingly.
- */
-private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
-    /**
-     * Return a normalized Copyright owner to group statement parts by.
-     */
-    fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
-
-    val map = mutableMapOf<String, Parts>()
-
-    forEach { part ->
-        val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
-        map.merge(key, part) { existing, other ->
-            Parts(
-                prefix = existing.prefix,
-                years = existing.years + other.years,
-                owner = existing.owner,
-                originalStatements = existing.originalStatements + other.originalStatements
-            )
-        }
-    }
-
-    return map.values.toList()
-}
-
-/**
  * A copyright statement consists in most cases of three parts: a copyright prefix, years and the owner. For legal
  * reasons the prefix part must not be modified at all while adjusting some special characters in the owner part is
  * acceptable. Entries can be merged by year as well. The main idea of the algorithm is to process only entries with
@@ -288,6 +261,33 @@ object CopyrightStatementsProcessor {
      * collapsed. The returned [Result] contains successfully processed as well as unprocessed statements.
      */
     fun process(copyrightStatements: Collection<String>): Result {
+        /**
+         * Return a normalized Copyright owner to group statement parts by.
+         */
+        fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
+
+        /**
+         * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original
+         * statements merged accordingly.
+         */
+        fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
+            val map = mutableMapOf<String, Parts>()
+
+            forEach { part ->
+                val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
+                map.merge(key, part) { existing, other ->
+                    Parts(
+                        prefix = existing.prefix,
+                        years = existing.years + other.years,
+                        owner = existing.owner,
+                        originalStatements = existing.originalStatements + other.originalStatements
+                    )
+                }
+            }
+
+            return map.values.toList()
+        }
+
         val unprocessedStatements = sortedSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
