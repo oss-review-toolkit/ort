@@ -93,6 +93,25 @@ class OrtMainFunTest : StringSpec() {
             iterator.next() shouldBe "\t${expectedPackageManagers.joinToString { it.managerName }}"
         }
 
+        "Disabling a package manager overrides enabling it" {
+            val inputDir = createTestTempDir()
+
+            val stdout = runMain(
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.resolve("gradle").path
+            )
+            val iterator = stdout.iterator()
+            while (iterator.hasNext()) {
+                if (iterator.next() == "The following package managers are enabled:") break
+            }
+
+            iterator.hasNext() shouldBe true
+            iterator.next() shouldBe "\tNPM"
+        }
+
         "Output formats are deduplicated" {
             val inputDir = projectDir.resolve("gradle")
 
