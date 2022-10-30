@@ -65,6 +65,9 @@ private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\
 
 private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
+/**
+ * Return a comma-separated string of sorted years or year-ranges that represent the [years].
+ */
 private fun prettyPrintYears(years: Collection<Int>): String {
     /**
      * Collapse consecutive [years] to a list of pairs that each denote a year range. A single year is represented as a
@@ -94,6 +97,9 @@ private fun prettyPrintYears(years: Collection<Int>): String {
     }
 }
 
+/**
+ * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
+ */
 private fun determineParts(copyrightStatement: String): Parts? {
     /**
      * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of the
@@ -112,6 +118,9 @@ private fun determineParts(copyrightStatement: String): Parts? {
         )
     }
 
+    /**
+     * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
+     */
     fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
         replaceYears(copyrightStatement).let {
             it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
@@ -132,11 +141,14 @@ private fun determineParts(copyrightStatement: String): Parts? {
 }
 
 /**
- * This function removes all found years from the given string and replaces the first match
- * with a placeholder. While replacement is not necessary for implementing the needed functionality
- * it is helpful for debugging.
+ * Remove all found years from the [copyrightStatement] and replace them with the [YEAR_PLACEHOLDER]. The replacement is
+ * not necessary for implementing the needed functionality, but it is helpful for debugging.
  */
 private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
+    /**
+     * Replace the first year range in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting
+     * string paired to the set of years.
+     */
     fun replaceYearRange(copyrightStatement: String): Pair<String, Set<Int>> {
         YEAR_RANGE_REGEX.findAll(copyrightStatement).forEach { matchResult ->
             val fromGroup = matchResult.groups[1]!!
@@ -165,6 +177,10 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
         return Pair(copyrightStatement, emptySet())
     }
 
+    /**
+     * Replace all year ranges in the [copyrightStatement] with the [YEAR_PLACEHOLDER] and return the resulting string
+     * paired to the set of years.
+     */
     fun replaceAllYearRanges(copyrightStatement: String): Pair<String, Set<Int>> {
         val years = mutableSetOf<Int>()
         var currentStatement = copyrightStatement
@@ -213,7 +229,14 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
     return Pair(currentStatement, resultYears)
 }
 
+/**
+ * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original statements
+ * merged accordingly.
+ */
 private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
+    /**
+     * Return a normalized Copyright owner to group statement parts by.
+     */
     fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
 
     val map = mutableMapOf<String, Parts>()
@@ -240,8 +263,7 @@ private fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
  * a known copyright prefix. This allows stripping the prefix and processing the remaining string separately and thus
  * guarantees that the prefix part is not modified at all.
  *
- * Future improvement ideas:
- *   -URLs could be treated similar to years, e.g. entries which differ only in terms of URLs and year can be merged.
+ * TODO: Maybe treat URLs similar to years, e.g. entries which differ only in URLs and years can be merged.
  */
 object CopyrightStatementsProcessor {
     data class Result(
@@ -261,6 +283,10 @@ object CopyrightStatementsProcessor {
         val allStatements by lazy { unprocessedStatements + processedStatements.keys }
     }
 
+    /**
+     * Try to process the [copyrightStatements] into a more condensed form grouped by owner / prefix and with years
+     * collapsed. The returned [Result] contains successfully processed as well as unprocessed statements.
+     */
     fun process(copyrightStatements: Collection<String>): Result {
         val unprocessedStatements = sortedSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
