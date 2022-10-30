@@ -2,10 +2,10 @@
 libxslt/1.1.34
 
 [requires]
-libcurl/7.79.1
+libcurl/7.85.0
 
 # Add "zlib" explicitly to resolve a version conflict.
-zlib/1.2.12
+zlib/1.2.13
 
 [generators]
 cmake

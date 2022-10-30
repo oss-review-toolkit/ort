@@ -23,17 +23,17 @@ project:
       - id: "Conan::libxml2:2.9.14"
         dependencies:
         - id: "Conan::libiconv:1.17"
-        - id: "Conan::zlib:1.2.12"
+        - id: "Conan::zlib:1.2.13"
   - name: "requires"
     dependencies:
-    - id: "Conan::libcurl:7.79.1"
+    - id: "Conan::libcurl:7.85.0"
       dependencies:
       - id: "Conan::openssl:1.1.1q"
-      - id: "Conan::zlib:1.2.12"
-    - id: "Conan::zlib:1.2.12"
+      - id: "Conan::zlib:1.2.13"
+    - id: "Conan::zlib:1.2.13"
 packages:
-- id: "Conan::libcurl:7.79.1"
-  purl: "pkg:conan/libcurl@7.79.1"
+- id: "Conan::libcurl:7.85.0"
+  purl: "pkg:conan/libcurl@7.85.0"
   declared_licenses:
   - "curl"
   declared_licenses_processed:
@@ -46,9 +46,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://curl.se/download/curl-7.79.1.tar.gz"
+    url: "https://curl.se/download/curl-7.85.0.tar.gz"
     hash:
-      value: "370b11201349816287fb0ccc995e420277fbfcaf76206e309b3f60f0eda090c2"
+      value: "78a06f918bd5fde3c4573ef4f9806f56372b32ec1829c9ec474799eeee641c27"
       algorithm: "SHA-256"
   vcs:
     type: ""
@@ -178,8 +178,8 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::zlib:1.2.12"
-  purl: "pkg:conan/zlib@1.2.12"
+- id: "Conan::zlib:1.2.13"
+  purl: "pkg:conan/zlib@1.2.13"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -193,9 +193,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://zlib.net/fossils/zlib-1.2.12.tar.gz"
+    url: "https://zlib.net/fossils/zlib-1.2.13.tar.gz"
     hash:
-      value: "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9"
+      value: "b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30"
       algorithm: "SHA-256"
   vcs:
     type: ""
