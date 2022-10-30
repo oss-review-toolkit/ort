@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.readValue
@@ -70,6 +71,26 @@ class OrtMainFunTest : StringSpec() {
 
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\tGradle"
+        }
+
+        "Disabling only Gradle works" {
+            val inputDir = createTestTempDir()
+
+            val stdout = runMain(
+                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.resolve("gradle").path
+            )
+            val iterator = stdout.iterator()
+            while (iterator.hasNext()) {
+                if (iterator.next() == "The following package managers are enabled:") break
+            }
+
+            val expectedPackageManagers = PackageManager.ALL.filterNot { it.managerName == "Gradle" }
+
+            iterator.hasNext() shouldBe true
+            iterator.next() shouldBe "\t${expectedPackageManagers.joinToString { it.managerName }}"
         }
 
         "Output formats are deduplicated" {
