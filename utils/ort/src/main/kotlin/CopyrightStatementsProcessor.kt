@@ -26,32 +26,6 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
-private data class Parts(
-    val prefix: String,
-    val years: Set<Int>,
-    val owner: String,
-    val originalStatements: List<String>
-) {
-    companion object {
-        val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
-    }
-
-    override fun toString() =
-        buildString {
-            append(prefix)
-
-            if (years.isNotEmpty()) {
-                append(" ")
-                append(prettyPrintYears(years))
-            }
-
-            if (owner.isNotEmpty()) {
-                append(" ")
-                append(owner)
-            }
-        }
-}
-
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
 
@@ -112,49 +86,6 @@ private fun prettyPrintYears(years: Collection<Int>): String {
     return getYearRanges(years).joinToString { (fromYear, toYear) ->
         if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
     }
-}
-
-/**
- * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
- */
-private fun determineParts(copyrightStatement: String): Parts? {
-    /**
-     * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of the
-     * copyright statement without the prefix and the prefix that was stripped from it.
-     */
-    fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
-        val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
-            copyrightStatement.replace(regex, "")
-        }.minByOrNull {
-            it.length
-        } ?: return Pair(first = copyrightStatement, second = "")
-
-        return Pair(
-            first = copyrightStatementWithoutPrefix,
-            second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
-        )
-    }
-
-    /**
-     * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
-     */
-    fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
-        replaceYears(copyrightStatement).let {
-            it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
-        }
-
-    val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
-    if (prefixStripResult.second.isEmpty()) return null
-
-    val yearsStripResult = stripYears(prefixStripResult.first)
-    return Parts(
-        prefix = prefixStripResult.second,
-        years = yearsStripResult.second,
-        owner = yearsStripResult.first
-            .trimStart(*INVALID_OWNER_START_CHARS)
-            .collapseWhitespace(),
-        originalStatements = listOf(copyrightStatement)
-    )
 }
 
 /**
@@ -256,6 +187,32 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
  * TODO: Maybe treat URLs similar to years, e.g. entries which differ only in URLs and years can be merged.
  */
 object CopyrightStatementsProcessor {
+    data class Parts(
+        val prefix: String,
+        val years: Set<Int>,
+        val owner: String,
+        val originalStatements: List<String>
+    ) {
+        companion object {
+            val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
+        }
+
+        override fun toString() =
+            buildString {
+                append(prefix)
+
+                if (years.isNotEmpty()) {
+                    append(" ")
+                    append(prettyPrintYears(years))
+                }
+
+                if (owner.isNotEmpty()) {
+                    append(" ")
+                    append(owner)
+                }
+            }
+    }
+
     data class Result(
         /**
          * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original
@@ -271,6 +228,49 @@ object CopyrightStatementsProcessor {
     ) {
         @get:JsonIgnore
         val allStatements by lazy { unprocessedStatements + processedStatements.keys }
+    }
+
+    /**
+     * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
+     */
+    fun determineParts(copyrightStatement: String): Parts? {
+        /**
+         * Strip the longest [known copyright prefix][KNOWN_PREFIX_REGEX] from [copyrightStatement] and return a pair of
+         * the copyright statement without the prefix and the prefix that was stripped from it.
+         */
+        fun stripKnownCopyrightPrefix(copyrightStatement: String): Pair<String, String> {
+            val copyrightStatementWithoutPrefix = KNOWN_PREFIX_REGEX.map { regex ->
+                copyrightStatement.replace(regex, "")
+            }.minByOrNull {
+                it.length
+            } ?: return Pair(first = copyrightStatement, second = "")
+
+            return Pair(
+                first = copyrightStatementWithoutPrefix,
+                second = copyrightStatement.removeSuffix(copyrightStatementWithoutPrefix)
+            )
+        }
+
+        /**
+         * Remove all years from the [copyrightStatement] and return the stripped string paired to the set of years.
+         */
+        fun stripYears(copyrightStatement: String): Pair<String, Set<Int>> =
+            replaceYears(copyrightStatement).let {
+                it.copy(first = it.first.replace(YEAR_PLACEHOLDER, ""))
+            }
+
+        val prefixStripResult = stripKnownCopyrightPrefix(copyrightStatement)
+        if (prefixStripResult.second.isEmpty()) return null
+
+        val yearsStripResult = stripYears(prefixStripResult.first)
+        return Parts(
+            prefix = prefixStripResult.second,
+            years = yearsStripResult.second,
+            owner = yearsStripResult.first
+                .trimStart(*INVALID_OWNER_START_CHARS)
+                .collapseWhitespace(),
+            originalStatements = listOf(copyrightStatement)
+        )
     }
 
     /**
