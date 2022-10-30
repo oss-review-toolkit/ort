@@ -67,21 +67,27 @@ private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\
 
 private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
+/**
+ * Collapse consecutive [years] to a list of pairs that each denote a year range. A single year is represented as a
+ * range whose first and last years are equal.
+ */
 private fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
-    fun divideAndConquer(years: IntArray, start: Int = 0, end: Int = years.size - 1): List<Pair<Int, Int>> {
-        if (end < start) return emptyList()
+    if (years.isEmpty()) return emptyList()
 
-        for (i in start + 1..end) {
-            if (years[i - 1] + 1 != years[i]) {
-                return listOf(Pair(years[start], years[i - 1])) + divideAndConquer(years, i, end)
-            }
-        }
+    val yearRanges = mutableListOf<Pair<Int, Int>>()
 
-        return listOf(Pair(years[start], years[end]))
+    val sortedYears = years.toSortedSet()
+    val rangeBreaks = sortedYears.zipWithNext { a, b -> (a to b).takeIf { b != a + 1 } }.filterNotNull()
+
+    var current = sortedYears.first()
+
+    rangeBreaks.mapTo(yearRanges) { (last, first) ->
+        (current to last).also { current = first }
     }
 
-    val sortedYears = years.toSortedSet().toIntArray()
-    return divideAndConquer(sortedYears, 0, sortedYears.size - 1)
+    yearRanges += current to sortedYears.last()
+
+    return yearRanges
 }
 
 private fun prettyPrintYears(years: Collection<Int>) =
