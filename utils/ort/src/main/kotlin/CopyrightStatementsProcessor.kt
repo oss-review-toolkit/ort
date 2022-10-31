@@ -35,6 +35,21 @@ private data class Parts(
     companion object {
         val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
     }
+
+    override fun toString() =
+        buildString {
+            append(prefix)
+
+            if (years.isNotEmpty()) {
+                append(" ")
+                append(prettyPrintYears(years))
+            }
+
+            if (owner.isNotEmpty()) {
+                append(" ")
+                append(owner)
+            }
+        }
 }
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
@@ -307,15 +322,7 @@ object CopyrightStatementsProcessor {
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
         mergedParts.forEach {
             if (it.owner.isNotEmpty()) {
-                val statement = buildString {
-                    append(it.prefix)
-                    if (it.years.isNotEmpty()) {
-                        append(" ")
-                        append(prettyPrintYears(it.years))
-                    }
-                    append(" ")
-                    append(it.owner)
-                }
+                val statement = it.toString()
                 processedStatements[statement] = it.originalStatements.toSortedSet()
             }
         }
