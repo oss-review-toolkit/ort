@@ -72,7 +72,7 @@ private val allPackageManagersByName = PackageManager.ALL.associateBy { it.manag
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
     private val inputDir by option(
         "--input-dir", "-i",
-        help = "The project directory to analyze. As a special case, if only one package manager is activated, this " +
+        help = "The project directory to analyze. As a special case, if only one package manager is enabled, this " +
                 "may point to a definition file for that package manager to only analyze that single project."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
@@ -151,11 +151,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
                 "times. For example: --label distribution=external"
     ).associate()
 
-    private val activatedPackageManagers by option(
+    private val enabledPackageManagers by option(
         "--package-managers", "-m",
-        help = "The comma-separated package managers to activate, any of ${allPackageManagersByName.keys}. Note that " +
-                "deactivation overrides activation. If set, package manager activation settings from configuration " +
-                "files are ignored."
+        help = "The comma-separated package managers to enable, any of ${allPackageManagersByName.keys}. Note that " +
+                "disabling overrides enabling. If set, the 'enabledPackageManagers' property from configuration " +
+                "files is ignored."
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
@@ -165,11 +165,11 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         tagValue = "use -P ort.analyzer.enabledPackageManagers=... on the ort command instead"
     )
 
-    private val deactivatedPackageManagers by option(
+    private val disabledPackageManagers by option(
         "--not-package-managers", "-n",
-        help = "The comma-separated package managers to deactivate, any of ${allPackageManagersByName.keys}. Note " +
-                "that deactivation overrides activation. If set, package manager activation settings from " +
-                "configuration files are ignored."
+        help = "The comma-separated package managers to disable, any of ${allPackageManagersByName.keys}. Note that " +
+                "disabling overrides enabling. If set, the 'disabledPackageManagers' property from configuration " +
+                "files is ignored."
     ).convert { name ->
         allPackageManagersByName[name]
             ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
@@ -214,8 +214,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val config = globalOptionsForSubcommands.config
 
-        val enabledPackageManagers = if (activatedPackageManagers != null || deactivatedPackageManagers != null) {
-            (activatedPackageManagers?.toSet() ?: PackageManager.ALL) - deactivatedPackageManagers.orEmpty().toSet()
+        val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
+            (enabledPackageManagers?.toSet() ?: PackageManager.ALL) - disabledPackageManagers.orEmpty().toSet()
         } else {
             config.analyzer.determineEnabledPackageManagers()
         }
