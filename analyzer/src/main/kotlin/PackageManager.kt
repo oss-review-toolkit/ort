@@ -27,6 +27,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.ServiceLoader
+import java.util.SortedMap
 
 import kotlin.time.measureTime
 
@@ -70,10 +71,10 @@ abstract class PackageManager(
         private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)
 
         /**
-         * The set of all available [package manager factories][PackageManagerFactory] in the classpath, sorted by name.
+         * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
-        val ALL: Set<PackageManagerFactory> by lazy {
-            LOADER.iterator().asSequence().toSortedSet(compareBy { it.managerName })
+        val ALL: SortedMap<String, PackageManagerFactory> by lazy {
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.managerName }
         }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
@@ -98,7 +99,10 @@ abstract class PackageManager(
          * Recursively search the [directory] for files managed by any of the [packageManagers]. The search is performed
          * depth-first so that root project files are found before any subproject files for a specific manager.
          */
-        fun findManagedFiles(directory: File, packageManagers: Set<PackageManagerFactory> = ALL): ManagedProjectFiles {
+        fun findManagedFiles(
+            directory: File,
+            packageManagers: Collection<PackageManagerFactory> = ALL.values
+        ): ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
             }
@@ -128,7 +132,7 @@ abstract class PackageManager(
 
                         val filesInDir = dirAsFile.walk().maxDepth(1).filter { it.isFile }.toList()
 
-                        packageManagers.forEach { manager ->
+                        packageManagers.distinct().forEach { manager ->
                             // Create a list of lists of matching files per glob.
                             val matchesPerGlob = manager.matchersForDefinitionFiles.mapNotNull { glob ->
                                 // Create a list of files in the current directory that match the current glob.

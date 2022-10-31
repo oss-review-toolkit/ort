@@ -107,14 +107,14 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
     private val scanners by option(
         "--scanners", "-s",
-        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL}"
+        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL.keys}"
     ).convertToScannerWrapperFactories().default(listOf(ScanCode.Factory()))
 
     private val projectScanners by option(
         "--project-scanners",
         help = "A comma-separated list of scanners to use for scanning the source code of projects. By default, " +
                 "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
-                "Possible values are: ${ScannerWrapper.ALL}"
+                "Possible values are: ${ScannerWrapper.ALL.keys}"
     ).convertToScannerWrapperFactories()
 
     private val packageTypes by option(
@@ -237,7 +237,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 private fun RawOption.convertToScannerWrapperFactories() =
     convert { scannerNames ->
         scannerNames.split(",").map { name ->
-            ScannerWrapper.ALL.find { it.scannerName.equals(name, ignoreCase = true) }
-                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL}.")
+            ScannerWrapper.ALL[name]
+                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL.keys}.")
         }
     }

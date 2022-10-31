@@ -84,9 +84,6 @@ class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
-    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName }
-        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."
@@ -107,10 +104,9 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The comma-separated reports to generate, any of ${allReportersByName.keys}."
+        help = "The comma-separated reports to generate, any of ${Reporter.ALL.keys}."
     ).convert { name ->
-        allReportersByName[name]
-            ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
+        Reporter.ALL[name] ?: throw BadParameterValue("Report formats must be one or more of ${Reporter.ALL.keys}.")
     }.split(",").required().outputGroup()
 
     private val copyrightGarbageFile by option(
@@ -195,8 +191,8 @@ class ReporterCommand : CliktCommand(
                 "format, and the value is an arbitrary key-value pair. For example: " +
                 "-O NoticeTemplate=template.id=summary"
     ).splitPair().convert { (format, option) ->
-        require(format in allReportersByName.keys) {
-            "Report formats must be one or more of ${allReportersByName.keys}."
+        require(format in Reporter.ALL.keys) {
+            "Report formats must be one or more of ${Reporter.ALL.keys}."
         }
 
         format to Pair(option.substringBefore("="), option.substringAfter("=", ""))

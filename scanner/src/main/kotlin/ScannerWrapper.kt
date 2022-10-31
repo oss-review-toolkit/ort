@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import java.io.File
 import java.util.ServiceLoader
+import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
@@ -39,10 +40,10 @@ sealed interface ScannerWrapper {
         private val LOADER = ServiceLoader.load(ScannerWrapperFactory::class.java)
 
         /**
-         * The set of all available [scanner wrapper factories][ScannerWrapperFactory] in the classpath, sorted by name.
+         * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
          */
-        val ALL: Set<ScannerWrapperFactory> by lazy {
-            LOADER.iterator().asSequence().toSortedSet(compareBy { it.scannerName })
+        val ALL: SortedMap<String, ScannerWrapperFactory> by lazy {
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.scannerName }
         }
     }
 

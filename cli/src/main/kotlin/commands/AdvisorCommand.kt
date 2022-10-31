@@ -50,9 +50,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
-    private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }
-        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
     private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
@@ -92,12 +89,9 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val providerFactories by option(
         "--advisors", "-a",
-        help = "The comma-separated advisors to use, any of ${allVulnerabilityProvidersByName.keys}."
+        help = "The comma-separated advisors to use, any of ${Advisor.ALL.keys}."
     ).convert { name ->
-        allVulnerabilityProvidersByName[name]
-            ?: throw BadParameterValue(
-                "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}."
-            )
+        Advisor.ALL[name] ?: throw BadParameterValue("Advisor '$name' is not one of ${Advisor.ALL.keys}.")
     }.split(",").required()
 
     private val skipExcluded by option(

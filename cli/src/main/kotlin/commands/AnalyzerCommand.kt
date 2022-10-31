@@ -66,9 +66,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-private val allPackageManagersByName = PackageManager.ALL.associateBy { it.managerName }
-    .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
 class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
     private val inputDir by option(
         "--input-dir", "-i",
@@ -153,12 +150,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val enabledPackageManagers by option(
         "--package-managers", "-m",
-        help = "The comma-separated package managers to enable, any of ${allPackageManagersByName.keys}. Note that " +
+        help = "The comma-separated package managers to enable, any of ${PackageManager.ALL.keys}. Note that " +
                 "disabling overrides enabling. If set, the 'enabledPackageManagers' property from configuration " +
                 "files is ignored."
     ).convert { name ->
-        allPackageManagersByName[name]
-            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
+        PackageManager.ALL[name]
+            ?: throw BadParameterValue("Package managers must be one or more of ${PackageManager.ALL.keys}.")
     }.split(",").deprecated(
         message = "--package-managers is deprecated, use -P ort.analyzer.enabledPackageManagers=... on the ort " +
                 "command instead.",
@@ -167,12 +164,12 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
     private val disabledPackageManagers by option(
         "--not-package-managers", "-n",
-        help = "The comma-separated package managers to disable, any of ${allPackageManagersByName.keys}. Note that " +
+        help = "The comma-separated package managers to disable, any of ${PackageManager.ALL.keys}. Note that " +
                 "disabling overrides enabling. If set, the 'disabledPackageManagers' property from configuration " +
                 "files is ignored."
     ).convert { name ->
-        allPackageManagersByName[name]
-            ?: throw BadParameterValue("Package managers must be one or more of ${allPackageManagersByName.keys}.")
+        PackageManager.ALL[name]
+            ?: throw BadParameterValue("Package managers must be one or more of ${PackageManager.ALL.keys}.")
     }.split(",").deprecated(
         message = "--not-package-managers is deprecated, use -P ort.analyzer.disabledPackageManagers=... on the ort " +
                 "command instead.",
@@ -215,7 +212,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         val config = globalOptionsForSubcommands.config
 
         val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
-            (enabledPackageManagers?.toSet() ?: PackageManager.ALL) - disabledPackageManagers.orEmpty().toSet()
+            (enabledPackageManagers ?: PackageManager.ALL.values).toSet() - disabledPackageManagers.orEmpty().toSet()
         } else {
             config.analyzer.determineEnabledPackageManagers()
         }
@@ -309,8 +306,8 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 }
 
 private fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
-    val enabled = enabledPackageManagers?.mapNotNull { allPackageManagersByName[it] }?.toSet() ?: PackageManager.ALL
-    val disabled = disabledPackageManagers?.mapNotNull { allPackageManagersByName[it] }?.toSet().orEmpty()
+    val enabled = enabledPackageManagers?.mapNotNull { PackageManager.ALL[it] } ?: PackageManager.ALL.values
+    val disabled = disabledPackageManagers?.mapNotNull { PackageManager.ALL[it] }.orEmpty()
 
-    return enabled - disabled
+    return enabled.toSet() - disabled.toSet()
 }

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.advisor
 
 import java.time.Instant
 import java.util.ServiceLoader
+import java.util.SortedMap
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -47,10 +48,10 @@ class Advisor(
         private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)
 
         /**
-         * The set of all available [advice provider factories][AdviceProviderFactory] in the classpath, sorted by name.
+         * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
-        val ALL: Set<AdviceProviderFactory> by lazy {
-            LOADER.iterator().asSequence().toSortedSet(compareBy { it.providerName })
+        val ALL: SortedMap<String, AdviceProviderFactory> by lazy {
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.providerName }
         }
     }
 
