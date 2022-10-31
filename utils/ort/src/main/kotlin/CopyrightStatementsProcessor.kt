@@ -265,12 +265,13 @@ object CopyrightStatementsProcessor {
         if (prefixStripResult.second.isEmpty()) return null
 
         val yearsStripResult = stripYears(prefixStripResult.first)
+        val owner = yearsStripResult.first.trimStart(*INVALID_OWNER_START_CHARS).collapseWhitespace()
+        if (owner.isEmpty()) return null
+
         return Parts(
             prefix = prefixStripResult.second,
             years = yearsStripResult.second,
-            owner = yearsStripResult.first
-                .trimStart(*INVALID_OWNER_START_CHARS)
-                .collapseWhitespace(),
+            owner = owner,
             originalStatements = listOf(copyrightStatement)
         )
     }
@@ -320,13 +321,8 @@ object CopyrightStatementsProcessor {
         }
 
         val mergedParts = processableStatements.sorted().groupByPrefixAndOwner()
-
-        val processedStatements = sortedMapOf<String, SortedSet<String>>()
-        mergedParts.forEach {
-            if (it.owner.isNotEmpty()) {
-                val statement = it.toString()
-                processedStatements[statement] = it.originalStatements.toSortedSet()
-            }
+        val processedStatements = mergedParts.associateTo(sortedMapOf<String, SortedSet<String>>()) {
+            it.toString() to it.originalStatements.toSortedSet()
         }
 
         return Result(

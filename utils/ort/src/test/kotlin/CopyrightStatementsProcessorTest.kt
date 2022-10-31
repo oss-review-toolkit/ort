@@ -31,13 +31,21 @@ import org.ossreviewtoolkit.model.yamlMapper
 
 class CopyrightStatementsProcessorTest : WordSpec({
     "process" should {
-        "return a result with items merged by owner and prefix, sorted by owner and year" {
-            val statements = File("src/test/assets/copyright-statements.txt").readLines()
-            val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
+        val storedStatements = File("src/test/assets/copyright-statements.txt").readLines()
+        val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
 
-            val actualResult = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
+        "return a result with items merged by owner and prefix, sorted by owner and year" {
+            val actualResult = CopyrightStatementsProcessor.process(storedStatements.shuffled()).toYaml()
 
             actualResult shouldBe expectedResult
+        }
+
+        "return all original statements" {
+            val processed = CopyrightStatementsProcessor.process(storedStatements)
+            val processedOriginalStatements = processed.unprocessedStatements +
+                    processed.processedStatements.values.flatten()
+
+            processedOriginalStatements shouldBe storedStatements.toSet()
         }
 
         "group statements with uppercase (C)" {
