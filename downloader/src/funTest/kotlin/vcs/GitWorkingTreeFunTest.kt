@@ -79,8 +79,7 @@ class GitWorkingTreeFunTest : StringSpec({
         val workingTree = git.getWorkingTree(zipContentDir)
 
         workingTree.listRemoteBranches() should containExactlyInAnyOrder(
-            "main",
-            "pre-commit-ci-update-config"
+            "main"
         )
     }
 
@@ -108,7 +107,9 @@ class GitWorkingTreeFunTest : StringSpec({
             "2.2.0",
             "2.2.1",
             "2.3.0",
-            "2.3.1"
+            "2.3.1",
+            "2.3.2",
+            "2.3.3"
         )
     }
 
