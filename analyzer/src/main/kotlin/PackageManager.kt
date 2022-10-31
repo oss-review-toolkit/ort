@@ -67,7 +67,7 @@ abstract class PackageManager(
     val repoConfig: RepositoryConfiguration
 ) {
     companion object : Logging {
-        private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)
 
         /**
          * The set of all available [package manager factories][PackageManagerFactory] in the classpath, sorted by name.
