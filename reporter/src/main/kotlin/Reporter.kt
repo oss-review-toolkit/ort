@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.reporter
 
 import java.io.File
 import java.util.ServiceLoader
+import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PathExclude
@@ -35,10 +36,10 @@ interface Reporter {
         private val LOADER = ServiceLoader.load(Reporter::class.java)
 
         /**
-         * The set of all available [reporters][Reporter] in the classpath, sorted by name.
+         * All [reporters][Reporter] available in the classpath, associated by their names.
          */
-        val ALL: Set<Reporter> by lazy {
-            LOADER.iterator().asSequence().toSortedSet(compareBy { it.reporterName })
+        val ALL: SortedMap<String, Reporter> by lazy {
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.reporterName }
         }
     }
 

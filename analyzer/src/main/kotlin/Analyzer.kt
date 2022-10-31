@@ -65,7 +65,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun findManagedFiles(
         absoluteProjectPath: File,
-        packageManagers: Set<PackageManagerFactory> = PackageManager.ALL,
+        packageManagers: Collection<PackageManagerFactory> = PackageManager.ALL.values,
         repositoryConfiguration: RepositoryConfiguration = RepositoryConfiguration()
     ): ManagedFileInfo {
         require(absoluteProjectPath.isAbsolute)
@@ -74,14 +74,16 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             "Using the following configuration settings:\n${yamlMapper.writeValueAsString(repositoryConfiguration)}"
         }
 
+        val distinctPackageManagers = packageManagers.distinct()
+
         // Associate files by the package manager factory that manages them.
-        val factoryFiles = if (packageManagers.size == 1 && absoluteProjectPath.isFile) {
+        val factoryFiles = if (distinctPackageManagers.size == 1 && absoluteProjectPath.isFile) {
             // If only one package manager is activated and the project path is in fact a file, assume that the file is
             // a definition file for that package manager. This is useful to limit analysis to a single project e.g. for
             // debugging purposes.
-            mutableMapOf(packageManagers.first() to listOf(absoluteProjectPath))
+            mutableMapOf(distinctPackageManagers.first() to listOf(absoluteProjectPath))
         } else {
-            PackageManager.findManagedFiles(absoluteProjectPath, packageManagers).toMutableMap()
+            PackageManager.findManagedFiles(absoluteProjectPath, distinctPackageManagers).toMutableMap()
         }
 
         // Associate mapped files by the package manager that manages them.
@@ -99,7 +101,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         if (!hasOnlyManagedDirs) {
-            packageManagers.find { it is Unmanaged.Factory }
+            distinctPackageManagers.find { it is Unmanaged.Factory }
                 ?.create(absoluteProjectPath, config, repositoryConfiguration)
                 ?.run { managedFiles[this] = listOf(absoluteProjectPath) }
         }

@@ -100,7 +100,7 @@ class OrtMainFunTest : StringSpec() {
                 if (iterator.next() == "The following package managers are enabled:") break
             }
 
-            val expectedPackageManagers = PackageManager.ALL.filterNot { it.managerName == "Gradle" }
+            val expectedPackageManagers = PackageManager.ALL.values.filterNot { it.managerName == "Gradle" }
 
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\t${expectedPackageManagers.joinToString { it.managerName }}"
