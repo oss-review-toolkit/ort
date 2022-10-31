@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.joinNonBlank
  */
 interface Reporter {
     companion object {
-        private val LOADER = ServiceLoader.load(Reporter::class.java)!!
+        private val LOADER = ServiceLoader.load(Reporter::class.java)
 
         /**
          * The set of all available [reporters][Reporter] in the classpath, sorted by name.

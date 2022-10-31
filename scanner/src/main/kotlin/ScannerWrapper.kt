@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
  */
 sealed interface ScannerWrapper {
     companion object {
-        private val LOADER = ServiceLoader.load(ScannerWrapperFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(ScannerWrapperFactory::class.java)
 
         /**
          * The set of all available [scanner wrapper factories][ScannerWrapperFactory] in the classpath, sorted by name.

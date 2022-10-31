@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 abstract class VersionControlSystem {
     companion object : Logging {
-        private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)!!
+        private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)
 
         /**
          * The set of all available [Version Control Systems][VersionControlSystem] in the classpath, sorted by

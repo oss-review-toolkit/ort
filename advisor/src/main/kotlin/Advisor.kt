@@ -44,7 +44,7 @@ class Advisor(
     private val config: AdvisorConfiguration
 ) {
     companion object : Logging {
-        private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)!!
+        private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)
 
         /**
          * The set of all available [advice provider factories][AdviceProviderFactory] in the classpath, sorted by name.
