@@ -31,7 +31,11 @@ private data class Parts(
     val years: Set<Int>,
     val owner: String,
     val originalStatements: List<String>
-)
+) {
+    companion object {
+        val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
+    }
+}
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
@@ -62,8 +66,6 @@ private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
 private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
 
 private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
-
-private val PARTS_COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
 
 /**
  * Return a comma-separated string of sorted years or year-ranges that represent the [years].
@@ -300,7 +302,7 @@ object CopyrightStatementsProcessor {
             }
         }
 
-        val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(PARTS_COMPARATOR)
+        val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(Parts.COMPARATOR)
 
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
         mergedParts.forEach {
