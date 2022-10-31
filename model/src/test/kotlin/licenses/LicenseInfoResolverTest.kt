@@ -281,6 +281,17 @@ class LicenseInfoResolverTest : WordSpec({
                 "(c) 2011 Holder",
                 "(c) 2012 Holder"
             )
+
+            result should containCopyrightStatementsForLicenseExactly(
+                "Apache-2.0",
+                "(c) 2009-2010 Holder",
+                process = true
+            )
+            result should containCopyrightStatementsForLicenseExactly(
+                "MIT",
+                "(c) 2011-2012 Holder",
+                process = true
+            )
         }
 
         "mark copyright garbage as garbage" {
@@ -748,13 +759,14 @@ private fun containCopyrightGarbageForProvenanceExactly(
 
 private fun containCopyrightStatementsForLicenseExactly(
     license: String,
-    vararg copyrights: String
+    vararg copyrights: String,
+    process: Boolean = false
 ): Matcher<ResolvedLicenseInfo?> =
     transformingCollectionMatcher(
         expected = copyrights.toList(),
         matcher = ::containExactlyInAnyOrder
     ) { resolvedLicenseInfo ->
-        resolvedLicenseInfo[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights(process = false).orEmpty()
+        resolvedLicenseInfo[SpdxSingleLicenseExpression.parse(license)]?.getCopyrights(process = process).orEmpty()
     }
 
 private fun containOnlyLicenseSources(vararg licenseSources: LicenseSource): Matcher<ResolvedLicenseInfo?> =
