@@ -361,7 +361,7 @@ class SpdxDocumentFile(
         val packageFile = definitionFile.parentFile.resolve(spdxPackage.packageFilename)
 
         if (packageFile.isFile) {
-            val managedFiles = findManagedFiles(packageFile.parentFile, ALL)
+            val managedFiles = findManagedFiles(packageFile.parentFile)
             managedFiles.forEach { (factory, files) ->
                 if (files.any { it.canonicalPath == packageFile.canonicalPath }) {
                     // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
