@@ -40,11 +40,13 @@ packages:
   - "Gerhard Weis <gerhard.weis@proclos.com>"
   declared_licenses:
   - "BSD"
+  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "ISO 8601 date/time parser"
+      BSD License: "BSD-3-Clause"
+  description: "An ISO 8601 date/time/duration parser and formatter"
   homepage_url: "https://github.com/gweis/isodate/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/b6/85/7882d311924cbcfc70b1890780763e36ff0b140c7e51c110fc59a532f087/isodate-0.6.1-py2.py3-none-any.whl"
@@ -76,8 +78,7 @@ packages:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "PLY is yet another implementation of lex and yacc for Python. Some\
-    \ notable"
+  description: "Python Lex & Yacc"
   homepage_url: "http://www.dabeaz.com/ply/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/a3/58/35da89ee790598a0700ea49b2a66594140f44dec458c07e8e3d4979137fc/ply-3.11-py2.py3-none-any.whl"
@@ -109,7 +110,7 @@ packages:
     spdx_expression: "MIT"
     mapped:
       MIT License: "MIT"
-  description: "PyParsing -- A Python Parsing Module"
+  description: "Python parsing module"
   homepage_url: "https://github.com/pyparsing/pyparsing/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/8a/bb/488841f56197b13700afd5658fc279a2025a39e22449b7cf29864669b15d/pyparsing-2.4.7-py2.py3-none-any.whl"
@@ -136,10 +137,14 @@ packages:
   authors:
   - "Daniel 'eikeon' Krech <eikeon@eikeon.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "RDFLib is a Python library for working with"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "RDFLib is a Python library for working with RDF, a simple yet powerful\
+    \ language for representing information."
   homepage_url: "https://github.com/RDFLib/rdflib"
   binary_artifact:
     url: ""
@@ -167,9 +172,12 @@ packages:
   - "Benjamin Peterson <benjamin@python.org>"
   declared_licenses:
   - "MIT"
+  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: ".. image:: https://img.shields.io/pypi/v/six.svg"
+    mapped:
+      MIT License: "MIT"
+  description: "Python 2 and 3 compatibility utilities"
   homepage_url: "https://github.com/benjaminp/six"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl"

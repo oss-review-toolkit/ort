@@ -29,6 +29,8 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
@@ -41,18 +43,22 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
+private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
 
 private val json = Json { ignoreUnknownKeys = true }
 
-internal object PythonInspector : CommandLineTool {
+internal object PythonInspector : CommandLineTool, Logging {
     override fun command(workingDir: File?) = "python-inspector"
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.8.1,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.9.0,)")
 
     fun run(
         workingDir: File,
@@ -160,7 +166,7 @@ internal object PythonInspector : CommandLineTool {
         @SerialName("vcs_url") val vcsUrl: String?,
         val copyright: String?,
         @SerialName("license_expression") val licenseExpression: String?,
-        @SerialName("declared_license") val declaredLicense: String?,
+        @SerialName("declared_license") val declaredLicense: DeclaredLicense?,
         @SerialName("source_packages") val sourcePackages: List<String>,
         @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
         @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
@@ -259,6 +265,27 @@ private fun PythonInspector.DeclaredLicense.getDeclaredLicenses() =
         addAll(classifiers.mapNotNull { getLicenseFromClassifier(it) })
     }.toSortedSet()
 
+private fun processDeclaredLicenses(id: Identifier, declaredLicenses: SortedSet<String>): ProcessedDeclaredLicense {
+    var declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
+
+    // Python's classifiers only support a coarse license declaration of "BSD License". So if there is another
+    // more specific declaration of a BSD license, align on that one.
+    if (GENERIC_BSD_LICENSE in declaredLicensesProcessed.unmapped) {
+        declaredLicensesProcessed.spdxExpression?.decompose()?.singleOrNull {
+            it is SpdxLicenseIdExpression && it.isValid() && it.toString().startsWith("BSD-")
+        }?.let { license ->
+            PythonInspector.logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
+
+            declaredLicensesProcessed = declaredLicensesProcessed.copy(
+                mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),
+                unmapped = declaredLicensesProcessed.unmapped - GENERIC_BSD_LICENSE
+            )
+        }
+    }
+
+    return declaredLicensesProcessed
+}
+
 internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(sortedSetOf()) { (_, packages) ->
         // The python inspector currently often contains two entries for a package where the only difference is the
@@ -276,16 +303,18 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
                 )
             } ?: RemoteArtifact.EMPTY
 
-        fun PythonInspector.Package.getDeclaredLicenses() =
-            listOfNotNull(getLicenseFromLicenseField(declaredLicense)).toSortedSet()
+        val id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version)
+        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses() ?: sortedSetOf()
+        val declaredLicensesProcessed = processDeclaredLicenses(id, declaredLicenses)
 
         Package(
             // The package has a namespace property which is currently always empty. Deliberately set the namespace to
             // an empty string here to be consistent with the resolved packages which do not have a namespace property.
-            id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version),
+            id = id,
             purl = pkg.purl,
             authors = pkg.parties.toAuthors(),
-            declaredLicenses = pkg.getDeclaredLicenses(),
+            declaredLicenses = declaredLicenses,
+            declaredLicensesProcessed = declaredLicensesProcessed,
             // Only use the first line of the description because the descriptions provided by python-inspector are
             // currently far too long, see: https://github.com/nexB/python-inspector/issues/74
             description = pkg.description.lineSequence().firstOrNull { it.isNotBlank() }.orEmpty(),
