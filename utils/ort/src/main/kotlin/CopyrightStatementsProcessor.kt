@@ -192,10 +192,12 @@ object CopyrightStatementsProcessor {
         val years: Set<Int>,
         val owner: String,
         val originalStatements: List<String>
-    ) {
+    ) : Comparable<Parts> {
         companion object {
-            val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
+            private val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
         }
+
+        override fun compareTo(other: Parts) = COMPARATOR.compare(this, other)
 
         override fun toString() =
             buildString {
@@ -317,7 +319,7 @@ object CopyrightStatementsProcessor {
             }
         }
 
-        val mergedParts = processableStatements.groupByPrefixAndOwner().sortedWith(Parts.COMPARATOR)
+        val mergedParts = processableStatements.groupByPrefixAndOwner().sorted()
 
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
         mergedParts.forEach {
