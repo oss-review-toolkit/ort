@@ -223,22 +223,23 @@ internal class ListLicensesCommand : CliktCommand(
 private data class TextLocationGroup(
     val locations: Set<TextLocation>,
     val text: String? = null
-) {
+) : Comparable<TextLocationGroup> {
     companion object {
-        val COMPARATOR = compareBy<TextLocationGroup>({ it.text == null }, { -it.locations.size })
+        private val COMPARATOR = compareBy<TextLocationGroup>({ it.text == null }, { -it.locations.size })
     }
+
+    override fun compareTo(other: TextLocationGroup) = COMPARATOR.compare(this, other)
 }
 
 private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pair<TextLocationGroup, String>> {
     var i = 0
-    return sortedWith(TextLocationGroup.COMPARATOR)
-        .map {
-            if (it.text != null) {
-                Pair(it, "${i++}")
-            } else {
-                Pair(it, "-")
-            }
+    return sorted().map {
+        if (it.text != null) {
+            Pair(it, "${i++}")
+        } else {
+            Pair(it, "-")
         }
+    }
 }
 
 private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValueAsString(
