@@ -507,7 +507,7 @@ processed_statements:
   - "Copyright (c) 2010 JRuby project"
   Copyright (c) 2008-2010 Ryan McGeary:
   - "Copyright (c) 2008-2010, Ryan McGeary"
-  Copyright (c) 2008-2011 Luis Lavena.:
+  Copyright (c) 2008-2011 Luis Lavena:
   - "Copyright (c) 2008 Luis Lavena"
   - "Copyright (c) 2008-2011 Luis Lavena."
   Copyright (c) 2008-2011 Wayne Meissner:
@@ -518,7 +518,7 @@ processed_statements:
   - "Copyright (c) 2010 Wayne Meissner"
   - "Copyright (c) 2010, 2011 Wayne Meissner"
   - "Copyright (c) 2011 Wayne Meissner"
-  Copyright (c) 2008-2015 Pivotal Labs.:
+  Copyright (c) 2008-2015 Pivotal Labs:
   - "Copyright (c) 2008-2013 Pivotal Labs."
   - "Copyright (c) 2008-2014 Pivotal Labs"
   - "Copyright (c) 2008-2015 Pivotal Labs"
@@ -545,7 +545,7 @@ processed_statements:
   - "Copyright (c) 2009 by Mark Pilgrim"
   Copyright (c) 2009-2010 Mathias Svensson http://result42.com:
   - "Copyright (c) 2009-2010 Mathias Svensson http://result42.com"
-  Copyright (c) 2009-2010 Thomas E. Enebo <tom.enebo@gmail.com>:
+  Copyright (c) 2009-2010 Thomas E Enebo (tom.enebo@gmail.com):
   - "Copyright (c) 2009 Thomas E. Enebo <tom.enebo@gmail.com>"
   - "Copyright (c) 2010 Thomas E Enebo (tom.enebo@gmail.com)"
   - "Copyright (c) 2010 Thomas E Enebo <tom.enebo@gmail.com>"
@@ -748,7 +748,7 @@ processed_statements:
   - "Copyright (c) 2013 Simon Lydell"
   - "Copyright (c) 2014 Simon Lydell"
   - "Copyright (c) 2014, 2015, 2016, 2017 Simon Lydell"
-  Copyright (c) 2013-2018 Jon Schlinkert.:
+  Copyright (c) 2013-2018 Jon Schlinkert:
   - "Copyright (c) 2013-2017, Jon Schlinkert."
   - "Copyright (c) 2014-2015 Jon Schlinkert"
   - "Copyright (c) 2014-2015 Jon Schlinkert."
@@ -907,12 +907,12 @@ processed_statements:
   Copyright (c) 2016-2017 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer <sebastian@phpeople.de> and contributors:
   - "Copyright (c) 2016-2017 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer\
     \ <sebastian@phpeople.de> and contributors"
+  Copyright (c) 2016-2017 Brian Woodward:
+  - "Copyright (c) 2016 Brian Woodward"
+  - "Copyright (c) 2016-2017, Brian Woodward."
   Copyright (c) 2016-2017 Brian Woodward (https://github.com/doowb).:
   - "Copyright (c) 2016, Brian Woodward (https://github.com/doowb)."
   - "Copyright (c) 2017, Brian Woodward (https://github.com/doowb)."
-  Copyright (c) 2016-2017 Brian Woodward.:
-  - "Copyright (c) 2016 Brian Woodward"
-  - "Copyright (c) 2016-2017, Brian Woodward."
   Copyright (c) 2017 Arne Blankerts <arne@blankerts.de> and contributors:
   - "Copyright (c) 2017 Arne Blankerts <arne@blankerts.de> and contributors"
   Copyright (c) 2017 Bozhidar Batsov and RuboCop contributors:
@@ -1149,7 +1149,7 @@ processed_statements:
   - "Copyright 2016 The Go Authors."
   Copyright 2009-2011 Philip Lowman <philip@yhbt.com>:
   - "Copyright 2009-2011 Philip Lowman <philip@yhbt.com>"
-  Copyright 2009-2011, 2018 Isaac Z. Schlueter.:
+  Copyright 2009-2011, 2018 Isaac Z. Schlueter:
   - "Copyright 2009, 2010, 2011 Isaac Z. Schlueter."
   - "Copyright 2018 Isaac Z. Schlueter"
   - "Copyright Isaac Z. Schlueter"

@@ -29,12 +29,12 @@ import org.ossreviewtoolkit.model.yamlMapper
 class CopyrightStatementsProcessorTest : WordSpec({
     "process" should {
         "return a result with items merged by owner and prefix, sorted by owner and year" {
-            val input = File("src/test/assets/copyright-statements.txt").readLines()
-
-            val result = CopyrightStatementsProcessor.process(input).toYaml()
-
+            val statements = File("src/test/assets/copyright-statements.txt").readLines()
             val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
-            result shouldBe expectedResult
+
+            val actualResult = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
+
+            actualResult shouldBe expectedResult
         }
     }
 })

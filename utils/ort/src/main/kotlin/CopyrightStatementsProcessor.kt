@@ -319,7 +319,7 @@ object CopyrightStatementsProcessor {
             }
         }
 
-        val mergedParts = processableStatements.groupByPrefixAndOwner().sorted()
+        val mergedParts = processableStatements.sorted().groupByPrefixAndOwner()
 
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
         mergedParts.forEach {
