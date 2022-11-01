@@ -29,12 +29,14 @@ packages:
   - "Django Software Foundation <foundation@djangoproject.com>"
   declared_licenses:
   - "BSD"
+  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "Django is a high-level Python Web framework that encourages rapid\
-    \ development"
+      BSD License: "BSD-3-Clause"
+  description: "A high-level Python Web framework that encourages rapid development\
+    \ and clean, pragmatic design."
   homepage_url: "https://www.djangoproject.com/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/b1/88/bd220ea3e4e12c42f2215285cb101d925f95e42b093f390c823e61c94f00/Django-2.2.20-py3-none-any.whl"
@@ -62,9 +64,12 @@ packages:
   - "Stuart Bishop <stuart@stuartbishop.net>"
   declared_licenses:
   - "MIT"
+  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "pytz - World Timezone Definitions for Python"
+    mapped:
+      MIT License: "MIT"
+  description: "World timezone definitions, modern and historical"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/85/ac/92f998fc52a70afd7f6b788142632afb27cd60c8c782d1452b7466603332/pytz-2022.6-py2.py3-none-any.whl"
@@ -91,10 +96,13 @@ packages:
   authors:
   - "Andi Albrecht <albrecht.andi@gmail.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "python-sqlparse - Parse SQL statements"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A non-validating SQL parser."
   homepage_url: "https://github.com/andialbrecht/sqlparse"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/97/d3/31dd2c3e48fc2060819f4acb0686248250a0f2326356306b38a42e059144/sqlparse-0.4.3-py3-none-any.whl"

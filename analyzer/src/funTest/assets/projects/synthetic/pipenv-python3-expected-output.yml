@@ -28,12 +28,14 @@ packages:
   - "Django Software Foundation <foundation@djangoproject.com>"
   declared_licenses:
   - "BSD"
+  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "Django is a high-level Python Web framework that encourages rapid\
-    \ development"
+      BSD License: "BSD-3-Clause"
+  description: "A high-level Python Web framework that encourages rapid development\
+    \ and clean, pragmatic design."
   homepage_url: "https://www.djangoproject.com/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/8c/49/d5038239995594281478bf209f8d93524ad342d500009a697b27f884668a/Django-2.1.11-py3-none-any.whl"
@@ -61,9 +63,12 @@ packages:
   - "Stuart Bishop <stuart@stuartbishop.net>"
   declared_licenses:
   - "MIT"
+  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "pytz - World Timezone Definitions for Python"
+    mapped:
+      MIT License: "MIT"
+  description: "World timezone definitions, modern and historical"
   homepage_url: "http://pythonhosted.org/pytz"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/e7/f9/f0b53f88060247251bf481fa6ea62cd0d25bf1b11a87888e53ce5b7c8ad2/pytz-2019.3-py2.py3-none-any.whl"

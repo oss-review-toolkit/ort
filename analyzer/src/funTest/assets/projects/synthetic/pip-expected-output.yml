@@ -35,9 +35,12 @@ packages:
   purl: "pkg:pypi/click@6.7"
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: ""
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "A simple wrapper around optparse for powerful command line utilities."
   homepage_url: "http://github.com/mitsuhiko/click"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
@@ -65,11 +68,13 @@ packages:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD"
+  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "Flask"
+      BSD License: "BSD-3-Clause"
+  description: "A simple framework for building complex web applications."
   homepage_url: "https://www.palletsprojects.com/p/flask/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/55/b1/4365193655df97227ace49311365cc296e74b60c7f5c63d23cd30175e2f6/Flask-1.0-py2.py3-none-any.whl"
@@ -95,9 +100,13 @@ packages:
   purl: "pkg:pypi/itsdangerous@0.24"
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
-  declared_licenses: []
-  declared_licenses_processed: {}
-  description: "It's Dangerous"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "Various helpers to pass trusted data to untrusted environments and\
+    \ back."
   homepage_url: "http://github.com/mitsuhiko/itsdangerous"
   binary_artifact:
     url: ""
@@ -124,10 +133,13 @@ packages:
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "Jinja"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A very fast and expressive template engine."
   homepage_url: "https://palletsprojects.com/p/jinja/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl"
@@ -155,11 +167,13 @@ packages:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD"
+  - "BSD License"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
       BSD: "BSD-3-Clause"
-  description: "MarkupSafe"
+      BSD License: "BSD-3-Clause"
+  description: "Implements a XML/HTML/XHTML Markup safe string for Python"
   homepage_url: "http://github.com/pallets/markupsafe"
   binary_artifact:
     url: ""
@@ -186,10 +200,13 @@ packages:
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "Werkzeug"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "The comprehensive WSGI web application library."
   homepage_url: "https://palletsprojects.com/p/werkzeug/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/3d/bf/79101bd1d6a2b3fe0888e8d6e039800b173f26b7388308fc4bcc45de8d0a/Werkzeug-0.15.3-py2.py3-none-any.whl"

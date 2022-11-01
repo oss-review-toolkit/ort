@@ -29,9 +29,12 @@ packages:
   - "Sebastian Bank <sebastian.bank@uni-leipzig.de>"
   declared_licenses:
   - "MIT"
+  - "MIT License"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Graphviz"
+    mapped:
+      MIT License: "MIT"
+  description: "Simple Python interface for Graphviz"
   homepage_url: "https://github.com/xflr6/graphviz"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/9d/fb/886e8ec7862989afc0c35d15813b6c665fe134cc6027cdde2fa300abe9a2/graphviz-0.19.1-py3-none-any.whl"
@@ -58,10 +61,13 @@ packages:
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "Jinja"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A very fast and expressive template engine."
   homepage_url: "https://palletsprojects.com/p/jinja/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/80/21/ae597efc7ed8caaa43fb35062288baaf99a7d43ff0cf66452ddf47604ee6/Jinja2-3.0.1-py3-none-any.whl"
@@ -88,10 +94,13 @@ packages:
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
+  - "BSD License"
   - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
-  description: "MarkupSafe"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "Safely add untrusted strings to HTML/XML markup."
   homepage_url: "https://palletsprojects.com/p/markupsafe/"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/53/e8/601efa63c4058311a8bda7984a2fe554b9da574044967d7aee253661ee46/MarkupSafe-2.0.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl"
