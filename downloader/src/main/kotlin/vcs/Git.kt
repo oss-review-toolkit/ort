@@ -19,17 +19,13 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import com.jcraft.jsch.JSch
-import com.jcraft.jsch.agentproxy.AgentProxyException
-import com.jcraft.jsch.agentproxy.RemoteIdentityRepository
-import com.jcraft.jsch.agentproxy.connector.SSHAgentConnector
-import com.jcraft.jsch.agentproxy.usocket.JNAUSocketFactory
-
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
 import java.net.Authenticator
+import java.net.InetSocketAddress
+import java.security.PublicKey
 import java.util.regex.Pattern
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -45,7 +41,10 @@ import org.eclipse.jgit.transport.CredentialsProvider
 import org.eclipse.jgit.transport.SshSessionFactory
 import org.eclipse.jgit.transport.TagOpt
 import org.eclipse.jgit.transport.URIish
-import org.eclipse.jgit.transport.ssh.jsch.JschConfigSessionFactory
+import org.eclipse.jgit.transport.sshd.DefaultProxyDataFactory
+import org.eclipse.jgit.transport.sshd.JGitKeyCache
+import org.eclipse.jgit.transport.sshd.ServerKeyDatabase
+import org.eclipse.jgit.transport.sshd.SshdSessionFactory
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
@@ -73,30 +72,25 @@ class Git : VersionControlSystem(), CommandLineTool {
             // discrepancies in the way .netrc files are interpreted between JGit's and ORT's implementation.
             CredentialsProvider.setDefault(AuthenticatorCredentialsProvider)
 
-            val sessionFactory = object : JschConfigSessionFactory() {
-                override fun configureJSch(jsch: JSch) {
-                    // Accept unknown hosts.
-                    JSch.setConfig("StrictHostKeyChecking", "no")
+            // Create a dummy key database that accepts any key from any (unknown) host.
+            val dummyKeyDatabase = object : ServerKeyDatabase {
+                override fun lookup(
+                    connectAddress: String,
+                    remoteAddress: InetSocketAddress,
+                    config: ServerKeyDatabase.Configuration
+                ) = emptyList<PublicKey>()
 
-                    // Limit to "publickey" to avoid "keyboard-interactive" prompts.
-                    JSch.setConfig("PreferredAuthentications", "publickey")
+                override fun accept(
+                    connectAddress: String,
+                    remoteAddress: InetSocketAddress,
+                    serverKey: PublicKey,
+                    config: ServerKeyDatabase.Configuration,
+                    provider: CredentialsProvider?
+                ) = true
+            }
 
-                    try {
-                        // By default, JGit configures JSch to use identity files (named "identity", "id_rsa" or
-                        // "id_dsa") from the current user's ".ssh" directory only, also see
-                        // https://www.codeaffine.com/2014/12/09/jgit-authentication/. Additionally configure JSch to
-                        // connect to an SSH-Agent if available.
-                        if (SSHAgentConnector.isConnectorAvailable()) {
-                            val socketFactory = JNAUSocketFactory()
-                            val connector = SSHAgentConnector(socketFactory)
-                            jsch.identityRepository = RemoteIdentityRepository(connector)
-                        }
-                    } catch (e: AgentProxyException) {
-                        e.showStackTrace()
-
-                        logger.error { "Could not create SSH Agent connector: ${e.collectMessages()}" }
-                    }
-                }
+            val sessionFactory = object : SshdSessionFactory(JGitKeyCache(), DefaultProxyDataFactory()) {
+                override fun getServerKeyDatabase(homeDir: File, sshDir: File) = dummyKeyDatabase
             }
 
             SshSessionFactory.setInstance(sessionFactory)
