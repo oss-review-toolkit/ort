@@ -26,6 +26,9 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -43,6 +46,7 @@ import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test for the main entry point of the application.
@@ -124,6 +128,44 @@ class OrtMainFunTest : StringSpec() {
 
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\tNPM"
+        }
+
+        "An Unmanaged project is created if no definition files are found" {
+            val inputDir = createTestTempDir()
+            inputDir.resolve("test").writeText("test")
+
+            runMain(
+                "-c", configFile.path,
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
+            )
+
+            val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+
+            ortResult.analyzer shouldNotBeNull {
+                result.projects should haveSize(1)
+                result.projects.single().id.type shouldBe "Unmanaged"
+            }
+        }
+
+        "No Unmanaged project is created if no definition files are found and Unmanaged is disabled" {
+            val inputDir = createTestTempDir()
+            inputDir.resolve("test").writeText("test")
+
+            runMain(
+                "-c", configFile.path,
+                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                "analyze",
+                "-i", inputDir.path,
+                "-o", outputDir.path
+            )
+
+            val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+
+            ortResult.analyzer shouldNotBeNull {
+                result.projects should beEmpty()
+            }
         }
 
         "Output formats are deduplicated" {
