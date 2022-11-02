@@ -27,16 +27,8 @@ dependencies {
 
     implementation(project(":utils:ort-utils"))
 
-    // Force the generated Maven POM to use the same version of "jsch" Gradle resolves the version conflict to.
-    implementation("com.jcraft:jsch") {
-        version {
-            strictly("0.1.55")
-        }
-    }
-
     implementation(libs.jgit)
-    implementation(libs.jgitJsch)
-    implementation(libs.jschAgentProxy)
+    implementation(libs.jgitSshApacheAgent)
     implementation(libs.svnkit)
 
     testImplementation(libs.mockk)

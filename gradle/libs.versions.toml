@@ -34,7 +34,6 @@ jackson = "2.13.4"
 jgit = "6.3.0.202209071007-r"
 jiraRestClient = "5.2.4"
 jruby = "9.3.9.0"
-jschAgentProxy = "0.0.9"
 jslt = "0.1.13"
 jsonSchemaValidator = "1.0.73"
 kotest = "5.5.3"
@@ -111,11 +110,10 @@ jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datat
 jacksonModuleJaxbAnnotations = { module = "com.fasterxml.jackson.module:jackson-module-jaxb-annotations", version.ref = "jackson" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
-jgitJsch = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.jsch", version.ref = "jgit" }
+jgitSshApacheAgent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClientApp = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
 jruby = { module = "org.jruby:jruby-complete", version.ref = "jruby" }
-jschAgentProxy = { module = "com.jcraft:jsch.agentproxy.jsch", version.ref = "jschAgentProxy" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
