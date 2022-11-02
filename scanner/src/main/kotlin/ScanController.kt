@@ -145,7 +145,7 @@ class ScanController(
     /**
      * Get all provenances for which no scan result for the provided [scanner] is available.
      */
-    fun getMissingProvenanceScans(scanner: ScannerWrapper, nestedProvenance: NestedProvenance) =
+    private fun getMissingProvenanceScans(scanner: ScannerWrapper, nestedProvenance: NestedProvenance) =
         nestedProvenance.getProvenances().filter { hasScanResult(scanner, it) }
 
     /**
@@ -265,7 +265,7 @@ class ScanController(
     /**
      * Get all [ScanResult]s for the provided [provenance].
      */
-    fun getScanResults(provenance: KnownProvenance): List<ScanResult> =
+    private fun getScanResults(provenance: KnownProvenance): List<ScanResult> =
         scanResults.values.flatMap { scanResultsByProvenance -> scanResultsByProvenance[provenance].orEmpty() }
 
     /**
