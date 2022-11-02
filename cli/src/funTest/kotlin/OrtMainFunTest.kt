@@ -74,7 +74,7 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
-                "-o", outputDir.resolve("gradle").path
+                "-o", outputDir.path
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -93,7 +93,7 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
-                "-o", outputDir.resolve("gradle").path
+                "-o", outputDir.path
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -115,7 +115,7 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.disabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
-                "-o", outputDir.resolve("gradle").path
+                "-o", outputDir.path
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
@@ -134,7 +134,7 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", inputDir.path,
-                "-o", outputDir.resolve("gradle").path,
+                "-o", outputDir.path,
                 "-f", "json,yaml,json"
             )
             val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
@@ -143,7 +143,6 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Analyzer creates correct output" {
-            val analyzerOutputDir = outputDir.resolve("merged-results")
             val expectedResult = patchExpectedResult(
                 projectDir.resolve("gradle-all-dependencies-expected-result.yml"),
                 url = vcsUrl,
@@ -157,17 +156,16 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", projectDir.resolve("gradle").absolutePath,
-                "-o", analyzerOutputDir.path
+                "-o", outputDir.path
             )
 
-            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+            val analyzerResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
             val resolvedResult = analyzerResult.withResolvedScopes()
 
             patchActualResult(resolvedResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Package curation data file is applied correctly" {
-            val analyzerOutputDir = outputDir.resolve("curations")
             val expectedResult = patchExpectedResult(
                 projectDir.resolve("gradle-all-dependencies-expected-result-with-curations.yml"),
                 url = vcsUrl,
@@ -181,11 +179,11 @@ class OrtMainFunTest : StringSpec() {
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
                 "-i", projectDir.resolve("gradle").absolutePath,
-                "-o", analyzerOutputDir.path,
+                "-o", outputDir.path,
                 "--package-curations-file", projectDir.resolve("gradle/curations.yml").toString()
             )
 
-            val analyzerResult = analyzerOutputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
+            val analyzerResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
             val resolvedResult = analyzerResult.withResolvedScopes()
 
             patchActualResult(resolvedResult, patchStartAndEndTime = true) shouldBe expectedResult
