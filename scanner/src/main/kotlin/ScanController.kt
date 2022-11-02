@@ -274,12 +274,6 @@ class ScanController(
     fun getScanResults(scanner: ScannerWrapper): Map<KnownProvenance, List<ScanResult>> = scanResults[scanner].orEmpty()
 
     /**
-     * Get all [ScanResult]s for the provided [scanner] and [provenance].
-     */
-    fun getScanResults(scanner: ScannerWrapper, provenance: KnownProvenance): List<ScanResult> =
-        scanResults[scanner]?.get(provenance).orEmpty()
-
-    /**
      * Return true if [ScanResult]s for the complete [NestedProvenance] of the package are available.
      */
     fun hasCompleteScanResult(scanner: ScannerWrapper, pkg: Package): Boolean =
