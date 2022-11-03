@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
  */
 class FileArchiver(
     /**
-     * A collection of globs to match the paths of files that shall be archived. For details about the glob pattern see
-     * [java.nio.file.FileSystem.getPathMatcher].
+     * A collection of globs to match the paths of files that shall be archived. For details about the glob patterns see
+     * [FileMatcher].
      */
     patterns: Collection<String>,
 
@@ -54,8 +54,8 @@ class FileArchiver(
 ) {
     constructor(
         /**
-         * A collection of globs to match the paths of files that shall be archived. For details about the glob pattern
-         * see [java.nio.file.FileSystem.getPathMatcher].
+         * A collection of globs to match the paths of files that shall be archived. For details about the glob patterns
+         * see [FileMatcher].
          */
         patterns: Collection<String>,
 
