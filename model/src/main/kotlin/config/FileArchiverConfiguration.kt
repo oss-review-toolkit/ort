@@ -80,7 +80,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
         else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))
     }
 
-    val patterns = LicenseFilenamePatterns.getInstance().allLicenseFilenames
+    val patterns = LicenseFilePatterns.getInstance().allLicenseFilenames
 
     return FileArchiver(patterns, storage)
 }

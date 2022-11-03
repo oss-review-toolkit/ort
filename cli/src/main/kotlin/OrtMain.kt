@@ -43,7 +43,7 @@ import kotlin.system.exitProcess
 
 import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.cli.utils.logger
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -185,7 +185,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         // Make options available to subcommands and apply static configuration.
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
-        LicenseFilenamePatterns.configure(ortConfiguration.licenseFilePatterns)
+        LicenseFilePatterns.configure(ortConfiguration.licenseFilePatterns)
 
         if (helpAll) {
             registeredSubcommands().forEach {

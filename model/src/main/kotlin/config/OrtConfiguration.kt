@@ -37,7 +37,7 @@ data class OrtConfiguration(
     /**
      * The license file patterns.
      */
-    val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
+    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
 
     /**
      * A flag to indicate whether authors should be considered as copyright holders.

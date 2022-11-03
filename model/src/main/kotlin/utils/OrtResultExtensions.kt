@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
@@ -40,7 +40,7 @@ fun OrtResult.createLicenseInfoResolver(
         copyrightGarbage,
         addAuthorsToCopyrights,
         archiver,
-        LicenseFilenamePatterns.getInstance()
+        LicenseFilePatterns.getInstance()
     )
 
 /**

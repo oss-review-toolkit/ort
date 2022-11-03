@@ -518,7 +518,7 @@ private fun ReporterInput.replaceOrtResult(ortResult: OrtResult): ReporterInput 
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = licenseInfoResolver.addAuthorsToCopyrights,
             archiver = licenseInfoResolver.archiver,
-            licenseFilenamePatterns = licenseInfoResolver.licenseFilenamePatterns
+            licenseFilePatterns = licenseInfoResolver.licenseFilePatterns
         )
     )
 

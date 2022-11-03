@@ -27,7 +27,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -98,7 +98,7 @@ data class ScanSummary(
     fun filterByPath(path: String): ScanSummary {
         if (path.isBlank()) return this
 
-        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
+        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilePatterns.getInstance())
         val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = listOf(path)

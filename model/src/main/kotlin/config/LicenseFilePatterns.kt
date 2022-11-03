@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.config
 
-data class LicenseFilenamePatterns(
+data class LicenseFilePatterns(
     /**
      * A list of globs that match default license file names. The patterns are supposed to be used case-insensitively.
      */
@@ -43,7 +43,7 @@ data class LicenseFilenamePatterns(
     val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
 
     companion object {
-        val DEFAULT = LicenseFilenamePatterns(
+        val DEFAULT = LicenseFilePatterns(
             licenseFilenames = listOf(
                 "copying*",
                 "copyright",
@@ -62,14 +62,14 @@ data class LicenseFilenamePatterns(
             )
         )
 
-        private var instance: LicenseFilenamePatterns = DEFAULT
+        private var instance: LicenseFilePatterns = DEFAULT
 
         @Synchronized
-        fun configure(patterns: LicenseFilenamePatterns) {
+        fun configure(patterns: LicenseFilePatterns) {
             instance = patterns
         }
 
         @Synchronized
-        fun getInstance(): LicenseFilenamePatterns = instance
+        fun getInstance(): LicenseFilePatterns = instance
     }
 }

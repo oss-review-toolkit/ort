@@ -75,7 +75,7 @@ data class ReporterInput(
         copyrightGarbage = copyrightGarbage,
         addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
         archiver = ortConfig.scanner.archive.createFileArchiver(),
-        licenseFilenamePatterns = ortConfig.licenseFilePatterns
+        licenseFilePatterns = ortConfig.licenseFilePatterns
     ),
 
     /**

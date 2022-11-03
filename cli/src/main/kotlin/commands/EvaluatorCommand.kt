@@ -58,7 +58,7 @@ import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -294,7 +294,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = config.addAuthorsToCopyrights,
             archiver = config.scanner.archive.createFileArchiver(),
-            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
+            licenseFilePatterns = LicenseFilePatterns.getInstance()
         )
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultInput, resolutionsFile)
