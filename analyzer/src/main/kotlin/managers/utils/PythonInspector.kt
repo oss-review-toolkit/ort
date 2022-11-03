@@ -26,7 +26,11 @@ import java.util.SortedSet
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonTransformingSerializer
 import kotlinx.serialization.json.decodeFromStream
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -112,9 +116,18 @@ internal object PythonInspector : CommandLineTool, Logging {
     @Serializable
     internal data class Result(
         @SerialName("files") val projects: List<Project>,
-        @SerialName("resolved_dependencies_graph") val resolvedDependenciesGraph: List<ResolvedDependency>,
+        @SerialName("resolved_dependencies_graph")
+        @Serializable(with = DependencyGraphDeserializer::class)
+        val resolvedDependenciesGraph: List<ResolvedDependency>,
         val packages: List<Package>
     )
+
+    // TODO: Can be removed once this issue is fixed: https://github.com/nexB/python-inspector/issues/94.
+    object DependencyGraphDeserializer :
+        JsonTransformingSerializer<List<ResolvedDependency>>(ListSerializer(ResolvedDependency.serializer())) {
+        override fun transformDeserialize(element: JsonElement): JsonElement =
+            if (element !is JsonArray) JsonArray(emptyList()) else element
+    }
 
     @Serializable
     internal data class Project(
