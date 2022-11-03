@@ -37,6 +37,7 @@ jruby = "9.3.9.0"
 jschAgentProxy = "0.0.9"
 jslt = "0.1.13"
 jsonSchemaValidator = "1.0.73"
+koin = "3.2.2"
 kotest = "5.5.3"
 kotlinxCoroutines = "1.6.4"
 kotlinxHtml = "0.8.0"
@@ -118,6 +119,8 @@ jruby = { module = "org.jruby:jruby-complete", version.ref = "jruby" }
 jschAgentProxy = { module = "com.jcraft:jsch.agentproxy.jsch", version.ref = "jschAgentProxy" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
+koinCore = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koinTest = { module = "io.insert-koin:koin-test", version.ref = "koin" }
 kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotestAssertionsJson = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 kotestExtensionsJunitXml = { module = "io.kotest:kotest-extensions-junitxml", version.ref = "kotest" }

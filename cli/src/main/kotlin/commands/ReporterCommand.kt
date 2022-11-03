@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.cli.commands
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
@@ -41,7 +40,9 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.cli.GlobalOptions
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.cli.utils.configurationGroup
@@ -51,7 +52,7 @@ import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -80,7 +81,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-class ReporterCommand : CliktCommand(
+class ReporterCommand : KoinComponent, CliktCommand(
     name = "report",
     help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
@@ -198,7 +199,7 @@ class ReporterCommand : CliktCommand(
         format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         var ortResult = readOrtResult(ortFile)
@@ -212,9 +213,7 @@ class ReporterCommand : CliktCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
-        val config = globalOptionsForSubcommands.config
-
-        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
                 packageConfigurationOption.createProvider()
@@ -232,9 +231,9 @@ class ReporterCommand : CliktCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
-            archiver = config.scanner.archive.createFileArchiver(),
-            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
+            addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
+            archiver = ortConfig.scanner.archive.createFileArchiver(),
+            licenseFilenamePatterns = ortConfig.licenseFilePatterns
         )
 
         val licenseClassifications =
@@ -248,7 +247,7 @@ class ReporterCommand : CliktCommand(
 
         val input = ReporterInput(
             ortResult,
-            globalOptionsForSubcommands.config,
+            ortConfig,
             packageConfigurationProvider,
             resolutionProvider,
             DefaultLicenseTextProvider(licenseTextDirectories),
@@ -260,7 +259,7 @@ class ReporterCommand : CliktCommand(
 
         val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
-        config.reporter.options?.forEach { (reporterName, option) ->
+        ortConfig.reporter.options?.forEach { (reporterName, option) ->
             val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
             reportSpecificOptionsMap += option
         }

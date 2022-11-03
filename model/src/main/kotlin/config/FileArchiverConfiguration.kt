@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.model.config
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.koin.core.context.GlobalContext
+
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
@@ -80,7 +82,9 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
         else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))
     }
 
-    val patterns = LicenseFilenamePatterns.getInstance().allLicenseFilenames
+    // The nullable receiver class of this extension function prevents the use of inject() as a delegate, so access the
+    // global context directly.
+    val ortConfig = GlobalContext.get().get<OrtConfiguration>()
 
-    return FileArchiver(patterns, storage)
+    return FileArchiver(ortConfig.licenseFilePatterns.allLicenseFilenames, storage)
 }

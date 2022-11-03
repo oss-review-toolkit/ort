@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -29,7 +28,6 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -74,16 +72,10 @@ class NotifierCommand : CliktCommand(name = "notify", help = "Create notificatio
                 "same name. Can be used multiple times. For example: --label distribution=external"
     ).associate()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
-
     override fun run() {
-        val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
-
         val ortResult = readOrtResult(ortFile).mergeLabels(labels)
-
-        val config = globalOptionsForSubcommands.config.notifier
-
-        val notifier = Notifier(ortResult, config, DefaultResolutionProvider.create(ortResult, resolutionsFile))
+        val notifier = Notifier(ortResult, DefaultResolutionProvider.create(ortResult, resolutionsFile))
+        val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
 
         notifier.run(script)
     }

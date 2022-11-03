@@ -28,9 +28,12 @@ import kotlin.script.experimental.api.providedProperties
 import kotlin.script.experimental.api.scriptsInstancesSharing
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.model.NotifierRun
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.NotifierConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.notifier.modules.JiraNotifier
@@ -39,12 +42,15 @@ import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Notifier(
     ortResult: OrtResult = OrtResult.EMPTY,
-    config: NotifierConfiguration = NotifierConfiguration(),
     resolutionProvider: ResolutionProvider = DefaultResolutionProvider()
-) : ScriptRunner() {
+) : ScriptRunner(), KoinComponent {
+    private val ortConfig by inject<OrtConfiguration>()
+
     private val customProperties = buildMap {
-        config.mail?.let { put("mailClient", MailNotifier(it)) }
-        config.jira?.let { put("jiraClient", JiraNotifier(it)) }
+        with(ortConfig.notifier) {
+            mail?.let { put("mailClient", MailNotifier(it)) }
+            jira?.let { put("jiraClient", JiraNotifier(it)) }
+        }
 
         put("resolutionProvider", resolutionProvider)
     }

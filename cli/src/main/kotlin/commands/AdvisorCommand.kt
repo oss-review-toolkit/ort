@@ -34,6 +34,9 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -42,6 +45,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -49,7 +53,10 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
+class AdvisorCommand : KoinComponent, CliktCommand(
+    name = "advise",
+    help = "Check dependencies for security vulnerabilities."
+) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
@@ -100,6 +107,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
     ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
@@ -117,8 +125,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         println("The following advisors are activated:")
         println("\t" + distinctProviders.joinToString())
 
-        val config = globalOptionsForSubcommands.config
-        val advisor = Advisor(distinctProviders, config.advisor)
+        val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
         val ortResultOutput = advisor.retrieveFindings(ortResultInput, skipExcluded).mergeLabels(labels)
@@ -138,6 +145,6 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
             advisorResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 }

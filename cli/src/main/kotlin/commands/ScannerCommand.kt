@@ -40,6 +40,9 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import kotlinx.coroutines.runBlocking
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -67,7 +70,10 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
+class ScannerCommand : KoinComponent, CliktCommand(
+    name = "scan",
+    help = "Run external license / copyright scanners."
+) {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",
@@ -137,6 +143,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         .configurationGroup()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
@@ -150,9 +157,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             }
         }
 
-        val config = globalOptionsForSubcommands.config
-
-        val ortResult = runScanners(scanners, projectScanners ?: scanners, config).mergeLabels(labels)
+        val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
 
         // Write the result.
         outputDir.safeMkdirs()
@@ -171,7 +176,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 
     private fun runScanners(

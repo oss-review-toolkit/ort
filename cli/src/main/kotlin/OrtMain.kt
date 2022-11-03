@@ -41,9 +41,11 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.module
+
 import org.ossreviewtoolkit.cli.commands.*
 import org.ossreviewtoolkit.cli.utils.logger
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -70,7 +72,6 @@ sealed interface GroupTypes {
  * Helper class for collecting options that can be passed to subcommands.
  */
 data class GlobalOptions(
-    val config: OrtConfiguration,
     val forceOverwrite: Boolean
 )
 
@@ -179,13 +180,19 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         logger.debug { "Used command line arguments: ${currentContext.originalArgv}" }
 
+        val configModule = module {
+            single { OrtConfiguration.load(configArguments, configFile) }
+        }
+
+        startKoin {
+            modules(configModule)
+        }
+
         // Make the parameter globally available.
         printStackTrace = stacktrace
 
         // Make options available to subcommands and apply static configuration.
-        val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
-        currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
-        LicenseFilenamePatterns.configure(ortConfiguration.licenseFilePatterns)
+        currentContext.findOrSetObject { GlobalOptions(forceOverwrite) }
 
         if (helpAll) {
             registeredSubcommands().forEach {

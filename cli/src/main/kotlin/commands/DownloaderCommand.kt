@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
@@ -37,7 +36,9 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.cli.GlobalOptions
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
@@ -56,6 +57,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -75,7 +77,10 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
-class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source code from a remote location.") {
+class DownloaderCommand : KoinComponent, CliktCommand(
+    name = "download",
+    help = "Fetch source code from a remote location."
+) {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",
@@ -176,7 +181,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
                 "result to limit downloads to. If not specified, all packages are downloaded."
     ).split(",")
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val failureMessages = mutableListOf<String>()
@@ -237,7 +242,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             }
         }
 
-        val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
+        val includedLicenseCategories = ortConfig.downloader.includedLicenseCategories
         if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
             val originalCount = packages.size
 
@@ -268,7 +273,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
 
         packageDownloadDirs.forEach { (pkg, dir) ->
             try {
-                Downloader(globalOptionsForSubcommands.config.downloader).download(pkg, dir)
+                Downloader(ortConfig.downloader).download(pkg, dir)
 
                 if (archiveMode == ArchiveMode.ENTITY) {
                     val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
@@ -369,7 +374,7 @@ class DownloaderCommand : CliktCommand(name = "download", help = "Fetch source c
             // Always allow moving revisions when directly downloading a single project only. This is for
             // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
             // project needs to be downloaded.
-            val config = globalOptionsForSubcommands.config.downloader.copy(allowMovingRevisions = true)
+            val config = ortConfig.downloader.copy(allowMovingRevisions = true)
             val provenance = Downloader(config).download(dummyPackage, outputDir)
             println("Successfully downloaded $provenance.")
         }.onFailure {

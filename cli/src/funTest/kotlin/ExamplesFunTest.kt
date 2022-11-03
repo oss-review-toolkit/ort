@@ -39,6 +39,9 @@ import java.io.File
 import java.io.IOException
 import java.time.Instant
 
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
+
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -49,6 +52,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
@@ -60,6 +64,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.ProjectConfig
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -122,10 +127,10 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
+            loadKoinModules(ProjectConfig.defaultConfigModule)
             val outputDir = createSpecTempDir()
 
             takeExampleFile("asciidoctor-pdf-theme.yml")
-
             val report = PdfTemplateReporter().generateReport(
                 ReporterInput(OrtResult.EMPTY),
                 outputDir,
@@ -136,6 +141,8 @@ class ExamplesFunTest : StringSpec() {
         }
 
         "example.rules.kts can be compiled and executed" {
+            loadKoinModules(ProjectConfig.defaultConfigModule)
+
             val resultFile = File("src/funTest/assets/semver4j-ort-result.yml")
             val licenseFile = File("../examples/license-classifications.yml")
             val ortResult = resultFile.readValue<OrtResult>()
@@ -164,20 +171,22 @@ class ExamplesFunTest : StringSpec() {
             greenMail.setUser("no-reply@oss-review-toolkit.org", "no-reply@oss-review-toolkit.org", "pwd")
             greenMail.start()
 
-            val ortResult = createOrtResultWithIssue()
-            val notifier = Notifier(
-                ortResult,
-                NotifierConfiguration(
-                    SendMailConfiguration(
-                        hostName = "localhost",
-                        port = greenMail.smtp.serverSetup.port,
-                        username = "no-reply@oss-review-toolkit.org",
-                        password = "pwd",
-                        useSsl = false,
-                        fromAddress = "no-reply@oss-review-toolkit.org"
-                    )
-                )
+            val sendMailConfig = SendMailConfiguration(
+                hostName = "localhost",
+                port = greenMail.smtp.serverSetup.port,
+                username = "no-reply@oss-review-toolkit.org",
+                password = "pwd",
+                useSsl = false,
+                fromAddress = "no-reply@oss-review-toolkit.org"
             )
+
+            val sendMailConfigModule = module {
+                single { OrtConfiguration(notifier = NotifierConfiguration(mail = sendMailConfig)) }
+            }
+
+            loadKoinModules(sendMailConfigModule)
+            val ortResult = createOrtResultWithIssue()
+            val notifier = Notifier(ortResult)
 
             val script = examplesDir.resolve("notifications/src/main/resources/example.notifications.kts").readText()
 

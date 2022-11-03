@@ -27,15 +27,23 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 
 import kotlin.script.experimental.api.ResultValue
 
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
+
 import org.ossreviewtoolkit.model.config.JiraConfiguration
 import org.ossreviewtoolkit.model.config.NotifierConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
 
 class NotifierTest : WordSpec({
     "Client properties" should {
         "only be available if configured" {
-            val mailNotifier = Notifier(config = NotifierConfiguration(mail = SendMailConfiguration()))
-            val jiraNotifier = Notifier(config = NotifierConfiguration(jira = JiraConfiguration()))
+            val sendMailConfigModule = module {
+                single { OrtConfiguration(notifier = NotifierConfiguration(mail = SendMailConfiguration())) }
+            }
+
+            loadKoinModules(sendMailConfigModule)
+            val mailNotifier = Notifier()
 
             assertSoftly {
                 shouldNotThrow<RuntimeException> {
@@ -52,6 +60,13 @@ class NotifierTest : WordSpec({
                     mailNotifier.runScript("jiraClient")
                 }
             }
+
+            val jiraConfigModule = module {
+                single { OrtConfiguration(notifier = NotifierConfiguration(jira = JiraConfiguration())) }
+            }
+
+            loadKoinModules(jiraConfigModule)
+            val jiraNotifier = Notifier()
 
             assertSoftly {
                 shouldThrow<RuntimeException> {

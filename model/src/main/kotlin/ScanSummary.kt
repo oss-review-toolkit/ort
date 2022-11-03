@@ -27,7 +27,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.Instant
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -73,7 +76,7 @@ data class ScanSummary(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
-) {
+) : KoinComponent {
     companion object {
         /**
          * A constant for a [ScannerRun] where all properties are empty.
@@ -98,7 +101,8 @@ data class ScanSummary(
     fun filterByPath(path: String): ScanSummary {
         if (path.isBlank()) return this
 
-        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
+        val ortConfig by inject<OrtConfiguration>()
+        val rootLicenseMatcher = RootLicenseMatcher(ortConfig.licenseFilePatterns)
         val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = listOf(path)

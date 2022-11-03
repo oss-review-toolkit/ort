@@ -39,6 +39,9 @@ import java.io.File
 
 import kotlin.time.measureTimedValue
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
@@ -58,7 +61,7 @@ import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -81,7 +84,10 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
+class EvaluatorCommand : KoinComponent, CliktCommand(
+    name = "evaluate",
+    help = "Evaluate ORT result files against policy rules."
+) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."
@@ -204,6 +210,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
     ).flag()
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val configurationFiles = listOfNotNull(
@@ -272,9 +279,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 
-        val config = globalOptionsForSubcommands.config
-
-        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResultInput.repository.config.packageConfigurations),
                 packageConfigurationOption.createProvider()
@@ -292,9 +297,9 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
-            archiver = config.scanner.archive.createFileArchiver(),
-            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
+            addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
+            archiver = ortConfig.scanner.archive.createFileArchiver(),
+            licenseFilenamePatterns = ortConfig.licenseFilePatterns
         )
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultInput, resolutionsFile)
@@ -322,7 +327,7 @@ class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT re
             evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
 
-        severityStats.print().conclude(config.severeRuleViolationThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeRuleViolationThreshold, 2)
     }
 }
 

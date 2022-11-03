@@ -27,10 +27,13 @@ import java.util.ServiceLoader
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -39,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 abstract class VersionControlSystem {
-    companion object : Logging {
+    companion object : KoinComponent, Logging {
         private val LOADER = ServiceLoader.load(VersionControlSystem::class.java)
 
         /**
@@ -151,8 +154,9 @@ abstract class VersionControlSystem {
          */
         internal fun getSparseCheckoutGlobPatterns(): List<String> {
             val globPatterns = mutableListOf("*$ORT_REPO_CONFIG_FILENAME")
-            val licensePatterns = LicenseFilenamePatterns.getInstance()
-            return licensePatterns.allLicenseFilenames.generateCapitalizationVariants().mapTo(globPatterns) { "**/$it" }
+            val ortConfig by inject<OrtConfiguration>()
+            return ortConfig.licenseFilePatterns.allLicenseFilenames.generateCapitalizationVariants()
+                .mapTo(globPatterns) { "**/$it" }
         }
 
         private fun Collection<String>.generateCapitalizationVariants() =

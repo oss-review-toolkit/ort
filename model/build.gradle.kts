@@ -30,6 +30,7 @@ dependencies {
     api(libs.jacksonDatabind)
     api(libs.jacksonDataformatXml)
     api(libs.jacksonDataformatYaml)
+    api(libs.koinCore)
 
     implementation(libs.bundles.exposed)
     implementation(libs.bundles.hoplite)

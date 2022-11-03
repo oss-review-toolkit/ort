@@ -36,12 +36,6 @@ data class LicenseFilenamePatterns(
      */
     val rootLicenseFilenames: List<String>
 ) {
-    /**
-     * A list of globs that match all kind of license file names, equaling the union of [licenseFilenames],
-     * [patentFilenames] and [rootLicenseFilenames]. The patterns are supposed to be used case-insensitively.
-     */
-    val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
-
     companion object {
         val DEFAULT = LicenseFilenamePatterns(
             licenseFilenames = listOf(
@@ -61,15 +55,11 @@ data class LicenseFilenamePatterns(
                 "readme*"
             )
         )
-
-        private var instance: LicenseFilenamePatterns = DEFAULT
-
-        @Synchronized
-        fun configure(patterns: LicenseFilenamePatterns) {
-            instance = patterns
-        }
-
-        @Synchronized
-        fun getInstance(): LicenseFilenamePatterns = instance
     }
+
+    /**
+     * A list of globs that match all kind of license file names, equaling the union of [licenseFilenames],
+     * [patentFilenames] and [rootLicenseFilenames]. The patterns are supposed to be used case-insensitively.
+     */
+    val allLicenseFilenames = (licenseFilenames + patentFilenames + rootLicenseFilenames).distinct()
 }

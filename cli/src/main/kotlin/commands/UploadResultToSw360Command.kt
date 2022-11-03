@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -36,7 +35,9 @@ import org.eclipse.sw360.clients.rest.resource.projects.SW360Project
 import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.clients.utils.SW360ClientException
 
-import org.ossreviewtoolkit.cli.GlobalOptions
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -45,6 +46,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
@@ -54,7 +56,7 @@ import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-class UploadResultToSw360Command : CliktCommand(
+class UploadResultToSw360Command : KoinComponent, CliktCommand(
     name = "upload-result-to-sw360",
     help = "Upload an ORT result to SW360.",
     epilog = "EXPERIMENTAL: The command is still in development and usage will likely change in the near future. The " +
@@ -74,12 +76,12 @@ class UploadResultToSw360Command : CliktCommand(
         help = "Download sources of packages and upload them as attachments to SW360 releases."
     ).flag()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)
 
-        val sw360Config = globalOptionsForSubcommands.config.scanner.storages?.values
+        val sw360Config = ortConfig.scanner.storages?.values
             ?.filterIsInstance<Sw360StorageConfiguration>()?.singleOrNull()
 
         requireNotNull(sw360Config) {
@@ -89,7 +91,7 @@ class UploadResultToSw360Command : CliktCommand(
         val sw360Connection = Sw360Storage.createConnection(sw360Config)
         val sw360ReleaseClient = sw360Connection.releaseAdapter
         val sw360ProjectClient = sw360Connection.projectAdapter
-        val downloader = Downloader(globalOptionsForSubcommands.config.downloader)
+        val downloader = Downloader(ortConfig.downloader)
 
         getProjectWithPackages(ortResult).forEach { (project, pkgList) ->
             val linkedReleases = pkgList.mapNotNull { pkg ->

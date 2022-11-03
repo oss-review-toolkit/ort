@@ -19,10 +19,12 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import org.koin.core.context.GlobalContext
+
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
@@ -35,13 +37,18 @@ fun OrtResult.createLicenseInfoResolver(
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
-) = LicenseInfoResolver(
+): LicenseInfoResolver {
+    // Avoid the need for OrtResult to implement KoinComponent by accessing the global context directly.
+    val ortConfig = GlobalContext.get().get<OrtConfiguration>()
+
+    return LicenseInfoResolver(
         DefaultLicenseInfoProvider(this, packageConfigurationProvider),
         copyrightGarbage,
         addAuthorsToCopyrights,
         archiver,
-        LicenseFilenamePatterns.getInstance()
+        ortConfig.licenseFilePatterns
     )
+}
 
 /**
  * Return the path where the repository given by [provenance] is linked into the source tree.

@@ -35,6 +35,9 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -54,6 +57,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
@@ -66,7 +70,10 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine dependencies of a software project.") {
+class AnalyzerCommand : KoinComponent, CliktCommand(
+    name = "analyze",
+    help = "Determine dependencies of a software project."
+) {
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze. As a special case, if only one package manager is enabled, this " +
@@ -177,6 +184,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
     )
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by inject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
@@ -209,12 +217,10 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
         println("Looking for analyzer-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
-        val config = globalOptionsForSubcommands.config
-
         val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
             (enabledPackageManagers ?: PackageManager.ALL.values).toSet() - disabledPackageManagers.orEmpty().toSet()
         } else {
-            config.analyzer.determineEnabledPackageManagers()
+            ortConfig.analyzer.determineEnabledPackageManagers()
         }
 
         println("The following package managers are enabled:")
@@ -226,7 +232,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             ?: RepositoryConfiguration()
 
         val analyzerConfiguration =
-            repositoryConfiguration.analyzer?.let { config.analyzer.merge(it) } ?: config.analyzer
+            repositoryConfiguration.analyzer?.let { ortConfig.analyzer.merge(it) } ?: ortConfig.analyzer
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
@@ -237,7 +243,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
-            if (config.enableRepositoryPackageCurations) {
+            if (ortConfig.enableRepositoryPackageCurations) {
                 add(SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
                 logger.warn {
@@ -249,7 +255,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
 
         val curationProviders = listOfNotNull(
             CompositePackageCurationProvider(defaultCurationProviders),
-            config.analyzer.sw360Configuration?.let {
+            ortConfig.analyzer.sw360Configuration?.let {
                 Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
             },
             ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
@@ -301,7 +307,7 @@ class AnalyzerCommand : CliktCommand(name = "analyze", help = "Determine depende
             analyzerResult.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 }
 

@@ -23,12 +23,23 @@ import io.kotest.core.config.AbstractProjectConfig
 import io.kotest.core.spec.SpecExecutionOrder
 import io.kotest.extensions.junitxml.JunitXmlReporter
 
+import org.koin.core.context.GlobalContext.startKoin
+import org.koin.dsl.module
+
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 
-class ProjectConfig : AbstractProjectConfig() {
+object ProjectConfig : AbstractProjectConfig() {
     override val specExecutionOrder = SpecExecutionOrder.Annotated
 
+    val defaultConfigModule = module {
+        single { OrtConfiguration() }
+    }
+
     init {
+        // Start Koin without modules to let the individual tests (un-)load them as needed.
+        startKoin { }
+
         OrtProxySelector.install()
     }
 
