@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -234,7 +234,7 @@ class ReporterCommand : CliktCommand(
             copyrightGarbage = copyrightGarbage,
             addAuthorsToCopyrights = config.addAuthorsToCopyrights,
             archiver = config.scanner.archive.createFileArchiver(),
-            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
+            licenseFilePatterns = LicenseFilePatterns.getInstance()
         )
 
         val licenseClassifications =

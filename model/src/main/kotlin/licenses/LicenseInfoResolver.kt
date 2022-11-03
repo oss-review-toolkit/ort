@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
@@ -45,14 +45,14 @@ class LicenseInfoResolver(
     private val copyrightGarbage: CopyrightGarbage,
     val addAuthorsToCopyrights: Boolean,
     val archiver: FileArchiver?,
-    val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
+    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT
 ) {
     private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
     private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
     private val rootLicenseMatcher = RootLicenseMatcher(
-        licenseFilenamePatterns = licenseFilenamePatterns.copy(rootLicenseFilenames = emptyList())
+        licenseFilePatterns = licenseFilePatterns.copy(rootLicenseFilenames = emptyList())
     )
-    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilenamePatterns))
+    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilePatterns))
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].

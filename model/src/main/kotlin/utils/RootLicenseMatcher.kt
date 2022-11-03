@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
 
@@ -30,22 +30,22 @@ import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
  * A heuristic for determining which (root) license files apply to any file or directory.
  *
  * For any given directory the heuristic tries to assign license files by utilizing
- * [LicenseFilenamePatterns.licenseFilenames] and patent files by utilizing [LicenseFilenamePatterns.patentFilenames]
- * independently of one another. The [LicenseFilenamePatterns.rootLicenseFilenames] serve only as fallback to find
- * license files if there isn't any match for [LicenseFilenamePatterns.licenseFilenames].
+ * [LicenseFilePatterns.licenseFilenames] and patent files by utilizing [LicenseFilePatterns.patentFilenames]
+ * independently of one another. The [LicenseFilePatterns.rootLicenseFilenames] serve only as fallback to find
+ * license files if there isn't any match for [LicenseFilePatterns.licenseFilenames].
  *
  * To determine the (root) license files applicable for a specific directory, all filenames in that directory are
- * matched against [LicenseFilenamePatterns.licenseFilenames]. If there are matches then these are used as result,
+ * matched against [LicenseFilePatterns.licenseFilenames]. If there are matches then these are used as result,
  * otherwise that search is repeated recursively in the parent directory. If there is no parent directory (because the
  * root was already searched but no result was found) then start from scratch using the fallback pattern
- * [LicenseFilenamePatterns.rootLicenseFilenames].
+ * [LicenseFilePatterns.rootLicenseFilenames].
  *
  * Patent files are assigned in an analog way, but without any fallback pattern.
  */
-class RootLicenseMatcher(licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT) {
-    private val licenseFileMatcher = createFileMatcher(licenseFilenamePatterns.licenseFilenames)
-    private val patentFileMatcher = createFileMatcher(licenseFilenamePatterns.patentFilenames)
-    private val rootLicenseFileMatcher = createFileMatcher(licenseFilenamePatterns.rootLicenseFilenames)
+class RootLicenseMatcher(licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT) {
+    private val licenseFileMatcher = createFileMatcher(licenseFilePatterns.licenseFilenames)
+    private val patentFileMatcher = createFileMatcher(licenseFilePatterns.patentFilenames)
+    private val rootLicenseFileMatcher = createFileMatcher(licenseFilePatterns.rootLicenseFilenames)
 
     /**
      * Return a mapping from the given relative [directories] to the licenses findings for the (root) license files
