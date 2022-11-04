@@ -95,8 +95,8 @@ pipeline {
 
         booleanParam(
             name: 'STACKTRACE',
-            defaultValue: false,
-            description: 'Show stacktrace of all exceptions.'
+            description: 'Show stacktrace of all exceptions.',
+            defaultValue: false
         )
 
         /*
@@ -105,14 +105,14 @@ pipeline {
 
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
-            defaultValue: false,
-            description: 'Allow dynamic versions of dependencies (support projects without lock files).'
+            description: 'Allow dynamic versions of dependencies (support projects without lock files).',
+            defaultValue: false
         )
 
         booleanParam(
             name: 'USE_CLEARLY_DEFINED_CURATIONS',
-            defaultValue: true,
-            description: 'Use package curation data from the ClearlyDefined service.'
+            description: 'Use package curation data from the ClearlyDefined service.',
+            defaultValue: true
         )
 
         /*
@@ -121,20 +121,20 @@ pipeline {
 
         booleanParam(
             name: 'RUN_SCANNER',
-            defaultValue: true,
-            description: 'Run the scanner tool.'
+            description: 'Run the scanner tool.',
+            defaultValue: true
         )
 
         choice(
             name: 'PROJECT_SCANNER',
-            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>'],
-            description: 'The scanner to use for project source code.'
+            description: 'The scanner to use for project source code.',
+            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
         )
 
         choice(
             name: 'PACKAGE_SCANNER',
-            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>'],
-            description: 'The scanner to use for package source code.'
+            description: 'The scanner to use for package source code.',
+            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
         )
 
         /*
@@ -143,8 +143,8 @@ pipeline {
 
         booleanParam(
             name: 'RUN_ADVISOR',
-            defaultValue: true,
-            description: 'Run the advisor tool.'
+            description: 'Run the advisor tool.',
+            defaultValue: true
         )
 
         /*
@@ -153,8 +153,8 @@ pipeline {
 
         booleanParam(
             name: 'RUN_EVALUATOR',
-            defaultValue: true,
-            description: 'Run the evaluator tool.'
+            description: 'Run the evaluator tool.',
+            defaultValue: true
         )
 
         /*
@@ -163,8 +163,8 @@ pipeline {
 
         booleanParam(
             name: 'RUN_REPORTER',
-            defaultValue: true,
-            description: 'Run the reporter tool.'
+            description: 'Run the reporter tool.',
+            defaultValue: true
         )
     }
 
