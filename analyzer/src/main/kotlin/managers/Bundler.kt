@@ -390,8 +390,8 @@ data class GemSpec(
                 node["name"].textValue(),
                 node["version"]["version"].textValue(),
                 homepage,
-                node["authors"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
-                node["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                node["authors"]?.toList().mapToSortedSetOfNotEmptyStrings(),
+                node["licenses"]?.toList().mapToSortedSetOfNotEmptyStrings(),
                 node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 VcsHost.parseUrl(homepage),
@@ -417,27 +417,28 @@ data class GemSpec(
                 RemoteArtifact.EMPTY
             }
 
-            val authors = node["authors"]
-                .textValueOrEmpty()
-                .split(',')
-                .mapNotNullTo(sortedSetOf()) { author ->
-                    author.trim().takeIf {
-                        it.isNotEmpty()
-                    }
-                }
-
             return GemSpec(
                 node["name"].textValue(),
                 node["version"].textValue(),
                 node["homepage_uri"].textValueOrEmpty(),
-                authors,
-                node["licenses"]?.asIterable()?.mapTo(sortedSetOf()) { it.textValue() } ?: sortedSetOf(),
+                node["authors"].textValueOrEmpty().split(',').mapToSortedSetOfNotEmptyStrings(),
+                node["licenses"]?.toList().mapToSortedSetOfNotEmptyStrings(),
                 node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 vcs,
                 artifact
             )
         }
+
+        private inline fun <reified T> Collection<T>?.mapToSortedSetOfNotEmptyStrings(): SortedSet<String> =
+            this?.mapNotNullTo(sortedSetOf()) { entry ->
+                val text = when (T::class) {
+                    JsonNode::class -> (entry as JsonNode).textValue()
+                    else -> entry.toString()
+                }
+
+                text?.trim()?.takeIf { it.isNotEmpty() }
+            } ?: sortedSetOf()
     }
 
     fun merge(other: GemSpec): GemSpec {
