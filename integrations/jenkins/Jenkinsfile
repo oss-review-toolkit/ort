@@ -49,19 +49,19 @@ pipeline {
 
         string(
             name: 'PROJECT_VCS_URL',
-            description: 'VCS clone URL of the project',
+            description: 'VCS clone URL of the project.',
             defaultValue: 'https://github.com/vdurmont/semver4j.git'
         )
 
         string(
             name: 'PROJECT_VCS_REVISION',
-            description: 'VCS revision of the project (prefix Git tags with "refs/tags/")',
+            description: 'VCS revision of the project (prefix Git tags with "refs/tags/").',
             defaultValue: ''
         )
 
         credentials(
             name: 'PROJECT_VCS_CREDENTIALS',
-            description: 'Optional Jenkins credentials id to use for VCS checkout',
+            description: 'Optional Jenkins credentials id to use for VCS checkout.',
             defaultValue: ''
         )
 
@@ -71,32 +71,32 @@ pipeline {
 
         string(
             name: 'ORT_CONFIG_VCS_URL',
-            description: 'Optional VCS clone URL of the ORT configuration',
+            description: 'Optional VCS clone URL of the ORT configuration.',
             defaultValue: 'https://github.com/oss-review-toolkit/ort-config.git'
         )
 
         string(
             name: 'ORT_CONFIG_VCS_REVISION',
-            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/")',
+            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").',
             defaultValue: ''
         )
 
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
-            description: 'Optional Jenkins credentials id to use for VCS checkout',
+            description: 'Optional Jenkins credentials id to use for VCS checkout.',
             defaultValue: ''
         )
 
         choice(
             name: 'LOG_LEVEL',
-            description: 'Log message level',
+            description: 'Log message level.',
             choices: ['--info', '--debug', '--error', '--warn', '']
         )
 
         booleanParam(
             name: 'STACKTRACE',
             defaultValue: false,
-            description: 'Show stacktrace of all exceptions'
+            description: 'Show stacktrace of all exceptions.'
         )
 
         /*
@@ -106,13 +106,13 @@ pipeline {
         booleanParam(
             name: 'ALLOW_DYNAMIC_VERSIONS',
             defaultValue: false,
-            description: 'Allow dynamic versions of dependencies (support projects without lock files)'
+            description: 'Allow dynamic versions of dependencies (support projects without lock files).'
         )
 
         booleanParam(
             name: 'USE_CLEARLY_DEFINED_CURATIONS',
             defaultValue: true,
-            description: 'Use package curation data from the ClearlyDefined service'
+            description: 'Use package curation data from the ClearlyDefined service.'
         )
 
         /*
@@ -122,7 +122,7 @@ pipeline {
         booleanParam(
             name: 'RUN_SCANNER',
             defaultValue: true,
-            description: 'Run the scanner tool'
+            description: 'Run the scanner tool.'
         )
 
         choice(
@@ -144,7 +144,7 @@ pipeline {
         booleanParam(
             name: 'RUN_ADVISOR',
             defaultValue: true,
-            description: 'Run the advisor tool'
+            description: 'Run the advisor tool.'
         )
 
         /*
@@ -154,7 +154,7 @@ pipeline {
         booleanParam(
             name: 'RUN_EVALUATOR',
             defaultValue: true,
-            description: 'Run the evaluator tool'
+            description: 'Run the evaluator tool.'
         )
 
         /*
@@ -164,7 +164,7 @@ pipeline {
         booleanParam(
             name: 'RUN_REPORTER',
             defaultValue: true,
-            description: 'Run the reporter tool'
+            description: 'Run the reporter tool.'
         )
     }
 
