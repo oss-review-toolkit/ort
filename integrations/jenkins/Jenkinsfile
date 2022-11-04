@@ -49,19 +49,19 @@ pipeline {
 
         string(
             name: 'PROJECT_VCS_URL',
-            description: 'VCS clone URL of the project.',
+            description: 'The VCS clone URL of the project.',
             defaultValue: 'https://github.com/vdurmont/semver4j.git'
         )
 
         string(
             name: 'PROJECT_VCS_REVISION',
-            description: 'VCS revision of the project (prefix Git tags with "refs/tags/").',
+            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").',
             defaultValue: ''
         )
 
         credentials(
             name: 'PROJECT_VCS_CREDENTIALS',
-            description: 'Optional Jenkins credentials id to use for VCS checkout.',
+            description: 'Optional Jenkins credentials to use for the VCS checkout.',
             defaultValue: ''
         )
 
@@ -83,19 +83,19 @@ pipeline {
 
         credentials(
             name: 'ORT_CONFIG_VCS_CREDENTIALS',
-            description: 'Optional Jenkins credentials id to use for VCS checkout.',
+            description: 'Optional Jenkins credentials to use for the VCS checkout.',
             defaultValue: ''
         )
 
         choice(
             name: 'LOG_LEVEL',
-            description: 'Log message level.',
+            description: 'The logging level.',
             choices: ['--info', '--debug', '--error', '--warn', '']
         )
 
         booleanParam(
             name: 'STACKTRACE',
-            description: 'Show stacktrace of all exceptions.',
+            description: 'Show the stacktrace for all exceptions.',
             defaultValue: false
         )
 
