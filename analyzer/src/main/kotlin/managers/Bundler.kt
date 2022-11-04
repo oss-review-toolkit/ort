@@ -279,8 +279,8 @@ class Bundler(
         val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)
 
         // The metadata produced by the "bundler_resolve_dependencies.rb" script separates specs for packages with the
-        // "\0" character as delimiter. Always drop the first "Fetching gem metadata from" entry.
-        val gemSpecs = stdout.split('\u0000').drop(1).map {
+        // "\0" character as delimiter.
+        val gemSpecs = stdout.split('\u0000').dropWhile { it.startsWith("Fetching gem metadata") }.map {
             GemSpec.createFromMetadata(yamlMapper.readTree(it))
         }.associateByTo(mutableMapOf()) {
             it.name
