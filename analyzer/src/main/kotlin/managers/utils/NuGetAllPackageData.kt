@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
 internal class NuGetAllPackageData(
@@ -28,22 +27,6 @@ internal class NuGetAllPackageData(
     val details: PackageDetails,
     val spec: PackageSpec
 ) {
-    // See https://docs.microsoft.com/en-us/nuget/api/service-index.
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    data class ServiceIndex(
-        val version: String,
-        val resources: List<ServiceResource>
-    )
-
-    // See https://docs.microsoft.com/en-us/nuget/api/service-index#resource.
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    data class ServiceResource(
-        @JsonProperty("@id")
-        val id: String,
-        @JsonProperty("@type")
-        val type: String
-    )
-
     // See https://docs.microsoft.com/en-us/nuget/api/registration-base-url-resource.
     @JsonIgnoreProperties(ignoreUnknown = true)
     class PackageData(
