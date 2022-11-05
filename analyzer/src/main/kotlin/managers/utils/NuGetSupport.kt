@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.ServiceIndex
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
