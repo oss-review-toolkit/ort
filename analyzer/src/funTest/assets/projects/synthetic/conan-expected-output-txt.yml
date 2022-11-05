@@ -28,7 +28,7 @@ project:
     dependencies:
     - id: "Conan::libcurl:7.85.0"
       dependencies:
-      - id: "Conan::openssl:1.1.1q"
+      - id: "Conan::openssl:1.1.1s"
       - id: "Conan::zlib:1.2.13"
     - id: "Conan::zlib:1.2.13"
 packages:
@@ -148,8 +148,8 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::openssl:1.1.1q"
-  purl: "pkg:conan/openssl@1.1.1q"
+- id: "Conan::openssl:1.1.1s"
+  purl: "pkg:conan/openssl@1.1.1s"
   declared_licenses:
   - "OpenSSL"
   declared_licenses_processed:
@@ -163,9 +163,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://www.openssl.org/source/openssl-1.1.1q.tar.gz"
+    url: "https://www.openssl.org/source/openssl-1.1.1s.tar.gz"
     hash:
-      value: "d7939ce614029cdff0b6c20f0e2e5703158a489a72b2507b8bd51bf8c8fd10ca"
+      value: "c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
