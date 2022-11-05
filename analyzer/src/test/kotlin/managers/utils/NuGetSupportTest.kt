@@ -28,9 +28,8 @@ import java.io.File
 class NuGetSupportTest : WordSpec({
     "getRegistrationsBaseUrls" should {
         "parse index urls" {
-            val reader = NuGetConfigFileReader()
             val configFile = File("src/funTest/assets/projects/synthetic/nuget/nuget.config")
-            val result = reader.getRegistrationsBaseUrls(configFile)
+            val result = NuGetConfigFileReader.getRegistrationsBaseUrls(configFile)
 
             result should containExactly(
                 "https://api.nuget.org/v3/index.json",
