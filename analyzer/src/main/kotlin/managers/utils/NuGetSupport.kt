@@ -88,9 +88,8 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         ).registerKotlinModule()
 
         fun create(definitionFile: File): NuGetSupport {
-            val configXmlReader = NuGetConfigFileReader()
             val configFile = definitionFile.parentFile.searchUpwardsForFile("nuget.config", ignoreCase = true)
-            val serviceIndexUrls = configFile?.let { configXmlReader.getRegistrationsBaseUrls(it) }
+            val serviceIndexUrls = configFile?.let { NuGetConfigFileReader.getRegistrationsBaseUrls(it) }
 
             return serviceIndexUrls?.let { NuGetSupport(it) } ?: NuGetSupport()
         }
@@ -363,9 +362,7 @@ private fun PackageManager.getProject(
  * A reader for XML-based NuGet configuration files, see
  * https://docs.microsoft.com/en-us/nuget/reference/nuget-config-file
  */
-class NuGetConfigFileReader {
-    companion object : Logging
-
+object NuGetConfigFileReader : Logging {
     @JsonIgnoreProperties(ignoreUnknown = true)
     @XmlRootElement(name = "configuration")
     private data class NuGetConfig(
