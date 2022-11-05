@@ -106,7 +106,7 @@ class DotNetPackageFileReader : XmlPackageFileReader {
         @JacksonXmlProperty(isAttribute = true, localName = "Include")
         val include: String,
         @JacksonXmlProperty(isAttribute = true, localName = "Version")
-        val version: String,
+        val version: String?,
         @JsonProperty(value = "PrivateAssets")
         val privateAssets: String?
     )
@@ -131,7 +131,8 @@ class DotNetPackageFileReader : XmlPackageFileReader {
                     ?.map { packageReference ->
                         NuGetDependency(
                             name = packageReference.include,
-                            version = packageReference.version,
+                            // TODO: Resolve an empty version to the lowest version published.
+                            version = packageReference.version.orEmpty(),
                             targetFramework = targetFramework,
                             developmentDependency = packageReference.privateAssets?.lowercase() == "all"
                         )

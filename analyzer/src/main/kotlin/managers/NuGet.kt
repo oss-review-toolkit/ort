@@ -93,7 +93,7 @@ class NuGetPackageFileReader : XmlPackageFileReader {
         @JacksonXmlProperty(isAttribute = true)
         val id: String,
         @JacksonXmlProperty(isAttribute = true)
-        val version: String,
+        val version: String?,
         @JacksonXmlProperty(isAttribute = true)
         val targetFramework: String?,
         @JacksonXmlProperty(isAttribute = true)
@@ -106,7 +106,8 @@ class NuGetPackageFileReader : XmlPackageFileReader {
         return packagesConfig.packages.mapTo(mutableSetOf()) { pkg ->
             NuGetDependency(
                 name = pkg.id,
-                version = pkg.version,
+                // TODO: Resolve an empty version to the lowest version published.
+                version = pkg.version.orEmpty(),
                 targetFramework = pkg.targetFramework.orEmpty(),
                 developmentDependency = pkg.developmentDependency ?: false
             )
