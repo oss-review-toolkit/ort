@@ -31,3 +31,10 @@ logos/
 
 # Ignore macOS-specific files.
 .DS_Store
+
+# Ignore docker scripts
+scripts/docker_build.sh
+scripts/docker_run.sh
+
+# Ignore .versions file
+.versions

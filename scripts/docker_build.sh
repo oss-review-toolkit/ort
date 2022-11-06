@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
@@ -17,16 +17,54 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-DOCKER_ARGS=$@
+set -e -o pipefail
+
+DOCKER_ARGS=$*
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty --match=[0-9]*)
+PLATFORM=${PLATFORM:-linux/amd64}
+DOCKER_ORG_BASE="ort"
 
-echo "Setting ORT_VERSION to $GIT_REVISION."
-docker buildx build \
-    -f "$GIT_ROOT/Dockerfile" \
-    -t "${ORT_DOCKER_TAG:-ort}" \
-    --build-arg ORT_VERSION="$GIT_REVISION" \
-    --platform linux/amd64 \
-    $DOCKER_ARGS \
-    "$GIT_ROOT"
+# Parse and transform versions from unique .versions file
+# shellcheck disable=SC1091
+source .versions
+VERSION_ARGS=$(xargs printf -- '--build-arg %s\n' < .versions)
+
+# Auxiliary function to build intermediary and final image
+# Usage:
+# docker_build <message> <target> <tag> <image_version>
+docker_build() {
+    echo "$1"
+    # shellcheck disable=SC2086
+    docker buildx build \
+        -f "$GIT_ROOT/Dockerfile" \
+        --target $2 \
+        --platform "$PLATFORM" \
+        --tag "$DOCKER_ORG_BASE/$3:latest" \
+        --tag "$DOCKER_ORG_BASE/$3:$4" \
+        --tag "ghcr.io/$DOCKER_ORG_BASE/$3:latest" \
+        --build-arg ORT_VERSION="$GIT_REVISION" \
+        $VERSION_ARGS \
+        $DOCKER_ARGS \
+        "$GIT_ROOT"
+}
+
+# Set NOBASE on terminal to skipt straight to ort container build
+# if all intermediary and base images are there
+if [ -z "${NOBASE+x}" ]; then
+    docker_build "Building base image" base base "$GIT_REVISION"
+    for lang in python ruby nodejs rust go haskell_stack android_cmd dart sbt; do
+        if [ "${BASH_VERSION:0:1}" == "3" ]; then
+            # Mac has old bash
+            lang_version="$(tr '[:lower:]' '[:upper:]' <<< ${lang})_VERSION"
+        else
+            lang_version="${lang^^}_VERSION"
+        fi
+        docker_build "Building support language: $lang" $lang $lang "${!lang_version}"
+    done
+fi
+docker_build "Building ort binary" ort ortdist "$GIT_REVISION"
+docker_build "Building ort components" components components "$GIT_REVISION"
+docker_build "Building ort combined runtime image" run ort "$GIT_REVISION"
+

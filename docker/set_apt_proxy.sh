@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+#
+# Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-PYENV_ROOT="/opt/python"
-export PYENV_ROOT
-
-add_local_path "${PYENV_ROOT}/bin"
-add_local_path "${PYENV_ROOT}/shims"
-
-# shellcheck disable=1091
-. "$(pyenv root)"/completions/pyenv.bash;
+if [ -n "$http_proxy" ]; then
+    cat << EOF > /etc/apt/apt.conf.d/proxy.conf
+Acquire {
+    HTTP::proxy "$http_proxy";
+    HTTPS::proxy "$http_proxy";
+}
+EOF
+fi
