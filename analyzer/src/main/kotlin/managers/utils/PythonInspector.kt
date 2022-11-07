@@ -58,7 +58,7 @@ internal object PythonInspector : CommandLineTool, Logging {
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.9.0,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.9.2,)")
 
     fun run(
         workingDir: File,
