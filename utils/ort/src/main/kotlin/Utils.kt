@@ -177,11 +177,6 @@ fun normalizeVcsUrl(vcsUrl: String): String {
         return url
     }
 
-    // Avoid using the unauthenticated Git protocol, which is blocked by many VCS hosts.
-    if (url.startsWith("git://")) {
-        url = "https://${url.removePrefix("git://")}"
-    }
-
     // URLs to Git repos may omit the scheme and use an SCP-like URL that uses ":" to separate the host from the path,
     // see https://git-scm.com/docs/git-clone#_git_urls_a_id_urls_a. Make this an explicit ssh URL, so it can be parsed
     // by Java's URI class.

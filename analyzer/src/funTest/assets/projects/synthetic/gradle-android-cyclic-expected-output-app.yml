@@ -11479,7 +11479,7 @@ shared_packages:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://android.googlesource.com/platform/tools/sherpa.git"
+    url: "git://android.googlesource.com/platform/tools/sherpa.git"
     revision: ""
     path: ""
 - id: "Maven:androidx.constraintlayout:constraintlayout-solver:2.0.1"
@@ -11511,7 +11511,7 @@ shared_packages:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://android.googlesource.com/platform/tools/sherpa.git"
+    url: "git://android.googlesource.com/platform/tools/sherpa.git"
     revision: ""
     path: ""
 - id: "Maven:androidx.dynamicanimation:dynamicanimation:1.0.0"
