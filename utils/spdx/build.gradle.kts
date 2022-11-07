@@ -102,6 +102,9 @@ class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
 // Prefer the texts from ScanCode as these have better formatting than those from SPDX.
 val providers = sequenceOf(ScanCodeLicenseTextProvider(), SpdxLicenseListDataProvider())
 
+val licensesResourcePath = "licenses"
+val exceptionsResourcePath = "exceptions"
+
 fun getLicenseHeader(year: Int = 2017) =
     """
     |/*
@@ -291,7 +294,9 @@ fun Task.generateEnumClass(
 
 val fixupLicenseTextResources by tasks.registering {
     doLast {
-        val resourcePaths = listOf("licenses", "exceptions").map { file("src/main/resources/$it") }
+        val resourcePaths = listOf(licensesResourcePath, exceptionsResourcePath).map {
+            file("src/main/resources/$it")
+        }
 
         resourcePaths.forEach { path ->
             path.listFiles().forEach { file ->
@@ -309,7 +314,6 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
     group = "SPDX"
 
     val description = "license"
-    val resourcePath = "licenses"
     val licenseInfo = getLicenseInfo(
         "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/licenses.json",
         description,
@@ -318,13 +322,12 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
         isException = false
     )
 
-    val projectResourcePath = "src/main/resources/$resourcePath"
     val licenseUrlMap = licenseInfo.associate { info ->
         providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
     src(licenseUrlMap.keys.sortedBy { it.toString().toLowerCase() })
-    dest(projectResourcePath)
+    dest("src/main/resources/$licensesResourcePath")
     eachFile { name = licenseUrlMap[sourceURL] }
 
     doLast {
@@ -332,7 +335,7 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
             "SpdxLicense",
             description,
             licenseInfo,
-            resourcePath
+            licensesResourcePath
         )
     }
 
@@ -344,7 +347,6 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
     group = "SPDX"
 
     val description = "license exception"
-    val resourcePath = "exceptions"
     val licenseInfo = getLicenseInfo(
         "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion/json/exceptions.json",
         description,
@@ -353,13 +355,12 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
         isException = true
     )
 
-    val projectResourcePath = "src/main/resources/$resourcePath"
     val licenseExceptionUrlMap = licenseInfo.associate { info ->
         providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
     src(licenseExceptionUrlMap.keys.sortedBy { it.toString().toLowerCase() })
-    dest(projectResourcePath)
+    dest("src/main/resources/$exceptionsResourcePath")
     eachFile { name = licenseExceptionUrlMap[sourceURL] }
 
     doLast {
@@ -367,7 +368,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
             "SpdxLicenseException",
             description,
             licenseInfo,
-            resourcePath
+            exceptionsResourcePath
         )
     }
 
