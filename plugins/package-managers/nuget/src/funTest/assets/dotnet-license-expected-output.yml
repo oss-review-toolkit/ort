@@ -18,9 +18,9 @@ project:
   scopes:
   - name: "netstandard2.0"
     dependencies:
-    - id: "NuGet::Newtonsoft.Json:13.0.2"
+    - id: "NuGet:Newtonsoft:Json:13.0.2"
 packages:
-- id: "NuGet::Newtonsoft.Json:13.0.2"
+- id: "NuGet:Newtonsoft:Json:13.0.2"
   purl: "pkg:nuget/Newtonsoft.Json@13.0.2"
   authors:
   - "James Newton-King"

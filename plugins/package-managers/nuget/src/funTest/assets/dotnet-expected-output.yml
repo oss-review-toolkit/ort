@@ -18,10 +18,10 @@ project:
   scopes:
   - name: "net45"
     dependencies:
-    - id: "NuGet::System.Runtime.CompilerServices.Unsafe:4.5.3"
-    - id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+    - id: "NuGet:System.Runtime:CompilerServices.Unsafe:4.5.3"
+    - id: "NuGet:System.Threading:Tasks.Extensions:4.5.4"
 packages:
-- id: "NuGet::System.Runtime.CompilerServices.Unsafe:4.5.3"
+- id: "NuGet:System.Runtime:CompilerServices.Unsafe:4.5.3"
   purl: "pkg:nuget/System.Runtime.CompilerServices.Unsafe@4.5.3"
   authors:
   - "Microsoft"
@@ -54,7 +54,7 @@ packages:
     url: ""
     revision: ""
     path: ""
-- id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+- id: "NuGet:System.Threading:Tasks.Extensions:4.5.4"
   purl: "pkg:nuget/System.Threading.Tasks.Extensions@4.5.4"
   authors:
   - "Microsoft"
