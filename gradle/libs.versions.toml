@@ -63,7 +63,7 @@ springCore = "5.3.23"
 svnkit = "1.10.8"
 sw360Client = "16.0.0-m1"
 toml4j = "0.7.2"
-wiremock = "2.34.0"
+wiremock = "2.35.0"
 xz = "1.9"
 
 [plugins]
