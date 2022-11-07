@@ -18,9 +18,9 @@ project:
   scopes:
   - name: "net7.0"
     dependencies:
-    - id: "NuGet::xunit.analyzers:1.2.0-pre.7"
+    - id: "NuGet:xunit:analyzers:1.2.0-pre.7"
 packages:
-- id: "NuGet::xunit.analyzers:1.2.0-pre.7"
+- id: "NuGet:xunit:analyzers:1.2.0-pre.7"
   purl: "pkg:nuget/xunit.analyzers@1.2.0-pre.7"
   authors:
   - "jnewkirk,bradwilson,marcind"

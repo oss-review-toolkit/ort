@@ -83,10 +83,17 @@ internal fun NuGetInspector.Result.toOrtProject(
     )
 }
 
+private fun NuGetInspector.PackageData.getIdentifierWithNamespace(): Identifier =
+    if (namespace.isNullOrEmpty()) {
+        getIdentifierWithNamespace(TYPE, name, version.orEmpty())
+    } else {
+        Identifier(TYPE, namespace, name, version.orEmpty())
+    }
+
 private fun List<NuGetInspector.PackageData>.toPackageReferences(): Set<PackageReference> =
     mapTo(mutableSetOf()) { data ->
         PackageReference(
-            id = Identifier(type = TYPE, namespace = "", name = data.name, version = data.version.orEmpty()),
+            id = data.getIdentifierWithNamespace(),
             dependencies = data.dependencies.toPackageReferences(),
             issues = data.errors.map { Issue(source = TYPE, message = it, severity = Severity.ERROR) }
                 + data.warnings.map { Issue(source = TYPE, message = it, severity = Severity.WARNING) }
@@ -102,12 +109,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
                 (sha512 ?: sha256 ?: sha1 ?: md5 ?: "").lowercase()
             )
 
-        val id = Identifier(
-            type = TYPE,
-            namespace = pkg.namespace.orEmpty(),
-            name = pkg.name,
-            version = pkg.version.orEmpty()
-        )
+        val id = pkg.getIdentifierWithNamespace()
 
         val declaredLicenses = mutableSetOf<String>()
         val pkgDeclaredLicense = pkg.declaredLicense.orEmpty()
