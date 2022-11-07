@@ -58,8 +58,7 @@ containers:
     image: eclipse-temurin:11-jdk-jammy
     <<: *common-container-config
   run:
-    build_directory: <{batect.project_directory}
-    build_target: run
+    image: ort/ort:latest 
     <<: *common-container-config
 
 tasks:
@@ -98,4 +97,4 @@ tasks:
     run:
       container: run
       command: "'./gradlew funTest jacocoFunTestReport -p analyzer $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
-      entrypoint: /bin/bash --login -c
+      entrypoint: /bin/bash -c
