@@ -20,6 +20,8 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -31,6 +33,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PipFunTest : WordSpec({
@@ -113,6 +116,14 @@ class PipFunTest : WordSpec({
             )
 
             result.toYaml() shouldBe expectedResult
+        }
+
+        "not fail if the requirements file is empty" {
+            val definitionFile = createTestTempFile(prefix = "requirements", suffix = ".txt")
+
+            val result = createPip().resolveSingleProject(definitionFile)
+
+            result.issues should beEmpty()
         }
     }
 })
