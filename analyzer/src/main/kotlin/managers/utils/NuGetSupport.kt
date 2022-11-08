@@ -40,7 +40,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 import okhttp3.CacheControl
-import okhttp3.Request
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -67,7 +66,7 @@ import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.await
+import org.ossreviewtoolkit.utils.ort.downloadText
 
 internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
@@ -115,7 +114,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
     private val serviceIndices = runBlocking {
         serviceIndexUrls.map {
-            async { mapFromUrl<ServiceIndex>(JSON_MAPPER, it) }
+            async { JSON_MAPPER.readValueFromUrl<ServiceIndex>(it) }
         }.awaitAll()
     }
 
@@ -128,23 +127,9 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
 
     private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
 
-    private suspend inline fun <reified T> mapFromUrl(mapper: ObjectMapper, url: String): T {
-        val request = Request.Builder()
-            .get()
-            .url(url)
-            .build()
-
-        val response = client.newCall(request).await()
-        if (response.cacheResponse != null) {
-            logger.debug { "Retrieved '$url' response from local cache." }
-        } else {
-            logger.debug { "Retrieved '$url' response from remote server." }
-        }
-
-        val body = response.body?.string()?.takeIf { response.isSuccessful }
-            ?: throw IOException("Failed to get a response body from '$url'.")
-
-        return mapper.readValue(body)
+    private inline fun <reified T> ObjectMapper.readValueFromUrl(url: String): T {
+        val text = client.downloadText(url).getOrThrow()
+        return readValue(text)
     }
 
     private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
@@ -154,7 +139,7 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         val data = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
             runCatching {
                 val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
-                runBlocking { mapFromUrl<PackageData>(JSON_MAPPER, dataUrl) }
+                JSON_MAPPER.readValueFromUrl<PackageData>(dataUrl)
             }.getOrNull()
         } ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
 
@@ -162,9 +147,9 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
 
         return runBlocking {
-            val packageDetails = mapFromUrl<PackageDetails>(JSON_MAPPER, data.catalogEntry)
-            val packageSpec = mapFromUrl<PackageSpec>(XML_MAPPER, nuspecUrl)
-            NuGetAllPackageData(data, packageDetails, packageSpec)
+            val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(data.catalogEntry) }
+            val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
+            NuGetAllPackageData(data, packageDetails.await(), packageSpec.await())
         }
     }
 
