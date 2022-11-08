@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.advisor
 
 import java.time.Instant
-import java.util.ServiceLoader
-import java.util.SortedMap
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
@@ -34,6 +32,7 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.utils.common.NamedPlugin
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -45,14 +44,10 @@ class Advisor(
     private val config: AdvisorConfiguration
 ) {
     companion object : Logging {
-        private val LOADER = ServiceLoader.load(AdviceProviderFactory::class.java)
-
         /**
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
-        val ALL: SortedMap<String, AdviceProviderFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
-        }
+        val ALL by lazy { NamedPlugin.getAll<AdviceProviderFactory>() }
     }
 
     @JvmOverloads
