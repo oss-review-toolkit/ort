@@ -587,6 +587,8 @@ class Scanner(
         val provenancesWithMissingArchives = controller.getNestedProvenancesByPackage()
             .filterNot { (_, nestedProvenance) -> archiver.hasArchive(nestedProvenance.root) }
 
+        if (provenancesWithMissingArchives.isEmpty()) return
+
         logger.info { "Creating file archives for ${provenancesWithMissingArchives.size} package(s)." }
 
         val duration = measureTime {
