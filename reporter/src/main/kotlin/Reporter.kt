@@ -20,33 +20,23 @@
 package org.ossreviewtoolkit.reporter
 
 import java.io.File
-import java.util.ServiceLoader
-import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.utils.common.NamedPlugin
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
  * A reporter that creates a human-readable report from a given [OrtResult].
  */
-interface Reporter {
+interface Reporter : NamedPlugin {
     companion object {
-        private val LOADER = ServiceLoader.load(Reporter::class.java)
-
         /**
          * All [reporters][Reporter] available in the classpath, associated by their names.
          */
-        val ALL: SortedMap<String, Reporter> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
-        }
+        val ALL by lazy { NamedPlugin.getAll<Reporter>() }
     }
-
-    /**
-     * The name to use to refer to the reporter.
-     */
-    val name: String
 
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the

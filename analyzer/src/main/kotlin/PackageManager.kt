@@ -26,8 +26,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
-import java.util.ServiceLoader
-import java.util.SortedMap
 
 import kotlin.time.measureTime
 
@@ -47,6 +45,7 @@ import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.common.NamedPlugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
@@ -68,14 +67,10 @@ abstract class PackageManager(
     val repoConfig: RepositoryConfiguration
 ) {
     companion object : Logging {
-        private val LOADER = ServiceLoader.load(PackageManagerFactory::class.java)
-
         /**
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
-        val ALL: SortedMap<String, PackageManagerFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
-        }
+        val ALL by lazy { NamedPlugin.getAll<PackageManagerFactory>() }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.

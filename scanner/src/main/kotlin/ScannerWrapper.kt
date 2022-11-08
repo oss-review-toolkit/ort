@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.scanner
 
 import java.io.File
-import java.util.ServiceLoader
-import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
@@ -31,20 +29,17 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.common.NamedPlugin
 
 /**
  * The base interface for all types of scanners.
  */
 sealed interface ScannerWrapper {
     companion object {
-        private val LOADER = ServiceLoader.load(ScannerWrapperFactory::class.java)
-
         /**
          * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
          */
-        val ALL: SortedMap<String, ScannerWrapperFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
-        }
+        val ALL by lazy { NamedPlugin.getAll<ScannerWrapperFactory>() }
     }
 
     /**
