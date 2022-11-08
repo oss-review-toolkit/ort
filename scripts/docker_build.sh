@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #
 # Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
@@ -21,12 +21,13 @@ DOCKER_ARGS=$@
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty --match=[0-9]*)
+PLATFORM="${PLATFORM:-linux/$(arch)}"
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
 docker buildx build \
     -f "$GIT_ROOT/Dockerfile" \
     -t "${ORT_DOCKER_TAG:-ort}" \
     --build-arg ORT_VERSION="$GIT_REVISION" \
-    --platform linux/amd64 \
+    --platform "$PLATFORM" \
     $DOCKER_ARGS \
     "$GIT_ROOT"

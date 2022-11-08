@@ -1,6 +1,6 @@
-#!/bin/bash -l
-
-# Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+#!/bin/bash
+#
+# Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,4 +17,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-exec /opt/ort/bin/"$(basename "$0")" "$@"
+if [ -n "$http_proxy" ]; then
+    cat << EOF > /etc/apt/apt.conf.d/proxy.conf
+Acquire {
+    HTTP::proxy "$http_proxy";
+    HTTPS::proxy "$http_proxy";
+}
+EOF
+fi
