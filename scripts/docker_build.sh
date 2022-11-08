@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
@@ -24,7 +24,7 @@ DOCKER_ARGS=$*
 GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty --match=[0-9]*)
 PLATFORM=${PLATFORM:-linux/amd64}
-DOCKER_ORG_BASE="ort"
+ORG_BASE_NAME="${ORG_BASE_NAME:-oss-review-toolkit}"
 
 # Parse and transform versions from unique .versions file
 # shellcheck disable=SC1091
@@ -41,9 +41,9 @@ docker_build() {
         -f "$GIT_ROOT/Dockerfile" \
         --target $2 \
         --platform "$PLATFORM" \
-        --tag "$DOCKER_ORG_BASE/$3:latest" \
-        --tag "$DOCKER_ORG_BASE/$3:$4" \
-        --tag "ghcr.io/$DOCKER_ORG_BASE/$3:latest" \
+        --tag "$ORG_BASE_NAME/$3:latest" \
+        --tag "$ORG_BASE_NAME/$3:$4" \
+        --tag "ghcr.io/$ORG_BASE_NAME/$3:latest" \
         --build-arg ORT_VERSION="$GIT_REVISION" \
         $VERSION_ARGS \
         $DOCKER_ARGS \

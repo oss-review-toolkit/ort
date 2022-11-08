@@ -61,25 +61,56 @@ jobs:
       - name: Set organization
         run: echo "ORG_BASE_NAME=${GITHUB_REPOSITORY_OWNER}" >> $GITHUB_ENV
 
-      # Ort main container
-      - name: Extract components metadata (tags, labels) for Docker
-        id: meta
+      #-----------------------------------------------------------
+      # Ort linux base container
+      - name: Extract components metadata (tags, labels) for base image
+        id: meta_base
         uses: docker/metadata-action@v4
         with:
           images: |
-            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ort
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/base
 
-      - name: Identify image
-        run: echo "Will be tagged as ${{ steps.meta.outputs.tags }} and labeled as ${{ steps.meta.outputs.labels }}"
+      - name: Identify base image
+        run: echo "Will be tagged as ${{ steps.meta_base.outputs.tags }} and labeled as ${{ steps.meta_base.outputs.labels }}"
 
-      - name: Build ort runtime container
+      - name: Build ort base container
         uses: docker/build-push-action@v3
         with:
           context: .
-          target: run
-          push: true #${{ github.event_name != 'pull_request' }}
+          target: base
+          push: true
+          load: false
           build-args: |
             ORT_VERSION=${{ env.ORT_VERSION }}
+          tags: |
+            ${{ steps.meta_base.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/base:latest
+          labels: ${{ steps.meta_base.outputs.labels }}
+          cache-from: type=gha,scope=base
+          cache-to: type=gha,scope=base,mode=max
+      
+      #-----------------------------------------------------------
+      # Ort components container
+      - name: Extract components metadata (tags, labels) for Ort image
+        id: meta_components
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/components
+
+      - name: Identify image
+        run: echo "Will be tagged as ${{ steps.meta_components.outputs.tags }} and labeled as ${{ steps.meta_components.outputs.labels }}"
+
+      - name: Build components container
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          target: components
+          load: false
+          push: true
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/base:latest
+          build-args: |
             ANDROID_CMD_VERSION=${{ env.ANDROID_CMD_VERSION }}
             BOWER_VERSION=${{ env.BOWER_VERSION }}
             COCOAPODS_VERSION=${{ env.COCOAPODS_VERSION }}
@@ -105,7 +136,80 @@ jobs:
             YARN_VERSION=${{ env.YARN_VERSION }}
           tags: |
             ${{ steps.meta_components.outputs.tags }}
-            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ort:latest
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/components:latest
           labels: ${{ steps.meta_components.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha,scope=components
+            type=gha,scope=base
+          cache-to: |
+            type=gha,scope=components,mode=max
+
+      #-----------------------------------------------------------
+      # Ort install dist container
+      - name: Extract components metadata (tags, labels) for Ort source build
+        id: meta_ort
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ortdist
+
+      - name: Identify Ort binary image
+        run: echo "Will be tagged as ${{ steps.meta_ort.outputs.tags }} and labeled as ${{ steps.meta_ort.outputs.labels }}"
+
+      - name: Build ort binary container
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          target: ort
+          load: false
+          push: true
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/base:latest
+          build-args: |
+            ORT_VERSION=${{ env.ORT_VERSION }}
+          tags: |
+            ${{ steps.meta_ort.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ortdist:latest
+          labels: ${{ steps.meta_ort.outputs.labels }}
+          cache-from: |
+            type=gha,scope=ortdist
+            type=gha,scope=base
+          cache-to: |
+            type=gha,scope=ortdist,mode=max
+      
+      #-----------------------------------------------------------
+      # Ort main container
+      - name: Extract components metadata (tags, labels) for Ort image
+        id: meta_runtime
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ort
+
+      - name: Identify Ort main runtime image
+        run: echo "Will be tagged as ${{ steps.meta_runtime.outputs.tags }} and labeled as ${{ steps.meta_runtime.outputs.labels }}"
+
+      - name: Build ort runtime container
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          target: run
+          load: false
+          push: true #${{ github.event_name != 'pull_request' }}
+          build-contexts: |
+            base=docker-image://${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/base:latest
+            ort=docker-image://${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ortdist:latest
+            components=docker-image://${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/components:latest
+          build-args: |
+            ORT_VERSION=${{ env.ORT_VERSION }}
+          tags: |
+            ${{ steps.meta_runtime.outputs.tags }}
+            ${{ env.REGISTRY }}/${{ env.ORG_BASE_NAME }}/ort:latest
+          labels: ${{ steps.meta_runtime.outputs.labels }}
+          cache-from: |
+            type=gha,scope=components
+            type=gha,scope=ortdist
+            type=gha,scope=components
+            type=gha,scope=base
+          cache-to: |
+            type=gha,scope=components,mode=max

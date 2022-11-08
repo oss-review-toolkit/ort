@@ -21,8 +21,7 @@ on:
   workflow_run:
     workflows: ["Docker Build and Deploy"]
     branches: [main]
-    types:
-      - completed
+    types: [requested]
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
