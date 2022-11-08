@@ -60,7 +60,7 @@ class BoyterLc internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            BoyterLc(scannerName, scannerConfig)
+            BoyterLc(name, scannerConfig)
     }
 
     override val name = "BoyterLc"

@@ -78,7 +78,7 @@ class Pip(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Pip(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val operatingSystemOption = (options[OPTION_OPERATING_SYSTEM] ?: OPTION_OPERATING_SYSTEM_DEFAULT)

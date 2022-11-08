@@ -66,7 +66,7 @@ class FossIdReporter : Reporter {
         const val SCAN_CODE_KEY = "scancode"
     }
 
-    override val reporterName = "FossId"
+    override val name = "FossId"
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val serverUrl = requireNotNull(options[SERVER_URL_PROPERTY]) {

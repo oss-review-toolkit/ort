@@ -59,7 +59,7 @@ class DotNet(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = DotNet(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val directDependenciesOnly = options[OPTION_DIRECT_DEPENDENCIES_ONLY].toBoolean()

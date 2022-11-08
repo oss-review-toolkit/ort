@@ -43,7 +43,7 @@ sealed interface ScannerWrapper {
          * All [scanner wrapper factories][ScannerWrapperFactory] available in the classpath, associated by their names.
          */
         val ALL: SortedMap<String, ScannerWrapperFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.scannerName }
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
         }
     }
 

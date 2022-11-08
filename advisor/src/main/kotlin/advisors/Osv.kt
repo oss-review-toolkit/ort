@@ -56,7 +56,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
-        override fun create(config: AdvisorConfiguration) = Osv(providerName, config)
+        override fun create(config: AdvisorConfiguration) = Osv(name, config)
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

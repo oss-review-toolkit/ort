@@ -136,7 +136,7 @@ class Bundler(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Bundler(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Bundler(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun beforeResolution(definitionFiles: List<File>) {

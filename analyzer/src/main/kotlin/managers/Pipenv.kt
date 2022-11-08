@@ -54,7 +54,7 @@ class Pipenv(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pipenv(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Pipenv(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "pipenv"

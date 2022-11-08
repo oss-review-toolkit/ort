@@ -38,7 +38,7 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
             val factory = object : AbstractAdviceProviderFactory<AdviceProvider>(PROVIDER_NAME) {
                 override fun create(config: AdvisorConfiguration): AdviceProvider {
                     config.forProvider { vulnerableCode } shouldBe VULNERABLE_CODE_CONFIG
-                    return VulnerableCode(providerName, VULNERABLE_CODE_CONFIG)
+                    return VulnerableCode(name, VULNERABLE_CODE_CONFIG)
                 }
             }
 
@@ -54,7 +54,7 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
 
                     exception.message shouldContain PROVIDER_NAME
 
-                    return VulnerableCode(providerName, VULNERABLE_CODE_CONFIG)
+                    return VulnerableCode(name, VULNERABLE_CODE_CONFIG)
                 }
             }
 
@@ -71,7 +71,7 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
                 override fun create(config: AdvisorConfiguration): AdviceProvider {
                     config.providerOptions() shouldBe providerOptions
 
-                    return VulnerableCode(providerName, VULNERABLE_CODE_CONFIG)
+                    return VulnerableCode(name, VULNERABLE_CODE_CONFIG)
                 }
             }
 
@@ -86,7 +86,7 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
                 override fun create(config: AdvisorConfiguration): AdviceProvider {
                     config.providerOptions() should beEmpty()
 
-                    return VulnerableCode(providerName, VULNERABLE_CODE_CONFIG)
+                    return VulnerableCode(name, VULNERABLE_CODE_CONFIG)
                 }
             }
 
@@ -98,7 +98,7 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
                 override fun create(config: AdvisorConfiguration): AdviceProvider {
                     config.providerOptions() should beEmpty()
 
-                    return VulnerableCode(providerName, VULNERABLE_CODE_CONFIG)
+                    return VulnerableCode(name, VULNERABLE_CODE_CONFIG)
                 }
             }
 

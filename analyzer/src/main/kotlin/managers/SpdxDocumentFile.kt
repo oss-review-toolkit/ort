@@ -273,7 +273,7 @@ class SpdxDocumentFile(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = SpdxDocumentFile(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = SpdxDocumentFile(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val spdxDocumentCache = SpdxDocumentCache()
@@ -367,7 +367,7 @@ class SpdxDocumentFile(
                     // TODO: The data from the spdxPackage is currently ignored, check if some fields need to be
                     //       preserved somehow.
                     return PackageManagerDependencyHandler.createPackageManagerDependency(
-                        packageManager = factory.managerName,
+                        packageManager = factory.name,
                         definitionFile = VersionControlSystem.getPathInfo(packageFile).path,
                         scope = scope,
                         linkage = PackageLinkage.PROJECT_STATIC // TODO: Set linkage based on SPDX reference type.

@@ -91,7 +91,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
 
     class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
         override fun create(config: AdvisorConfiguration) =
-            GitHubDefects(providerName, config.forProvider { gitHubDefects })
+            GitHubDefects(name, config.forProvider { gitHubDefects })
     }
 
     /**

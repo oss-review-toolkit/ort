@@ -67,7 +67,7 @@ private const val OPTION_EXTRA_COLUMNS = "extraColumns"
  * - *extraColumns*: A comma separated list of columns that are added to each sheet.
  */
 class ExcelReporter : Reporter {
-    override val reporterName = "Excel"
+    override val name = "Excel"
 
     private val reportFilename = "scan-report.xlsx"
 

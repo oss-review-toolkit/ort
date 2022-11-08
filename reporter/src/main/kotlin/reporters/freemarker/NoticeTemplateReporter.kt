@@ -47,7 +47,7 @@ class NoticeTemplateReporter : Reporter {
         private const val DEFAULT_TEMPLATE_ID = "default"
     }
 
-    override val reporterName = "NoticeTemplate"
+    override val name = "NoticeTemplate"
 
     private val templateProcessor = FreemarkerTemplateProcessor(
         NOTICE_FILE_PREFIX,

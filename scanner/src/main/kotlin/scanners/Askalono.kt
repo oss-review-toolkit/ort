@@ -53,7 +53,7 @@ class Askalono internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(scannerName, scannerConfig)
+            Askalono(name, scannerConfig)
     }
 
     override val name = "Askalono"

@@ -86,7 +86,7 @@ class CocoaPods(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = CocoaPods(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = CocoaPods(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val podspecCache = mutableMapOf<String, Podspec>()

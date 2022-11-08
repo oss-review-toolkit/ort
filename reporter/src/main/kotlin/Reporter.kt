@@ -39,14 +39,14 @@ interface Reporter {
          * All [reporters][Reporter] available in the classpath, associated by their names.
          */
         val ALL: SortedMap<String, Reporter> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.reporterName }
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
         }
     }
 
     /**
      * The name to use to refer to the reporter.
      */
-    val reporterName: String
+    val name: String
 
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the

@@ -53,7 +53,7 @@ class Yarn(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Yarn(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Yarn(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
