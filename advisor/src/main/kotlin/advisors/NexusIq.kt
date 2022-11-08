@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.advisor.advisors
 
 import java.io.IOException
 import java.net.URI
+import java.time.Duration
 import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -51,6 +52,12 @@ import retrofit2.HttpException
 private const val BULK_REQUEST_SIZE = 128
 
 /**
+ * The timeout for requests to the NexusIQ REST API. This timeout is larger than the one used by default within ORT,
+ * as practice has shown that NexusIQ needs more time to process certain requests.
+ */
+private val READ_TIMEOUT = Duration.ofSeconds(60)
+
+/**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : AdviceProvider(name) {
@@ -67,7 +74,9 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
             nexusIqConfig.serverUrl,
             nexusIqConfig.username,
             nexusIqConfig.password,
-            OkHttpClientHelper.buildClient()
+            OkHttpClientHelper.buildClient {
+                readTimeout(READ_TIMEOUT)
+            }
         )
     }
 
