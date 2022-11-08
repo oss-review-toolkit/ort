@@ -69,7 +69,7 @@ class CycloneDxReporter : Reporter {
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
     }
 
-    override val reporterName = "CycloneDx"
+    override val name = "CycloneDx"
 
     private val base64Encoder = Base64.getEncoder()
 

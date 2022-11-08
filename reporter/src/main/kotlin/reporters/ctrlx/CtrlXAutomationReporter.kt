@@ -39,7 +39,7 @@ class CtrlXAutomationReporter : Reporter {
         )
     }
 
-    override val reporterName = "CtrlXAutomation"
+    override val name = "CtrlXAutomation"
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val reportFile = outputDir.resolve(REPORT_FILENAME)

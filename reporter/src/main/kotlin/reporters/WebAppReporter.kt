@@ -45,7 +45,7 @@ class WebAppReporter : Reporter {
         const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
 
-    override val reporterName = "WebApp"
+    override val name = "WebApp"
 
     private val reportFilename = "scan-report-web-app.html"
 

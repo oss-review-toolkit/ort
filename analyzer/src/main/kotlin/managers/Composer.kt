@@ -85,7 +85,7 @@ class Composer(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Composer(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Composer(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =

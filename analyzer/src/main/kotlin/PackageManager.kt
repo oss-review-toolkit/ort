@@ -74,7 +74,7 @@ abstract class PackageManager(
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
         val ALL: SortedMap<String, PackageManagerFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.managerName }
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
         }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(

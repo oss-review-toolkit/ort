@@ -51,7 +51,7 @@ class SpdxDocumentReporter : Reporter {
         private const val DOCUMENT_NAME_DEFAULT_VALUE = "Unnamed document"
     }
 
-    override val reporterName = "SpdxDocument"
+    override val name = "SpdxDocument"
 
     override fun generateReport(
         input: ReporterInput,

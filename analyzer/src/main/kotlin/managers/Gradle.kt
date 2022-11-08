@@ -89,7 +89,7 @@ class Gradle(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Gradle(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Gradle(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

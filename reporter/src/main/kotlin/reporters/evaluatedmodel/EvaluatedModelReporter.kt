@@ -42,7 +42,7 @@ class EvaluatedModelReporter : Reporter {
         const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
     }
 
-    override val reporterName = "EvaluatedModel"
+    override val name = "EvaluatedModel"
 
     override fun generateReport(
         input: ReporterInput,

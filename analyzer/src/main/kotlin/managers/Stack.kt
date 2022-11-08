@@ -77,7 +77,7 @@ class Stack(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Stack(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Stack(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)

@@ -503,7 +503,7 @@ class OpossumReporter : Reporter {
         }
     }
 
-    override val reporterName = "Opossum"
+    override val name = "Opossum"
 
     private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
         FileOutputStream(outputFile, /* append = */ false).use { outputStream ->

@@ -141,7 +141,7 @@ class FossId internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<FossId>("FossId") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            FossId(scannerName, scannerConfig, FossIdConfig.create(scannerConfig))
+            FossId(name, scannerConfig, FossIdConfig.create(scannerConfig))
     }
 
     /**

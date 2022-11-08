@@ -49,7 +49,7 @@ class Poetry(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Poetry(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Poetry(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "poetry"

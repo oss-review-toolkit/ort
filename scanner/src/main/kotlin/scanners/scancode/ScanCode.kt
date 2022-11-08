@@ -99,7 +99,7 @@ class ScanCode internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(scannerName, scannerConfig)
+            ScanCode(name, scannerConfig)
     }
 
     override val name = SCANNER_NAME

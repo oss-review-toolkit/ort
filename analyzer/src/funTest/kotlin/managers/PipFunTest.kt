@@ -134,7 +134,7 @@ private fun createPip(pythonVersion: String = "3.10") =
 private fun createAnalyzerConfiguration(pythonVersion: String) =
     AnalyzerConfiguration(
         packageManagers = mapOf(
-            Pip.Factory().managerName to PackageManagerConfiguration(
+            Pip.Factory().name to PackageManagerConfiguration(
                 options = mapOf("pythonVersion" to pythonVersion)
             )
         )

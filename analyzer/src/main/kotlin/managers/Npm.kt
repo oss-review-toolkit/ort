@@ -108,7 +108,7 @@ open class Npm(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Npm(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Npm(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()

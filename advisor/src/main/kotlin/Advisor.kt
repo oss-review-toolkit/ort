@@ -51,7 +51,7 @@ class Advisor(
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
         val ALL: SortedMap<String, AdviceProviderFactory> by lazy {
-            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.providerName }
+            LOADER.iterator().asSequence().associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) { it.name }
         }
     }
 
