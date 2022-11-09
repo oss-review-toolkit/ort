@@ -46,6 +46,10 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
 ) : AdviceProviderFactory {
     abstract override fun create(config: AdvisorConfiguration): T
 
+    /**
+     * For providers that require configuration, return the typed configuration dedicated to provider [T] or throw if it
+     * does not exist.
+     */
     protected fun <T : Any> AdvisorConfiguration.forProvider(select: AdvisorConfiguration.() -> T?): T =
         requireNotNull(select()) {
             "No configuration for '$name' found in '${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}'."

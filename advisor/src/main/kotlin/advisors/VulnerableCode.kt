@@ -50,8 +50,7 @@ private const val BULK_REQUEST_SIZE = 100
  */
 class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeConfiguration) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
-        override fun create(config: AdvisorConfiguration) =
-            VulnerableCode(name, config.forProvider { vulnerableCode })
+        override fun create(config: AdvisorConfiguration) = VulnerableCode(name, config.forProvider { vulnerableCode })
     }
 
     /**
