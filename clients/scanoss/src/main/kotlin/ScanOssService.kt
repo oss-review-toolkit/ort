@@ -39,6 +39,11 @@ typealias FullScanResponse = Map<String, List<ScanResponse>>
 interface ScanOssService {
     companion object {
         /**
+         * The default API URL.
+         */
+        const val DEFAULT_API_URL = "https://osskb.org/api/"
+
+        /**
          * The JSON (de-)serialization object used by this service.
          */
         val JSON = Json { ignoreUnknownKeys = true }
@@ -46,11 +51,11 @@ interface ScanOssService {
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): ScanOssService {
+        fun create(url: String? = null, client: OkHttpClient? = null): ScanOssService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
-                .baseUrl(url)
+                .baseUrl(url ?: DEFAULT_API_URL)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
