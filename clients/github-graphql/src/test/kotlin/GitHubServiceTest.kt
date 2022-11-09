@@ -40,7 +40,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
 
-import io.ktor.client.features.ClientRequestException
+import io.ktor.client.plugins.ClientRequestException
 
 import java.io.File
 import java.net.ConnectException

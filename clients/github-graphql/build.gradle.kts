@@ -34,6 +34,11 @@ graphql {
         schemaFile = file("${project.projectDir}/src/main/assets/schema.graphql")
         queryFileDirectory = "${project.projectDir}/src/main/assets/"
         serializer = GraphQLSerializer.KOTLINX
+
+        parserOptions {
+            // Raise the default of 15000 tokens to be able to parse the GitHub grammar.
+            maxTokens = 55000
+        }
     }
 }
 
