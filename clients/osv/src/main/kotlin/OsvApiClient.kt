@@ -44,22 +44,39 @@ import retrofit2.http.Path
  */
 interface OsvApiClient {
     companion object {
-        const val SERVER_URL_PRODUCTION = "https://api.osv.dev"
-        const val SERVER_URL_STAGING = "https://api-staging.osv.dev"
         const val BATCH_REQUEST_MAX_SIZE = 1000
 
         val JSON = Json.Default
+
+        /**
+         * Create an OsvApiClient instance for communicating with the given [server], optionally using a pre-built
+         * OkHttp [client].
+         */
+        fun create(server: Server, client: OkHttpClient? = null): OsvApiClient =
+            create(server.url, client)
 
         fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvApiClient {
             val converterFactory = JSON.asConverterFactory(contentType = "application/json".toMediaType())
 
             return Retrofit.Builder()
                 .apply { client(client ?: defaultHttpClient()) }
-                .baseUrl(serverUrl ?: SERVER_URL_PRODUCTION)
+                .baseUrl(serverUrl ?: Server.PRODUCTION.url)
                 .addConverterFactory(converterFactory)
                 .build()
                 .create(OsvApiClient::class.java)
         }
+    }
+
+    enum class Server(val url: String) {
+        /**
+         * The production API server.
+         */
+        PRODUCTION("https://api.osv.dev"),
+
+        /**
+         * The staging API server.
+         */
+        STAGING("https://api-staging.osv.dev")
     }
 
     /**
