@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import us.springett.cvss.Cvss
 
 /**
- * An advice provider that obtains vulnerability information from OSV.dev https://osv.dev/.
+ * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
  */
 class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProvider(name) {
     companion object : Logging
