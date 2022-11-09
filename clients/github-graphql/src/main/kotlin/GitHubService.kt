@@ -26,7 +26,7 @@ import com.expediagroup.graphql.client.types.GraphQLClientResponse
 
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
-import io.ktor.client.features.defaultRequest
+import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 
 import java.net.URI
