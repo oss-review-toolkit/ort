@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import org.apache.logging.log4j.kotlin.Logging
+
 /**
  * An object providing functionality to filter environments that are passed to newly created processes.
  *
@@ -41,7 +43,7 @@ package org.ossreviewtoolkit.utils.common
  * TODO: Find an alternative mechanism to initialize this object from the ORT configuration (maybe using dependency
  *       injection) which does not require this object to be public.
  */
-object EnvironmentVariableFilter {
+object EnvironmentVariableFilter : Logging {
     /**
      * A set with substrings contained in variable names that are denied by default. All variables containing one of
      * these strings (ignoring case) are not propagated to child processes.
@@ -91,6 +93,10 @@ object EnvironmentVariableFilter {
     ) {
         this.denySubstrings = denySubstrings.toSet()
         this.allowNames = allowNames.toSet()
+
+        logger.info {
+            "EnvironmentVariableFilter initialized with denySubstrings = $denySubstrings and allowNames = $allowNames."
+        }
     }
 
     /**
@@ -106,6 +112,10 @@ object EnvironmentVariableFilter {
      */
     fun filter(environment: MutableMap<String, String>): MutableMap<String, String> {
         val keysToRemove = environment.keys.filterNot(EnvironmentVariableFilter::isAllowed)
+
+        if (keysToRemove.isNotEmpty()) {
+            logger.debug { "Filtering out these variables from the environment: $keysToRemove" }
+        }
 
         @Suppress("ConvertArgumentToSet") // The list cannot contain duplicates.
         environment -= keysToRemove
