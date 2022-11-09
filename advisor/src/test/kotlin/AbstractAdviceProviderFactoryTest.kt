@@ -109,4 +109,4 @@ class AbstractAdviceProviderFactoryTest : WordSpec({
 
 private const val PROVIDER_NAME = "testAdviceProvider"
 
-private val VULNERABLE_CODE_CONFIG = VulnerableCodeConfiguration("https://example.org/vc")
+private val VULNERABLE_CODE_CONFIG = VulnerableCodeConfiguration("https://example.org/vc", "")

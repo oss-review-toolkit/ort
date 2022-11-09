@@ -60,7 +60,9 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
-        VulnerableCodeService.create(vulnerableCodeConfiguration.serverUrl, OkHttpClientHelper.buildClient())
+        VulnerableCodeService.create(
+            vulnerableCodeConfiguration.serverUrl, vulnerableCodeConfiguration.apiKey, OkHttpClientHelper.buildClient()
+        )
     }
 
     override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
