@@ -65,7 +65,7 @@ class FossIdClientReturnTypeTest : StringSpec({
 
     beforeSpec {
         server.start()
-        service = FossIdRestService.createService("http://localhost:${server.port()}")
+        service = FossIdRestService.create("http://localhost:${server.port()}")
     }
 
     afterSpec {

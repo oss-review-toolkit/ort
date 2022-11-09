@@ -219,7 +219,7 @@ class FossIdConfigTest : WordSpec({
                 )
 
                 val fossIdConfig = FossIdConfig.create(scannerConfig)
-                val service = FossIdRestService.createService(fossIdConfig.serverUrl)
+                val service = FossIdRestService.create(fossIdConfig.serverUrl)
 
                 service.getLoginPage().string() shouldBe loginPage
             } finally {

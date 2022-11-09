@@ -102,7 +102,7 @@ class FossIdTest : WordSpec({
         // See https://lifesaver.codes/answer/cannot-mockkstatic-for-kotlin-companion-object-static-method-136
         mockkObject(FossIdRestService)
 
-        every { FossIdRestService.createService(any()) } returns createServiceMock()
+        every { FossIdRestService.create(any()) } returns createServiceMock()
     }
 
     afterTest {
@@ -134,7 +134,7 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -158,7 +158,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -188,7 +188,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -221,7 +221,7 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -252,7 +252,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -282,7 +282,7 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -314,7 +314,7 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -340,7 +340,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode, status = 0, error = "Project does not exist")
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
@@ -365,7 +365,7 @@ class FossIdTest : WordSpec({
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
@@ -407,7 +407,7 @@ class FossIdTest : WordSpec({
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
@@ -455,7 +455,7 @@ class FossIdTest : WordSpec({
             val config = createConfig(deltaScans = false)
             val vcsInfo = createVcsInfo()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.SCANNING, ScanStatus.FINISHED)
@@ -500,7 +500,7 @@ class FossIdTest : WordSpec({
             val config = createConfig(deltaScans = false, waitForResult = false)
             val vcsInfo = createVcsInfo()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.SCANNING, ScanStatus.FINISHED)
@@ -531,7 +531,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
@@ -571,7 +571,7 @@ class FossIdTest : WordSpec({
             val vcsInfo = createVcsInfo()
             val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
@@ -619,7 +619,7 @@ class FossIdTest : WordSpec({
             val config = createConfig()
             val vcsInfo = createVcsInfo()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NEW, ScanStatus.FINISHED)
@@ -673,7 +673,7 @@ class FossIdTest : WordSpec({
 
             val config = createConfig()
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode1)
                 .expectListScans(projectCode1, emptyList())
                 .expectCheckScanStatus(scanCode1, ScanStatus.FINISHED)
@@ -742,7 +742,7 @@ class FossIdTest : WordSpec({
             val recentScan = deltaScans.last()
             val scans = deltaScans + listOf(otherScan1, otherScan2, originScan)
 
-            val service = FossIdRestService.createService(config.serverUrl)
+            val service = FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, scans)
                 .expectCheckScanStatus(recentScan.code!!, ScanStatus.FINISHED)
@@ -783,7 +783,7 @@ class FossIdTest : WordSpec({
             val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
             val pkgId = createIdentifier(index = 42)
 
-            FossIdRestService.createService(config.serverUrl)
+            FossIdRestService.create(config.serverUrl)
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)

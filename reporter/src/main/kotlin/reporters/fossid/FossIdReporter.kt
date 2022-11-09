@@ -90,7 +90,7 @@ class FossIdReporter : Reporter {
             }.getOrNull()
         } ?: SelectionType.INCLUDE_ALL_LICENSES
 
-        val service = FossIdRestService.createService(serverUrl)
+        val service = FossIdRestService.create(serverUrl)
 
         return runBlocking(Dispatchers.IO) {
             input.ortResult.scanner?.scanResults?.values?.flatten()?.mapNotNull { result ->

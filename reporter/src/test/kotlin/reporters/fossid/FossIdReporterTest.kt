@@ -237,7 +237,7 @@ private fun createReporterMock(): Pair<FossIdRestService, FossIdReporter> {
 
     val serviceMock = mockk<FossIdServiceWithVersion>()
     val reporterMock = spyk<FossIdReporter>()
-    every { FossIdRestService.createService(any()) } returns serviceMock
+    every { FossIdRestService.create(any()) } returns serviceMock
 
     coEvery {
         serviceMock.generateReport(any(), any(), any(), any(), any(), any())
