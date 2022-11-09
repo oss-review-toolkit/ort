@@ -50,12 +50,12 @@ interface OsvApiClient {
 
         val JSON = Json.Default
 
-        fun create(serverUrl: String = SERVER_URL_PRODUCTION, client: OkHttpClient? = null): OsvApiClient {
+        fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvApiClient {
             val converterFactory = JSON.asConverterFactory(contentType = "application/json".toMediaType())
 
             return Retrofit.Builder()
                 .apply { client(client ?: defaultHttpClient()) }
-                .baseUrl(serverUrl)
+                .baseUrl(serverUrl ?: SERVER_URL_PRODUCTION)
                 .addConverterFactory(converterFactory)
                 .build()
                 .create(OsvApiClient::class.java)

@@ -52,7 +52,7 @@ interface OssIndexService {
          * using [user] and [password] for basic authentication, and / or a pre-built OkHttp [client].
          */
         fun create(
-            url: String,
+            url: String? = null,
             user: String? = null,
             password: String? = null,
             client: OkHttpClient? = null
@@ -73,7 +73,7 @@ interface OssIndexService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .client(ossIndexClient)
-                .baseUrl(url)
+                .baseUrl(url ?: DEFAULT_BASE_URL)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 

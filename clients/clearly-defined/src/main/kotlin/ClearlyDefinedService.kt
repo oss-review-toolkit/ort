@@ -60,11 +60,11 @@ interface ClearlyDefinedService {
          * Create a ClearlyDefined service instance for communicating with a server running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): ClearlyDefinedService {
+        fun create(url: String? = null, client: OkHttpClient? = null): ClearlyDefinedService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
-                .baseUrl(url)
+                .baseUrl(url ?: Server.PRODUCTION.url)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()

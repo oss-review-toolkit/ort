@@ -61,7 +61,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         )
 
         "return single curation data" {
-            val service = ClearlyDefinedService.create(Server.PRODUCTION)
+            val service = ClearlyDefinedService.create()
 
             val curation = service.getCuration(
                 coordinates.type,
@@ -75,7 +75,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
         }
 
         "return bulk curation data" {
-            val service = ClearlyDefinedService.create(Server.PRODUCTION)
+            val service = ClearlyDefinedService.create()
 
             val curations = service.getCurations(listOf(coordinates))
             val curation = curations[coordinates]?.curations?.get(coordinates)

@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
  */
 internal data class ScanOssConfig(
     /** URL of the ScanOSS server. */
-    val apiUrl: String,
+    val apiUrl: String?,
 
     /** API Key required to authenticate with the ScanOSS server. */
     val apiKey: String
@@ -40,13 +40,10 @@ internal data class ScanOssConfig(
         /** Name of the configuration property for the API key. */
         const val API_KEY_PROPERTY = "apiKey"
 
-        /** The default API URL to use. */
-        internal const val DEFAULT_API_URL = "https://osskb.org/api/"
-
         fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
             val scanOssOptions = scannerConfig.options?.get("ScanOss")
 
-            val apiUrl = scanOssOptions?.get(API_URL_PROPERTY) ?: DEFAULT_API_URL
+            val apiUrl = scanOssOptions?.get(API_URL_PROPERTY)
             val apiKey = scanOssOptions?.get(API_KEY_PROPERTY).orEmpty()
 
             return ScanOssConfig(apiUrl, apiKey)

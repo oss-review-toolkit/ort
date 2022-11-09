@@ -33,7 +33,7 @@ import retrofit2.Response
 /**
  * This class wraps the OSV Rest API client in order to make its use simpler and less error-prone.
  */
-class OsvService(serverUrl: String = OsvApiClient.SERVER_URL_PRODUCTION, httpClient: OkHttpClient? = null) {
+class OsvService(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
     private val client = OsvApiClient.create(serverUrl, httpClient)
 
     /**
