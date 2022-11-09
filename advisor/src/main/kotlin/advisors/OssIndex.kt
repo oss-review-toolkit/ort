@@ -54,7 +54,9 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
-        override fun create(config: AdvisorConfiguration) = OssIndex(name)
+        override fun create(config: AdvisorConfiguration) =
+            // The OSS Index does not require any configuration.
+            OssIndex(name)
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
