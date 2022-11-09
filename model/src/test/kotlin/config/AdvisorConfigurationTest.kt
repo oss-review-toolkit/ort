@@ -58,7 +58,13 @@ class AdvisorConfigurationTest : WordSpec({
             val expectedVCConfig = originalConfig.vulnerableCode.shouldNotBeNull()
             val actualVCConfig = rereadConfig.vulnerableCode.shouldNotBeNull()
 
-            actualVCConfig shouldBe expectedVCConfig
+            actualVCConfig.serverUrl shouldBe expectedVCConfig.serverUrl
+        }
+
+        "not serialize credentials" {
+            val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).vulnerableCode.shouldNotBeNull()
+
+            rereadConfig.apiKey.shouldBeNull()
         }
     }
 

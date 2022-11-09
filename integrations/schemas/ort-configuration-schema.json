@@ -150,6 +150,9 @@
                 "serverUrl": {
                     "type": "string",
                     "format": "uri"
+                },
+                "apiKey": {
+                    "type": "string"
                 }
             },
             "required": [

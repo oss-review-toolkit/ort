@@ -247,7 +247,7 @@ private fun WireMockServer.stubPackagesRequest(responseFile: String) {
  */
 private fun createConfig(server: WireMockServer): VulnerableCodeConfiguration {
     val url = "http://localhost:${server.port()}"
-    return VulnerableCodeConfiguration(url)
+    return VulnerableCodeConfiguration(url, "")
 }
 
 /**

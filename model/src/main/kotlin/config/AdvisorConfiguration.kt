@@ -82,14 +82,18 @@ data class OsvConfiguration(
 
 /**
  * The configuration for VulnerableCode as security vulnerability provider.
- *
- * TODO: Define options for authentication.
  */
 data class VulnerableCodeConfiguration(
     /**
-     * The base URL of the VulnerableCode REST API.
+     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
      */
-    val serverUrl: String
+    val serverUrl: String?,
+
+    /**
+     * The optional API key to use.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val apiKey: String?
 )
 
 /**

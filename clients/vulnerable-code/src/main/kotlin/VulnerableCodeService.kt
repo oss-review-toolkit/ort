@@ -38,6 +38,8 @@ import retrofit2.http.POST
  */
 interface VulnerableCodeService {
     companion object {
+        const val PUBLIC_SERVER_URL = "https://public.vulnerablecode.io"
+
         /**
          * The JSON (de-)serialization object used by this service.
          */
@@ -46,11 +48,23 @@ interface VulnerableCodeService {
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): VulnerableCodeService {
+        fun create(url: String? = null, apiKey: String? = null, client: OkHttpClient? = null): VulnerableCodeService {
+            val vulnerableCodeClient = (client ?: OkHttpClient()).run {
+                takeIf { apiKey == null } ?: run {
+                    newBuilder().addInterceptor { chain ->
+                        val requestBuilder = chain.request().newBuilder().apply {
+                            header("Authorization", "Token $apiKey")
+                        }
+
+                        chain.proceed(requestBuilder.build())
+                    }.build()
+                }
+            }
+
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
-                .apply { if (client != null) client(client) }
-                .baseUrl(url)
+                .client(vulnerableCodeClient)
+                .baseUrl(url ?: PUBLIC_SERVER_URL)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
 
