@@ -156,7 +156,7 @@ interface FossIdRestService {
          * Create the [FossIdServiceWithVersion] to interact with the FossID instance running at the given [url],
          * optionally using a pre-built OkHttp [client].
          */
-        fun createService(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
+        fun create(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
             logger.info { "The FossID server URL is $url." }
 
             val minReadTimeout = Duration.ofSeconds(60)

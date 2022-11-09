@@ -169,7 +169,7 @@ class FossId internal constructor(
     // of scans for each package.
     private val createdScans = mutableSetOf<String>()
 
-    private val service = FossIdRestService.createService(config.serverUrl)
+    private val service = FossIdRestService.create(config.serverUrl)
 
     override val criteria: ScannerCriteria? = null
     override val name: String = "FossId"
