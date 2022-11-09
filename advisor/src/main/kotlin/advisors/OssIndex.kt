@@ -76,7 +76,10 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
         return try {
             val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
 
-            components.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
+            val chunks = components.chunked(BULK_REQUEST_SIZE)
+            chunks.forEachIndexed { index, chunk ->
+                logger.debug { "Getting report for ${chunk.size} components (chunk $index of ${chunks.size})." }
+
                 val requestResults = getComponentReport(service, chunk).associateBy {
                     it.coordinates
                 }
@@ -132,7 +135,6 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
         coordinates: List<String>
     ): List<OssIndexService.ComponentReport> =
         try {
-            logger.debug { "Querying component report from ${OssIndexService.DEFAULT_BASE_URL}." }
             service.getComponentReport(OssIndexService.ComponentReportRequest(coordinates))
         } catch (e: HttpException) {
             throw IOException(e)
