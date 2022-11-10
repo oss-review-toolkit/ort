@@ -729,8 +729,7 @@ following formats are supported (reporter names are case-insensitive):
     * XHTML (`-f XHtmlTemplate`)
     * DocBook (`-f DocBookTemplate`)
     * Man page (`-f ManPageTemplate`)
-    * AsciiDoc (`-f AdocTemplate`): Does not convert the created AsciiDoc files but writes the generated files as
-      reports.
+    * AsciiDoc, without any further conversion beyond template processing (`-f AdocTemplate`)
 * [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform
   [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo)
   (`-f CtrlXAutomation`)
@@ -738,7 +737,7 @@ following formats are supported (reporter names are case-insensitive):
 * [Excel](https://www.microsoft.com/en-us/microsoft-365/excel) sheet (`-f Excel`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
   (`-f GitLabLicenseModel`)
-  * A nice tutorial video has been [published](https://youtu.be/dNmH_kYJ34g) by GitLab engineer @mokhan.
+  * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
 * [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
   * List license texts and copyrights by package (`-f NoticeTemplate`)
   * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=summary`)
