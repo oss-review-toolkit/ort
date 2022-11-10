@@ -23,14 +23,19 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT configurations") {
     private val showDefault by option(
@@ -48,6 +53,12 @@ class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT c
         help = "Show the reference configuration. This configuration is never actually used as it just contains " +
                 "example entries for all supported configuration options."
     ).flag()
+
+    private val checkSyntax by option(
+        "--check-syntax",
+        help = "Check the syntax of the given configuration file."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
@@ -75,6 +86,17 @@ class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT c
             println("The reference configuration is:")
             println()
             println(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
+        }
+
+        if (checkSyntax != null) {
+            runCatching {
+                OrtConfiguration.load(file = checkSyntax)
+            }.onSuccess {
+                println("The syntax of the configuration file '$checkSyntax' is valid.")
+            }.onFailure {
+                println(it.collectMessages())
+                throw ProgramResult(2)
+            }
         }
     }
 }
