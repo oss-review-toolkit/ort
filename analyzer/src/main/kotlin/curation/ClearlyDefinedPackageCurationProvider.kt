@@ -98,7 +98,7 @@ class ClearlyDefinedPackageCurationProvider(
 ) : PackageCurationProvider {
     companion object : Logging
 
-    constructor(server: Server) : this(server.url)
+    constructor(server: Server) : this(server.apiUrl)
 
     private val service by lazy { ClearlyDefinedService.create(serverUrl, client ?: OkHttpClientHelper.buildClient()) }
 

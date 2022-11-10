@@ -123,8 +123,7 @@ class UploadCurationsCommand : CliktCommand(
         val unharvestedCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
 
         unharvestedCurations.forEach { curation ->
-            val webServerUrl = server.url.replaceFirst("dev-api.", "dev.").replaceFirst("api.", "")
-            val definitionUrl = "$webServerUrl/definitions/${curationsToCoordinates[curation]}"
+            val definitionUrl = "${server.webUrl}/definitions/${curationsToCoordinates[curation]}"
 
             println(
                 "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +

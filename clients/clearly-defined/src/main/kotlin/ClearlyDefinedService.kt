@@ -54,7 +54,7 @@ interface ClearlyDefinedService {
          * pre-built OkHttp [client].
          */
         fun create(server: Server, client: OkHttpClient? = null): ClearlyDefinedService =
-            create(server.url, client)
+            create(server.apiUrl, client)
 
         /**
          * Create a ClearlyDefined service instance for communicating with a server running at the given [url],
@@ -64,7 +64,7 @@ interface ClearlyDefinedService {
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
                 .apply { if (client != null) client(client) }
-                .baseUrl(url ?: Server.PRODUCTION.url)
+                .baseUrl(url ?: Server.PRODUCTION.apiUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
@@ -76,21 +76,27 @@ interface ClearlyDefinedService {
     /**
      * See https://github.com/clearlydefined/service/blob/661934a/schemas/swagger.yaml#L8-L14.
      */
-    enum class Server(val url: String) {
+    enum class Server(val apiUrl: String, val webUrl: String? = null, val contributionUrl: String? = null) {
         /**
-         * The ClearlyDefined production server. When submitting curations, this will create PRs against the repository
-         * at https://github.com/clearlydefined/curated-data.
+         * The production server.
          */
-        PRODUCTION("https://api.clearlydefined.io"),
+        PRODUCTION(
+            "https://api.clearlydefined.io",
+            "https://clearlydefined.io",
+            "https://github.com/clearlydefined/curated-data"
+        ),
 
         /**
-         * The ClearlyDefined development server. When submitting curations, this will create PRs against the repository
-         * at https://github.com/clearlydefined/curated-data-dev.
+         * The development server.
          */
-        DEVELOPMENT("https://dev-api.clearlydefined.io"),
+        DEVELOPMENT(
+            "https://dev-api.clearlydefined.io",
+            "https://dev.clearlydefined.io",
+            "https://github.com/clearlydefined/curated-data-dev"
+        ),
 
         /**
-         * The ClearlyDefined server when running locally.
+         * The server when running locally.
          */
         LOCAL("http://localhost:4000")
     }

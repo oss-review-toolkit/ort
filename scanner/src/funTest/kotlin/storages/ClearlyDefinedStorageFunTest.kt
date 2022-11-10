@@ -25,7 +25,7 @@ import io.kotest.matchers.result.shouldBeSuccess
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
+import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 class ClearlyDefinedStorageFunTest : StringSpec({
-    val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(ClearlyDefinedService.Server.PRODUCTION.url))
+    val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(Server.PRODUCTION.apiUrl))
 
     "Scan results for ScanCode 3.0.2 should be read correctly" {
         val id = Identifier("Maven:com.vdurmont:semver4j:3.1.0")
