@@ -71,16 +71,16 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
     override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
-        val components = packages.map { it.purl }
+        val purls = packages.map { it.purl }
 
         return try {
             val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
 
-            val chunks = components.chunked(BULK_REQUEST_SIZE)
-            chunks.forEachIndexed { index, chunk ->
-                logger.debug { "Getting report for ${chunk.size} components (chunk $index of ${chunks.size})." }
+            val chunks = purls.chunked(BULK_REQUEST_SIZE)
+            chunks.forEachIndexed { index, chunkOfPurls ->
+                logger.debug { "Getting report for ${chunkOfPurls.size} components (chunk $index of ${chunks.size})." }
 
-                val requestResults = getComponentReport(service, chunk).associateBy {
+                val requestResults = getComponentReport(service, chunkOfPurls).associateBy {
                     it.coordinates
                 }
 
@@ -127,15 +127,15 @@ class OssIndex(name: String, serverUrl: String = OssIndexService.DEFAULT_BASE_UR
     }
 
     /**
-     * Invoke the [OSS Index service][service] to request detail information for the given [coordinates]. Catch HTTP
+     * Invoke the [OSS Index service][service] to request detail information for the given [purls]. Catch HTTP
      * exceptions thrown by the service and re-throw them as [IOException].
      */
     private suspend fun getComponentReport(
         service: OssIndexService,
-        coordinates: List<String>
+        purls: List<String>
     ): List<OssIndexService.ComponentReport> =
         try {
-            service.getComponentReport(OssIndexService.ComponentReportRequest(coordinates))
+            service.getComponentReport(OssIndexService.ComponentReportRequest(purls))
         } catch (e: HttpException) {
             throw IOException(e)
         }
