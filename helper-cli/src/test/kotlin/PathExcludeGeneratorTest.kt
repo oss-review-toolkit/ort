@@ -109,7 +109,7 @@ class PathExcludeGeneratorTest : WordSpec({
         fun getPatternsForFiles(vararg files: String) =
             createExcludePatterns(
                 filenamePattern = "*_test.go",
-                files = files.mapTo(mutableSetOf()) { File(it) }
+                filePaths = files.asList()
             )
 
         "return the expected pattern if only a single file matches" {
