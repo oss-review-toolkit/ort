@@ -53,7 +53,7 @@ internal object PathExcludeGenerator {
      */
     fun generateDirectoryExcludes(filePaths: Collection<String>): Set<PathExclude> {
         val files = filePaths.mapTo(mutableSetOf()) { File(it) }
-        val dirs = getAllDirectories(files)
+        val dirs = files.flatMapTo(mutableSetOf()) { it.getAncestorFiles() }
 
         val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
 
@@ -121,9 +121,6 @@ internal object PathExcludeGenerator {
         return "$dir$wildcard$filenamePattern"
     }
 }
-
-private fun getAllDirectories(files: Collection<File>): Set<File> =
-    files.flatMapTo(mutableSetOf()) { it.getAncestorFiles() }
 
 /**
  * Return all ancestor directories ordered from parent to root.
