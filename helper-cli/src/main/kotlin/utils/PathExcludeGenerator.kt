@@ -91,8 +91,8 @@ internal object PathExcludeGenerator {
             pathExcludes += patterns.map { PathExclude(it, reason) }
         }
 
-        val filesForPathExcludes = pathExcludes.associateWith { pathExcludeExclude ->
-            filePaths.filterTo(mutableSetOf()) { pathExcludeExclude.matches(it) }
+        val filesForPathExcludes = pathExcludes.associateWith { pathExclude ->
+            filePaths.filterTo(mutableSetOf()) { pathExclude.matches(it) }
         }
 
         return greedySetCover(filesForPathExcludes, FILE_EXCLUDE_COMPARATOR).toSet()
