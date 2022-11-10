@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason.BUILD_TOOL_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.DOCUMENTATION_OF
 import org.ossreviewtoolkit.model.config.PathExcludeReason.TEST_OF
 import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.common.getAllAncestorDirectories
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
@@ -52,14 +53,12 @@ internal object PathExcludeGenerator {
      * containing all given [filePaths] which must be relative to the root directory of the source tree.
      */
     fun generateDirectoryExcludes(filePaths: Collection<String>): Set<PathExclude> {
-        val files = filePaths.mapTo(mutableSetOf()) { File(it) }
-        val dirs = files.flatMapTo(mutableSetOf()) { it.getAncestorFiles() }
-
-        val dirsToExclude = mutableMapOf<File, PathExcludeReason>()
+        val dirs = filePaths.flatMapTo(mutableSetOf()) { getAllAncestorDirectories(it) }
+        val dirsToExclude = mutableMapOf<String, PathExcludeReason>()
 
         dirs.forEach { dir ->
             val (_, reason) = PATH_EXCLUDES_REASON_FOR_DIR_NAME.find { (pattern, _) ->
-                FileMatcher.match(pattern, dir.name, ignoreCase = true)
+                FileMatcher.match(pattern, File(dir).name, ignoreCase = true)
             } ?: return@forEach
 
             dirsToExclude += dir to reason
@@ -68,9 +67,9 @@ internal object PathExcludeGenerator {
         val result = mutableSetOf<PathExclude>()
 
         dirsToExclude.forEach { (dir, reason) ->
-            if (dir.getAncestorFiles().intersect(dirsToExclude.keys).isEmpty()) {
+            if (getAllAncestorDirectories(dir).intersect(dirsToExclude.keys).isEmpty()) {
                 result += PathExclude(
-                    pattern = "${dir.invariantSeparatorsPath}/**",
+                    pattern = "$dir/**",
                     reason = reason
                 )
             }
@@ -84,25 +83,27 @@ internal object PathExcludeGenerator {
      * given [filePaths] which must be relative to the root directory of the source tree.
      */
     fun generateFileExcludes(filePaths: Collection<String>): Set<PathExclude> {
-        val files = filePaths.mapTo(mutableSetOf()) { File(it) }
         val pathExcludes = mutableSetOf<PathExclude>()
 
         PATH_EXCLUDE_REASON_FOR_FILENAME.forEach { (pattern, reason) ->
-            val patterns = createExcludePatterns(pattern, files)
+            val patterns = createExcludePatterns(pattern, filePaths)
 
             pathExcludes += patterns.map { PathExclude(it, reason) }
         }
 
         val filesForPathExcludes = pathExcludes.associateWith { pathExcludeExclude ->
-            files.filter { pathExcludeExclude.matches(it.path) }.toSet()
+            filePaths.filterTo(mutableSetOf()) { pathExcludeExclude.matches(it) }
         }
 
         return greedySetCover(filesForPathExcludes, FILE_EXCLUDE_COMPARATOR).toSet()
     }
 
-    internal fun createExcludePatterns(filenamePattern: String, files: Set<File>): Set<String> {
-        val matchingFiles = files.filter { FileMatcher.match(filenamePattern, it.name) }.takeIf { it.isNotEmpty() }
-            ?: return emptySet()
+    internal fun createExcludePatterns(filenamePattern: String, filePaths: Collection<String>): Set<String> {
+        val matchingFiles = filePaths.mapNotNull { filePath ->
+            File(filePath).takeIf { FileMatcher.match(filenamePattern, it.name) }
+        }.ifEmpty {
+            return emptySet()
+        }
 
         return createExcludePattern(
             directory = getCommonParentFile(matchingFiles).invariantSeparatorsPath,
@@ -120,22 +121,6 @@ internal object PathExcludeGenerator {
         val wildcard = "**/".takeIf { matchSubdirectories }.orEmpty()
         return "$dir$wildcard$filenamePattern"
     }
-}
-
-/**
- * Return all ancestor directories ordered from parent to root.
- */
-private fun File.getAncestorFiles(): List<File> {
-    val result = mutableListOf<File>()
-
-    var ancenstor = parentFile
-
-    while (ancenstor != null) {
-        result += ancenstor
-        ancenstor = ancenstor.parentFile
-    }
-
-    return result
 }
 
 private fun <T> Collection<T>.checkPatterns(patternSelector: (T) -> String) =
