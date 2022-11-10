@@ -42,61 +42,6 @@ data class AdvisorConfiguration(
 )
 
 /**
- * The configuration for Nexus IQ as a security vulnerability provider.
- */
-data class NexusIqConfiguration(
-    /**
-     * The URL to use for REST API requests against the server.
-     */
-    val serverUrl: String,
-
-    /**
-     * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
-     */
-    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val browseUrl: String = serverUrl,
-
-    /**
-     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
-     * disabled.
-     */
-    val username: String?,
-
-    /**
-     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
-     * disabled.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String?
-)
-
-/**
- * The configuration for the Google OSV vulnerability provider.
- */
-data class OsvConfiguration(
-    /**
-     * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
-     */
-    val serverUrl: String?
-)
-
-/**
- * The configuration for VulnerableCode as security vulnerability provider.
- */
-data class VulnerableCodeConfiguration(
-    /**
-     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
-     */
-    val serverUrl: String?,
-
-    /**
-     * The optional API key to use.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val apiKey: String?
-)
-
-/**
  * The configuration for the GitHub Defects advisor.
  */
 data class GitHubDefectsConfiguration(
@@ -150,4 +95,59 @@ data class GitHubDefectsConfiguration(
      * defined in the _GitHubDefects_ class is used.
      */
     val parallelRequests: Int? = null
+)
+
+/**
+ * The configuration for Nexus IQ as a security vulnerability provider.
+ */
+data class NexusIqConfiguration(
+    /**
+     * The URL to use for REST API requests against the server.
+     */
+    val serverUrl: String,
+
+    /**
+     * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    val browseUrl: String = serverUrl,
+
+    /**
+     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
+     */
+    val username: String?,
+
+    /**
+     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val password: String?
+)
+
+/**
+ * The configuration for the Google OSV vulnerability provider.
+ */
+data class OsvConfiguration(
+    /**
+     * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
+     */
+    val serverUrl: String?
+)
+
+/**
+ * The configuration for VulnerableCode as security vulnerability provider.
+ */
+data class VulnerableCodeConfiguration(
+    /**
+     * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
+     */
+    val serverUrl: String?,
+
+    /**
+     * The optional API key to use.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val apiKey: String?
 )
