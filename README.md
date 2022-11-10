@@ -306,6 +306,31 @@ The file containing any policy rule implementations to be used with the _evaluat
 |---------------------|-----------|---------------------------------------|
 | Kotlin script (DSL) | Evaluator | `$ORT_CONFIG_DIR/evaluator.rules.kts` |
 
+### Protecting environment variables
+
+In order to do its analysis, ORT invokes a number of external tools, such as package managers or scanners. Especially
+when interacting with package managers to obtain the dependencies of the analyzed project, this can lead to the
+execution of code in build scripts from potentially unknown sources. A possible risk in this constellation is that
+untrusted code could read sensitive information from environment variables used for the ORT configuration, such as
+database connection strings or service credentials. This is because the environment variables of a process are by
+default propagated to the child processes spawned by it.
+
+To reduce this risk, ORT filters out certain environment variables when it runs external tools in child processes.
+This filter mechanism can be configured via the following properties in the
+[ORT configuration file](./model/src/main/resources/reference.yml):
+
+| Property | Description |
+|----------|-------------|
+| deniedProcessEnvironmentVariablesSubstrings | A list of substrings that identify variables containing sensitive information. All variables that contain at least one of these strings (ignoring case) are not propagated to child processes. The default for this property contains strings like "PASS", "PWD", or "TOKEN", which are typically used to reference credentials. |
+| allowedProcessEnvironmentVariableNames | This is a list of variable names that are explicitly allowed to be passed to child processes - even if they contain a substring listed in `deniedProcessEnvironmentVariablesSubstrings`. Via this property variables required by external tools, e.g. credentials for repositories needed by package managers, can be passed through. Here, entries must match variables names exactly and case-sensitively. |
+
+This mechanism offers a certain level of security without enforcing an excessive amount of configuration, which would
+be needed for instance to define an explicit allow list. With the two configuration properties even corner cases can be
+defined:
+
+* In order to disable filtering of environment variables completely, set the `deniedProcessEnvironmentVariablesSubstrings` property to a single string that is certainly not contained in any environment variable, such as "This is for sure not contained in a variable name".
+* To prevent that any environment variable is passed to a child process, substrings can be configured in `deniedProcessEnvironmentVariablesSubstrings` that match all variables, for instance one string for each letter of the alphabet.
+
 # Details on the tools
 
 <a name="analyzer"></a>
