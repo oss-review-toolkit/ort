@@ -65,7 +65,7 @@ data class FileBasedStorageConfiguration(
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
-    val type: StorageType = StorageType.PACKAGE_BASED
+    val type: StorageType = StorageType.PROVENANCE_BASED
 ) : ScanStorageConfiguration
 
 /**
@@ -80,7 +80,7 @@ data class PostgresStorageConfiguration(
     /**
      * The way that scan results are stored, defaults to [StorageType.PACKAGE_BASED].
      */
-    val type: StorageType = StorageType.PACKAGE_BASED
+    val type: StorageType = StorageType.PROVENANCE_BASED
 ) : ScanStorageConfiguration
 
 /**
