@@ -124,6 +124,8 @@ class OrtConfigurationTest : WordSpec({
                             sslkey shouldBe "/defaultdir/postgresql.pk8"
                             sslrootcert shouldBe "/defaultdir/root.crt"
                         }
+
+                        type shouldBe StorageType.PROVENANCE_BASED
                     }
                 }
 

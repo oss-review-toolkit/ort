@@ -207,6 +207,7 @@ ort:
           sslcert: /defaultdir/postgresql.crt
           sslkey: /defaultdir/postgresql.pk8
           sslrootcert: /defaultdir/root.crt
+        type: PROVENANCE_BASED
 
       sw360Configuration:
         restUrl: 'https://your-sw360-rest-url'
