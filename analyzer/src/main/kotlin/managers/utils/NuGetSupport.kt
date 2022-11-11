@@ -41,9 +41,6 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageData
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageDetails
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetAllPackageData.PackageSpec
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -90,6 +87,15 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         }
     }
 
+    /**
+     * A class that bundles all metadata for NuGet packages.
+     */
+    private class AllPackageData(
+        val data: PackageData,
+        val details: PackageDetails,
+        val spec: PackageSpec
+    )
+
     private val client = OkHttpClientHelper.buildClient {
         // Cache responses more aggressively than the NuGet registry's default of "max-age=120, must-revalidate"
         // (for the index URL) or even "no-store" (for the package data). More or less arbitrarily choose 7 days /
@@ -119,14 +125,14 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
         .map { it.id.removeSuffix("/") }
 
-    private val packageMap = mutableMapOf<Identifier, Pair<NuGetAllPackageData, Package>>()
+    private val packageMap = mutableMapOf<Identifier, Pair<AllPackageData, Package>>()
 
     private inline fun <reified T> ObjectMapper.readValueFromUrl(url: String): T {
         val text = client.downloadText(url).getOrThrow()
         return readValue(text)
     }
 
-    private fun getAllPackageData(id: Identifier): NuGetAllPackageData {
+    private fun getAllPackageData(id: Identifier): AllPackageData {
         // Note: The package name in the URL is case-sensitive and must be lower-case!
         val lowerId = id.name.lowercase()
 
@@ -143,11 +149,11 @@ class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX
         return runBlocking {
             val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(data.catalogEntry) }
             val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
-            NuGetAllPackageData(data, packageDetails.await(), packageSpec.await())
+            AllPackageData(data, packageDetails.await(), packageSpec.await())
         }
     }
 
-    private fun getPackage(all: NuGetAllPackageData): Package {
+    private fun getPackage(all: AllPackageData): Package {
         val vcs = all.spec.metadata.repository?.let {
             VcsInfo(
                 type = VcsType(it.type.orEmpty()),
