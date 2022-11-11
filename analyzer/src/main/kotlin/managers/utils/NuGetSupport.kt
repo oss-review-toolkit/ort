@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.dataformat.xml.XmlFactory
@@ -29,11 +28,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedMap
 import java.util.SortedSet
 import java.util.concurrent.TimeUnit
-
-import javax.xml.bind.annotation.XmlRootElement
 
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -356,31 +352,4 @@ private fun PackageManager.getProject(
         homepageUrl = "",
         scopeDependencies = scopes
     )
-}
-
-/**
- * A reader for XML-based NuGet configuration files, see
- * https://docs.microsoft.com/en-us/nuget/reference/nuget-config-file
- */
-object NuGetConfigFileReader : Logging {
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    @XmlRootElement(name = "configuration")
-    private data class NuGetConfig(
-        val packageSources: List<SortedMap<String, String>>
-    )
-
-    fun getRegistrationsBaseUrls(configFile: File): List<String> {
-        val nuGetConfig = NuGetSupport.XML_MAPPER.readValue<NuGetConfig>(configFile)
-
-        val (remotes, locals) = nuGetConfig.packageSources
-            .mapNotNull { it["value"] }
-            .partition { it.startsWith("http") }
-
-        if (locals.isNotEmpty()) {
-            // TODO: Handle local package sources.
-            logger.warn { "Ignoring local NuGet package sources $locals." }
-        }
-
-        return remotes
-    }
 }
