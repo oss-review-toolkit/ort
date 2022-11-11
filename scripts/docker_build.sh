@@ -27,6 +27,5 @@ docker buildx build \
     -f "$GIT_ROOT/Dockerfile" \
     -t "${ORT_DOCKER_TAG:-ort}" \
     --build-arg ORT_VERSION="$GIT_REVISION" \
-    --platform linux/amd64 \
     $DOCKER_ARGS \
     "$GIT_ROOT"
