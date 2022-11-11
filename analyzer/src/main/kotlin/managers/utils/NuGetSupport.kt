@@ -271,6 +271,9 @@ private fun resolveLocalSpec(definitionFile: File): File? =
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
+/**
+ * A class that bundles properties of a single NuGet dependency.
+ */
 data class NuGetDependency(
     val name: String,
     val version: String,
@@ -278,7 +281,13 @@ data class NuGetDependency(
     val developmentDependency: Boolean = false
 )
 
+/**
+ * An interface to be implemented by different XML file format readers that declare NuGet dependencies.
+ */
 interface XmlPackageFileReader {
+    /**
+     * Return the set of [NuGet dependencies][NuGetDependency] declared in the given [definitionFile].
+     */
     fun getDependencies(definitionFile: File): Set<NuGetDependency>
 }
 

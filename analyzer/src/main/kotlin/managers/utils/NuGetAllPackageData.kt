@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty
 
+/**
+ * A class that bundles all metadata for NuGet packages.
+ */
 internal class NuGetAllPackageData(
     val data: PackageData,
     val details: PackageDetails,
