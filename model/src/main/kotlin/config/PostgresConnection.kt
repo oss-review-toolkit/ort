@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class PostgresConnection(
@@ -53,18 +55,21 @@ data class PostgresConnection(
      * The full path of the certificate file.
      * See: https://jdbc.postgresql.org/documentation/head/connect.html
      */
+    @JsonInclude(Include.NON_NULL)
     val sslcert: String? = null,
 
     /**
      * The full path of the key file.
      * See: https://jdbc.postgresql.org/documentation/head/connect.html
      */
+    @JsonInclude(Include.NON_NULL)
     val sslkey: String? = null,
 
     /**
      * The full path of the root certificate file.
      * See: https://jdbc.postgresql.org/documentation/head/connect.html
      */
+    @JsonInclude(Include.NON_NULL)
     val sslrootcert: String? = null,
 
     /**
