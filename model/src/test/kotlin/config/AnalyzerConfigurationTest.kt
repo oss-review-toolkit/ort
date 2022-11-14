@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
+import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -106,7 +107,7 @@ class AnalyzerConfigurationTest : WordSpec({
 
             with(self.merge(other)) {
                 packageManagers shouldNotBeNull {
-                    this should io.kotest.matchers.maps.containExactly(
+                    this should containExactlyEntries(
                         "Gradle" to PackageManagerConfiguration(
                             mustRunAfter = listOf("NPM"),
                             options = mapOf("option1" to "value1", "option2" to "value2")
