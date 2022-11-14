@@ -495,4 +495,15 @@ data class OrtResult(
      */
     fun getLabelValues(key: String): Set<String> =
         labels[key]?.split(',').orEmpty().mapTo(mutableSetOf()) { it.trim() }
+
+    /**
+     * Return true if a [label] with [value] exists in this [OrtResult]. If [value] is null the value of the label is
+     * ignored.
+     */
+    fun hasLabel(label: String, value: String? = null) =
+        if (value == null) {
+            label in labels
+        } else {
+            labels[label] == value
+        }
 }
