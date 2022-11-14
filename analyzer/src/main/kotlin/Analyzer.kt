@@ -183,6 +183,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         managedFiles.keys.forEach { packageManager ->
             val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
+
             dependencies.mustRunAfter.forEach { name ->
                 val managerForName = packageManagersWithFiles[name]
 
