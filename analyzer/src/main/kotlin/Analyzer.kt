@@ -176,8 +176,9 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     private fun determinePackageManagerDependencies(
         managedFiles: Map<PackageManager, List<File>>
     ): Map<PackageManager, Set<PackageManager>> {
-        val packageManagersWithFiles =
-            managedFiles.keys.associateBy { it.managerName }.toSortedMap(String.CASE_INSENSITIVE_ORDER)
+        val packageManagersWithFiles = managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
+            it.managerName
+        }
 
         val result = mutableMapOf<PackageManager, MutableSet<PackageManager>>()
 
