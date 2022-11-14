@@ -176,7 +176,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     private fun determinePackageManagerDependencies(
         managedFiles: Map<PackageManager, List<File>>
     ): Map<PackageManager, Set<PackageManager>> {
-        val allPackageManagers =
+        val packageManagersWithFiles =
             managedFiles.keys.associateBy { it.managerName }.toSortedMap(String.CASE_INSENSITIVE_ORDER)
 
         val result = mutableMapOf<PackageManager, MutableSet<PackageManager>>()
@@ -184,7 +184,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         managedFiles.keys.forEach { packageManager ->
             val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
             dependencies.mustRunAfter.forEach { name ->
-                val managerForName = allPackageManagers[name]
+                val managerForName = packageManagersWithFiles[name]
 
                 if (managerForName == null) {
                     logger.debug {
@@ -197,7 +197,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             }
 
             dependencies.mustRunBefore.forEach { name ->
-                val managerForName = allPackageManagers[name]
+                val managerForName = packageManagersWithFiles[name]
 
                 if (managerForName == null) {
                     logger.debug {
