@@ -153,7 +153,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         runBlocking {
             managedFiles.entries.map { (manager, files) ->
                 val mustRunAfter = config.getPackageManagerConfiguration(manager.managerName)?.mustRunAfter?.toSet()
-                    ?: packageManagerDependencies[manager]?.mapTo(mutableSetOf()) { it.managerName }.orEmpty()
+                    ?: packageManagerDependencies[manager].orEmpty()
 
                 PackageManagerRunner(
                     manager = manager,
@@ -175,12 +175,12 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
     private fun determinePackageManagerDependencies(
         managedFiles: Map<PackageManager, List<File>>
-    ): Map<PackageManager, Set<PackageManager>> {
+    ): Map<PackageManager, Set<String>> {
         val packageManagersWithFiles = managedFiles.keys.associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
             it.managerName
         }
 
-        val result = mutableMapOf<PackageManager, MutableSet<PackageManager>>()
+        val result = mutableMapOf<PackageManager, MutableSet<String>>()
 
         managedFiles.keys.forEach { packageManager ->
             val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
@@ -194,7 +194,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                                 "definition files for $name."
                     }
                 } else {
-                    result.getOrPut(packageManager) { mutableSetOf() } += managerForName
+                    result.getOrPut(packageManager) { mutableSetOf() } += name
                 }
             }
 
@@ -207,7 +207,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                                 "definition files for $name."
                     }
                 } else {
-                    result.getOrPut(managerForName) { mutableSetOf() } += packageManager
+                    result.getOrPut(managerForName) { mutableSetOf() } += packageManager.managerName
                 }
             }
         }
