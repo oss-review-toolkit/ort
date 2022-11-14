@@ -152,14 +152,11 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         runBlocking {
             managedFiles.entries.map { (manager, files) ->
-                val mustRunAfter = config.getPackageManagerConfiguration(manager.managerName)?.mustRunAfter?.toSet()
-                    ?: packageManagerDependencies[manager].orEmpty()
-
                 PackageManagerRunner(
                     manager = manager,
                     definitionFiles = files,
                     labels = labels,
-                    mustRunAfter = mustRunAfter,
+                    mustRunAfter = packageManagerDependencies[manager].orEmpty(),
                     finishedPackageManagersState = state.finishedPackageManagersState,
                     onResult = { result -> state.addResult(manager, result) }
                 )
@@ -184,8 +181,12 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         managedFiles.keys.forEach { packageManager ->
             val dependencies = packageManager.findPackageManagerDependencies(managedFiles)
+            val mustRunAfterConfig = config.getPackageManagerConfiguration(packageManager.managerName)?.mustRunAfter
 
-            dependencies.mustRunAfter.forEach { name ->
+            // Configured mustRunAfter dependencies override programmatic mustRunAfter dependencies.
+            val mustRunAfter = mustRunAfterConfig?.toSet() ?: dependencies.mustRunAfter
+
+            mustRunAfter.forEach { name ->
                 val managerForName = packageManagersWithFiles[name]
 
                 if (managerForName == null) {
@@ -198,7 +199,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 }
             }
 
-            dependencies.mustRunBefore.forEach { name ->
+            // Configured mustRunAfter dependencies override programmatic mustRunBefore dependencies.
+            val mustRunBefore = dependencies.mustRunBefore.takeUnless { mustRunAfterConfig != null }
+
+            mustRunBefore?.forEach { name ->
                 val managerForName = packageManagersWithFiles[name]
 
                 if (managerForName == null) {
