@@ -48,7 +48,6 @@ class AnalyzerFunTest : WordSpec({
                 repoConfig
             )
 
-            // TODO: This test currently fails.
             shouldCompleteWithin(20, TimeUnit.SECONDS) {
                 analyzer.analyze(info)
             }
