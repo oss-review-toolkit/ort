@@ -32,28 +32,26 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class BabelFunTest : WordSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+class BabelFunTest : WordSpec({
+    val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel").absoluteFile
+    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
 
-    init {
-        "Babel dependencies" should {
-            "be correctly analyzed" {
-                val packageFile = projectDir.resolve("package.json")
+    "Babel dependencies" should {
+        "be correctly analyzed" {
+            val packageFile = projectDir.resolve("package.json")
 
-                val expectedResult = patchExpectedResult(
-                    projectDir.parentFile.resolve("npm-babel-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
-                )
-                val actualResult = createNPM().resolveSingleProject(packageFile, resolveScopes = true)
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("npm-babel-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+            val actualResult = createNPM().resolveSingleProject(packageFile, resolveScopes = true)
 
-                patchActualResult(actualResult.toYaml()) shouldBe expectedResult
-            }
+            patchActualResult(actualResult.toYaml()) shouldBe expectedResult
         }
     }
-}
+})
 
 private fun createNPM() = Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
