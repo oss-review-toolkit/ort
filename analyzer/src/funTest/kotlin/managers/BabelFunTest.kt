@@ -54,7 +54,6 @@ class BabelFunTest : WordSpec() {
             }
         }
     }
-
-    private fun createNPM() =
-        Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }
+
+private fun createNPM() = Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
