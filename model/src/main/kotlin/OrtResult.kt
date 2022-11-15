@@ -498,11 +498,13 @@ data class OrtResult(
 
     /**
      * Return true if a [label] with [value] exists in this [OrtResult]. If [value] is null the value of the label is
-     * ignored.
+     * ignored. If [splitValue] is true, the label value is interpreted as comma-separated list.
      */
-    fun hasLabel(label: String, value: String? = null) =
+    fun hasLabel(label: String, value: String? = null, splitValue: Boolean = true) =
         if (value == null) {
             label in labels
+        } else if (splitValue) {
+            value in getLabelValues(label)
         } else {
             labels[label] == value
         }
