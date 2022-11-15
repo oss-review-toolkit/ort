@@ -113,7 +113,7 @@ abstract class Rule(
         object : RuleMatcher {
             override val description = "hasLabel(${listOfNotNull(label, value).joinToString()})"
 
-            override fun matches() = ruleSet.ortResult.hasLabel(label, value)
+            override fun matches() = ruleSet.ortResult.hasLabel(label, value, splitValue = false)
         }
 
     /**
