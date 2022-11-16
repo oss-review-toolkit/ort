@@ -83,8 +83,8 @@ RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
 
 COPY docker/00-add_local_path.sh /etc/profile.d/
 
-# Copy ort scripts
-COPY scripts /etc/scripts
+# Import certificates scripts only
+COPY scripts/import_certificates.sh /etc/scripts/import_certificates.sh
 
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES=""
