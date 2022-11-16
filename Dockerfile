@@ -72,6 +72,7 @@ ARG USER_ID=1000
 ARG USER_GID=$USER_ID
 ARG HOMEDIR=/home/ort
 ENV HOME=$HOMEDIR
+ENV USER=$USERNAME
 
 # Non privileged user
 RUN groupadd --gid $USER_GID $USERNAME \
@@ -81,6 +82,9 @@ RUN groupadd --gid $USER_GID $USERNAME \
     --shell /bin/bash \
     --home-dir $HOMEDIR \
     --create-home $USERNAME
+
+RUN chgrp $USER /opt \
+    && chmod g+wx /opt
 
 # sudo support
 RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
