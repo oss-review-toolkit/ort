@@ -330,7 +330,7 @@ ENV ANDROID_HOME=/opt/android-sdk
 COPY --from=androidbuild /usr/bin/repo /usr/bin/
 COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
-RUN chmod o+rw ${ANDROID_HOME}
+RUN chmod -R o+rw ${ANDROID_HOME}
 
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
