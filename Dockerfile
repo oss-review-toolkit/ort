@@ -40,11 +40,16 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     dirmngr \
     gcc \
     git \
+    g++ \
     gnupg2 \
     iproute2 \
     libarchive-tools \
+    libffi-dev \
+    libgmp-dev \
     libz-dev \
     locales \
+    lzma \
+    make \
     netbase \
     openssh-client \
     openssl \
