@@ -24,6 +24,10 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
+# Check and set apt proxy
+COPY docker/set_apt_proxy.sh /etc/scripts/set_apt_proxy.sh
+RUN /etc/scripts/set_apt_proxy.sh
+
 # Base package set
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
