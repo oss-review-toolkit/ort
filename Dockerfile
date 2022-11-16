@@ -24,10 +24,6 @@ ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
-RUN echo $LANG > /etc/locale.gen \
-    && locale-gen en_US.UTF-8 \
-    && update-locale LANG=en_US.UTF-8
-
 # Base package set
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -57,6 +53,10 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     wget \
     xz-utils \
     && rm -rf /var/lib/apt/lists/*
+
+RUN echo $LANG > /etc/locale.gen \
+    && locale-gen $LANG \
+    && update-locale LANG=$LANG
 
 ARG USERNAME=ort
 ARG USER_ID=1000
