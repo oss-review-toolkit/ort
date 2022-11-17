@@ -73,8 +73,7 @@ private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 class NuGetSupport(
     private val managerName: String,
     private val analysisRoot: File,
-    private val reader: XmlPackageFileReader,
-    definitionFile: File
+    private val reader: XmlPackageFileReader
 ) {
     companion object : Logging {
         val XML_MAPPER = XmlMapper(
@@ -110,15 +109,14 @@ class NuGetSupport(
         }
     }
 
-    private val registrationsBaseUrls: List<String> = getRegistrationsBaseUrls(definitionFile)
-
     private inline fun <reified T> ObjectMapper.readValueFromUrl(url: String): T {
         val text = client.downloadText(url).getOrThrow()
         return readValue(text)
     }
 
     private fun getAllPackageData(
-        directDependencies: Collection<Identifier>
+        directDependencies: Collection<Identifier>,
+        registrationsBaseUrls: Collection<String>,
     ): Pair<Map<Identifier, AllPackageData>, Set<OrtIssue>> {
         val issues = mutableSetOf<OrtIssue>()
         val result = mutableMapOf<Identifier, AllPackageData>()
@@ -241,7 +239,8 @@ class NuGetSupport(
         val referencesByFramework = references.groupBy { it.targetFramework }
         val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
 
-        val (allPackageData, issues) = getAllPackageData(references.map { it.getId() })
+        val registrationsBaseUrls = getRegistrationsBaseUrls(definitionFile)
+        val (allPackageData, issues) = getAllPackageData(references.map { it.getId() }, registrationsBaseUrls)
         val packageMap = allPackageData.mapValues { it.value to getPackage(it.value) }
 
         val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
