@@ -69,7 +69,12 @@ private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
 
 private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
-class NuGetSupport(definitionFile: File) {
+class NuGetSupport(
+    val managerName: String,
+    val analysisRoot: File,
+    val reader: XmlPackageFileReader,
+    definitionFile: File
+) {
     companion object : Logging {
         val XML_MAPPER = XmlMapper(
             XmlFactory().apply {
@@ -294,9 +299,8 @@ interface XmlPackageFileReader {
     fun getDependencies(definitionFile: File): Set<NuGetDependency>
 }
 
-fun PackageManager.resolveNuGetDependencies(
+fun resolveNuGetDependencies(
     definitionFile: File,
-    reader: XmlPackageFileReader,
     support: NuGetSupport,
     directDependenciesOnly: Boolean
 ): ProjectAnalyzerResult {
@@ -305,7 +309,7 @@ fun PackageManager.resolveNuGetDependencies(
     val packages = sortedSetOf<Package>()
     val issues = mutableListOf<OrtIssue>()
 
-    val references = reader.getDependencies(definitionFile)
+    val references = support.reader.getDependencies(definitionFile)
     val referencesByFramework = references.groupBy { it.targetFramework }
     val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
 
@@ -336,13 +340,14 @@ fun PackageManager.resolveNuGetDependencies(
         }
     }
 
-    val project = getProject(definitionFile, workingDir, scopes)
+    val project = getProject(definitionFile, support, workingDir, scopes)
 
     return ProjectAnalyzerResult(project, packages, issues)
 }
 
-private fun PackageManager.getProject(
+private fun getProject(
     definitionFile: File,
+    support: NuGetSupport,
     workingDir: File,
     scopes: SortedSet<Scope>
 ): Project {
@@ -350,9 +355,9 @@ private fun PackageManager.getProject(
 
     return Project(
         id = Identifier(
-            type = managerName,
+            type = support.managerName,
             namespace = "",
-            name = spec?.metadata?.id ?: definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+            name = spec?.metadata?.id ?: definitionFile.relativeTo(support.analysisRoot).invariantSeparatorsPath,
             version = spec?.metadata?.version.orEmpty()
         ),
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
