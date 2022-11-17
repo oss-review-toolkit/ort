@@ -65,13 +65,12 @@ internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
-
 private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
+
+private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
 class NuGetSupport(serviceIndexUrls: List<String> = listOf(DEFAULT_SERVICE_INDEX_URL)) {
     companion object : Logging {
-        val JSON_MAPPER = JsonMapper().registerKotlinModule()
-
         val XML_MAPPER = XmlMapper(
             XmlFactory().apply {
                 // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
