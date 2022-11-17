@@ -250,7 +250,7 @@ class NuGetSupport(
                 val packageReferences = sortedSetOf<PackageReference>()
 
                 buildDependencyTree(
-                    references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
+                    references = allDependencies.map { it.getId() },
                     dependencies = packageReferences,
                     packages = packages,
                     issues = issues,
@@ -342,6 +342,8 @@ private fun resolveLocalSpec(definitionFile: File): File? =
 
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
+
+private fun NuGetDependency.getId() = Identifier("NuGet::$name:$version")
 
 /**
  * A class that bundles properties of a single NuGet dependency.
