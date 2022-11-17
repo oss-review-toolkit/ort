@@ -638,7 +638,6 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NuGet"
-  message: "Failed to get package data for 'NuGet::foobar:1.2.3': IOException: Failed\
-    \ to retrieve package data for 'foobar' from any of [https://api.nuget.org/v3/registration5-gz-semver2,\
+  message: "Failed to get package data for 'NuGet::foobar:1.2.3' from any of [https://api.nuget.org/v3/registration5-gz-semver2,\
     \ https://pkgs.dev.azure.com/ms/20953fb4-d427-4ad6-b78c-13142d0c5462/_packaging/64e3bf16-3e04-41cd-b90f-60fdc9ccf494/nuget/v3/registrations2-semver2]."
   severity: "ERROR"
