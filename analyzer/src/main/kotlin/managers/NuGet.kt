@@ -69,8 +69,12 @@ class NuGet(
         listOf(
             resolveNuGetDependencies(
                 definitionFile,
-                reader,
-                NuGetSupport(definitionFile),
+                NuGetSupport(
+                    managerName,
+                    analysisRoot,
+                    reader,
+                    definitionFile
+                ),
                 directDependenciesOnly
             )
         )
