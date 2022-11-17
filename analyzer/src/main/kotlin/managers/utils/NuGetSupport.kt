@@ -70,9 +70,9 @@ private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
 private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
 class NuGetSupport(
-    val managerName: String,
-    val analysisRoot: File,
-    val reader: XmlPackageFileReader,
+    private val managerName: String,
+    private val analysisRoot: File,
+    private val reader: XmlPackageFileReader,
     definitionFile: File
 ) {
     companion object : Logging {
@@ -184,7 +184,7 @@ class NuGetSupport(
         }
     }
 
-    fun buildDependencyTree(
+    private fun buildDependencyTree(
         references: Collection<Identifier>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
@@ -244,6 +244,68 @@ class NuGetSupport(
             }
         }
     }
+
+    fun resolveNuGetDependencies(definitionFile: File, directDependenciesOnly: Boolean): ProjectAnalyzerResult {
+        val workingDir = definitionFile.parentFile
+
+        val packages = sortedSetOf<Package>()
+        val issues = mutableListOf<OrtIssue>()
+
+        val references = reader.getDependencies(definitionFile)
+        val referencesByFramework = references.groupBy { it.targetFramework }
+        val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
+
+        val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
+            frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
+                val allDependencies = buildSet {
+                    addAll(dependencies)
+                    // Add dependencies without a specified target framework to all scopes.
+                    addAll(referencesForAllFrameworks.filter { it.developmentDependency == isDevDependency })
+                }
+
+                val packageReferences = sortedSetOf<PackageReference>()
+
+                buildDependencyTree(
+                    references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
+                    dependencies = packageReferences,
+                    packages = packages,
+                    issues = issues,
+                    recursive = !directDependenciesOnly
+                )
+
+                val scopeName = buildString {
+                    if (targetFramework.isEmpty()) append("allTargetFrameworks") else append(targetFramework)
+                    if (isDevDependency) append("-dev")
+                }
+
+                Scope(scopeName, packageReferences)
+            }
+        }
+
+        val project = getProject(definitionFile, workingDir, scopes)
+
+        return ProjectAnalyzerResult(project, packages, issues)
+    }
+
+    private fun getProject(definitionFile: File, workingDir: File, scopes: SortedSet<Scope>): Project {
+        val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
+
+        return Project(
+            id = Identifier(
+                type = managerName,
+                namespace = "",
+                name = spec?.metadata?.id ?: definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+                version = spec?.metadata?.version.orEmpty()
+            ),
+            definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
+            authors = parseAuthors(spec),
+            declaredLicenses = parseLicenses(spec),
+            vcs = VcsInfo.EMPTY,
+            vcsProcessed = PackageManager.processProjectVcs(workingDir),
+            homepageUrl = "",
+            scopeDependencies = scopes
+        )
+    }
 }
 
 /**
@@ -297,75 +359,4 @@ interface XmlPackageFileReader {
      * Return the set of [NuGet dependencies][NuGetDependency] declared in the given [definitionFile].
      */
     fun getDependencies(definitionFile: File): Set<NuGetDependency>
-}
-
-fun resolveNuGetDependencies(
-    definitionFile: File,
-    support: NuGetSupport,
-    directDependenciesOnly: Boolean
-): ProjectAnalyzerResult {
-    val workingDir = definitionFile.parentFile
-
-    val packages = sortedSetOf<Package>()
-    val issues = mutableListOf<OrtIssue>()
-
-    val references = support.reader.getDependencies(definitionFile)
-    val referencesByFramework = references.groupBy { it.targetFramework }
-    val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
-
-    val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
-        frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
-            val allDependencies = buildSet {
-                addAll(dependencies)
-                // Add dependencies without a specified target framework to all scopes.
-                addAll(referencesForAllFrameworks.filter { it.developmentDependency == isDevDependency })
-            }
-
-            val packageReferences = sortedSetOf<PackageReference>()
-
-            support.buildDependencyTree(
-                references = allDependencies.map { Identifier("NuGet::${it.name}:${it.version}") },
-                dependencies = packageReferences,
-                packages = packages,
-                issues = issues,
-                recursive = !directDependenciesOnly
-            )
-
-            val scopeName = buildString {
-                if (targetFramework.isEmpty()) append("allTargetFrameworks") else append(targetFramework)
-                if (isDevDependency) append("-dev")
-            }
-
-            Scope(scopeName, packageReferences)
-        }
-    }
-
-    val project = getProject(definitionFile, support, workingDir, scopes)
-
-    return ProjectAnalyzerResult(project, packages, issues)
-}
-
-private fun getProject(
-    definitionFile: File,
-    support: NuGetSupport,
-    workingDir: File,
-    scopes: SortedSet<Scope>
-): Project {
-    val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
-
-    return Project(
-        id = Identifier(
-            type = support.managerName,
-            namespace = "",
-            name = spec?.metadata?.id ?: definitionFile.relativeTo(support.analysisRoot).invariantSeparatorsPath,
-            version = spec?.metadata?.version.orEmpty()
-        ),
-        definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        authors = parseAuthors(spec),
-        declaredLicenses = parseLicenses(spec),
-        vcs = VcsInfo.EMPTY,
-        vcsProcessed = PackageManager.processProjectVcs(workingDir),
-        homepageUrl = "",
-        scopeDependencies = scopes
-    )
 }

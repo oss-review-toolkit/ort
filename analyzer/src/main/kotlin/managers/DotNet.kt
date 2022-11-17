@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
-import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
@@ -66,14 +65,12 @@ class DotNet(
 
     private val reader = DotNetPackageFileReader()
 
-    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> =
-        listOf(
-            resolveNuGetDependencies(
-                definitionFile,
-                NuGetSupport(managerName, analysisRoot, reader, definitionFile),
-                directDependenciesOnly
-            )
-        )
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+        val support = NuGetSupport(managerName, analysisRoot, reader, definitionFile)
+        val projectAnalyzerResult = support.resolveNuGetDependencies(definitionFile, directDependenciesOnly)
+
+        return listOf(projectAnalyzerResult)
+    }
 }
 
 /**
