@@ -71,7 +71,7 @@ class DotNet(
             resolveNuGetDependencies(
                 definitionFile,
                 reader,
-                NuGetSupport.create(definitionFile),
+                NuGetSupport(definitionFile),
                 directDependenciesOnly
             )
         )
