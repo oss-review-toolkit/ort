@@ -27,7 +27,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import java.io.File
-import java.io.IOException
+import java.util.LinkedList
 import java.util.SortedSet
 import java.util.concurrent.TimeUnit
 
@@ -55,7 +55,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.orEmpty
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
@@ -113,32 +112,58 @@ class NuGetSupport(
 
     private val registrationsBaseUrls: List<String> = getRegistrationsBaseUrls(definitionFile)
 
-    private val packageMap = mutableMapOf<Identifier, Pair<AllPackageData, Package>>()
-
     private inline fun <reified T> ObjectMapper.readValueFromUrl(url: String): T {
         val text = client.downloadText(url).getOrThrow()
         return readValue(text)
     }
 
-    private fun getAllPackageData(id: Identifier): AllPackageData {
-        // Note: The package name in the URL is case-sensitive and must be lower-case!
-        val lowerId = id.name.lowercase()
+    private fun getAllPackageData(
+        directDependencies: Collection<Identifier>
+    ): Pair<Map<Identifier, AllPackageData>, Set<OrtIssue>> {
+        val issues = mutableSetOf<OrtIssue>()
+        val result = mutableMapOf<Identifier, AllPackageData>()
+        val queue = LinkedList(directDependencies)
 
-        val data = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
-            runCatching {
-                val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
-                JSON_MAPPER.readValueFromUrl<PackageData>(dataUrl)
-            }.getOrNull()
-        } ?: throw IOException("Failed to retrieve package data for '$lowerId' from any of $registrationsBaseUrls.")
+        while (queue.isNotEmpty()) {
+            val id = queue.removeFirst()
+            if (id in result) continue
 
-        val nupkgUrl = data.packageContent
-        val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
+            val data = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
+                runCatching {
+                    // Note: The package name in the URL is case-sensitive and must be lower-case!
+                    val lowerId = id.name.lowercase()
+                    val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
+                    JSON_MAPPER.readValueFromUrl<PackageData>(dataUrl)
+                }.getOrNull()
+            }
 
-        return runBlocking {
-            val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(data.catalogEntry) }
-            val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
-            AllPackageData(data, packageDetails.await(), packageSpec.await())
+            if (data == null) {
+                issues += createAndLogIssue(
+                    source = "NuGet",
+                    message = "Failed to get package data for '${id.toCoordinates()}' from any of " +
+                            "$registrationsBaseUrls."
+                )
+                continue
+            }
+
+            val nupkgUrl = data.packageContent
+            val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
+
+            val allPackageData = runBlocking {
+                val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(data.catalogEntry) }
+                val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
+                AllPackageData(data, packageDetails.await(), packageSpec.await())
+            }
+
+            val dependencies = allPackageData.details.dependencyGroups.flatMapTo(mutableSetOf()) { group ->
+                group.dependencies.map { it.getId() }
+            }
+
+            result[id] = allPackageData
+            queue += dependencies.filterNot { it in result }
         }
+
+        return result to issues
     }
 
     private fun getPackage(all: AllPackageData): Package {
@@ -172,48 +197,38 @@ class NuGetSupport(
 
     private fun buildDependencyTree(
         references: Collection<Identifier>,
+        packageMap: Map<Identifier, Pair<AllPackageData, Package>>,
         dependencies: MutableCollection<PackageReference>,
         packages: MutableCollection<Package>,
-        issues: MutableCollection<OrtIssue>,
         recursive: Boolean
     ) {
         references.forEach { id ->
-            try {
-                val (all, pkg) = packageMap.getOrPut(id) {
-                    val all = getAllPackageData(id)
-                    all to getPackage(all)
-                }
+            val (all, pkg) = packageMap[id] ?: return@forEach
 
-                val pkgRef = pkg.toReference()
-                dependencies += pkgRef
+            val pkgRef = pkg.toReference()
+            dependencies += pkgRef
 
-                val packageIsNew = packages.add(pkg)
-                if (!recursive) return@forEach
+            val packageIsNew = packages.add(pkg)
+            if (!recursive) return@forEach
 
-                // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
-                // grow really huge.
-                if (packageIsNew) {
-                    // TODO: Consider mapping dependency groups to scopes.
-                    val referredDependencies =
-                        all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
+            // As NuGet dependencies are very repetitive, truncate the tree at already known branches to avoid it to
+            // grow really huge.
+            if (packageIsNew) {
+                // TODO: Consider mapping dependency groups to scopes.
+                val referredDependencies =
+                    all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
 
-                    buildDependencyTree(
-                        referredDependencies.map { it.getId() },
-                        pkgRef.dependencies,
-                        packages,
-                        issues,
-                        recursive = true
-                    )
-                } else {
-                    logger.debug {
-                        "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
-                    }
-                }
-            } catch (e: IOException) {
-                issues += createAndLogIssue(
-                    source = "NuGet",
-                    message = "Failed to get package data for '${id.toCoordinates()}': ${e.collectMessages()}"
+                buildDependencyTree(
+                    referredDependencies.map { it.getId() },
+                    packageMap,
+                    pkgRef.dependencies,
+                    packages,
+                    recursive = true
                 )
+            } else {
+                logger.debug {
+                    "Truncating dependencies for '${id.toCoordinates()}' which were already determined."
+                }
             }
         }
     }
@@ -222,11 +237,13 @@ class NuGetSupport(
         val workingDir = definitionFile.parentFile
 
         val packages = sortedSetOf<Package>()
-        val issues = mutableListOf<OrtIssue>()
 
         val references = reader.getDependencies(definitionFile)
         val referencesByFramework = references.groupBy { it.targetFramework }
         val referencesForAllFrameworks = referencesByFramework[""].orEmpty()
+
+        val (allPackageData, issues) = getAllPackageData(references.map { it.getId() })
+        val packageMap = allPackageData.mapValues { it.value to getPackage(it.value) }
 
         val scopes = referencesByFramework.flatMapTo(sortedSetOf()) { (targetFramework, frameworkDependencies) ->
             frameworkDependencies.groupBy { it.developmentDependency }.map { (isDevDependency, dependencies) ->
@@ -240,9 +257,9 @@ class NuGetSupport(
 
                 buildDependencyTree(
                     references = allDependencies.map { it.getId() },
+                    packageMap = packageMap,
                     dependencies = packageReferences,
                     packages = packages,
-                    issues = issues,
                     recursive = !directDependenciesOnly
                 )
 
@@ -257,7 +274,7 @@ class NuGetSupport(
 
         val project = getProject(definitionFile, workingDir, scopes)
 
-        return ProjectAnalyzerResult(project, packages, issues)
+        return ProjectAnalyzerResult(project, packages, issues.toList())
     }
 
     private fun getProject(definitionFile: File, workingDir: File, scopes: SortedSet<Scope>): Project {
