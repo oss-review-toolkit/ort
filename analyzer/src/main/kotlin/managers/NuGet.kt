@@ -70,7 +70,7 @@ class NuGet(
             resolveNuGetDependencies(
                 definitionFile,
                 reader,
-                NuGetSupport.create(definitionFile),
+                NuGetSupport(definitionFile),
                 directDependenciesOnly
             )
         )
