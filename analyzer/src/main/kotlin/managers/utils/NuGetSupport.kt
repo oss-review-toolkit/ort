@@ -109,23 +109,7 @@ class NuGetSupport(
         }
     }
 
-    private val registrationsBaseUrls: List<String> = run {
-        val configFile = definitionFile.parentFile.searchUpwardsForFile("nuget.config", ignoreCase = true)
-        val serviceIndexUrls = configFile?.let { NuGetConfigFileReader.getRegistrationsBaseUrls(it) }
-            ?: listOf(DEFAULT_SERVICE_INDEX_URL)
-        val serviceIndices = runBlocking {
-            serviceIndexUrls.map {
-                async { JSON_MAPPER.readValueFromUrl<ServiceIndex>(it) }
-            }.awaitAll()
-        }
-
-        // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash
-        // would break the URL!
-        serviceIndices
-            .flatMap { it.resources }
-            .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
-            .map { it.id.removeSuffix("/") }
-    }
+    private val registrationsBaseUrls: List<String> = getRegistrationsBaseUrls(definitionFile)
 
     private val packageMap = mutableMapOf<Identifier, Pair<AllPackageData, Package>>()
 
@@ -305,6 +289,24 @@ class NuGetSupport(
             homepageUrl = "",
             scopeDependencies = scopes
         )
+    }
+
+    private fun getRegistrationsBaseUrls(definitionFile: File): List<String> {
+        val configFile = definitionFile.parentFile.searchUpwardsForFile("nuget.config", ignoreCase = true)
+        val serviceIndexUrls = configFile?.let { NuGetConfigFileReader.getRegistrationsBaseUrls(it) }
+            ?: listOf(DEFAULT_SERVICE_INDEX_URL)
+        val serviceIndices = runBlocking {
+            serviceIndexUrls.map {
+                async { JSON_MAPPER.readValueFromUrl<ServiceIndex>(it) }
+            }.awaitAll()
+        }
+
+        // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash
+        // would break the URL!
+        return serviceIndices
+            .flatMap { it.resources }
+            .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
+            .map { it.id.removeSuffix("/") }
     }
 }
 
