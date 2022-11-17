@@ -251,7 +251,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
         /**
          * Return true if the provided DependencyResult represents an imported Maven BOM.
          */
-        private boolean isBom(DependencyResult dependencyResult) {
+        private static boolean isBom(DependencyResult dependencyResult) {
             if (dependencyResult instanceof ResolvedDependencyResult &&
                     dependencyResult.selected.hasProperty('variants')) {
                 return dependencyResult.selected.variants.every {
@@ -394,7 +394,8 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
             def resultDependencies = dependencyResult instanceof ResolvedDependencyResult ?
                     dependencyResult.selected.dependencies : [] as Set<DependencyResult>
-            if (dependency.dependencies.size() != resultDependencies.size()) {
+            // Ignore the BOM dependencies for calculating the count since they are skipped by `fetchDependency`.
+            if (dependency.dependencies.size() != resultDependencies.count { !isBom(it) }) {
                 return false
             }
 
