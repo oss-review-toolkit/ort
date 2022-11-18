@@ -66,7 +66,7 @@ class NuGet(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val support = NuGetSupport(managerName, analysisRoot, reader)
-        val projectAnalyzerResult = support.resolveNuGetDependencies(definitionFile, directDependenciesOnly)
+        val projectAnalyzerResult = support.resolveDependencies(definitionFile, directDependenciesOnly)
 
         return listOf(projectAnalyzerResult)
     }
