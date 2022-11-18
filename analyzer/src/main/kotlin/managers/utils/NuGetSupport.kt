@@ -343,7 +343,7 @@ private fun resolveLocalSpec(definitionFile: File): File? =
 private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
-private fun NuGetDependency.getId() = Identifier("NuGet::$name:$version")
+private fun NuGetDependency.getId() = getIdentifier(name, version)
 
 /**
  * A class that bundles properties of a single NuGet dependency.
