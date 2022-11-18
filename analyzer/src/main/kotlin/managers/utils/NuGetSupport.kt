@@ -128,7 +128,7 @@ class NuGetSupport(
             val id = queue.removeFirst()
             if (id in result) continue
 
-            val data = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
+            val packageData = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
                 runCatching {
                     // Note: The package name in the URL is case-sensitive and must be lower-case!
                     val lowerId = id.name.lowercase()
@@ -137,7 +137,7 @@ class NuGetSupport(
                 }.getOrNull()
             }
 
-            if (data == null) {
+            if (packageData == null) {
                 issues += createAndLogIssue(
                     source = "NuGet",
                     message = "Failed to get package data for '${id.toCoordinates()}' from any of " +
@@ -146,13 +146,13 @@ class NuGetSupport(
                 continue
             }
 
-            val nupkgUrl = data.packageContent
+            val nupkgUrl = packageData.packageContent
             val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
 
             val allPackageData = runBlocking {
-                val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(data.catalogEntry) }
+                val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(packageData.catalogEntry) }
                 val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
-                AllPackageData(data, packageDetails.await(), packageSpec.await())
+                AllPackageData(packageData, packageDetails.await(), packageSpec.await())
             }
 
             val dependencies = allPackageData.details.dependencyGroups.flatMapTo(mutableSetOf()) { group ->
