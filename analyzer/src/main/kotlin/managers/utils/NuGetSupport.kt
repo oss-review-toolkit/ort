@@ -146,12 +146,11 @@ class NuGetSupport(
                 continue
             }
 
-            val nupkgUrl = packageData.packageContent
-            val nuspecUrl = nupkgUrl.replace(".${id.version}.nupkg", ".nuspec")
-
             val allPackageData = runBlocking {
                 val packageDetails = async { JSON_MAPPER.readValueFromUrl<PackageDetails>(packageData.catalogEntry) }
+                val nuspecUrl = packageData.packageContent.replace(".${id.version}.nupkg", ".nuspec")
                 val packageSpec = async { XML_MAPPER.readValueFromUrl<PackageSpec>(nuspecUrl) }
+
                 AllPackageData(packageData, packageDetails.await(), packageSpec.await())
             }
 
