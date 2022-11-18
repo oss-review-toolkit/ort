@@ -198,17 +198,7 @@ class NuGetSupport(
                         all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
 
                     buildDependencyTree(
-                        referredDependencies.map { dependency ->
-                            // Resolve to the lowest applicable version, see
-                            // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
-                            val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
-                                .split(',').first().trim()
-
-                            // TODO: Add support resolving to the highest version for floating versions, see
-                            //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
-
-                            getIdentifier(dependency.id, version)
-                        },
+                        referredDependencies.map { it.getId() },
                         pkgRef.dependencies,
                         packages,
                         issues,
@@ -343,6 +333,18 @@ private fun getIdentifier(name: String, version: String) =
     Identifier(type = "NuGet", namespace = "", name = name, version = version)
 
 private fun NuGetDependency.getId() = getIdentifier(name, version)
+
+private fun Dependency.getId(): Identifier {
+    // Resolve to the lowest applicable version, see
+    // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
+    val version = range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
+        .split(',').first().trim()
+
+    // TODO: Add support resolving to the highest version for floating versions, see
+    //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
+
+    return getIdentifier(id, version)
+}
 
 /**
  * A class that bundles properties of a single NuGet dependency.
