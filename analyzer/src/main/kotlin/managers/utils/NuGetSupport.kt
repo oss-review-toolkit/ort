@@ -305,11 +305,11 @@ class NuGetSupport(
             }.awaitAll()
         }
 
-        // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash
-        // would break the URL!
         return serviceIndices
             .flatMap { it.resources }
             .filter { it.type == REGISTRATIONS_BASE_URL_TYPE }
+            // Note: Remove a trailing slash as one is always added later to separate from the path, and a double-slash
+            // would break the URL!
             .map { it.id.removeSuffix("/") }
     }
 }
