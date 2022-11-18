@@ -212,11 +212,12 @@ class NuGetSupport(
             // grow really huge.
             if (packageIsNew) {
                 // TODO: Consider mapping dependency groups to scopes.
-                val referredDependencies =
-                    all.details.dependencyGroups.flatMapTo(mutableSetOf()) { it.dependencies }
+                val dependencyReferences = all.details.dependencyGroups.flatMapTo(mutableSetOf()) { group ->
+                    group.dependencies.map { it.getId() }
+                }
 
                 buildDependencyTree(
-                    referredDependencies.map { it.getId() },
+                    dependencyReferences,
                     packageMap,
                     pkgRef.dependencies,
                     packages,
