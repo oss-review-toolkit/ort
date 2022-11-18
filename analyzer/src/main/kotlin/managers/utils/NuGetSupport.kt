@@ -231,7 +231,7 @@ class NuGetSupport(
         }
     }
 
-    fun resolveNuGetDependencies(definitionFile: File, directDependenciesOnly: Boolean): ProjectAnalyzerResult {
+    fun resolveDependencies(definitionFile: File, directDependenciesOnly: Boolean): ProjectAnalyzerResult {
         val workingDir = definitionFile.parentFile
 
         val packages = sortedSetOf<Package>()
