@@ -69,6 +69,8 @@ private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
 
 private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
+// TODO: Add support for lock files, see
+//       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
 class NuGetSupport(
     private val managerName: String,
     private val analysisRoot: File,
@@ -197,9 +199,6 @@ class NuGetSupport(
 
                     buildDependencyTree(
                         referredDependencies.map { dependency ->
-                            // TODO: Add support for lock files, see
-                            //       https://devblogs.microsoft.com/nuget/enable-repeatable-package-restores-using-a-lock-file/.
-
                             // Resolve to the lowest applicable version, see
                             // https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#lowest-applicable-version.
                             val version = dependency.range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
