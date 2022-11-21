@@ -24,8 +24,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 enum class DownloadStatus {
     FAILED,
     FINISHED,
+
     @JsonProperty("NOT FINISHED")
     NOT_FINISHED,
+
     @JsonProperty("NOT STARTED")
     NOT_STARTED
 }

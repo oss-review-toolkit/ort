@@ -29,32 +29,19 @@ import kotlinx.serialization.json.jsonPrimitive
  */
 @Serializable
 enum class ComponentType {
-    @SerialName("npm")
-    NPM,
-    @SerialName("crate")
-    CRATE,
-    @SerialName("git")
-    GIT,
-    @SerialName("maven")
-    MAVEN,
-    @SerialName("composer")
-    COMPOSER,
-    @SerialName("nuget")
-    NUGET,
-    @SerialName("gem")
-    GEM,
-    @SerialName("go")
-    GO,
-    @SerialName("pod")
-    POD,
-    @SerialName("pypi")
-    PYPI,
-    @SerialName("sourcearchive")
-    SOURCE_ARCHIVE,
-    @SerialName("deb")
-    DEBIAN,
-    @SerialName("debsrc")
-    DEBIAN_SOURCES;
+    @SerialName("npm") NPM,
+    @SerialName("crate") CRATE,
+    @SerialName("git") GIT,
+    @SerialName("maven") MAVEN,
+    @SerialName("composer") COMPOSER,
+    @SerialName("nuget") NUGET,
+    @SerialName("gem") GEM,
+    @SerialName("go") GO,
+    @SerialName("pod") POD,
+    @SerialName("pypi") PYPI,
+    @SerialName("sourcearchive") SOURCE_ARCHIVE,
+    @SerialName("deb") DEBIAN,
+    @SerialName("debsrc") DEBIAN_SOURCES;
 
     companion object {
         @JvmStatic
@@ -71,32 +58,19 @@ enum class ComponentType {
  */
 @Serializable
 enum class Provider {
-    @SerialName("npmjs")
-    NPM_JS,
-    @SerialName("cocoapods")
-    COCOAPODS,
-    @SerialName("cratesio")
-    CRATES_IO,
-    @SerialName("github")
-    GITHUB,
-    @SerialName("gitlab")
-    GITLAB,
-    @SerialName("packagist")
-    PACKAGIST,
-    @SerialName("golang")
-    GOLANG,
-    @SerialName("mavencentral")
-    MAVEN_CENTRAL,
-    @SerialName("mavengoogle")
-    MAVEN_GOOGLE,
-    @SerialName("nuget")
-    NUGET,
-    @SerialName("rubygems")
-    RUBYGEMS,
-    @SerialName("pypi")
-    PYPI,
-    @SerialName("debian")
-    DEBIAN;
+    @SerialName("npmjs") NPM_JS,
+    @SerialName("cocoapods") COCOAPODS,
+    @SerialName("cratesio") CRATES_IO,
+    @SerialName("github") GITHUB,
+    @SerialName("gitlab") GITLAB,
+    @SerialName("packagist") PACKAGIST,
+    @SerialName("golang") GOLANG,
+    @SerialName("mavencentral") MAVEN_CENTRAL,
+    @SerialName("mavengoogle") MAVEN_GOOGLE,
+    @SerialName("nuget") NUGET,
+    @SerialName("rubygems") RUBYGEMS,
+    @SerialName("pypi") PYPI,
+    @SerialName("debian") DEBIAN;
 
     companion object {
         @JvmStatic
@@ -113,10 +87,8 @@ enum class Provider {
  */
 @Serializable
 enum class Nature {
-    @SerialName("license")
-    LICENSE,
-    @SerialName("notice")
-    NOTICE
+    @SerialName("license") LICENSE,
+    @SerialName("notice") NOTICE
 }
 
 /**
@@ -124,16 +96,11 @@ enum class Nature {
  */
 @Serializable
 enum class ContributionType {
-    @SerialName("Missing")
-    MISSING,
-    @SerialName("Incorrect")
-    INCORRECT,
-    @SerialName("Incomplete")
-    INCOMPLETE,
-    @SerialName("Ambiguous")
-    AMBIGUOUS,
-    @SerialName("Other")
-    OTHER
+    @SerialName("Missing") MISSING,
+    @SerialName("Incorrect") INCORRECT,
+    @SerialName("Incomplete") INCOMPLETE,
+    @SerialName("Ambiguous") AMBIGUOUS,
+    @SerialName("Other") OTHER
 }
 
 /**

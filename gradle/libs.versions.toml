@@ -1,6 +1,6 @@
 [versions]
 buildConfigPlugin = "3.1.0"
-detektPlugin = "1.21.0"
+detektPlugin = "1.22.0"
 dokkaPlugin = "1.7.20"
 downloadPlugin = "5.3.0"
 graalPlugin = "0.12.0"

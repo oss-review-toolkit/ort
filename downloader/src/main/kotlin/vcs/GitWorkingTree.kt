@@ -103,7 +103,9 @@ open class GitWorkingTree(
         val patchedUrl = repositoryUrlPrefixReplacements.entries.fold(url) { url, (prefix, replacement) ->
             if (url.startsWith(prefix)) {
                 "$replacement${url.removePrefix(prefix)}"
-            } else url
+            } else {
+                url
+            }
         }
 
         return takeIf { patchedUrl == url } ?: copy(url = patchedUrl)

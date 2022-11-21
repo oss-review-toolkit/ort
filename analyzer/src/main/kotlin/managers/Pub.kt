@@ -610,8 +610,11 @@ class Pub(
     private fun commandPub(): String = "${command()} pub"
 
     private fun commandFlutter(): String =
-        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$flutterCommand pub"
-        else "$flutterCommand pub"
+        if (flutterAbsolutePath.isDirectory) {
+            "$flutterAbsolutePath${File.separator}$flutterCommand pub"
+        } else {
+            "$flutterCommand pub"
+        }
 
     override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
         var result = ProcessCapture(workingDir, *commandPub().split(' ').toTypedArray(), *args)

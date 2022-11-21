@@ -3,8 +3,8 @@
 # https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
 
 complexity:
-  ComplexMethod:
-    threshold: 33
+  CyclomaticComplexMethod:
+    threshold: 25
   LongMethod:
     threshold: 158
   LongParameterList:
@@ -23,6 +23,10 @@ coroutines:
 # Formatting rules are implemented via the ktlint plugin. As ktlint does not allow exceptions, we need to disable
 # respective rules completely.
 formatting:
+  AnnotationOnSeparateLine:
+    active: false
+  ArgumentListWrapping:
+    active: false
   ChainWrapping:
     active: false
   FinalNewline:
@@ -38,6 +42,8 @@ formatting:
   NoWildcardImports:
     active: false
   ParameterListWrapping:
+    active: false
+  SpacingBetweenDeclarationsWithAnnotations:
     active: false
 
 naming:
