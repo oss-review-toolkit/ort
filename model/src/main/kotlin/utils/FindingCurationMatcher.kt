@@ -68,9 +68,11 @@ class FindingCurationMatcher {
         curation: LicenseFindingCuration,
         relativeFindingPath: String = ""
     ): LicenseFinding? =
-        if (!matches(finding, curation, relativeFindingPath)) finding
-        else if (curation.concludedLicense.toString() == SpdxConstants.NONE) null
-        else finding.copy(license = curation.concludedLicense)
+        when {
+            !matches(finding, curation, relativeFindingPath) -> finding
+            curation.concludedLicense.toString() == SpdxConstants.NONE -> null
+            else -> finding.copy(license = curation.concludedLicense)
+        }
 
     /**
      * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all

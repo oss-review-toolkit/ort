@@ -170,7 +170,7 @@ fun Task.generateEnumClass(
     enumFile.writeText(getLicenseHeader())
     enumFile.appendText(
         """
-        |@file:Suppress("MaxLineLength")
+        |@file:Suppress("EnumEntryNameCase", "MaxLineLength")
         |
         |package org.ossreviewtoolkit.utils.spdx
         |

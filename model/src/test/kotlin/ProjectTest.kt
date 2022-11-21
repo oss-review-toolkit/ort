@@ -70,8 +70,12 @@ private fun createDependencyGraph(qualified: Boolean = false): DependencyGraph {
         "test" to listOf(RootDependencyIndex(4), RootDependencyIndex(3)),
         "partial" to listOf(RootDependencyIndex(1))
     )
-    val scopeMapping = if (qualified) plainScopeMapping.mapKeys { DependencyGraph.qualifyScope(projectId, it.key) }
-    else plainScopeMapping
+
+    val scopeMapping = if (qualified) {
+        plainScopeMapping.mapKeys { DependencyGraph.qualifyScope(projectId, it.key) }
+    } else {
+        plainScopeMapping
+    }
 
     return DependencyGraph(dependencies, sortedSetOf(exampleRef, csvRef), scopeMapping)
 }

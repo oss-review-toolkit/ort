@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("MaxLineLength")
+@file:Suppress("EnumEntryNameCase", "MaxLineLength")
 
 package org.ossreviewtoolkit.utils.spdx
 

@@ -293,12 +293,15 @@ class FreemarkerTemplateProcessor(
         ): List<ResolvedLicense> =
             mergeResolvedLicenses(
                 models.filter { !omitExcluded || !it.excluded }.flatMap { model ->
-                    val chosenResolvedLicenseInfo = if (skipLicenseChoices) model.license else licenseView.filter(
-                        model.license,
-                        model.licenseChoices
-                    )
+                    val chosenResolvedLicenseInfo = if (skipLicenseChoices) {
+                        model.license
+                    } else {
+                        licenseView.filter(model.license, model.licenseChoices)
+                    }
+
                     val licenses = chosenResolvedLicenseInfo.filter(licenseView).licenses
                     val filteredLicenses = if (omitExcluded) licenses.filterExcluded() else licenses
+
                     if (omitNotPresent) filteredLicenses.filter(::isLicensePresent) else filteredLicenses
                 }
             )
