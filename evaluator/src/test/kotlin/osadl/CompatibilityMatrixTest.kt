@@ -19,24 +19,13 @@
 
 package org.ossreviewtoolkit.evaluator.osadl
 
-import kotlinx.serialization.Serializable
+import io.kotest.assertions.throwables.shouldNotThrow
+import io.kotest.core.spec.style.StringSpec
 
-@Serializable
-internal data class MatrixLicenses(
-    val timeformat: String,
-    val timestamp: String,
-    val licenses: List<MatrixRow>
-)
-
-@Serializable
-internal data class MatrixRow(
-    val name: String,
-    val compatibilities: List<MatrixCell>
-)
-
-@Serializable
-internal data class MatrixCell(
-    val name: String,
-    val compatibility: Compatibility,
-    val explanation: String
-)
+class CompatibilityMatrixTest : StringSpec({
+    "Deserializing the matrix succeeds" {
+        shouldNotThrow<IllegalArgumentException> {
+            CompatibilityMatrix.releaseDateAndTime
+        }
+    }
+})
