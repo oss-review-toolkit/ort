@@ -1,4 +1,7 @@
-{ "licenses": [
+{
+"timeformat": "%Y-%m-%dT%H:%M:%S%z",
+"timestamp": "2022-11-18T11:31:00+00:00",
+"licenses": [
   { "name": "0BSD", "compatibilities": [
     { "name": "0BSD", "compatibility": "Same", "explanation": "n.a."},
     { "name": "AFL-2.0", "compatibility": "Yes", "explanation": "Non-copyleft licenses such as the AFL-2.0 license and the 0BSD license are generally considered mutually compatible."},
