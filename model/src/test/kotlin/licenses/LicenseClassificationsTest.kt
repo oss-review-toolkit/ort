@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.licenses
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -110,6 +111,14 @@ class LicenseClassificationsTest : WordSpec({
             permissiveLicenses shouldNotBeNull {
                 permissiveLicenses should containExactlyInAnyOrder(lic1.id, lic2.id)
             }
+        }
+
+        "maintain empty categories" {
+            val licenseClassifications = LicenseClassifications(
+                categories = listOf(LicenseCategory("permissive"))
+            )
+
+            licenseClassifications.licensesByCategory["permissive"] shouldNotBeNull { shouldBeEmpty() }
         }
 
         "return null when querying the licenses for an unknown category" {
