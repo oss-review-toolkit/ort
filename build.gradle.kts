@@ -59,7 +59,7 @@ buildscript {
         resolutionStrategy {
             // Work around the Kotlin plugin to depend on an outdated version of the Download plugin, see
             // https://youtrack.jetbrains.com/issue/KT-53822.
-            force("de.undercouch:gradle-download-task:${libs.plugins.download.get().version}")
+            force("de.undercouch:gradle-download-task:${libs.versions.downloadPlugin.get()}")
         }
     }
 }
