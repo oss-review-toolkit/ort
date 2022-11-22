@@ -27,7 +27,7 @@ import kotlin.math.min
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants.NOASSERTION
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -271,7 +271,7 @@ fun associateLicensesWithExceptions(
     // Associate remaining "orphan" exceptions with "NOASSERTION" to turn them into valid SPDX expressions and at the
     // same time "marking" them for review as "NOASSERTION" is not a real license.
     remainingExceptions.mapTo(fixedLicenses) { exception ->
-        exception.copy(license = "$NOASSERTION WITH ${exception.license}".toSpdx())
+        exception.copy(license = "${SpdxConstants.NOASSERTION} WITH ${exception.license}".toSpdx())
     }
 
     return fixedLicenses
