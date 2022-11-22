@@ -56,6 +56,10 @@ data class LicenseClassifications(
                     getOrPut(category) { mutableSetOf() } += license.id
                 }
             }
+
+            categories.forEach { category ->
+                putIfAbsent(category.name, mutableSetOf())
+            }
         }
     }
 
