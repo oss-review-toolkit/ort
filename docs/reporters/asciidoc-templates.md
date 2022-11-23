@@ -1,4 +1,4 @@
-# AsciiDoc template reporters
+# AsciiDoc templates
 
 The AsciiDoc template reporters create reports using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
 with [AsciidoctorJ][3] as Java interface and [AsciidoctorJ PDF][4] as PDF file generator for the
