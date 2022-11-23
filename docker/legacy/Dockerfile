@@ -27,7 +27,7 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 ARG CRT_FILES=""
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="30.1.0"
+ARG SCANCODE_VERSION="31.2.1"
 
 # Set this to the Python Inspector version to use.
 ARG PYTHON_INSPECTOR_VERSION="0.9.2"

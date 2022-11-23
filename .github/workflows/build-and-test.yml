@@ -10,7 +10,7 @@ on:
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
-  SCANCODE_VERSION: 30.1.0
+  SCANCODE_VERSION: 31.2.1
 
 jobs:
   build:
