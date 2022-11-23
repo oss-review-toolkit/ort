@@ -184,9 +184,21 @@ class SpdxExpressionTest : WordSpec() {
 
             "be valid in lenient mode" {
                 assertSoftly {
-                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_ANY)
-                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_ANY)
-                    licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_ANY)
+                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_ANY) shouldBe
+                            SpdxLicenseWithExceptionExpression(
+                                SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                                "LicenseRef-ort-exception"
+                            )
+                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_ANY) shouldBe
+                            SpdxLicenseWithExceptionExpression(
+                                SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                                "LicenseRef-ort-exception-2.0"
+                            )
+                    licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_ANY) shouldBe
+                            SpdxLicenseWithExceptionExpression(
+                                SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                                "LicenseRef-ort-license"
+                            )
                 }
             }
 
@@ -224,8 +236,16 @@ class SpdxExpressionTest : WordSpec() {
 
             "be valid when allowing LicenseRef exceptions" {
                 assertSoftly {
-                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
-                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
+                    licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS) shouldBe
+                            SpdxLicenseWithExceptionExpression(
+                                SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                                "LicenseRef-ort-exception"
+                            )
+                    licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS) shouldBe
+                            SpdxLicenseWithExceptionExpression(
+                                SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                                "LicenseRef-ort-exception-2.0"
+                            )
 
                     shouldThrow<SpdxException> {
                         licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
