@@ -123,11 +123,18 @@ data class ResolvedLicense(
 private fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: Boolean): List<ResolvedCopyright> {
     if (!process) return map { ResolvedCopyright(it.statement, setOf(it)) }
 
-    val statementToFinding = associateBy { it.statement }
-    val result = CopyrightStatementsProcessor.process(statementToFinding.keys)
+    val statements = associateBy { it.statement }
+    val result = CopyrightStatementsProcessor.process(statements.keys)
 
+    val statementToFinding = result.processedStatements.mapValues { (_, originalStatements) ->
+        filter { it.statement in originalStatements }
+    }.filterValues {
+        it.isNotEmpty()
+    }
     val processedCopyrights = result.processedStatements.map { (statement, originalStatements) ->
-        val findings = originalStatements.mapTo(mutableSetOf()) { statementToFinding.getValue(it) }
+        val findings = originalStatements.mapTo(mutableSetOf()) {
+            statementToFinding.getValue(statement)
+        }.flatten().toSet()
         ResolvedCopyright(statement, findings)
     }
 
