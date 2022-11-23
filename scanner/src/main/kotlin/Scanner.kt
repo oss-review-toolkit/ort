@@ -50,6 +50,7 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
@@ -489,8 +490,9 @@ class Scanner(
         val downloadDir = try {
             provenanceDownloader.download(provenance)
         } catch (e: DownloadException) {
-            val message = "Could not download provenance $provenance: ${e.collectMessages()}"
-            logger.error { message }
+            val issue = createAndLogIssue(
+                "Downloader", "Could not download provenance $provenance: ${e.collectMessages()}"
+            )
 
             val summary = ScanSummary(
                 startTime = Instant.now(),
@@ -498,13 +500,7 @@ class Scanner(
                 packageVerificationCode = "",
                 licenseFindings = sortedSetOf(),
                 copyrightFindings = sortedSetOf(),
-                issues = listOf(
-                    OrtIssue(
-                        source = "Downloader",
-                        message = message,
-                        severity = Severity.ERROR
-                    )
-                )
+                issues = listOf(issue)
             )
 
             return scanners.associateWith { scanner ->
