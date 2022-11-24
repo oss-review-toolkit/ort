@@ -34,20 +34,20 @@ private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
 private val COMMA_SEPARATED_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b( *, *)\\b(\\d{4})\\b".toRegex()
 
 private val KNOWN_PREFIX_REGEX = listOf(
-    "^(?:\\(c\\))",
-    "^(?:\\(c\\) [C|c]opyright)",
-    "^(?:\\(c\\) [C|c]opyrighted)",
+    "^(?:\\([C|c]\\))",
+    "^(?:\\([C|c]\\) [C|c]opyright)",
+    "^(?:\\([C|c]\\) [C|c]opyrighted)",
     "^(?:[C|c]opyright)",
-    "^(?:[C|c]opyright \\(c\\))",
+    "^(?:[C|c]opyright \\([C|c]\\))",
     "^(?:[C|c]opyright [O|o]wnership)",
     "^(?:[C|c]opyright')",
-    "^(?:[C|c]opyright' \\(c\\))",
+    "^(?:[C|c]opyright' \\([C|c]\\))",
     "^(?:COPYRIGHT)",
     "^(?:[C|c]opyrighted)",
-    "^(?:[C|c]opyrighted \\(c\\))",
+    "^(?:[C|c]opyrighted \\([C|c]\\))",
     "^(?:[P|p]ortions [C|c]opyright)",
-    "^(?:[P|p]ortions \\(c\\))",
-    "^(?:[P|p]ortions [C|c]opyright \\(c\\))"
+    "^(?:[P|p]ortions \\([C|c]\\))",
+    "^(?:[P|p]ortions [C|c]opyright \\([C|c]\\))"
 ).map { it.toRegex() }
 
 private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
