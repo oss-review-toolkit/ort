@@ -20,6 +20,9 @@
 package org.ossreviewtoolkit.utils.ort
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -35,6 +38,19 @@ class CopyrightStatementsProcessorTest : WordSpec({
             val actualResult = CopyrightStatementsProcessor.process(statements.shuffled()).toYaml()
 
             actualResult shouldBe expectedResult
+        }
+
+        "group statements with uppercase (C)" {
+            val statements = listOf(
+                "Copyright (C) 2017 The ORT Project Authors",
+                "Copyright (C) 2022 The ORT Project Authors"
+            )
+
+            val actualResult = CopyrightStatementsProcessor.process(statements)
+
+            actualResult.processedStatements shouldHaveSize 1
+            actualResult.processedStatements.firstKey() shouldBe "Copyright (C) 2017, 2022 The ORT Project Authors"
+            actualResult.unprocessedStatements should beEmpty()
         }
     }
 })
