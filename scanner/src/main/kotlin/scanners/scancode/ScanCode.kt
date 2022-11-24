@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -115,9 +116,9 @@ class ScanCode internal constructor(
 
     private val scanCodeConfiguration = scannerConfig.options?.get("ScanCode").orEmpty()
 
-    private val configurationOptions = scanCodeConfiguration["commandLine"]?.split(' ')
+    private val configurationOptions = scanCodeConfiguration["commandLine"]?.splitOnWhitespace()
         ?: DEFAULT_CONFIGURATION_OPTIONS
-    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.split(' ')
+    private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.splitOnWhitespace()
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
     val commandLineOptions by lazy {
