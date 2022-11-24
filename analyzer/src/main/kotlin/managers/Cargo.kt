@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -332,7 +333,7 @@ private fun getResolvedVersion(
     // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
     // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
     node["dependencies"].forEach {
-        val substrings = it.textValue().split(' ')
+        val substrings = it.textValue().splitOnWhitespace()
         require(substrings.size > 1) { "Unexpected format while parsing dependency JSON node." }
 
         if (substrings[0] == dependencyName) return substrings[1]

@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 
@@ -162,7 +163,7 @@ class GoMod(
         edges.stdout.lines().forEach { line ->
             if (line.isBlank()) return@forEach
 
-            val columns = line.split(' ')
+            val columns = line.splitOnWhitespace()
             require(columns.size == 2) { "Expected exactly one occurrence of ' ' on any non-blank line." }
 
             val parent = parseModuleEntry(columns[0])
@@ -270,10 +271,8 @@ class GoMod(
         )
 
         list.stdout.lines().forEach { line ->
-            val columns = line.split(' ')
-            if (columns.size != 2) return@forEach
-
-            result += columns[0]
+            val columns = line.splitOnWhitespace()
+            if (columns.size in 1..2) result += columns[0]
         }
 
         return result
