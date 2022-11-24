@@ -417,7 +417,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val result = FreemarkerTemplateProcessor.TemplateHelper(input).mergeLicenses(listOf(pkg))
 
             result should haveSize(1)
-            with(result[0]) {
+            with(result.first()) {
                 license.toString() shouldBe "MIT"
                 originalExpressions.map { it.expression.toString() } shouldContainExactlyInAnyOrder listOf(
                     "GPL-2.0-only OR MIT OR Apache-2.0"

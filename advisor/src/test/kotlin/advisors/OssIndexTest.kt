@@ -130,11 +130,11 @@ class OssIndexTest : WordSpec({
                 COMPONENTS_REQUEST_IDS.forEach { pkg ->
                     val pkgResults = getValue(pkg)
                     pkgResults shouldHaveSize 1
-                    val pkgResult = pkgResults[0]
+                    val pkgResult = pkgResults.first()
                     pkgResult.advisor shouldBe ossIndex.details
                     pkgResult.vulnerabilities should beEmpty()
                     pkgResult.summary.issues shouldHaveSize 1
-                    val issue = pkgResult.summary.issues[0]
+                    val issue = pkgResult.summary.issues.first()
                     issue.severity shouldBe Severity.ERROR
                 }
             }

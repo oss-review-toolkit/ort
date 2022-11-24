@@ -273,7 +273,7 @@ class GoMod(
 
         list.stdout.lines().forEach { line ->
             val columns = line.splitOnWhitespace()
-            if (columns.size in 1..2) result += columns[0]
+            if (columns.size in 1..2) result += columns.first()
         }
 
         return result
