@@ -182,7 +182,7 @@ class OrtResultTest : WordSpec({
             val openIssues = ortResult.getOpenIssues(Severity.WARNING)
 
             openIssues should haveSize(1)
-            with(openIssues[0]) {
+            with(openIssues.first()) {
                 message shouldBe "Non-resolved issue"
             }
         }
@@ -215,7 +215,7 @@ class OrtResultTest : WordSpec({
             val openIssues = ortResult.getOpenIssues(Severity.WARNING)
 
             openIssues should haveSize(1)
-            with(openIssues[0]) {
+            with(openIssues.first()) {
                 message shouldBe "Issue with severity 'warning'"
             }
         }
@@ -257,7 +257,7 @@ class OrtResultTest : WordSpec({
             val openIssues = ortResult.getOpenIssues()
 
             openIssues should haveSize(1)
-            with(openIssues[0]) {
+            with(openIssues.first()) {
                 message shouldBe "Included issue"
             }
         }

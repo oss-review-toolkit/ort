@@ -174,7 +174,7 @@ data class EvaluatedModel(
         val tree = JSON_MAPPER.valueToTree<ObjectNode>(this)
         tree.forEach { node ->
             if (node is ArrayNode) {
-                if (!node.isEmpty && node[0].has("_id")) {
+                if (!node.isEmpty && node.first().has("_id")) {
                     val sortedChildren = node.elements().asSequence().sortedBy { it["_id"].intValue() }.toList()
                     node.removeAll()
                     node.addAll(sortedChildren)

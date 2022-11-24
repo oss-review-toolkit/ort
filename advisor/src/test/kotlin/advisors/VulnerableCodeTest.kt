@@ -85,7 +85,7 @@ class VulnerableCodeTest : WordSpec({
 
             val langResults = result.getValue(idLang)
             langResults shouldHaveSize(1)
-            langResults[0].advisor shouldBe vulnerableCode.details
+            langResults.first().advisor shouldBe vulnerableCode.details
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
                 references = listOf(
@@ -160,12 +160,12 @@ class VulnerableCodeTest : WordSpec({
                 packageIdentifiers.forEach { pkg ->
                     val pkgResults = getValue(pkg)
                     pkgResults shouldHaveSize 1
-                    val pkgResult = pkgResults[0]
-                    pkgResult.advisor shouldBe vulnerableCode.details
-                    pkgResult.vulnerabilities should beEmpty()
-                    pkgResult.summary.issues shouldHaveSize 1
-                    val issue = pkgResult.summary.issues[0]
-                    issue.severity shouldBe Severity.ERROR
+                    with(pkgResults.first()) {
+                        advisor shouldBe vulnerableCode.details
+                        vulnerabilities should beEmpty()
+                        summary.issues shouldHaveSize 1
+                        summary.issues.first().severity shouldBe Severity.ERROR
+                    }
                 }
             }
         }

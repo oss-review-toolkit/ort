@@ -228,7 +228,7 @@ class ScanCodeResultParserTest : FreeSpec({
             "handle a missing option property gracefully" {
                 val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
                 val headers = result["headers"] as ArrayNode
-                val headerObj = headers[0] as ObjectNode
+                val headerObj = headers.first() as ObjectNode
                 headerObj.remove("options")
 
                 val details = generateScannerDetails(result)

@@ -131,7 +131,7 @@ fun getLicenseHeader(year: Int = 2017) =
 
 fun licenseToEnumEntry(info: LicenseInfo): String {
     var enumEntry = info.id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
-    if (enumEntry[0].isDigit()) {
+    if (enumEntry.first().isDigit()) {
         enumEntry = "_$enumEntry"
     }
 

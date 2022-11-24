@@ -184,7 +184,7 @@ class ExamplesFunTest : StringSpec() {
             notifier.run(script)
 
             greenMail.waitForIncomingEmail(1000, 1) shouldBe true
-            val actualBody = GreenMailUtil.getBody(greenMail.receivedMessages[0])
+            val actualBody = GreenMailUtil.getBody(greenMail.receivedMessages.first())
 
             actualBody shouldContain "Content-Type: text/html; charset=UTF-8"
             actualBody shouldContain "Content-Type: text/plain; charset=UTF-8" // Fallback

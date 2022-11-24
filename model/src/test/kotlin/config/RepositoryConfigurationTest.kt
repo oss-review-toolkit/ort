@@ -47,7 +47,7 @@ class RepositoryConfigurationTest : WordSpec({
                 """.trimIndent()
 
             val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-            config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
+            config.excludes.paths.first().matches("android/project1/build.gradle") shouldBe true
         }
 
         "throw ValueInstantiationException if no given is supplied for repository_license_choices" {
@@ -131,11 +131,11 @@ class RepositoryConfigurationTest : WordSpec({
 
             val paths = repositoryConfiguration.excludes.paths
             paths should haveSize(1)
-
-            val path = paths[0]
-            path.pattern shouldBe "project1/path"
-            path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
-            path.comment shouldBe "project comment"
+            with(paths.first()) {
+                pattern shouldBe "project1/path"
+                reason shouldBe PathExcludeReason.BUILD_TOOL_OF
+                comment shouldBe "project comment"
+            }
 
             val scopes = repositoryConfiguration.excludes.scopes
             scopes should haveSize(1)

@@ -491,7 +491,7 @@ class SpdxDocumentFile(
         val scopes = sortedSetOf<Scope>()
 
         val projectPackage = if (!spdxDocument.isProject()) {
-            spdxDocument.packages[0]
+            spdxDocument.packages.first()
         } else {
             requireNotNull(spdxDocument.projectPackage()) {
                 "The SPDX document file at '$definitionFile' does not describe a project."
