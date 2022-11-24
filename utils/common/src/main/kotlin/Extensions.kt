@@ -417,6 +417,13 @@ fun String.replaceCredentialsInUri(userInfo: String? = null) =
     }.getOrDefault(this)
 
 /**
+ * Return all substrings that do not contain any whitespace as a list.
+ */
+fun String.splitOnWhitespace(): List<String> = nonSpaceRegex.findAll(this).mapTo(mutableListOf()) { it.value }
+
+private val nonSpaceRegex = Regex("\\S+")
+
+/**
  * Return this string lower-cased except for the first character which is upper-cased.
  */
 fun String.titlecase() = lowercase().uppercaseFirstChar()
