@@ -8,7 +8,6 @@ graphQlPlugin = "6.3.0"
 ideaExtPlugin = "1.1.6"
 kotlinPlugin = "1.7.21"
 shadowPlugin = "7.1.2"
-taskInfoPlugin = "2.0.0"
 versionCatalogUpdatePlugin = "0.7.0"
 versionsPlugin = "0.44.0"
 
@@ -75,7 +74,6 @@ ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtP
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
 shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadowPlugin" }
-taskInfo = { id = "org.barfuin.gradle.taskinfo", version.ref = "taskInfoPlugin" }
 versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdatePlugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
