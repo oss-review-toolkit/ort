@@ -265,6 +265,7 @@ class GoMod(
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
         val result = mutableSetOf<String>()
 
+        // See https://pkg.go.dev/text/template for the format syntax.
         val list = run(
             "list", "-deps", "-f", "{{with .Module}}{{.Path}} {{.Version}}{{end}}", "-buildvcs=false", "./...",
             workingDir = projectDir
