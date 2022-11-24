@@ -249,12 +249,6 @@ class ScanCodeResultParserTest : FreeSpec({
         }
     }
 
-    "mapTimeoutErrors()" - {
-    }
-
-    "mapUnknownErrors()" - {
-    }
-
     "replaceLicenseKeys() should" - {
         "properly handle redundant replacements" {
             val expression = "public-domain"
