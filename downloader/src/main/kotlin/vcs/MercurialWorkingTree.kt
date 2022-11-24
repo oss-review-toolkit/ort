@@ -45,7 +45,7 @@ class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(wor
     override fun listRemoteBranches(): List<String> {
         val branches = MercurialCommand.run(workingDir, "branches").stdout.trimEnd()
         return branches.lines().map {
-            it.split(' ').first()
+            it.substringBefore(' ')
         }.sorted()
     }
 
@@ -55,7 +55,7 @@ class MercurialWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(wor
         MercurialCommand.run(workingDir, "pull", "-r", "default")
         val tags = MercurialCommand.run(workingDir, "cat", "-r", "default", ".hgtags").stdout.trimEnd()
         return tags.lines().map {
-            it.split(' ').last()
+            it.substringAfterLast(' ')
         }.sorted()
     }
 }
