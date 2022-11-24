@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
@@ -183,7 +184,7 @@ class Gradle(
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
         val jvmArgs = gradleProperties.find { (key, _) ->
             key == "org.gradle.jvmargs"
-        }?.second?.split(' ').orEmpty().toMutableList()
+        }?.second?.splitOnWhitespace().orEmpty().toMutableList()
 
         if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
             jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"

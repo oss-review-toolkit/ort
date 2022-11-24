@@ -61,6 +61,7 @@ import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -617,11 +618,12 @@ class Pub(
         }
 
     override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
-        var result = ProcessCapture(workingDir, *commandPub().split(' ').toTypedArray(), *args)
+        var result = ProcessCapture(workingDir, *commandPub().splitOnWhitespace().toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
             if ("Flutter users should run `flutter" in result.errorMessage) {
-                result = ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), *args).requireSuccess()
+                result = ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), *args)
+                    .requireSuccess()
             } else {
                 throw IOException(result.errorMessage)
             }
@@ -636,7 +638,7 @@ class Pub(
             // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
             // installs the required dependencies and also creates the `local.properties` file which is required for
             // the Android analysis.
-            ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), "get").requireSuccess()
+            ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), "get").requireSuccess()
         } else {
             // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
             // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.

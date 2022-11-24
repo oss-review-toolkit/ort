@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -124,7 +125,7 @@ class Carthage(
     }
 
     private fun parseDependencyLine(line: String, workingDir: String): Package {
-        val split = line.split(' ')
+        val split = line.splitOnWhitespace()
 
         require(split.size == 3) {
             "A dependency line must consist of exactly 3 space separated elements."

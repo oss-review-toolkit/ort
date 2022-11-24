@@ -67,7 +67,7 @@ interface CommandLineTool {
      */
     fun run(vararg args: CharSequence, workingDir: File? = null, environment: Map<String, String> = emptyMap()) =
         ProcessCapture(
-            *command(workingDir).split(' ').toTypedArray(),
+            *command(workingDir).splitOnWhitespace().toTypedArray(),
             *args,
             workingDir = workingDir,
             environment = environment
@@ -77,13 +77,13 @@ interface CommandLineTool {
      * Run the command in the [workingDir] directory with arguments as specified by [args].
      */
     fun run(workingDir: File?, vararg args: CharSequence) =
-        ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
+        ProcessCapture(workingDir, *command(workingDir).splitOnWhitespace().toTypedArray(), *args).requireSuccess()
 
     /**
      * Get the version of the command by parsing its output.
      */
     fun getVersion(workingDir: File? = null): String {
-        val version = run(workingDir, *getVersionArguments().split(' ').toTypedArray())
+        val version = run(workingDir, *getVersionArguments().splitOnWhitespace().toTypedArray())
 
         // Some tools actually report the version to stderr, so try that as a fallback.
         val versionString = sequenceOf(version.stdout, version.stderr).map {
