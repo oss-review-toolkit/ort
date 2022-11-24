@@ -86,6 +86,22 @@ class ScanCodeTest : WordSpec({
             scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
                     "--command --line --commandLineNonConfig"
         }
+
+        "be handled correctly when containing multiple spaces" {
+            val scannerWithConfig = ScanCode(
+                "ScanCode",
+                ScannerConfiguration(
+                    options = mapOf(
+                        "ScanCode" to mapOf(
+                            "commandLine" to " --command  --line  ",
+                            "commandLineNonConfig" to "  -n -c "
+                        )
+                    )
+                )
+            )
+
+            scannerWithConfig.commandLineOptions shouldBe listOf("--command", "--line", "-n", "-c")
+        }
     }
 
     "scanPath" should {
