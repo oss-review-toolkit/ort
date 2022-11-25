@@ -6432,6 +6432,7 @@ org/jruby/parser/signature_skeleton.parser
 org/tmatesoft/sqljet/core/internal/lang/Sql.g
 osgi-resource-locator/osgi.bundle
 osgi.bnd
+package-lock.json
 package.json.ls
 package.json5
 package/.jshintrc

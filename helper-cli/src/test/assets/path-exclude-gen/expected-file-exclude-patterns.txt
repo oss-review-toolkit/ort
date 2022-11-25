@@ -61,6 +61,7 @@ jitpack.yml
 libxml2-2.9.14/runsuite.c
 libxml2-2.9.14/runtest.c
 mkdocs.yml
+package-lock.json
 runtime/Perl5/Build.PL
 setup.cfg
 setup.py
