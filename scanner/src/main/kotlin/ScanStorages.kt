@@ -66,7 +66,7 @@ class ScanStorages(
                 "Could not resolve storage '$name'."
             }
 
-            val defaultStorage = createDefaultStorage()
+            val defaultStorage by lazy { createDefaultStorage() }
 
             val readers = config.storageReaders.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
             val writers = config.storageWriters.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
