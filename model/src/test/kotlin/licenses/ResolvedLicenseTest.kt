@@ -19,40 +19,72 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.TextLocation
 
-class ResolvedLicenseTest : StringSpec({
-    "Copyright findings with the same statement across different files should be listed in the result" {
-        val originalFindings = listOf(
-            ResolvedCopyrightFinding(
-                statement = "Copyright (C) 2022 The ORT Project Authors",
-                location = TextLocation(
-                    path = "/path/to/file/A",
-                    line = 2
+class ResolvedLicenseTest : WordSpec({
+    "Copyright findings across different files" should {
+        "be consolidated without processing if their statements are exactly the same" {
+            val originalFindings = listOf(
+                ResolvedCopyrightFinding(
+                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    location = TextLocation(
+                        path = "/path/to/file/A",
+                        line = 2
+                    ),
+                    matchingPathExcludes = emptyList()
                 ),
-                matchingPathExcludes = emptyList()
-            ),
-            ResolvedCopyrightFinding(
-                statement = "Copyright (C) 2022 The ORT Project Authors",
-                location = TextLocation(
-                    path = "/path/to/file/B",
-                    line = 2
+                ResolvedCopyrightFinding(
+                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    location = TextLocation(
+                        path = "/path/to/file/B",
+                        line = 2
+                    ),
+                    matchingPathExcludes = emptyList()
                 ),
-                matchingPathExcludes = emptyList()
-            ),
-        )
+            )
 
-        val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
+            val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
 
-        resolvedCopyrights shouldHaveSize 1
-        with(resolvedCopyrights.first()) {
-            statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
-            findings.map { it.location.path }.shouldContainExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+            resolvedCopyrights shouldHaveSize 1
+            with(resolvedCopyrights.first()) {
+                statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
+                findings.map { it.location.path }.shouldContainExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+            }
+        }
+
+        "be consolidated with processing if their statements are afterwards the same" {
+            val originalFindings = listOf(
+                ResolvedCopyrightFinding(
+                    statement = "Copyright (C) 2022 The ORT Project Authors",
+                    location = TextLocation(
+                        path = "/path/to/file/A",
+                        line = 2
+                    ),
+                    matchingPathExcludes = emptyList()
+                ),
+                ResolvedCopyrightFinding(
+                    // Note the "." at the end.
+                    statement = "Copyright (C) 2022 The ORT Project Authors.",
+                    location = TextLocation(
+                        path = "/path/to/file/B",
+                        line = 2
+                    ),
+                    matchingPathExcludes = emptyList()
+                ),
+            )
+
+            val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = true)
+
+            resolvedCopyrights shouldHaveSize 1
+            with(resolvedCopyrights.first()) {
+                statement shouldBe "Copyright (C) 2022 The ORT Project Authors"
+                findings.map { it.location.path }.shouldContainExactlyInAnyOrder("/path/to/file/A", "/path/to/file/B")
+            }
         }
     }
 })
