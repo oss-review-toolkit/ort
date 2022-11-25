@@ -316,8 +316,6 @@ pipeline {
             steps {
                 script {
                     def status = sh returnStatus: true, script: '''
-                        /opt/ort/bin/set_gradle_proxy.sh
-
                         if [ "$STACKTRACE" = "true" ]; then
                             STACKTRACE_OPTION="--stacktrace"
                         fi
@@ -325,6 +323,8 @@ pipeline {
                         if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
                             USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
                         fi
+
+                        /opt/ort/bin/set_gradle_proxy.sh
 
                         rm -fr out/results
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
