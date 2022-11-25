@@ -1,4 +1,7 @@
-# syntax=docker/dockerfile:1.3
+# syntax=docker/dockerfile:1.4
+
+# Use at least version 1.4 above to be able to use linked copies, see e.g.
+# https://www.howtogeek.com/devops/how-to-accelerate-docker-builds-and-optimize-caching-with-copy-link/
 
 # Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
@@ -41,7 +44,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/import_proxy_certs.sh && \
     scripts/set_gradle_proxy.sh && \
-    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
+    ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:installDist :helper-cli:startScripts
 
 FROM eclipse-temurin:11-jdk-jammy AS run
 
@@ -161,12 +164,10 @@ RUN pip install --no-cache-dir python-inspector==$PYTHON_INSPECTOR_VERSION
 
 FROM run AS dist
 
-ARG ORT_VERSION
-RUN --mount=type=bind,from=build,source=/usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar,target=/opt/ort.tar \
-    tar xf /opt/ort.tar -C /opt/ort --exclude="*.bat" --strip-components 1 && \
-    /opt/ort/bin/ort requirements
+COPY --from=build --link /usr/local/src/ort/cli/build/install/ort /opt/ort
 
-COPY --from=build /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
-COPY --from=build /usr/local/src/ort/helper-cli/build/libs/helper-cli-$ORT_VERSION.jar /opt/ort/lib/
+ARG ORT_VERSION
+COPY --from=build --link /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
+COPY --from=build --link /usr/local/src/ort/helper-cli/build/libs/helper-cli-$ORT_VERSION.jar /opt/ort/lib/
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
