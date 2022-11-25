@@ -236,8 +236,6 @@ pipeline {
             steps {
                 withCredentials(projectVcsCredentials) {
                     sh '''
-                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
-
                         if [ "$STACKTRACE" = "true" ]; then
                             STACKTRACE_OPTION="--stacktrace"
                         fi
@@ -245,6 +243,8 @@ pipeline {
                         if [ -n "$PROJECT_VCS_REVISION" ]; then
                             VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
                         fi
+
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
                         rm -fr "$PROJECT_DIR"
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
@@ -280,8 +280,6 @@ pipeline {
             steps {
                 withCredentials(ortConfigVcsCredentials) {
                     sh '''
-                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
-
                         if [ "$STACKTRACE" = "true" ]; then
                             STACKTRACE_OPTION="--stacktrace"
                         fi
@@ -289,6 +287,8 @@ pipeline {
                         if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
                             VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
                         fi
+
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
                         rm -fr $ORT_DATA_DIR/config
                         /opt/ort/bin/ort $LOG_LEVEL $STACKTRACE_OPTION download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
