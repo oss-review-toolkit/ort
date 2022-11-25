@@ -158,7 +158,7 @@ class PathExcludeGeneratorTest : WordSpec({
             )
         }
 
-        "return the expected pattern if matching file have different names and are in different directories" {
+        "return the expected pattern if matching files have different names and are in different directories" {
             getPatternsForFiles(
                 "src/some_test.go",
                 "src/module/other_test.go"
