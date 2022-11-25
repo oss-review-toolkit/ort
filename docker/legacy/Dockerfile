@@ -167,6 +167,8 @@ FROM run AS dist
 COPY --from=build --link /usr/local/src/ort/cli/build/install/ort /opt/ort
 
 ARG ORT_VERSION
+
+# Support to run the helper-cli like `docker run --entrypoint /opt/ort/bin/orth ort`.
 COPY --from=build --link /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
 COPY --from=build --link /usr/local/src/ort/helper-cli/build/libs/helper-cli-$ORT_VERSION.jar /opt/ort/lib/
 
