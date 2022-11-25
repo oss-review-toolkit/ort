@@ -125,6 +125,12 @@ pipeline {
             defaultValue: true
         )
 
+        booleanParam(
+            name: 'SKIP_CONCLUDED',
+            description: 'Enable to skip scanning packages that have a concluded license and authors set.',
+            defaultValue: true
+        )
+
         choice(
             name: 'PROJECT_SCANNER',
             description: 'The scanner to use for project source code.',
@@ -401,7 +407,7 @@ pipeline {
                         def status = sh returnStatus: true, script: '''
                             #!/usr/bin/env bash
 
-                            ORT_OPTIONS="$LOG_LEVEL"
+                            ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
 
                             if [ "$STACKTRACE" = "true" ]; then
                                 ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
