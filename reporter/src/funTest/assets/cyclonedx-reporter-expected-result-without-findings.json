@@ -7,6 +7,15 @@
     {
       "type": "website",
       "url": "https://github.com/oss-review-toolkit/ort"
+    },
+    {
+      "type": "build-system",
+      "url": "NPM"
+    },
+    {
+      "type": "other",
+      "url": "pkg:npm/%40ort/project-without-findings@1.0",
+      "comment": "Package-URL of the project"
     }
   ]
 }
