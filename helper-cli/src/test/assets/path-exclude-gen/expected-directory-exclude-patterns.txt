@@ -671,6 +671,7 @@ native/native.tests/**
 native/utils/tests/**
 nj2k/tests/**
 notifier/src/test/**
+objectivec/DevTools/**
 objectivec/Tests/**
 okio/jvm/jmh/src/jmh/java/com/squareup/okio/benchmarks/**
 okio/src/appleTest/**
@@ -772,7 +773,7 @@ packages/react-debug-tools/src/__tests__/**
 packages/react-dev-utils/__tests__/**
 packages/react-devtools-scheduling-profiler/**
 packages/react-devtools-shared/src/__tests__/**
-packages/react-devtools-shared/src/devtools/views/Profiler/**
+packages/react-devtools-shared/src/devtools/**
 packages/react-dom/src/__tests__/**
 packages/react-dom/src/client/__tests__/**
 packages/react-dom/src/events/__tests__/**
