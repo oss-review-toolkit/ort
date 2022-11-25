@@ -23,9 +23,12 @@ CHANGELOG*
 CHANGES
 CHANGES.md
 CHANGES.txt
+CODE_OF_CONDUCT
 CODE_OF_CONDUCT.md
 CONTRIBUTING
 CONTRIBUTING.md
+CONTRIBUTING.rst
+CONTRIBUTING.txt
 Cakefile
 Cargo.toml
 Configure
@@ -62,6 +65,7 @@ libxml2-2.9.14/runsuite.c
 libxml2-2.9.14/runtest.c
 mkdocs.yml
 package-lock.json
+package.json
 runtime/Perl5/Build.PL
 setup.cfg
 setup.py
