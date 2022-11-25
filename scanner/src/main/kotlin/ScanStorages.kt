@@ -68,10 +68,8 @@ class ScanStorages(
 
             val defaultStorage = createDefaultStorage()
 
-            val readers = config.storageReaders.orEmpty().map { resolve(it) }.takeIf { it.isNotEmpty() }
-                ?: listOf(defaultStorage)
-            val writers = config.storageWriters.orEmpty().map { resolve(it) }.takeIf { it.isNotEmpty() }
-                ?: listOf(defaultStorage)
+            val readers = config.storageReaders.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
+            val writers = config.storageWriters.orEmpty().map { resolve(it) }.ifEmpty { listOf(defaultStorage) }
 
             val packageProvenanceStorage = PackageProvenanceStorage.createFromConfig(config)
             val nestedProvenanceStorage = NestedProvenanceStorage.createFromConfig(config)
