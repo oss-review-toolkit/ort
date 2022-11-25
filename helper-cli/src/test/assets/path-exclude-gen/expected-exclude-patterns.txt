@@ -24,9 +24,12 @@ CHANGELOG*
 CHANGES
 CHANGES.md
 CHANGES.txt
+CODE_OF_CONDUCT
 CODE_OF_CONDUCT.md
 CONTRIBUTING
 CONTRIBUTING.md
+CONTRIBUTING.rst
+CONTRIBUTING.txt
 Cakefile
 Cargo.toml
 Configure
@@ -77,6 +80,7 @@ mkdocs.yml
 objectivec/DevTools/**
 org.abego.treelayout.demo/**
 package-lock.json
+package.json
 runtime/Perl5/Build.PL
 samples/SupportLeanbackDemos/**
 setup.cfg

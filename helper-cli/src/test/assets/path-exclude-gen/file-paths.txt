@@ -26,9 +26,12 @@ CHANGES
 CHANGES.md
 CHANGES.txt
 CITATION.cff
+CODE_OF_CONDUCT
 CODE_OF_CONDUCT.md
 CONTRIBUTING
 CONTRIBUTING.md
+CONTRIBUTING.rst
+CONTRIBUTING.txt
 CONTRIBUTORS
 COPYING.txt
 COPYRIGHT
@@ -6433,6 +6436,7 @@ org/tmatesoft/sqljet/core/internal/lang/Sql.g
 osgi-resource-locator/osgi.bundle
 osgi.bnd
 package-lock.json
+package.json
 package.json.ls
 package.json5
 package/.jshintrc
