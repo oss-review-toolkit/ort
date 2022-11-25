@@ -88,13 +88,13 @@ data class ScannerConfiguration(
 
     /**
      * A list with the IDs of scan storages that are queried for existing scan results. The strings in this list
-     * must match keys in the storages map.
+     * must match keys in the [storages] map.
      */
     val storageReaders: List<String>? = null,
 
     /**
      * A list with the IDs of scan storages that are called to persist scan results. The strings in this list
-     * must match keys in the storages map.
+     * must match keys in the [storages] map.
      */
     val storageWriters: List<String>? = null,
 
