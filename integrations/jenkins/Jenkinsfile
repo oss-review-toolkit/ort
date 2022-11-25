@@ -143,6 +143,12 @@ pipeline {
             choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
         )
 
+        booleanParam(
+            name: 'USE_CLEARLY_DEFINED_SCAN_STORAGE',
+            description: 'Use the ClearlyDefined service to retrieve existing scan results. This overrides any other scan storage configuration.',
+            defaultValue: true
+        )
+
         /*
          * ORT advisor tool parameters.
          */
@@ -408,6 +414,18 @@ pipeline {
                             #!/usr/bin/env bash
 
                             ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
+
+                            if [ "$USE_CLEARLY_DEFINED_SCAN_STORAGE" = "true" ]; then
+                                # Configure the default local file storage explicitly to be able to refer to it.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.localFiles.backend.localFileStorage.directory=$HOME/.ort/scanner/results"
+
+                                # Configure the ClearlyDefined remote storage.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.clearlyDefined.serverUrl=https://api.clearlydefined.io"
+
+                                # Take both storages into use.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storageReaders=localFiles,clearlyDefined \
+                                    -P ort.scanner.storageWriters=localFiles"
+                            fi
 
                             if [ "$STACKTRACE" = "true" ]; then
                                 ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
