@@ -47,7 +47,7 @@ class ResolvedLicenseTest : StringSpec({
             ),
         )
 
-        val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = true)
+        val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
 
         resolvedCopyrights shouldHaveSize 1
         with(resolvedCopyrights.first()) {
