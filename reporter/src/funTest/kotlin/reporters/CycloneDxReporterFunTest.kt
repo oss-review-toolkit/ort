@@ -128,25 +128,6 @@ class CycloneDxReporterFunTest : WordSpec({
             ) should beEmpty()
         }
 
-        "generate expected XML files" {
-            val expectedBomWithFindings =
-                File("src/funTest/assets/cyclonedx-reporter-expected-result-with-findings.xml").readText()
-            val expectedBomWithoutFindings =
-                File("src/funTest/assets/cyclonedx-reporter-expected-result-without-findings.xml").readText()
-            val xmlOptions = optionMulti + mapOf("output.file.formats" to "xml")
-
-            val (bomProjectWithFindings, bomProjectWithoutFindings) = CycloneDxReporter()
-                .generateReport(ReporterInput(ORT_RESULT), outputDir, xmlOptions).also {
-                    it shouldHaveSize 2
-                }
-            val actualBomWithFindings = bomProjectWithFindings.readText().patchCycloneDxResult().normalizeLineBreaks()
-            val actualBomWithoutFindings = bomProjectWithoutFindings.readText().patchCycloneDxResult()
-                .normalizeLineBreaks()
-
-            actualBomWithFindings shouldBe expectedBomWithFindings
-            actualBomWithoutFindings shouldBe expectedBomWithoutFindings
-        }
-
         "generate valid JSON files according to schema version $defaultSchemaVersion" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
