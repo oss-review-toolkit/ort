@@ -15,5 +15,13 @@
     "reporter-web-app",
     "**/src/funTest/assets/**",
     "**/src/test/assets/**"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.springframework:spring-core"
+      ],
+      "allowedVersions": "< 6.0.0"
+    }
   ]
 }
