@@ -12,6 +12,7 @@
     "org.eclipse.sw360:client"
   ],
   "ignorePaths": [
+    "reporter-web-app",
     "**/src/funTest/assets/**",
     "**/src/test/assets/**"
   ]
