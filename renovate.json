@@ -8,7 +8,8 @@
     "org.apache.maven.resolver:maven-resolver-connector-basic",
     "org.apache.maven.resolver:maven-resolver-transport-file",
     "org.apache.maven.resolver:maven-resolver-transport-http",
-    "org.apache.maven.resolver:maven-resolver-transport-wagon"
+    "org.apache.maven.resolver:maven-resolver-transport-wagon",
+    "org.eclipse.sw360:client"
   ],
   "ignorePaths": [
     "**/src/funTest/assets/**",
