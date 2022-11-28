@@ -45,6 +45,30 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         arguments: --scan :reporter-web-app:yarnBuild
+  codeql-analysis:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      security-events: write
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: java
+        tools: latest
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Build all classes
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: -Dorg.gradle.jvmargs=-Xmx1g classes -x :reporter-web-app:yarnBuild
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
   test:
     needs: build
     runs-on: ubuntu-22.04
