@@ -72,7 +72,6 @@ buildConfig {
     buildConfigField("String", "BOYTER_LC_VERSION", "\"$boyterLcVersion\"")
     buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
     buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
-    buildConfigField("String", "SCANOSS_VERSION", "\"${libs.versions.scanoss.get()}\"")
 }
 
 tasks.withType<KotlinCompile>().configureEach {
