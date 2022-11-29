@@ -25,6 +25,8 @@ import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 
+import kotlin.time.Duration.Companion.days
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -33,7 +35,15 @@ import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+
+private val yarnInfoCache = DiskCache(
+    directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
+    maxCacheSizeInBytes = 100L * 1024L * 1024L,
+    maxCacheEntryAgeInSeconds = 7.days.inWholeSeconds
+)
 
 /**
  * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
@@ -72,9 +82,16 @@ class Yarn(
     override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
 
     override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+        yarnInfoCache.read(packageName)?.let { return jsonMapper.readTree(it) }
+
         val process = run(workingDir, "info", "--json", packageName)
-        return jsonMapper.readTree(process.stdout)["data"] ?: jsonMapper.readTree(process.stderr)["data"].also {
-            logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
+
+        return jsonMapper.readTree(process.stdout)["data"]?.also {
+            yarnInfoCache.write(packageName, it.toString())
+        } ?: run {
+            jsonMapper.readTree(process.stderr)["data"].also {
+                logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
+            }
         }
     }
 }
