@@ -300,17 +300,12 @@ private class PackageManagerRunner(
      */
     suspend fun start() {
         if (mustRunAfter.isNotEmpty()) {
-            Analyzer.logger.info {
-                "${manager.managerName} is waiting for the following package managers to complete: " +
-                        mustRunAfter.joinToString(postfix = ".")
-            }
-
             finishedPackageManagersState.first { finishedPackageManagers ->
                 val remaining = mustRunAfter - finishedPackageManagers
 
                 if (remaining.isNotEmpty()) {
                     Analyzer.logger.info {
-                        "${manager.managerName} is still waiting for the following package managers to complete: " +
+                        "${manager.managerName} is waiting for the following package managers to complete: " +
                                 remaining.joinToString(postfix = ".")
                     }
                 }
