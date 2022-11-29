@@ -20,10 +20,12 @@
 package org.ossreviewtoolkit.scanner.scanners.scanoss
 
 import com.scanoss.scanner.BlacklistRules
+import com.scanoss.scanner.Scanner
 import com.scanoss.scanner.Winnowing
 
 import java.io.File
 import java.time.Instant
+import java.util.Properties
 import java.util.UUID
 
 import kotlinx.coroutines.runBlocking
@@ -40,7 +42,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
@@ -68,8 +69,12 @@ class ScanOss internal constructor(
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
 
-    // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
-    override val details = ScannerDetails(name, BuildConfig.SCANOSS_VERSION, "")
+    override val details by lazy {
+        // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
+        val pomProperties = "/META-INF/maven/com.scanoss/scanner/pom.properties"
+        val properties = Scanner::class.java.getResourceAsStream(pomProperties).use { Properties().apply { load(it) } }
+        ScannerDetails(name, properties.getProperty("version"), "")
+    }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.
