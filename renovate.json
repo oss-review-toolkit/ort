@@ -4,6 +4,9 @@
     "config:base",
     "docker:disable"
   ],
+  "batect": {
+    "enabled": false
+  },
   "ignoreDeps": [
     "org.eclipse.sw360:client"
   ],
