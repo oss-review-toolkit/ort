@@ -107,20 +107,17 @@ private val File?.safePath: String
 
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object : Logging {
-        private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
-        private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
-
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
         private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
 
         private val WHITESPACE_REGEX = Regex("\\s")
 
-        private val remoteArtifactCache =
-            DiskCache(
-                ortDataDirectory.resolve("cache/remote_artifacts"),
-                MAX_DISK_CACHE_SIZE_IN_BYTES, MAX_DISK_CACHE_ENTRY_AGE_SECONDS
-            )
+        private val remoteArtifactCache = DiskCache(
+            directory = ortDataDirectory.resolve("cache/remote_artifacts"),
+            maxCacheSizeInBytes = 1024L * 1024L * 1024L,
+            maxCacheEntryAgeInSeconds = 6 * 60 * 60
+        )
 
         private fun createContainer(): PlexusContainer {
             val configuration = DefaultContainerConfiguration().apply {
