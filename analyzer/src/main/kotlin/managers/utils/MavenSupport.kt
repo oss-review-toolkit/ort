@@ -116,7 +116,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         private val WHITESPACE_REGEX = Regex("\\s")
 
         private val remoteArtifactCache = DiskCache(
-            directory = ortDataDirectory.resolve("cache/remote_artifacts"),
+            directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
             maxCacheSizeInBytes = 1024L * 1024L * 1024L,
             maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
         )
