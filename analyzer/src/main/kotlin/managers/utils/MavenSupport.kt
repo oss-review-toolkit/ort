@@ -24,6 +24,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import java.io.File
 import java.util.regex.Pattern
 
+import kotlin.time.Duration.Companion.hours
+
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
@@ -116,7 +118,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         private val remoteArtifactCache = DiskCache(
             directory = ortDataDirectory.resolve("cache/remote_artifacts"),
             maxCacheSizeInBytes = 1024L * 1024L * 1024L,
-            maxCacheEntryAgeInSeconds = 6 * 60 * 60
+            maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
         )
 
         private fun createContainer(): PlexusContainer {
