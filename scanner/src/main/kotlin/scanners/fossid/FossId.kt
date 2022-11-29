@@ -89,7 +89,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * gets a Git repository URL as input and would be a good match for [ProvenanceScannerWrapper].
  */
 class FossId internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration,
     private val config: FossIdConfig
 ) : PackageScannerWrapper {
@@ -171,9 +171,11 @@ class FossId internal constructor(
 
     private val service = FossIdRestService.create(config.serverUrl)
 
+    override val version = service.version
+    override val configuration = ""
     override val criteria: ScannerCriteria? = null
-    override val name: String = "FossId"
-    override val details = ScannerDetails(name, service.version, "")
+
+    val details by lazy { ScannerDetails(name, version, configuration) }
 
     override fun filterSecretOptions(options: Options) =
         options.mapValues { (k, v) ->

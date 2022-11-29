@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
@@ -249,7 +250,7 @@ class ScanController(
             scanners.map { scanner ->
                 ScanResult(
                     provenance = UnknownProvenance,
-                    scanner = scanner.details,
+                    scanner = ScannerDetails(scanner.name, scanner.version, scanner.configuration),
                     summary = ScanSummary(
                         startTime = Instant.now(),
                         endTime = Instant.now(),

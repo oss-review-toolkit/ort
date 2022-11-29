@@ -27,6 +27,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -57,9 +58,12 @@ class Askalono internal constructor(
     }
 
     override val name = "Askalono"
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val expectedVersion = BuildConfig.ASKALONO_VERSION
     override val configuration = ""
+
+    override val criteria by lazy {
+        ScannerCriteria.fromConfig(ScannerDetails(name, version, configuration), scannerConfig)
+    }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)

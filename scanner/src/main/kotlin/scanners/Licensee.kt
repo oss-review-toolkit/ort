@@ -27,6 +27,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -56,9 +57,12 @@ class Licensee internal constructor(
     }
 
     override val name = "Licensee"
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val expectedVersion = BuildConfig.LICENSEE_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
+
+    override val criteria by lazy {
+        ScannerCriteria.fromConfig(ScannerDetails(name, version, configuration), scannerConfig)
+    }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)

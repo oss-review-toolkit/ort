@@ -26,7 +26,6 @@ import kotlin.time.measureTimedValue
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 
@@ -92,16 +91,9 @@ abstract class CommandLinePathScannerWrapper(
     protected val scannerPath by lazy { scannerDir.resolve(command()) }
 
     /**
-     * The configuration used by the scanner, should contain command line options that influence the scan result.
-     */
-    abstract val configuration: String
-
-    /**
      * The actual version of the scanner, or an empty string in case of failure.
      */
-    val version by lazy { getVersion(scannerDir) }
-
-    override val details by lazy { ScannerDetails(name, version, configuration) }
+    override val version by lazy { getVersion(scannerDir) }
 
     /**
      * Bootstrap the scanner to be ready for use, like downloading and / or configuring it.

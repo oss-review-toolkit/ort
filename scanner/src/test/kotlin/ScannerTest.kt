@@ -797,10 +797,13 @@ class ScannerTest : WordSpec({
 private class FakePackageScannerWrapper(
     val packageProvenanceResolver: PackageProvenanceResolver = FakePackageProvenanceResolver(),
     val sourceCodeOriginPriority: List<SourceCodeOrigin> = listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT),
-    name: String = "fake"
+    override val name: String = "fake"
 ) : PackageScannerWrapper {
-    override val details = ScannerDetails(name, "1.0.0", "config")
-    override val name = details.name
+    override val version = "1.0.0"
+    override val configuration = "config"
+
+    val details by lazy { ScannerDetails(name, version, configuration) }
+
     override val criteria: ScannerCriteria? = ScannerCriteria.forDetails(details)
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
@@ -811,8 +814,12 @@ private class FakePackageScannerWrapper(
  * An implementation of [ProvenanceScannerWrapper] that creates empty scan results.
  */
 private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
-    override val details = ScannerDetails("fake", "1.0.0", "config")
-    override val name = details.name
+    override val name = "fake"
+    override val version = "1.0.0"
+    override val configuration = "config"
+
+    val details by lazy { ScannerDetails(name, version, configuration) }
+
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
@@ -823,8 +830,12 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
  * An implementation of [PathScannerWrapper] that creates scan results with one license finding for each file.
  */
 private class FakePathScannerWrapper : PathScannerWrapper {
-    override val details = ScannerDetails("fake", "1.0.0", "config")
-    override val name = details.name
+    override val name = "fake"
+    override val version = "1.0.0"
+    override val configuration = "config"
+
+    val details by lazy { ScannerDetails(name, version, configuration) }
+
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {

@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -506,7 +507,7 @@ class Scanner(
             return scanners.associateWith { scanner ->
                 ScanResult(
                     provenance = provenance,
-                    scanner = scanner.details,
+                    scanner = ScannerDetails(scanner.name, scanner.version, scanner.configuration),
                     summary = summary
                 )
             }
@@ -520,7 +521,7 @@ class Scanner(
 
                 logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
 
-                ScanResult(provenance, scanner.details, summary)
+                ScanResult(provenance, ScannerDetails(scanner.name, scanner.version, scanner.configuration), summary)
             }
         } finally {
             downloadDir.safeDeleteRecursively(force = true)

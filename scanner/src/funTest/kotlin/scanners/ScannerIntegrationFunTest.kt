@@ -89,8 +89,9 @@ class ScannerIntegrationFunTest : StringSpec() {
 
     class DummyScanner : PathScannerWrapper {
         override val name = "Dummy"
-        override val details = ScannerDetails(name = name, version = "1.0.0", configuration = "")
-        override val criteria = ScannerCriteria.forDetails(details)
+        override val version = "1.0.0"
+        override val configuration = ""
+        override val criteria = ScannerCriteria.forDetails(ScannerDetails(name, version, configuration))
 
         override fun scanPath(path: File, context: ScanContext): ScanSummary {
             val licenseFindings = path.listFiles().orEmpty().mapTo(sortedSetOf()) { file ->

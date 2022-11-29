@@ -63,7 +63,7 @@ import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
  *   contain an SPDX expression.
  */
 class ScanCode internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
@@ -103,9 +103,11 @@ class ScanCode internal constructor(
             ScanCode(name, scannerConfig)
     }
 
-    override val name = SCANNER_NAME
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val expectedVersion = BuildConfig.SCANCODE_VERSION
+
+    override val criteria by lazy {
+        ScannerCriteria.fromConfig(ScannerDetails(name, version, configuration), scannerConfig)
+    }
 
     override val configuration by lazy {
         buildList {

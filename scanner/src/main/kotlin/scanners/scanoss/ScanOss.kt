@@ -66,10 +66,13 @@ class ScanOss internal constructor(
 
     private val service = ScanOssService.create(config.apiUrl)
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-
     // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
-    override val details = ScannerDetails(name, BuildConfig.SCANOSS_VERSION, "")
+    override val version = BuildConfig.SCANOSS_VERSION
+    override val configuration = ""
+
+    override val criteria by lazy {
+        ScannerCriteria.fromConfig(ScannerDetails(name, version, configuration), scannerConfig)
+    }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

@@ -33,7 +33,6 @@ import io.mockk.spyk
 import java.io.File
 
 import org.ossreviewtoolkit.model.PackageType
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.ProcessCapture
@@ -114,7 +113,9 @@ class ScanCodeTest : WordSpec({
             every { process.errorMessage } returns "some error message"
 
             val scannerSpy = spyk(scanner)
-            every { scannerSpy.details } returns ScannerDetails("ScanCode", "30.1.0", "")
+            every { scannerSpy.name } returns "ScanCode"
+            every { scannerSpy.version } returns "30.1.0"
+            every { scannerSpy.configuration } returns ""
             every { scannerSpy.runScanCode(any(), any()) } answers {
                 val resultFile = File("src/test/assets/scancode-with-issues.json")
                 val targetFile = secondArg<File>()

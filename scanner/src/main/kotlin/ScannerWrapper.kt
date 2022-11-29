@@ -26,7 +26,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.NamedPlugin
@@ -48,9 +47,14 @@ sealed interface ScannerWrapper {
     val name: String
 
     /**
-     * The details of the scanner.
+     * The version of the scanner.
      */
-    val details: ScannerDetails
+    val version: String
+
+    /**
+     * The configuration of the scanner, could be command line arguments for example.
+     */
+    val configuration: String
 
     /**
      * The [ScannerCriteria] object to be used when looking up existing scan results from a scan storage. By default,
