@@ -45,7 +45,7 @@ class DiskCache(
     /**
      * Duration in seconds that cache entries are valid.
      */
-    private val maxCacheEntryAgeInSeconds: Int
+    private val maxCacheEntryAgeInSeconds: Long
 ) {
     companion object : Logging {
         const val INDEX_FULL_KEY = 0
