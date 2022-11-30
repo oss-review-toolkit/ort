@@ -72,6 +72,10 @@ Files: integrations/completions/*
 Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
+Files: integrations/jenkins/*
+Copyright: 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+License: Apache-2.0
+
 Files: integrations/schemas/*
 Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0

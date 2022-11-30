@@ -37,7 +37,10 @@ longer, but again subsequent scans will be faster thanks to the use of stored sc
 
 Once the pipeline run completes you will see that the "Run ORT evaluator" stage is actually yellow and marked as
 "unstable". This is expected due to the use of a built-in rules resource as an example. The ORT results from the stages
-and the report formats are published as build artifacts.
+and the report formats are published as build artifacts. All in all, a pipeline run for scanning the
+[Semver4j](https://github.com/vdurmont/semver4j) as an example project should look similar to this:
+
+![ORT Pipeline Stage View](pipeline.png)
 
 Now the pipeline is properly configured / initialized and you can click again on *Build with Parameters* to run it
 against VCS repositories Jenkins has (read-)access to. Of course, you can also programmatically trigger the ORT pipeline
