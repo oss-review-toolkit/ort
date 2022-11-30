@@ -218,6 +218,9 @@ ARG RUSTUP_HOME=${RUST_HOME}/rustup
 ARG RUST_VERSION=1.64.0
 RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain ${RUST_VERSION}
 
+FROM scratch AS rust
+COPY --from=rustbuild /opt/rust /opt/rust
+
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
 FROM build AS gobuild
