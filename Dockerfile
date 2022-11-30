@@ -210,7 +210,7 @@ RUN . $NVM_DIR/nvm.sh \
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
-FROM build AS rustbuild
+FROM ort-base-image AS rustbuild
 
 ARG RUST_HOME=/opt/rust
 ARG CARGO_HOME=${RUST_HOME}/cargo
