@@ -464,18 +464,24 @@ pipeline {
                         '''.trim()
 
                         switch (status) {
-                            case 0: if (!fileExists('out/results/scanner/scan-result.yml')) {
-                                sh '''
-                                    mkdir -p out/results/scanner
-                                    cp out/results/current-result.yml out/results/scanner/scan-result.yml
-                                '''.trim()
+                            case 0:
+                                if (!fileExists('out/results/scanner/scan-result.yml')) {
+                                    sh '''
+                                        mkdir -p out/results/scanner
+                                        cp out/results/current-result.yml out/results/scanner/scan-result.yml
+                                    '''.trim()
 
-                                Utils.markStageSkippedForConditional('Run ORT scanner')
-                            }
+                                    Utils.markStageSkippedForConditional('Run ORT scanner')
+                                }
+                                break
 
-                            case { it >= ORT_FAILURE_STATUS_CODE }: unstable("Scanner issues found (exit code $status).")
+                            case { it >= ORT_FAILURE_STATUS_CODE }:
+                                unstable("Scanner issues found (exit code $status).")
+                                break
 
-                            default: error("Error executing the scanner (exit code $status).")
+                            default:
+                                error("Error executing the scanner (exit code $status).")
+                                break
                         }
                     }
 
