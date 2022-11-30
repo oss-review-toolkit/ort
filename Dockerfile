@@ -315,10 +315,12 @@ COPY --chown=$USERNAME:$USERNAME --from=nodebuild ${NVM_DIR} ${NVM_DIR}
 RUN chmod o+rwx ${NVM_DIR}
 
 # Rust
-ARG RUST_HOME=/opt/rust
-ARG CARGO_HOME=${RUST_HOME}/cargo
-COPY --chown=$USERNAME:$USERNAME --from=rustbuild /opt/rust /opt/rust
-COPY docker/rust.sh /etc/profile.d/
+ENV RUST_HOME=/opt/rust
+ENV CARGO_HOME=${RUST_HOME}/cargo
+ENV RUSTUP_HOME=${RUST_HOME}/rustup
+ENV PATH=$PATH:${CARGO_HOME}/bin:${RUSTUP_HOME}/bin
+
+COPY --chown=$USER:$USER --from=rust /opt/rust /opt/rust
 RUN chmod o+rwx ${CARGO_HOME}
 
 # Golang
