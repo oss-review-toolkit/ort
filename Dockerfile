@@ -240,7 +240,6 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
     && curl -L https://dl.google.com/go/go${GO_VERSION}.linux-${arch}.tar.gz | tar -C /opt -xz \
     && curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
-RUN echo "add_local_path /opt/go/bin:\$PATH" > /etc/profile.d/go.sh
 
 FROM scratch AS golang
 COPY --from=gobuild /opt/go /opt/go
@@ -334,8 +333,8 @@ COPY --chown=$USER:$USER --from=rust /opt/rust /opt/rust
 RUN chmod o+rwx ${CARGO_HOME}
 
 # Golang
-COPY --chown=$USERNAME:$USERNAME --from=gobuild /opt/go /opt/go/
-COPY --from=gobuild  /etc/profile.d/go.sh /etc/profile.d/
+ENV PATH=$PATH:/opt/go/bin
+COPY --from=golang /opt/go /opt/go
 
 # Haskell
 COPY --from=haskellbuild /usr/bin/stack /usr/bin
