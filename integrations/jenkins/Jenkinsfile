@@ -473,9 +473,9 @@ pipeline {
                                 Utils.markStageSkippedForConditional('Run ORT scanner')
                             }
 
-                            case { it >= ORT_FAILURE_STATUS_CODE }: unstable('Scanner issues found.')
+                            case { it >= ORT_FAILURE_STATUS_CODE }: unstable("Scanner issues found (exit code $status).")
 
-                            default: error('Error executing the scanner.')
+                            default: error("Error executing the scanner (exit code $status).")
                         }
                     }
 
