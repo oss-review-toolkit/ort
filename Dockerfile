@@ -247,11 +247,13 @@ FROM ort-base-image AS gobuild
 
 ARG GO_DEP_VERSION=0.5.4
 ARG GO_VERSION=1.18.3
-ENV GOPATH=/opt/go
-RUN curl -L https://dl.google.com/go/go${GO_VERSION}.linux-amd64.tar.gz | tar -C /opt -xz
-ENV PATH=/opt/go/bin:$PATH
-RUN go version
-RUN curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
+ENV GOBIN=/opt/go/bin
+ENV PATH=$PATH:/opt/go/bin
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
+    && curl -L https://dl.google.com/go/go${GO_VERSION}.linux-${arch}.tar.gz | tar -C /opt -xz \
+    && curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
 RUN echo "add_local_path /opt/go/bin:\$PATH" > /etc/profile.d/go.sh
 
 #------------------------------------------------------------------------
