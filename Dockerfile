@@ -242,6 +242,9 @@ RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
     && curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
 RUN echo "add_local_path /opt/go/bin:\$PATH" > /etc/profile.d/go.sh
 
+FROM scratch AS golang
+COPY --from=gobuild /opt/go /opt/go
+
 #------------------------------------------------------------------------
 # HASKELL STACK
 FROM build AS haskellbuild
