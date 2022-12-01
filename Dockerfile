@@ -313,6 +313,9 @@ RUN --mount=type=tmpfs,target=/dart \
     && curl -o /dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/${DART_VERSION}/sdk/dartsdk-linux-${arch}-release.zip \
     && unzip /dart/dart.zip
 
+FROM scratch AS dart
+COPY --from=dartbuild ${DART_SDK} ${DART_SDK}
+
 #------------------------------------------------------------------------
 # ORT
 FROM build as ortbuild
