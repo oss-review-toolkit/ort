@@ -297,6 +297,23 @@ FROM scratch AS android
 COPY --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
 
 #------------------------------------------------------------------------
+#  Dart
+FROM ort-base-image AS dartbuild
+
+ARG DART_VERSION=2.18.4
+WORKDIR /opt/
+
+ENV DART_SDK=/opt/dart-sdk
+ENV PATH=$PATH:${DART_SDK}/bin
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN --mount=type=tmpfs,target=/dart \
+    arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) \
+    && curl -o /dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/${DART_VERSION}/sdk/dartsdk-linux-${arch}-release.zip \
+    && unzip /dart/dart.zip
+
+#------------------------------------------------------------------------
 # ORT
 FROM build as ortbuild
 
