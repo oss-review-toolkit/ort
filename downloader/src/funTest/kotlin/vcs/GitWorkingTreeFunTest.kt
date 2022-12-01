@@ -66,7 +66,8 @@ class GitWorkingTreeFunTest : StringSpec({
     "Git correctly lists remote branches" {
         val workingTree = git.getWorkingTree(zipContentDir)
 
-        workingTree.listRemoteBranches() should containExactlyInAnyOrder(
+        // Ignore auto-created branches by Dependabot to avoid regular updates to this list.
+        workingTree.listRemoteBranches().filterNot { it.startsWith("dependabot/") } should containExactlyInAnyOrder(
             "main",
             "pre-commit-ci-update-config"
         )
