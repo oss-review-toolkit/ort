@@ -362,6 +362,11 @@ COPY --from=androidbuild /etc/profile.d/android.sh /etc/profile.d/
 COPY --chown=$USERNAME:$USERNAME --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
 RUN chmod -R o+rw ${ANDROID_HOME}
 
+# Dart
+ENV DART_SDK=/opt/dart-sdk
+ENV PATH=$PATH:${DART_SDK}/bin
+COPY --from=dart ${DART_SDK} ${DART_SDK}
+
 # External repositories for SBT
 ARG SBT_VERSION=1.6.1
 RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" \
@@ -369,19 +374,11 @@ RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A
     && echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list \
     && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubuntu.gpg" > /dev/null
 
-# External repository for Dart
-RUN KEYURL="https://dl-ssl.google.com/linux/linux_signing_key.pub" \
-    && LISTURL="https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list" \
-    && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/dart.gpg" > /dev/null \
-    && curl -ksS "$LISTURL" > /etc/apt/sources.list.d/dart.list \
-    && echo "add_local_path /usr/lib/dart/bin:\$PATH" > /etc/profile.d/dart.sh
-
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        dart \
         php \
         sbt=$SBT_VERSION \
         subversion \
