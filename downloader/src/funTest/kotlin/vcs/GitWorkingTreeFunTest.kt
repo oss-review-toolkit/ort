@@ -24,7 +24,6 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
 
 import java.io.File
 
@@ -45,19 +44,8 @@ class GitWorkingTreeFunTest : StringSpec({
         zipFile.unpack(zipContentDir)
     }
 
-    "Detected Git version is not empty" {
-        val version = git.getVersion()
-        println("Git version $version detected.")
-        version shouldNotBe ""
-    }
-
     "Git detects non-working-trees" {
         git.getWorkingTree(ortDataDirectory).isValid() shouldBe false
-    }
-
-    "Git correctly detects URLs to remote repositories" {
-        git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample.git") shouldBe true
-        git.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe false
     }
 
     "Detected Git working tree information is correct" {

@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.downloader.vcs
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 import io.mockk.every
 import io.mockk.just
@@ -42,19 +43,33 @@ import org.eclipse.jgit.transport.URIish
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class GitTest : WordSpec({
+    // Make sure that the initialization logic runs.
+    val git = Git()
+
     var originalCredentialsProvider: CredentialsProvider? = null
     var originalAuthenticator: Authenticator? = null
 
     beforeSpec {
         originalCredentialsProvider = CredentialsProvider.getDefault()
         originalAuthenticator = Authenticator.getDefault()
-
-        Git() // Make sure that the initialization logic runs.
     }
 
     afterSpec {
         Authenticator.setDefault(originalAuthenticator)
         CredentialsProvider.setDefault(originalCredentialsProvider)
+    }
+
+    "Git" should {
+        "be able to get the version" {
+            val version = git.getVersion()
+            println("Git version $version detected.")
+            version shouldNotBe ""
+        }
+
+        "detect URLs to remote repositories" {
+            git.isApplicableUrl("https://bitbucket.org/yevster/spdxtraxample.git") shouldBe true
+            git.isApplicableUrl("https://hg.sr.ht/~duangle/paniq_legacy") shouldBe false
+        }
     }
 
     "The CredentialsProvider" should {
