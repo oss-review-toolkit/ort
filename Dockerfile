@@ -135,7 +135,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
-FROM build as pythonbuild
+FROM ort-base-image as pythonbuild
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    libreadline-dev \
+    libgdbm-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libbz2-dev \
+    liblzma-dev \
+    tk-dev \
+    && sudo rm -rf /var/lib/apt/lists/*
 
 ARG PYTHON_VERSION=3.10.6
 ARG PYENV_GIT_TAG=v2.3.4
