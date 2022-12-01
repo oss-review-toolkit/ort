@@ -37,6 +37,8 @@ import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
 
+import org.semver4j.Semver
+
 class RequirementsCommand : OrtCommand(
     name = "requirements",
     help = "Check for the command line tools required by ORT."
@@ -120,7 +122,7 @@ class RequirementsCommand : OrtCommand(
                             val actualVersion = tool.getVersion()
                             runCatching {
                                 val isRequiredVersion = tool.getVersionRequirement().let {
-                                    it == CommandLineTool.ANY_VERSION || it.isSatisfiedBy(actualVersion)
+                                    Semver.coerce(actualVersion).satisfies(it)
                                 }
 
                                 if (isRequiredVersion) {
@@ -134,7 +136,7 @@ class RequirementsCommand : OrtCommand(
                                 Pair("\t+ ", "Found version '$actualVersion'.")
                             }
                         }.getOrElse {
-                            if (tool.getVersionRequirement() != CommandLineTool.ANY_VERSION) {
+                            if (!tool.getVersionRequirement().isSatisfiedByAny) {
                                 statusCode = statusCode or 2
                             }
 
@@ -155,7 +157,7 @@ class RequirementsCommand : OrtCommand(
                     append(prefix)
                     append("${tool.javaClass.simpleName}: Requires '${tool.command()}' in ")
 
-                    if (tool.getVersionRequirement() == CommandLineTool.ANY_VERSION) {
+                    if (tool.getVersionRequirement().isSatisfiedByAny) {
                         append("no specific version. ")
                     } else {
                         append("version ${tool.getVersionRequirement()}. ")

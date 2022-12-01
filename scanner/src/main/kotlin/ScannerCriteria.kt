@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.vdurmont.semver4j.Semver
-
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+
+import org.semver4j.Semver
+import org.semver4j.Semver.VersionDiff
 
 /**
  * Definition of a predicate to check whether the configuration of a scanner is compatible with the requirements
@@ -106,14 +107,14 @@ data class ScannerCriteria(
          */
         fun forDetails(
             details: ScannerDetails,
-            versionDiff: Semver.VersionDiff = Semver.VersionDiff.NONE
+            versionDiff: VersionDiff = VersionDiff.NONE
         ): ScannerCriteria {
             val minVersion = Semver(details.version)
 
             val maxVersion = when (versionDiff) {
-                Semver.VersionDiff.NONE, Semver.VersionDiff.SUFFIX, Semver.VersionDiff.BUILD -> minVersion.nextPatch()
-                Semver.VersionDiff.PATCH -> minVersion.nextMinor()
-                Semver.VersionDiff.MINOR -> minVersion.nextMajor()
+                VersionDiff.NONE, VersionDiff.PRE_RELEASE, VersionDiff.BUILD -> minVersion.nextPatch()
+                VersionDiff.PATCH -> minVersion.nextMinor()
+                VersionDiff.MINOR -> minVersion.nextMajor()
                 else -> throw IllegalArgumentException("Invalid version difference $versionDiff")
             }
 

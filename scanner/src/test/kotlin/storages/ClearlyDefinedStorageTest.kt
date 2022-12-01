@@ -29,8 +29,6 @@ import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
@@ -62,6 +60,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+
+import org.semver4j.Semver
 
 private const val PACKAGE_TYPE = "Maven"
 private const val NAMESPACE = "someNamespace"

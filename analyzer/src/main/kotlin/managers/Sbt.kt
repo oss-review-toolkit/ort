@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.vdurmont.semver4j.Requirement
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 import java.nio.file.StandardCopyOption
@@ -42,6 +39,10 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.suppressInput
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -121,11 +122,11 @@ class Sbt(
         return checkForSameSbtVersion(versions)
     }
 
-    override fun getVersionRequirement(): Requirement =
+    override fun getVersionRequirement(): RangesList =
         // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
         // form "make-pom" and to support declaring Maven-style repositories, see
         // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        Requirement.buildIvy("[0.13.0,)")
+        RangesListFactory.create("[0.13.0,)")
 
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()
@@ -202,7 +203,7 @@ class Sbt(
             val sbtVersionRequirement = getVersionRequirement()
             val lowestSbtVersion = checkForSameSbtVersion(versions)
 
-            if (!sbtVersionRequirement.isSatisfiedBy(lowestSbtVersion)) {
+            if (!Semver(lowestSbtVersion).satisfies(sbtVersionRequirement)) {
                 throw IOException(
                     "Unsupported $managerName version $lowestSbtVersion does not fulfill " +
                             "$sbtVersionRequirement."

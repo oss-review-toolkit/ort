@@ -54,7 +54,7 @@ retrofit = "2.9.0"
 retrofitConverterKotlinxSerialization = "0.8.0"
 saxonHe = "11.4"
 scanoss = "1.1.6"
-semver4j = "3.1.0"
+semver4j = "4.1.1"
 springCore = "5.3.24"
 svnkit = "1.10.9"
 sw360Client = "16.0.0-m1"
@@ -144,7 +144,7 @@ retrofitConverterKotlinxSerialization = { module = "com.jakewharton.retrofit:ret
 retrofitConverterScalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 saxonHe = { module = "net.sf.saxon:Saxon-HE", version.ref = "saxonHe" }
 scanoss = { module = "com.scanoss:scanner", version.ref = "scanoss" }
-semver4j = { module = "com.vdurmont:semver4j", version.ref = "semver4j" }
+semver4j = { module = "org.semver4j:semver4j", version.ref = "semver4j" }
 springCore = { module = "org.springframework:spring-core", version.ref = "springCore" }
 svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }

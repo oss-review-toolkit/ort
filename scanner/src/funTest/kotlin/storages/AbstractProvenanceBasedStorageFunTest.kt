@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
@@ -46,6 +44,8 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ProvenanceBasedScanStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+
+import org.semver4j.Semver
 
 abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListener) : WordSpec() {
     private lateinit var storage: ProvenanceBasedScanStorage

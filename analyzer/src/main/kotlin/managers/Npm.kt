@@ -24,8 +24,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 
@@ -80,6 +78,9 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -145,7 +146,7 @@ open class Npm(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "npm.cmd" else "npm"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("6.* - 8.*")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("6.* - 8.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForNpm(definitionFiles).toList()
 

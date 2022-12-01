@@ -23,8 +23,6 @@ package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
@@ -42,6 +40,8 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
+
+import org.semver4j.Semver
 
 internal val SCANCODE_TIMESTAMP_FORMATTER: DateTimeFormatter =
     DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))

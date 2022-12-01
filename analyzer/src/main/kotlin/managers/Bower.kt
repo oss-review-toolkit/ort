@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.SortedSet
 import java.util.Stack
@@ -49,6 +47,9 @@ import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.fieldsOrEmpty
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
@@ -225,7 +226,7 @@ class Bower(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.8.8,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.8.8,)")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

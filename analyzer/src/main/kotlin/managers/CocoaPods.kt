@@ -27,8 +27,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.SortedSet
 
@@ -59,6 +57,9 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 /**
  * The [CocoaPods](https://cocoapods.org/) package manager for Objective-C.
@@ -93,7 +94,7 @@ class CocoaPods(
 
     override fun command(workingDir: File?) = "pod"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.11.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.11.0,)")
 
     override fun getVersionArguments() = "--version --allow-root"
 

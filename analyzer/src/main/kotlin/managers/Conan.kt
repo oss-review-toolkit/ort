@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.SortedSet
 
@@ -56,6 +54,9 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
@@ -114,7 +115,7 @@ class Conan(
         // Conan version 1.18.0
         output.removePrefix("Conan version ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.18.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.18.0,)")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

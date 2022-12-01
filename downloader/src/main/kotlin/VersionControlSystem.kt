@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.downloader
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 import java.util.ServiceLoader
@@ -37,6 +35,8 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.uppercaseFirstChar
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+import org.semver4j.Semver
 
 abstract class VersionControlSystem {
     companion object : Logging {
@@ -404,7 +404,7 @@ abstract class VersionControlSystem {
      * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
      */
     fun isAtLeastVersion(expectedVersion: String): Boolean {
-        val actualVersion = Semver(getVersion(), Semver.SemverType.LOOSE)
-        return actualVersion.isGreaterThanOrEqualTo(expectedVersion)
+        val actualVersion = Semver.coerce(getVersion())
+        return actualVersion.isGreaterThanOrEqualTo(Semver.coerce(expectedVersion))
     }
 }

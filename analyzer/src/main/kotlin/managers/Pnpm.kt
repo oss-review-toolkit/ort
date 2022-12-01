@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -30,6 +28,9 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.realFile
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 /**
  * The [fast, disk space efficient package manager](https://pnpm.io/).
@@ -69,7 +70,7 @@ class Pnpm(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "pnpm.cmd" else "pnpm"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("5.* - 7.*")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("5.* - 7.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForPnpm(definitionFiles).toList()
 
