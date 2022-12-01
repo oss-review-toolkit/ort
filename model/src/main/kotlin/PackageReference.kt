@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.Deque
@@ -43,7 +42,7 @@ data class PackageReference(
     /**
      * The identifier of the package.
      */
-    val id: Identifier,
+    override val id: Identifier,
 
     /**
      * The type of linkage used for the referred package from its dependent package. As most of our supported
@@ -51,20 +50,19 @@ data class PackageReference(
      * default value here to not blow up our result files.
      */
     @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageLinkageValueFilter::class)
-    val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
+    override val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
-     * The list of references to packages this package depends on. Note that this list depends on the scope in
-     * which this package reference is used.
+     * The set of [references to packages][PackageReference] this package depends on. Note that this list depends on the
+     * [scope][Scope] in which this package is referenced.
      */
     val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
     /**
      * A list of [OrtIssue]s that occurred handling this [PackageReference].
      */
-    @JsonAlias("errors")
-    val issues: List<OrtIssue> = emptyList()
-) : Comparable<PackageReference> {
+    override val issues: List<OrtIssue> = emptyList()
+) : Comparable<PackageReference>, DependencyNode {
     /**
      * Return the set of [Identifier]s the package referred by this [PackageReference] transitively depends on,
      * up to and including a depth of [maxDepth] where counting starts at 0 (for the [PackageReference] itself) and 1
@@ -128,4 +126,6 @@ data class PackageReference(
         }
         return transform(copy(dependencies = transformedDependencies.toSortedSet()))
     }
+
+    override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies.asSequence())
 }

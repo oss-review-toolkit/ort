@@ -25,19 +25,16 @@ project:
     dependencies: []
   - name: "requires"
     dependencies:
-    - id: "Conan::OpenSSL:1.0.2o"
+    - id: "Conan::openssl:3.0.0"
       dependencies:
-      - id: "Conan::zlib:1.2.11"
-    - id: "Conan::zlib:1.2.11"
+      - id: "Conan::zlib:1.2.12"
 packages:
-- id: "Conan::OpenSSL:1.0.2o"
-  purl: "pkg:conan/OpenSSL@1.0.2o"
-  authors:
-  - "Conan Community"
+- id: "Conan::openssl:3.0.0"
+  purl: "pkg:conan/openssl@3.0.0"
   declared_licenses:
-  - "OpenSSL"
+  - "Apache-2.0"
   declared_licenses_processed:
-    spdx_expression: "OpenSSL"
+    spdx_expression: "Apache-2.0"
   description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
     \ Layer (SSL) protocols"
   homepage_url: "https://github.com/openssl/openssl"
@@ -47,24 +44,22 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://www.openssl.org/source/openssl-3.0.0.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "59eedfcb46c25214c9bd37ed6078297b4df01d012267fe9e9eee31f61bc70536"
+      algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "http://github.com/conan-community/conan-openssl"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/conan-community/conan-openssl.git"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
-- id: "Conan::zlib:1.2.11"
-  purl: "pkg:conan/zlib@1.2.11"
-  authors:
-  - "Conan Community"
+- id: "Conan::zlib:1.2.12"
+  purl: "pkg:conan/zlib@1.2.12"
   declared_licenses:
   - "Zlib"
   declared_licenses_processed:
@@ -78,17 +73,18 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://zlib.net/fossils/zlib-1.2.12.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "91844808532e5ce316b3c010929493c0244f3d37593afd6de04f71821d5136d9"
+      algorithm: "SHA-256"
   vcs:
-    type: "Git"
-    url: "http://github.com/conan-community/conan-zlib"
+    type: ""
+    url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
-    url: "https://github.com/conan-community/conan-zlib.git"
+    type: ""
+    url: ""
     revision: ""
     path: ""
+  is_modified: true

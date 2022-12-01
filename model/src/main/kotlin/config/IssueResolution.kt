@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,9 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-
 import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 /**
  * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been
@@ -44,11 +43,10 @@ data class IssueResolution(
      */
     val comment: String
 ) {
-    @JsonIgnore
-    private val regex = Regex(message, RegexOption.DOT_MATCHES_ALL)
+    private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
     /**
      * True if [message] matches the message of [issue].
      */
-    fun matches(issue: OrtIssue) = regex.matches(issue.message)
+    fun matches(issue: OrtIssue) = regex.matches(issue.message.collapseWhitespace())
 }

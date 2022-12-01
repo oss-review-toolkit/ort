@@ -1,0 +1,15 @@
+{
+    "name": "testing-pnpm-package-c",
+    "version": "1.0.0",
+    "description": "",
+    "amdName": "packageC",
+    "module": "dist/package-c.module.js",
+    "unpkg": "dist/package-c.umd.js",
+    "sideEffects": false,
+    "keywords": [],
+    "author": "Marcel Bochtler",
+    "license": "ISC",
+    "dependencies": {
+        "long": "^5.2.0"
+    }
+}

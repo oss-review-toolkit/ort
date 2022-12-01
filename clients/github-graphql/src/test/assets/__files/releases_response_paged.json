@@ -1,0 +1,38 @@
+{
+  "data": {
+    "repository": {
+      "releases": {
+        "edges": [
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.4",
+              "name": "Releasing 0.4.4",
+              "publishedAt": "2018-04-12T18:47:35Z",
+              "tagName": "0.4.4",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/1ec03fce40b59e2559e3f3affde27042f1a9b644",
+                "authoredDate": "2018-04-12T18:44:07Z"
+              }
+            }
+          },
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.5",
+              "name": "Releasing 0.4.5 version",
+              "publishedAt": "2018-09-02T06:36:05Z",
+              "tagName": "0.4.5",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/2c935f192846414880b94dd6f4dcb04675c7765d",
+                "authoredDate": "2018-09-02T06:33:23Z"
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "Y3Vyc29yOnYyOpK5MjAyMC0wNi0yM1QxMzoyNzo1NiswMjowMM4BqJGR",
+          "hasNextPage": true
+        }
+      }
+    }
+  }
+}

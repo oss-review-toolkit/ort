@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,24 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-
-import kotlin.reflect.full.memberProperties
-
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * Bundles general Version Control System information.
  */
-@JsonDeserialize(using = VcsInfoDeserializer::class)
 data class VcsInfo(
     /**
      * The type of the VCS, for example Git, GitRepo, Mercurial, etc.
@@ -54,16 +41,8 @@ data class VcsInfo(
     val revision: String,
 
     /**
-     * The VCS-specific revision resolved during downloading from the VCS. In contrast to [revision] this must not
-     * contain symbolic names like branches or tags.
-     */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolvedRevision: String? = null,
-
-    /**
-     * The path inside the VCS to take into account, if any. The actual meaning depends on the VCS type. For
-     * example, for Git only this subdirectory of the repository should be cloned, or for Git Repo it is
-     * interpreted as the path to the manifest file.
+     * The path inside the VCS to take into account. If the VCS supports checking out only a subdirectory, only this
+     * path is checked out.
      */
     val path: String = ""
 ) {
@@ -76,7 +55,6 @@ data class VcsInfo(
             type = VcsType.UNKNOWN,
             url = "",
             revision = "",
-            resolvedRevision = null,
             path = ""
         )
     }
@@ -86,15 +64,12 @@ data class VcsInfo(
      * If in question, information in this instance has precedence over information in the other instance.
      */
     fun merge(other: VcsInfo): VcsInfo {
-        if (this == EMPTY) {
-            return other
-        }
+        if (this == EMPTY) return other
 
         return VcsInfo(
             type.takeUnless { it == EMPTY.type } ?: other.type,
             url.takeUnless { it == EMPTY.url } ?: other.url,
             revision.takeUnless { it == EMPTY.revision } ?: other.revision,
-            resolvedRevision.takeUnless { it == EMPTY.resolvedRevision } ?: other.resolvedRevision,
             path.takeUnless { it == EMPTY.path } ?: other.path
         )
     }
@@ -107,30 +82,10 @@ data class VcsInfo(
     /**
      * Return a [VcsInfoCurationData] with the properties from this [VcsInfo].
      */
-    fun toCuration() = VcsInfoCurationData(type, url, revision, resolvedRevision, path)
+    fun toCuration() = VcsInfoCurationData(type, url, revision, path)
 }
 
-private class VcsInfoDeserializer : StdDeserializer<VcsInfo>(VcsInfo::class.java) {
-    companion object {
-        val KNOWN_FIELDS by lazy { VcsInfo::class.memberProperties.map { PROPERTY_NAMING_STRATEGY.translate(it.name) } }
-    }
-
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): VcsInfo {
-        val node = p.codec.readTree<JsonNode>(p)
-
-        val fields = node.fieldNamesOrEmpty().asSequence().toList()
-        (fields - KNOWN_FIELDS).let { unknownFields ->
-            if (unknownFields.isNotEmpty()) {
-                throw UnrecognizedPropertyException.from(p, VcsInfo::class.java, unknownFields.first(), KNOWN_FIELDS)
-            }
-        }
-
-        return VcsInfo(
-            VcsType(node["type"].textValueOrEmpty()),
-            node["url"].textValueOrEmpty(),
-            node["revision"].textValueOrEmpty(),
-            (node["resolved_revision"] ?: node["resolvedRevision"])?.textValue(),
-            node["path"].textValueOrEmpty()
-        )
-    }
-}
+/**
+ * Return this [VcsInfo] if not null or else [VcsInfo.EMPTY].
+ */
+fun VcsInfo?.orEmpty(): VcsInfo = this ?: VcsInfo.EMPTY

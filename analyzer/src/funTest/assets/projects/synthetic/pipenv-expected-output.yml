@@ -30,25 +30,24 @@ packages:
 - id: "PyPI::click:6.7"
   purl: "pkg:pypi/click@6.7"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "A simple wrapper around optparse for powerful command line utilities."
   homepage_url: "http://github.com/mitsuhiko/click"
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
     hash:
-      value: "5e7a4e296b3212da2ff11017675d7a4d"
-      algorithm: "MD5"
+      value: "29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
     hash:
-      value: "fc4cc00c4863833230d3af92af48abd4"
-      algorithm: "MD5"
+      value: "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -62,7 +61,7 @@ packages:
 - id: "PyPI::flask:1.0"
   purl: "pkg:pypi/flask@1.0"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -76,46 +75,45 @@ packages:
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/55/b1/4365193655df97227ace49311365cc296e74b60c7f5c63d23cd30175e2f6/Flask-1.0-py2.py3-none-any.whl"
     hash:
-      value: "4c0757a5a489d4db8260c6d722c5e6b0"
-      algorithm: "MD5"
+      value: "b1883637bbee4dc7bc98d900792d0a304d609fce0f5bd9ca91d1b6457e5918dd"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/99/ab/eedb921f26adf7057ade1291f9c1bfa35a506d64894f58546457ef658772/Flask-1.0.tar.gz"
     hash:
-      value: "7140df3116386c7af0f389800a91817b"
-      algorithm: "MD5"
+      value: "7fab1062d11dd0038434e790d18c5b9133fd9e6b7257d707c4578ccc1e38b67c"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/flask.git"
     revision: ""
     path: ""
 - id: "PyPI::itsdangerous:0.24"
   purl: "pkg:pypi/itsdangerous@0.24"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD License"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-    mapped:
-      BSD License: "BSD-3-Clause"
+    unmapped:
+    - "BSD License"
   description: "Various helpers to pass trusted data to untrusted environments and\
     \ back."
   homepage_url: "http://github.com/mitsuhiko/itsdangerous"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
+    url: ""
     hash:
-      value: "a3d55aa79369aef5345c036a8a26307f"
-      algorithm: "MD5"
+      value: ""
+      algorithm: ""
   source_artifact:
     url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
     hash:
-      value: "a3d55aa79369aef5345c036a8a26307f"
-      algorithm: "MD5"
+      value: "cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -129,7 +127,7 @@ packages:
 - id: "PyPI::jinja2:2.10.1"
   purl: "pkg:pypi/jinja2@2.10.1"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -144,13 +142,13 @@ packages:
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
     hash:
-      value: "93ca8152bf9ca03214158a49d542402f"
-      algorithm: "MD5"
+      value: "14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
     hash:
-      value: "0ae535be40fd215a8114a090c8b68e5a"
-      algorithm: "MD5"
+      value: "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -164,7 +162,7 @@ packages:
 - id: "PyPI::markupsafe:1.0"
   purl: "pkg:pypi/markupsafe@1.0"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD"
   - "BSD License"
@@ -176,15 +174,15 @@ packages:
   description: "Implements a XML/HTML/XHTML Markup safe string for Python"
   homepage_url: "http://github.com/pallets/markupsafe"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+    url: ""
     hash:
-      value: "2fcedc9284d50e577b5192e8e3578355"
-      algorithm: "MD5"
+      value: ""
+      algorithm: ""
   source_artifact:
     url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
     hash:
-      value: "2fcedc9284d50e577b5192e8e3578355"
-      algorithm: "MD5"
+      value: "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
@@ -198,7 +196,7 @@ packages:
 - id: "PyPI::werkzeug:0.15.3"
   purl: "pkg:pypi/werkzeug@0.15.3"
   authors:
-  - "Armin Ronacher"
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
   - "BSD License"
   - "BSD-3-Clause"
@@ -211,20 +209,20 @@ packages:
   binary_artifact:
     url: "https://files.pythonhosted.org/packages/3d/bf/79101bd1d6a2b3fe0888e8d6e039800b173f26b7388308fc4bcc45de8d0a/Werkzeug-0.15.3-py2.py3-none-any.whl"
     hash:
-      value: "5e1e9fb526428fbafe0eccadc2015a5c"
-      algorithm: "MD5"
+      value: "97660b282aa7e29f94f3fe378e5c7162d7ab9d601a8dbb1cbb2ffc8f0e54607d"
+      algorithm: "SHA-256"
   source_artifact:
     url: "https://files.pythonhosted.org/packages/9c/6d/854f2aa124dcfeb901815492b7fa7f026d114a18784c1c679fbdea36c809/Werkzeug-0.15.3.tar.gz"
     hash:
-      value: "2da857b57e7e4c5b6403369a9d1c15a9"
-      algorithm: "MD5"
+      value: "cfd1281b1748288e59762c0e174d64d8bcb2b70e7c57bc4a1203c8825af24ac3"
+      algorithm: "SHA-256"
   vcs:
     type: ""
     url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/werkzeug.git"
     revision: ""
     path: ""

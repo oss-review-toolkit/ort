@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,21 +23,21 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.spdx.model.LicenseChoice
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * The license choices configured for a repository.
  */
 data class LicenseChoices(
     /**
-     * [LicenseChoice]s that are applied to all packages in the repository.
-     * Since the [LicenseChoice] is applied to each package that offers this license as a choice, [LicenseChoice.given]
-     * can not be null. This helps only applying the choice to a wanted [LicenseChoice.given] as opposed to all
-     * licenses with that choice, which could lead to unwanted applied choices.
+     * [SpdxLicenseChoice]s that are applied to all packages in the repository. As the [SpdxLicenseChoice] is applied to
+     * each package that offers this license as a choice, [SpdxLicenseChoice.given] can not be null. This helps only
+     * applying the choice to a wanted [SpdxLicenseChoice.given] as opposed to all licenses with that choice, which
+     * could lead to unwanted applied choices.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val repositoryLicenseChoices: List<LicenseChoice> = emptyList(),
+    val repositoryLicenseChoices: List<SpdxLicenseChoice> = emptyList(),
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageLicenseChoices: List<PackageLicenseChoice> = emptyList()
@@ -55,10 +55,10 @@ data class LicenseChoices(
 }
 
 /**
- * [LicenseChoice]s defined for an artifact.
+ * [SpdxLicenseChoice]s defined for an artifact.
  */
 data class PackageLicenseChoice(
     val packageId: Identifier,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val licenseChoices: List<LicenseChoice> = emptyList()
+    val licenseChoices: List<SpdxLicenseChoice> = emptyList()
 )

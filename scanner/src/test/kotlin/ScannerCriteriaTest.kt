@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.config.Options
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class ScannerCriteriaTest : WordSpec({
     "ScannerCriteria" should {
@@ -43,7 +45,81 @@ class ScannerCriteriaTest : WordSpec({
         }
     }
 
-    "ScannerCriteria.isCompatible()" should {
+    "ScannerCriteria.forDetails()" should {
+        "create criteria that only match the passed details by default" {
+            val criteria = ScannerCriteria.forDetails(testDetails)
+            val nextPatchVersion = Semver(testDetails.version).nextPatch().toString()
+            val testDetailsForNextPatchVersion = testDetails.copy(version = nextPatchVersion)
+
+            criteria.matches(testDetails) shouldBe true
+            criteria.matches(testDetailsForNextPatchVersion) shouldBe false
+        }
+
+        "can create criteria that match details with respect to a version difference" {
+            val criteria = ScannerCriteria.forDetails(testDetails, Semver.VersionDiff.PATCH)
+            val nextPatchVersion = Semver(testDetails.version).nextPatch().toString()
+            val testDetailsForNextPatchVersion = testDetails.copy(version = nextPatchVersion)
+            val nextMinorVersion = Semver(testDetails.version).nextMinor().toString()
+            val testDetailsForNextMinorVersion = testDetails.copy(version = nextMinorVersion)
+
+            criteria.matches(testDetails) shouldBe true
+            criteria.matches(testDetailsForNextPatchVersion) shouldBe true
+            criteria.matches(testDetailsForNextMinorVersion) shouldBe false
+        }
+    }
+
+    "ScannerCriteria.fromConfig()" should {
+        "obtain default values from the scanner details" {
+            val config = createScannerConfig(emptyMap())
+
+            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+
+            criteria.regScannerName shouldBe SCANNER_NAME
+            criteria.minVersion.originalValue shouldBe SCANNER_VERSION
+            criteria.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
+        }
+
+        "obtain values from the configuration" {
+            val config = createScannerConfig(
+                mapOf(
+                    ScannerCriteria.PROP_CRITERIA_NAME to "foo",
+                    ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1.2.3",
+                    ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "4.5.6"
+                )
+            )
+
+            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+
+            criteria.regScannerName shouldBe "foo"
+            criteria.minVersion.originalValue shouldBe "1.2.3"
+            criteria.maxVersion.originalValue shouldBe "4.5.6"
+        }
+
+        "parse versions in a lenient way" {
+            val config = createScannerConfig(
+                mapOf(
+                    ScannerCriteria.PROP_CRITERIA_MIN_VERSION to "1",
+                    ScannerCriteria.PROP_CRITERIA_MAX_VERSION to "3.7"
+                )
+            )
+
+            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+
+            criteria.minVersion.originalValue shouldBe "1.0.0"
+            criteria.maxVersion.originalValue shouldBe "3.7.0"
+        }
+
+        "use an exact configuration matcher" {
+            val config = createScannerConfig(emptyMap())
+
+            val criteria = ScannerCriteria.fromConfig(testDetails, config)
+
+            criteria.configMatcher(testDetails.configuration) shouldBe true
+            criteria.configMatcher(testDetails.configuration + "_other") shouldBe false
+        }
+    }
+
+    "ScannerCriteria.matches()" should {
         "accept matching details" {
             matchingCriteria.matches(testDetails) shouldBe true
         }
@@ -63,7 +139,7 @@ class ScannerCriteriaTest : WordSpec({
         "detect a scanner version that is too old" {
             val criteria = matchingCriteria.copy(
                 minVersion = matchingCriteria.maxVersion,
-                maxVersion = Semver("2.0.0")
+                maxVersion = Semver("4.0.0")
             )
 
             criteria.matches(testDetails) shouldBe false
@@ -88,8 +164,11 @@ class ScannerCriteriaTest : WordSpec({
     }
 })
 
+private const val SCANNER_NAME = "ScannerCriteriaTest"
+private const val SCANNER_VERSION = "3.2.1-rc2"
+
 /** Test details to match against. */
-private val testDetails = ScannerDetails("ScannerCriteriaTest", "1.2.3.beta-47", "a b c")
+private val testDetails = ScannerDetails(SCANNER_NAME, SCANNER_VERSION, "--command-line-option")
 
 /** A test instance which should accept the test details. */
 private val matchingCriteria = ScannerCriteria(
@@ -98,3 +177,11 @@ private val matchingCriteria = ScannerCriteria(
     maxVersion = Semver(testDetails.version).nextPatch(),
     configMatcher = ScannerCriteria.exactConfigMatcher(testDetails.configuration)
 )
+
+/**
+ * Creates a [ScannerConfiguration] with the given properties for the test scanner.
+ */
+private fun createScannerConfig(properties: Options): ScannerConfiguration {
+    val options = mapOf(SCANNER_NAME to properties)
+    return ScannerConfiguration(options = options)
+}

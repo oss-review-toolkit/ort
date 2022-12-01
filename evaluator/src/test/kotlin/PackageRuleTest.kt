@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,23 +22,34 @@ package org.ossreviewtoolkit.evaluator
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 class PackageRuleTest : WordSpec() {
-    private val ruleSet = RuleSet(ortResult)
+    private val ruleSet = ruleSet(ortResult)
 
     private fun createPackageRule(pkg: Package) =
-        PackageRule(ruleSet, "test", pkg, emptyList(), ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id))
+        PackageRule(
+            ruleSet = ruleSet,
+            name = "test",
+            pkg = CuratedPackage(pkg),
+            resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id)
+        )
 
     private fun PackageRule.createLicenseRule(license: SpdxSingleLicenseExpression, licenseSource: LicenseSource) =
         LicenseRule(
             name = "test",
-            resolvedLicense = resolvedLicenseInfo[license]
-                ?: ResolvedLicense(license, emptySet(), emptyMap(), emptySet()),
+            resolvedLicense = resolvedLicenseInfo[license] ?: ResolvedLicense(
+                license = license,
+                originalDeclaredLicenses = emptySet(),
+                originalExpressions = setOf(ResolvedOriginalExpression(license, licenseSource)),
+                locations = emptySet()
+            ),
             licenseSource = licenseSource
         )
 
@@ -67,6 +78,20 @@ class PackageRuleTest : WordSpec() {
 
             "return false if the package has no license" {
                 val rule = createPackageRule(packageWithoutLicense)
+                val matcher = rule.hasLicense()
+
+                matcher.matches() shouldBe false
+            }
+
+            "return false if the package has only 'not present' licenses" {
+                val rule = createPackageRule(packageWithNotPresentLicense)
+                val matcher = rule.hasLicense()
+
+                matcher.matches() shouldBe false
+            }
+
+            "return false for non-existing packages" {
+                val rule = createPackageRule(Package.EMPTY)
                 val matcher = rule.hasLicense()
 
                 matcher.matches() shouldBe false
@@ -105,17 +130,17 @@ class PackageRuleTest : WordSpec() {
             }
         }
 
-        "isMetaDataOnly()" should {
-            "return true for a package that has only meta data" {
-                val rule = createPackageRule(packageMetaDataOnly)
-                val matcher = rule.isMetaDataOnly()
+        "isMetadataOnly()" should {
+            "return true for a package that has only metadata" {
+                val rule = createPackageRule(packageMetadataOnly)
+                val matcher = rule.isMetadataOnly()
 
                 matcher.matches() shouldBe true
             }
 
-            "return false for a package that has not only meta data" {
+            "return false for a package that has not only metadata" {
                 val rule = createPackageRule(packageWithoutLicense)
-                val matcher = rule.isMetaDataOnly()
+                val matcher = rule.isMetadataOnly()
 
                 matcher.matches() shouldBe false
             }
@@ -170,6 +195,67 @@ class PackageRuleTest : WordSpec() {
 
                     matcher.matches() shouldBe false
                 }
+            }
+        }
+
+        "hasVulnerability()" should {
+            "return true if any vulnerability is found" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability()
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if no vulnerabilities are found" {
+                val rule = createPackageRule(packageWithOnlyDetectedLicense)
+                val matcher = rule.hasVulnerability()
+
+                matcher.matches() shouldBe false
+            }
+
+            "return true if a severity of a vulnerability is higher than the threshold" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability("8.9", "CVSS3") { value, threshold ->
+                    value.toFloat() >= threshold.toFloat()
+                }
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if a severity of a vulnerability is lower than the threshold" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability("9.1", "CVSS3") { value, threshold ->
+                    value.toFloat() >= threshold.toFloat()
+                }
+
+                matcher.matches() shouldBe false
+            }
+
+            "return true if a severity of a vulnerability is the same as the threshold" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability("9.0", "CVSS3") { value, threshold ->
+                    value.toFloat() >= threshold.toFloat()
+                }
+
+                matcher.matches() shouldBe true
+            }
+
+            "return true if a severity of a vulnerability is the same as the threshold without decimals" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability("9", "CVSS3") { value, threshold ->
+                    value.toFloat() >= threshold.toFloat()
+                }
+
+                matcher.matches() shouldBe true
+            }
+
+            "return false if no vulnerability is found for the scoringSystem" {
+                val rule = createPackageRule(packageWithVulnerabilities)
+                val matcher = rule.hasVulnerability("10.0", "fake-scoring-system") { value, threshold ->
+                    value.toFloat() >= threshold.toFloat()
+                }
+
+                matcher.matches() shouldBe false
             }
         }
     }

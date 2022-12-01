@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,14 +24,15 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldNotContain
 import io.kotest.matchers.string.shouldNotStartWith
 import io.kotest.matchers.string.shouldStartWith
 
+import org.ossreviewtoolkit.model.utils.createPurl
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.test.containExactly
 
 class IdentifierTest : WordSpec({
     "String representations" should {
@@ -67,6 +68,21 @@ class IdentifierTest : WordSpec({
             mapping.entries.forAll { (stringRepresentation, identifier) ->
                 Identifier(stringRepresentation) shouldBe identifier
             }
+        }
+
+        "be sorted as expected".config(invocations = 5) {
+            val sorted = listOf(
+                Identifier("Maven:com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre8"),
+                Identifier("Maven:com.microsoft.sqlserver:mssql-jdbc:9.2.1.jre11"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.6.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:5.11.0"),
+                Identifier("Maven:net.java.dev.jna:jna-platform:NOT_A_VERSION"),
+                Identifier("Maven:org.springframework.boot:spring-boot"),
+                Identifier("Maven:org.springframework.boot:spring-boot-actuator")
+            )
+            val unsorted = sorted.shuffled()
+
+            unsorted.sorted() shouldBe sorted
         }
 
         "be serialized correctly" {
@@ -127,7 +143,7 @@ class IdentifierTest : WordSpec({
         "ignore case in type" {
             val purl = Identifier("MaVeN", "namespace", "name", "version").toPurl()
 
-            purl shouldBe purl.toLowerCase()
+            purl shouldBe purl.lowercase()
         }
 
         "use given type if it is not a known package manager" {
@@ -159,6 +175,42 @@ class IdentifierTest : WordSpec({
 
             purl shouldBe "pkg:type/namespace/name@release%20candidate"
         }
+
+        "allow qualifiers" {
+            val purl = createPurl(
+                "type",
+                "namespace",
+                "name",
+                "version",
+                mapOf("argName" to "argValue")
+            )
+
+            purl shouldBe "pkg:type/namespace/name@version?argName=argValue"
+        }
+
+        "allow multiple qualifiers" {
+            val purl = createPurl(
+                "type",
+                "namespace",
+                "name",
+                "version",
+                mapOf("argName1" to "argValue1", "argName2" to "argValue2")
+            )
+
+            purl shouldBe "pkg:type/namespace/name@version?argName1=argValue1&argName2=argValue2"
+        }
+
+        "allow subpath" {
+            val purl = createPurl(
+                "type",
+                "namespace",
+                "name",
+                "version",
+                subpath = "value1/value2"
+            )
+
+            purl shouldBe "pkg:type/namespace/name@version#value1/value2"
+        }
     }
 
     "Checking the organization" should {
@@ -170,6 +222,7 @@ class IdentifierTest : WordSpec({
                     .isFromOrg("ossreviewtoolkit") shouldBe true
                 Identifier("Maven:org.apache:name:version").isFromOrg("apache") shouldBe true
                 Identifier("NPM:@scope:name:version").isFromOrg("scope") shouldBe true
+                Identifier("Maven:example:name:version").isFromOrg("example") shouldBe true
 
                 Identifier("").isFromOrg("ossreviewtoolkit") shouldBe false
                 Identifier("type:namespace:name:version").isFromOrg("ossreviewtoolkit") shouldBe false

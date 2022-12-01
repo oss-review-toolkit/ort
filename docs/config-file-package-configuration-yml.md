@@ -1,8 +1,8 @@
-# The Package Configuration File (Experimental)
+# The Package Configuration File
 
 A package configuration file allows you to define path excludes and license finding curations for a specific package
 (dependency) and provenance. Conceptually, the file is similar to
-[.ort.yml](https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-ort-yml.md), but it is used only for
+[.ort.yml](https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-ort-yml.md), but it is used only for
 packages included via a package manager as project dependencies, and not for the project's own source code repository to
 be scanned.
 
@@ -17,7 +17,7 @@ Use a package configuration file to:
 # Package Configuration File Basics
 
 Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The
-*provenance* can be specified as either a *source artifact* or a *VCS location and revision*. 
+*provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
 
 Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
 
@@ -44,7 +44,7 @@ to fix incorrect scan results, for example if a wrong license was detected, or i
 
 The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file,
 see [excluding paths](config-file-ort-yml.md#excluding-paths) and
-[curating license findings](config-file-ort-yml.md#curating-license-findings) for details.
+[curating license findings](config-file-ort-yml.md#curating-project-license-findings) for details.
 
 ```yaml
   id: "Pip::example-package:0.0.1"
@@ -54,7 +54,7 @@ see [excluding paths](config-file-ort-yml.md#excluding-paths) and
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
@@ -86,7 +86,7 @@ cli/build/install/ort/bin/ort evaluate
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --package-configuration-dir $ORT_CONFIG_DIR/packages
-  --rules-file $ORT_CONFIG_DIR/rules.kts
+  --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
 or to the _reporter_:
@@ -113,7 +113,7 @@ cli/build/install/ort/bin/ort evaluate
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
   --package-configuration-file $ORT_CONFIG_DIR/packages.yml
-  --rules-file $ORT_CONFIG_DIR/rules.kts
+  --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
 or to the _reporter_:
@@ -137,7 +137,7 @@ The code below shows an example for `packages.yml`:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
@@ -151,7 +151,7 @@ The code below shows an example for `packages.yml`:
     reason: "DOCUMENTATION_OF"
     comment: "This directory contains documentation which is not distributed."
   license_finding_curations:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"

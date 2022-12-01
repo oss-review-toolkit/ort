@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>Disclosure Document</title>
+<date>1970-01-01</date>
+<revhistory>
+<revision>
+<revnumber>1.0.0</revnumber>
+<date>1970-01-01</date>
+</revision>
+</revhistory>
+</info>
+<section xml:id="_acknowledgements">
+<title>Acknowledgements</title>
+<simpara>This software includes external packages and source code.
+The applicable license information is listed below:</simpara>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_project_licenses">
+<title>Project Licenses</title>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_dependencies">
+<title>Dependencies</title>
+<simpara>This software depends on external packages and source code.
+The applicable license information is listed below:</simpara>
+<simpara><emphasis role="strong">Dependency</emphasis></simpara>
+<simpara>Package URL: <emphasis>pkg:npm/%40ort/concluded-license@1.0</emphasis></simpara>
+<simpara>The following licenses and copyrights were found in the source code of this package:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>License: <link linkend="_mit_with_libtool_exception">MIT WITH Libtool-exception</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>No copyright found.</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Dependency</emphasis></simpara>
+<simpara>Package URL: <emphasis>pkg:npm/%40ort/declared-license@1.0</emphasis></simpara>
+<simpara>The following licenses and copyrights were found in the source code of this package:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_bsd_3_clause">BSD-3-Clause</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>No copyright found.</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Dependency</emphasis></simpara>
+<simpara>Package URL: <emphasis>pkg:npm/%40ort/license-file@1.0</emphasis></simpara>
+<simpara>The following licenses and copyrights were found in the source code of this package:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+<listitem>
+<simpara>Copyright 2</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Dependency</emphasis></simpara>
+<simpara>Package URL: <emphasis>pkg:npm/%40ort/license-file-and-additional-licenses@1.0</emphasis></simpara>
+<simpara>The following licenses and copyrights were found in the source code of this package:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_bsd_3_clause">BSD-3-Clause</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 3</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+<listitem>
+<simpara>Copyright 2</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Dependency</emphasis></simpara>
+<simpara>Package URL: <emphasis>pkg:npm/%40ort/no-license-file@1.0</emphasis></simpara>
+<simpara>The following licenses and copyrights were found in the source code of this package:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>License: <link linkend="_mit">MIT</link></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Copyright 1</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+</itemizedlist>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<appendix xml:id="_license_texts">
+<title>License Texts</title>
+<section xml:id="_bsd_3_clause">
+<title>BSD-3-Clause</title>
+Copyright 1
+Copyright 3
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+Redistributions of source code must retain the above copyright notice, this list
+of conditions and the following disclaimer.
+
+Redistributions in binary form must reproduce the above copyright notice, this
+list of conditions and the following disclaimer in the documentation and/or
+other materials provided with the distribution.
+
+Neither the name of the ORGANIZATION nor the names of its contributors may be
+used to endorse or promote products derived from this software without specific
+prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS
+BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE
+GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_mit">
+<title>MIT</title>
+Copyright 1
+Copyright 2
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_mit_with_libtool_exception">
+<title>MIT WITH Libtool-exception</title>
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+"Software"), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+As a special exception to the GNU General Public License,
+if you distribute this file as part of a program or library that
+is built using GNU Libtool, you may include this file under the
+same distribution terms that you use for the rest of that program.
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</appendix>
+<section xml:id="_license_files_for_packages">
+<title>License Files for Packages</title>
+
+</section>
+</article>

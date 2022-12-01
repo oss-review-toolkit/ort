@@ -6,11 +6,13 @@
 
 ```shell
 docker run \
-  -v $PWD/:/project  \ # Mount current working directory into /project to use as input.
-  ort --info analyze \
-  -c /project/ort/config.hocon \ # Use file from "<workingdirectory>/ort" as config.
-  analyze (...) # Insert further arguments for the command.
+  -v $PWD/:/project \ # Mount current working directory into /project to use as input.
+  ort --info \
+  -c /project/ort/config.yml \ # Use file from "<workingdirectory>/ort" as config.
+  analyze -i /project [...] # Insert further arguments for the command.
 ```
+
+If only a subproject shall be analyzed, change the input path `-i /project` to `-i /project/subproject`. Note that still the projects root directory needs to be mounted to Docker for ORT to detect VCS information.
 
 **Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell compatibility, as PowerShell otherwise interprets `:` as part of the environment variable. 
 
@@ -50,10 +52,26 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
 
    **Note:** If you receive any authentication errors, double-check this file. The format often shared online with the properties separated by newlines does **not** work with Docker images for ORT, as not all included third-party tools support this format.
 
-2. Mount the `.netrc` into the home directory of the ORT Docker container. By default that is the `/root` directory: 
+2. Mount the `.netrc` into the home directory of the ORT Docker container. By default, that is the `/root` directory: 
    
    ```shell
    docker run -v <workspace_path>:/project -v <netrc_folder_path>/.netrc:/root/.netrc ort --info scan (...)
    ```
 
    **Important:** Ensure that the `.netrc` file has been created at `netrc_folder_path` before running the command, otherwise Docker will create a folder `.netrc` inside the container, instead of mounting a single file.
+
+It is also possible to use `git config` to set up access to private repositories.
+
+1. Configure your `.gitconfig` with your GitHub credentials
+
+    ```shell
+    [url "https://<username>:<password>@github.com"]
+	         insteadOf = https://github.com    
+    ```
+2. Mount the `.gitconfig` into the home directory of the ORT Docker container. By default, that is the `/root` directory:
+
+    ```shell
+    docker run -v <workspace_path>:/project -v <gitconfig_path>:/root/.gitconfig ort --info scan (...)
+    ```
+
+   **Important:** Ensure that the `.gitconfig` file has been created at `gitconfig_path` before running the command, otherwise Docker will create a folder `.gitconfig` inside the container, instead of mounting a single file.

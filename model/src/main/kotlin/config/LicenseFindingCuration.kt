@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.databind.util.StdConverter
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * A curation for a license finding. Use it to correct a license finding or to add a license that was not previously
@@ -60,7 +60,7 @@ data class LicenseFindingCuration(
     val detectedLicense: SpdxExpression? = null,
 
     /**
-     * The concluded license as SPDX expression or [org.ossreviewtoolkit.spdx.SpdxConstants.NONE] for no license,
+     * The concluded license as SPDX expression or [org.ossreviewtoolkit.utils.spdx.SpdxConstants.NONE] for no license,
      * see https://spdx.dev/spdx-specification-21-web-version#h.jxpfx0ykyb60.
      */
     val concludedLicense: SpdxExpression,

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
 /**
  * The default [LicenseInfoProvider] that collects license information from an [ortResult].
@@ -70,7 +70,7 @@ class DefaultLicenseInfoProvider(
                 authors = pkg.authors,
                 licenses = pkg.declaredLicenses,
                 processed = pkg.declaredLicensesProcessed,
-                appliedCurations = curations.filter { it.curation.declaredLicenses != null }
+                appliedCurations = curations.filter { it.curation.declaredLicenseMapping.isNotEmpty() }
             )
         } ?: DeclaredLicenseInfo(
             authors = sortedSetOf(),
@@ -82,7 +82,7 @@ class DefaultLicenseInfoProvider(
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
         val findings = mutableListOf<Findings>()
 
-        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary) ->
+        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary, _) ->
             val (licenseFindingCurations, pathExcludes, relativeFindingsPath) = getConfiguration(id, provenance)
 
             findings += Findings(
@@ -108,10 +108,10 @@ class DefaultLicenseInfoProvider(
                 ortResult.repository.config.excludes.paths,
                 ortResult.repository.getRelativePath(project.vcsProcessed).orEmpty()
             )
-        } ?: packageConfigurationProvider.getPackageConfiguration(id, provenance).let { packageConfiguration ->
+        } ?: packageConfigurationProvider.getPackageConfigurations(id, provenance).let { packageConfigurations ->
             Triple(
-                packageConfiguration?.licenseFindingCurations.orEmpty(),
-                packageConfiguration?.pathExcludes.orEmpty(),
+                packageConfigurations.flatMap { it.licenseFindingCurations },
+                packageConfigurations.flatMap { it.pathExcludes },
                 ""
             )
         }

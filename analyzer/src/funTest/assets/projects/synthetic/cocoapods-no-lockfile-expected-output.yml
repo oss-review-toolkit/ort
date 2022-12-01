@@ -1,0 +1,26 @@
+---
+project:
+  id: "CocoaPods::src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile:"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes: []
+packages: []
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "CocoaPods"
+  message: "Missing lockfile 'src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile.lock'\
+    \ for definition file 'src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile'.\
+    \ The analysis of a Podfile without a lockfile is not supported at all."
+  severity: "ERROR"

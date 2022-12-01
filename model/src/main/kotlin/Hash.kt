@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,21 +19,15 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.DeserializationContext
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.deser.std.StdDeserializer
-
 import java.io.File
 import java.util.Base64
 
-import org.ossreviewtoolkit.utils.toHexString
+import org.ossreviewtoolkit.utils.common.decodeHex
+import org.ossreviewtoolkit.utils.common.encodeHex
 
 /**
  * A class that bundles a hash algorithm with its hash value.
  */
-@JsonDeserialize(using = HashDeserializer::class)
 data class Hash(
     /**
      * The value calculated using the hash algorithm.
@@ -61,7 +55,7 @@ data class Hash(
                 // Support Subresource Integrity (SRI) hashes, see
                 // https://w3c.github.io/webappsec-subresource-integrity/
                 Hash(
-                    value = Base64.getDecoder().decode(splitValue.last()).toHexString(),
+                    value = Base64.getDecoder().decode(splitValue.last()).encodeHex(),
                     algorithm = HashAlgorithm.fromString(splitValue.first())
                 )
             } else {
@@ -82,6 +76,12 @@ data class Hash(
     }
 
     /**
+     * Return the hash in Support Subresource Integrity (SRI) format.
+     */
+    fun toSri() = algorithm.toString().lowercase().replace("sha-", "sha") + "-" +
+            Base64.getEncoder().encodeToString(value.decodeHex())
+
+    /**
      * Verify that the [file] matches this hash.
      */
     fun verify(file: File): Boolean {
@@ -89,23 +89,11 @@ data class Hash(
             "Cannot verify algorithm '$algorithm'. Supported algorithms are ${HashAlgorithm.VERIFIABLE}."
         }
 
-        return algorithm.calculate(file) == value
+        return algorithm.calculate(file).equals(value, ignoreCase = true)
     }
-}
 
-private class HashDeserializer : StdDeserializer<Hash>(Hash::class.java) {
-    override fun deserialize(p: JsonParser, ctxt: DeserializationContext): Hash {
-        val node = p.codec.readTree<JsonNode>(p)
-        return if (node.isTextual) {
-            val hashValue = node.textValue()
-            if (p.nextFieldName() == "hash_algorithm") {
-                val hashAlgorithm = p.nextTextValue()
-                Hash.create(hashValue, hashAlgorithm)
-            } else {
-                Hash.create(hashValue)
-            }
-        } else {
-            Hash.create(node["value"].textValue(), node["algorithm"].textValue())
-        }
-    }
+    /**
+     * Verify that the provided [hash] matches this hash.
+     */
+    fun verify(hash: Hash): Boolean = algorithm == hash.algorithm && value.equals(hash.value, ignoreCase = true)
 }

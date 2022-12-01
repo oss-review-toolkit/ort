@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,33 +30,32 @@ import kotlin.math.max
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
-import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.ossreviewtoolkit.model.Failure
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.Result
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Success
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transactionAsync
 import org.ossreviewtoolkit.model.utils.arrayParam
 import org.ossreviewtoolkit.model.utils.rawParam
 import org.ossreviewtoolkit.model.utils.tilde
-import org.ossreviewtoolkit.scanner.LocalScanner
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResultDao
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val TABLE_NAME = ScanResults.tableName
 
@@ -67,9 +66,14 @@ class PostgresStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    private val dataSource: DataSource
+    private val dataSource: Lazy<DataSource>,
+
+    /**
+     * The number of parallel storage transactions.
+     */
+    private val parallelTransactions: Int
 ) : ScanResultsStorage() {
-    companion object {
+    companion object : Logging {
         /** Expression to reference the scanner version as an array. */
         private const val VERSION_ARRAY =
             "string_to_array(regexp_replace(scan_result->'scanner'->>'version', '[^0-9.]', '', 'g'), '.')"
@@ -78,26 +82,19 @@ class PostgresStorage(
         private const val VERSION_EXPRESSION = "$VERSION_ARRAY::int[]"
     }
 
-    init {
-        setupDatabase()
-    }
+    /** The [Database] instance on which all operations are executed. */
+    private val database by lazy {
+        Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(TABLE_NAME)) {
+                        checkDatabaseEncoding()
 
-    /**
-     * Setup the database.
-     */
-    private fun setupDatabase() {
-        Database.connect(dataSource).apply {
-            defaultFetchSize(1000)
-        }
+                        createMissingTablesAndColumns(ScanResults)
 
-        transaction {
-            withDataBaseLock {
-                if (!tableExists(TABLE_NAME)) {
-                    checkDatabaseEncoding()
-
-                    createMissingTablesAndColumns(ScanResults)
-
-                    createIdentifierAndScannerVersionIndex()
+                        createIdentifierAndScannerVersionIndex()
+                        createScanResultUniqueIndex()
+                    }
                 }
             }
         }
@@ -117,39 +114,48 @@ class PostgresStorage(
             """.trimIndent()
         )
 
-    override fun readInternal(id: Identifier): Result<List<ScanResult>> {
-        @Suppress("TooGenericExceptionCaught")
-        return try {
-            transaction {
-                val scanResults =
-                    ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
+    /**
+     * Create an index that ensures that there is only one scan result for the same identifier, scanner, and provenance.
+     */
+    private fun Transaction.createScanResultUniqueIndex() =
+        exec(
+            """
+            CREATE UNIQUE INDEX scan_result_unique_index
+                ON $TABLE_NAME USING btree
+                (
+                    identifier,
+                    (scan_result->'provenance'),
+                    (scan_result->'scanner')
+                )
+                TABLESPACE pg_default
+            """.trimIndent()
+        )
 
-                Success(scanResults)
+    override fun readInternal(id: Identifier): Result<List<ScanResult>> =
+        runCatching {
+            database.transaction {
+                ScanResultDao.find { ScanResults.identifier eq id.toCoordinates() }.map { it.scanResult }
             }
-        } catch (e: Exception) {
-            when (e) {
-                is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-                    val message = "Could not read scan results for ${id.toCoordinates()} from database: " +
-                            e.collectMessagesAsString()
+                val message = "Could not read scan results for '${id.toCoordinates()}' from database: " +
+                        it.collectMessages()
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw e
+                logger.info { message }
+
+                return Result.failure(ScanStorageException(message))
             }
         }
-    }
 
     override fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
-        @Suppress("TooGenericExceptionCaught")
-        return try {
-            transaction {
-                val scanResults = ScanResultDao.find {
+        return runCatching {
+            database.transaction {
+                ScanResultDao.find {
                     (ScanResults.identifier eq pkg.id.toCoordinates()) and
                             (rawParam("scan_result->'scanner'->>'name'") tilde scannerCriteria.regScannerName) and
                             (rawParam(VERSION_EXPRESSION) greaterEq arrayParam(minVersionArray)) and
@@ -161,39 +167,34 @@ class PostgresStorage(
                     // The scanner compatibility is already checked in the query, but filter here again to be on the
                     // safe side.
                     .filter { scannerCriteria.matches(it.scanner) }
-
-                Success(scanResults)
             }
-        } catch (e: Exception) {
-            when (e) {
-                is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-                    val message = "Could not read scan results for ${pkg.id.toCoordinates()} with " +
-                            "$scannerCriteria from database: ${e.collectMessagesAsString()}"
+                val message = "Could not read scan results for '${pkg.id.toCoordinates()}' with " +
+                        "$scannerCriteria from database: ${it.collectMessages()}"
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw e
+                logger.info { message }
+
+                return Result.failure(ScanStorageException(message))
             }
         }
     }
 
     override fun readInternal(
-        packages: List<Package>,
+        packages: Collection<Package>,
         scannerCriteria: ScannerCriteria
     ): Result<Map<Identifier, List<ScanResult>>> {
-        if (packages.isEmpty()) return Success(emptyMap())
+        if (packages.isEmpty()) return Result.success(emptyMap())
 
         val minVersionArray = with(scannerCriteria.minVersion) { intArrayOf(major, minor, patch) }
         val maxVersionArray = with(scannerCriteria.maxVersion) { intArrayOf(major, minor, patch) }
 
-        @Suppress("TooGenericExceptionCaught")
-        return try {
-            val scanResults = runBlocking(Dispatchers.IO) {
-                packages.chunked(max(packages.size / LocalScanner.NUM_STORAGE_THREADS, 1)).map { chunk ->
-                    suspendedTransactionAsync {
+        return runCatching {
+            runBlocking(Dispatchers.IO) {
+                packages.chunked(max(packages.size / parallelTransactions, 1)).map { chunk ->
+                    database.transactionAsync {
                         @Suppress("MaxLineLength")
                         ScanResultDao.find {
                             (ScanResults.identifier inList chunk.map { it.id.toCoordinates() }) and
@@ -217,45 +218,40 @@ class PostgresStorage(
                             .filter { scannerCriteria.matches(it.scanner) }
                     }
             }
+        }.onFailure {
+            if (it is JsonProcessingException || it is SQLException) {
+                it.showStackTrace()
 
-            Success(scanResults)
-        } catch (e: Exception) {
-            when (e) {
-                is JsonProcessingException, is SQLException -> {
-                    e.showStackTrace()
+                val message = "Could not read scan results with $scannerCriteria from database: " +
+                        it.collectMessages()
 
-                    val message = "Could not read scan results with $scannerCriteria from database: " +
-                            e.collectMessagesAsString()
+                logger.info { message }
 
-                    log.info { message }
-                    Failure(message)
-                }
-                else -> throw e
+                return Result.failure(ScanStorageException(message))
             }
         }
     }
 
     override fun addInternal(id: Identifier, scanResult: ScanResult): Result<Unit> {
-        log.info { "Storing scan result for ${id.toCoordinates()} in storage." }
+        logger.info { "Storing scan result for '${id.toCoordinates()}' in storage." }
 
         // TODO: Check if there is already a matching entry for this provenance and scanner details.
 
-        try {
-            transaction {
+        return runCatching {
+            database.transaction {
                 ScanResultDao.new {
                     identifier = id
                     this.scanResult = scanResult
                 }
             }
-        } catch (e: SQLException) {
-            e.showStackTrace()
+        }.recoverCatching {
+            it.showStackTrace()
 
-            val message = "Could not store scan result for '${id.toCoordinates()}': ${e.collectMessagesAsString()}"
-            log.warn { message }
+            val message = "Could not store scan result for '${id.toCoordinates()}': ${it.collectMessages()}"
 
-            return Failure(message)
-        }
+            logger.warn { message }
 
-        return Success(Unit)
+            throw ScanStorageException(message)
+        }.map { /* Unit */ }
     }
 }

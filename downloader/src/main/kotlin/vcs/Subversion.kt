@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,21 +20,22 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
-import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.net.URI
-import java.net.URL
 import java.nio.file.Paths
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
+import org.ossreviewtoolkit.utils.ort.OrtProxySelector
+import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.tmatesoft.svn.core.SVNDepth
 import org.tmatesoft.svn.core.SVNErrorMessage
@@ -53,6 +53,8 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
+    companion object : Logging
+
     private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {
         setAuthenticationManager(ortAuthManager)
@@ -62,69 +64,11 @@ class Subversion : VersionControlSystem() {
     override val priority = 10
     override val latestRevisionNames = listOf("HEAD")
 
-    override fun getVersion() = Version.getVersionString()
+    override fun getVersion(): String = Version.getVersionString()
 
     override fun getDefaultBranchName(url: String) = "trunk"
 
-    override fun getWorkingTree(vcsDirectory: File) =
-        object : WorkingTree(vcsDirectory, type) {
-            private val directoryNamespaces = listOf("branches", "tags", "trunk", "wiki")
-
-            override fun isValid(): Boolean {
-                if (!workingDir.isDirectory) {
-                    return false
-                }
-
-                return doSvnInfo() != null
-            }
-
-            override fun isShallow() = false
-
-            override fun getRemoteUrl() = doSvnInfo()?.url?.toString().orEmpty()
-
-            override fun getRevision() = doSvnInfo()?.committedRevision?.number?.toString().orEmpty()
-
-            override fun getRootPath() = doSvnInfo()?.workingCopyRoot ?: workingDir
-
-            private fun listRemoteRefs(namespace: String): List<String> {
-                val refs = mutableListOf<String>()
-                val remoteUrl = getRemoteUrl()
-
-                val projectRoot = if (directoryNamespaces.any { "/$it/" in remoteUrl }) {
-                    doSvnInfo()?.repositoryRootURL?.toString().orEmpty()
-                } else {
-                    remoteUrl
-                }
-
-                // We assume a single project directory layout.
-                val svnUrl = SVNURL.parseURIEncoded("$projectRoot/$namespace")
-
-                try {
-                    clientManager.logClient.doList(
-                        svnUrl,
-                        SVNRevision.HEAD,
-                        SVNRevision.HEAD,
-                        /*fetchLocks =*/ false,
-                        /*recursive =*/ false
-                    ) { dirEntry ->
-                        if (dirEntry.name.isNotEmpty()) refs += "$namespace/${dirEntry.relativePath}"
-                    }
-                } catch (e: SVNException) {
-                    e.showStackTrace()
-
-                    log.info { "Unable to list remote refs for $type repository at $remoteUrl." }
-                }
-
-                return refs
-            }
-
-            override fun listRemoteBranches() = listRemoteRefs("branches")
-
-            override fun listRemoteTags() = listRemoteRefs("tags")
-
-            private fun doSvnInfo() =
-                runCatching { clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING) }.getOrNull()
-        }
+    override fun getWorkingTree(vcsDirectory: File) = SubversionWorkingTree(vcsDirectory, type, clientManager)
 
     override fun isApplicableUrlInternal(vcsUrl: String) =
         try {
@@ -134,8 +78,8 @@ class Subversion : VersionControlSystem() {
         } catch (e: SVNException) {
             e.showStackTrace()
 
-            log.debug {
-                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessagesAsString()}"
+            logger.debug {
+                "An exception was thrown when checking $vcsUrl for a $type repository: ${e.collectMessages()}"
             }
 
             false
@@ -178,7 +122,7 @@ class Subversion : VersionControlSystem() {
     }
 
     override fun updateWorkingTree(workingTree: WorkingTree, revision: String, path: String, recursive: Boolean) =
-        try {
+        runCatching {
             revision.toLongOrNull()?.let { numericRevision ->
                 // This code path updates the working tree to a numeric revision.
                 val svnRevision = SVNRevision.create(numericRevision)
@@ -215,7 +159,7 @@ class Subversion : VersionControlSystem() {
                 // Then update the working tree in the current revision along the requested path, and ...
                 updateEmptyPath(workingTree, SVNRevision.HEAD, path)
 
-                // finally deepen only the requested path in the current revision.
+                // Finally, deepen only the requested path in the current revision.
                 clientManager.updateClient.apply { isIgnoreExternals = !recursive }.doUpdate(
                     workingTree.workingDir.resolve(path),
                     SVNRevision.HEAD,
@@ -226,15 +170,15 @@ class Subversion : VersionControlSystem() {
             }
 
             true
-        } catch (e: SVNException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
-                        e.collectMessagesAsString()
+                        it.collectMessages()
             }
-
-            false
+        }.map {
+            revision
         }
 }
 
@@ -246,7 +190,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
     /* privateKey = */ null,
     /* passphrase = */ charArrayOf()
 ) {
-    private val ortProxySelector = installAuthenticatorAndProxySelector()
+    private val ortProxySelector = OrtProxySelector.install().also { OrtAuthenticator.install() }
 
     init {
         authenticationProvider = object : ISVNAuthenticationProvider {
@@ -258,11 +202,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
                 previousAuth: SVNAuthentication?,
                 authMayBeStored: Boolean
             ): SVNAuthentication? {
-                val url = URL(svnurl.toString())
-
-                val auth = Authenticator.getDefault()?.requestPasswordAuthenticationInstance(
-                    svnurl.host, null, svnurl.port, svnurl.protocol, null, null, url, Authenticator.RequestorType.SERVER
-                ) ?: return null
+                val auth = requestPasswordAuthentication(svnurl.host, svnurl.port, svnurl.protocol) ?: return null
 
                 return SVNPasswordAuthentication.newInstance(
                     auth.userName, auth.password, authMayBeStored, svnurl, /* isPartial = */ false

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,27 +20,25 @@
 package org.ossreviewtoolkit.reporter.reporters
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.longs.shouldBeGreaterThan
-
-import kotlin.io.path.createTempDirectory
+import io.kotest.matchers.longs.beInRange
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class WebAppReporterFunTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val ortResult = readOrtResult(
-                "../scanner/src/funTest/assets/file-counter-expected-output-for-analyzer-result.yml"
+                "../scanner/src/funTest/assets/dummy-expected-output-for-analyzer-result.yml"
             )
 
-            val outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile().apply { deleteOnExit() }
+            val outputDir = createTestTempDir()
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 
-            // Do not be more specific here as the web-app report changes quite often still.
-            report.length() shouldBeGreaterThan 0L
+            report.length() should beInRange(1910000L..1920000L)
         }
     }
 })

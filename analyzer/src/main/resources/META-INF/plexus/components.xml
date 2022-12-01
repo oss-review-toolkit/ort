@@ -2,7 +2,6 @@
 
 <component-set>
     <components>
-
         <!--
          | Define empty lifecycle mappings for packaging types that are unknown otherwise.
          | The default packagings (https://maven.apache.org/ref/3.5.2/maven-core/default-bindings.html) are defined by
@@ -102,11 +101,65 @@
         </component>
 
         <!--
+         | GWT (Google Web Toolkit) application (https://github.com/tbroyer/gwt-maven-plugin)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>gwt-app</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
+         | GWT (Google Web Toolkit) library (https://github.com/tbroyer/gwt-maven-plugin)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>gwt-lib</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
          | GlassFish High Availability API (https://mvnrepository.com/artifact/org.glassfish.ha/ha-api/)
          |-->
         <component>
             <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
             <role-hint>hk2-jar</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
+         | Jenkins Plugin (https://jenkins.io/doc/book/managing/plugins/)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>hpi</role-hint>
             <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
             <configuration>
                 <lifecycles>
@@ -138,11 +191,11 @@
         </component>
 
         <!--
-         | Jenkins Plugin (https://jenkins.io/doc/book/managing/plugins/)
+         | Orbit Signed OSGi Bundle (https://www.eclipse.org/orbit/)
          |-->
         <component>
             <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
-            <role-hint>hpi</role-hint>
+            <role-hint>orbit</role-hint>
             <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
             <configuration>
                 <lifecycles>

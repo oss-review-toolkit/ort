@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,92 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException
-import com.fasterxml.jackson.module.kotlin.readValue
-
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containAll
-import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 class VcsInfoTest : WordSpec({
-    "Deserializing VcsInfo" should {
-        "work when all fields are given" {
-            val yaml = """
-                ---
-                type: "type"
-                url: "url"
-                revision: "revision"
-                path: "path"
-                """.trimIndent()
-
-            println(yaml)
-
-            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
-
-            with(vcsInfo) {
-                type shouldBe VcsType("type")
-                url shouldBe "url"
-                revision shouldBe "revision"
-                path shouldBe "path"
-            }
-        }
-
-        "assign empty strings to missing fields when only type is set" {
-            val yaml = """
-                ---
-                type: "type"
-                """.trimIndent()
-
-            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
-
-            with(vcsInfo) {
-                type shouldBe VcsType("type")
-                url shouldBe ""
-                revision shouldBe ""
-                path shouldBe ""
-            }
-        }
-
-        "assign empty strings to missing fields when only path is set" {
-            val yaml = """
-                ---
-                path: "path"
-                """.trimIndent()
-
-            val vcsInfo = yamlMapper.readValue<VcsInfo>(yaml)
-
-            with(vcsInfo) {
-                type shouldBe VcsType.UNKNOWN
-                url shouldBe ""
-                revision shouldBe ""
-                path shouldBe "path"
-            }
-        }
-
-        "fail if the input contains unknown fields" {
-            val yaml = """
-                ---
-                type: "type"
-                url: "url"
-                revision: "revision"
-                resolved_revision: "resolved_revision"
-                path: "path"
-                unknown: "unknown"
-                """.trimIndent()
-
-            val exception = shouldThrow<UnrecognizedPropertyException> {
-                yamlMapper.readValue<VcsInfo>(yaml)
-            }
-
-            with(exception) {
-                propertyName shouldBe "unknown"
-                knownPropertyIds should containAll<Any>("type", "url", "revision", "resolved_revision", "path")
-            }
-        }
-    }
-
     "Merging VcsInfo" should {
         "ignore empty information" {
             val inputA = VcsInfo(
@@ -117,7 +35,6 @@ class VcsInfoTest : WordSpec({
                 type = VcsType("type"),
                 url = "url",
                 revision = "revision",
-                resolvedRevision = "resolvedRevision",
                 path = "path"
             )
 
@@ -125,7 +42,6 @@ class VcsInfoTest : WordSpec({
                 type = VcsType("type"),
                 url = "url",
                 revision = "revision",
-                resolvedRevision = "resolvedRevision",
                 path = "path"
             )
 

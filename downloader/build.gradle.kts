@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,10 +17,6 @@
  * License-Filename: LICENSE
  */
 
-val jgitVersion: String by project
-val jSchAgentProxyVersion: String by project
-val svnkitVersion: String by project
-
 plugins {
     // Apply core plugins.
     `java-library`
@@ -30,18 +25,11 @@ plugins {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":utils"))
+    implementation(project(":utils:ort-utils"))
 
-    implementation("com.jcraft:jsch.agentproxy.jsch:$jSchAgentProxyVersion")
+    implementation(libs.jgit)
+    implementation(libs.jgitSshApacheAgent)
+    implementation(libs.svnkit)
 
-    // Force the generated Maven POM to use the same version of "jsch" Gradle resolves the version conflict to.
-    implementation("com.jcraft:jsch") {
-        version {
-            strictly("0.1.55")
-        }
-    }
-
-    implementation("org.eclipse.jgit:org.eclipse.jgit:$jgitVersion")
-    implementation("org.eclipse.jgit:org.eclipse.jgit.ssh.jsch:$jgitVersion")
-    implementation("org.tmatesoft.svnkit:svnkit:$svnkitVersion")
+    testImplementation(libs.mockk)
 }

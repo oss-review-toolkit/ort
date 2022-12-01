@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,9 +35,9 @@ interface RuleMatcher {
 }
 
 /**
- * A [RuleMatcher] that requires all of the provided [matchers] to match.
+ * A [RuleMatcher] that requires all provided [matchers] to match.
  */
-class AllOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class AllOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "(${matchers.joinToString(" && ") { it.description }})"
 
     override fun matches() = matchers.all { it.matches() }
@@ -46,7 +46,7 @@ class AllOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that requires at least one of the provided [matchers] to match.
  */
-class AnyOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class AnyOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "(${matchers.joinToString(" || ") { it.description }})"
 
     override fun matches() = matchers.any { it.matches() }
@@ -55,7 +55,7 @@ class AnyOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that requires none of the provided [matchers] to match.
  */
-class NoneOf(vararg val matchers: RuleMatcher) : RuleMatcher {
+class NoneOf(private vararg val matchers: RuleMatcher) : RuleMatcher {
     override val description = "!(${matchers.joinToString(" || ") { it.description }})"
 
     override fun matches() = matchers.none { it.matches() }
@@ -64,7 +64,7 @@ class NoneOf(vararg val matchers: RuleMatcher) : RuleMatcher {
 /**
  * A [RuleMatcher] that inverts the result of the provided [matcher].
  */
-class Not(val matcher: RuleMatcher) : RuleMatcher {
+class Not(private val matcher: RuleMatcher) : RuleMatcher {
     override val description = "!(${matcher.description})"
 
     override fun matches() = !matcher.matches()

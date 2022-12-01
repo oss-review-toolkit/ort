@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.model
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldStartWith
 
 import java.io.File
 
@@ -29,13 +31,29 @@ class HashAlgorithmTest : StringSpec({
     // all platforms and in the Git object store.
     val file = File("../LICENSE")
 
-    "Calculating the SHA1 on a file should yield the correct result" {
-        // The expected hash was calculated with "sha1sum".
-        HashAlgorithm.SHA1.calculate(file) shouldBe "92170cdc034b2ff819323ff670d3b7266c8bffcd"
+    "SHA string representations need to contain a dash for MessageDigest compatibility" {
+        enumValues<HashAlgorithm>().filter { it.toString().startsWith("SHA") }.forAll {
+            it.toString() shouldStartWith "SHA-"
+        }
     }
 
-    "Calculating the SHA1-GIT on a file should yield the correct result" {
-        // The expected hash was calculated with "git ls-tree HEAD".
-        HashAlgorithm.SHA1_GIT.calculate(file) shouldBe "8dada3edaf50dbc082c9a125058f25def75e625a"
+    "Calculating the SHA1 on a file should yield the correct result" {
+        // The expected hash was calculated with "sha1sum".
+        HashAlgorithm.SHA1.calculate(file) shouldBe "c00ef43045659b53da5d71d49b8cd7e528c9d55b"
+    }
+
+    "Calculating the SHA1GIT on a file should yield the correct result" {
+        // The expected hash was calculated with "git hash-object".
+        HashAlgorithm.SHA1GIT.calculate(file) shouldBe "3f4d322ebd76de0f1bbb9c867e1f818f5202efd3"
+    }
+
+    "Calculating the SHA1GIT on a resource should yield the correct result" {
+        // The expected hash was calculated with "git hash-object".
+        HashAlgorithm.SHA1GIT.calculate("/licenses/Apache-2.0") shouldBe
+                "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    }
+
+    "Calculating the SHA1GIT on non-existent field should return null" {
+        HashAlgorithm.SHA1GIT.calculate("/license/DOESNOTEXIST") shouldBe null
     }
 })

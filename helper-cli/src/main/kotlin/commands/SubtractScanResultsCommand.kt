@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020-2021 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,54 +25,53 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.mapper
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class SubtractScanResultsCommand : CliktCommand(
     help = "Subtracts the given right-hand side scan results from the given left-hand side scan results. The output " +
             "is written to the given output ORT file."
 ) {
-    private val lhsOrtResultFile by option(
-        "--lhs-ort-result-file",
-        help = "The ORT result containing the left-hand-side scan result."
+    private val lhsOrtFile by option(
+        "--lhs-ort-file",
+        help = "The ORT result containing the left-hand side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val rhsOrtResultFile by option(
-        "--rhs-ort-result-file",
-        help = "The ORT result containing the left-hand-side scan result."
+    private val rhsOrtFile by option(
+        "--rhs-ort-file",
+        help = "The ORT result containing the right-hand side scan result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val outputOrtResultFile by option(
-        "--output-ort-result-file",
-        help = "The ORT result containing the left-hand-side scan result."
+    private val outputOrtFile by option(
+        "--output-ort-file",
+        help = "The file to write the output ORT result to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
         .required()
 
     override fun run() {
-        val lhsOrtResult = lhsOrtResultFile.readValue<OrtResult>()
-        val rhsOrtResult = rhsOrtResultFile.readValue<OrtResult>()
+        val lhsOrtResult = readOrtResult(lhsOrtFile)
+        val rhsOrtResult = readOrtResult(rhsOrtFile)
 
-        val rhsScanSummaries = rhsOrtResult.scanner!!.results.scanResults.flatMap { it.value }.associateBy(
+        val rhsScanSummaries = rhsOrtResult.scanner!!.scanResults.flatMap { it.value }.associateBy(
             keySelector = { it.provenance.key() },
             valueTransform = { it.summary }
         )
 
-        val scanResults = lhsOrtResult.scanner!!.results.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
+        val scanResults = lhsOrtResult.scanner!!.scanResults.mapValuesTo(sortedMapOf()) { (_, results) ->
             results.map { lhsScanResult ->
                 val lhsSummary = lhsScanResult.summary
                 val rhsSummary = rhsScanSummaries[lhsScanResult.provenance.key()]
@@ -81,15 +80,13 @@ internal class SubtractScanResultsCommand : CliktCommand(
             }
         }
 
-       val result = lhsOrtResult.copy(
-           scanner = lhsOrtResult.scanner!!.copy(
-               results = lhsOrtResult.scanner!!.results.copy(
-                    scanResults = scanResults
-               )
-           )
-       )
+        val result = lhsOrtResult.copy(
+            scanner = lhsOrtResult.scanner!!.copy(
+                scanResults = scanResults
+            )
+        )
 
-       outputOrtResultFile.mapper().writerWithDefaultPrettyPrinter().writeValue(outputOrtResultFile, result)
+        writeOrtResult(result, outputOrtFile)
     }
 }
 

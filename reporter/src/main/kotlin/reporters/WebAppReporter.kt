@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,12 +29,23 @@ import org.apache.commons.compress.compressors.gzip.GzipParameters
 
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.model.EvaluatedModel
+import org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModel
 
 private const val PLACEHOLDER = "ORT_REPORT_DATA_PLACEHOLDER"
 
+/**
+ * A [Reporter] that generates a web application that allows browsing an ORT result interactively.
+ *
+ * This reporter supports the following options:
+ * - *deduplicateDependencyTree*: Controls whether subtrees occurring multiple times in the dependency tree are
+ *   stripped.
+ */
 class WebAppReporter : Reporter {
-    override val reporterName = "WebApp"
+    companion object {
+        const val OPTION_DEDUPLICATE_DEPENDENCY_TREE = "deduplicateDependencyTree"
+    }
+
+    override val name = "WebApp"
 
     private val reportFilename = "scan-report-web-app.html"
 
@@ -43,8 +54,8 @@ class WebAppReporter : Reporter {
         outputDir: File,
         options: Map<String, String>
     ): List<File> {
-        val template = javaClass.classLoader.getResource("scan-report-template.html").readText()
-        val evaluatedModel = EvaluatedModel.create(input)
+        val template = javaClass.getResource("/scan-report-template.html").readText()
+        val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
 
         val index = template.indexOf(PLACEHOLDER)
         val prefix = template.substring(0, index)

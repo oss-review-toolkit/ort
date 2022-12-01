@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,61 +19,65 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageCurationResult
 import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
-import org.ossreviewtoolkit.spdx.enumSetOf
+import org.ossreviewtoolkit.utils.common.enumSetOf
 
 /**
- * A [Rule] to check a single [dependency][PackageReference].
+ * A [Rule] to check a single [dependency][DependencyNode].
  */
 class DependencyRule(
     ruleSet: RuleSet,
     name: String,
-    pkg: Package,
-    curations: List<PackageCurationResult>,
+    pkg: CuratedPackage,
     resolvedLicenseInfo: ResolvedLicenseInfo,
 
     /**
-     * The [dependency][PackageReference] to check.
+     * The [dependency][DependencyNode] to check.
      */
-    val dependency: PackageReference,
+    val dependency: DependencyNode,
 
     /**
-     * The ancestors of the [dependency] in the dependency tree. The first entry is the root of the tree, the last entry
-     * (at [level] - 1) is the direct parent.
+     * The ancestors of the [dependency] in the dependency tree, sorted from farthest to closest: The first entry is the
+     * direct dependency of a project, the last entry (at index `level - 1`) is a direct parent of this [dependency].
+     * If the list is empty it means that this dependency is a direct dependency.
      */
-    val ancestors: List<PackageReference>,
+    val ancestors: List<DependencyNode>,
 
     /**
-     * The level of the [dependency] inside the dependency tree. Starts with 0 for root level entries.
+     * The level of the [dependency] inside the dependency tree. Starts with 0 for a direct dependency of a project.
      */
     val level: Int,
 
     /**
-     * The [Scope] that contains the [dependency].
+     * The [name][scopeName] of the scope that contains the [dependency].
      */
-    val scope: Scope,
+    val scopeName: String,
 
     /**
      * The [Project] that contains the [dependency].
      */
     val project: Project
-) : PackageRule(ruleSet, name, pkg, curations, resolvedLicenseInfo) {
+) : PackageRule(ruleSet, name, pkg, resolvedLicenseInfo) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
-                "(project=${project.id.toCoordinates()}, scope=${scope.name}, level=$level)."
+                "(project=${project.id.toCoordinates()}, scope=$scopeName, level=$level)."
 
     override fun issueSource() =
-        "$name - ${pkg.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope ${scope.name})"
+        "$name - ${pkg.metadata.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"
 
     /**
-     * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level].
+     * Return the direct dependencies of the [dependency].
+     */
+    fun directDependencies() = dependency.visitDependencies { it.toList() }
+
+    /**
+     * A [RuleMatcher] that checks if the level of the [dependency] inside the dependency tree equals [level], which
+     * starts with 0 for a direct dependency.
      */
     fun isAtTreeLevel(level: Int) =
         object : RuleMatcher {

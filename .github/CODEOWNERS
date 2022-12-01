@@ -1,9 +1,12 @@
 # Note that patterns are not cumulative. So order is important as only the
-# last matching pattern is used.
+# last matching pattern is used, see
+# https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-repository-on-github/about-code-owners#codeowners-syntax
 
 * @oss-review-toolkit/kotlin-devs
 *.md @oss-review-toolkit/core-devs
 /**/*Sw360* @oss-review-toolkit/kotlin-devs @bs-ondem @oheger-bosch
 /advisor/ @oss-review-toolkit/kotlin-devs @MarcelBochtler @oheger-bosch
+/clients/fossid-webapp/ @oss-review-toolkit/kotlin-devs @nnobelis
 /reporter-web-app/ @tsteenbe
 /spdx-utils/src/main/ @oss-review-toolkit/core-devs
+/LICENSE @oss-review-toolkit/core-devs

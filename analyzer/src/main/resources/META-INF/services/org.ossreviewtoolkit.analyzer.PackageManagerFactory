@@ -2,6 +2,7 @@ org.ossreviewtoolkit.analyzer.managers.Bower$Factory
 org.ossreviewtoolkit.analyzer.managers.Bundler$Factory
 org.ossreviewtoolkit.analyzer.managers.Cargo$Factory
 org.ossreviewtoolkit.analyzer.managers.Carthage$Factory
+org.ossreviewtoolkit.analyzer.managers.CocoaPods$Factory
 org.ossreviewtoolkit.analyzer.managers.Composer$Factory
 org.ossreviewtoolkit.analyzer.managers.Conan$Factory
 org.ossreviewtoolkit.analyzer.managers.DotNet$Factory
@@ -13,8 +14,12 @@ org.ossreviewtoolkit.analyzer.managers.Npm$Factory
 org.ossreviewtoolkit.analyzer.managers.NuGet$Factory
 org.ossreviewtoolkit.analyzer.managers.Pip$Factory
 org.ossreviewtoolkit.analyzer.managers.Pipenv$Factory
+org.ossreviewtoolkit.analyzer.managers.Pnpm$Factory
+org.ossreviewtoolkit.analyzer.managers.Poetry$Factory
 org.ossreviewtoolkit.analyzer.managers.Pub$Factory
 org.ossreviewtoolkit.analyzer.managers.Sbt$Factory
 org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile$Factory
 org.ossreviewtoolkit.analyzer.managers.Stack$Factory
+org.ossreviewtoolkit.analyzer.managers.Unmanaged$Factory
 org.ossreviewtoolkit.analyzer.managers.Yarn$Factory
+org.ossreviewtoolkit.analyzer.managers.Yarn2$Factory

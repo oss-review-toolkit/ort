@@ -1,0 +1,32 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "curl-7.70.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-curl"
+documentDescribes:
+- "SPDXRef-Package-curl"
+packages:
+- SPDXID: "SPDXRef-Package-curl"
+  description: "A command line tool and library for transferring data with URL syntax, supporting \
+    HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \
+    IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad of powerful features."
+  copyrightText: "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
+    contributors, see the THANKS file."
+  downloadLocation: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
+  filesAnalyzed: false
+  homepage: "https://curl.haxx.se/"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "curl"
+  name: "curl"
+  versionInfo: "7.70.0"
+  originator: "Person: Daniel Stenberg (daniel@haxx.se)"

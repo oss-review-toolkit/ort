@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,13 +31,41 @@ import java.time.Instant
 class AdvisorResultContainerTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val vulnerability11 = Vulnerability("CVE-11", 1.1F, URI("https://1.1.com"))
-    private val vulnerability12 = Vulnerability("CVE-12", 1.2F, URI("https://1.2.com"))
-    private val vulnerability21 = Vulnerability("CVE-21", 2.1F)
-    private val vulnerability22 = Vulnerability("CVE-22", 2.2F)
+    private val vulnerability11 = Vulnerability(
+        id = "CVE-11",
+        references = listOf(VulnerabilityReference(URI("https://src1.example.org"), "score1", "5"))
+    )
+    private val vulnerability12 = Vulnerability(
+        id = "CVE-12",
+        references = listOf(VulnerabilityReference(URI("https://src2.example.org"), "score1", "7"))
+    )
+    private val vulnerability21 = Vulnerability(
+        id = "CVE-21",
+        references = listOf(VulnerabilityReference(URI("https://src3.example.org"), "score2", "medium"))
+    )
+    private val vulnerability22 = Vulnerability(
+        id = "CVE-22",
+        references = listOf(VulnerabilityReference(URI("https://src1.example.org"), "score2", "low"))
+    )
 
     private val vulnerabilities1 = listOf(vulnerability11, vulnerability12)
     private val vulnerabilities2 = listOf(vulnerability21, vulnerability22)
+
+    private val defects = listOf(
+        Defect(
+            "defect1",
+            URI("https://defects.example.org/d1"),
+            "Some bug",
+            creationTime = Instant.parse("2021-09-23T11:28:33.123Z")
+        ),
+        Defect(
+            "defect2",
+            URI("https://defects.example.org/d2"),
+            "Another bug",
+            severity = "ugly",
+            labels = mapOf("backend" to "true", "expensive" to "true")
+        )
+    )
 
     private val advisorDetails1 = AdvisorDetails("name 1")
     private val advisorDetails2 = AdvisorDetails("name 2")
@@ -54,19 +81,19 @@ class AdvisorResultContainerTest : WordSpec() {
     private val issue22 = OrtIssue(source = "source-22", message = "issue-22")
 
     private val advisorSummary1 = AdvisorSummary(
-            advisorStartTime1,
-            advisorEndTime1,
-            mutableListOf(issue11, issue12)
+        advisorStartTime1,
+        advisorEndTime1,
+        mutableListOf(issue11, issue12)
     )
 
     private val advisorSummary2 = AdvisorSummary(
-            advisorStartTime2,
-            advisorEndTime2,
-            mutableListOf(issue21, issue22)
+        advisorStartTime2,
+        advisorEndTime2,
+        mutableListOf(issue21, issue22)
     )
 
-    private val advisorResult1 = AdvisorResult(vulnerabilities1, advisorDetails1, advisorSummary1)
-    private val advisorResult2 = AdvisorResult(vulnerabilities2, advisorDetails2, advisorSummary2)
+    private val advisorResult1 = AdvisorResult(advisorDetails1, advisorSummary1, vulnerabilities = vulnerabilities1)
+    private val advisorResult2 = AdvisorResult(advisorDetails2, advisorSummary2, defects, vulnerabilities2)
 
     private val advisorResults = AdvisorResultContainer(id, listOf(advisorResult1, advisorResult2))
 

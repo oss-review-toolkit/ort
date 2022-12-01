@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,13 +19,11 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.nio.file.FileSystems
-import java.nio.file.Paths
-
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.licenses.LicenseFindingCurationResult
-import org.ossreviewtoolkit.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 /**
  * A class for matching and applying [LicenseFindingCuration]s to [LicenseFinding]s.
@@ -35,10 +33,10 @@ class FindingCurationMatcher {
         finding: LicenseFinding,
         curation: LicenseFindingCuration,
         relativeFindingPath: String
-    ): Boolean =
-        FileSystems.getDefault()
-            .getPathMatcher("glob:${curation.path}")
-            .matches(Paths.get(finding.location.prependPath(relativeFindingPath)))
+    ): Boolean = FileMatcher.match(
+        pattern = curation.path,
+        path = finding.location.prependPath(relativeFindingPath)
+    )
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
         curation.startLines.isEmpty() || curation.startLines.any { it == finding.location.startLine }
@@ -70,9 +68,11 @@ class FindingCurationMatcher {
         curation: LicenseFindingCuration,
         relativeFindingPath: String = ""
     ): LicenseFinding? =
-        if (!matches(finding, curation, relativeFindingPath)) finding
-        else if (curation.concludedLicense.toString() == SpdxConstants.NONE) null
-        else finding.copy(license = curation.concludedLicense)
+        when {
+            !matches(finding, curation, relativeFindingPath) -> finding
+            curation.concludedLicense.toString() == SpdxConstants.NONE -> null
+            else -> finding.copy(license = curation.concludedLicense)
+        }
 
     /**
      * Applies the given [curations] to the given [findings]. In case multiple curations match any given finding all

@@ -1,0 +1,28 @@
+[
+  {
+    "coordinates": "pkg:maven/org.hamcrest/hamcrest-core@1.3",
+    "description": "This is the core API of hamcrest matcher framework \n\t\tto be used by third-party framework providers. \n\t\tThis includes the a foundation set of matcher\n\t\timplementations for common operations.",
+    "reference": "https://ossindex.sonatype.org/component/pkg:maven/org.hamcrest/hamcrest-core@1.3?utm_source=mozilla&utm_medium=integration&utm_content=5.0",
+    "vulnerabilities": []
+  },
+  {
+    "coordinates": "pkg:maven/junit/junit@4.12",
+    "description": "JUnit is a regression testing framework written by Erich Gamma and Kent Beck.\n        It is used by the developer who implements unit tests in Java.",
+    "reference": "https://ossindex.sonatype.org/component/pkg:maven/junit/junit@4.12?utm_source=mozilla&utm_medium=integration&utm_content=5.0",
+    "vulnerabilities": [
+      {
+        "id": "7ea56ad4-8a8b-4e51-8ed9-5aad83d8efb1",
+        "displayName": "CVE-2020-15250",
+        "title": "[CVE-2020-15250] In JUnit4 from version 4.7 and before 4.13.1,...",
+        "description": "In JUnit4 from version 4.7 and before 4.13.1, the test...",
+        "cvssScore": 5.5,
+        "cvssVector": "CVSS:3.0/AV:L/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N",
+        "cve": "CVE-2020-15250",
+        "reference": "https://ossindex.sonatype.org/vulnerability/7ea56ad4-8a8b-4e51-8ed9-5aad83d8efb1?component-type=maven&component-name=junit.junit&utm_source=mozilla&utm_medium=integration&utm_content=5.0",
+        "externalReferences": [
+          "https://nvd.nist.gov/vuln/detail/CVE-2020-15250"
+        ]
+      }
+    ]
+  }
+]

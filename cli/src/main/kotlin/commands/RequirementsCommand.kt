@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
@@ -26,14 +26,14 @@ import java.io.File
 import java.lang.reflect.Modifier
 
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.Scanner
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 
 import org.reflections.Reflections
 
@@ -47,20 +47,19 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
         classes.filterNot {
             Modifier.isAbstract(it.modifiers) || it.isAnonymousClass || it.isLocalClass
         }.sortedBy { it.simpleName }.forEach {
-            @Suppress("TooGenericExceptionCaught")
-            try {
+            runCatching {
                 val kotlinObject = it.kotlin.objectInstance
 
                 var category = "Other tool"
                 val instance = when {
                     kotlinObject != null -> {
-                        log.debug { "$it is a Kotlin object." }
+                        logger.debug { "$it is a Kotlin object." }
                         kotlinObject
                     }
 
                     PackageManager::class.java.isAssignableFrom(it) -> {
                         category = "PackageManager"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
                             File::class.java,
@@ -69,29 +68,28 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                         ).newInstance(
                             "",
                             File(""),
-                            AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
+                            AnalyzerConfiguration(),
                             RepositoryConfiguration()
                         )
                     }
 
-                    Scanner::class.java.isAssignableFrom(it) -> {
+                    CommandLinePathScannerWrapper::class.java.isAssignableFrom(it) -> {
                         category = "Scanner"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor(
                             String::class.java,
-                            ScannerConfiguration::class.java,
-                            DownloaderConfiguration::class.java
-                        ).newInstance("", ScannerConfiguration(), DownloaderConfiguration())
+                            ScannerConfiguration::class.java
+                        ).newInstance("", ScannerConfiguration())
                     }
 
                     VersionControlSystem::class.java.isAssignableFrom(it) -> {
                         category = "VersionControlSystem"
-                        log.debug { "$it is a $category." }
+                        logger.debug { "$it is a $category." }
                         it.getDeclaredConstructor().newInstance()
                     }
 
                     else -> {
-                        log.debug { "Trying to instantiate $it without any arguments." }
+                        logger.debug { "Trying to instantiate $it without any arguments." }
                         it.getDeclaredConstructor().newInstance()
                     }
                 }
@@ -99,8 +97,8 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                 if (instance.command().isNotEmpty()) {
                     allTools.getOrPut(category) { mutableListOf() } += instance
                 }
-            } catch (e: Exception) {
-                log.error { "There was an error instantiating $it: $e." }
+            }.onFailure { e ->
+                logger.error { "There was an error instantiating $it: $e." }
                 throw ProgramResult(1)
             }
         }
@@ -114,7 +112,7 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
             tools.forEach { tool ->
                 // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
-                    val (prefix, suffix) = if (tool.isInPath()) {
+                    val (prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
                         runCatching {
                             val actualVersion = tool.getVersion()
                             runCatching {
@@ -133,12 +131,18 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
                                 Pair("\t+ ", "Found version '$actualVersion'.")
                             }
                         }.getOrElse {
-                            statusCode = statusCode or 2
+                            if (tool.getVersionRequirement() != CommandLineTool.ANY_VERSION) {
+                                statusCode = statusCode or 2
+                            }
+
                             Pair("\t+ ", "Could not determine the version.")
                         }
                     } else {
-                        // Tolerate scanners to be missing as they can be bootstrapped.
-                        if (category != "Scanner") {
+                        // Tolerate scanners and Pub to be missing as they can be bootstrapped.
+                        // Tolerate Yarn2 because it is provided in code repositories that use it.
+                        if (category != "Scanner" && tool.javaClass.simpleName != "Pub"
+                            && tool.javaClass.simpleName != "Yarn2"
+                        ) {
                             statusCode = statusCode or 4
                         }
 
@@ -167,6 +171,13 @@ class RequirementsCommand : CliktCommand(help = "Check for the command line tool
         println("\t- The tool was not found in the PATH environment.")
         println("\t+ The tool was found in the PATH environment, but not in the required version.")
         println("\t* The tool was found in the PATH environment in the required version.")
+
+        println()
+        if (scanCodeLicenseTextDir != null) {
+            println("ScanCode license texts found in '$scanCodeLicenseTextDir'.")
+        } else {
+            println("ScanCode license texts not found.")
+        }
 
         if (statusCode != 0) {
             println()

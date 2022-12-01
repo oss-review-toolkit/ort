@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,19 +19,19 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
- * A generic descriptor for a software package. It contains all relevant meta-data about a package like the name,
+ * A generic descriptor for a software package. It contains all relevant metadata about a package like the name,
  * version, and how to retrieve the package and its source code. It does not contain information about the package's
  * dependencies, however. This is because at this stage we would only be able to get the declared dependencies, whereas
  * we are interested in the resolved dependencies. Resolved dependencies might differ from declared dependencies due to
@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
  * dependency resolution process. For example, if multiple versions of the same package are used in a project, the build
  * system might decide to align on a single version of that package.
  */
-@JsonIgnoreProperties(value = ["purl"], allowGetters = true)
 data class Package(
     /**
      * The unique identifier of this package. The [id]'s type is the name of the package type or protocol (e.g. "Maven"
@@ -53,17 +52,20 @@ data class Package(
     val purl: String = id.toPurl(),
 
     /**
-     * The list of authors declared for this package.
-     *
-     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
-     *       accordingly.
+     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val cpe: String? = null,
+
+    /**
+     * The set of authors declared for this package.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
-     * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
-     * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
+     * The set of licenses declared for this package. This does not necessarily correspond to the licenses as detected
+     * by a scanner. Both need to be taken into account for any conclusions.
      */
     val declaredLicenses: SortedSet<String>,
 
@@ -74,8 +76,8 @@ data class Package(
     val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
     /**
-     * The concluded license as an [SpdxExpression]. It can be used to correct the license of a package in case the
-     * [declaredLicenses] found in the packages metadata or the licenses detected by a scanner do not match reality.
+     * The concluded license as an [SpdxExpression]. It can be used to override the [declared][declaredLicenses] /
+     * [detected][LicenseFinding.license] licenses of a package.
      *
      * ORT itself does not set this field, it needs to be set by the user using a [PackageCuration].
      */
@@ -103,24 +105,27 @@ data class Package(
     val sourceArtifact: RemoteArtifact,
 
     /**
-     * Original VCS-related information as defined in the [Package]'s meta-data.
+     * Original VCS-related information as defined in the package's metadata.
      */
     val vcs: VcsInfo,
 
     /**
-     * Processed VCS-related information about the [Package] that has e.g. common mistakes corrected.
+     * Processed VCS-related information about the package in normalized form. The information is either derived from
+     * [vcs], guessed from additional data as a fallback, or empty. On top of that [PackageCuration]s may have been
+     * applied.
      */
     val vcsProcessed: VcsInfo = vcs.normalize(),
 
     /**
-     * Indicates whether this [Package] is just meta data, like e.g. Maven BOM artifacts which only define constraints
+     * Indicates whether the package is just metadata, like e.g. Maven BOM artifacts which only define constraints
      * for dependency versions.
      */
+    @JsonAlias("is_meta_data_only")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val isMetaDataOnly: Boolean = false,
+    val isMetadataOnly: Boolean = false,
 
     /**
-     * Indicates whether the source code of this [Package] has been modified compared to the original source code,
+     * Indicates whether the source code of the package has been modified compared to the original source code,
      * e.g., in case of a fork of an upstream Open Source project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -164,28 +169,15 @@ data class Package(
 
         return PackageCurationData(
             authors = authors.takeIf { it != other.authors },
-            declaredLicenses = declaredLicenses.takeIf { it != other.declaredLicenses },
             description = description.takeIf { it != other.description },
             homepageUrl = homepageUrl.takeIf { it != other.homepageUrl },
             binaryArtifact = binaryArtifact.takeIf { it != other.binaryArtifact },
             sourceArtifact = sourceArtifact.takeIf { it != other.sourceArtifact },
-            vcs = vcs.takeIf { it != other.vcs }?.toCuration(),
-            isMetaDataOnly = isMetaDataOnly.takeIf { it != other.isMetaDataOnly }
+            vcs = vcsProcessed.takeIf { it != other.vcsProcessed }?.toCuration(),
+            isMetadataOnly = isMetadataOnly.takeIf { it != other.isMetadataOnly },
+            isModified = isModified.takeIf { it != other.isModified }
         )
     }
-
-    /**
-     * Check if this package contains any erroneous data.
-     */
-    fun collectIssues(): List<OrtIssue> =
-        declaredLicensesProcessed.unmapped.map { unmappedLicense ->
-            OrtIssue(
-                severity = Severity.WARNING,
-                source = id.toCoordinates(),
-                message = "The declared license '$unmappedLicense' could not be mapped to a valid license or " +
-                        "parsed as an SPDX expression."
-            )
-        }
 
     /**
      * Create a [CuratedPackage] from this package with an empty list of applied curations.

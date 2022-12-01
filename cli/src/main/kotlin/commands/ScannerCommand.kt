@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
+import com.github.ajalt.clikt.parameters.options.RawOption
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -37,26 +38,34 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import kotlin.time.measureTime
+import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
+import org.ossreviewtoolkit.cli.utils.SeverityStats
+import org.ossreviewtoolkit.cli.utils.configurationGroup
+import org.ossreviewtoolkit.cli.utils.outputGroup
+import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.scanner.LocalScanner
-import org.ossreviewtoolkit.scanner.ScanResultsStorage
+import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.scanner.Scanner
+import org.ossreviewtoolkit.scanner.ScannerWrapper
+import org.ossreviewtoolkit.scanner.ScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
+import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
+import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
 import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
-import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.scanner.storages.SCAN_RESULTS_FILE_NAME
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
     private val input by mutuallyExclusiveOptions(
@@ -78,7 +87,7 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the scan results as ORT result file(s) to, in the specified output format(s)."
+        help = "The directory to write the ORT result file with scan results to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
@@ -90,66 +99,46 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
-    private val downloadDir by option(
-        "--download-dir",
-        help = "The output directory for downloaded source code. (default: <output-dir>/downloads)"
-    ).convert { it.expandTilde() }
-        .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
-        .convert { it.absoluteFile.normalize() }
-        .outputGroup()
-
     private val labels by option(
         "--label", "-l",
-        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
-                "scanner, any existing label with the same key is overwritten. For example: " +
-                "--label distribution=external"
+        help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
+                "times. For example: --label distribution=external"
     ).associate()
 
-    private val scannerFactory by option(
-        "--scanner", "-s",
-        help = "The scanner to use, one of ${Scanner.ALL}."
-    ).convert { scannerName ->
-        // TODO: Consider allowing to enable multiple scanners (and potentially running them in parallel).
-        Scanner.ALL.find { it.scannerName.equals(scannerName, ignoreCase = true) }
-            ?: throw BadParameterValue("Scanner '$scannerName' is not one of ${Scanner.ALL}.")
-    }.default(ScanCode.Factory())
+    private val scanners by option(
+        "--scanners", "-s",
+        help = "A comma-separated list of scanners to use.\nPossible values are: ${ScannerWrapper.ALL.keys}"
+    ).convertToScannerWrapperFactories().default(listOf(ScanCode.Factory()))
+
+    private val projectScanners by option(
+        "--project-scanners",
+        help = "A comma-separated list of scanners to use for scanning the source code of projects. By default, " +
+                "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
+                "Possible values are: ${ScannerWrapper.ALL.keys}"
+    ).convertToScannerWrapperFactories()
+
+    private val packageTypes by option(
+        "--package-types",
+        help = "A comma-separated list of the package types from the ORT file's analyzer result to limit scans to."
+    ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
 
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not scan excluded projects or packages. Works only with the '--ort-file' parameter."
     ).flag()
 
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .configurationGroup()
+
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
-    private fun configureScanner(
-        scannerConfig: ScannerConfiguration,
-        downloaderConfig: DownloaderConfiguration
-    ): Scanner {
-        ScanResultsStorage.configure(scannerConfig)
-
-        val scanner = scannerFactory.create(scannerConfig, downloaderConfig)
-
-        println("Using scanner '${scanner.scannerName}' with storage '${ScanResultsStorage.storage.name}'.")
-
-        val storage = ScanResultsStorage.storage
-        if (storage is FileBasedStorage) {
-            val backend = storage.backend
-            if (backend is LocalFileStorage) {
-                val transformedScanResultsFileName = backend.transformPath(SCAN_RESULTS_FILE_NAME)
-                val fileCount = backend.directory.walk().filter {
-                    it.isFile && it.name == transformedScanResultsFileName
-                }.count()
-
-                println("Local file storage has $fileCount scan results files.")
-            }
-        }
-
-        return scanner
-    }
-
     override fun run() {
-        val nativeOutputDir = outputDir.resolve("native-scan-results")
-
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("scan-result.${format.fileExtension}")
         }
@@ -159,58 +148,96 @@ class ScannerCommand : CliktCommand(name = "scan", help = "Run external license 
             if (existingOutputFiles.isNotEmpty()) {
                 throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
             }
-
-            if (nativeOutputDir.exists() && nativeOutputDir.list().isNotEmpty()) {
-                throw UsageError("The directory '$nativeOutputDir' must not contain any files yet.", statusCode = 2)
-            }
-        }
-
-        require(downloadDir?.exists() != true) {
-            "The download directory '$downloadDir' must not exist yet."
         }
 
         val config = globalOptionsForSubcommands.config
-        val scanner = configureScanner(config.scanner, config.downloader)
 
-        val ortResult = if (input.isFile) {
-            scanner.scanOrtResult(
-                ortResultFile = input,
-                outputDirectory = nativeOutputDir,
-                downloadDirectory = downloadDir ?: outputDir.resolve("downloads"),
-                skipExcluded = skipExcluded
-            )
-        } else {
-            require(scanner is LocalScanner) {
-                "To scan local files the chosen scanner must be a local scanner."
-            }
+        val ortResult = runScanners(scanners, projectScanners ?: scanners, config).mergeLabels(labels)
 
-            scanner.scanPath(
-                inputPath = input,
-                outputDirectory = nativeOutputDir
-            )
-        }.mergeLabels(labels)
-
+        // Write the result.
         outputDir.safeMkdirs()
+        writeOrtResult(ortResult, outputFiles, "scan")
 
-        outputFiles.forEach { file ->
-            println("Writing scan result to '$file'.")
-            val duration = measureTime { file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult) }
+        val scannerRun = ortResult.scanner
 
-            log.perf {
-                "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-            }
-        }
-
-        val scanResults = ortResult.scanner?.results
-
-        if (scanResults == null) {
+        if (scannerRun == null) {
             println("There was an error creating the scan results.")
             throw ProgramResult(1)
         }
 
-        if (scanResults.hasIssues) {
-            println("The scan result contains issues.")
-            throw ProgramResult(2)
+        val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }.partition {
+            resolutionProvider.isResolved(it)
+        }
+        val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
+
+        severityStats.print().conclude(config.severeIssueThreshold, 2)
+    }
+
+    private fun runScanners(
+        scannerWrapperFactories: List<ScannerWrapperFactory>,
+        projectScannerWrapperFactories: List<ScannerWrapperFactory>,
+        config: OrtConfiguration
+    ): OrtResult {
+        val packageScannerWrappers = scannerWrapperFactories
+            .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
+            .map { it.create(config.scanner, config.downloader) }
+        val projectScannerWrappers = projectScannerWrapperFactories
+            .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
+            .map { it.create(config.scanner, config.downloader) }
+
+        if (projectScannerWrappers.isNotEmpty()) {
+            println("Scanning projects with:")
+            println(projectScannerWrappers.joinToString { "\t${it.name} (version ${it.details.version})" })
+        } else {
+            println("Projects will not be scanned.")
+        }
+
+        if (packageScannerWrappers.isNotEmpty()) {
+            println("Scanning packages with:")
+            println(packageScannerWrappers.joinToString { "\t${it.name} (version ${it.details.version})" })
+        } else {
+            println("Packages will not be scanned.")
+        }
+
+        val scanStorages = ScanStorages.createFromConfig(config.scanner)
+        val workingTreeCache = DefaultWorkingTreeCache()
+
+        try {
+            val scanner = Scanner(
+                scannerConfig = config.scanner,
+                downloaderConfig = config.downloader,
+                provenanceDownloader = DefaultProvenanceDownloader(config.downloader, workingTreeCache),
+                storageReaders = scanStorages.readers,
+                storageWriters = scanStorages.writers,
+                packageProvenanceResolver = DefaultPackageProvenanceResolver(
+                    scanStorages.packageProvenanceStorage,
+                    workingTreeCache
+                ),
+                nestedProvenanceResolver = DefaultNestedProvenanceResolver(
+                    scanStorages.nestedProvenanceStorage,
+                    workingTreeCache
+                ),
+                scannerWrappers = mapOf(
+                    PackageType.PACKAGE to packageScannerWrappers,
+                    PackageType.PROJECT to projectScannerWrappers
+                )
+            )
+
+            val ortResult = readOrtResult(input)
+            return runBlocking {
+                scanner.scan(ortResult, skipExcluded)
+            }
+        } finally {
+            runBlocking { workingTreeCache.shutdown() }
         }
     }
 }
+
+private fun RawOption.convertToScannerWrapperFactories() =
+    convert { scannerNames ->
+        scannerNames.split(",").map { name ->
+            ScannerWrapper.ALL[name]
+                ?: throw BadParameterValue("Scanner '$name' is not one of ${ScannerWrapper.ALL.keys}.")
+        }
+    }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,20 +20,22 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.time.Instant
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.FileMatcher
+import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
  * A short summary of the scan results.
  */
+@JsonIgnoreProperties("file_count")
 data class ScanSummary(
     /**
      * The time when the scan started.
@@ -46,48 +48,57 @@ data class ScanSummary(
     val endTime: Instant,
 
     /**
-     * The number of scanned files.
-     */
-    val fileCount: Int,
-
-    /**
-     * The [SPDX package verification code](https://spdx.dev/spdx_specification_2_0_html#h.2p2csry), calculated from
-     * all files in the package. Note that if the scanner is configured to ignore certain files they will still be
-     * included in the calculation of this code.
+     * The [SPDX package verification code](https://spdx.dev/spdx_specification_2_0_html#h.2p2csry), calculated from all
+     * files in the package. Note that if the scanner is configured to ignore certain files they will still be included
+     * in the calculation of this code.
      */
     val packageVerificationCode: String,
 
     /**
-     * The license findings.
+     * The detected license findings.
      */
     @JsonProperty("licenses")
     val licenseFindings: SortedSet<LicenseFinding>,
 
     /**
-     * The copyright findings.
+     * The detected copyright findings.
      */
     @JsonProperty("copyrights")
     val copyrightFindings: SortedSet<CopyrightFinding>,
 
     /**
-     * The list of issues that occurred during the scan.
-     * This property is not serialized if the list is empty to reduce the size of the result file. If there are no
-     * issues at all, [ScanRecord.hasIssues] already contains that information.
+     * The list of issues that occurred during the scan. This property is not serialized if the list is empty to reduce
+     * the size of the result file. If there are no issues at all, [ScannerRun.hasIssues] already contains that
+     * information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
 ) {
+    companion object {
+        /**
+         * A constant for a [ScannerRun] where all properties are empty.
+         */
+        @JvmField
+        val EMPTY = ScanSummary(
+            startTime = Instant.EPOCH,
+            endTime = Instant.EPOCH,
+            packageVerificationCode = "",
+            licenseFindings = sortedSetOf(),
+            copyrightFindings = sortedSetOf()
+        )
+    }
+
     @get:JsonIgnore
     val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
 
     /**
-     * Filter all detected licenses and copyrights from the [summary] which are underneath [path]. Findings which
+     * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
      * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
     fun filterByPath(path: String): ScanSummary {
         if (path.isBlank()) return this
 
-        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilenamePatterns.getInstance())
+        val rootLicenseMatcher = RootLicenseMatcher(LicenseFilePatterns.getInstance())
         val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
             directories = listOf(path)
@@ -97,13 +108,8 @@ data class ScanSummary(
 
         val licenseFindings = licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
         val copyrightFindings = copyrightFindings.filter { it.location.matchesPath() }.toSortedSet()
-        val fileCount = mutableSetOf<String>().also { set ->
-            licenseFindings.mapTo(set) { it.location.path }
-            copyrightFindings.mapTo(set) { it.location.path }
-        }.size
 
         return copy(
-            fileCount = fileCount,
             licenseFindings = licenseFindings,
             copyrightFindings = copyrightFindings
         )

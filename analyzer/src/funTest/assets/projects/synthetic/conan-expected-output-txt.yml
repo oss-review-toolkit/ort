@@ -18,69 +18,193 @@ project:
   scopes:
   - name: "build_requires"
     dependencies:
-    - id: "Conan::protobuf:3.6.1"
-    - id: "Conan::protoc_installer:3.6.1"
+    - id: "Conan::libxslt:1.1.34"
+      dependencies:
+      - id: "Conan::libxml2:2.9.14"
+        dependencies:
+        - id: "Conan::libiconv:1.17"
+        - id: "Conan::zlib:1.2.13"
   - name: "requires"
     dependencies:
-    - id: "Conan::protobuf:3.6.1"
+    - id: "Conan::libcurl:7.85.0"
+      dependencies:
+      - id: "Conan::openssl:1.1.1s"
+      - id: "Conan::zlib:1.2.13"
+    - id: "Conan::zlib:1.2.13"
 packages:
-- id: "Conan::protobuf:3.6.1"
-  purl: "pkg:conan/protobuf@3.6.1"
-  authors:
-  - "Bincrafters"
+- id: "Conan::libcurl:7.85.0"
+  purl: "pkg:conan/libcurl@7.85.0"
   declared_licenses:
-  - "BSD-3-Clause"
+  - "curl"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Protocol Buffers - Google's data interchange format"
-  homepage_url: "https://github.com/protocolbuffers/protobuf"
+    spdx_expression: "curl"
+  description: "command line tool and library for transferring data with URLs"
+  homepage_url: "https://curl.se"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: ""
+    url: "https://curl.se/download/curl-7.85.0.tar.gz"
     hash:
-      value: ""
-      algorithm: ""
+      value: "78a06f918bd5fde3c4573ef4f9806f56372b32ec1829c9ec474799eeee641c27"
+      algorithm: "SHA-256"
   vcs:
-    type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf"
+    type: ""
+    url: ""
     revision: ""
     path: ""
   vcs_processed:
-    type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf.git"
+    type: ""
+    url: ""
     revision: ""
     path: ""
-- id: "Conan::protoc_installer:3.6.1"
-  purl: "pkg:conan/protoc_installer@3.6.1"
-  authors:
-  - "Bincrafters"
+- id: "Conan::libiconv:1.17"
+  purl: "pkg:conan/libiconv@1.17"
   declared_licenses:
-  - "BSD-3-Clause"
+  - "LGPL-2.1"
   declared_licenses_processed:
-    spdx_expression: "BSD-3-Clause"
-  description: "Protocol Buffers - Google's data interchange format"
-  homepage_url: "https://github.com/protocolbuffers/protobuf"
+    spdx_expression: "LGPL-2.1-only"
+    mapped:
+      LGPL-2.1: "LGPL-2.1-only"
+  description: "Convert text to and from Unicode"
+  homepage_url: "https://www.gnu.org/software/libiconv/"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
+    url: "https://ftp.gnu.org/gnu/libiconv/libiconv-1.17.tar.gz"
+    hash:
+      value: "8f74213b56238c85a50a5329f77e06198771e70dd9a739779f4c02f65d971313"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Conan::libxml2:2.9.14"
+  purl: "pkg:conan/libxml2@2.9.14"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "libxml2 is a software library for parsing XML documents"
+  homepage_url: "https://gitlab.gnome.org/GNOME/libxml2/-/wikis/"
+  binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
+  source_artifact:
+    url: "https://download.gnome.org/sources/libxml2/2.9/libxml2-2.9.14.tar.xz"
+    hash:
+      value: "60d74a257d1ccec0475e749cba2f21559e48139efba6ff28224357c7c798dfee"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Conan::libxslt:1.1.34"
+  purl: "pkg:conan/libxslt@1.1.34"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "libxslt is a software library implementing XSLT processor, based on\
+    \ libxml2"
+  homepage_url: "https://xmlsoft.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.34.tar.xz"
+    hash:
+      value: "28c47db33ab4daefa6232f31ccb3c65260c825151ec86ec461355247f3f56824"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  is_modified: true
+- id: "Conan::openssl:1.1.1s"
+  purl: "pkg:conan/openssl@1.1.1s"
+  declared_licenses:
+  - "OpenSSL"
+  declared_licenses_processed:
+    spdx_expression: "OpenSSL"
+  description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
+    \ Layer (SSL) protocols"
+  homepage_url: "https://github.com/openssl/openssl"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://www.openssl.org/source/openssl-1.1.1s.tar.gz"
+    hash:
+      value: "c5ac01e760ee6ff0dab61d6b2bbd30146724d063eb322180c6f18a6f74e4b6aa"
+      algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/bincrafters/conan-protobuf.git"
+    url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
+  is_modified: true
+- id: "Conan::zlib:1.2.13"
+  purl: "pkg:conan/zlib@1.2.13"
+  declared_licenses:
+  - "Zlib"
+  declared_licenses_processed:
+    spdx_expression: "Zlib"
+  description: "A Massively Spiffy Yet Delicately Unobtrusive Compression Library\
+    \ (Also Free, Not to Mention Unencumbered by Patents)"
+  homepage_url: "https://zlib.net"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://zlib.net/fossils/zlib-1.2.13.tar.gz"
+    hash:
+      value: "b3a24de97a8fdbc835b9833169501030b8977031bcb54b3b3ac13740f846ab30"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  is_modified: true

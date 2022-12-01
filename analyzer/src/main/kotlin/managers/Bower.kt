@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -43,12 +43,12 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.fieldsOrEmpty
-import org.ossreviewtoolkit.utils.stashDirectories
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.common.fieldsOrEmpty
+import org.ossreviewtoolkit.utils.common.stashDirectories
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 /**
  * The [Bower](https://bower.io/) package manager for JavaScript.
@@ -64,7 +64,7 @@ class Bower(
         private const val SCOPE_NAME_DEPENDENCIES = "dependencies"
         private const val SCOPE_NAME_DEV_DEPENDENCIES = "devDependencies"
 
-        private fun extractPackageId(node: JsonNode) =
+        private fun parsePackageId(node: JsonNode) =
             Identifier(
                 type = "Bower",
                 namespace = "",
@@ -72,30 +72,28 @@ class Bower(
                 version = node["pkgMeta"]["version"].textValueOrEmpty()
             )
 
-        private fun extractRepositoryType(node: JsonNode) =
+        private fun parseRepositoryType(node: JsonNode) =
             VcsType(node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty())
 
-        private fun extractRepositoryUrl(node: JsonNode) =
+        private fun parseRepositoryUrl(node: JsonNode) =
             node["pkgMeta"]["repository"]?.get("url")?.textValue()
                 ?: node["pkgMeta"]["_source"].textValueOrEmpty()
 
-        private fun extractRevision(node: JsonNode): String =
+        private fun parseRevision(node: JsonNode): String =
             node["pkgMeta"]["_resolution"]?.get("commit")?.textValue()
                 ?: node["pkgMeta"]["_resolution"]?.get("tag").textValueOrEmpty()
 
-        private fun extractVcsInfo(node: JsonNode) =
+        private fun parseVcsInfo(node: JsonNode) =
             VcsInfo(
-                type = extractRepositoryType(node),
-                url = extractRepositoryUrl(node),
-                revision = extractRevision(node)
+                type = parseRepositoryType(node),
+                url = parseRepositoryUrl(node),
+                revision = parseRevision(node)
             )
 
-        private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
+        private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> =
             sortedSetOf<String>().apply {
                 val license = node["pkgMeta"]["license"].textValueOrEmpty()
-                if (license.isNotEmpty()) {
-                    add(license)
-                }
+                if (license.isNotEmpty()) add(license)
             }
 
         /**
@@ -114,22 +112,22 @@ class Bower(
                 }?.let { addAll(it) }
             }
 
-        private fun extractPackage(node: JsonNode) =
+        private fun parsePackage(node: JsonNode) =
             Package(
-                id = extractPackageId(node),
+                id = parsePackageId(node),
                 authors = parseAuthors(node),
-                declaredLicenses = extractDeclaredLicenses(node),
+                declaredLicenses = parseDeclaredLicenses(node),
                 description = node["pkgMeta"]["description"].textValueOrEmpty(),
                 homepageUrl = node["pkgMeta"]["homepage"].textValueOrEmpty(),
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY, // TODO: implement me!
-                vcs = extractVcsInfo(node)
+                vcs = parseVcsInfo(node)
             )
 
         private fun getDependencyNodes(node: JsonNode): Sequence<JsonNode> =
             node["dependencies"].fieldsOrEmpty().asSequence().map { it.value }
 
-        private fun extractPackages(node: JsonNode): Map<String, Package> {
+        private fun parsePackages(node: JsonNode): Map<String, Package> {
             val result = mutableMapOf<String, Package>()
 
             val stack = Stack<JsonNode>()
@@ -137,7 +135,7 @@ class Bower(
 
             while (!stack.empty()) {
                 val currentNode = stack.pop()
-                val pkg = extractPackage(currentNode)
+                val pkg = parsePackage(currentNode)
                 result["${pkg.id.name}:${pkg.id.version}"] = pkg
 
                 stack += getDependencyNodes(currentNode)
@@ -155,7 +153,7 @@ class Bower(
 
         private fun dependencyKeyOf(node: JsonNode): String? {
             // As non-null dependency keys are supposed to define an equivalence relation for parsing 'missing' nodes,
-            // only the name and version attributes can be used. Typically those attributes should be not null
+            // only the name and version attributes can be used. Typically, those attributes should be not null
             // however in particular for root projects the null case also happens.
             val name = node["pkgMeta"]["name"].textValueOrEmpty()
             val version = node["pkgMeta"]["version"].textValueOrEmpty()
@@ -183,7 +181,7 @@ class Bower(
             return result
         }
 
-        private fun extractDependencyTree(
+        private fun parseDependencyTree(
             node: JsonNode,
             scopeName: String,
             alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)
@@ -197,15 +195,15 @@ class Bower(
                 // information.
                 // See https://github.com/bower/bower/blob/6bc778d/lib/core/Manager.js#L557 and below.
                 val alternativeNode = checkNotNull(alternativeNodes[dependencyKeyOf(node)])
-                return extractDependencyTree(alternativeNode, scopeName, alternativeNodes)
+                return parseDependencyTree(alternativeNode, scopeName, alternativeNodes)
             }
 
             node["pkgMeta"][scopeName].fieldNamesOrEmpty().forEach {
                 val childNode = node["dependencies"][it]
                 val childScope = SCOPE_NAME_DEPENDENCIES
-                val childDependencies = extractDependencyTree(childNode, childScope, alternativeNodes)
+                val childDependencies = parseDependencyTree(childNode, childScope, alternativeNodes)
                 val packageReference = PackageReference(
-                    id = extractPackageId(childNode),
+                    id = parsePackageId(childNode),
                     dependencies = childDependencies
                 )
                 result += packageReference
@@ -222,33 +220,33 @@ class Bower(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Bower(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Bower(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.8.8,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("bower_components")).use {
             installDependencies(workingDir)
             val dependenciesJson = listDependencies(workingDir)
             val rootNode = jsonMapper.readTree(dependenciesJson)
-            val packages = extractPackages(rootNode)
+            val packages = parsePackages(rootNode)
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEPENDENCIES)
+                dependencies = parseDependencyTree(rootNode, SCOPE_NAME_DEPENDENCIES)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = extractDependencyTree(rootNode, SCOPE_NAME_DEV_DEPENDENCIES)
+                dependencies = parseDependencyTree(rootNode, SCOPE_NAME_DEV_DEPENDENCIES)
             )
 
-            val projectPackage = extractPackage(rootNode)
+            val projectPackage = parsePackage(rootNode)
             val project = Project(
                 id = projectPackage.id,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -264,7 +262,7 @@ class Bower(
         }
     }
 
-    private fun installDependencies(workingDir: File) = run(workingDir, "install")
+    private fun installDependencies(workingDir: File) = run(workingDir, "--allow-root", "install")
 
-    private fun listDependencies(workingDir: File) = run(workingDir, "list", "--json").stdout
+    private fun listDependencies(workingDir: File) = run(workingDir, "--allow-root", "list", "--json").stdout
 }

@@ -18,7 +18,7 @@ th {
 /* === Ant Design customizations === */
 
 /*
-FIXME Switch to use Ant Design customization
+TODO Switch to use Ant Design customization
 https://ant.design/docs/react/customize-theme
 */
 .ant-collapse,
@@ -88,28 +88,42 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
     width: 1.2em;
 }
 .ort-control > svg:hover {
-    color: #1890FF;
+    color: #1890ff;
 }
 
 /* Colors of exclude, error, hint, success and warning icons */
-.ort-error {
-    color: #F5222D;
+.ort-critical {
+    color: #c61b10;
+}
+
+.ort-error, .ort-high {
+    color: #f5222d;
 }
 
 .ort-excluded {
-    color: #B0C4DE;
+    color: #b0c4de;
 }
 
-.ort-hint {
-    color: #FFCC00;
+.ort-hint, .ort-unknown {
+    color: #84b6eb;
 }
 
-.ort-ok {
-    color: #52C41A;
+.ort-low, .ort-ok {
+    color: #52c41a;
 }
 
 .ort-warning {
-    color: #FAAD14;
+    color: #ef8f1c;
+}
+
+.ort-medium {
+    color: #d5c920;
+}
+
+.ort-about-logo {
+    width: 420px;
+    height: 90px;
+    margin-bottom: 10px;
 }
 
 .ort-loading-logo {
@@ -125,7 +139,7 @@ tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
 /* === Styling for PackageCollapse === */
 
 .ort-package-collapse {
-    background-color: #FFF;
+    background-color: #fff;
     font-weight: 400;
 }
 

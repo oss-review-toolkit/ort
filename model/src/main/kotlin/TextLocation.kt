@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,7 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.utils.SortedSetComparator
+import kotlin.math.abs
+import kotlin.math.min
 
 /**
  * A [TextLocation] references text located in a file.
@@ -42,7 +43,6 @@ data class TextLocation(
 ) : Comparable<TextLocation> {
     companion object {
         const val UNKNOWN_LINE = -1
-        val SORTED_SET_COMPARATOR = SortedSetComparator<TextLocation>()
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
     }
 
@@ -62,4 +62,30 @@ data class TextLocation(
     constructor(path: String, line: Int) : this(path, line, line)
 
     override fun compareTo(other: TextLocation) = COMPARATOR.compare(this, other)
+
+    /**
+     * Return whether the given [line] is contained in the location.
+     */
+    operator fun contains(line: Int) = line != UNKNOWN_LINE && line in startLine..endLine
+
+    /**
+     * Return whether the given [other] location is contained in this location.
+     */
+    operator fun contains(other: TextLocation) = other.path == path && other.startLine in this && other.endLine in this
+
+    /**
+     * Return whether this and the [other] locations are overlapping, i.e. they share at least a single line. Note that
+     * the [path] is not compared.
+     */
+    fun linesOverlapWith(other: TextLocation) = startLine in other || other.startLine in this
+
+    /**
+     * Return the minimum distance between this and the [other] location. A distance of 0 means that the locations are
+     * overlapping.
+     */
+    fun distanceTo(other: TextLocation) =
+        when {
+            linesOverlapWith(other) -> 0
+            else -> min(abs(other.startLine - endLine), abs(startLine - other.endLine))
+        }
 }

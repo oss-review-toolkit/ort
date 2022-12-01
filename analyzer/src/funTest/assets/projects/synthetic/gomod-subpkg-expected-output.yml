@@ -1,0 +1,131 @@
+---
+project:
+  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-synthetic-test-project:<REPLACE_REVISION>"
+  definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "main"
+    dependencies:
+    - id: "Go::github.com/fatih/color:1.7.0"
+      linkage: "PROJECT_STATIC"
+  - name: "vendor"
+    dependencies:
+    - id: "Go::github.com/fatih/color:1.7.0"
+      linkage: "PROJECT_STATIC"
+packages:
+- id: "Go::github.com/fatih/color:1.7.0"
+  purl: "pkg:golang/github.com%2Ffatih%2Fcolor@1.7.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/fatih/color.git"
+    revision: "v1.7.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fatih/color.git"
+    revision: "v1.7.0"
+    path: ""
+- id: "Go::github.com/mattn/go-colorable:0.1.4"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@0.1.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mattn/go-colorable.git"
+    revision: "v0.1.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mattn/go-colorable.git"
+    revision: "v0.1.4"
+    path: ""
+- id: "Go::github.com/mattn/go-isatty:0.0.10"
+  purl: "pkg:golang/github.com%2Fmattn%2Fgo-isatty@0.0.10"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mattn/go-isatty.git"
+    revision: "v0.0.10"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mattn/go-isatty.git"
+    revision: "v0.0.10"
+    path: ""
+- id: "Go::golang.org/x/sys:0.0.0-20191008105621-543471e840be"
+  purl: "pkg:golang/golang.org%2Fx%2Fsys@0.0.0-20191008105621-543471e840be"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://proxy.golang.org/golang.org/x/sys/@v/v0.0.0-20191008105621-543471e840be.zip"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""

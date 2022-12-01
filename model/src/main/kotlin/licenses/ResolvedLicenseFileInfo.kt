@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.utils.CopyrightStatementsProcessor
+import org.ossreviewtoolkit.utils.ort.CopyrightStatementsProcessor
 
 /**
  * Information about license files of a package and the licenses detected in those files.
@@ -76,7 +76,7 @@ data class ResolvedLicenseFile(
         licenses.flatMapTo(mutableSetOf()) { it.getCopyrights(process, omitExcluded) }
 
     /**
-     * Return the content of the [license file][file].
+     * The textual content of the [license file][file].
      */
-    fun readFile(): String = file.readText()
+    val text by lazy { file.readText() }
 }

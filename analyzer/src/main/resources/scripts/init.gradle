@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -168,9 +168,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
-                // For versions of Gradle before the "canBeResolved" property was introduced, consider any
-                // configuration to be resolvable.
-                if (!configuration.hasProperty('canBeResolved') || configuration.canBeResolved) {
+                if (canBeResolved(configuration)) {
                     ResolutionResult result = configuration.getIncoming().getResolutionResult()
                     Set<ResolvedArtifact> resolvedArtifacts = []
 
@@ -183,7 +181,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                                 "available: ${e.message}")
                     }
 
-                    List<Dependency> dependencies = result.getRoot().getDependencies().collect {
+                    List<Dependency> dependencies = result.getRoot().getDependencies().findResults {
                         fetchDependency(it, project, resolvedArtifacts, [] as Set<String>)
                     }
 
@@ -230,6 +228,11 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          */
         private Dependency fetchDependency(DependencyResult dependencyResult, Project project,
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> visited) {
+            // Ignore this dependency if it is a BOM imported from Maven, because BOMs do not define dependencies but
+            // version constraints.
+            // See: https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
+            if (isBom(dependencyResult)) return null
+
             def dependencyId = identifierFor(dependencyResult, project)
             dependencies.putIfAbsent(dependencyId, [])
             def dependency = dependencies[dependencyId].find {
@@ -243,6 +246,26 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             dependency = parseDependency(dependencyResult, project, resolvedArtifacts, visited)
             dependencies[dependencyId].add(dependency)
             return dependency
+        }
+
+        /**
+         * Return true if the provided DependencyResult represents an imported Maven BOM.
+         */
+        private static boolean isBom(DependencyResult dependencyResult) {
+            if (dependencyResult instanceof ResolvedDependencyResult &&
+                    dependencyResult.selected.hasProperty('variants')) {
+                return dependencyResult.selected.variants.every {
+                    def categoryAttribute = it.attributes.keySet().find { it.name == 'org.gradle.category' }
+                    if (categoryAttribute != null) {
+                        def value = it.attributes.getAttribute(categoryAttribute)
+                        return value == 'platform' || value == 'enforced-platform'
+                    }
+
+                    false
+                }
+            }
+
+            return false
         }
 
         /**
@@ -328,6 +351,20 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
         }
 
+        private static boolean canBeResolved(org.gradle.api.artifacts.Configuration configuration) {
+            // The canBeResolved property is available since Gradle 3.3.
+            boolean canBeResolved = !configuration.hasProperty('canBeResolved') || configuration.canBeResolved
+
+            // The function getResolutionAlternatives() which belongs to the DeprecatableConfiguration class is
+            // available since Gradle 6.0.
+            boolean isDeprecatedForResolving = false
+            if (configuration.metaClass.respondsTo(configuration, 'getResolutionAlternatives')) {
+                isDeprecatedForResolving = configuration.getResolutionAlternatives() != null
+            }
+
+            return canBeResolved && !isDeprecatedForResolving
+        }
+
         private static String collectCauses(Throwable throwable) {
             def result = "${throwable.getClass().simpleName}: ${throwable.message}"
             def cause = throwable.cause
@@ -357,7 +394,8 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
             def resultDependencies = dependencyResult instanceof ResolvedDependencyResult ?
                     dependencyResult.selected.dependencies : [] as Set<DependencyResult>
-            if (dependency.dependencies.size() != resultDependencies.size()) {
+            // Ignore the BOM dependencies for calculating the count since they are skipped by `fetchDependency`.
+            if (dependency.dependencies.size() != resultDependencies.count { !isBom(it) }) {
                 return false
             }
 

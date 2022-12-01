@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,11 +20,12 @@
 import RemoteArtifact from './RemoteArtifact';
 import VcsInfo from './VcsInfo';
 import WebAppFinding from './WebAppFinding';
-import WebAppScanResult from './WebAppScanResult';
 import { randomStringGenerator } from '../utils';
 
 class WebAppPackage {
     #_id;
+
+    #authors = new Set();
 
     #binaryArtifact;
 
@@ -60,6 +61,12 @@ class WebAppPackage {
 
     #detectedLicensesProcessed = new Set();
 
+    #effectiveLicense;
+
+    #excludedFindings;
+
+    #excludedFindingsIndexes = [];
+
     #findings = [];
 
     #homepageUrl;
@@ -88,7 +95,9 @@ class WebAppPackage {
 
     #purl;
 
-    #scanResults = [];
+    #scanResultsIndexes;
+
+    #scanResults;
 
     #scopeExcludes;
 
@@ -116,6 +125,10 @@ class WebAppPackage {
         if (obj) {
             if (Number.isInteger(obj._id)) {
                 this.#_id = obj._id;
+            }
+
+            if (obj.authors) {
+                this.#authors = new Set(obj.authors);
             }
 
             if (obj.binary_artifact || obj.binaryArtifact) {
@@ -188,6 +201,11 @@ class WebAppPackage {
                 this.#detectedLicensesIndexes = new Set(detectedLicensesIndexes);
             }
 
+            if (obj.effective_license || obj.effectiveLicense) {
+                this.#effectiveLicense = obj.effective_license
+                    || obj.effectiveLicense;
+            }
+
             if (obj.homepage_url || obj.homepageUrl) {
                 this.#homepageUrl = obj.homepage_url || obj.homepageUrl;
             }
@@ -201,9 +219,15 @@ class WebAppPackage {
             }
 
             if (obj.findings && webAppOrtResult) {
-                for (let i = 0, len = obj.findings.length; i < len; i++) {
-                    this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
-                }
+                setTimeout(() => {
+                    for (let i = 0, len = obj.findings.length; i < len; i++) {
+                        if (obj.findings[i]['path_excludes'] || obj.findings[i]['pathExcludes']) {
+                            this.#excludedFindingsIndexes.push(i);
+                        }
+
+                        this.#findings.push(new WebAppFinding(obj.findings[i], webAppOrtResult));
+                    }
+                }, 0);
             }
 
             if (obj.is_project || obj.isProject) {
@@ -228,10 +252,7 @@ class WebAppPackage {
             }
 
             if (obj.scan_results || obj.scanResults) {
-                const scanResults = obj.scan_results || obj.scanResults;
-                for (let i = 0, len = scanResults.length; i < len; i++) {
-                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
-                }
+                this.#scanResultsIndexes = obj.scan_results || obj.scanResults;
             }
 
             if (obj.scope_excludes || obj.scopeExcludes) {
@@ -309,6 +330,10 @@ class WebAppPackage {
         return this.#_id;
     }
 
+    get authors() {
+        return this.#authors;
+    }
+
     get binaryArtifact() {
         return this.#binaryArtifact;
     }
@@ -369,10 +394,30 @@ class WebAppPackage {
         return this.#detectedLicensesProcessed;
     }
 
+    get effectiveLicense() {
+        return this.#effectiveLicense;
+    }
+
     get excludeReasons() {
         const { pathExcludeReasons, scopeExcludeReasons } = this;
 
         return new Set([...pathExcludeReasons, ...scopeExcludeReasons]);
+    }
+
+    get excludedFindings() {
+        if (!this.#excludedFindings) {
+            this.#excludedFindings = [];
+
+            this.#excludedFindingsIndexes.forEach((index) => {
+                this.#excludedFindings.push(this.#findings[index]);
+            });
+        }
+
+        return this.#excludedFindings;
+    }
+
+    get excludedFindingsIndexes() {
+        return this.#excludedFindingsIndexes;
     }
 
     get findings() {
@@ -493,6 +538,14 @@ class WebAppPackage {
     }
 
     get scanResults() {
+        if (!this.#scanResults) {
+            this.#scanResults = [];
+
+            for (let i = 0, len = this.#scanResultsIndexes.length; i < len; i++) {
+                this.#scanResults.push(this.#webAppOrtResult.getScanResultByIndex(this.#scanResultsIndexes[i]));
+            }
+        }
+
         return this.#scanResults;
     }
 
@@ -569,16 +622,12 @@ class WebAppPackage {
         return this.#vcs;
     }
 
-    get vcsUrl() {
-        return this.#vcs.url;
-    }
-
     get vcsProcessed() {
         return this.#vcsProcessed;
     }
 
-    get vcsProcessedUrl() {
-        return this.#vcsProcessed.url;
+    hasAuthors() {
+        return this.#authors.size !== 0;
     }
 
     hasConcludedLicense() {
@@ -611,6 +660,15 @@ class WebAppPackage {
 
     hasDetectedExcludedLicenses() {
         return this.#detectedExcludedLicenses.size !== 0;
+    }
+
+    hasEffectiveLicense() {
+        return this.#effectiveLicense
+            && this.#effectiveLicense.length !== 0;
+    }
+
+    hasExcludedFindings() {
+        return this.#excludedFindingsIndexes.length > 0;
     }
 
     hasFindings() {

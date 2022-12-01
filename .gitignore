@@ -1,3 +1,4 @@
+.batect/
 .gradle/
 .idea/
 !.idea/icon*.png

@@ -5,7 +5,7 @@
 # resolutions can be configured in the .ort.yml file of the project.
 #
 # For detailed documentation, see:
-# https://github.com/oss-review-toolkit/ort/blob/master/docs/config-file-resolutions-yml.md
+# https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-resolutions-yml.md
 
 # Structure of issue resolution:
 #

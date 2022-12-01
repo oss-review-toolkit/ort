@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,23 +20,21 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * A class describing a software project. A [Project] is very similar to a [Package] but contains some additional
- * meta-data like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
+ * metadata like e.g. the [homepageUrl]. Most importantly, it defines the dependency scopes that refer to the actual
  * packages.
  */
-@JsonIgnoreProperties(value = ["aliases", "purl"])
 data class Project(
     /**
      * The unique identifier of this project. The [id]'s type is the name of the package manager that manages this
@@ -45,23 +43,26 @@ data class Project(
     val id: Identifier,
 
     /**
+     * An optional additional identifier in [CPE syntax](https://cpe.mitre.org/specification/).
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val cpe: String? = null,
+
+    /**
      * The path to the definition file of this project, relative to the root of the repository described in [vcs]
      * and [vcsProcessed].
      */
     val definitionFilePath: String,
 
     /**
-     * The list of authors declared for this package.
-     *
-     * TODO: The annotation can be removed after all package manager implementations have filled the field [authors]
-     *       accordingly.
+     * The set of authors declared for this project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val authors: SortedSet<String> = sortedSetOf(),
 
     /**
-     * The list of licenses the authors have declared for this package. This does not necessarily correspond to the
-     * licenses as detected by a scanner. Both need to be taken into account for any conclusions.
+     * The set of licenses declared for this project. This does not necessarily correspond to the licenses as detected
+     * by a scanner. Both need to be taken into account for any conclusions.
      */
     val declaredLicenses: SortedSet<String>,
 
@@ -72,7 +73,7 @@ data class Project(
     val declaredLicensesProcessed: ProcessedDeclaredLicense = DeclaredLicenseProcessor.process(declaredLicenses),
 
     /**
-     * Original VCS-related information as defined in the [Project]'s meta-data.
+     * Original VCS-related information as defined in the [Project]'s metadata.
      */
     val vcs: VcsInfo,
 
@@ -96,12 +97,12 @@ data class Project(
     val scopeDependencies: SortedSet<Scope>? = null,
 
     /**
-     * Contains dependency information as a [DependencyGraph]. This is an alternative format to store the dependencies
-     * referenced by the various scopes. Use the [scopes] property to access dependency information independent on
-     * the concrete representation.
+     * Contains dependency information as a set of scope names in case a shared [DependencyGraph] is used. The scopes
+     * of this project and their dependencies can then be constructed as the corresponding sub graph of the shared
+     * graph.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val dependencyGraph: DependencyGraph? = null
+    val scopeNames: SortedSet<String>? = null
 ) : Comparable<Project> {
     companion object {
         /**
@@ -122,8 +123,8 @@ data class Project(
     }
 
     init {
-        require(scopeDependencies == null || dependencyGraph == null) {
-            "Not both 'scopeDependencies' and 'dependencyGraph' may be set, as otherwise it is ambiguous which one " +
+        require(scopeDependencies == null || scopeNames == null) {
+            "Not both 'scopeDependencies' and 'scopeNames' may be set, as otherwise it is ambiguous which one " +
                     "to use."
         }
     }
@@ -133,65 +134,22 @@ data class Project(
      * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
      */
     @get:JsonIgnore
-    val scopes by lazy {
-        dependencyGraph?.createScopes() ?: scopeDependencies ?: sortedSetOf()
-    }
+    val scopes by lazy { scopeDependencies ?: sortedSetOf() }
 
     /**
-     * Return a [Project] instance that has its scope information directly available. A project can be constructed
-     * either with a set of [Scope] objects or with a [DependencyGraph]. In the latter case, the graph has to be
-     * converted first into the scope representation. This function ensures that this step was done: If the project
-     * has a [DependencyGraph], it returns a new instance with the converted scope information (and the dependency
-     * graph removed to save memory); otherwise, it returns this same object.
+     * Return a [Project] instance that has its scope information directly available, resolved from the given [graph].
+     * This function can be used to create a fully initialized [Project] if dependency information is available in a
+     * shared [DependencyGraph]. In this case, the set with [Scope]s is constructed as a subset of the provided shared
+     * graph. Otherwise, result is this same object.
      */
-    fun withResolvedScopes(): Project =
-        takeUnless { dependencyGraph != null } ?: copy(scopeDependencies = scopes, dependencyGraph = null)
-
-    /**
-     * Return the set of package [Identifier]s of all transitive dependencies of this [Project], up to and including a
-     * depth of [maxDepth] where counting starts at 0 (for the [Project] itself) and 1 are direct dependencies etc. A
-     * value below 0 means to not limit the depth. If the given [filterPredicate] is false for a specific
-     * [PackageReference] the corresponding [Identifier] is excluded from the result.
-     */
-    fun collectDependencies(
-        maxDepth: Int = -1,
-        filterPredicate: (PackageReference) -> Boolean = { true }
-    ): Set<Identifier> =
-        scopes.fold(mutableSetOf()) { refs, scope ->
-            refs.also { it += scope.collectDependencies(maxDepth, filterPredicate) }
-        }
-
-    /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
-     */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
-
-        fun addIssues(pkgRef: PackageReference) {
-            if (pkgRef.issues.isNotEmpty()) {
-                collectedIssues.getOrPut(pkgRef.id) { mutableSetOf() } += pkgRef.issues
-            }
-
-            pkgRef.dependencies.forEach { addIssues(it) }
-        }
-
-        for (scope in scopes) {
-            for (dependency in scope.dependencies) {
-                addIssues(dependency)
-            }
-        }
-
-        return collectedIssues
-    }
-
-    /**
-     * Return the set of [Identifier]s that refer to sub-projects of this [Project].
-     */
-    fun collectSubProjects(): SortedSet<Identifier> =
-        scopes.fold(sortedSetOf()) { refs, scope ->
-            refs.also {
-                it += scope.collectDependencies { ref -> ref.linkage in PackageLinkage.PROJECT_LINKAGE }
-            }
+    fun withResolvedScopes(graph: DependencyGraph?): Project =
+        if (graph != null && scopeNames != null) {
+            copy(
+                scopeDependencies = graph.createScopes(qualifiedScopeNames()),
+                scopeNames = null
+            )
+        } else {
+            this
         }
 
     /**
@@ -224,4 +182,11 @@ data class Project(
             vcs = vcs,
             vcsProcessed = vcsProcessed
         )
+
+    /**
+     * Return a set with scope names that are qualified by this project's identifier. This is necessary when
+     * extracting the scopes of this project from a shared dependency graph.
+     */
+    private fun qualifiedScopeNames(): Set<String> =
+        scopeNames.orEmpty().map { DependencyGraph.qualifyScope(this, it) }.toSet()
 }

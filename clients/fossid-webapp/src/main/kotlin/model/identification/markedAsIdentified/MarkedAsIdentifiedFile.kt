@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ data class MarkedAsIdentifiedFile(
         val licenses = file.licenses?.let { licenses ->
             licenses.values.map {
                 License(
-                    identifier = it.file.licenseIdentifier!!,
+                    identifier = checkNotNull(it.file.licenseIdentifier),
                     name = it.file.licenseName,
                     origin = it.type
                 )
@@ -61,7 +61,7 @@ data class MarkedAsIdentifiedFile(
         )
     }
 
-    override fun getFileName(): String = file.path!!
+    override fun getFileName(): String = checkNotNull(file.path)
 
-    override fun getCopyright(): String? = identificationCopyright
+    override fun getCopyright(): String = identificationCopyright
 }

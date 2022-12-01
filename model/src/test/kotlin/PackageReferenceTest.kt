@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,18 +33,18 @@ class PackageReferenceTest : WordSpec() {
             PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
     }
 
-    private val node1_1_1 = pkgRefFromIdStr("::node1_1_1")
-    private val node1_1 = pkgRefFromIdStr("::node1_1", node1_1_1)
-    private val node1_2 = pkgRefFromIdStr("::node1_2")
-    private val node1 = pkgRefFromIdStr("::node1", node1_1, node1_2)
+    private val node111 = pkgRefFromIdStr("::node1_1_1")
+    private val node11 = pkgRefFromIdStr("::node1_1", node111)
+    private val node12 = pkgRefFromIdStr("::node1_2")
+    private val node1 = pkgRefFromIdStr("::node1", node11, node12)
     private val node2 = pkgRefFromIdStr("::node2")
-    private val node3 = pkgRefFromIdStr("::node3", node1_2)
+    private val node3 = pkgRefFromIdStr("::node3", node12)
     private val root = pkgRefFromIdStr("::root", node1, node2, node3)
 
     init {
         "findReferences" should {
             "find references to an existing id" {
-                root.findReferences(Identifier("::node1_2")) should containExactly(node1_2, node1_2)
+                root.findReferences(Identifier("::node1_2")) should containExactly(node12, node12)
                 root.findReferences(Identifier("::node1")) should containExactly(node1)
             }
 
@@ -56,7 +56,7 @@ class PackageReferenceTest : WordSpec() {
 
         "traverse" should {
             "visit each node of the tree depth-first" {
-                val expectedOrder = mutableListOf(node1_1_1, node1_1, node1_2, node1, node2, node1_2, node3, root)
+                val expectedOrder = mutableListOf(node111, node11, node12, node1, node2, node12, node3, root)
 
                 root.traverse {
                     val expectedNode = expectedOrder.removeAt(0)
@@ -64,7 +64,7 @@ class PackageReferenceTest : WordSpec() {
                     it
                 }
 
-                expectedOrder should haveSize(0)
+                expectedOrder should beEmpty()
             }
 
             "change nodes as expected" {
@@ -82,6 +82,14 @@ class PackageReferenceTest : WordSpec() {
                     it.issues.first().message shouldBe "issue ${it.id.name}"
                     it
                 }
+            }
+        }
+
+        "visitNodes" should {
+            "invoke the code block on the child dependencies" {
+                val children = root.visitDependencies { it.toList() }
+
+                children should containExactly(node1, node2, node3)
             }
         }
     }

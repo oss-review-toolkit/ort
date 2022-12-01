@@ -1,0 +1,87 @@
+{
+  "data": {
+    "repository": {
+      "issues": {
+        "edges": [
+          {
+            "cursor": "Y3Vyc29yOnYyOpHOEBC_8g==",
+            "node": {
+              "title": "No license and copyright information in the files",
+              "url": "https://github.com/oss-review-toolkit/ort/issues/1",
+              "bodyText": "Since this is an open Source compliance toolkit, I would love to see the best practises for a good OSS project realized in this project.\nSome of the best practises are:\n\nPut a copyrihgt notice in each file\nPut the relevant Strandard License Header in file (or a statement like This file is licensed under --SPDX Short Identifier --\n\nThe FSFE hast set up a Project with best practizes relevant for smart license compliance support, the proejct is called reuse. Please see https://reuse.software/\nNo file of the current release carries a standarde license haeder, there is no license information in the files at all. The same applies to the copyright information, except the README.md file.\nRegarding the README.md file, please remove the statement \"See the LICENSE file in the root of this project for license details.\" because no license scanner can \"auto conclude\" such a statement.\nThe file oss-review-toolkit-preview/analyzer/src/funTest/assets/projects/synthetic/mixed/NPMNestedMaven/package.json\n{\n\"name\": \"npmnestedmaven\",\n\"version\": \"1.0.0\",\n\"description\": \"A dummy NPM project with a nested Maven project\",\n\"scripts\": {\n\"test\": \"echo \"Error: no test specified\" && exit 1\"\n},\n\"author\": \"Sebastian Schuberth\",\n\"license\": \"ISC\",\n\"repository\": {\n\"type\": \"git\",\n\"url\": \"https://github.com/heremaps/oss-review-toolkit.git\"\n}\n}\nCarries a license information which doea not fit. Even in case of test files you should care for license hygiene",
+              "closed": true,
+              "closedAt": "2017-11-06T15:04:05Z",
+              "createdAt": "2017-10-30T09:35:17Z",
+              "lastEditedAt": null,
+              "labels": {
+                "edges": [
+                  {
+                    "node": {
+                      "name": "enhancement"
+                    }
+                  },
+                  {
+                    "node": {
+                      "name": "documentation"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "cursor": "Y3Vyc29yOnYyOpHOEEe_tg==",
+            "node": {
+              "title": "Consider using a \"purl\" as the package identifier",
+              "url": "https://github.com/oss-review-toolkit/ort/issues/20",
+              "bodyText": "Consider redesigning the package identifier as a \"puurl\" as described at nexB/scancode-toolkit#805 (comment).",
+              "closed": true,
+              "closedAt": "2019-02-07T18:33:02Z",
+              "createdAt": "2017-11-11T11:00:22Z",
+              "lastEditedAt": null,
+              "labels": {
+                "edges": [
+                  {
+                    "node": {
+                      "name": "enhancement"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "cursor": "Y3Vyc29yOnYyOpHOEJmL_w==",
+            "node": {
+              "title": "downloader: Add Mercurial support",
+              "url": "https://github.com/oss-review-toolkit/ort/issues/85",
+              "bodyText": "Add support for Mercurial repositories to the downloader module.",
+              "closed": true,
+              "closedAt": "2017-12-03T18:06:57Z",
+              "createdAt": "2017-12-01T15:19:39Z",
+              "lastEditedAt": null,
+              "labels": {
+                "edges": [
+                  {
+                    "node": {
+                      "name": "enhancement"
+                    }
+                  },
+                  {
+                    "node": {
+                      "name": "downloader"
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "Y3Vyc29yOnYyOpHOEJmL_w==",
+          "hasNextPage": false
+        }
+      }
+    }
+  }
+}

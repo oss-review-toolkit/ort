@@ -1,0 +1,35 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "openssl-1.1.1g"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-openssl"
+documentDescribes:
+- "SPDXRef-Package-openssl"
+packages:
+- SPDXID: "SPDXRef-Package-openssl"
+  description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the \
+    Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) \
+    protocol. The protocol implementation is based on a full-strength general purpose cryptographic \
+    library, which can also be used stand-alone."
+  copyrightText: "copyright 2004-2020 The OpenSSL Project Authors. All Rights Reserved."
+  downloadLocation: "git+ssh://github.com/openssl/openssl.git@e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceLocator: "pkg:a-name/openssl@1.1.1g"
+    referenceType: "purl"
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
+  filesAnalyzed: false
+  homepage: "https://www.openssl.org/"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
+  name: "openssl"
+  versionInfo: "1.1.1g"
+  originator: "Organization: OpenSSL Development Team"

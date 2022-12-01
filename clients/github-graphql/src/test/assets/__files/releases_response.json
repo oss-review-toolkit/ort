@@ -1,0 +1,74 @@
+{
+  "data": {
+    "repository": {
+      "releases": {
+        "edges": [
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.4",
+              "name": "Releasing 0.4.4",
+              "publishedAt": "2018-04-12T18:47:35Z",
+              "tagName": "0.4.4",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/1ec03fce40b59e2559e3f3affde27042f1a9b644",
+                "authoredDate": "2018-04-12T18:44:07Z"
+              }
+            }
+          },
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.5",
+              "name": "Releasing 0.4.5 version",
+              "publishedAt": "2018-09-02T06:36:05Z",
+              "tagName": "0.4.5",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/2c935f192846414880b94dd6f4dcb04675c7765d",
+                "authoredDate": "2018-09-02T06:33:23Z"
+              }
+            }
+          },
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.6",
+              "name": "Releasing 0.4.6 version",
+              "publishedAt": "2018-10-18T12:06:11Z",
+              "tagName": "0.4.6",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/878c4744c687cf612a9f52d9fba2e3fb10ab2da1",
+                "authoredDate": "2018-10-18T12:00:44Z"
+              }
+            }
+          },
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.8",
+              "name": "Releasing 0.4.8 version",
+              "publishedAt": "2019-03-16T06:01:24Z",
+              "tagName": "0.4.8",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/41ad1fe23d7657b907a5dac7467faa20e0d031f2",
+                "authoredDate": "2019-03-16T05:58:14Z"
+              }
+            }
+          },
+          {
+            "node": {
+              "url": "https://github.com/flipkart-incubator/zjsonpatch/releases/tag/0.4.9",
+              "name": "Releasing 0.4.11",
+              "publishedAt": "2020-06-23T11:32:43Z",
+              "tagName": "0.4.11",
+              "tagCommit": {
+                "commitUrl": "https://github.com/flipkart-incubator/zjsonpatch/commit/581a547e794290802e9d5a3377c69c303f069d4a",
+                "authoredDate": "2020-06-23T11:27:56Z"
+              }
+            }
+          }
+        ],
+        "pageInfo": {
+          "endCursor": "Y3Vyc29yOnYyOpK5MjAyMC0wNi0yM1QxMzoyNzo1NiswMjowMM4BqJGR",
+          "hasNextPage": false
+        }
+      }
+    }
+  }
+}

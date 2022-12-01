@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,11 +27,13 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.IOException
 
-import org.ossreviewtoolkit.helper.common.download
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
@@ -49,11 +51,13 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
         val failed = curations.filterNot { curation ->
             curation.data.sourceArtifact?.let { sourceArtifact ->
                 println("\n-----")
-                println("Checking source artifact for ${curation.id.toCoordinates()}.")
+                println("Checking source artifact for '${curation.id.toCoordinates()}'.")
                 println("Downloading ${sourceArtifact.url}.")
 
+                val tempDir = createOrtTempDir()
+
                 try {
-                    val file = download(sourceArtifact.url)
+                    val file = OkHttpClientHelper.downloadFile(sourceArtifact.url, tempDir).getOrThrow()
                     val hash = sourceArtifact.hash.algorithm.calculate(file)
 
                     println("Expected hash: ${sourceArtifact.hash.algorithm} ${sourceArtifact.hash.value}")
@@ -67,9 +71,11 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                         true
                     }
                 } catch (e: IOException) {
-                    val message = "Failed to download source artifact: ${e.collectMessagesAsString()}"
+                    val message = "Failed to download source artifact: ${e.collectMessages()}"
                     println(message)
                     false
+                } finally {
+                    tempDir.safeDeleteRecursively(force = true)
                 }
             } ?: true
         }

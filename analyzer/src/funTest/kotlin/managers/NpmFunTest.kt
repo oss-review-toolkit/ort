@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,9 +25,9 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -44,7 +44,7 @@ class NpmFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("shrinkwrap")
                 val packageFile = workingDir.resolve("package.json")
 
-                val result = createNPM().resolveSingleProject(packageFile)
+                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
@@ -62,7 +62,7 @@ class NpmFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("package-lock")
                 val packageFile = workingDir.resolve("package.json")
 
-                val result = createNPM().resolveSingleProject(packageFile)
+                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
@@ -80,7 +80,7 @@ class NpmFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("no-lockfile")
                 val packageFile = workingDir.resolve("package.json")
 
-                val result = createNPM().resolveSingleProject(packageFile)
+                val result = createNpm().resolveSingleProject(packageFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output-no-lockfile.yml"),
@@ -98,7 +98,7 @@ class NpmFunTest : WordSpec() {
                 val workingDir = projectsDir.resolve("node-modules")
                 val packageFile = workingDir.resolve("package.json")
 
-                val result = createNPM().resolveSingleProject(packageFile)
+                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
@@ -114,6 +114,6 @@ class NpmFunTest : WordSpec() {
         }
     }
 
-    private fun createNPM() =
-        Npm("NPM", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNpm() =
+        Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }

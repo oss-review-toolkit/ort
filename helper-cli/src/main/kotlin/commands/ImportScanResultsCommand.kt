@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,17 +25,16 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.FileBasedStorage
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 internal class ImportScanResultsCommand : CliktCommand(
     help = "Import all scan results from the given ORT result file to the file based scan results storage directory."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file from which repository configuration shall be extracted."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
@@ -51,9 +50,9 @@ internal class ImportScanResultsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = readOrtResult(ortFile)
         val scanResultsStorage = FileBasedStorage(LocalFileStorage(scanResultsStorageDir))
-        val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.pkg.id }
+        val ids = ortResult.getProjects().map { it.id } + ortResult.getPackages().map { it.metadata.id }
 
         ids.forEach { id ->
             ortResult.getScanResultsForId(id).forEach { scanResult ->

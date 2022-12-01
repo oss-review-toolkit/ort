@@ -1,0 +1,226 @@
+---
+project:
+  id: "PIP::src/funTest/assets/projects/synthetic/python-inspector/requirements.txt:<REPLACE_REVISION>"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/python-inspector/requirements.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "install"
+    dependencies:
+    - id: "PyPI::flask:1.0"
+      dependencies:
+      - id: "PyPI::click:6.7"
+      - id: "PyPI::itsdangerous:0.24"
+      - id: "PyPI::jinja2:2.11.3"
+        dependencies:
+        - id: "PyPI::markupsafe:1.0"
+      - id: "PyPI::werkzeug:0.15.3"
+packages:
+- id: "PyPI::click:6.7"
+  purl: "pkg:pypi/click@6.7"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "A simple wrapper around optparse for powerful command line utilities."
+  homepage_url: "http://github.com/mitsuhiko/click"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/34/c1/8806f99713ddb993c5366c362b2f908f18269f8d792aff1abfd700775a77/click-6.7-py2.py3-none-any.whl"
+    hash:
+      value: "29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/95/d9/c3336b6b5711c3ab9d1d3a80f1a3e2afeb9d8c02a7166462f6cc96570897/click-6.7.tar.gz"
+    hash:
+      value: "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mitsuhiko/click.git"
+    revision: ""
+    path: ""
+- id: "PyPI::flask:1.0"
+  purl: "pkg:pypi/flask@1.0"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "A simple framework for building complex web applications."
+  homepage_url: "https://www.palletsprojects.com/p/flask/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/55/b1/4365193655df97227ace49311365cc296e74b60c7f5c63d23cd30175e2f6/Flask-1.0-py2.py3-none-any.whl"
+    hash:
+      value: "b1883637bbee4dc7bc98d900792d0a304d609fce0f5bd9ca91d1b6457e5918dd"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/99/ab/eedb921f26adf7057ade1291f9c1bfa35a506d64894f58546457ef658772/Flask-1.0.tar.gz"
+    hash:
+      value: "7fab1062d11dd0038434e790d18c5b9133fd9e6b7257d707c4578ccc1e38b67c"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/flask.git"
+    revision: ""
+    path: ""
+- id: "PyPI::itsdangerous:0.24"
+  purl: "pkg:pypi/itsdangerous@0.24"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD License"
+  declared_licenses_processed:
+    unmapped:
+    - "BSD License"
+  description: "Various helpers to pass trusted data to untrusted environments and\
+    \ back."
+  homepage_url: "http://github.com/mitsuhiko/itsdangerous"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/dc/b4/a60bcdba945c00f6d608d8975131ab3f25b22f2bcfe1dab221165194b2d4/itsdangerous-0.24.tar.gz"
+    hash:
+      value: "cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mitsuhiko/itsdangerous.git"
+    revision: ""
+    path: ""
+- id: "PyPI::jinja2:2.11.3"
+  purl: "pkg:pypi/jinja2@2.11.3"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "A very fast and expressive template engine."
+  homepage_url: "https://palletsprojects.com/p/jinja/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl"
+    hash:
+      value: "03e47ad063331dd6a3f04a43eddca8a966a26ba0c5b7207a9a9e4e08f1b29419"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7/Jinja2-2.11.3.tar.gz"
+    hash:
+      value: "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/jinja.git"
+    revision: ""
+    path: ""
+- id: "PyPI::markupsafe:1.0"
+  purl: "pkg:pypi/markupsafe@1.0"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD"
+  - "BSD License"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD: "BSD-3-Clause"
+      BSD License: "BSD-3-Clause"
+  description: "Implements a XML/HTML/XHTML Markup safe string for Python"
+  homepage_url: "http://github.com/pallets/markupsafe"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/4d/de/32d741db316d8fdb7680822dd37001ef7a448255de9699ab4bfcbdf4172b/MarkupSafe-1.0.tar.gz"
+    hash:
+      value: "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/markupsafe.git"
+    revision: ""
+    path: ""
+- id: "PyPI::werkzeug:0.15.3"
+  purl: "pkg:pypi/werkzeug@0.15.3"
+  authors:
+  - "Armin Ronacher <armin.ronacher@active-4.com>"
+  declared_licenses:
+  - "BSD License"
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD License: "BSD-3-Clause"
+  description: "The comprehensive WSGI web application library."
+  homepage_url: "https://palletsprojects.com/p/werkzeug/"
+  binary_artifact:
+    url: "https://files.pythonhosted.org/packages/3d/bf/79101bd1d6a2b3fe0888e8d6e039800b173f26b7388308fc4bcc45de8d0a/Werkzeug-0.15.3-py2.py3-none-any.whl"
+    hash:
+      value: "97660b282aa7e29f94f3fe378e5c7162d7ab9d601a8dbb1cbb2ffc8f0e54607d"
+      algorithm: "SHA-256"
+  source_artifact:
+    url: "https://files.pythonhosted.org/packages/9c/6d/854f2aa124dcfeb901815492b7fa7f026d114a18784c1c679fbdea36c809/Werkzeug-0.15.3.tar.gz"
+    hash:
+      value: "cfd1281b1748288e59762c0e174d64d8bcb2b70e7c57bc4a1203c8825af24ac3"
+      algorithm: "SHA-256"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pallets/werkzeug.git"
+    revision: ""
+    path: ""

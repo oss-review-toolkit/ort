@@ -1,0 +1,214 @@
+---
+repository:
+  vcs:
+    type: "Git"
+    url: "https://github.com/vdurmont/semver4j.git"
+    revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/vdurmont/semver4j.git"
+    revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+    path: ""
+  config: {}
+analyzer:
+  start_time: "2021-04-26T05:48:05.390356Z"
+  end_time: "2021-04-26T05:48:13.604832Z"
+  environment:
+    ort_version: "9d23fdf"
+    java_version: "11.0.8"
+    os: "Linux"
+    processors: 4
+    max_memory: 12884901888
+    variables:
+      JAVA_HOME: "/opt/java/openjdk"
+      ANDROID_HOME: "/opt/android-sdk"
+      GOPATH: "/go"
+    tool_versions: {}
+  config:
+    allow_dynamic_versions: false
+  result:
+    projects:
+    - id: "Maven:com.vdurmont:semver4j:3.1.0"
+      definition_file_path: "pom.xml"
+      authors:
+      - "Vincent DURMONT"
+      declared_licenses:
+      - "The MIT License"
+      declared_licenses_processed:
+        spdx_expression: "MIT"
+        mapped:
+          The MIT License: "MIT"
+      vcs:
+        type: "Git"
+        url: "git@github.com:vdurmont/semver4j.git"
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/vdurmont/semver4j.git"
+        revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+        path: ""
+      homepage_url: "https://github.com/vdurmont/semver4j"
+      scope_names:
+      - "test"
+    packages:
+    - package:
+        id: "Maven:junit:junit:4.12"
+        purl: "pkg:maven/junit/junit@4.12"
+        authors:
+        - "David Saff"
+        - "JUnit"
+        - "Kevin Cooney"
+        - "Marc Philipp"
+        - "Stefan Birkner"
+        declared_licenses:
+        - "Eclipse Public License 1.0"
+        declared_licenses_processed:
+          spdx_expression: "EPL-1.0"
+          mapped:
+            Eclipse Public License 1.0: "EPL-1.0"
+        concluded_license: "EPL-1.0"
+        description: "JUnit is a unit testing framework for Java, created by Erich\
+          \ Gamma and Kent Beck."
+        homepage_url: "http://junit.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.jar"
+          hash:
+            value: "2973d150c0dc1fefe998f834810d68f278ea58ec"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+          hash:
+            value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "https://github.com/junit-team/junit4.git"
+          revision: "r4.12"
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "https://github.com/junit-team/junit4.git"
+          revision: "r4.12"
+          path: ""
+      curations:
+      - base:
+          vcs:
+            type: "Git"
+            url: "git://github.com/junit-team/junit.git"
+            revision: "r4.12"
+            path: ""
+        curation:
+          comment: "ScanCode claims to find some NOASSERTION and Apache-2.0 in the\
+            \ FAQ and the pom.xml, both are false-positives."
+          concluded_license: "EPL-1.0"
+          vcs:
+            type: "Git"
+            url: "https://github.com/junit-team/junit4.git"
+            revision: "r4.12"
+    - package:
+        id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
+        authors:
+        - "Joe Walnes"
+        - "Nat Pryce"
+        - "Neil Dunn"
+        - "Steve Freeman"
+        - "Tom Denley"
+        declared_licenses:
+        - "BSD-3-Clause"
+        declared_licenses_processed:
+          spdx_expression: "BSD-3-Clause"
+        description: "This is the core API of hamcrest matcher framework to be used\
+          \ by third-party framework providers. This includes the a foundation set\
+          \ of matcher implementations for common operations."
+        homepage_url: "https://github.com/hamcrest/JavaHamcrest/hamcrest-core"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar"
+          hash:
+            value: "42a25dc3219429f0e5d060061f71acb49bf010a0"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+          hash:
+            value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+            algorithm: "SHA-1"
+        vcs:
+          type: "Git"
+          url: "git@github.com:hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: "Git"
+          url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
+          revision: ""
+          path: ""
+      curations:
+      - base:
+          declared_licenses:
+          - "New BSD License"
+        curation:
+          comment: "Provided by ClearlyDefined."
+          declared_licenses:
+          - "BSD-3-Clause"
+    - package:
+        id: "Maven:org.mockito:mockito-all:1.10.19"
+        purl: "pkg:maven/org.mockito/mockito-all@1.10.19"
+        authors:
+        - "Szczepan Faber"
+        declared_licenses:
+        - "MIT"
+        declared_licenses_processed:
+          spdx_expression: "MIT"
+        description: "Mock objects library for java"
+        homepage_url: "http://www.mockito.org"
+        binary_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19.jar"
+          hash:
+            value: "539df70269cc254a58cccc5d8e43286b4a73bf30"
+            algorithm: "SHA-1"
+        source_artifact:
+          url: "https://repo.maven.apache.org/maven2/org/mockito/mockito-all/1.10.19/mockito-all-1.10.19-sources.jar"
+          hash:
+            value: "8269667b73d9616600359a9b0ba1b1c7d0cf7a97"
+            algorithm: "SHA-1"
+        vcs:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+        vcs_processed:
+          type: ""
+          url: ""
+          revision: ""
+          path: ""
+      curations:
+      - base:
+          declared_licenses:
+          - "The MIT License"
+        curation:
+          comment: "Provided by ClearlyDefined."
+          declared_licenses:
+          - "MIT"
+    dependency_graphs:
+      Maven:
+        packages:
+        - "Maven:junit:junit:4.12"
+        - "Maven:org.hamcrest:hamcrest-core:1.3"
+        - "Maven:org.mockito:mockito-all:1.10.19"
+        scope_roots:
+        - dependencies:
+          - pkg: 1
+        - pkg: 2
+        scopes:
+          com.vdurmont:semver4j:3.1.0:test:
+          - root: 0
+          - root: 2
+    has_issues: false
+scanner: null
+advisor: null
+evaluator: null
+labels:
+  applicationCategory: "BT05 Client application"
+  projectName: "Semver4jNewDependencyGraphShared"

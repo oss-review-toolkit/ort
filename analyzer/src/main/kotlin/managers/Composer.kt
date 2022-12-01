@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,8 @@ import java.io.File
 import java.io.IOException
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -44,23 +46,25 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.readJsonFile
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.fieldNamesOrEmpty
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.stashDirectories
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.readTree
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.stashDirectories
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"
 
 private val EXCLUDED_PACKAGES = setOf(
     "php", // Exclude the PHP runtime itself.
-    "composer-plugin-api" // Exclude the package to specify the supported composer plugin versions.
+    "composer-plugin-api", // Exclude the package to specify the supported composer plugin versions.
+    "composer-runtime-api" // Exclude the package to specify the supported composer versions for additional features.
 )
 
 /**
@@ -73,6 +77,8 @@ class Composer(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
         override val globsForDefinitionFiles = listOf("composer.json")
 
@@ -80,7 +86,7 @@ class Composer(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Composer(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Composer(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) =
@@ -94,36 +100,31 @@ class Composer(
             }
         }
 
-    override fun run(workingDir: File?, vararg args: String) =
-        ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args).requireSuccess()
-
     override fun getVersionArguments() = "--no-ansi --version"
 
     override fun transformVersion(output: String) =
         // The version string can be something like:
         // Composer version 1.5.1 2017-08-09 16:07:22
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
-        output.split(' ').dropLast(2).last().removeSurrounding("(", ")")
+        output.splitOnWhitespace().dropLast(2).last().removeSurrounding("(", ")")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[1.5,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        // If all of the directories we are analyzing contain a composer.phar, no global installation of Composer is
-        // required and hence we skip the version check.
-        if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) {
-            return
-        }
+        // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required
+        // and hence we skip the version check.
+        if (definitionFiles.all { File(it.parentFile, COMPOSER_PHAR_BINARY).isFile }) return
 
         // We do not actually depend on any features specific to a version of Composer, but we still want to stick to
         // fixed versions to be sure to get consistent results.
-        checkVersion(analyzerConfig.ignoreToolVersions)
+        checkVersion()
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         stashDirectories(workingDir.resolve("vendor")).use {
-            val manifest = readJsonFile(definitionFile)
+            val manifest = definitionFile.readTree()
             val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
                 key.startsWith("require") && value.count() > 0
             }
@@ -131,21 +132,24 @@ class Composer(
             val (packages, scopes) = if (hasDependencies) {
                 installDependencies(workingDir)
 
-                log.info { "Reading $COMPOSER_LOCK_FILE file in $workingDir..." }
-                val lockFile = readJsonFile(workingDir.resolve(COMPOSER_LOCK_FILE))
-                val packages = parseInstalledPackages(lockFile)
+                val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as 
-                // required, but are not listed in composer.lock as installed.  
-                // If we didn't handle them specifically, we would report them as missing when trying to load the 
-                // dependency information for them. We can't simply put these "virtual" packages in the normal package 
-                // map as this would cause us to report a package which is not actually installed with the contents of 
+                logger.info { "Reading '$lockFile'..." }
+
+                val json = jsonMapper.readTree(lockFile)
+                val packages = parseInstalledPackages(json)
+
+                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
+                // required, but are not listed in composer.lock as installed.
+                // If we didn't handle them specifically, we would report them as missing when trying to load the
+                // dependency information for them. We can't simply put these "virtual" packages in the normal package
+                // map as this would cause us to report a package which is not actually installed with the contents of
                 // the "replacing" package.
-                val virtualPackages = parseVirtualPackageNames(packages, manifest, lockFile)
+                val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
                 val scopes = sortedSetOf(
-                    parseScope("require", manifest, lockFile, packages, virtualPackages),
-                    parseScope("require-dev", manifest, lockFile, packages, virtualPackages)
+                    parseScope("require", manifest, json, packages, virtualPackages),
+                    parseScope("require-dev", manifest, json, packages, virtualPackages)
                 )
 
                 Pair(packages, scopes)
@@ -153,7 +157,7 @@ class Composer(
                 Pair(emptyMap(), sortedSetOf())
             }
 
-            log.info { "Reading ${definitionFile.name} file in $workingDir..." }
+            logger.info { "Reading ${definitionFile.name} file in $workingDir..." }
 
             val project = parseProject(definitionFile, scopes)
 
@@ -182,13 +186,13 @@ class Composer(
         dependencies.filterNot { packageName ->
             packageName in EXCLUDED_PACKAGES
                     || packageName.startsWith("ext-") // Exclude extensions to PHP itself.
-                    || packageName in virtualPackages // Exclude virtual packages as they have no meta-data.
+                    || packageName in virtualPackages // Exclude virtual packages as they have no metadata.
         }.forEach { packageName ->
             val packageInfo = packages[packageName]
                 ?: throw IOException("Could not find package info for $packageName")
 
             if (packageName in dependencyBranch) {
-                log.debug {
+                logger.debug {
                     "Not adding circular dependency '$packageName' to the tree, it is already on this branch of the " +
                             "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
                 }
@@ -209,7 +213,7 @@ class Composer(
                     issues = listOf(
                         createAndLogIssue(
                             source = managerName,
-                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessagesAsString()}"
+                            message = "Could not resolve dependencies of '$packageName': ${e.collectMessages()}"
                         )
                     )
                 )
@@ -220,7 +224,7 @@ class Composer(
     }
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
-        val json = readJsonFile(definitionFile)
+        val json = definitionFile.readTree()
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
         val rawName = json["name"]?.textValue() ?: definitionFile.parentFile.name
@@ -255,7 +259,7 @@ class Composer(
                 // Just warn if the version is missing as Composer itself declares it as optional, see
                 // https://getcomposer.org/doc/04-schema.md#version.
                 if (version.isEmpty()) {
-                    log.warn { "No version information found for package $rawName." }
+                    logger.warn { "No version information found for package $rawName." }
                 }
 
                 packages[rawName] = Package(
@@ -284,7 +288,7 @@ class Composer(
      *
      * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
      * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
-     * composer.lock we can ignore any virtual package with the same name. Since the code later depends on the virtual
+     * 'composer.lock' we can ignore any virtual package with the same name. Since the code later depends on the virtual
      * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
      * packages for which are not in the installed package map.
      */
@@ -292,8 +296,8 @@ class Composer(
             Set<String> {
         val replacedNames = mutableSetOf<String>()
 
-        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so 
-        // we parse the manifest file as well. 
+        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so
+        // we parse the manifest file as well.
         replacedNames += parseVirtualNames(manifest)
 
         listOf("packages", "packages-dev").forEach { type ->
@@ -321,20 +325,20 @@ class Composer(
             packageInfo["license"]?.mapNotNullTo(set) { it.textValue() }
         }
 
-    private fun parseVcsInfo(packageInfo: JsonNode) =
+    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
         packageInfo["source"]?.let {
             VcsInfo(
-                VcsType(it["type"].textValueOrEmpty()),
-                it["url"].textValueOrEmpty(),
-                it["reference"].textValueOrEmpty()
+                type = VcsType(it["type"].textValueOrEmpty()),
+                url = it["url"].textValueOrEmpty(),
+                revision = it["reference"].textValueOrEmpty()
             )
-        } ?: VcsInfo.EMPTY
+        }.orEmpty()
 
     private fun parseArtifact(packageInfo: JsonNode) =
         packageInfo["dist"]?.let {
             val shasum = it["shasum"].textValueOrEmpty()
             RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
-        } ?: RemoteArtifact.EMPTY
+        }.orEmpty()
 
     private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
         listOf("packages", "packages-dev").forEach {
@@ -356,6 +360,6 @@ class Composer(
 
         // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
         // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.
-        run(workingDir, "install")
+        run(workingDir, "install", "--ignore-platform-reqs")
     }
 }

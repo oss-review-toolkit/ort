@@ -231,7 +231,7 @@ packages:
   description: "Use with Net::HTTP to do multipart form postspec. IO values that have\
     \ #content_type, #original_filename, and #local_path will be posted as a binary\
     \ file."
-  homepage_url: "https://github.com/nicksieger/multipart-post"
+  homepage_url: "https://github.com/socketry/multipart-post"
   binary_artifact:
     url: ""
     hash:
@@ -244,12 +244,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/nicksieger/multipart-post.git"
+    url: "https://github.com/socketry/multipart-post.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/nicksieger/multipart-post.git"
+    url: "https://github.com/socketry/multipart-post.git"
     revision: ""
     path: ""
 - id: "Gem::public_suffix:4.0.5"
@@ -314,6 +314,38 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/rack/rack.git"
+    revision: ""
+    path: ""
+- id: "Gem::rspec:3.7.0"
+  purl: "pkg:gem/rspec@3.7.0"
+  authors:
+  - "David Chelimsky"
+  - "Myron Marston"
+  - "Steven Baker"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "BDD for Ruby"
+  homepage_url: "http://github.com/rspec"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/rspec-3.7.0.gem"
+    hash:
+      value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/rspec/rspec.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/rspec/rspec.git"
     revision: ""
     path: ""
 - id: "Gem::rspec-core:3.7.1"
@@ -449,38 +481,6 @@ packages:
     url: "https://github.com/rspec/rspec-support.git"
     revision: ""
     path: ""
-- id: "Gem::rspec:3.7.0"
-  purl: "pkg:gem/rspec@3.7.0"
-  authors:
-  - "David Chelimsky"
-  - "Myron Marston"
-  - "Steven Baker"
-  declared_licenses:
-  - "MIT"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-  description: "BDD for Ruby"
-  homepage_url: "http://github.com/rspec"
-  binary_artifact:
-    url: ""
-    hash:
-      value: ""
-      algorithm: ""
-  source_artifact:
-    url: "https://rubygems.org/gems/rspec-3.7.0.gem"
-    hash:
-      value: "0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404"
-      algorithm: "SHA-256"
-  vcs:
-    type: "Git"
-    url: "http://github.com/rspec/rspec.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/rspec/rspec.git"
-    revision: ""
-    path: ""
 - id: "Gem::signet:0.8.1"
   purl: "pkg:gem/signet@0.8.1"
   authors:
@@ -504,12 +504,12 @@ packages:
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/google/signet.git"
+    url: "https://github.com/googleapis/signet.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/google/signet.git"
+    url: "https://github.com/googleapis/signet.git"
     revision: ""
     path: ""
 - id: "Gem::test-project:1.0.0"

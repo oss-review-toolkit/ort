@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -27,7 +28,7 @@ import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class PackageCurationTest : WordSpec({
     "Applying a single curation" should {
@@ -40,21 +41,22 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = sortedSetOf(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY,
-                isMetaDataOnly = false,
+                isMetadataOnly = false,
                 isModified = false
             )
 
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
+                    purl = "pkg:maven/org.hamcrest/hamcrest-core@1.3#subpath=src/main/java/org/hamcrest/core",
+                    cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
                     authors = sortedSetOf("author 1", "author 2"),
-                    declaredLicenses = sortedSetOf("license a", "license b"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
@@ -71,20 +73,21 @@ class PackageCurationTest : WordSpec({
                         type = VcsType.GIT,
                         url = "http://url.git",
                         revision = "revision",
-                        resolvedRevision = "resolvedRevision",
                         path = "path"
                     ),
-                    isMetaDataOnly = true,
+                    isMetadataOnly = true,
                     isModified = true
                 )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            with(curatedPkg.pkg) {
+            with(curatedPkg.metadata) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                purl shouldBe curation.data.purl
+                cpe shouldBe curation.data.cpe
                 authors shouldBe curation.data.authors
-                declaredLicenses shouldBe curation.data.declaredLicenses
+                declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
                 declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
                 concludedLicense shouldBe curation.data.concludedLicense
@@ -92,13 +95,14 @@ class PackageCurationTest : WordSpec({
                 homepageUrl shouldBe curation.data.homepageUrl
                 binaryArtifact shouldBe curation.data.binaryArtifact
                 sourceArtifact shouldBe curation.data.sourceArtifact
-                vcs.toCuration() shouldBe curation.data.vcs
-                isMetaDataOnly shouldBe true
+                vcs shouldBe pkg.vcs
+                vcsProcessed.toCuration() shouldBe curation.data.vcs
+                isMetadataOnly shouldBe true
                 isModified shouldBe true
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
@@ -110,6 +114,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
+                cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
                 authors = sortedSetOf("author 1", "author 2"),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "description",
@@ -120,10 +125,9 @@ class PackageCurationTest : WordSpec({
                     type = VcsType.GIT,
                     url = "http://url.git",
                     revision = "revision",
-                    resolvedRevision = "resolvedRevision",
                     path = "path"
                 ),
-                isMetaDataOnly = false,
+                isMetadataOnly = false,
                 isModified = false
             )
 
@@ -139,8 +143,10 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            with(curatedPkg.pkg) {
+            with(curatedPkg.metadata) {
                 id.toCoordinates() shouldBe pkg.id.toCoordinates()
+                purl shouldBe pkg.purl
+                cpe shouldBe pkg.cpe
                 authors shouldBe pkg.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
                 concludedLicense shouldBe pkg.concludedLicense
@@ -152,15 +158,14 @@ class PackageCurationTest : WordSpec({
                     type = pkg.vcs.type,
                     url = curation.data.vcs!!.url!!,
                     revision = pkg.vcs.revision,
-                    resolvedRevision = pkg.vcs.resolvedRevision,
                     path = pkg.vcs.path
                 )
-                isMetaDataOnly shouldBe false
+                isMetadataOnly shouldBe false
                 isModified shouldBe false
             }
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.pkg)
+            curatedPkg.curations.first().base shouldBe pkg.diff(curatedPkg.metadata)
             curatedPkg.curations.first().curation shouldBe curation.data
         }
 
@@ -201,7 +206,7 @@ class PackageCurationTest : WordSpec({
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
             curatedPkg.curations.size shouldBe 1
-            curatedPkg.pkg.vcs shouldBe VcsInfo.EMPTY
+            curatedPkg.metadata.vcsProcessed shouldBe VcsInfo.EMPTY
         }
 
         "fail if identifiers do not match" {
@@ -238,7 +243,7 @@ class PackageCurationTest : WordSpec({
             }
         }
 
-        "be able to clear isMetaDataOnly" {
+        "be able to clear isMetadataOnly" {
             val pkg = Package(
                 id = Identifier(
                     type = "Maven",
@@ -253,19 +258,19 @@ class PackageCurationTest : WordSpec({
                 binaryArtifact = RemoteArtifact.EMPTY,
                 sourceArtifact = RemoteArtifact.EMPTY,
                 vcs = VcsInfo.EMPTY,
-                isMetaDataOnly = true
+                isMetadataOnly = true
             )
 
             val curation = PackageCuration(
                 id = pkg.id,
                 data = PackageCurationData(
-                    isMetaDataOnly = false
+                    isMetadataOnly = false
                 )
             )
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.isMetaDataOnly shouldBe false
+            curatedPkg.metadata.isMetadataOnly shouldBe false
         }
 
         "be able to clear isModified" {
@@ -295,7 +300,7 @@ class PackageCurationTest : WordSpec({
 
             val curatedPkg = curation.apply(pkg.toCuratedPackage())
 
-            curatedPkg.pkg.isModified shouldBe false
+            curatedPkg.metadata.isModified shouldBe false
         }
 
         "work with Ivy version ranges" {
@@ -344,19 +349,19 @@ class PackageCurationTest : WordSpec({
             val result2 = curation2.apply(result1)
             val result3 = curation3.apply(result2)
 
-            result1.pkg.description shouldBe "description 1"
+            result1.metadata.description shouldBe "description 1"
             result1.curations.size shouldBe 1
             result1.curations[0].base shouldBe PackageCurationData(description = "")
             result1.curations[0].curation shouldBe curation1.data
 
-            result2.pkg.description shouldBe "description 2"
+            result2.metadata.description shouldBe "description 2"
             result2.curations.size shouldBe 2
             result2.curations[0].base shouldBe PackageCurationData(description = "")
             result2.curations[0].curation shouldBe curation1.data
             result2.curations[1].base shouldBe PackageCurationData(description = "description 1")
             result2.curations[1].curation shouldBe curation2.data
 
-            result3.pkg.description shouldBe "description 3"
+            result3.metadata.description shouldBe "description 3"
             result3.curations.size shouldBe 3
             result3.curations[0].base shouldBe PackageCurationData(description = "")
             result3.curations[0].curation shouldBe curation1.data
@@ -389,11 +394,11 @@ class PackageCurationTest : WordSpec({
             val result2 = curation2.apply(result1)
             val result3 = curation3.apply(result2)
 
-            result1.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result1.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause".toSpdx()
-            result2.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result2.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause AND CC-BY-1.0".toSpdx()
-            result3.pkg.declaredLicensesProcessed.spdxExpression shouldBe
+            result3.metadata.declaredLicensesProcessed.spdxExpression shouldBe
                     "Apache-2.0 AND BSD-3-Clause AND CC-BY-2.0".toSpdx()
 
             result3.curations[0].base.declaredLicenseMapping should beEmpty()
@@ -403,12 +408,45 @@ class PackageCurationTest : WordSpec({
             )
         }
     }
+
+    "isApplicable()" should {
+        "accept an empty name and / or version" {
+            val curation = PackageCuration(
+                id = Identifier("Maven:com.android.tools"),
+
+                // Hint: Curation data could set authors and a concluded license here to implement the concept of a
+                // "trusted framework" (as [identified][id] by only the type and namespace) with
+                // [ScannerConfiguration.skipConcluded] enabled.
+                data = PackageCurationData()
+            )
+
+            assertSoftly {
+                curation.isApplicable(Identifier("Maven:com.android.tools:common:25.3.0")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools:common")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools::25.3.0")) shouldBe true
+                curation.isApplicable(Identifier("Maven:com.android.tools")) shouldBe true
+            }
+        }
+
+        "comply to the ivy version matchers specifications" {
+            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
+            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("[1.0,2.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("1.+").isApplicable(identifierForVersion("1.23")) shouldBe true
+            packageCurationForVersion("]1.0,)").isApplicable(identifierForVersion("1.0")) shouldBe false
+        }
+    }
 })
+
+private fun packageCurationForVersion(version: String) =
+    PackageCuration(identifierForVersion(version), PackageCurationData())
+
+private fun identifierForVersion(version: String) = Identifier.EMPTY.copy(version = version)
 
 private fun declaredLicenseMappingCuration(id: Identifier, vararg entries: Pair<String, String>): PackageCuration =
     PackageCuration(
         id,
         PackageCurationData(
-            declaredLicenseMapping = entries.map { it.first to it.second.toSpdx() }.toMap()
+            declaredLicenseMapping = entries.associate { it.first to it.second.toSpdx() }
         )
     )

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,8 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit
+package org.ossreviewtoolkit.cli
 
+import ch.qos.logback.classic.Level
+import ch.qos.logback.classic.Logger
+
+import com.github.ajalt.clikt.completion.completionOption
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
@@ -37,30 +41,30 @@ import java.io.File
 
 import kotlin.system.exitProcess
 
-import org.apache.logging.log4j.Level
-import org.apache.logging.log4j.core.config.Configurator
-
-import org.ossreviewtoolkit.commands.*
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.cli.commands.*
+import org.ossreviewtoolkit.cli.utils.logger
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_CONFIG_DIR_ENV_NAME
-import org.ossreviewtoolkit.utils.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ORT_DATA_DIR_ENV_NAME
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.PERFORMANCE
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.printStackTrace
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_DATA_DIR_ENV_NAME
+import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.printStackTrace
+
+import org.slf4j.LoggerFactory
 
 /**
  * Helper class for mutually exclusive command line options of different types.
  */
-sealed class GroupTypes {
-    data class FileType(val file: File) : GroupTypes()
-    data class StringType(val string: String) : GroupTypes()
+sealed interface GroupTypes {
+    data class FileType(val file: File) : GroupTypes
+    data class StringType(val string: String) : GroupTypes
 }
 
 /**
@@ -71,6 +75,15 @@ data class GlobalOptions(
     val forceOverwrite: Boolean
 )
 
+/**
+ * The entry point for the application with [args] being the list of arguments.
+ */
+fun main(args: Array<String>) {
+    Os.fixupUserHomeProperty()
+    OrtMain().main(args)
+    exitProcess(0)
+}
+
 class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
@@ -78,9 +91,10 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         .default(ortConfigDirectory.resolve(ORT_CONFIG_FILENAME))
 
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
+        "--debug" to Level.DEBUG,
+        "--error" to Level.ERROR,
         "--info" to Level.INFO,
-        "--performance" to PERFORMANCE,
-        "--debug" to Level.DEBUG
+        "--warn" to Level.WARN
     ).default(Level.WARN)
 
     private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
@@ -88,7 +102,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgresStorage.schema=testSchema"
+                "-P ort.scanner.storages.postgres.schema=testSchema"
     ).associate()
 
     private val forceOverwrite by option(
@@ -119,7 +133,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
                 // initialized yet.)
                 val isRootCommand = currentContext.invokedSubcommand == null
                 if (isRootCommand && !headerShownBefore) {
-                    appendLine(getVersionHeader(env.ortVersion))
+                    appendLine(getOrtHeader(env.ortVersion))
                     headerShownBefore = true
                 }
 
@@ -130,6 +144,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
     }
 
     init {
+        completionOption()
+
         context {
             expandArgumentFiles = false
             helpFormatter = OrtHelpFormatter()
@@ -141,6 +157,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             ConfigCommand(),
             DownloaderCommand(),
             EvaluatorCommand(),
+            NotifierCommand(),
             ReporterCommand(),
             RequirementsCommand(),
             ScannerCommand(),
@@ -152,13 +169,16 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         versionOption(
             version = env.ortVersion,
             names = setOf("--version", "-v"),
-            help = "Show version information and exit.",
-            message = ::getVersionHeader
+            help = "Show the version and exit.",
+            message = { it }
         )
     }
 
     override fun run() {
-        Configurator.setRootLevel(logLevel)
+        val rootLogger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME) as Logger
+        rootLogger.level = logLevel
+
+        logger.debug { "Used command line arguments: ${currentContext.originalArgv}" }
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
@@ -166,18 +186,23 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         // Make options available to subcommands and apply static configuration.
         val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
         currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
-        LicenseFilenamePatterns.configure(ortConfiguration.licenseFilePatterns)
+        LicenseFilePatterns.configure(ortConfiguration.licenseFilePatterns)
+
+        EnvironmentVariableFilter.reset(
+            ortConfiguration.deniedProcessEnvironmentVariablesSubstrings,
+            ortConfiguration.allowedProcessEnvironmentVariableNames
+        )
 
         if (helpAll) {
             registeredSubcommands().forEach {
                 println(it.getFormattedHelp())
             }
         } else {
-            println(getVersionHeader(env.ortVersion))
+            println(getOrtHeader(env.ortVersion))
         }
     }
 
-    private fun getVersionHeader(version: String): String {
+    private fun getOrtHeader(version: String): String {
         val variables = mutableListOf(
             "$ORT_CONFIG_DIR_ENV_NAME = $ortConfigDirectory",
             "$ORT_DATA_DIR_ENV_NAME = $ortDataDirectory"
@@ -207,13 +232,4 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         return header.joinToString("\n", postfix = "\n")
     }
-}
-
-/**
- * The entry point for the application with [args] being the list of arguments.
- */
-fun main(args: Array<String>) {
-    Os.fixupUserHomeProperty()
-    OrtMain().main(args)
-    exitProcess(0)
 }

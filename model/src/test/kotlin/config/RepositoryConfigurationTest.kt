@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,8 @@ import io.kotest.matchers.string.shouldNotContain
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class RepositoryConfigurationTest : WordSpec({
     "RepositoryConfiguration" should {
@@ -40,13 +41,13 @@ class RepositoryConfigurationTest : WordSpec({
             val configuration = """
                 excludes:
                   paths:
-                  - pattern: "android/**build.gradle"
+                  - pattern: "android/**/build.gradle"
                     reason: "BUILD_TOOL_OF"
                     comment: "project comment"
                 """.trimIndent()
 
             val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
-            config.excludes.paths[0].matches("android/project1/build.gradle") shouldBe true
+            config.excludes.paths.first().matches("android/project1/build.gradle") shouldBe true
         }
 
         "throw ValueInstantiationException if no given is supplied for repository_license_choices" {
@@ -62,19 +63,21 @@ class RepositoryConfigurationTest : WordSpec({
                 yamlMapper.readValue<RepositoryConfiguration>(configuration)
             }
 
-            exception.message shouldContain "problem: LicenseChoices LicenseChoice(given=null, choice=MIT)"
+            exception.message shouldContain "problem: LicenseChoices SpdxLicenseChoice(given=null, choice=MIT)"
             exception.message shouldNotContain "GPL-2.0-only"
         }
 
         "be deserializable" {
             val configuration = """
+                analyzer:
+                  allow_dynamic_versions: true
                 excludes:
                   paths:
                   - pattern: "project1/path"
                     reason: "BUILD_TOOL_OF"
                     comment: "project comment"
                   scopes:
-                  - name: "scope"
+                  - pattern: "scope"
                     reason: "TEST_DEPENDENCY_OF"
                     comment: "scope comment"
                 resolutions:
@@ -90,6 +93,24 @@ class RepositoryConfigurationTest : WordSpec({
                   - id: "vulnerability id"
                     reason: "INEFFECTIVE_VULNERABILITY"
                     comment: "vulnerability comment"
+                package_configurations:
+                - id: "Maven:com.example:package:1.2.3"
+                  source_artifact_url: "https://repo.maven.apache.org/com/example/package/package-1.2.3-sources.jar"
+                  license_finding_curations:
+                  - path: "com/example/common/example/ExampleClass.java"
+                    start_lines: 41
+                    line_count: 1
+                    detected_license: "GPL-2.0-only"
+                    reason: "INCORRECT"
+                    comment: "False-positive license finding."
+                    concluded_license: "NONE"
+                  - path: "com/example/common/second/Example.java"
+                    start_lines: 35
+                    line_count: 1
+                    detected_license: "GPL-2.0-only"
+                    reason: "INCORRECT"
+                    comment: "False-positive by ScanCode."
+                    concluded_license: "NONE"
                 license_choices:
                   repository_license_choices:
                   - given: Apache-2.0 or GPL-2.0-only
@@ -104,13 +125,17 @@ class RepositoryConfigurationTest : WordSpec({
 
             val repositoryConfiguration = yamlMapper.readValue<RepositoryConfiguration>(configuration)
 
+            repositoryConfiguration.analyzer shouldNotBeNull {
+                allowDynamicVersions shouldBe true
+            }
+
             val paths = repositoryConfiguration.excludes.paths
             paths should haveSize(1)
-
-            val path = paths[0]
-            path.pattern shouldBe "project1/path"
-            path.reason shouldBe PathExcludeReason.BUILD_TOOL_OF
-            path.comment shouldBe "project comment"
+            with(paths.first()) {
+                pattern shouldBe "project1/path"
+                reason shouldBe PathExcludeReason.BUILD_TOOL_OF
+                comment shouldBe "project comment"
+            }
 
             val scopes = repositoryConfiguration.excludes.scopes
             scopes should haveSize(1)
@@ -142,6 +167,13 @@ class RepositoryConfigurationTest : WordSpec({
                 id shouldBe "vulnerability id"
                 reason shouldBe VulnerabilityResolutionReason.INEFFECTIVE_VULNERABILITY
                 comment shouldBe "vulnerability comment"
+            }
+
+            val packageConfigurations = repositoryConfiguration.packageConfigurations
+            packageConfigurations should haveSize(1)
+            with(packageConfigurations.first()) {
+                licenseFindingCurations should haveSize(2)
+                id shouldBe Identifier("Maven:com.example:package:1.2.3")
             }
 
             val repositoryLicenseChoices = repositoryConfiguration.licenseChoices.repositoryLicenseChoices

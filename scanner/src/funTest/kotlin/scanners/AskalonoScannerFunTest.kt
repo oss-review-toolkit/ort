@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,10 +19,19 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.TextLocation
 
-class AskalonoScannerFunTest : AbstractScannerFunTest() {
-    override val scanner = Askalono("Askalono", scannerConfig, downloaderConfig)
-    override val expectedFileLicenses = setOf("Apache-2.0".toSpdx())
-    override val expectedDirectoryLicenses = setOf("Apache-2.0".toSpdx())
+class AskalonoScannerFunTest : AbstractPathScannerWrapperFunTest() {
+    override val scanner = Askalono("Askalono", scannerConfig)
+
+    override val expectedFileLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 1.0f)
+    )
+
+    override val expectedDirectoryLicenses = listOf(
+        LicenseFinding("Apache-2.0", TextLocation("COPYING", TextLocation.UNKNOWN_LINE), 0.9891926f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENCE", TextLocation.UNKNOWN_LINE), 0.99112236f),
+        LicenseFinding("Apache-2.0", TextLocation("LICENSE", TextLocation.UNKNOWN_LINE), 1.0f)
+    )
 }

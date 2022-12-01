@@ -3,50 +3,83 @@ name: Static Analysis
 on:
   pull_request:
     branches:
-      - master
+      - main
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  detekt:
-    runs-on: ubuntu-latest
+  copyright-license:
+    runs-on: ubuntu-22.04
     env:
       GRADLE_OPTS: -Dorg.gradle.daemon=false
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Setup Java
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v3
       with:
+        distribution: temurin
+        java-version: 11
+    - name: Check copyright and license information
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: checkCopyrightsInNoticeFile checkLicenseHeaders
+  detekt-issues:
+    runs-on: ubuntu-22.04
+    env:
+      GRADLE_OPTS: -Dorg.gradle.daemon=false
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
         java-version: 11
     - name: Check for Detekt Issues
-      uses: burrunan/gradle-cache-action@v1
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: --no-daemon --stacktrace detekt
+        arguments: detekt detektTest
     - name: Upload SARIF File
-      uses: github/codeql-action/upload-sarif@v1
+      uses: github/codeql-action/upload-sarif@v2
       if: ${{ always() }} # Upload even if the previous step failed.
       with:
         sarif_file: build/reports/detekt/merged.sarif
-  markdown:
-    runs-on: ubuntu-latest
+  markdown-links:
+    runs-on: ubuntu-22.04
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Check Links
       uses: gaurav-nelson/github-action-markdown-link-check@v1
       with:
+        base-branch: main
         check-modified-files-only: yes
         max-depth: 2
         use-quiet-mode: yes
-  reuse:
-    runs-on: ubuntu-latest
+  qodana-scan:
+    runs-on: ubuntu-22.04
     steps:
-    - name: Setup Python
-      uses: actions/setup-python@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v3
       with:
-        python-version: 3.6
+        fetch-depth: 0
+    - name: Qodana Scan
+      uses: JetBrains/qodana-action@v2022.2.4
+    - uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: ${{runner.temp}}/qodana/results/qodana.sarif.json
+  reuse-tool:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+        cache: pip
     - name: Check REUSE Compliance
       run: |
         pip install --user reuse

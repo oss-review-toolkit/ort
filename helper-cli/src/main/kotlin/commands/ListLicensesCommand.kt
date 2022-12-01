@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,32 +34,30 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 import java.lang.IllegalArgumentException
-import java.nio.file.FileSystems
-import java.nio.file.Paths
 
-import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.common.createProvider
-import org.ossreviewtoolkit.helper.common.fetchScannedSources
-import org.ossreviewtoolkit.helper.common.getLicenseFindingsById
-import org.ossreviewtoolkit.helper.common.getPackageOrProject
-import org.ossreviewtoolkit.helper.common.getViolatedRulesByLicense
-import org.ossreviewtoolkit.helper.common.replaceConfig
+import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.helper.utils.createProvider
+import org.ossreviewtoolkit.helper.utils.fetchScannedSources
+import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
+import org.ossreviewtoolkit.helper.utils.getPackageOrProject
+import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.FileMatcher
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 internal class ListLicensesCommand : CliktCommand(
     help = "Lists the license findings for a given package as distinct text locations."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -83,13 +81,14 @@ internal class ListLicensesCommand : CliktCommand(
 
     private val offendingOnly by option(
         "--offending-only",
-        help = "Only list licenses causing a rule violation of severity specified severity, see --severity."
+        help = "Only list licenses causing at least one rule violation with an offending severity, see " +
+                "--offending-severities."
     ).flag()
 
-    private val offendingSeverity by option(
-        "--offending-severity",
-        help = "Set the severities to use filtering enabled by --offending-only, specified as comma-separated " +
-                "values. Allowed values: ERROR,WARNING,HINT."
+    private val offendingSeverities by option(
+        "--offending-severities",
+        help = "Set the severities to use for the filtering enabled by --offending-only, specified as " +
+                "comma-separated values."
     ).enum<Severity>().split(",").default(enumValues<Severity>().asList())
 
     private val omitExcluded by option(
@@ -150,22 +149,19 @@ internal class ListLicensesCommand : CliktCommand(
     private val fileAllowList by option(
         "--file-allow-list",
         help = "Output only license findings for files whose paths matches any of the given glob expressions."
-    ).convert { csv ->
-        csv.split(',').map { pattern -> FileSystems.getDefault().getPathMatcher("glob:$pattern") }
-    }.default(emptyList())
+    ).split(",")
+        .default(emptyList())
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
 
         if (ortResult.getPackageOrProject(packageId) == null) {
             throw UsageError("Could not find the package for the given id '${packageId.toCoordinates()}'.")
         }
 
-        val sourcesDir = if (sourceCodeDir == null) {
+        val sourcesDir = sourceCodeDir ?: run {
             println("Downloading sources for package '${packageId.toCoordinates()}'...")
             ortResult.fetchScannedSources(packageId)
-        } else {
-            sourceCodeDir!!
         }
 
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
@@ -174,10 +170,10 @@ internal class ListLicensesCommand : CliktCommand(
             if (ortResult.isProject(packageId)) {
                 ortResult.getExcludes().paths
             } else {
-                packageConfigurationProvider.getPackageConfiguration(packageId, provenance)?.pathExcludes.orEmpty()
+                packageConfigurationProvider.getPackageConfigurations(packageId, provenance).flatMap { it.pathExcludes }
             }.any { it.matches(path) }
 
-        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverity)
+        val violatedRulesByLicense = ortResult.getViolatedRulesByLicense(packageId, offendingSeverities)
 
         val findingsByProvenance = ortResult
             .getLicenseFindingsById(
@@ -188,12 +184,15 @@ internal class ListLicensesCommand : CliktCommand(
             )
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
-                    !offendingOnly || violatedRulesByLicense.contains(license)
+                    !offendingOnly || license in violatedRulesByLicense
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
-                        (fileAllowList.isEmpty() || fileAllowList.any { it.matches(Paths.get(location.path)) }) &&
-                                (!omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty())
+                        val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
+
+                        val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
+                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+
+                        isAllowedFile && isIncluded
                     }
                 }.mapValues { (_, locations) ->
                     locations.groupByText(sourcesDir)
@@ -224,22 +223,23 @@ internal class ListLicensesCommand : CliktCommand(
 private data class TextLocationGroup(
     val locations: Set<TextLocation>,
     val text: String? = null
-) {
+) : Comparable<TextLocationGroup> {
     companion object {
-        val COMPARATOR = compareBy<TextLocationGroup>({ it.text == null }, { -it.locations.size })
+        private val COMPARATOR = compareBy<TextLocationGroup>({ it.text == null }, { -it.locations.size })
     }
+
+    override fun compareTo(other: TextLocationGroup) = COMPARATOR.compare(this, other)
 }
 
 private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pair<TextLocationGroup, String>> {
     var i = 0
-    return sortedWith(TextLocationGroup.COMPARATOR)
-        .map {
-            if (it.text != null) {
-                Pair(it, "${i++}")
-            } else {
-                Pair(it, "-")
-            }
+    return sorted().map {
+        if (it.text != null) {
+            Pair(it, "${i++}")
+        } else {
+            Pair(it, "-")
         }
+    }
 }
 
 private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValueAsString(
@@ -286,7 +286,7 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
 
     forEach { textLocation ->
         textLocation.resolve(baseDir)?.let {
-            resolvedLocations.getOrPut(it, { mutableSetOf() }) += textLocation
+            resolvedLocations.getOrPut(it) { mutableSetOf() } += textLocation
         }
     }
 
@@ -314,7 +314,7 @@ private fun Provenance.writeValueAsString(): String =
     when (this) {
         is ArtifactProvenance -> "url=${sourceArtifact.url}, hash=${sourceArtifact.hash.value}"
         is RepositoryProvenance -> {
-            "type=${vcsInfo.type}, url=${vcsInfo.url}, path=${vcsInfo.path}, revision=${vcsInfo.resolvedRevision}"
+            "type=${vcsInfo.type}, url=${vcsInfo.url}, path=${vcsInfo.path}, revision=$resolvedRevision"
         }
         else -> throw IllegalArgumentException("Provenance must have either a non-null source artifact or VCS info.")
     }

@@ -1,13 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,63 +17,76 @@
  * License-Filename: LICENSE
  */
 
-val cliktVersion: String by project
-val config4kVersion: String by project
-val exposedVersion: String by project
-val jacksonVersion: String by project
-val hikariVersion: String by project
-val kotestVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val log4jCoreVersion: String by project
-val postgresVersion: String by project
-val reflectionsVersion: String by project
-val sw360ClientVersion: String by project
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+import java.nio.charset.Charset
 
 plugins {
     // Apply core plugins.
     application
+
+    // Apply third-party plugins.
+    alias(libs.plugins.graal)
+    alias(libs.plugins.shadow)
 }
 
 application {
     applicationName = "ort"
-    mainClassName = "org.ossreviewtoolkit.OrtMainKt"
+    mainClass.set("org.ossreviewtoolkit.cli.OrtMainKt")
 }
 
-tasks.named<CreateStartScripts>("startScripts") {
+graal {
+    graalVersion(libs.versions.graal.get())
+    javaVersion("17")
+
+    // Build a standalone native executable or report a failure.
+    option("--no-fallback")
+
+    // Work-around for:
+    // "WARNING: Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports"
+    option("-J--add-modules")
+    option("-JALL-SYSTEM")
+
+    // Work-around for:
+    // "Error: Classes that should be initialized at run time got initialized during image building"
+    option("--initialize-at-build-time=org.jruby.util.RubyFileTypeDetector")
+
+    // Work-around for:
+    // "Unsupported method java.lang.invoke.MethodHandleNatives.setCallSiteTargetNormal() is reachable"
+    option("--report-unsupported-elements-at-runtime")
+
+    // Work-around for:
+    // "Error: Non-reducible loop requires too much duplication"
+    option("-H:MaxDuplicationFactor=3.0")
+
+    mainClass("org.ossreviewtoolkit.cli.OrtMainKt")
+    outputName("ort")
+}
+
+tasks.withType<ShadowJar>().configureEach {
+    isZip64 = true
+}
+
+tasks.named<CreateStartScripts>("startScripts").configure {
     doLast {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
         // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
-        windowsScript.writeText(windowsScript.readText().replace(Regex("set CLASSPATH=.*"),
-            "set CLASSPATH=%APP_HOME%\\\\lib\\\\*"))
+        val windowsScriptText = windowsScript.readText(Charset.defaultCharset())
+        windowsScript.writeText(
+            windowsScriptText.replace(
+                Regex("set CLASSPATH=%APP_HOME%\\\\lib\\\\.*"),
+                "set CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%\\\\plugin\\\\*"
+            )
+        )
+
+        val unixScriptText = unixScript.readText(Charset.defaultCharset())
+        unixScript.writeText(
+            unixScriptText.replace(
+                Regex("CLASSPATH=\\\$APP_HOME/lib/.*"),
+                "CLASSPATH=\\\$APP_HOME/lib/*:\\\$APP_HOME/plugin/*"
+            )
+        )
     }
-}
-
-val fatJar by tasks.registering(Jar::class) {
-    description = "Creates a fat jar that includes all required dependencies."
-    group = "Build"
-
-    archiveBaseName.set(application.applicationName)
-
-    manifest.from(tasks.jar.get().manifest)
-    manifest {
-        attributes["Main-Class"] = application.mainClassName
-    }
-
-    isZip64 = true
-
-    val classpath = configurations.runtimeClasspath.get().filterNot {
-        it.isFile && it.extension == "pom"
-    }.map {
-        if (it.isDirectory) it else zipTree(it)
-    }
-
-    from(classpath) {
-        exclude("META-INF/*.DSA")
-        exclude("META-INF/*.RSA")
-        exclude("META-INF/*.SF")
-    }
-
-    with(tasks.jar.get())
 }
 
 repositories {
@@ -83,7 +94,7 @@ repositories {
     // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
         forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases-local/")
+            maven("https://repo.gradle.org/gradle/libs-releases/")
         }
 
         filter {
@@ -111,6 +122,16 @@ repositories {
             includeGroup("com.github.everit-org.json-schema")
         }
     }
+    exclusiveContent {
+        forRepository {
+            maven("https://packages.atlassian.com/maven-external")
+        }
+
+        filter {
+            includeGroupByRegex("com\\.atlassian\\..*")
+            includeVersionByRegex("log4j", "log4j", ".*-atlassian-.*")
+        }
+    }
 }
 
 dependencies {
@@ -119,34 +140,33 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":evaluator"))
     implementation(project(":model"))
+    implementation(project(":notifier"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))
-    implementation(project(":utils"))
+    implementation(project(":utils:ort-utils"))
+    implementation(project(":utils:spdx-utils"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("io.github.config4k:config4k:$config4kVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
-    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.postgresql:postgresql:$postgresVersion")
-    implementation("org.reflections:reflections:$reflectionsVersion")
+    implementation(libs.bundles.exposed)
+    implementation(libs.clikt)
+    implementation(libs.hikari)
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.kotlinxSerialization)
+    implementation(libs.log4jApiToSlf4j)
+    implementation(libs.logbackClassic)
+    implementation(libs.postgres)
+    implementation(libs.reflections)
+    implementation(libs.sw360Client)
 
-    testImplementation(project(":test-utils"))
+    testImplementation(project(":utils:test-utils"))
 
-    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
-    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation(libs.greenmail)
+    testImplementation(libs.kotestAssertionsCore)
+    testImplementation(libs.kotestRunnerJunit5)
 
     funTestImplementation(sourceSets["main"].output)
     funTestImplementation(sourceSets["test"].output)
 }
 
-configurations["funTestImplementation"].extendsFrom(configurations.testImplementation.get())
-configurations["funTestRuntime"].extendsFrom(configurations.testRuntime.get())
+configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])

@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,16 +17,12 @@
  * License-Filename: LICENSE
  */
 
-val exposedVersion: String by project
-val hikariVersion: String by project
-val jacksonVersion: String by project
-val kotlinxCoroutinesVersion: String by project
-val mockkVersion: String by project
-val postgresVersion: String by project
-val postgresEmbeddedVersion: String by project
-val retrofitVersion: String by project
-val sw360ClientVersion: String by project
-val wiremockVersion: String by project
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
+val askalonoVersion: String by project
+val boyterLcVersion: String by project
+val licenseeVersion: String by project
+val scancodeVersion: String by project
 
 plugins {
     // Apply core plugins.
@@ -51,22 +46,43 @@ dependencies {
 
     implementation(project(":clients:clearly-defined"))
     implementation(project(":clients:fossid-webapp"))
+    implementation(project(":clients:scanoss"))
     implementation(project(":downloader"))
-    implementation(project(":utils"))
+    implementation(project(":utils:ort-utils"))
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
-    implementation("com.squareup.retrofit2:converter-jackson:$retrofitVersion")
-    implementation("com.zaxxer:HikariCP:$hikariVersion")
-    implementation("org.eclipse.sw360:client:$sw360ClientVersion")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion")
-    implementation("org.postgresql:postgresql:$postgresVersion")
+    implementation(libs.bundles.exposed)
+    implementation(libs.hikari)
+    implementation(libs.jacksonModuleKotlin)
+    implementation(libs.kotlinxCoroutines)
+    implementation(libs.postgres)
+    implementation(libs.retrofitConverterJackson)
+    implementation(libs.scanoss)
+    implementation(libs.sw360Client)
 
-    testImplementation("com.github.tomakehurst:wiremock:$wiremockVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation(libs.kotlinxSerialization)
+    testImplementation(libs.mockk)
+    testImplementation(libs.retrofitConverterKotlinxSerialization)
+    testImplementation(libs.wiremock)
+}
 
-    funTestImplementation("com.opentable.components:otj-pg-embedded:$postgresEmbeddedVersion")
+buildConfig {
+    packageName("org.ossreviewtoolkit.scanner")
+
+    buildConfigField("String", "ASKALONO_VERSION", "\"$askalonoVersion\"")
+    buildConfigField("String", "BOYTER_LC_VERSION", "\"$boyterLcVersion\"")
+    buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
+    buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
+    buildConfigField("String", "SCANOSS_VERSION", "\"${libs.versions.scanoss.get()}\"")
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    if ("test" in name.toLowerCase()) {
+        kotlinOptions {
+            freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+        }
+    }
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,21 +28,21 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.common.createProvider
-import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.helper.utils.createProvider
+import org.ossreviewtoolkit.helper.utils.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ListCopyrightsCommand : CliktCommand(
     help = "Lists the copyright findings."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The ORT result file to read as input."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -88,8 +88,8 @@ internal class ListCopyrightsCommand : CliktCommand(
     ).single()
 
     override fun run() {
-        val ortResult = ortResultFile.expandTilde().readValue<OrtResult>()
-        val copyrightGarbage = copyrightGarbageFile?.expandTilde()?.readValue<CopyrightGarbage>().orEmpty()
+        val ortResult = readOrtResult(ortFile)
+        val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
         val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val copyrightStatements = ortResult.processAllCopyrightStatements(

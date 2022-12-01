@@ -1,0 +1,35 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+    - "Organization: Example Inc."
+    - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "xyz-0.1.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
+documentDescribes:
+  - "SPDXRef-Package-xyz"
+externalDocumentRefs:
+  - externalDocumentId: "DocumentRef-subproject-conan"
+    spdxDocument: "./subproject/subproject-with-conan-reference.spdx.yml"
+    checksum:
+      algorithm: "SHA1"
+      checksumValue: "53840294281f7d1bf401b746162da11dcf9306eb"
+packages:
+  - SPDXID: "SPDXRef-Package-xyz"
+    description: "Awesome product created by Example Inc."
+    copyrightText: "Copyright (C) 2020 Example Inc."
+    downloadLocation: "git+ssh://gitlab.example.com:3389/products/xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+    filesAnalyzed: false
+    homepage: "https://example.com/products/xyz"
+    licenseConcluded:  "NOASSERTION"
+    licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+    name: "xyz"
+    versionInfo: "0.1.0"
+    originator: "Person: Thomas Steenbergen"
+relationships:
+  - spdxElementId: "DocumentRef-subproject-conan:SPDXRef-Package-subproject-conan"
+    relationshipType: "RUNTIME_DEPENDENCY_OF"
+    relatedSpdxElement: "SPDXRef-Package-xyz"

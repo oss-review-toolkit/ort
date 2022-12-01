@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,6 +25,7 @@ import java.io.File
 import java.util.regex.Pattern
 
 import org.apache.logging.log4j.Level
+import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
 import org.apache.maven.execution.DefaultMavenExecutionRequest
@@ -80,31 +81,40 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.DiskCache
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.installAuthenticatorAndProxySelector
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.logOnce
-import org.ossreviewtoolkit.utils.ortDataDirectory
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.withoutPrefix
+import org.ossreviewtoolkit.utils.common.DiskCache
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.withoutPrefix
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
+import org.ossreviewtoolkit.utils.ort.OrtProxySelector
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 fun Artifact.identifier() = "$groupId:$artifactId:$version"
 
+/**
+ * Return the path to this file or a corresponding message if the file is unknown.
+ */
+private val File?.safePath: String
+    get() = this?.invariantSeparatorsPath ?: "<unknown file>"
+
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
-    companion object {
+    companion object : Logging {
         private const val MAX_DISK_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
         private const val MAX_DISK_CACHE_ENTRY_AGE_SECONDS = 6 * 60 * 60
 
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
         private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
+
+        private val WHITESPACE_REGEX = Regex("\\s")
 
         private val remoteArtifactCache =
             DiskCache(
@@ -121,7 +131,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             return DefaultPlexusContainer(configuration).apply {
                 loggerManager = object : BaseLoggerManager() {
-                    override fun createLogger(name: String) = MavenLogger(log.delegate.level)
+                    override fun createLogger(name: String) = MavenLogger(MavenSupport.logger.delegate.level)
                 }
             }
         }
@@ -138,9 +148,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         fun parseLicenses(mavenProject: MavenProject) =
             mavenProject.licenses.mapNotNull { license ->
-                license.comments.withoutPrefix("SPDX-License-Identifier:") {
-                    license.name ?: license.url ?: license.comments
-                }?.trim()
+                listOfNotNull(license.name, license.url, license.comments).firstOrNull { it.isNotBlank() }
             }.toSortedSet()
 
         fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
@@ -151,25 +159,31 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         fun parseVcsInfo(mavenProject: MavenProject) = parseScm(getOriginalScm(mavenProject))
 
         /**
-         * When asking Maven for the SCM URL of a POM that does not itself define an SCM URL, Maven returns the SCM
-         * URL of the first parent POM (if any) that defines one and appends the artifactIds of all child POMs to it,
-         * separated by slashes.
-         * This behavior is fundamentally broken because it invalidates the SCM URL for all VCS that cannot limit
-         * cloning to a specific path within a repository, or use a different syntax for that. Also, the assumption
-         * that the source code for a child artifact is stored in a top-level directory named like the artifactId
-         * inside the parent artifact's repository is often not correct.
-         * To address this, determine the SCM URL of the parent (if any) that is closest to the root POM and whose
-         * SCM URL still is a prefix of the child POM's SCM URL.
+         * When asking Maven for the SCM connection or the SCM URL of a POM that does not itself define these values,
+         * Maven returns the values of the first parent POM (if any) that defines one and appends the artifactIds of all
+         * child POMs to it, separated by slashes.
+         * This behavior is fundamentally broken because it invalidates the SCM connection / URL for all VCS that cannot
+         * limit cloning to a specific path within a repository, or use a different syntax for that. Also, the
+         * assumption that the source code for a child artifact is stored in a top-level directory named like the
+         * artifactId inside the parent artifact's repository is often not correct.
+         * To address this, determine the SCM connection and URL of the parent (if any) that is closest to the root POM
+         * and whose SCM connection / URL still is a prefix of the child POM's SCM values.
          */
         fun getOriginalScm(mavenProject: MavenProject): Scm? {
-            var scm = mavenProject.scm
+            val scm = mavenProject.scm
             var parent = mavenProject.parent
 
             while (parent != null) {
                 parent.scm?.let { parentScm ->
                     parentScm.connection?.let { parentConnection ->
                         if (parentConnection.isNotBlank() && scm.connection.startsWith(parentConnection)) {
-                            scm = parentScm
+                            scm.connection = parentScm.connection
+                        }
+                    }
+
+                    parentScm.url?.let { parentUrl ->
+                        if (parentUrl.isNotBlank() && scm.url.startsWith(parentUrl)) {
+                            scm.url = parentScm.url
                         }
                     }
                 }
@@ -181,10 +195,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
 
         private fun parseScm(scm: Scm?): VcsInfo {
-            val connection = scm?.connection.orEmpty()
-            val tag = scm?.tag?.takeIf { it != "HEAD" }.orEmpty()
+            val connection = scm?.connection
+            if (connection.isNullOrEmpty()) return VcsInfo.EMPTY
 
-            if (connection.isEmpty()) return VcsInfo.EMPTY
+            val tag = scm.tag?.takeIf { it != "HEAD" }.orEmpty()
 
             return SCM_REGEX.matcher(connection).let { matcher ->
                 if (matcher.matches()) {
@@ -200,14 +214,20 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         }
 
                         // Maven does not officially support git-repo as an SCM, see
-                        // http://maven.apache.org/scm/scms-overview.html, so come up with a convention to use the URL
-                        // fragment for the path to the manifest inside the repository.
+                        // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
+                        // "manifest" query parameter for the path to the manifest inside the repository. An earlier
+                        // version of this workaround expected the query string to be only the path to the manifest, for
+                        // backward compatibility convert such URLs to the new syntax.
                         type == "git-repo" -> {
+                            val manifestPath = url.parseRepoManifestPath()
+                                ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
+                            val urlWithManifest = url.takeIf { manifestPath == null }
+                                ?: "${url.substringBefore('?')}?manifest=$manifestPath"
+
                             VcsInfo(
                                 type = VcsType.GIT_REPO,
-                                url = url.substringBefore('?'),
-                                revision = tag,
-                                path = url.substringAfter('?')
+                                url = urlWithManifest,
+                                revision = tag
                             )
                         }
 
@@ -222,12 +242,25 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                             // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
                             // special URL paths.
-                            VcsHost.toVcsInfo(fixedUrl).copy(revision = tag).also {
-                                log.info { "Fixed up invalid SCM connection '$connection' without a provider to $it." }
+                            VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
+                                logger.info {
+                                    "Fixed up invalid SCM connection '$connection' without a provider to $it."
+                                }
                             }
                         }
 
-                        else -> VcsInfo(type = VcsType(type), url = url, revision = tag)
+                        else -> {
+                            VcsHost.fromUrl(url)?.let { host ->
+                                host.toVcsInfo(url)?.let { vcsInfo ->
+                                    // Fixup paths that are specified as part of the URL and contain the project name as
+                                    // a prefix.
+                                    val projectPrefix = "${host.getProject(url)}-"
+                                    vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
+                                        vcsInfo.copy(path = path)
+                                    }
+                                }
+                            } ?: VcsInfo(type = VcsType(type), url = url, revision = tag)
+                        }
                     }
                 } else {
                     val userHostMatcher = USER_HOST_REGEX.matcher(connection)
@@ -242,23 +275,51 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     } else if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                         // clear cases.
-                        log.warn { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
+                        logger.info { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
 
-                        VcsInfo(VcsType.GIT, connection, tag)
+                        VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
                     } else {
-                        log.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
+                        logger.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
 
                         VcsInfo.EMPTY
                     }
                 }
             }
         }
+
+        /**
+         * Split the provided [checksum] by whitespace and return a [Hash] for the first element that matches the
+         * provided algorithm. If no element matches, return [Hash.NONE]. This works around the issue that Maven
+         * checksum files sometimes contain arbitrary strings before or after the actual checksum.
+         */
+        internal fun parseChecksum(checksum: String, algorithm: String) =
+            checksum.split(WHITESPACE_REGEX).firstNotNullOfOrNull {
+                runCatching { Hash.create(it, algorithm) }.getOrNull()
+            } ?: Hash.NONE
+
+        /**
+         * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
+         * but with a different hash, otherwise return false.
+         */
+        private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean {
+            if (remoteArtifact.url.isBlank() || isMavenCentralUrl(remoteArtifact.url)) return false
+
+            val mavenCentralUrl = with(artifact) {
+                val group = groupId.replace('.', '/')
+                val name = remoteArtifact.url.substringAfterLast('/')
+                val hash = remoteArtifact.hash.algorithm.name.lowercase()
+                "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$hash"
+            }
+
+            val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrNull() ?: return false
+            return !remoteArtifact.hash.verify(parseChecksum(checksum, remoteArtifact.hash.algorithm.name))
+        }
     }
 
     val container = createContainer()
     private val repositorySystemSession = createRepositorySystemSession(workspaceReader)
 
-    // The MavenSettingsBuilder class is deprecated but internally it uses its successor SettingsBuilder. Calling
+    // The MavenSettingsBuilder class is deprecated, but internally it uses its successor SettingsBuilder. Calling
     // MavenSettingsBuilder requires less code than calling SettingsBuilder, so use it until it is removed.
     @Suppress("DEPRECATION")
     private fun createMavenExecutionRequest(): MavenExecutionRequest {
@@ -308,7 +369,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         return DefaultRepositorySystemSession(session).apply {
             setWorkspaceReader(skipDownloadWorkspaceReader)
-            installAuthenticatorAndProxySelector()
+            OrtAuthenticator.install()
+            OrtProxySelector.install()
             proxySelector = JreProxySelector()
         }
     }
@@ -352,9 +414,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         } catch (e: ProjectBuildingException) {
             e.showStackTrace()
 
-            log.warn {
+            logger.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.collectMessagesAsString()}"
+                        "dependency analysis: ${e.collectMessages()}"
             }
 
             e.results
@@ -364,7 +426,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         projectBuildingResults.forEach { projectBuildingResult ->
             if (projectBuildingResult.project == null) {
-                log.warn {
+                logger.warn {
                     "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
                             projectBuildingResult.problems.joinToString("\n")
                 }
@@ -395,17 +457,16 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
 
             if (resultForPomFile != null) {
-                log.warn {
-                    "There was an error building project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}'. " +
+                logger.warn {
+                    "There was an error building project '${e.projectId}' at '${e.pomFile.safePath}'. " +
                             "Still continuing with the incompletely built project '${resultForPomFile.projectId}' at " +
-                            "'${resultForPomFile.pomFile.invariantSeparatorsPath}': ${e.collectMessagesAsString()}"
+                            "'${resultForPomFile.pomFile.safePath}': ${e.collectMessages()}"
                 }
 
                 resultForPomFile
             } else {
-                log.error {
-                    "Failed to build project '${e.projectId}' at '${e.pomFile.invariantSeparatorsPath}': " +
-                            e.collectMessagesAsString()
+                logger.error {
+                    "Failed to build project '${e.projectId}' at '${e.pomFile.safePath}': ${e.collectMessages()}"
                 }
 
                 throw e
@@ -425,7 +486,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
     private fun requestRemoteArtifact(artifact: Artifact, repositories: List<RemoteRepository>): RemoteArtifact {
         remoteArtifactCache.read(artifact.toString())?.let {
-            log.debug { "Reading remote artifact for '$artifact' from disk cache." }
+            logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
             return yamlMapper.readValue(it)
         }
 
@@ -445,17 +506,20 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         val remoteRepositories = allRepositories.filterNot {
             // Some (Linux) file URIs do not start with "file://" but look like "file:/opt/android-sdk-linux".
             it.url.startsWith("file:/")
+        }.map { repository ->
+            val proxy = repositorySystemSession.proxySelector.getProxy(repository)
+            RemoteRepository.Builder(repository).setProxy(proxy).build()
         }
 
-        if (log.delegate.isDebugEnabled) {
+        if (logger.delegate.isDebugEnabled) {
             val localRepositories = allRepositories - remoteRepositories
             if (localRepositories.isNotEmpty()) {
                 // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-                log.debug { "Ignoring local repositories $localRepositories." }
+                logger.debug { "Ignoring local repositories $localRepositories." }
             }
         }
 
-        log.debug { "Searching for '$artifact' in $remoteRepositories." }
+        logger.debug { "Searching for '$artifact' in $remoteRepositories." }
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
@@ -465,13 +529,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             } catch (e: NoRepositoryLayoutException) {
                 e.showStackTrace()
 
-                log.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessagesAsString()}" }
+                logger.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
 
                 return@forEach
             }
 
             val remoteLocation = repositoryLayout.getLocation(artifact, false)
-            log.debug { "Remote location for '$artifact': $remoteLocation" }
+            logger.debug { "Remote location for '$artifact': $remoteLocation" }
 
             val snapshot = artifact.isSnapshot
             val policy = remoteRepositoryManager.getPolicy(repositorySystemSession, repository, !snapshot, snapshot)
@@ -484,93 +548,82 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             artifactDownload.isExistenceCheck = true
             artifactDownload.listener = object : AbstractTransferListener() {
                 override fun transferFailed(event: TransferEvent?) {
-                    MavenSupport.log.debug { "Transfer failed: $event" }
+                    MavenSupport.logger.debug { "Transfer failed: $event" }
                 }
 
                 override fun transferSucceeded(event: TransferEvent?) {
-                    MavenSupport.log.debug { "Transfer succeeded: $event" }
+                    MavenSupport.logger.debug { "Transfer succeeded: $event" }
                 }
             }
 
             try {
                 wrapMavenSession {
-                    val repositoryConnector = repositoryConnectorProvider
-                        .newRepositoryConnector(repositorySystemSession, repository)
-                    repositoryConnector.get(listOf(artifactDownload), null)
+                    repositoryConnectorProvider.newRepositoryConnector(repositorySystemSession, repository).use {
+                        it.get(listOf(artifactDownload), null)
+                    }
                 }
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
-                log.warn { "Could not create connector for repository '$repository': ${e.collectMessagesAsString()}" }
+                logger.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
 
                 return@forEach
             }
 
             if (artifactDownload.exception == null) {
-                log.debug { "Found '$artifact' in '$repository'." }
+                logger.debug { "Found '$artifact' in '$repository'." }
+
+                val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
+                logger.debug { "Checksums: $checksums" }
 
                 // TODO: Could store multiple checksums in model instead of only the first.
-                val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
-                log.debug { "Checksums: $checksums" }
-
                 val checksum = checksums.first()
-                val tempFile = File.createTempFile(ORT_NAME, "checksum-${checksum.algorithm}")
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
 
-                @Suppress("TooGenericExceptionCaught")
-                val actualChecksum = try {
-                    transporter.get(GetTask(checksum.location).setDataFile(tempFile))
+                val hash = runCatching {
+                    val task = GetTask(checksum.location)
+                    transporter.get(task)
 
-                    // Sometimes the checksum file contains a path after the actual checksum, so strip everything after
-                    // the first space.
-                    tempFile.useLines { it.first().substringBefore(' ') }
-                } catch (e: Exception) {
-                    e.showStackTrace()
+                    parseChecksum(task.dataString, checksum.algorithm)
+                }.getOrElse {
+                    it.showStackTrace()
 
-                    log.warn { "Could not get checksum for '$artifact': ${e.collectMessagesAsString()}" }
+                    logger.warn { "Could not get checksum for '$artifact': ${it.collectMessages()}" }
 
-                    // Fall back to an empty checksum string.
-                    ""
-                }
-
-                if (!tempFile.delete()) {
-                    log.warn { "Unable to delete temporary file '$tempFile'." }
+                    // Fall back to an empty hash.
+                    Hash.NONE
                 }
 
                 val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
-                val hash = if (actualChecksum.isBlank()) Hash.NONE else Hash.create(actualChecksum, checksum.algorithm)
+
                 return RemoteArtifact(downloadUrl, hash).also {
-                    log.debug { "Writing remote artifact for '$artifact' to disk cache." }
+                    logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
-                log.debug {
+                logger.debug {
                     "Could not find '$artifact' in '$repository': " +
-                            artifactDownload.exception.collectMessagesAsString()
+                            artifactDownload.exception.collectMessages()
                 }
             }
         }
 
         val level = if (artifact.classifier == "sources") Level.DEBUG else Level.WARN
-        log.log(level) { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
+        logger.log(level) { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
 
         return RemoteArtifact.EMPTY.also {
-            log.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
+            logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
             remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
         }
     }
 
     /**
-     * Create an instance of [Package] from the information found in a POM file.
-     *
-     * @param artifact The artifact for which the [Package] will be created.
-     * @param repositories A list of remote repositories to search for [artifact].
-     * @param localProjects Instances of local [MavenProject]s which have already been created, mapped by their
-     *                      identifier. If a project is found in this map no remote repositories will be queried and the
-     *                      VCS working tree information will be used to create the [Package].
-     * @param sbtMode If enabled assume that the POM files referenced from the [localProjects] were generated by
-     *                "sbt makePom" and are therefore located below a "target" subdirectory of the actual project.
+     * Create a [Package] for the given [artifact] which is searched for in the list of [repositories]. [localProjects]
+     * contains local [MavenProject]s associated by their identifier for which no remote repositories will be queried,
+     * but the VCS working tree information will be used to create the [Package]. If [sbtMode] is enabled, it is assumed
+     * that the POM files referenced from the [localProjects] were generated by "sbt makePom" and are therefore located
+     * below a "target" subdirectory of the actual project.
      */
     fun parsePackage(
         artifact: Artifact, repositories: List<RemoteRepository>,
@@ -590,7 +643,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         val localProject = localProjects[artifact.identifier()]
 
         val mavenProject = localProject?.also {
-            log.info { "'${artifact.identifier()}' refers to a local project." }
+            logger.info { "'${artifact.identifier()}' refers to a local project." }
         } ?: artifact.let {
             val pomArtifact = mavenRepositorySystem
                 .createArtifact(it.groupId, it.artifactId, it.version, "", "pom")
@@ -607,13 +660,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 }
 
                 if (failedProject != null) {
-                    log.warn {
+                    logger.warn {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
-                                "project: ${e.collectMessagesAsString()}"
+                                "project: ${e.collectMessages()}"
                     }
                     failedProject.project
                 } else {
-                    log.error { "Failed to build '${it.identifier()}': ${e.collectMessagesAsString()}" }
+                    logger.error { "Failed to build '${it.identifier()}': ${e.collectMessages()}" }
                     throw e
                 }
             }
@@ -626,6 +679,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             RemoteArtifact.EMPTY
         } ?: requestRemoteArtifact(artifact, repositories)
 
+        val isBinaryArtifactModified = isArtifactModified(artifact, binaryRemoteArtifact)
+
         val sourceRemoteArtifact = when {
             localProject != null -> RemoteArtifact.EMPTY
             artifact.extension == "pom" -> binaryRemoteArtifact
@@ -637,6 +692,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 requestRemoteArtifact(sourceArtifact, repositories)
             }
         }
+
+        val isSourceArtifactModified = isArtifactModified(artifact, sourceRemoteArtifact)
 
         val vcsFromPackage = parseVcsInfo(mavenProject)
         val localDirectory = localProject?.file?.parentFile?.let {
@@ -657,6 +714,15 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             PackageManager.processProjectVcs(it, vcsFromPackage, *vcsFallbackUrls)
         } ?: PackageManager.processPackageVcs(vcsFromPackage, *vcsFallbackUrls)
 
+        val isSpringMetadataProject = with(mavenProject) {
+            listOf("boot", "cloud").any {
+                groupId == "org.springframework.$it" && (
+                        artifactId.startsWith("spring-$it-starter") ||
+                        artifactId.startsWith("spring-$it-contract-spec")
+                )
+            }
+        }
+
         return Package(
             id = Identifier(
                 type = "Maven",
@@ -673,7 +739,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
-            isMetaDataOnly = mavenProject.packaging == "pom"
+            isMetadataOnly = mavenProject.packaging == "pom" || isSpringMetadataProject,
+            isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }
 
@@ -716,7 +783,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
  * [Medium article](https://medium.com/p/d069d253fe23)
  */
 private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSelector?) : MirrorSelector {
-    companion object {
+    companion object : Logging {
         private val DISABLED_HTTP_REPOSITORY_URLS = listOf(
             "http://jcenter.bintray.com",
             "http://repo.maven.apache.org",
@@ -730,7 +797,7 @@ private class HttpsMirrorSelector(private val originalMirrorSelector: MirrorSele
 
         if (repository == null || DISABLED_HTTP_REPOSITORY_URLS.none { repository.url.startsWith(it) }) return null
 
-        logOnce(Level.INFO) {
+        logger.debug {
             "HTTP access to ${repository.id} (${repository.url}) was disabled. Automatically switching to HTTPS."
         }
 
@@ -769,7 +836,7 @@ private class SkipBinaryDownloadsWorkspaceReader(
      * Locate the given artifact on the local disk. This implementation does a correct location only for POM files;
      * for all other artifacts it returns a non-null file. Note: For the purpose of analyzing the project's
      * dependencies the artifact files are never accessed. Therefore, the concrete file returned here does not
-     * actually matter; it just have to be non-null to indicate that the artifact is present locally.
+     * actually matter; it just has to be non-null to indicate that the artifact is present locally.
      */
     override fun findArtifact(artifact: Artifact): File? {
         return if (artifact.extension == "pom") {

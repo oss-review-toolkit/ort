@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.Scope
 
 /**
  * Defines which parts of a repository should be excluded.
@@ -60,17 +59,12 @@ data class Excludes(
     fun findScopeExcludes(scopeName: String): List<ScopeExclude> = scopes.filter { it.matches(scopeName) }
 
     /**
-     * Return the [ScopeExclude]s for the provided [scope].
-     */
-    fun findScopeExcludes(scope: Scope): List<ScopeExclude> = findScopeExcludes(scope.name)
-
-    /**
      * True if any [path exclude][paths] matches [path].
      */
     fun isPathExcluded(path: String) = paths.any { it.matches(path) }
 
     /**
-     * True if the [scope] is excluded by this [Excludes] configuration.
+     * True if the scope with the given [scopeName] is excluded by this [Excludes] configuration.
      */
-    fun isScopeExcluded(scope: Scope): Boolean = findScopeExcludes(scope).isNotEmpty()
+    fun isScopeExcluded(scopeName: String): Boolean = findScopeExcludes(scopeName).isNotEmpty()
 }

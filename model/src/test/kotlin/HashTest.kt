@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.File
 import java.lang.IllegalArgumentException
 
 class HashTest : WordSpec({
@@ -79,6 +80,32 @@ class HashTest : WordSpec({
             shouldThrow<IllegalArgumentException> {
                 Hash.create("0123456789", "MD5")
             }
+        }
+    }
+
+    "toSri()" should {
+        "return an SRI value from which a hash can be created" {
+            val hash = Hash("a8115c55e4a702fe4d150abd3872822a7e09fc98", HashAlgorithm.SHA1)
+            val sri = hash.toSri()
+
+            sri shouldBe "sha1-qBFcVeSnAv5NFQq9OHKCKn4J/Jg="
+            with(Hash.create(sri)) {
+                value shouldBe "a8115c55e4a702fe4d150abd3872822a7e09fc98"
+                algorithm shouldBe HashAlgorithm.SHA1
+            }
+        }
+    }
+
+    "verify()" should {
+        "be insensitive to the hash's case" {
+            val licenseFile = File("../LICENSE")
+
+            Hash.create("c00ef43045659b53da5d71d49b8cd7e528c9d55b").verify(licenseFile) shouldBe true
+            Hash.create("C00EF43045659B53DA5D71D49B8CD7E528C9D55B").verify(licenseFile) shouldBe true
+
+            Hash.create("c00ef43045659b53da5d71d49b8cd7e528c9d55b").verify(
+                Hash.create("C00EF43045659B53DA5D71D49B8CD7E528C9D55B")
+            ) shouldBe true
         }
     }
 })

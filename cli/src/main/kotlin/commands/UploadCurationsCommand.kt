@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
-
-import com.fasterxml.jackson.module.kotlin.readValue
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
@@ -34,27 +32,29 @@ import java.io.IOException
 import java.net.URI
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Curation
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Described
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Licensed
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ContributionType
+import org.ossreviewtoolkit.clients.clearlydefined.Curation
+import org.ossreviewtoolkit.clients.clearlydefined.CurationDescribed
+import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
 import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
+import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.PackageCurationData
+import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.hasNonNullProperty
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 import retrofit2.HttpException
 
@@ -83,10 +83,10 @@ class UploadCurationsCommand : CliktCommand(
             runBlocking { block() }
         } catch (e: HttpException) {
             val errorMessage = e.response()?.errorBody()?.let {
-                val errorResponse = jsonMapper.readValue<ErrorResponse>(it.string())
+                val errorResponse = Json.Default.decodeFromString<ErrorResponse>(it.string())
                 val innerError = errorResponse.error.innererror
 
-                log.debug { innerError.stack }
+                logger.debug { innerError.stack }
 
                 "The HTTP service call failed with: ${innerError.message}"
             } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
@@ -95,12 +95,26 @@ class UploadCurationsCommand : CliktCommand(
         }
 
     override fun run() {
-        val curations = inputFile.readValue<List<PackageCuration>>()
-        val curationsToCoordinates = curations.associateWith { it.id.toClearlyDefinedCoordinates().toString() }
+        val allCurations = inputFile.readValueOrDefault(emptyList<PackageCuration>())
+
+        val curations = allCurations.groupBy { it.id }.mapValues { (id, pkgCurations) ->
+            val mergedData = pkgCurations.fold(PackageCurationData()) { current, other ->
+                current.merge(other.data)
+            }
+
+            PackageCuration(id, mergedData)
+        }.values
+
+        val curationsToCoordinates = curations.mapNotNull { curation ->
+            curation.id.toClearlyDefinedCoordinates()?.let { coordinates ->
+                curation to coordinates
+            }
+        }.toMap()
+
         val definitions = service.call { getDefinitions(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
-            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: log.warn {
+            definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
                 "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
                         "or upload curations for it."
             }
@@ -109,8 +123,7 @@ class UploadCurationsCommand : CliktCommand(
         val unharvestedCurations = curationsByHarvestStatus[HarvestStatus.NOT_HARVESTED].orEmpty()
 
         unharvestedCurations.forEach { curation ->
-            val webServerUrl = server.url.replaceFirst("dev-api.", "dev.").replaceFirst("api.", "")
-            val definitionUrl = "$webServerUrl/definitions/${curationsToCoordinates[curation]}"
+            val definitionUrl = "${server.webUrl}/definitions/${curationsToCoordinates[curation]}"
 
             println(
                 "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +
@@ -154,22 +167,22 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
         summary = "Curation for component $coordinates.",
         details = "Imported from curation data of the " +
                 "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/master/clearly-defined) " +
+                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
                 "module.",
         resolution = data.comment ?: "Unknown, original data contains no comment.",
         removedDefinitions = false
     )
 
-    val licenseExpression = data.concludedLicense?.toString() ?: data.declaredLicenses?.joinToString(" AND ")
+    val licenseExpression = data.concludedLicense?.toString()
 
-    val described = Described(
+    val described = CurationDescribed(
         projectWebsite = data.homepageUrl?.let { URI(it) },
         sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
     val curation = Curation(
-        described = described.takeIf { it.hasNonNullProperty() },
-        licensed = licenseExpression?.let { Licensed(declared = it) }
+        described = described.takeIf { it != CurationDescribed() },
+        licensed = licenseExpression?.let { CurationLicensed(declared = it) }
     )
 
     val patch = Patch(

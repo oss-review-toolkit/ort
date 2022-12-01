@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,9 +19,15 @@
 
 package org.ossreviewtoolkit.reporter
 
+import kotlin.script.experimental.api.ResultValue
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.scriptsInstancesSharing
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.utils.ScriptRunner
+import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 /**
  * Provides how-to-fix texts in Markdown format for any given [OrtIssue].
@@ -48,18 +54,15 @@ fun interface HowToFixTextProvider {
 }
 
 private class HowToFixScriptRunner(ortResult: OrtResult) : ScriptRunner() {
-    override val preface = """
-            import org.ossreviewtoolkit.model.*
-            import org.ossreviewtoolkit.reporter.HowToFixTextProvider
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<HowToFixTextProviderScriptTemplate>()
 
-        """.trimIndent()
-
-    override val postface = """
-        """.trimIndent()
-
-    init {
-        engine.put("ortResult", ortResult)
+    override val evalConfig = ScriptEvaluationConfiguration {
+        constructorArgs(ortResult)
+        scriptsInstancesSharing(true)
     }
 
-    override fun run(script: String): HowToFixTextProvider = super.run(script) as HowToFixTextProvider
+    fun run(script: String): HowToFixTextProvider {
+        val scriptValue = runScript(script) as ResultValue.Value
+        return scriptValue.value as HowToFixTextProvider
+    }
 }

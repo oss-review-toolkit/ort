@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,16 +19,16 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.paypal.digraph.parser.GraphParser
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
 import java.io.IOException
-import java.net.HttpURLConnection
 import java.util.SortedSet
 
-import okhttp3.Request
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -45,12 +45,12 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
@@ -61,6 +61,15 @@ class Stack(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging {
+        const val EXTERNAL_SCOPE_NAME = "external"
+        const val TEST_SCOPE_NAME = "test"
+        const val BENCH_SCOPE_NAME = "bench"
+
+        const val HACKAGE_PACKAGE_TYPE = "hackage"
+        const val PROJECT_PACKAGE_TYPE = "project package"
+    }
+
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
 
@@ -68,22 +77,37 @@ class Stack(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Stack(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Stack(name, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Location(
+        val url: String,
+        val type: String
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Dependency(
+        val name: String,
+        val version: String,
+        val license: String,
+        val location: Location? = null,
+        val dependencies: List<String> = emptyList()
+    )
 
     override fun command(workingDir: File?) = "stack"
 
     override fun transformVersion(output: String) =
-        // Stack could report version strings like:
+        // The version string can be something like:
         // Version 1.7.1 x86_64
         // Version 2.1.1, Git revision f612ea85316bbc327a64e4ad8d9f0b150dc12d4b (7648 commits) x86_64 hpack-0.31.2
         output.removePrefix("Version ").substringBefore(',').substringBefore(' ')
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.1.1,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
         // Parse project information from the *.cabal file.
@@ -108,57 +132,82 @@ class Stack(
             return run(workingDir, *command)
         }
 
-        fun mapParentsToChildren(scope: String): Map<String, List<String>> {
-            val dotGraph = runStack("dot", "--global-hints", "--$scope").stdout
+        fun listDependencies(scope: String): List<Dependency> {
+            val scopeOptions = listOfNotNull(
+                "--$scope",
+                // Disable the default inclusion of external dependencies if another scope than "external" is specified.
+                "--no-$EXTERNAL_SCOPE_NAME".takeIf { scope != EXTERNAL_SCOPE_NAME }
+            )
 
-            // Strip any leading garbage in case Stack was bootstrapping itself, resulting in unrelated output.
-            val dotLines = dotGraph.lineSequence().dropWhile { !it.startsWith("strict digraph deps") }
+            val dependenciesJson = runStack(
+                // Use a hints file for global packages to not require installing the Glasgow Haskell Compiler (GHC).
+                "ls", "dependencies", "json", "--global-hints", *scopeOptions.toTypedArray()
+            ).stdout
 
-            val dotParser = GraphParser(dotLines.joinToString("\n").byteInputStream())
-            val dependencies = mutableMapOf<String, MutableList<String>>()
-
-            dotParser.edges.values.forEach { edge ->
-                val parent = edge.node1.id.removeSurrounding("\"")
-                val child = edge.node2.id.removeSurrounding("\"")
-                dependencies.getOrPut(parent) { mutableListOf() } += child
-            }
-
-            log.debug { "Parsed ${dependencies.size} dependency relations from graph." }
-
-            return dependencies
+            return jsonMapper.readValue(dependenciesJson)
         }
 
-        fun mapNamesToVersions(scope: String): Map<String, String> {
-            val dependencies = runStack("ls", "dependencies", "--global-hints", "--$scope").stdout
-            return dependencies.lines().associate {
-                Pair(it.substringBefore(' '), it.substringAfter(' '))
-            }.also {
-                log.debug { "Parsed ${it.size} dependency versions from list." }
+        val allDependencies = mutableSetOf<Dependency>()
+
+        val externalDependencyList = listDependencies(EXTERNAL_SCOPE_NAME).also { allDependencies += it }
+        val testDependencyList = listDependencies(TEST_SCOPE_NAME).also { allDependencies += it }
+        val benchDependencyList = listDependencies(BENCH_SCOPE_NAME).also { allDependencies += it }
+
+        val dependencyPackageMap = mutableMapOf<Dependency, Package>()
+
+        allDependencies.forEach { dependency ->
+            val id = Identifier(
+                type = "Hackage",
+                namespace = "",
+                name = dependency.name,
+                version = dependency.version
+            )
+
+            val fallback = Package.EMPTY.copy(
+                id = id,
+                purl = id.toPurl(),
+                declaredLicenses = sortedSetOf(dependency.license)
+            )
+
+            val pkg = when (dependency.location?.type) {
+                null, HACKAGE_PACKAGE_TYPE -> {
+                    // Enrich the package with additional metadata from Hackage.
+                    downloadCabalFile(id)?.let {
+                        parseCabalFile(it)
+                    } ?: fallback
+                }
+
+                PROJECT_PACKAGE_TYPE -> {
+                    // Do not add the project as a package.
+                    null
+                }
+
+                else -> fallback
             }
+
+            // Do not add the Glasgow Haskell Compiler (GHC) as a package.
+            if (pkg != null && pkg.id.name != "ghc") dependencyPackageMap[dependency] = pkg
         }
 
-        // A map of package IDs to enriched package information.
-        val allPackages = mutableMapOf<Identifier, Package>()
+        fun List<String>.toPackageReferences(): SortedSet<PackageReference> =
+            mapNotNullTo(sortedSetOf()) { name ->
+                // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
+                //       different namespaces should be handled.
+                dependencyPackageMap.entries.find { (dependency, _) -> dependency.name == name }?.let { entry ->
+                    val pkg = entry.value
+                    val dependencies = entry.key.dependencies.toPackageReferences()
 
-        val externalChildren = mapParentsToChildren("external")
-        val externalVersions = mapNamesToVersions("external")
-        val externalDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, externalChildren, externalVersions, externalDependencies)
+                    pkg.toReference().copy(dependencies = dependencies)
+                }
+            }
 
-        val testChildren = mapParentsToChildren("test")
-        val testVersions = mapNamesToVersions("test")
-        val testDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, testChildren, testVersions, testDependencies)
-
-        val benchChildren = mapParentsToChildren("bench")
-        val benchVersions = mapNamesToVersions("bench")
-        val benchDependencies = sortedSetOf<PackageReference>()
-        buildDependencyTree(projectId.name, allPackages, benchChildren, benchVersions, benchDependencies)
+        fun List<Dependency>.getProjectDependencies(): List<String> =
+            single { it.location?.type == PROJECT_PACKAGE_TYPE }.dependencies
 
         val scopes = sortedSetOf(
-            Scope("external", externalDependencies),
-            Scope("test", testDependencies),
-            Scope("bench", benchDependencies)
+            Scope(EXTERNAL_SCOPE_NAME, externalDependencyList.getProjectDependencies().toPackageReferences()),
+            Scope(TEST_SCOPE_NAME, testDependencyList.getProjectDependencies().toPackageReferences()),
+            Scope(BENCH_SCOPE_NAME, benchDependencyList.getProjectDependencies().toPackageReferences())
         )
 
         val project = Project(
@@ -172,67 +221,18 @@ class Stack(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, allPackages.values.toSortedSet()))
-    }
-
-    private fun buildDependencyTree(
-        parentName: String, allPackages: MutableMap<Identifier, Package>,
-        childMap: Map<String, List<String>>, versionMap: Map<String, String>,
-        scopeDependencies: SortedSet<PackageReference>
-    ) {
-        childMap[parentName]?.let { children ->
-            children.forEach { childName ->
-                val pkgId = Identifier(
-                    type = "Hackage",
-                    namespace = "",
-                    name = childName,
-                    version = versionMap[childName].orEmpty()
-                )
-
-                val pkgFallback = Package.EMPTY.copy(id = pkgId, purl = pkgId.toPurl())
-
-                val pkg = allPackages.getOrPut(pkgId) {
-                    if (pkgId.type == "Hackage") {
-                        // Enrich the package with additional meta-data from Hackage.
-                        downloadCabalFile(pkgId)?.let {
-                            parseCabalFile(it)
-                        } ?: pkgFallback
-                    } else {
-                        pkgFallback
-                    }
-                }
-
-                val packageRef = pkg.toReference()
-                scopeDependencies += packageRef
-
-                buildDependencyTree(childName, allPackages, childMap, versionMap, packageRef.dependencies)
-            }
-        } ?: log.debug { "No dependencies found for '$parentName'." }
+        return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSortedSet()))
     }
 
     private fun getPackageUrl(name: String, version: String) =
         "https://hackage.haskell.org/package/$name-$version"
 
     private fun downloadCabalFile(pkgId: Identifier): String? {
-        val pkgRequest = Request.Builder()
-            .get()
-            .url("${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal")
-            .build()
+        val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
 
-        return OkHttpClientHelper.execute(pkgRequest).use { response ->
-            val body = response.body?.string()?.trim()
-
-            if (response.code != HttpURLConnection.HTTP_OK || body.isNullOrEmpty()) {
-                log.warn { "Unable to retrieve Hackage meta-data for package '${pkgId.toCoordinates()}'." }
-                if (body != null) {
-                    log.warn { "The response was '$body' (code ${response.code})." }
-                }
-
-                null
-            } else {
-                body
-            }
-        }
+        return OkHttpClientHelper.downloadText(url).onFailure {
+            logger.warn { "Unable to retrieve Hackage metadata for package '${pkgId.toCoordinates()}'." }
+        }.getOrNull()
     }
 
     private fun parseKeyValue(i: ListIterator<String>, keyPrefix: String = ""): Map<String, String> {
@@ -265,7 +265,7 @@ class Stack(
                 }
                 2 -> {
                     // Handle lines with a colon.
-                    val key = (keyPrefix + keyValue[0]).toLowerCase()
+                    val key = (keyPrefix + keyValue[0]).lowercase()
 
                     val valueLines = mutableListOf<String>()
 
@@ -300,9 +300,7 @@ class Stack(
 
                         // Within a multi-line value, lines with only a dot mark empty lines.
                         if (indentedLine == ".") {
-                            if (valueLines.isNotEmpty()) {
-                                valueLines += ""
-                            }
+                            if (valueLines.isNotEmpty()) valueLines += ""
                         } else {
                             valueLines += indentedLine
                         }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,12 +24,13 @@ import com.moandjiezana.toml.Toml
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.nio.file.Paths
 
-import kotlin.io.path.createTempDirectory
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -41,19 +42,19 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.realFile
-import org.ossreviewtoolkit.utils.safeCopyRecursively
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.toUri
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.realFile
+import org.ossreviewtoolkit.utils.common.safeCopyRecursively
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * A map of legacy package manager file names "dep" can import, and their respective lock file names, if any.
@@ -77,6 +78,8 @@ class GoDep(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<GoDep>("GoDep") {
         override val globsForDefinitionFiles = listOf("Gopkg.toml", *GO_LEGACY_MANIFESTS.keys.toTypedArray())
 
@@ -84,7 +87,7 @@ class GoDep(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = GoDep(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = GoDep(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"
@@ -92,16 +95,16 @@ class GoDep(
     override fun getVersionArguments() = "version"
 
     override fun transformVersion(output: String) =
-        output.lineSequence().first { it.contains("version") }.substringAfter(':').trim().removePrefix("v")
+        output.lineSequence().first { "version" in it }.substringAfter(':').trim().removePrefix("v")
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val projectDir = resolveProjectRoot(definitionFile)
         val projectVcs = processProjectVcs(projectDir)
-        val gopath = createTempDirectory("$ORT_NAME-${projectDir.name}-gopath").toFile()
+        val gopath = createOrtTempDir("${projectDir.name}-gopath")
         val workingDir = setUpWorkspace(projectDir, projectVcs, gopath)
 
         GO_LEGACY_MANIFESTS[definitionFile.name]?.let { lockfileName ->
-            log.debug { "Importing legacy manifest file at '$definitionFile'." }
+            logger.debug { "Importing legacy manifest file at '$definitionFile'." }
             importLegacyManifest(lockfileName, workingDir, gopath)
         }
 
@@ -124,14 +127,14 @@ class GoDep(
 
                 issues += createAndLogIssue(
                     source = managerName,
-                    message = "Could not resolve VCS information for project '$name': ${e.collectMessagesAsString()}"
+                    message = "Could not resolve VCS information for project '$name': ${e.collectMessages()}"
                 )
 
                 VcsInfo.EMPTY
             }
 
             val pkg = Package(
-                id = Identifier(managerName, "", name, version),
+                id = Identifier("Go", "", name, normalizeModuleVersion(version)),
                 authors = sortedSetOf(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
@@ -155,7 +158,7 @@ class GoDep(
             listOf(uri.host, uri.path.removePrefix("/").removeSuffix(".git"), vcsPath)
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
-                .toLowerCase()
+                .lowercase()
         }.getOrDefault(projectDir.name)
 
         // TODO Keeping this between scans would speed things up considerably.
@@ -184,9 +187,14 @@ class GoDep(
     }
 
     fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        vcs.url.toUri { uri ->
-            Paths.get(gopath.path, "src", uri.host, uri.path)
-        }.getOrDefault(Paths.get(gopath.path, "src", projectDir.name)).toFile()
+        gopath.resolve("src").let { src ->
+            val uri = vcs.url.toUri().getOrNull()
+            if (uri?.host != null) {
+                src.resolve("${uri.host}/${uri.path}")
+            } else {
+                src.resolve(projectDir.name)
+            }
+        }
 
     private fun resolveProjectRoot(definitionFile: File) =
         when (definitionFile.name) {
@@ -203,7 +211,7 @@ class GoDep(
     private fun setUpWorkspace(projectDir: File, vcs: VcsInfo, gopath: File): File {
         val destination = deduceImportPath(projectDir, vcs, gopath)
 
-        log.debug { "Copying $projectDir to temporary directory $destination" }
+        logger.debug { "Copying $projectDir to temporary directory $destination" }
 
         projectDir.safeCopyRecursively(destination)
 
@@ -224,14 +232,14 @@ class GoDep(
                 "No lockfile found in ${workingDir.invariantSeparatorsPath}, dependency versions are unstable."
             }
 
-            log.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
+            logger.debug { "Running 'dep ensure' to generate missing lockfile in $workingDir" }
 
             run("ensure", workingDir = workingDir, environment = mapOf("GOPATH" to gopath.path))
         }
 
         val entries = Toml().read(lockfile).toMap()["projects"]
         if (entries == null) {
-            log.warn { "${lockfile.name} is missing any [[projects]] entries" }
+            logger.warn { "${lockfile.name} is missing any [[projects]] entries" }
             return emptyList()
         }
 
@@ -243,7 +251,7 @@ class GoDep(
             val revision = project["revision"]
 
             if (name !is String || revision !is String) {
-                log.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
+                logger.warn { "Invalid [[projects]] entry in $lockfile: $entry" }
                 continue
             }
 
@@ -255,7 +263,10 @@ class GoDep(
     }
 
     private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
-        val pc = ProcessCapture("go", "get", "-d", importPath, environment = mapOf("GOPATH" to gopath.path))
+        val pc = ProcessCapture(
+            "go", "get", "-d", importPath,
+            environment = mapOf("GOPATH" to gopath.path, "GO111MODULE" to "off")
+        )
 
         // HACK Some failure modes from "go get" can be ignored:
         // 1. repositories that don't have .go files in the root directory
@@ -269,14 +280,19 @@ class GoDep(
                 "build constraints exclude all Go files in"
             )
 
-            if (!errorMessagesToIgnore.any { it in msg }) {
-                throw IOException(msg)
-            }
+            if (!errorMessagesToIgnore.any { it in msg }) throw IOException(msg)
         }
 
-        val repoRoot = Paths.get(gopath.path, "src", importPath).toFile()
+        val repoRoot = gopath.resolve("src/$importPath")
+
+        // The "processProjectVcs()" function should always be able to deduce VCS information from the working tree
+        // created by "go get". However, if that fails for whatever reason, fall back to guessing VCS information from
+        // the "importPath" (which usually resembles a URL).
+        val fallbackVcsInfo = VcsHost.parseUrl("https://$importPath").takeIf {
+            it.type != VcsType.UNKNOWN
+        } ?: VcsInfo.EMPTY
 
         // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
-        return processProjectVcs(repoRoot).copy(revision = revision)
+        return processProjectVcs(repoRoot, fallbackVcsInfo).copy(revision = revision)
     }
 }

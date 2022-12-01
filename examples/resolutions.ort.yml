@@ -1,0 +1,9 @@
+resolutions:
+  issues:
+  - message: "Could not download 'Maven:com.example:library:.*"
+    reason: "CANT_FIX_ISSUE"
+    comment: "An example for an issue resolution."
+  rule_violations:
+  - message: "Example rule violation*."
+    reason: "DYNAMIC_LINKAGE_EXCEPTION"
+    comment: "An example for rule a rule violation resolution."

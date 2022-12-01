@@ -1,0 +1,28 @@
+{
+  "id" : "6eba9a37-92e8-4e94-b2ce-b9ef557162f8",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"ignore_rules_add\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20210609_144524\",\"type\":\"extension\",\"value\":\".docx\",\"apply_to\":\"scan\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scans_ignore_rules_add\",\"status\":\"1\",\"data\":{\"operation\":\"scan_ignore_rules_add\",\"status\":\"1\",\"data\":null,\"message\":\"Rule has been added successfully.\"}}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Content-Type" : "application/json",
+      "Date" : "Fri, 07 Jan 2022 14:46:15 GMT",
+      "Expires" : "Fri, 07 Jan 2022 14:46:14 GMT",
+      "Server" : "nginx/1.14.2",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "6eba9a37-92e8-4e94-b2ce-b9ef557162f8",
+  "persistent" : true,
+  "insertionIndex" : 11
+}

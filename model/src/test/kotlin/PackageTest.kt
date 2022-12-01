@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -50,7 +50,8 @@ class PackageTest : StringSpec({
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
             sourceArtifact = RemoteArtifact("url", Hash.create("hash")),
             vcs = VcsInfo(VcsType("type"), "url", "revision"),
-            isMetaDataOnly = false
+            isMetadataOnly = false,
+            isModified = false
         )
 
         val other = Package(
@@ -67,7 +68,8 @@ class PackageTest : StringSpec({
             binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             sourceArtifact = RemoteArtifact("other url", Hash.create("other hash")),
             vcs = VcsInfo(VcsType("other type"), "other url", "other revision"),
-            isMetaDataOnly = true
+            isMetadataOnly = true,
+            isModified = true
         )
 
         val diff = pkg.diff(other)
@@ -75,11 +77,11 @@ class PackageTest : StringSpec({
         diff.binaryArtifact shouldBe pkg.binaryArtifact
         diff.comment should beNull()
         diff.authors shouldBe pkg.authors
-        diff.declaredLicenses shouldBe pkg.declaredLicenses
         diff.homepageUrl shouldBe pkg.homepageUrl
         diff.sourceArtifact shouldBe pkg.sourceArtifact
-        diff.vcs shouldBe pkg.vcs.toCuration()
-        diff.isMetaDataOnly shouldBe pkg.isMetaDataOnly
+        diff.vcs shouldBe pkg.vcsProcessed.toCuration()
+        diff.isMetadataOnly shouldBe pkg.isMetadataOnly
+        diff.isModified shouldBe pkg.isModified
     }
 
     "diff result does not contain unchanged values" {
@@ -104,10 +106,9 @@ class PackageTest : StringSpec({
         diff.binaryArtifact should beNull()
         diff.comment should beNull()
         diff.authors should beNull()
-        diff.declaredLicenses should beNull()
         diff.homepageUrl should beNull()
         diff.sourceArtifact should beNull()
         diff.vcs should beNull()
-        diff.isMetaDataOnly should beNull()
+        diff.isMetadataOnly should beNull()
     }
 })

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,21 +20,63 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import java.io.File
+import java.io.IOException
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
- * A [PackageCurationProvider] that loads [PackageCuration]s from a single file. Supports all file formats specified
- * in [FileFormat].
+ * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
+ * specified in [FileFormat].
  */
-class FilePackageCurationProvider(curationFile: File) : PackageCurationProvider {
-    internal val packageCurations: List<PackageCuration> by lazy {
-        curationFile.readValue<List<PackageCuration>>()
-    }
+class FilePackageCurationProvider(
+    curationFiles: Collection<File>
+) : SimplePackageCurationProvider(readCurationFiles(curationFiles)) {
+    constructor(curationFile: File) : this(listOf(curationFile))
 
-    override fun getCurationsFor(pkgId: Identifier) = packageCurations.filter { it.isApplicable(pkgId) }
+    companion object : Logging {
+        fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
+            val curationFiles = mutableListOf<File>()
+            file?.takeIf { it.isFile }?.let { curationFiles += it }
+            dir?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
+
+            return FilePackageCurationProvider(curationFiles)
+        }
+
+        fun readCurationFiles(curationFiles: Collection<File>): List<PackageCuration> {
+            val allCurations = mutableListOf<Pair<PackageCuration, File>>()
+
+            curationFiles.map { curationFile ->
+                val curations = runCatching {
+                    curationFile.readValue<List<PackageCuration>>()
+                }.getOrElse {
+                    throw IOException("Failed parsing package curation from '${curationFile.absolutePath}'.", it)
+                }
+
+                curations.mapTo(allCurations) { it to curationFile }
+            }
+
+            val duplicates = allCurations.getDuplicates { it.first }
+
+            if (duplicates.isNotEmpty()) {
+                val duplicatesInfo = buildString {
+                    duplicates.forEach { (curation, origins) ->
+                        appendLine("Curation for '${curation.id.toCoordinates()}' found in all of:")
+                        val files = origins.joinToString(separator = "\n") { (_, file) -> file.absolutePath }
+                        appendLine(files.prependIndent())
+                    }
+                }
+                throw DuplicatedCurationException("Duplicate curations found:\n${duplicatesInfo.prependIndent()}")
+            }
+
+            return allCurations.unzip().first
+        }
+    }
 }
+
+private class DuplicatedCurationException(message: String?) : Exception(message)

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,7 +34,7 @@ import java.util.Locale
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ImportCopyrightGarbageCommand : CliktCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +
@@ -57,14 +57,10 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val entriesToImport = inputCopyrightGarbageFile
-            .expandTilde()
-            .readText()
-            .lines()
-            .filterNot { it.isBlank() }
+        val entriesToImport = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
         val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
-            outputCopyrightGarbageFile.expandTilde().readValue<CopyrightGarbage>().items
+            outputCopyrightGarbageFile.readValue<CopyrightGarbage>().items
         } else {
             emptySet<String>()
         }

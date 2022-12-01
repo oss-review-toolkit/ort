@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,79 +20,122 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class PipFunTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+class PipFunTest : WordSpec({
+    val projectsDir = File("src/funTest/assets/projects").absoluteFile
+    val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
 
-    init {
-        "Python 2" should {
-            "resolve setup.py dependencies correctly for spdx-tools-python" {
-                val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
+    "Python 2" should {
+        "resolve setup.py dependencies correctly for spdx-tools-python" {
+            val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
 
-                val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
+            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
+            val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
 
-                result.toYaml() shouldBe expectedResult
-            }
-
-            "resolve requirements.txt dependencies correctly for example-python-flask" {
-                val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
-
-                val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResult = projectsDir.resolve("external/example-python-flask-expected-output.yml").readText()
-
-                result.toYaml() shouldBe expectedResult
-            }
-
-            "capture metadata from setup.py even if requirements.txt is present" {
-                val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
-                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
-
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolve("synthetic/pip-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-
-                val result = createPIP().resolveSingleProject(definitionFile)
-
-                result.toYaml() shouldBe expectedResult
-            }
+            result.toYaml() shouldBe expectedResult
         }
 
-        "Python 3" should {
-            "resolve dependencies correctly for a Django project" {
-                val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
-                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+        "capture metadata from setup.py even if requirements.txt is present" {
+            val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
+            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createPIP().resolveSingleProject(definitionFile)
-                val expectedResultFile = projectsDir.resolve("synthetic/pip-python3-expected-output.yml")
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
+            val expectedResult = patchExpectedResult(
+                projectsDir.resolve("synthetic/pip-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
 
-                result.toYaml() shouldBe expectedResult
-            }
+            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
+
+            result.toYaml() shouldBe expectedResult
         }
     }
 
-    private fun createPIP() =
-        Pip("PIP", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-}
+    "Python 3" should {
+        "resolve requirements.txt dependencies correctly for example-python-flask" {
+            val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
+
+            val result = createPip().resolveSingleProject(definitionFile)
+
+            // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
+            val expectedResultsFile = buildString {
+                append("external/example-python-flask-expected-output")
+                if (Os.isWindows) append("-windows")
+                append(".yml")
+            }
+
+            val expectedResult = projectsDir.resolve(expectedResultsFile).readText()
+
+            result.toYaml() shouldBe expectedResult
+        }
+
+        "resolve dependencies correctly for a Django project" {
+            val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
+            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+
+            val result = createPip().resolveSingleProject(definitionFile)
+            val expectedResultFile = projectsDir.resolve("synthetic/pip-python3-expected-output.yml")
+            val expectedResult = patchExpectedResult(
+                expectedResultFile,
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
+
+            result.toYaml() shouldBe expectedResult
+        }
+
+        "capture metadata using python-inspector" {
+            val definitionFile = projectsDir.resolve("synthetic/python-inspector/requirements.txt")
+            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+
+            val result = createPip().resolveSingleProject(definitionFile)
+            val expectedResult = patchExpectedResult(
+                projectsDir.resolve("synthetic/python-inspector-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
+
+            result.toYaml() shouldBe expectedResult
+        }
+
+        "not fail if the requirements file is empty" {
+            val definitionFile = createTestTempFile(prefix = "requirements", suffix = ".txt")
+
+            val result = createPip().resolveSingleProject(definitionFile)
+
+            result.issues should beEmpty()
+        }
+    }
+})
+
+private fun createPip(pythonVersion: String = "3.10") =
+    Pip("PIP", USER_DIR, createAnalyzerConfiguration(pythonVersion), RepositoryConfiguration())
+
+private fun createAnalyzerConfiguration(pythonVersion: String) =
+    AnalyzerConfiguration(
+        packageManagers = mapOf(
+            Pip.Factory().name to PackageManagerConfiguration(
+                options = mapOf("pythonVersion" to pythonVersion)
+            )
+        )
+    )

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +26,7 @@ import org.eclipse.sw360.clients.adapter.SW360Connection
 import org.eclipse.sw360.clients.adapter.SW360ConnectionFactory
 import org.eclipse.sw360.clients.config.SW360ClientConfig
 import org.eclipse.sw360.clients.rest.resource.attachments.SW360AttachmentType
+import org.eclipse.sw360.clients.rest.resource.licenses.SW360SparseLicense
 import org.eclipse.sw360.clients.rest.resource.releases.SW360ClearingState
 import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.http.HttpClientFactoryImpl
@@ -40,35 +41,66 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 /**
- * A [PackageCurationProvider] for curated package meta-data from the configured SW360 instance using the REST API.
+ * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
-class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration) : PackageCurationProvider {
-    private val sw360Connection = createSw360Connection(
-        sw360Configuration,
-        jsonMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-    )
+class Sw360PackageCurationProvider(configuration: Sw360StorageConfiguration) : PackageCurationProvider {
+    companion object {
+        val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
 
-    override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
-        val name = listOfNotNull(pkgId.namespace, pkgId.name).joinToString("/")
-        val sw360ReleaseClient = sw360Connection.releaseAdapter
+        fun createConnection(config: Sw360StorageConfiguration): SW360Connection {
+            val httpClientConfig = HttpClientConfig
+                .basicConfig()
+                .withObjectMapper(JSON_MAPPER)
 
-        return sw360ReleaseClient.getSparseReleaseByNameAndVersion(name, pkgId.version)
-            .flatMap { sw360ReleaseClient.enrichSparseRelease(it) }
+            val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
+
+            val sw360ClientConfig = SW360ClientConfig.createConfig(
+                config.restUrl,
+                config.authUrl,
+                config.username,
+                config.password,
+                config.clientId,
+                config.clientPassword,
+                config.token,
+                httpClient,
+                JSON_MAPPER
+            )
+
+            return SW360ConnectionFactory().newConnection(sw360ClientConfig)
+        }
+    }
+
+    private val connectionFactory = createConnection(configuration)
+    private val releaseClient = connectionFactory.releaseAdapter
+
+    override fun getCurationsFor(pkgIds: Collection<Identifier>) =
+        pkgIds.mapNotNull { pkgId ->
+            getCurationsFor(pkgId).takeUnless { it.isEmpty() }?.let { pkgId to it }
+        }.toMap()
+
+    private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
+        val name = "${pkgId.namespace}/${pkgId.name}"
+
+        return releaseClient.getSparseReleaseByNameAndVersion(name, pkgId.version)
+            .flatMap { releaseClient.enrichSparseRelease(it) }
             .filter { it.sw360ClearingState == SW360ClearingState.APPROVED }
             .map { sw360Release ->
                 listOf(
                     PackageCuration(
                         id = pkgId,
                         data = PackageCurationData(
-                            declaredLicenses = sw360Release.embedded?.licenses
-                                ?.mapNotNullTo(sortedSetOf()) { it?.shortName },
+                            concludedLicense = sw360Release.embedded?.licenses.orEmpty().toSpdx(),
                             homepageUrl = getHomepageOfRelease(sw360Release).orEmpty(),
                             binaryArtifact = getAttachmentAsRemoteArtifact(sw360Release, SW360AttachmentType.BINARY)
-                                ?: RemoteArtifact.EMPTY,
+                                .orEmpty(),
                             sourceArtifact = getAttachmentAsRemoteArtifact(sw360Release, SW360AttachmentType.SOURCE)
-                                ?: RemoteArtifact.EMPTY,
+                                .orEmpty(),
                             vcs = null,
                             comment = "Provided by SW360."
                         )
@@ -90,26 +122,8 @@ class Sw360PackageCurationProvider(sw360Configuration: Sw360StorageConfiguration
         }
 
     private fun getHomepageOfRelease(release: SW360Release): String? =
-        sw360Connection.componentAdapter.getComponentById(release.componentId).orElse(null)?.homepage
-
-    private fun createSw360Connection(config: Sw360StorageConfiguration, jsonMapper: ObjectMapper): SW360Connection {
-        val httpClientConfig = HttpClientConfig
-            .basicConfig()
-            .withObjectMapper(jsonMapper)
-        val httpClient = HttpClientFactoryImpl().newHttpClient(httpClientConfig)
-
-        val sw360ClientConfig = SW360ClientConfig.createConfig(
-            config.restUrl,
-            config.authUrl,
-            config.username,
-            config.password,
-            config.clientId,
-            config.clientPassword,
-            config.token,
-            httpClient,
-            jsonMapper
-        )
-
-        return SW360ConnectionFactory().newConnection(sw360ClientConfig)
-    }
+        connectionFactory.componentAdapter.getComponentById(release.componentId).orElse(null)?.homepage
 }
+
+private fun Collection<SW360SparseLicense>.toSpdx(): SpdxExpression? =
+    DeclaredLicenseProcessor.process(mapTo(mutableSetOf()) { it.shortName }).spdxExpression

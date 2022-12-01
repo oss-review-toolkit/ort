@@ -7,13 +7,15 @@ ORT:
 * Install ORT.
 * Analyze the dependencies of `mime-types` using the _analyzer_.
 * Scan the source code of `mime-types` and its dependencies using the `scanner`.
+* Run the evaluator to find any rule violations.
+* Generate reports to show the results.
 
 ## 1. Prerequisites
 
 ORT is tested to run on Linux, macOS, and Windows. This tutorial assumes that you are running on Linux, but it should be
 easy to adapt the commands to macOS or Windows.
 
-In addition to Java (version >= 8), for some of the supported package managers and Version Control Systems additional
+In addition to Java (version >= 11), for some supported package managers and Version Control Systems additional
 tools need to be installed. In the context of this tutorial the following tools are required:
 
 * Git (any recent version will do)
@@ -25,7 +27,7 @@ For the full list of supported package managers and Version Control Systems see 
 
 ## 2. Download & Install ORT
 
-In future we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
+In the future, we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
 download the source code (including Git submodules) from GitHub:
 
 ```bash
@@ -60,7 +62,7 @@ git checkout 2.1.18
 ## 4. Run the analyzer on `mime-types`
 
 The next step is to run the _analyzer_. It will create a JSON or YAML output file containing the full dependency tree of
-`mime-types` including the meta-data of `mime-types` and its dependencies.
+`mime-types` including the metadata of `mime-types` and its dependencies.
 
 ```bash
 # Command line help specific to the analyzer.
@@ -85,7 +87,7 @@ The following package managers are activated:
         Bower, Bundler, Cargo, Composer, DotNet, GoDep, Gradle, Maven, NPM, NuGet, PIP, SBT, Stack, Yarn
 Analyzing project path:
         [mime-types-dir]
-ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To allow this, enable support for dynamic versions.
+ERROR - Resolving dependencies for 'package.json' failed with: No lockfile found in '[mime-types-dir]'. This potentially results in unstable versions of dependencies. To support this, enable the 'allowDynamicVersions' option in 'config.yml'.
 Writing analyzer result to '[analyzer-output-dir]/analyzer-result.yml'.
 ```
 
@@ -134,11 +136,11 @@ repository:
     revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
     path: ""
   vcs_processed:
-    type: "git"
+    type: "Git"
     url: "https://github.com/jshttp/mime-types.git"
     revision: "7c4ce23d7354fbf64c69d7b7be8413c4ba2add78"
     path: ""
-  # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise this is an empty object.
+  # Will only be present if an '.ort.yml' configuration file with scope excludes was provided. Otherwise, this is an empty object.
   config:
     excludes:
       scopes:
@@ -161,7 +163,6 @@ analyzer:
     tool_versions: {}
   # Configuration options of the analyzer.
   config:
-    ignore_tool_versions: false
     allow_dynamic_versions: true
   # The result of the dependency analysis.
   result:
@@ -180,7 +181,7 @@ analyzer:
         revision: ""
         path: ""
       vcs_processed:
-        type: "git"
+        type: "Git"
         url: "https://github.com/jshttp/mime-types.git"
         revision: "076f7902e3a730970ea96cd0b9c09bb6110f1127"
         path: ""
@@ -213,25 +214,27 @@ analyzer:
         homepage_url: "https://github.com/isaacs/abbrev-js#readme"
         binary_artifact:
           url: ""
-          hash: ""
-          hash_algorithm: ""
+          hash:
+            value: ""
+            algorithm: ""
         source_artifact:
           url: "https://registry.npmjs.org/abbrev/-/abbrev-1.0.9.tgz"
-          hash: "91b4792588a7738c25f35dd6f63752a2f8776135"
-          hash_algorithm: "SHA-1"
+          hash:
+            value: "91b4792588a7738c25f35dd6f63752a2f8776135"
+            algorithm: "SHA-1"
         vcs:
-          type: "git"
+          type: "Git"
           url: "git+ssh://git@github.com/isaacs/abbrev-js.git"
           revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
           path: ""
         vcs_processed:
-          type: "git"
+          type: "Git"
           url: "ssh://git@github.com/isaacs/abbrev-js.git"
           revision: "c386cd9dbb1d8d7581718c54d4ba944cc9298d6f"
           path: ""
       curations: []
 # ...
-# Finally a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
+# Finally, a list of project related issues that happened during dependency analysis. Fortunately empty in this case.
     issues: {}
 # A field to quickly check if the analyzer result contains any issues.
     has_issues: false
@@ -270,7 +273,7 @@ As for the _analyzer_ you can get the command line options for the `scanner` usi
 cli/build/install/ort/bin/ort scan --help
 ```
 
-The `mime-types` package has only one dependency in the `depenencies` scope, but a lot of dependencies in the
+The `mime-types` package has only one dependency in the `dependencies` scope, but a lot of dependencies in the
 `devDependencies` scope. Scanning all of the `devDependencies` would take a lot of time, so we will only run the
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
 advised to configure a [scan storage](../README.md#storage-backends) for the scan results to speed up repeated scans.
@@ -294,7 +297,7 @@ Writing scan result to '[scanner-output-dir]/scan-result.yml'.
 
 The `scanner` writes a new ORT result file to `[scanner-output-dir]/scan-result.yml` containing the scan results in
 addition to the analyzer result from the input. This way belonging results are stored in the same place for
-traceability. If the input file already contained scan results they are replaced by the new scan results in the output.
+traceability. If the input file already contained scan results, they are replaced by the new scan results in the output.
 
 As you can see when checking the `scan-result.yml` file, the licenses detected by `ScanCode` match the licenses declared
 by the packages. This is because we scanned a small and well-maintained package in this example, but if you run the scan
@@ -303,9 +306,9 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 ## 6. Running the evaluator
 
 The evaluator can apply a set of rules against the scan result created above.
-ORT provides examples for the policy rules file [(rules.kts)](../examples/rules.kts),
-[user-defined categorization of licenses (license-classifications.yml)](../examples/license-classifications.yml) and
-[user-defined package curations (curations.yml)](../examples/curations.yml) that can be used for testing the
+ORT provides examples for the policy rules file ([example.rules.kts](../examples/evaluator-rules/src/main/resources/example.rules.kts)),
+user-defined categorization of licenses ([license-classifications.yml](../examples/license-classifications.yml)) and
+user-defined package curations ([curations.yml](../examples/curations.yml)) that can be used for testing the
 _evaluator_. 
 
 To run the example rules use:
@@ -313,7 +316,7 @@ To run the example rules use:
 ```bash
 cli/build/install/ort/bin/ort evaluate
   --package-curations-file curations.yml
-  --rules-file rules.kts
+  --rules-file evaluator.rules.kts
   --license-classifications-file license-classifications.yml
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]/mime-types
@@ -331,7 +334,7 @@ Note that detailed documentation for writing custom rules is not yet available.
 The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports and open
 source notices. 
 
-For example, to generate a static HTML report, WebApp report and an open source notice by package, use:
+For example, to generate a static HTML report, WebApp report, and an open source notice by package, use:
 
 ```bash
 cli/build/install/ort/bin/ort report

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -31,7 +31,7 @@ import io.kotest.matchers.string.shouldNotContain
 
 import java.util.Collections.emptySortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class LicenseClassificationsTest : WordSpec({
@@ -113,6 +113,14 @@ class LicenseClassificationsTest : WordSpec({
             }
         }
 
+        "maintain empty categories" {
+            val licenseClassifications = LicenseClassifications(
+                categories = listOf(LicenseCategory("permissive"))
+            )
+
+            licenseClassifications.licensesByCategory["permissive"] shouldNotBeNull { shouldBeEmpty() }
+        }
+
         "return null when querying the licenses for an unknown category" {
             val cat = LicenseCategory("oneAndOnlyCategory")
             val lic = LicenseCategorization(
@@ -148,7 +156,11 @@ class LicenseClassificationsTest : WordSpec({
             val cat3 = LicenseCategory("other", "Completely different licenses")
             val licenseClassifications = LicenseClassifications(categories = listOf(cat1, cat2, cat3))
 
-            licenseClassifications.categoryNames should containExactly("non permissive", "other", "permissive")
+            licenseClassifications.categoryNames should containExactlyInAnyOrder(
+                "permissive",
+                "non permissive",
+                "other"
+            )
         }
     }
 })

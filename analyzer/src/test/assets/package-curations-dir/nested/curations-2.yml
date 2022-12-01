@@ -1,0 +1,4 @@
+---
+- id: "Maven:org.foo::"
+  curations:
+    homepage_url: "http://home.page"

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,28 +20,22 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
-
-import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.spdx.model.LicenseChoice
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.zipWithDefault
+import org.ossreviewtoolkit.utils.common.zipWithCollections
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * The common output format for the analyzer and scanner. It contains information about the scanned repository, and the
  * analyzer and scanner will add their result to it.
  */
-@JsonIgnoreProperties("data")
 @Suppress("TooManyFunctions")
 data class OrtResult(
     /**
@@ -95,6 +89,10 @@ data class OrtResult(
         )
     }
 
+    /** An object that can be used to navigate the dependency information contained in this result. */
+    @get:JsonIgnore
+    val dependencyNavigator: DependencyNavigator by lazy { createDependencyNavigator() }
+
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
 
     /**
@@ -102,24 +100,16 @@ data class OrtResult(
      * when querying projects in large analyzer results.
      */
     private val projects: Map<Identifier, ProjectEntry> by lazy {
-        log.perf { "Computing excluded projects..." }
-
-        val (result, duration) = measureTimedValue {
-            getProjects().associateBy(
-                { project -> project.id },
-                { project ->
-                    val pathExcludes = getExcludes().findPathExcludes(project, this)
-                    ProjectEntry(
-                        project = project,
-                        isExcluded = pathExcludes.isNotEmpty()
-                    )
-                }
-            )
-        }
-
-        log.perf { "Computing excluded projects took ${duration.inSeconds}s." }
-
-        result
+        getProjects().associateBy(
+            { project -> project.id },
+            { project ->
+                val pathExcludes = getExcludes().findPathExcludes(project, this)
+                ProjectEntry(
+                    project = project,
+                    isExcluded = pathExcludes.isNotEmpty()
+                )
+            }
+        )
     }
 
     private data class PackageEntry(val curatedPackage: CuratedPackage?, val isExcluded: Boolean)
@@ -130,42 +120,32 @@ data class OrtResult(
      * dependencies of other projects, but for them only the excluded state is provided, no [CuratedPackage] instance.
      */
     private val packages: Map<Identifier, PackageEntry> by lazy {
-        log.perf { "Computing excluded packages..." }
+        val projects = getProjects()
+        val packages = getPackages().associateBy { it.metadata.id }
 
-        val (result, duration) = measureTimedValue {
-            val projects = getProjects()
-            val packages = getPackages().associateBy { it.pkg.id }
+        val allDependencies = packages.keys.toMutableSet()
+        val includedDependencies = mutableSetOf<Identifier>()
 
-            val allDependencies = packages.keys.toMutableSet()
-            val includedDependencies = mutableSetOf<Identifier>()
+        projects.forEach { project ->
+            dependencyNavigator.scopeDependencies(project).forEach { (scopeName, dependencies) ->
+                val isScopeExcluded = getExcludes().isScopeExcluded(scopeName)
+                allDependencies += dependencies
 
-            projects.forEach { project ->
-                project.scopes.forEach { scope ->
-                    val isScopeExcluded = getExcludes().isScopeExcluded(scope)
-
-                    val dependencies = scope.collectDependencies()
-                    allDependencies += dependencies
-
-                    if (!isProjectExcluded(project.id) && !isScopeExcluded) {
-                        includedDependencies += dependencies
-                    }
+                if (!isProjectExcluded(project.id) && !isScopeExcluded) {
+                    includedDependencies += dependencies
                 }
-            }
-
-            allDependencies.associateWithTo(mutableMapOf()) { id ->
-                PackageEntry(
-                    curatedPackage = packages[id],
-                    isExcluded = id !in includedDependencies
-                )
             }
         }
 
-        log.perf { "Computing excluded packages took ${duration.inSeconds}s." }
-
-        result
+        allDependencies.associateWithTo(mutableMapOf()) { id ->
+            PackageEntry(
+                curatedPackage = packages[id],
+                isExcluded = id !in includedDependencies
+            )
+        }
     }
 
-    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.results?.scanResults.orEmpty() }
+    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.scanResults.orEmpty() }
 
     private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
         advisor?.results?.advisorResults.orEmpty()
@@ -181,12 +161,10 @@ data class OrtResult(
 
         getProjects().forEach { project ->
             if (project.id == id) {
-                dependencies += project.collectDependencies(maxLevel)
+                dependencies += dependencyNavigator.projectDependencies(project, maxLevel)
             }
 
-            project.findReferences(id).forEach { ref ->
-                dependencies += ref.collectDependencies(maxLevel)
-            }
+            dependencies += dependencyNavigator.packageDependencies(project, id, maxLevel)
         }
 
         return dependencies
@@ -197,35 +175,23 @@ data class OrtResult(
      */
     fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
         val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
-        val scannerIssues = scanner?.results?.collectIssues().orEmpty()
+        val scannerIssues = scanner?.collectIssues().orEmpty()
         val advisorIssues = advisor?.results?.collectIssues().orEmpty()
 
-        val analyzerAndScannerIssues =
-            analyzerIssues.zipWithDefault(scannerIssues, emptySet()) { left, right -> left + right }
-
-        return analyzerAndScannerIssues.zipWithDefault(advisorIssues, emptySet()) { left, right -> left + right }
+        val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)
+        return analyzerAndScannerIssues.zipWithCollections(advisorIssues)
     }
 
     /**
-     * Return the set of all project or package identifiers in the result, optionally [including those of sub-projects]
+     * Return the set of all project or package identifiers in the result, optionally [including those of subprojects]
      * [includeSubProjects].
      */
-    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): SortedSet<Identifier> {
-        val projectsAndPackages = sortedSetOf<Identifier>()
+    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
+        val projectsAndPackages = mutableSetOf<Identifier>()
+        val projects = getProjects(includeSubProjects = includeSubProjects)
 
-        getProjects().mapTo(projectsAndPackages) { it.id }
-
-        if (!includeSubProjects) {
-            val allSubProjects = sortedSetOf<Identifier>()
-
-            getProjects().forEach {
-                allSubProjects += it.collectSubProjects()
-            }
-
-            projectsAndPackages -= allSubProjects
-        }
-
-        getPackages().mapTo(projectsAndPackages) { it.pkg.id }
+        projects.mapTo(projectsAndPackages) { it.id }
+        getPackages().mapTo(projectsAndPackages) { it.metadata.id }
 
         return projectsAndPackages
     }
@@ -248,7 +214,7 @@ data class OrtResult(
         getPackages().filter { (pkg, _) ->
             pkg.id.isFromOrg(*names) && (!omitExcluded || !isPackageExcluded(pkg.id))
         }.mapTo(vendorPackages) {
-            it.pkg
+            it.metadata
         }
 
         return vendorPackages
@@ -340,14 +306,14 @@ data class OrtResult(
     /**
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
      */
-    fun replacePackageCurations(curations: List<PackageCuration>): OrtResult =
+    fun replacePackageCurations(curations: Collection<PackageCuration>): OrtResult =
         copy(
             analyzer = analyzer?.copy(
                 result = analyzer.result.copy(
                     packages = getPackages().map { curatedPackage ->
                         val uncuratedPackage = CuratedPackage(curatedPackage.toUncuratedPackage())
                         curations
-                            .filter { it.isApplicable(curatedPackage.pkg.id) }
+                            .filter { it.isApplicable(curatedPackage.metadata.id) }
                             .fold(uncuratedPackage) { current, packageCuration -> packageCuration.apply(current) }
                     }.toSortedSet()
                 )
@@ -364,17 +330,29 @@ data class OrtResult(
     @JsonIgnore
     fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
         analyzer?.result?.packages.orEmpty().filterTo(mutableSetOf()) { pkg ->
-            !omitExcluded || !isExcluded(pkg.pkg.id)
+            !omitExcluded || !isExcluded(pkg.metadata.id)
         }
 
     /**
-     * Return all [Project]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
+     * Return the [Project]s contained in this [OrtResult], optionally limited to only non-excluded ones if
+     * [omitExcluded] is true, or to only root projects if [includeSubProjects] is false.
      */
     @JsonIgnore
-    fun getProjects(omitExcluded: Boolean = false): Set<Project> =
-        analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
+    fun getProjects(omitExcluded: Boolean = false, includeSubProjects: Boolean = true): Set<Project> {
+        val projects = analyzer?.result?.projects.orEmpty().filterTo(mutableSetOf()) { project ->
             !omitExcluded || !isExcluded(project.id)
         }
+
+        if (!includeSubProjects) {
+            val subProjectIds = projects.flatMapTo(mutableSetOf()) {
+                dependencyNavigator.collectSubProjects(it)
+            }
+
+            projects.removeAll { it.id in subProjectIds }
+        }
+
+        return projects
+    }
 
     /**
      * Return all [AdvisorResult]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
@@ -387,16 +365,16 @@ data class OrtResult(
         }
 
     /**
-     * Return all [LicenseChoice]s for the [Package] with [id].
+     * Return all [SpdxLicenseChoice]s for the [Package] with [id].
      */
-    fun getLicenseChoices(id: Identifier): List<LicenseChoice> =
+    fun getPackageLicenseChoices(id: Identifier): List<SpdxLicenseChoice> =
         repository.config.licenseChoices.packageLicenseChoices.find { it.packageId == id }?.licenseChoices.orEmpty()
 
     /**
-     * Return all [LicenseChoice]s applicable for the scope of the whole [repository].
+     * Return all [SpdxLicenseChoice]s applicable for the scope of the whole [repository].
      */
     @JsonIgnore
-    fun getRepositoryLicenseChoices(): List<LicenseChoice> =
+    fun getRepositoryLicenseChoices(): List<SpdxLicenseChoice> =
         repository.config.licenseChoices.repositoryLicenseChoices
 
     /**
@@ -405,10 +383,51 @@ data class OrtResult(
     fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
 
     /**
-     * Return all [RuleViolation]s contained in this [OrtResult].
+     * Return all [RuleViolation]s contained in this [OrtResult]. Optionally exclude resolved violations with
+     * [omitResolved] and remove violations below the [minSeverity].
      */
     @JsonIgnore
-    fun getRuleViolations(): List<RuleViolation> = evaluator?.violations.orEmpty()
+    fun getRuleViolations(omitResolved: Boolean = false, minSeverity: Severity? = null): List<RuleViolation> {
+        val allViolations = evaluator?.violations.orEmpty()
+
+        val severeViolations = when (minSeverity) {
+            null -> allViolations
+            else -> allViolations.filter { it.severity >= minSeverity }
+        }
+
+        return if (omitResolved) {
+            val resolutions = getResolutions().ruleViolations
+
+            severeViolations.filter { violation ->
+                resolutions.none { resolution ->
+                    resolution.matches(violation)
+                }
+            }
+        } else {
+            severeViolations
+        }
+    }
+
+    @JsonIgnore
+    fun getVulnerabilities(
+        omitResolved: Boolean = false,
+        omitExcluded: Boolean = false
+    ): Map<Identifier, List<Vulnerability>> {
+        val allVulnerabilities = advisor?.results?.getVulnerabilities().orEmpty()
+            .filterKeys { !omitExcluded || !isExcluded(it) }
+
+        return if (omitResolved) {
+            val resolutions = getResolutions().vulnerabilities
+
+            allVulnerabilities.mapValues { (_, vulnerabilities) ->
+                vulnerabilities.filter { vulnerability ->
+                    resolutions.none { it.matches(vulnerability) }
+                }
+            }.filterValues { it.isNotEmpty() }
+        } else {
+            allVulnerabilities
+        }
+    }
 
     @JsonIgnore
     fun getExcludes(): Excludes = repository.config.excludes
@@ -424,25 +443,30 @@ data class OrtResult(
         }
 
     /**
+     * Retrieve non-excluded issues which are not resolved by resolutions in the repository configuration of this
+     * [OrtResult] with severities equal to or over [minSeverity].
+     */
+    @JsonIgnore
+    fun getOpenIssues(minSeverity: Severity = Severity.WARNING) = collectIssues()
+        .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
+        .flatten()
+        .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
+
+    /**
      * Return the [Resolutions] contained in the repository configuration of this [OrtResult].
      */
     @JsonIgnore
     fun getResolutions(): Resolutions = repository.config.resolutions.orEmpty()
 
     /**
-     * Return the set of Identifiers of all [Package]s and [Project]s contained in this [OrtResult].
-     */
-    @JsonIgnore
-    fun getProjectAndPackageIds(): Set<Identifier> =
-        mutableSetOf<Identifier>().also { set ->
-            getPackages().mapTo(set) { it.pkg.id }
-            getProjects().mapTo(set) { it.id }
-        }
-
-    /**
      * Return the list of [ScanResult]s for the given [id].
      */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
+
+    /**
+     * Return true if and only if the given [id] denotes a [Package] contained in this [OrtResult].
+     */
+    fun isPackage(id: Identifier): Boolean = getPackage(id) != null
 
     /**
      * Return true if and only if the given [id] denotes a [Project] contained in this [OrtResult].
@@ -455,9 +479,33 @@ data class OrtResult(
     fun withResolvedScopes(): OrtResult =
         copy(
             analyzer = analyzer?.copy(
-                result = analyzer.result.copy(
-                    projects = analyzer.result.projects.mapTo(sortedSetOf()) { it.withResolvedScopes() }
-                )
+                result = analyzer.result.withResolvedScopes()
             )
         )
+
+    /**
+     * Create the [DependencyNavigator] for this [OrtResult]. The concrete navigator implementation depends on the
+     * format, in which dependency information is stored.
+     */
+    private fun createDependencyNavigator(): DependencyNavigator = CompatibilityDependencyNavigator.create(this)
+
+    /**
+     * Return the label values corresponding to the given [key] split at the delimiter ',', or an empty set if the label
+     * is absent.
+     */
+    fun getLabelValues(key: String): Set<String> =
+        labels[key]?.split(',').orEmpty().mapTo(mutableSetOf()) { it.trim() }
+
+    /**
+     * Return true if a [label] with [value] exists in this [OrtResult]. If [value] is null the value of the label is
+     * ignored. If [splitValue] is true, the label value is interpreted as comma-separated list.
+     */
+    fun hasLabel(label: String, value: String? = null, splitValue: Boolean = true) =
+        if (value == null) {
+            label in labels
+        } else if (splitValue) {
+            value in getLabelValues(label)
+        } else {
+            labels[label] == value
+        }
 }

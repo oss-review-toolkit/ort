@@ -1,0 +1,36 @@
+{
+    "schema_version": "1.2.0",
+    "id": "OSV-2020-584",
+    "published": "2020-07-01T00:00:18.401815Z",
+    "modified": "2021-03-09T04:49:05.965964Z",
+    "summary": "Heap-buffer-overflow in collator_compare_fuzzer.cpp",
+    "details": "OSS-Fuzz report: https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=15499\nCrash type: Heap-buffer-overflow WRITE 3\nCrash state:\ncollator_compare_fuzzer.cpp\n",
+    "references": [
+        {
+            "type": "REPORT",
+            "url": "https://bugs.chromium.org/p/oss-fuzz/issues/detail?id=15499"
+        }
+    ],
+    "affected": [
+        {
+            "package": {
+                "ecosystem": "OSS-Fuzz",
+                "name": "icu"
+            },
+            "ranges": [
+                {
+                    "type": "GIT",
+                    "repo": "https://github.com/unicode-org/icu.git",
+                    "events": [
+                        {
+                            "introduced": "6e5755a2a833bc64852eae12967d0a54d7adf629"
+                        },
+                        {
+                            "fixed": "c43455749b914feef56b178b256f29b3016146eb"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

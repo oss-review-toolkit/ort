@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,54 +21,39 @@ package org.ossreviewtoolkit.evaluator
 
 import java.time.Instant
 
+import kotlin.script.experimental.api.ScriptEvaluationConfiguration
+import kotlin.script.experimental.api.constructorArgs
+import kotlin.script.experimental.api.scriptsInstancesSharing
+import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+
 import org.ossreviewtoolkit.model.EvaluatorRun
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.ResolutionProvider
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
-import org.ossreviewtoolkit.utils.ScriptRunner
+import org.ossreviewtoolkit.utils.scripting.ScriptRunner
 
 class Evaluator(
     ortResult: OrtResult = OrtResult.EMPTY,
-    licenseInfoResolver: LicenseInfoResolver = OrtResult.EMPTY.createLicenseInfoResolver(),
-    licenseClassifications: LicenseClassifications = LicenseClassifications()
+    licenseInfoResolver: LicenseInfoResolver = ortResult.createLicenseInfoResolver(),
+    resolutionProvider: ResolutionProvider = DefaultResolutionProvider.create(),
+    licenseClassifications: LicenseClassifications = LicenseClassifications(),
+    time: Instant = Instant.now()
 ) : ScriptRunner() {
-    override val preface = """
-            import org.ossreviewtoolkit.evaluator.*
-            import org.ossreviewtoolkit.model.*
-            import org.ossreviewtoolkit.model.config.*
-            import org.ossreviewtoolkit.model.licenses.*
-            import org.ossreviewtoolkit.model.utils.*
-            import org.ossreviewtoolkit.spdx.*
-            import org.ossreviewtoolkit.utils.*
+    override val compConfig = createJvmCompilationConfigurationFromTemplate<RulesScriptTemplate>()
 
-            import java.util.*
-
-            // Output:
-            val ruleViolations = mutableListOf<RuleViolation>()
-
-        """.trimIndent()
-
-    override val postface = """
-
-            ruleViolations
-        """.trimIndent()
-
-    init {
-        engine.put("ortResult", ortResult)
-        engine.put("licenseInfoResolver", licenseInfoResolver)
-        engine.put("licenseClassifications", licenseClassifications)
+    override val evalConfig = ScriptEvaluationConfiguration {
+        constructorArgs(ortResult, licenseInfoResolver, resolutionProvider, licenseClassifications, time)
+        scriptsInstancesSharing(true)
     }
 
-    override fun run(script: String): EvaluatorRun {
+    fun run(script: String): EvaluatorRun {
         val startTime = Instant.now()
-
-        @Suppress("UNCHECKED_CAST")
-        val violations = super.run(script) as List<RuleViolation>
-
+        val scriptInstance = runScript(script).scriptInstance as RulesScriptTemplate
         val endTime = Instant.now()
 
-        return EvaluatorRun(startTime, endTime, violations)
+        return EvaluatorRun(startTime, endTime, scriptInstance.ruleViolations)
     }
 }

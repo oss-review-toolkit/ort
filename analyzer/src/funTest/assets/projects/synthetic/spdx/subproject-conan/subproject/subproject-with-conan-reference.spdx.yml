@@ -1,0 +1,25 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2022-07-06T12:00:00Z"
+  creators:
+    - "Organization: Example Inc."
+  licenseListVersion: "3.9"
+name: "sub-conan-0.1.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
+documentDescribes:
+  - "SPDXRef-Package-subproject-conan"
+packages:
+  - SPDXID: "SPDXRef-Package-subproject-conan"
+    copyrightText: "Copyright (c) 2020 Example Inc."
+    downloadLocation: "git+ssh://gitlab.example.com:3389/products/conan-project.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+    licenseConcluded: "NOASSERTION"
+    licenseDeclared: "NOASSERTION"
+    name: "ConanProject"
+    versionInfo: "1.0.0"
+    packageFileName: "./conanfile.py"
+    externalRefs:
+    - referenceCategory: "PACKAGE_MANAGER"
+      referenceLocator: "pkg:conan/example.org/sub-conan@0.1.0?scope=requires"
+      referenceType: "purl"

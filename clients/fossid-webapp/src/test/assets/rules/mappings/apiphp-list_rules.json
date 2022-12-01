@@ -1,0 +1,28 @@
+{
+  "id" : "5628ab4e-8855-4b0c-bac4-9536286c545c",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"ignore_rules_show\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_20210609_144524\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{\"operation\":\"scans_ignore_rules_show\",\"status\":\"1\",\"data\":{\"1135\":{\"id\":\"1135\",\"0\":\"1135\",\"type\":\"directory\",\"1\":\"directory\",\"value\":\".git\",\"2\":\".git\",\"scan_id\":\"3538\",\"3\":\"3538\",\"updated\":\"2021-06-09 14:45:25\",\"4\":\"2021-06-09 14:45:25\"},\"2099\":{\"id\":\"2099\",\"0\":\"2099\",\"type\":\"file\",\"1\":\"file\",\"value\":\"bla\",\"2\":\"bla\",\"scan_id\":\"3538\",\"3\":\"3538\",\"updated\":\"2022-01-05 14:59:14\",\"4\":\"2022-01-05 14:59:14\"},\"2100\":{\"id\":\"2100\",\"0\":\"2100\",\"type\":\"extension\",\"1\":\"extension\",\"value\":\".txt\",\"2\":\".txt\",\"scan_id\":\"3538\",\"3\":\"3538\",\"updated\":\"2022-01-05 14:59:22\",\"4\":\"2022-01-05 14:59:22\"}}}",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Content-Type" : "application/json",
+      "Date" : "Wed, 05 Jan 2022 14:54:19 GMT",
+      "Expires" : "Wed, 05 Jan 2022 14:54:18 GMT",
+      "Server" : "nginx/1.14.2",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "5628ab4e-8855-4b0c-bac4-9536286c545c",
+  "persistent" : true,
+  "insertionIndex" : 3
+}

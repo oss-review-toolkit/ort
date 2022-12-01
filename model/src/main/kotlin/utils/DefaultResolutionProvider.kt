@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,16 +19,30 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.readValue
 
 /**
  * A provider of previously added resolutions for [OrtIssue]s and [RuleViolation]s.
  */
 class DefaultResolutionProvider : ResolutionProvider {
+    companion object {
+        /**
+         * Create a [DefaultResolutionProvider] and add the resolutions from the [ortResult] and the [resolutionsFile].
+         */
+        fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider =
+            DefaultResolutionProvider().apply {
+                ortResult?.let { add(it.getResolutions()) }
+                resolutionsFile?.takeIf { it.isFile }?.readValue<Resolutions>()?.let { add(it) }
+            }
+    }
+
     private var resolutions = Resolutions()
 
     /**

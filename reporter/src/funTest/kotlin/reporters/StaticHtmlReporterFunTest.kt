@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.reporter.reporters
 
+import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
@@ -26,14 +27,12 @@ import java.io.File
 
 import javax.xml.transform.TransformerFactory
 
-import kotlin.io.path.createTempDirectory
-
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -48,10 +47,10 @@ private val HOW_TO_FIX_TEXT_PROVIDER = HowToFixTextProvider {
 
 class StaticHtmlReporterFunTest : WordSpec({
     "StaticHtmlReporter" should {
-        "use the Apache Xalan TransformerFactory" {
+        "use the Saxon TransformerFactory" {
             val transformer = TransformerFactory.newInstance().newTransformer()
 
-            transformer.javaClass.name shouldBe "org.apache.xalan.transformer.TransformerIdentityImpl"
+            transformer.javaClass.name shouldBe "net.sf.saxon.jaxp.IdentityTransformer"
         }
 
         "successfully export to a static HTML page" {
@@ -61,7 +60,7 @@ class StaticHtmlReporterFunTest : WordSpec({
 
             val expectedReport = patchExpectedResult(
                 File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
-                mapOf("<REPLACE_ORT_VERSION>" to Environment().ortVersion)
+                mapOf("<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION)
             )
 
             actualReport shouldBe expectedReport
@@ -69,16 +68,14 @@ class StaticHtmlReporterFunTest : WordSpec({
     }
 })
 
-private fun generateReport(ortResult: OrtResult): String {
+private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
+        resolutionProvider = DefaultResolutionProvider.create(ortResult),
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
-    val outputDir = createTempDirectory("$ORT_NAME-${StaticHtmlReporterFunTest::class.simpleName}").toFile().apply {
-        deleteOnExit()
-    }
+    val outputDir = createTestTempDir()
 
     return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
 }

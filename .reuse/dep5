@@ -12,28 +12,24 @@ Files: */.gitignore
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: *.json
+Copyright: 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+License: Apache-2.0
+
 Files: *.md
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
-Files: mlc_config.json
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Files: *.yml
+Copyright: 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
-Files: ci/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Files: batect*
+Copyright: 2017-2021 Charles Korn <me@charleskorn.com>
 License: Apache-2.0
 
-Files: docs/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
-License: Apache-2.0
-
-Files: examples/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
-License: Apache-2.0
-
-Files: logos/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Files: NOTICE
+Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
 License: Apache-2.0
 
 Files: */src/main/resources/*
@@ -44,13 +40,53 @@ Files: */src/funTest/assets/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
-Files: clients/fossid-webapp/src/test/assets/*
-Copyright: 2020-2021 Bosch.IO GmbH
-License: Apache-2.0
-
 Files: */src/test/assets/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
+
+Files: ci/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: clients/fossid-webapp/src/test/assets/*
+Copyright: 2020-2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: clients/github-graphql/src/main/assets/*
+Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: clients/osv/src/test/assets/vulnerability/examples/*
+Copyright: 2021-2022 OSV Schema Authors
+License: Apache-2.0
+
+Files: docs/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: examples/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: integrations/completions/*
+Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: integrations/schemas/*
+Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+License: Apache-2.0
+
+Files: integrations/tekton/*
+Copyright: 2022 Google, LLC.
+License: Apache-2.0
+
+Files: logos/*
+Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+License: Apache-2.0
+
+Files: reporter/src/funTest/assets/spdx-schema.json
+Copyright: 2020-2022 Linux Foundation and its Contributors
+License: CC-BY-3.0
 
 Files: reporter-web-app/*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
@@ -66,23 +102,34 @@ Files: gradle/*
 Copyright: 2007-2020 The original author or authors <info@gradle.com>
 License: Apache-2.0
 
-Files: reporter-web-app/src/data/choosealicense/*
-Copyright: 2013-2020 GitHub, Inc. and contributors <support@github.com>
+Files: clients/github-graphql/src/main/assets/schema.graphql
+Copyright: 2017 Gregor Martynus
+License: MIT
+
+Files: evaluator/src/main/resources/rules/osadl-matrix-with-explanations.json
+Copyright: 2021 Open Source Automation Development Lab (OSADL) eG
+License: CC-BY-4.0
+
+Files: reporter/src/main/resources/prismjs/*
+Copyright: 2012 Lea Verou
+License: MIT
+
+Files: reporter/src/funTest/assets/sample.fossinfo.json
+Copyright: 2020-2021 Bosch Rexroth AG
+License: MIT
+
+Files: utils/spdx/src/main/resources/exceptions/*
+Copyright: 2010-2020 Linux Foundation and its Contributors
+License: CC0-1.0
+
+Files: utils/spdx/src/main/resources/licenses/*
+Copyright: 2010-2020 Linux Foundation and its Contributors
+License: CC0-1.0
+
+Files: utils/spdx/src/main/resources/licenserefs/*
+Copyright: 2010-2020 Linux Foundation and its Contributors
+License: CC0-1.0
+
+Files: utils/spdx/src/test/assets/spdx-spec-examples/*
+Copyright: 2010-2020 Linux Foundation and its Contributors
 License: CC-BY-3.0
-
-Files: spdx-utils/src/main/resources/exceptions/*
-Copyright: 2010-2020 Linux Foundation and its Contributors
-License: CC0-1.0
-
-Files: spdx-utils/src/main/resources/licenses/*
-Copyright: 2010-2020 Linux Foundation and its Contributors
-License: CC0-1.0
-
-Files: spdx-utils/src/main/resources/licenserefs/*
-Copyright: 2010-2020 Linux Foundation and its Contributors
-License: CC0-1.0
-
-Files: spdx-utils/src/test/resources/spdx-spec-examples/*
-Copyright: 2010-2020 Linux Foundation and its Contributors
-License: CC-BY-3.0
-

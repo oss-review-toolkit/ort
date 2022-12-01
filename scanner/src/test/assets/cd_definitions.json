@@ -1,0 +1,110 @@
+{
+  "<<package>>": {
+    "described": {
+      "sourceLocation": {
+        "type": "sourcearchive",
+        "provider": "mavencentral",
+        "namespace": "org.apache.commons",
+        "name": "commons-lang3",
+        "revision": "3.12.0",
+        "url": "https://search.maven.org/remotecontent?filepath=org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0-sources.jar"
+      },
+      "hashes": {
+        "sha1": "c6842c86792ff03b9f1d1fe2aab8dc23aa6c6f0e",
+        "sha256": "d919d904486c037f8d193412da0c92e22a9fa24230b9d67a57855c5c31c7e94e"
+      },
+      "files": 350,
+      "releaseDate": "2000-03-12",
+      "urls": {
+        "registry": "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3",
+        "version": "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0",
+        "download": "https://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.12.0/commons-lang3-3.12.0.jar"
+      },
+      "tools": [
+        "clearlydefined/1.5.0"
+      ],
+      "toolScore": {
+        "total": 100,
+        "date": 30,
+        "source": 70
+      },
+      "score": {
+        "total": 100,
+        "date": 30,
+        "source": 70
+      }
+    },
+    "licensed": {
+      "declared": "Apache-2.0",
+      "toolScore": {
+        "total": 60,
+        "declared": 30,
+        "discovered": 0,
+        "consistency": 15,
+        "spdx": 15,
+        "texts": 0
+      },
+      "facets": {
+        "core": {
+          "attribution": {
+            "unknown": 350
+          },
+          "discovered": {
+            "unknown": 350
+          },
+          "files": 350
+        }
+      },
+      "score": {
+        "total": 60,
+        "declared": 30,
+        "discovered": 0,
+        "consistency": 15,
+        "spdx": 15,
+        "texts": 0
+      }
+    },
+    "files": [
+      {
+        "path": "META-INF/LICENSE.txt",
+        "hashes": {
+          "sha1": "2b8b815229aa8a61e483fb4ba0588b8b6c491890",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+        },
+        "token": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+        "natures": [
+          "license"
+        ]
+      },
+      {
+        "path": "META-INF/MANIFEST.MF",
+        "hashes": {
+          "sha1": "0b4567bb552017561e56c2953c0aba7444fbcc69",
+          "sha256": "5250f1cfb9d70a5cf2cd83182e1924b92cc87502ffbd85b982895ef54c717b33"
+        }
+      },
+      {
+        "path": "org/apache/commons/lang3/tuple/Triple.class",
+        "hashes": {
+          "sha1": "a269ab2f9adbcc8b5b64a556dc43851979df6d12",
+          "sha256": "e94be14d05bb7ce459e6abab7f151ab9b89186be38cb2e495273128f9887ec56"
+        }
+      }
+    ],
+    "coordinates": {
+      "type": "maven",
+      "provider": "mavencentral",
+      "namespace": "org.apache.commons",
+      "name": "commons-lang3",
+      "revision": "3.12.0"
+    },
+    "_meta": {
+      "schemaVersion": "1.6.1",
+      "updated": "2021-03-13T01:17:51.883Z"
+    },
+    "scores": {
+      "effective": 80,
+      "tool": 80
+    }
+  }
+}

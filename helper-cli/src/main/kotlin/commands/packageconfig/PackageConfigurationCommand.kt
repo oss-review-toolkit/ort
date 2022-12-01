@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,24 +19,23 @@
 
 package org.ossreviewtoolkit.helper.commands.packageconfig
 
-import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-internal class PackageConfigurationCommand : CliktCommand(
+internal class PackageConfigurationCommand : NoOpCliktCommand(
     help = "Commands for working with package configurations."
 ) {
     init {
         subcommands(
+            CreateCommand(),
             FindCommand(),
             FormatCommand(),
+            ExportLicenseFindingCurationsCommand(),
+            ExportPathExcludesCommand(),
             ImportLicenseFindingCurationsCommand(),
             ImportPathExcludesCommand(),
             SortCommand(),
             RemoveEntriesCommand()
         )
-    }
-
-    override fun run() {
-        // Intentionally empty, because all logic is implemented inside the sub commands..
     }
 }

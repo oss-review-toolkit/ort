@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,11 +26,13 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -46,12 +47,23 @@ class NuGetFunTest : StringSpec() {
     init {
         "Definition file is correctly read" {
             val reader = NuGetPackageFileReader()
-            val result = reader.getPackageReferences(packageFile)
+            val result = reader.getDependencies(packageFile)
 
             result should containExactly(
-                Identifier(type = "NuGet", namespace = "", name = "jQuery", version = "3.3.1"),
-                Identifier(type = "NuGet", namespace = "", name = "WebGrease", version = "1.5.2"),
-                Identifier(type = "NuGet", namespace = "", name = "foobar", version = "1.2.3")
+                NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
+                NuGetDependency(name = "System.Threading", version = "4.0.11", targetFramework = "netcoreapp3.1"),
+                NuGetDependency(
+                    name = "System.Threading.Tasks.Extensions",
+                    version = "4.5.4",
+                    targetFramework = "net45"
+                ),
+                NuGetDependency(
+                    name = "WebGrease",
+                    version = "1.5.2",
+                    targetFramework = "netcoreapp3.1",
+                    developmentDependency = true
+                ),
+                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "netcoreapp3.1")
             )
         }
 
@@ -67,8 +79,34 @@ class NuGetFunTest : StringSpec() {
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
+
+        "Direct project dependencies are detected correctly" {
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
+            val expectedResult = patchExpectedResult(
+                projectDir.parentFile.resolve("nuget-direct-dependencies-only-expected-output.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
+            val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(packageFile)
+
+            patchActualResult(result.toYaml()) shouldBe expectedResult
+        }
     }
 
-    private fun createNuGet() =
-        NuGet("NuGet", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createNuGet(directDependenciesOnly: Boolean = false) =
+        NuGet(
+            "NuGet",
+            USER_DIR,
+            AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "NuGet" to PackageManagerConfiguration(
+                        options = mapOf(
+                            OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
+                        )
+                    )
+                )
+            ),
+            RepositoryConfiguration()
+        )
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -56,9 +56,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe true
         }
@@ -72,9 +72,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe false
         }
@@ -88,9 +88,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://host/repo.git",
-                        revision = "",
-                        resolvedRevision = "12345678"
-                    )
+                        revision = ""
+                    ),
+                    resolvedRevision = "12345678"
                 )
             ) shouldBe true
         }
@@ -104,9 +104,9 @@ class PackageConfigurationTest : WordSpec({
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
                         url = "ssh://git@host/repo.git",
-                        revision = "12345678",
-                        resolvedRevision = "12"
-                    )
+                        revision = "12345678"
+                    ),
+                    resolvedRevision = "12"
                 )
             ) shouldBe false
         }

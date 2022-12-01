@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,13 +21,10 @@ package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
-
-import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
@@ -36,18 +33,13 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class BeanUtilsFunTest : StringSpec() {
     private lateinit var outputDir: File
 
-    override fun beforeTest(testCase: TestCase) {
-        outputDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}").toFile()
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        outputDir.safeDeleteRecursively(force = true)
+    override suspend fun beforeTest(testCase: TestCase) {
+        outputDir = createTestTempDir()
     }
 
     init {
@@ -80,9 +72,9 @@ class BeanUtilsFunTest : StringSpec() {
             provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
                 vcsInfo.type shouldBe VcsType.SUBVERSION
                 vcsInfo.url shouldBe vcsFromCuration.url
-                vcsInfo.revision shouldBe "928490"
-                vcsInfo.resolvedRevision shouldBe "928490"
+                vcsInfo.revision shouldBe ""
                 vcsInfo.path shouldBe vcsFromCuration.path
+                resolvedRevision shouldBe "928490"
             }
         }
     }

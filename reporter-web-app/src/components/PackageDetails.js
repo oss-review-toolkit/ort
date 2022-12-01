@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,12 +32,21 @@ const PackageDetails = (props) => {
         isProject,
         definitionFilePath,
         purl,
+        authors,
         description,
         homepageUrl,
         binaryArtifact,
         sourceArtifact,
-        vcs,
-        vcsProcessed
+        vcs: {
+            path: vcsPath,
+            revision: vcsRevision = webAppPackage.vcs.resolvedRevision,
+            url: vcsUrl,
+        },
+        vcsProcessed: {
+            path: vcsProcessedPath,
+            revision: vcsProcessedRevision = webAppPackage.vcsProcessed.resolvedRevision,
+            url: vcsProcessedUrl
+        }
     } = webAppPackage;
 
     const renderAhref = (text, href) => (
@@ -82,6 +91,17 @@ const PackageDetails = (props) => {
                 )
             }
             {
+                webAppPackage.hasAuthors()
+                && (
+                    <Item
+                        label="Authors"
+                        key="ort-package-authors"
+                    >
+                        {Array.from(authors).join(', ')}
+                    </Item>
+                )
+            }
+            {
                 description
                 && (
                     <Item
@@ -104,24 +124,69 @@ const PackageDetails = (props) => {
                 )
             }
             {
-                !!vcs.url
+                !!vcsUrl
                 && (
                     <Item
-                        label="Repository Declared"
+                        label="Declared Repository"
                         key="ort-package-vcs-url"
                     >
-                        {renderAhref(vcs.url)}
+                        {renderAhref(vcsUrl)}
                     </Item>
                 )
             }
             {
-                !!vcsProcessed.url
+                !!vcsRevision
+                && vcsRevision !== vcsProcessedRevision
                 && (
                     <Item
-                        label="Repository Processed"
+                        label="Declared Repository Revision"
+                        key="ort-package-vcs-revision"
+                    >
+                        {vcsRevision}
+                    </Item>
+                )
+            }
+            {
+                !!vcsPath
+                && (
+                    <Item
+                        label="Declared Repository Sources Path"
+                        key="ort-package-vcs-path"
+                    >
+                        {vcsPath}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedUrl
+                && (
+                    <Item
+                        label="Processed Repository"
                         key="ort-package-vcs-processed-url"
                     >
-                        {renderAhref(vcsProcessed.url)}
+                        {renderAhref(vcsProcessedUrl)}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedRevision
+                && (
+                    <Item
+                        label="Processed Repository Revision"
+                        key="ort-package-vcs-processed-resolved-revision"
+                    >
+                        {vcsProcessedRevision}
+                    </Item>
+                )
+            }
+            {
+                !!vcsProcessedPath
+                && (
+                    <Item
+                        label="Processed Repository Sources Path"
+                        key="ort-package-vcs-processed-path"
+                    >
+                        {vcsProcessedPath}
                     </Item>
                 )
             }

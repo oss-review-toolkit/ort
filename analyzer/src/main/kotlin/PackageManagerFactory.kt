@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,16 +26,12 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.NamedPlugin
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
  */
-interface PackageManagerFactory {
-    /**
-     * The name to use to refer to the package manager.
-     */
-    val managerName: String
-
+interface PackageManagerFactory : NamedPlugin {
     /**
      * The glob matchers for all definition files.
      */
@@ -56,7 +52,7 @@ interface PackageManagerFactory {
  * A generic factory class for a [PackageManager].
  */
 abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val managerName: String
+    override val name: String
 ) : PackageManagerFactory {
     /**
      * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
@@ -80,5 +76,5 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
      * Return the package manager's name here to allow Clikt to display something meaningful when listing the
      * package managers which are enabled by default via their factories.
      */
-    override fun toString() = managerName
+    override fun toString() = name
 }

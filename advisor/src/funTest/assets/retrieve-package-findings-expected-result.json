@@ -1,0 +1,88 @@
+{
+  "NPM::find-my-way:3.0.0" : [ {
+    "advisor" : {
+      "name" : "OSV",
+      "capabilities" : [ "VULNERABILITIES" ]
+    },
+    "summary" : {
+      "start_time" : "2022-07-08T09:17:44.773547238Z",
+      "end_time" : "2022-07-08T09:17:45.267886427Z"
+    },
+    "defects" : [ ],
+    "vulnerabilities" : [ {
+      "id" : "GHSA-jgrh-5m3h-9c5f",
+      "summary" : "Web Cache Poisoning in find-my-way",
+      "description" : "This affects the package find-my-way before 2.2.5, from 3.0.0 and before 3.0.5. It accepts the Accept-Version' header by default, and if versioned routes are not being used, this could lead to a denial of service. Accept-Version can be used as an unkeyed header in a cache poisoning attack.",
+      "references" : [ {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2020-7764",
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "5.9"
+      }, {
+        "url" : "https://github.com/delvedor/find-my-way/commit/ab408354690e6b9cf3c4724befb3b3fa4bb90aac",
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "5.9"
+      }, {
+        "url" : "https://snyk.io/vuln/SNYK-JS-FINDMYWAY-1038269",
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "5.9"
+      }, {
+        "url" : "https://www.npmjs.com/package/find-my-way",
+        "scoring_system" : "CVSS:3.1",
+        "severity" : "5.9"
+      } ]
+    } ]
+  } ],
+  "NPM::discord-markdown:2.3.0" : [ {
+    "advisor" : {
+      "name" : "OSV",
+      "capabilities" : [ "VULNERABILITIES" ]
+    },
+    "summary" : {
+      "start_time" : "2022-07-11T11:43:59.561110209Z",
+      "end_time" : "2022-07-11T11:44:00.397553119Z"
+    },
+    "defects" : [ ],
+    "vulnerabilities" : [ {
+      "id" : "GHSA-9r27-994c-4xch",
+      "summary" : "discord-html not escaping HTML code blocks when lacking a language identifier",
+      "description" : "### Impact\nAny website using discord-markdown with user-generated markdown is vulnerable to having code injected into the page where the markdown is displayed.\n\n### Patches\nThis has been patched in version 2.3.1\n\n### Workarounds\nEscape the characters `&lt;&gt;&amp;` before sending plain code blocks to discord-markdown.\n\n### References\nhttps://github.com/brussell98/discord-markdown/issues/13",
+      "references" : [ {
+        "url" : "https://github.com/brussell98/discord-markdown/security/advisories/GHSA-9r27-994c-4xch",
+        "scoring_system" : null,
+        "severity" : "HIGH"
+      }, {
+        "url" : "https://github.com/brussell98/discord-markdown/issues/13",
+        "scoring_system" : null,
+        "severity" : "HIGH"
+      }, {
+        "url" : "https://github.com/brussell98/discord-markdown/commit/7ce2eb66520815dcf5e97ef2bc8a2d5979da66e7",
+        "scoring_system" : null,
+        "severity" : "HIGH"
+      } ]
+    } ]
+  } ],
+  "PyPI::donfig:0.2.0" : [ {
+    "advisor" : {
+      "name" : "OSV",
+      "capabilities" : [ "VULNERABILITIES" ]
+    },
+    "summary" : {
+      "start_time" : "2022-07-20T08:55:02.798653218Z",
+      "end_time" : "2022-07-20T08:55:03.677229008Z"
+    },
+    "defects" : [ ],
+    "vulnerabilities" : [ {
+      "id" : "PYSEC-2019-21",
+      "description" : "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the collect_yaml method in config_obj.py. It can execute arbitrary Python commands, resulting in command execution.",
+      "references" : [ {
+        "url" : "https://github.com/pytroll/donfig/issues/5",
+        "scoring_system" : null,
+        "severity" : null
+      }, {
+        "url" : "https://github.com/pytroll/donfig/commits/master",
+        "scoring_system" : null,
+        "severity" : null
+      } ]
+    } ]
+  } ]
+}

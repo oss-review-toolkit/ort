@@ -1,0 +1,21 @@
+{
+  "name": "npm-yarn",
+  "version": "1.0.0",
+  "description": "NPM test project with yarn.lock.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oss-review-toolkit/ort.git"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "dependencies": {
+    "cheerio": "1.0.0-rc.1",
+    "long": "^3.2.0"
+  },
+  "devDependencies": {
+    "cson": "~4.1.0"
+  },
+  "optionalDependencies": {
+    "promise": "~7.3.1"
+  }
+}

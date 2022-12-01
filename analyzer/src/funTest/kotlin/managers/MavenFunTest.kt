@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,11 +28,11 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -44,34 +44,6 @@ class MavenFunTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     init {
-        "jgnash parent dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
-            val pomFile = projectDir.resolve("pom.xml")
-            val expectedResult = projectDir.parentFile.resolve("jgnash-expected-output.yml").readText()
-
-            val result = createMaven().resolveSingleProject(pomFile)
-
-            result.toYaml() shouldBe expectedResult
-        }
-
-        "jgnash-core dependencies are detected correctly" {
-            val projectDir = File("src/funTest/assets/projects/external/jgnash").absoluteFile
-
-            val pomFileCore = projectDir.resolve("jgnash-core/pom.xml")
-            val pomFileResources = projectDir.resolve("jgnash-resources/pom.xml")
-
-            val expectedResult = projectDir.parentFile.resolve("jgnash-core-expected-output.yml").readText()
-
-            // jgnash-core depends on jgnash-resources, so we also have to pass the pom.xml of jgnash-resources to
-            // resolveDependencies so that it is available in the Maven.projectsByIdentifier cache. Otherwise resolution
-            // of transitive dependencies would not work.
-            val result = createMaven().resolveDependencies(listOf(pomFileCore, pomFileResources))[pomFileCore]
-
-            result.shouldNotBeNull()
-            result should haveSize(1)
-            result.single().toYaml() shouldBe expectedResult
-        }
-
         "Root project dependencies are detected correctly" {
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
@@ -80,7 +52,7 @@ class MavenFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveSingleProject(pomFile)
+            val result = createMaven().resolveSingleProject(pomFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -95,13 +67,14 @@ class MavenFunTest : StringSpec() {
             )
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
-            // available in the Maven.projectsByIdentifier cache. Otherwise resolution of transitive dependencies would
+            // available in the Maven.projectsByIdentifier cache. Otherwise, resolution of transitive dependencies would
             // not work.
-            val result = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib))[pomFileApp]
+            val managerResult = createMaven().resolveDependencies(listOf(pomFileApp, pomFileLib), emptyMap())
+            val result = managerResult.projectResults[pomFileApp]
 
             result.shouldNotBeNull()
             result should haveSize(1)
-            result.single().toYaml() shouldBe expectedResult
+            managerResult.resolveScopes(result.single()).toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
@@ -112,7 +85,7 @@ class MavenFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveSingleProject(pomFile)
+            val result = createMaven().resolveSingleProject(pomFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -131,7 +104,7 @@ class MavenFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveSingleProject(pomFile)
+            val result = createMaven().resolveSingleProject(pomFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -145,12 +118,12 @@ class MavenFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createMaven().resolveSingleProject(pomFile)
+            val result = createMaven().resolveSingleProject(pomFile, resolveScopes = true)
 
             patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 
     private fun createMaven() =
-        Maven("Maven", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Maven("Maven", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }

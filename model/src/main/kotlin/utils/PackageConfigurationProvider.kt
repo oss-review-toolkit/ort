@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,9 +26,17 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 /**
  * A provider for [PackageConfiguration]s.
  */
-interface PackageConfigurationProvider {
+fun interface PackageConfigurationProvider {
+    companion object {
+        /**
+         * A provider that does not provide any curations.
+         */
+        @JvmField
+        val EMPTY = PackageConfigurationProvider { _, _ -> emptyList() }
+    }
+
     /**
-     * Return the first matching [PackageConfiguration] for the given [packageId] and [provenance] if any.
+     * Return a list of [PackageConfiguration]s for the given [packageId] and [provenance].
      */
-    fun getPackageConfiguration(packageId: Identifier, provenance: Provenance): PackageConfiguration?
+    fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration>
 }

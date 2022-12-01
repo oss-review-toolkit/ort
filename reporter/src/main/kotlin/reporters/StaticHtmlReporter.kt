@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,6 +33,7 @@ import kotlinx.html.dom.*
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -44,27 +44,34 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.reporter.ReportTableModel
+import org.ossreviewtoolkit.reporter.ReportTableModel.IssueTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
+import org.ossreviewtoolkit.reporter.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.IssueTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ResolvableIssue
-import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.containsUnresolved
-import org.ossreviewtoolkit.utils.Environment
-import org.ossreviewtoolkit.utils.ORT_FULL_NAME
-import org.ossreviewtoolkit.utils.isValidUri
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
+import org.ossreviewtoolkit.utils.common.isValidUri
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
-@Suppress("LargeClass")
+@Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
-    override val reporterName = "StaticHtml"
+    override val name = "StaticHtml"
 
     private val reportFilename = "scan-report.html"
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
+    private val licensesSha1 = mutableMapOf<String, String>()
 
     override fun generateReport(
         input: ReporterInput,
@@ -129,17 +136,16 @@ class StaticHtmlReporter : Reporter {
                         strong { +"ORT" }
                         +", the "
                         a {
-                            href = "http://oss-review-toolkit.org/"
+                            href = "https://oss-review-toolkit.org/"
                             +ORT_FULL_NAME
                         }
-                        +", version ${Environment().ortVersion} on ${Instant.now()}."
+                        +", version ${Environment.ORT_VERSION} on ${Instant.now()}."
                     }
 
                     h2 { +"Project" }
 
                     div {
                         with(reportTableModel.vcsInfo) {
-                            val revision = resolvedRevision ?: revision
                             +"Scanned revision $revision of $type repository $url"
                         }
                     }
@@ -289,7 +295,7 @@ class StaticHtmlReporter : Reporter {
                 }
             }
             td { +ruleViolation.violation.rule }
-            td { +ruleViolation.violation.pkg.toCoordinates() }
+            td { +(ruleViolation.violation.pkg?.toCoordinates() ?: "-") }
             td {
                 +if (ruleViolation.violation.license != null) {
                     "${ruleViolation.violation.licenseSource}: ${ruleViolation.violation.license}"
@@ -370,7 +376,7 @@ class StaticHtmlReporter : Reporter {
 
         val issues = (row.analyzerIssues + row.scanIssues).flatMap { it.value }
 
-        val worstSeverity = issues.filterNot { it.isResolved }.map { it.severity }.minOrNull() ?: Severity.ERROR
+        val worstSeverity = issues.filterNot { it.isResolved }.minOfOrNull { it.severity } ?: Severity.ERROR
 
         val areAllResolved = issues.isNotEmpty() && issues.all { it.isResolved }
 
@@ -516,20 +522,12 @@ class StaticHtmlReporter : Reporter {
             td {
                 row.concludedLicense?.let {
                     em { +"Concluded License:" }
-                    dl { dd { +"${row.concludedLicense}" } }
+                    dl { dd { div { licensesLink(row.concludedLicense) } } }
                 }
 
                 if (row.declaredLicenses.isNotEmpty()) {
                     em { +"Declared Licenses:" }
-                    dl {
-                        dd {
-                            row.declaredLicenses.forEach {
-                                div {
-                                    +it.license.toString()
-                                }
-                            }
-                        }
-                    }
+                    dl { dd { row.declaredLicenses.forEach { div { licensesLink(it.license) } } } }
                 }
 
                 if (row.detectedLicenses.isNotEmpty()) {
@@ -545,7 +543,7 @@ class StaticHtmlReporter : Reporter {
                     dl {
                         dd {
                             row.detectedLicenses.forEach { license ->
-                                val firstFinding = license.locations.firstOrNull { it.matchingPathExcludes.isEmpty() }
+                                val firstFinding = license.locations.find { it.matchingPathExcludes.isEmpty() }
                                     ?: license.locations.firstOrNull()
 
                                 val permalink = firstFinding?.permalink(row.id)
@@ -555,7 +553,7 @@ class StaticHtmlReporter : Reporter {
 
                                 if (!license.isDetectedExcluded) {
                                     div {
-                                        +license.license.toString()
+                                        licensesLink(license.license)
                                         if (permalink != null) {
                                             val count = license.locations.count { it.matchingPathExcludes.isEmpty() }
                                             permalink(permalink, count)
@@ -578,7 +576,7 @@ class StaticHtmlReporter : Reporter {
 
                 if (row.effectiveLicense != null) {
                     em { +"Effective License:" }
-                    dl { dd { +"${row.effectiveLicense}" } }
+                    dl { dd { div { licensesLink(row.effectiveLicense) } } }
                 }
             }
 
@@ -633,7 +631,52 @@ class StaticHtmlReporter : Reporter {
         val renderer = HtmlRenderer.builder().build()
         unsafe { +renderer.render(document) }
     }
+
+    private fun DIV.licenseLink(license: String) {
+        val licenseResourcePath = getLicenseResourcePath(license)
+        val sha1Git = licensesSha1.getOrPut(license) {
+            HashAlgorithm.SHA1GIT.calculate(licenseResourcePath) ?: license
+        }
+
+        if (sha1Git == license) {
+            +license
+        } else {
+            // Software Heritage is able to identify textual content by providing a sha1_git, as explained here:
+            // https://docs.softwareheritage.org/devel/swh-web/uri-scheme-browse-content.html
+            a(href = "https://archive.softwareheritage.org/browse/content/sha1_git:$sha1Git") {
+                +license
+            }
+        }
+    }
+
+    private fun DIV.licensesLink(expression: SpdxExpression) {
+        when (expression) {
+            is SpdxLicenseIdExpression -> {
+                licenseLink(expression.toString())
+            }
+            is SpdxLicenseWithExceptionExpression -> {
+                licenseLink(expression.simpleLicense())
+                +" WITH "
+                licenseLink(expression.exception)
+            }
+            is SpdxCompoundExpression -> {
+                licensesLink(expression.left)
+                +" ${expression.operator} "
+                licensesLink(expression.right)
+            }
+            else -> {
+                +expression.toString()
+            }
+        }
+    }
 }
+
+private fun getLicenseResourcePath(license: String): String =
+    when {
+        license.startsWith(SpdxConstants.LICENSE_REF_PREFIX) -> "/licenserefs/$license"
+        "exception" in license -> "/exceptions/$license"
+        else -> "/licenses/$license"
+    }
 
 private fun EM.provenanceLink(provenance: Provenance?) {
     if (provenance is ArtifactProvenance) {
@@ -671,8 +714,7 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
 
     (provenance as? ArtifactProvenance)?.let {
         if (it.sourceArtifact != RemoteArtifact.EMPTY) {
-            val mavenCentralPattern = Regex("https?://repo[^/]+maven[^/]+org/.*")
-            if (it.sourceArtifact.url.matches(mavenCentralPattern)) {
+            if (isMavenCentralUrl(it.sourceArtifact.url)) {
                 // At least for source artifacts on Maven Central, use the "proxy" from Sonatype which has the
                 // Archive Browser plugin installed to link to the files with findings.
                 return with(id) {

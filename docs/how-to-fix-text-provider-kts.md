@@ -1,6 +1,6 @@
 # The `how-to-fix-text-provider.kts` file
 
-The `how-to-fix-text-provider.kts` file enables the injection of how-to-fix texts in markdown format for ORT issues into
+The `how-to-fix-text-provider.kts` file enables the injection of how-to-fix texts in Markdown format for ORT issues into
 the reports.
 
 You can use the [how-to-fix-text-provider.kts example](../examples/how-to-fix-text-provider.kts) as the base script file

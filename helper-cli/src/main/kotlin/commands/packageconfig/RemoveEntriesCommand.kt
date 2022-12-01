@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,14 +25,14 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.getScanResultFor
-import org.ossreviewtoolkit.helper.common.writeAsYaml
-import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.helper.utils.getScanResultFor
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class RemoveEntriesCommand : CliktCommand(
     help = "Removes all path excludes and license finding curations which do not match any files or license findings."
@@ -45,8 +45,8 @@ internal class RemoveEntriesCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file",
         help = "The ORT result file to read as input which should contain a scan result to which the given " +
                 "package configuration applies to."
     ).convert { it.expandTilde() }
@@ -58,7 +58,7 @@ internal class RemoveEntriesCommand : CliktCommand(
 
     override fun run() {
         val packageConfiguration = packageConfigurationFile.readValue<PackageConfiguration>()
-        val ortResult = ortResultFile.readValue<OrtResult>()
+        val ortResult = readOrtResult(ortFile)
         val scanResult = ortResult.getScanResultFor(packageConfiguration)
 
         if (scanResult == null) {
@@ -79,7 +79,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         packageConfiguration.copy(
             pathExcludes = pathExcludes,
             licenseFindingCurations = licenseFindingCurations
-        ).writeAsYaml(packageConfigurationFile)
+        ).write(packageConfigurationFile)
 
         buildString {
             val removedPathExcludes = packageConfiguration.pathExcludes.size - pathExcludes.size

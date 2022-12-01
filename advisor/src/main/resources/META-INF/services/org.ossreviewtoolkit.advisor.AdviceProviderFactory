@@ -1,0 +1,5 @@
+org.ossreviewtoolkit.advisor.advisors.GitHubDefects$Factory
+org.ossreviewtoolkit.advisor.advisors.NexusIq$Factory
+org.ossreviewtoolkit.advisor.advisors.OssIndex$Factory
+org.ossreviewtoolkit.advisor.advisors.Osv$Factory
+org.ossreviewtoolkit.advisor.advisors.VulnerableCode$Factory

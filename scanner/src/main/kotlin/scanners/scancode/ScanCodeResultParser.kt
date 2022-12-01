@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,6 +25,8 @@ import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
 import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -34,23 +35,28 @@ import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.spdx.SpdxConstants
-import org.ossreviewtoolkit.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
+import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
-private data class LicenseExpression(
+internal val SCANCODE_TIMESTAMP_FORMATTER: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
+
+private data class LicenseMatch(
     val expression: String,
     val startLine: Int,
-    val endLine: Int
+    val endLine: Int,
+    val score: Float
 )
 
-data class LicenseKeyReplacement(
+internal data class LicenseKeyReplacement(
     val scanCodeLicenseKey: String,
     val spdxExpression: String
 )
 
-private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.toLowerCase()}-"
+private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.lowercase()}-"
 
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Pattern.compile(
@@ -64,85 +70,59 @@ private val TIMEOUT_ERROR_REGEX = Pattern.compile(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
 
-private val UNKNOWN_LICENSE_KEYS = listOf(
-    "free-unknown",
-    "unknown",
-    "unknown-license-reference"
-)
-
 /**
- * Generate a summary from the given raw ScanCode [result], using [startTime] and [endTime] metadata. From the
- * [scanPath] the package verification code is generated. If [parseExpressions] is true, license findings are preferably
- * parsed as license expressions.
+ * Generate a summary from the given raw ScanCode [result]. From the [scanPath] the package verification code is
+ * generated. If [parseExpressions] is true, license findings are preferably parsed as license expressions.
  */
 internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
     scanPath: File,
     result: JsonNode,
+    detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
 ) =
     generateSummary(
-        startTime,
-        endTime,
         calculatePackageVerificationCode(scanPath),
         result,
+        detectedLicenseMapping,
         parseExpressions
     )
 
 /**
- * Generate a summary from the given raw ScanCode [result], using [startTime], [endTime], and [verificationCode]
- * metadata. This variant can be used if the result is not read from a local file. If [parseExpressions] is true,
- * license findings are preferably parsed as license expressions.
+ * Generate a summary from the given raw ScanCode [result] using [verificationCode] metadata. This variant can be used
+ * if the result is not read from a local file. If [parseExpressions] is true, license findings are preferably parsed as
+ * license expressions.
  */
 internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
     verificationCode: String,
     result: JsonNode,
+    detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
-) =
-    ScanSummary(
+): ScanSummary {
+    val header = result["headers"].single()
+
+    val startTimestamp = header["start_timestamp"].textValue()
+    val endTimestamp = header["end_timestamp"].textValue()
+
+    val startTime = SCANCODE_TIMESTAMP_FORMATTER.parse(startTimestamp).query(Instant::from)
+    val endTime = SCANCODE_TIMESTAMP_FORMATTER.parse(endTimestamp).query(Instant::from)
+
+    return ScanSummary(
         startTime = startTime,
         endTime = endTime,
-        fileCount = getFileCount(result),
         packageVerificationCode = verificationCode,
-        licenseFindings = getLicenseFindings(result, parseExpressions).toSortedSet(),
+        licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions).toSortedSet(),
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
         issues = getIssues(result)
     )
-
-/**
- * Get the number of files that have been scanned.
- */
-private fun getFileCount(result: JsonNode): Int {
-    // ScanCode 2.9.8 and above nest the files count in an extra header.
-    result["headers"]?.forEach { header ->
-        header["extra_data"]?.get("files_count")?.let {
-            return it.intValue()
-        }
-    }
-
-    // ScanCode 2.9.7 and below contain the files count at the top level.
-    return result["files_count"]?.intValue() ?: 0
 }
 
 /**
- * Generate an object with details about the ScanCode scanner that produced the given [result]. The corresponding
- * metadata from the result is evaluated.
+ * Generate details for the given raw ScanCode [result].
  */
-internal fun generateScannerDetails(result: JsonNode) =
-    result["headers"]?.let { headers ->
-        generateScannerDetails(headers.first(), "options", "tool_version")
-    } ?: generateScannerDetails(result, "scancode_options", "scancode_version")
-
-/**
- * Generate a ScannerDetails object from the given [result] node, which structure depends on the current ScanCode
- * version. The node names to check are specified via [optionsNode], and [versionNode].
- */
-private fun generateScannerDetails(result: JsonNode, optionsNode: String, versionNode: String): ScannerDetails {
-    val version = result[versionNode].textValueOrEmpty()
-    val config = generateScannerOptions(result[optionsNode])
+internal fun generateScannerDetails(result: JsonNode): ScannerDetails {
+    val header = result["headers"].single()
+    val version = header["tool_version"].textValueOrEmpty()
+    val config = generateScannerOptions(header["options"])
     return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
 }
 
@@ -174,47 +154,60 @@ private fun generateScannerOptions(options: JsonNode?): String {
     }.orEmpty()
 }
 
+private fun getInputPath(result: JsonNode): String {
+    val header = result["headers"].single()
+    val input = header["options"]["input"]
+    val path = input.takeUnless { it.isArray } ?: input.single()
+    return path.textValue().let { "$it/" }
+}
+
 /**
  * Get the license findings from the given [result]. If [parseExpressions] is true and license expressions are contained
- * in the result, these are preferred over separate license findings. Otherwise only separate license findings are
+ * in the result, these are preferred over separate license findings. Otherwise, only separate license findings are
  * parsed.
  */
-private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): List<LicenseFinding> {
+private fun getLicenseFindings(
+    result: JsonNode,
+    detectedLicenseMapping: Map<String, String>,
+    parseExpressions: Boolean
+): List<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
-    val files = result["files"]?.asSequence().orEmpty()
+    val input = getInputPath(result)
+    val files = result["files"]?.asSequence().orEmpty().filter { it["type"].textValue() == "file" }
+
     files.flatMapTo(licenseFindings) { file ->
         val licenses = file["licenses"]?.asSequence().orEmpty()
 
         licenses.groupBy(
             keySelector = {
-                LicenseExpression(
-                    // Older ScanCode versions do not produce the `license_expression` field.
-                    // Just use the `key` field in this case.
-                    it["matched_rule"]?.get("license_expression")?.textValue().takeIf { parseExpressions }
-                        ?: it["key"].textValue(),
+                LicenseMatch(
+                    (if (parseExpressions) it["matched_rule"]["license_expression"] else it["key"]).textValue(),
                     it["start_line"].intValue(),
-                    it["end_line"].intValue()
+                    it["end_line"].intValue(),
+                    it["score"].floatValue()
                 )
             },
             valueTransform = {
                 LicenseKeyReplacement(it["key"].textValue(), getSpdxLicenseId(it))
             }
-        ).map { (licenseExpression, replacements) ->
-            val spdxLicenseExpression = replaceLicenseKeys(licenseExpression.expression, replacements)
+        ).map { (licenseMatch, replacements) ->
+            val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
 
-            LicenseFinding(
+            LicenseFinding.createAndMap(
                 license = spdxLicenseExpression,
                 location = TextLocation(
-                    path = file["path"].textValue(),
-                    startLine = licenseExpression.startLine,
-                    endLine = licenseExpression.endLine
-                )
+                    path = file["path"].textValue().removePrefix(input),
+                    startLine = licenseMatch.startLine,
+                    endLine = licenseMatch.endLine
+                ),
+                score = licenseMatch.score,
+                detectedLicenseMapping = detectedLicenseMapping
             )
         }
     }
 
-    return licenseFindings
+    return associateLicensesWithExceptions(licenseFindings)
 }
 
 /**
@@ -222,23 +215,17 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Lis
  */
 private fun getSpdxLicenseId(license: JsonNode): String {
     // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
-    val id = license["spdx_license_key"].textValueOrEmpty()
+    val idFromSpdxKey = license["spdx_license_key"].textValueOrEmpty().toSpdxId(allowPlusSuffix = true)
 
     // For regular SPDX IDs, return early here.
-    if (id.isNotEmpty() && !id.startsWith(LICENSE_REF_PREFIX)) return id
+    if (idFromSpdxKey.isNotEmpty() && !idFromSpdxKey.startsWith(LICENSE_REF_PREFIX)) return idFromSpdxKey
 
-    // Before version 2.9.8, ScanCode used SPDX LicenseRefs that did not include the "scancode" namespace, like
-    // "LicenseRef-Proprietary-HERE" instead of now "LicenseRef-scancode-here-proprietary", see
-    // https://github.com/nexB/scancode-toolkit/blob/f94f716/src/licensedcode/data/licenses/here-proprietary.yml#L6-L8
-    // But if the "scancode" namespace is present, return early here.
-    if (id.startsWith(LICENSE_REF_PREFIX_SCAN_CODE)) return id
+    return idFromSpdxKey.takeUnless { it.isEmpty() } ?: run {
+        // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
+        // on the ScanCode-specific "key".
+        val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
 
-    // At this point the ID is either empty or a non-"scancode" SPDX LicenseRef that needs to be fixed up.
-    val key = license["key"].textValue().replace('_', '-')
-    return if (key in UNKNOWN_LICENSE_KEYS) {
-        SpdxConstants.NOASSERTION
-    } else {
-        "$LICENSE_REF_PREFIX_SCAN_CODE$key"
+        "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
     }
 }
 
@@ -248,14 +235,11 @@ private fun getSpdxLicenseId(license: JsonNode): String {
  */
 internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
     replacements.fold(licenseExpression) { expression, replacement ->
-        var result = expression
-        val regex = "(?:^| |\\()(${replacement.scanCodeLicenseKey})(?:$| |\\))".toRegex()
+        val regex = "(^| |\\()(${replacement.scanCodeLicenseKey})($| |\\))".toRegex()
 
-        regex.findAll(expression).forEach {
-            result = expression.replaceRange(it.groups[1]!!.range, replacement.spdxExpression)
+        regex.replace(expression) {
+            "${it.groupValues[1]}${replacement.spdxExpression}${it.groupValues[3]}"
         }
-
-        result
     }
 
 /**
@@ -264,29 +248,22 @@ internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collect
 private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
+    val input = getInputPath(result)
     val files = result["files"]?.asSequence().orEmpty()
+
     files.flatMapTo(copyrightFindings) { file ->
-        val path = file["path"].textValue()
+        val path = file["path"].textValue().removePrefix(input)
 
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
-        copyrights.flatMap { copyright ->
-            val startLine = copyright["start_line"].intValue()
-            val endLine = copyright["end_line"].intValue()
-
-            // While ScanCode 2.9.2 was still using "statements", version 2.9.7 is using "value".
-            val statements = (copyright["statements"]?.asSequence() ?: sequenceOf(copyright["value"]))
-
-            statements.map { statement ->
-                CopyrightFinding(
-                    statement = statement.textValue(),
-                    location = TextLocation(
-                        // The path is already relative as we run ScanCode with "--strip-root".
-                        path = path,
-                        startLine = startLine,
-                        endLine = endLine
-                    )
+        copyrights.map { copyright ->
+            CopyrightFinding(
+                statement = copyright["value"].textValue(),
+                location = TextLocation(
+                    path = path,
+                    startLine = copyright["start_line"].intValue(),
+                    endLine = copyright["end_line"].intValue()
                 )
-            }
+            )
         }
     }
 
@@ -296,9 +273,10 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
 /**
  * Get the list of [OrtIssue]s for scanned files.
  */
-private fun getIssues(result: JsonNode): List<OrtIssue> =
-    result["files"]?.flatMap { file ->
-        val path = file["path"].textValue()
+private fun getIssues(result: JsonNode): List<OrtIssue> {
+    val input = getInputPath(result)
+    return result["files"]?.flatMap { file ->
+        val path = file["path"].textValue().removePrefix(input)
         file["scan_errors"].map {
             OrtIssue(
                 source = ScanCode.SCANNER_NAME,
@@ -306,6 +284,7 @@ private fun getIssues(result: JsonNode): List<OrtIssue> =
             )
         }
     }.orEmpty()
+}
 
 /**
  * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false

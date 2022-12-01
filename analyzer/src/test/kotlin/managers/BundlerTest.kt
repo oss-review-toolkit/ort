@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,12 +29,13 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.readValue
 
 class BundlerTest : StringSpec({
     "createFromJson() parses JSON metadata for a Gem correctly" {
-        val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.json")
+        val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.yaml")
 
-        val gemspec = GemSpec.Factory.createFromJson(rspecGemJson.readText())
+        val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
 
         gemspec shouldBe GemSpec(
             name = "rspec",

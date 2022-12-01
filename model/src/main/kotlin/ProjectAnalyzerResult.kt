@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,53 +45,4 @@ data class ProjectAnalyzerResult(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<OrtIssue> = emptyList()
-) {
-    init {
-        // Perform a sanity check to ensure we have no references to non-existing packages.
-        val packageIds = packages.map { it.id }
-        val referencedIds = project.collectDependencies {
-            // Exclude project dependencies in multi-projects from the check as these appear as references in the
-            // dependency tree but not in the list of packages used.
-            !it.hasIssues() && it.linkage !in PackageLinkage.PROJECT_LINKAGE
-        }
-
-        // Note that not all packageIds have to be contained in the referencedIds, e.g. for NPM optional dependencies.
-        require(packageIds.containsAll(referencedIds)) {
-            "The following references do not actually refer to packages: ${referencedIds - packageIds}."
-        }
-    }
-
-    fun collectIssues(): Map<Identifier, List<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
-
-        fun addIssues(pkgReference: PackageReference) {
-            val issuesForPkg = collectedIssues.getOrPut(pkgReference.id) { mutableListOf() }
-            issuesForPkg += pkgReference.issues
-
-            pkgReference.dependencies.forEach { addIssues(it) }
-        }
-
-        for (scope in project.scopes) {
-            for (dependency in scope.dependencies) {
-                addIssues(dependency)
-            }
-        }
-
-        return mutableMapOf<Identifier, List<OrtIssue>>().apply {
-            if (issues.isNotEmpty()) {
-                this[project.id] = issues.toMutableList()
-            }
-
-            collectedIssues.forEach { (pkgId, issues) ->
-                if (issues.isNotEmpty()) {
-                    this[pkgId] = issues.distinct()
-                }
-            }
-        }
-    }
-
-    fun collectPackagesByScope(scopeName: String): List<Package> {
-        val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
-        return packages.filter { it.id in scope }
-    }
-}
+)

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,11 +26,12 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import java.io.File
+import org.yaml.snakeyaml.LoaderOptions
 
 val PROPERTY_NAMING_STRATEGY = PropertyNamingStrategies.SNAKE_CASE as PropertyNamingStrategies.NamingBase
 
@@ -48,11 +49,15 @@ val mapperConfig: ObjectMapper.() -> Unit = {
 
 val jsonMapper = JsonMapper().apply(mapperConfig)
 val xmlMapper = XmlMapper().apply(mapperConfig)
-val yamlMapper = YAMLMapper().apply(mapperConfig)
+
+private val loaderOptions = LoaderOptions().apply {
+    // Set the code point limit to 1GB, required since SnakeYAML 1.32. Also see:
+    // https://github.com/FasterXML/jackson-dataformats-text/tree/2.15/yaml#maximum-input-yaml-document-size-3-mb
+    // https://github.com/FasterXML/jackson-dataformats-text/issues/337
+    // TODO: Consider making this configurable.
+    codePointLimit = 1024 * 1024 * 1024
+}
+private val yamlFactory = YAMLFactory.builder().loaderOptions(loaderOptions).build()
+val yamlMapper = YAMLMapper(yamlFactory).apply(mapperConfig)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
-
-/**
- * Read a JSON [file] to a JSON node, or return an empty JSON node on failure.
- */
-fun readJsonFile(file: File): JsonNode = runCatching { jsonMapper.readTree(file) }.getOrDefault(EMPTY_JSON_NODE)

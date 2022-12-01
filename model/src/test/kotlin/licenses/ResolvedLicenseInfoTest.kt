@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,9 +28,9 @@ import io.mockk.mockk
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.spdx.model.LicenseChoice
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ResolvedLicenseInfoTest : WordSpec() {
     private val mit = "MIT"
@@ -43,9 +43,9 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.ALL on all resolved licenses" {
                 // All: (Apache-2.0 WITH LLVM-exception OR MIT) AND (MIT OR GPL-2.0-only) AND (0BSD OR GPL-2.0-only)
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(LicenseView.ALL, choices)
@@ -62,8 +62,8 @@ class ResolvedLicenseInfoTest : WordSpec() {
                         ResolvedLicense(
                             license = apache.toSpdx() as SpdxSingleLicenseExpression,
                             originalDeclaredLicenses = setOf("$apache OR $mit"),
-                            originalExpressions = mapOf(
-                                LicenseSource.DECLARED to setOf("$apache OR $mit OR $gpl".toSpdx())
+                            originalExpressions = setOf(
+                                ResolvedOriginalExpression("$apache OR $mit OR $gpl".toSpdx(), LicenseSource.DECLARED)
                             ),
                             locations = emptySet()
                         )
@@ -73,7 +73,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 )
 
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
                 )
 
                 val effectiveLicense = resolvedLicenseInfo.effectiveLicense(LicenseView.ONLY_DECLARED, choices)
@@ -84,7 +84,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED" {
                 // Concluded: 0BSD OR GPL-2.0-only
                 val choices = listOf(
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -98,7 +98,7 @@ class ResolvedLicenseInfoTest : WordSpec() {
             "apply choices for LicenseView.ONLY_DECLARED" {
                 // Declared: Apache-2.0 WITH LLVM-exception OR MIT
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -111,11 +111,11 @@ class ResolvedLicenseInfoTest : WordSpec() {
 
             "apply package and repository license choice for LicenseView.ONLY_CONCLUDED in the correct order" {
                 val repositoryChoices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
                 val packageChoices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), apache.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), apache.toSpdx())
                 )
 
                 val effectiveLicense = createResolvedLicenseInfo().effectiveLicense(
@@ -133,9 +133,9 @@ class ResolvedLicenseInfoTest : WordSpec() {
                 val resolvedLicenseInfo = createResolvedLicenseInfo()
 
                 val choices = listOf(
-                    LicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
-                    LicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
+                    SpdxLicenseChoice("$apache OR $mit".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$mit OR $gpl".toSpdx(), mit.toSpdx()),
+                    SpdxLicenseChoice("$bsd OR $gpl".toSpdx(), bsd.toSpdx())
                 )
 
                 val filteredResolvedLicenseInfo = resolvedLicenseInfo.applyChoices(choices)
@@ -150,34 +150,34 @@ class ResolvedLicenseInfoTest : WordSpec() {
             ResolvedLicense(
                 license = apache.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = setOf("$apache OR $mit"),
-                originalExpressions = mapOf(
-                    LicenseSource.DECLARED to setOf("$apache OR $mit".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$apache OR $mit".toSpdx(), LicenseSource.DECLARED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = mit.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = setOf("$apache OR $mit"),
-                originalExpressions = mapOf(
-                    LicenseSource.DECLARED to setOf("$apache OR $mit".toSpdx()),
-                    LicenseSource.DETECTED to setOf("$mit OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$apache OR $mit".toSpdx(), LicenseSource.DECLARED),
+                    ResolvedOriginalExpression("$mit OR $gpl".toSpdx(), LicenseSource.DETECTED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = gpl.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = emptySet(),
-                originalExpressions = mapOf(
-                    LicenseSource.DETECTED to setOf("$mit OR $gpl".toSpdx()),
-                    LicenseSource.CONCLUDED to setOf("$bsd OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$mit OR $gpl".toSpdx(), LicenseSource.DETECTED),
+                    ResolvedOriginalExpression("$bsd OR $gpl".toSpdx(), LicenseSource.CONCLUDED)
                 ),
                 locations = emptySet()
             ),
             ResolvedLicense(
                 license = bsd.toSpdx() as SpdxSingleLicenseExpression,
                 originalDeclaredLicenses = emptySet(),
-                originalExpressions = mapOf(
-                    LicenseSource.CONCLUDED to setOf("$bsd OR $gpl".toSpdx())
+                originalExpressions = setOf(
+                    ResolvedOriginalExpression("$bsd OR $gpl".toSpdx(), LicenseSource.CONCLUDED)
                 ),
                 locations = emptySet()
             )

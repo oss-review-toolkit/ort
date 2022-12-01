@@ -1,0 +1,95 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2020-07-23T18:30:22Z"
+  creators:
+  - "Organization: Example Inc."
+  - "Person: Thomas Steenbergen"
+  licenseListVersion: "3.9"
+name: "xyz-0.1.0"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-xyz"
+documentDescribes:
+- "SPDXRef-Package-xyz"
+packages:
+- SPDXID: "SPDXRef-Package-xyz"
+  description: "Awesome product created by Example Inc."
+  copyrightText: "Copyright (C) 2020 Example Inc."
+  downloadLocation: "git+ssh://gitlab.example.com:3389/products/xyz.git@b2c358080011af6a366d2512a25a379fbe7b1f78"
+  filesAnalyzed: false
+  homepage: "https://example.com/products/xyz"
+  licenseConcluded:  "NOASSERTION"
+  licenseDeclared: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+  name: "xyz"
+  versionInfo: "0.1.0"
+  originator: "Person: Thomas Steenbergen"
+- SPDXID: "SPDXRef-Package-curl"
+  description: "A command line tool and library for transferring data with URL syntax, supporting \
+    HTTP, HTTPS, FTP, FTPS, GOPHER, TFTP, SCP, SFTP, SMB, TELNET, DICT, LDAP, LDAPS, MQTT, FILE, \
+    IMAP, SMTP, POP3, RTSP and RTMP. libcurl offers a myriad of powerful features."
+  copyrightText: "Copyright (c) 1996 - 2020, Daniel Stenberg, <daniel@haxx.se>, and many
+    contributors, see the THANKS file."
+  downloadLocation: "https://github.com/curl/curl/releases/download/curl-7_70_0/curl-7.70.0.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
+  filesAnalyzed: false
+  homepage: "https://curl.haxx.se/"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "curl"
+  name: "curl"
+  versionInfo: "7.70.0"
+  originator: "Person: Daniel Stenberg (daniel@haxx.se)"
+  packageFileName: "../libs/curl"
+- SPDXID: "SPDXRef-Package-openssl"
+  description: "OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the \
+    Transport Layer Security (TLS) protocol formerly known as the Secure Sockets Layer (SSL) \
+    protocol. The protocol implementation is based on a full-strength general purpose cryptographic \
+    library, which can also be used stand-alone."
+  copyrightText: "copyright 2004-2020 The OpenSSL Project Authors. All Rights Reserved."
+  downloadLocation: "git+ssh://github.com/openssl/openssl.git@e2e09d9fba1187f8d6aafaa34d4172f56f1ffb72"
+  externalRefs:
+  - referenceCategory: "PACKAGE_MANAGER"
+    referenceLocator: "pkg:a-name/openssl@1.1.1g"
+    referenceType: "purl"
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*"
+    referenceType: "cpe23Type"
+  filesAnalyzed: false
+  homepage: "https://www.openssl.org/"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Apache-2.0"
+  name: "openssl"
+  versionInfo: "1.1.1g"
+  originator: "Organization: OpenSSL Development Team"
+  packageFileName: "../libs/openssl"
+- SPDXID: "SPDXRef-Package-zlib"
+  description: "zlib 1.2.11 is a general purpose data compression library."
+  copyrightText: "(C) 1995-2017 Jean-loup Gailly and Mark Adler"
+  downloadLocation: "http://zlib.net/zlib-1.2.11.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:/a:compress:zlib:1.2.11:::en-us"
+    referenceType: "cpe22Type"
+  filesAnalyzed: false
+  homepage: "http://zlib.net"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Zlib"
+  name: "zlib"
+  versionInfo: "1.2.11"
+  originator: "Person: Mark Adler, Jean-loup Gailly"
+  packageFileName: "../libs/zlib"
+relationships:
+- spdxElementId: "SPDXRef-Package-curl"
+  relationshipType: "TEST_DEPENDENCY_OF"
+  relatedSpdxElement: "SPDXRef-Package-xyz"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "DEPENDS_ON"
+  relatedSpdxElement: "SPDXRef-Package-openssl"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "DYNAMIC_LINK"
+  relatedSpdxElement: "SPDXRef-Package-curl"
+- spdxElementId: "SPDXRef-Package-xyz"
+  relationshipType: "STATIC_LINK"
+  relatedSpdxElement: "SPDXRef-Package-zlib"

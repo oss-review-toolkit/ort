@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,20 +36,20 @@ enum class PackageLinkage {
     STATIC,
 
     /**
-     * A dynamically linked package whose source code is part of the project itself, e.g. a sub-project of a
+     * A dynamically linked package whose source code is part of the project itself, e.g. a subproject of a
      * multi-project.
      */
     PROJECT_DYNAMIC,
 
     /**
-     * A statically linked package whose source code is part of the project itself, e.g. a sub-project of a
+     * A statically linked package whose source code is part of the project itself, e.g. a subproject of a
      * multi-project.
      */
     PROJECT_STATIC;
 
     companion object {
         /**
-         * A set of linkage types that all refer to a sub-project in a multi-project.
+         * A set of linkage types that all refer to a subproject in a multi-project.
          */
         val PROJECT_LINKAGE = setOf(PROJECT_DYNAMIC, PROJECT_STATIC)
     }

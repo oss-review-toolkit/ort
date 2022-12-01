@@ -1,0 +1,33 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://oss-review-toolkit.org/package-managers.yml",
+    "title": "ORT Package Managers",
+    "description": "A list of package managers supported by the OSS Review Toolkit (ORT). A full list of all supported package managers can ve found at https://github.com/oss-review-toolkit/ort/blob/main/analyzer/src/main/resources/META-INF/services/org.ossreviewtoolkit.analyzer.PackageManagerFactory.",
+    "enum": [
+        "Bower",
+        "Bundler",
+        "Cargo",
+        "Carthage",
+        "CocoaPods",
+        "Composer",
+        "Conan",
+        "DotNet",
+        "GoDep",
+        "GoMod",
+        "Gradle",
+        "Maven",
+        "NPM",
+        "NuGet",
+        "PIP",
+        "Pipenv",
+        "PNPM",
+        "Poetry",
+        "Pub",
+        "SBT",
+        "SpdxDocumentFile",
+        "Stack",
+        "Unmanaged",
+        "Yarn",
+        "Yarn2"
+    ]
+}

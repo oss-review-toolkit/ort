@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,18 +26,20 @@ import io.kotest.matchers.string.haveSubstring
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PubFunTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/pub/").absoluteFile
-    private val projectsDirExternal = File("src/funTest/assets/projects/external/").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic/pub").absoluteFile
+    private val projectsDirExternal = getAssetFile("projects/external").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -51,18 +53,11 @@ class PubFunTest : WordSpec() {
 
                 try {
                     val packageFile = workingDir.resolve("pubspec.yaml")
-                    val expectedResultFile = projectsDirExternal.resolve("dart-http-expected-output.yml")
+                    val expectedResult = getExpectedResult("dart-http-expected-output.yml", workingDir)
 
-                    val result = createPubForExternal().resolveSingleProject(packageFile)
-                    val vcsPath = vcsDir.getPathToRoot(workingDir)
-                    val expectedResult = patchExpectedResult(
-                        expectedResultFile,
-                        custom = mapOf("pub-project" to "pub-${workingDir.name}"),
-                        definitionFilePath = "$vcsPath/pubspec.yaml",
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsPath
-                    )
+                    val result = createPub(
+                        AnalyzerConfiguration(allowDynamicVersions = true)
+                    ).resolveSingleProject(packageFile)
 
                     result.toYaml() shouldBe expectedResult
                 } finally {
@@ -70,53 +65,44 @@ class PubFunTest : WordSpec() {
                 }
             }
 
-            "Resolve dependencies for a project with flutter correctly" {
-                val workingDir = projectsDir.resolve("project-with-flutter")
-                val packageFile = workingDir.resolve("pubspec.yaml")
-                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-project-with-flutter.yml")
-
-                val result = createPub().resolveSingleProject(packageFile)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    custom = mapOf("pub-project" to "pub-${workingDir.name}"),
-                    definitionFilePath = "$vcsPath/pubspec.yaml",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-
-                patchActualResult(result.toYaml()) shouldBe expectedResult
-            }
-
-            "Resolve dependencies for a project with dependencies without a static version" {
+            "resolve dependencies for a project with dependencies without a static version" {
                 val workingDir = projectsDir.resolve("any-version")
                 val packageFile = workingDir.resolve("pubspec.yaml")
-                val expectedResultFile = projectsDir.parentFile.resolve("pub-expected-output-any-version.yml")
+                val expectedResult = getExpectedResult("pub-expected-output-any-version.yml", workingDir)
 
                 val result = createPub().resolveSingleProject(packageFile)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    expectedResultFile,
-                    custom = mapOf("pub-project" to "pub-${workingDir.name}"),
-                    definitionFilePath = "$vcsPath/pubspec.yaml",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
                 result.toYaml() shouldBe expectedResult
             }
 
-            "Error is shown when no lockfile is present" {
+            "resolve multi-module dependencies correctly" {
+                val workingDir = projectsDir.resolve("multi-module")
+                val expectedResult = getExpectedResult("pub-expected-output-multi-module.yml", workingDir)
+
+                val analyzerResult = analyze(workingDir).patchPackages()
+
+                analyzerResult.toYaml() shouldBe expectedResult
+            }
+
+            "resolve dependencies for a project with Flutter, Android and Cocoapods" {
+                val workingDir = projectsDir.resolve("flutter-project-with-android-and-cocoapods")
+                val expectedResult = getExpectedResult(
+                    "pub-expected-output-with-flutter-android-and-cocoapods.yml",
+                    workingDir
+                )
+
+                val analyzerResult = analyze(workingDir).patchPackages().reduceToPubProjects()
+
+                analyzerResult.toYaml() shouldBe expectedResult
+            }
+
+            "show an error if no lockfile is present" {
                 val workingDir = projectsDir.resolve("no-lockfile")
                 val packageFile = workingDir.resolve("pubspec.yaml")
 
                 val result = createPub().resolveSingleProject(packageFile)
 
                 with(result) {
-                    project.definitionFilePath shouldBe
-                            "analyzer/src/funTest/assets/projects/synthetic/pub/no-lockfile/pubspec.yaml"
                     packages.size shouldBe 0
                     issues.size shouldBe 1
                     issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
@@ -125,11 +111,62 @@ class PubFunTest : WordSpec() {
         }
     }
 
-    private fun createPub() =
-        Pub("Pub", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun getExpectedResult(expectedResultFilename: String, workingDir: File): String {
+        val vcsPath = vcsDir.getPathToRoot(workingDir)
+        val expectedResultDir = if (workingDir.startsWith(projectsDirExternal)) {
+            projectsDirExternal
+        } else {
+            projectsDir.parentFile
+        }
 
-    private fun createPubForExternal(): Pub {
-        val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
-        return Pub("Pub", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
+        return patchExpectedResult(
+            expectedResultDir.resolve(expectedResultFilename),
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
     }
+}
+
+private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
+    val projects = projects.filterTo(sortedSetOf()) { it.id.type == "Pub" }
+    val scopes = projects.flatMap { it.scopes }
+    val dependencies = scopes.flatMap { it.collectDependencies() }
+
+    return AnalyzerResult(
+        projects = projects,
+        packages = packages.filterTo(sortedSetOf()) { it.metadata.id in dependencies },
+        issues = issues
+    )
+}
+private fun analyze(workingDir: File): AnalyzerResult {
+    val analyzer = Analyzer(AnalyzerConfiguration())
+    val managedFiles = analyzer.findManagedFiles(workingDir)
+    val analyzerRun = analyzer.analyze(managedFiles).analyzer
+
+    return checkNotNull(analyzerRun).result.withResolvedScopes()
+}
+
+private fun getAssetFile(path: String) = File("src/funTest/assets", path)
+
+private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
+    Pub("Pub", USER_DIR, config, RepositoryConfiguration())
+
+/**
+ * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
+ */
+private fun AnalyzerResult.patchPackages(): AnalyzerResult {
+    val patchedPackages = packages.mapTo(sortedSetOf()) { pkg ->
+        pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
+            ?: pkg.copy(
+                metadata = pkg.metadata.copy(
+                    binaryArtifact = pkg.metadata.binaryArtifact.copy(
+                        url = "***",
+                        hash = Hash("***", HashAlgorithm.SHA1)
+                    )
+                )
+            )
+    }
+
+    return copy(packages = patchedPackages)
 }

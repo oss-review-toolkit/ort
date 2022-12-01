@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,21 +20,21 @@
 package org.ossreviewtoolkit.clients.fossid.model.summary
 
 /**
- * This interface marks FossId file results that can be included in a scan summary
+ * This interface marks FossID file results that can be included in a scan summary.
  */
 interface Summarizable {
     /**
-     * Convert the current FossId file to an Object suitable for a scan summary
+     * Convert the current FossID file to an Object suitable for a scan summary.
      */
     fun toSummary(): SummaryIdentifiedFile
 
     /**
-     * Get the file name of the FossId file result
+     * Get the file name of the FossID file result.
      */
     fun getFileName(): String
 
     /**
-     * Get the copyright of the FossId file result
+     * Get the copyright of the FossID file result.
      */
-    fun getCopyright(): String?
+    fun getCopyright(): String
 }

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,11 +28,11 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.stripCredentialsFromUrl
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 
 /**
- * A configuration for a specific package and provenance. It allows to setup [PathExclude]s and
- * [LicenseFindingCuration]s, similar to how its done via the [RepositoryConfiguration] for projects.
+ * A configuration for a specific package and provenance. It allows to set up [PathExclude]s and
+ * [LicenseFindingCuration]s, similar to how it is done via the [RepositoryConfiguration] for projects.
  */
 data class PackageConfiguration(
     /**
@@ -76,35 +76,39 @@ data class PackageConfiguration(
         return when (provenance) {
             is UnknownProvenance -> false
             is ArtifactProvenance -> sourceArtifactUrl != null && sourceArtifactUrl == provenance.sourceArtifact.url
-            is RepositoryProvenance -> vcs != null && vcs.matches(provenance.vcsInfo)
+            is RepositoryProvenance -> vcs != null && vcs.matches(provenance)
         }
     }
 }
 
 /**
- * A matcher which matches its properties against [VcsInfo]s.
+ * A matcher which matches its properties against a [RepositoryProvenance].
  */
 data class VcsMatcher(
+    /**
+     * The [type] to match for equality against [VcsInfo.type].
+     */
     val type: VcsType,
+
+    /**
+     * The [url] to match for equality against [VcsInfo.url].
+     */
     val url: String,
-    val revision: String,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val path: String? = null
+
+    /**
+     * The [revision] to match for equality against [RepositoryProvenance.resolvedRevision], or null to match any
+     * revision.
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val revision: String? = null
 ) {
     init {
-        require(url.isNotBlank() && revision.isNotBlank())
-
-        if (type == VcsType.GIT_REPO) {
-            require(!path.isNullOrBlank()) {
-                "Matching against Git-Repo VCS info requires a non-blank path."
-            }
-        }
+        require(url.isNotBlank() && revision?.isBlank() != true)
     }
 
-    fun matches(vcsInfo: VcsInfo): Boolean =
-        type == vcsInfo.type && matchesWithoutCredentials(url, vcsInfo.url) && (path == null || path == vcsInfo.path) &&
-                revision == vcsInfo.resolvedRevision
+    fun matches(provenance: RepositoryProvenance): Boolean =
+        type == provenance.vcsInfo.type &&
+                // URLs need to match only after any credentials have been removed.
+                url.replaceCredentialsInUri() == provenance.vcsInfo.url.replaceCredentialsInUri() &&
+                (revision == null || revision == provenance.resolvedRevision)
 }
-
-private fun matchesWithoutCredentials(lhs: String, rhs: String): Boolean =
-    lhs.stripCredentialsFromUrl() == rhs.stripCredentialsFromUrl()

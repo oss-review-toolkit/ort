@@ -3,20 +3,32 @@
 
 
 "@here/harp-fetch@^0.11.0":
-  version "0.11.0"
-  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.11.0.tgz#8d0e0bdb523c7c4f306f676aac65aa6bcb95da1c"
-  integrity sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw==
+  "integrity" "sha512-Yp+3VQdDR9r66MRJ4zSSu6XemnkAz9ahz2e+RRWhdoM4OHih8zvmVbSH1H4WDCW0qkZM2W8z8c66jKPCJoHAPw=="
+  "resolved" "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.11.0.tgz"
+  "version" "0.11.0"
   dependencies:
-    node-fetch "^2.2.0"
+    "node-fetch" "^2.2.0"
 
 "@here/harp-fetch@^0.3.6":
-  version "0.3.6"
-  resolved "https://registry.yarnpkg.com/@here/harp-fetch/-/harp-fetch-0.3.6.tgz#703fc8b034f6e0d621cc2c3ded96c6f904723742"
-  integrity sha512-KtpnHQXymwfwvYWVqXh5ZV16SXLW7n8hQb1wZYDbcm+5OX/LzYWmwEzEKzxluaNxbo2vt/hM/jeqDlSEGMDelA==
+  "integrity" "sha512-KtpnHQXymwfwvYWVqXh5ZV16SXLW7n8hQb1wZYDbcm+5OX/LzYWmwEzEKzxluaNxbo2vt/hM/jeqDlSEGMDelA=="
+  "resolved" "https://registry.npmjs.org/@here/harp-fetch/-/harp-fetch-0.3.6.tgz"
+  "version" "0.3.6"
   dependencies:
-    node-fetch "^2.2.0"
+    "node-fetch" "^2.2.0"
 
-node-fetch@^2.2.0:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA==
+"@scope1/pkg1@file:/home/sse1be/Development/GitHub/oss-review-toolkit/ort/analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1":
+  "resolved" "file:packages/pkg1"
+  "version" "1.0.0"
+  dependencies:
+    "@here/harp-fetch" "^0.11.0"
+
+"node-fetch@^2.2.0":
+  "integrity" "sha512-8dG4H5ujfvFiqDmVu9fQ5bOHUC15JMjMY/Zumv26oOvvVJjM67KF8koCWIabKQ1GJIa9r2mMZscBq/TbdOcmNA=="
+  "resolved" "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.0.tgz"
+  "version" "2.6.0"
+
+"pkg2@file:/home/sse1be/Development/GitHub/oss-review-toolkit/ort/analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2":
+  "resolved" "file:packages/pkg2"
+  "version" "1.0.0"
+  dependencies:
+    "@here/harp-fetch" "^0.3.6"

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,61 +19,58 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import com.fasterxml.jackson.annotation.JsonAlias
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.spdx.getDuplicates
+import org.ossreviewtoolkit.utils.common.getDuplicates
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
- * Classifications for licenses which allow to assign meta data to licenses. This allows defining rather generic
+ * Classifications for licenses which allow assigning metadata to licenses. This allows defining rather generic
  * categories and assigning licenses to these. That way flexible classifications can be created based on
  * customizable categories. The available license categories need to be declared explicitly; when creating an
  * instance, it is checked that all the references from the [categorizations] point to existing [categories].
  */
 data class LicenseClassifications(
     /**
-     * Defines meta data for the license categories.
+     * Defines metadata for the license categories.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonAlias("license_sets")
     val categories: List<LicenseCategory> = emptyList(),
 
     /**
-     * Defines meta data for licenses.
+     * Defines metadata for licenses.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonAlias("licenses")
     val categorizations: List<LicenseCategorization> = emptyList()
 ) {
     /** A property for fast look-ups of licenses for a given category. */
+    @get:JsonIgnore
     val licensesByCategory: Map<String, Set<SpdxSingleLicenseExpression>> by lazy {
-        val result = mutableMapOf<String, MutableSet<SpdxSingleLicenseExpression>>()
+        buildMap<String, MutableSet<SpdxSingleLicenseExpression>> {
+            categorizations.forEach { license ->
+                license.categories.forEach { category ->
+                    getOrPut(category) { mutableSetOf() } += license.id
+                }
+            }
 
-        categorizations.forEach { license ->
-            license.categories.forEach { category ->
-                result.getOrPut(category) { mutableSetOf() } += license.id
+            categories.forEach { category ->
+                putIfAbsent(category.name, mutableSetOf())
             }
         }
-
-        result
     }
 
     /** A property for fast look-ups of categories for a given license. */
+    @get:JsonIgnore
     val categoriesByLicense: Map<SpdxSingleLicenseExpression, Set<String>> by lazy {
-        val result = mutableMapOf<SpdxSingleLicenseExpression, Set<String>>()
-
-        categorizations.forEach { license ->
-            result[license.id] = license.categories
-        }
-
-        result
+        categorizations.associate { it.id to it.categories }
     }
 
     /** A property allowing convenient access to the names of all categories defined. */
+    @get:JsonIgnore
     val categoryNames: SortedSet<String> by lazy {
         categories.mapTo(sortedSetOf()) { it.name }
     }
@@ -81,13 +78,13 @@ data class LicenseClassifications(
     init {
         categories.getDuplicates { it.name }.let { duplicates ->
             require(duplicates.isEmpty()) {
-                "Found multiple license category entries with the same name: $duplicates"
+                "Found multiple license categories with the same name: ${duplicates.keys}"
             }
         }
 
         categorizations.getDuplicates { it.id }.let { duplicates ->
             require(duplicates.isEmpty()) {
-                "Found multiple license entries with the same id: $duplicates"
+                "Found multiple license categorizations with the same id: ${duplicates.keys}"
             }
         }
 

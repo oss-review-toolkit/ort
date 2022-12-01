@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.detekt
 import io.github.detekt.psi.absolutePath
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -32,7 +33,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 
-class OrtImportOrder : Rule() {
+class OrtImportOrder(config: Config) : Rule(config) {
     private val commonTopLevelDomains = listOf("com", "org", "io")
 
     override val issue = Issue(
@@ -56,7 +57,7 @@ class OrtImportOrder : Rule() {
                 is KtImportDirective -> psi.importPath.toString()
                 // Between two imports there is a child PSI of type whitespace.
                 // For 'n' blank lines in between, the text of this child contains
-                // 'n + 1' line breaks. Thus a single blank line is represented by "\n\n".
+                // 'n + 1' line breaks. Thus, a single blank line is represented by "\n\n".
                 is PsiWhiteSpace -> if (psi.text == "\n\n") "" else null
                 else -> null
             }
@@ -83,7 +84,7 @@ class OrtImportOrder : Rule() {
 
         val (importPathsWithDot, importPathsWithoutDot) = importPaths.filter(String::isNotEmpty)
             .sorted()
-            .partition { it.contains('.') }
+            .partition { '.' in it }
 
         val sortedImportPathsWithDotAndBlankLines = createImportListWithBlankLines(importPathsWithDot)
 

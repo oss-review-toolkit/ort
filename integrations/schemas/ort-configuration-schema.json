@@ -1,0 +1,499 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://oss-review-toolkit.org/ort-configuration.yml",
+    "title": "ORT configuration",
+    "description": "The main configuration file for the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml.",
+    "type": "object",
+    "properties": {
+        "ort": {
+            "properties": {
+                "licenseFilePatterns": {
+                    "$ref": "#/definitions/LicenseFilePatterns"
+                },
+                "severeIssueThreshold": {
+                    "$ref": "#/definitions/Severity"
+                },
+                "severeRuleViolationThreshold": {
+                    "$ref": "#/definitions/Severity"
+                },
+                "enableRepositoryPackageCurations": {
+                    "type": "boolean"
+                },
+                "enableRepositoryPackageConfigurations": {
+                    "type": "boolean"
+                },
+                "analyzer": {
+                    "$ref": "#/definitions/Analyzer"
+                },
+                "advisor": {
+                    "$ref": "#/definitions/Advisor"
+                },
+                "downloader": {
+                    "$ref": "#/definitions/Downloader"
+                },
+                "scanner": {
+                    "$ref": "#/definitions/Scanner"
+                },
+                "reporter": {
+                    "$ref": "#/definitions/Reporter"
+                },
+                "notifier": {
+                    "$ref": "#/definitions/Notifier"
+                }
+            }
+        }
+    },
+    "required": [
+        "ort"
+    ],
+    "definitions": {
+        "Advisor": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "nexusIq": {
+                    "$ref": "#/definitions/NexusIq"
+                },
+                "vulnerableCode": {
+                    "$ref": "#/definitions/VulnerableCode"
+                },
+                "gitHubDefects": {
+                    "$ref": "#/definitions/GitHubDefects"
+                },
+                "osv": {
+                    "$ref": "#/definitions/Osv"
+                },
+                "options": {
+                    "$ref": "#/definitions/AdvisorOptions"
+                }
+            }
+        },
+        "GitHubDefects": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "token": {
+                    "type": "string"
+                },
+                "labelFilter": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "maxNumberOfIssuesPerRepository": {
+                    "type": "integer"
+                },
+                "parallelRequests": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "labelFilter"
+            ]
+        },
+        "NexusIq": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "serverUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "browseUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "serverUrl"
+            ]
+        },
+        "AdvisorOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "CustomAdvisor": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "apiKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "apiKey"
+            ]
+        },
+        "Osv": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "serverUrl": {
+                    "type": "string",
+                    "format": "uri"
+                }
+            }
+        },
+        "VulnerableCode": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "serverUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "apiKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "serverUrl"
+            ]
+        },
+        "Analyzer": {
+            "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"
+        },
+        "Downloader": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "allowMovingRevisions": {
+                    "type": "boolean"
+                },
+                "includedLicenseCategories": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "sourceCodeOrigins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SourceCodeOrigins"
+                    }
+                }
+            }
+        },
+        "LicenseFilePatterns": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "licenseFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "patentFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "rootLicenseFilenames": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "Notifier": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "mail": {
+                    "$ref": "#/definitions/Mail"
+                },
+                "jira": {
+                    "$ref": "#/definitions/Jira"
+                }
+            }
+        },
+        "Jira": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "host": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "Mail": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "hostName": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "useSsl": {
+                    "type": "boolean"
+                },
+                "fromAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "Reporter": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "options": {
+                    "$ref": "#/definitions/ReporterOptions"
+                }
+            },
+            "required": [
+                "options"
+            ]
+        },
+        "ReporterOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "Scanner": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "skipConcluded": {
+                    "type": "boolean"
+                },
+                "archive": {
+                    "$ref": "#/definitions/Archive"
+                },
+                "createMissingArchives": {
+                    "type": "boolean"
+                },
+                "detectedLicenseMapping": {
+                    "$ref": "#/definitions/DetectedLicenseMapping"
+                },
+                "options": {
+                    "$ref": "#/definitions/ScannerOptions"
+                },
+                "storages": {
+                    "$ref": "#/definitions/Storages"
+                },
+                "storageReaders": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/StorageTypes"
+                    }
+                },
+                "storageWriters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/StorageTypes"
+                    }
+                },
+                "ignorePatterns": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "provenanceStorage": {
+                    "$ref": "#/definitions/ProvenanceStorage"
+                }
+            }
+        },
+        "Archive": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "FileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "localFileStorage": {
+                    "$ref": "#/definitions/LocalFileStorage"
+                },
+                "httpFileStorage": {
+                    "§ref": "#/definitions/HttpFileStorage"
+                }
+            },
+            "required": [
+                "localFileStorage"
+            ]
+        },
+        "LocalFileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "directory": {
+                    "type": "string"
+                },
+                "compression": {
+                    "type": "boolean"
+                }
+            },
+            "required": [
+                "directory"
+            ]
+        },
+        "HttpFileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "query": {
+                    "type": "string"
+                },
+                "headers": {
+                    "$ref": "#/definitions/Headers"
+                }
+            },
+            "required": [
+                "url"
+            ]
+        },
+        "PostgresConfig": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "connection": {
+                    "$ref": "#/definitions/Connection"
+                }
+            },
+            "required": [
+                "connection"
+            ]
+        },
+        "Connection": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "url": {
+                    "type": "string"
+                },
+                "schema": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "sslmode": {
+                    "type": "string"
+                },
+                "sslcert": {
+                    "type": "string"
+                },
+                "sslkey": {
+                    "type": "string"
+                },
+                "sslrootcert": {
+                    "type": "string"
+                },
+                "parallelTransactions": {
+                    "type": "integer"
+                }
+            },
+            "required": [
+                "url",
+                "username"
+            ]
+        },
+        "DetectedLicenseMapping": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "string"
+            }
+        },
+        "ScannerOptions": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "ProvenanceStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "Storages": {
+            "type": "object",
+            "additionalProperties": {
+                "type": "object"
+            }
+        },
+        "Severity": {
+            "enum": [
+                "HINT",
+                "WARNING",
+                "ERROR"
+            ]
+        },
+        "SourceCodeOrigins": {
+            "enum": [
+                "ARTIFACT",
+                "VCS"
+            ]
+        },
+        "StorageTypes": {
+            "enum": [
+                "clearlyDefined",
+                "http",
+                "local",
+                "postgres"
+            ]
+        },
+        "Headers": {
+            "type": "object",
+            "additionalProperties": {
+                "type": [
+                    "boolean",
+                    "number",
+                    "string"
+                ]
+            }
+        }
+    }
+}

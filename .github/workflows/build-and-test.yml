@@ -1,0 +1,119 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+env:
+  GRADLE_OPTS: -Dorg.gradle.daemon=false
+  SCANCODE_VERSION: 30.1.0
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Build all classes
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --scan classes -x :reporter-web-app:yarnBuild
+  build-reporter-web-app:
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Build the reporter-web-app
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --scan :reporter-web-app:yarnBuild
+  test:
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Run unit tests
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --scan test jacocoTestReport -x :reporter-web-app:yarnBuild
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v3
+      with:
+        flags: test
+  funTest-non-analyzer:
+    needs: build-reporter-web-app
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Install required tools
+      run: |
+          sudo apt-get install -y --no-install-recommends cvs
+
+          # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
+          sudo apt-get -qq remove mono-devel
+
+          # Install git-repo.
+          mkdir -p $HOME/.local/bin
+          curl https://storage.googleapis.com/git-repo-downloads/repo -o $HOME/.local/bin/repo
+          chmod a+x $HOME/.local/bin/repo
+
+          # Install ScanCode for license texts.
+          curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt
+          pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Run functional tests
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: --scan funTest jacocoFunTestReport -x :analyzer:funTest
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v3
+      with:
+        flags: funTest-non-analyzer
+  funTest-analyzer-docker:
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Setup Java
+      uses: actions/setup-java@v3
+      with:
+        distribution: temurin
+        java-version: 11
+    - name: Restore Gradle cache entries
+      uses: gradle/gradle-build-action@v2
+    - name: Validate Batect wrapper scripts
+      uses: batect/batect-wrapper-validation-action@v0
+    - name: Run functional tests
+      run: BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit --config-var gradle_build_scan=true --config-var gradle_console=plain funTestAnalyzer
+    - name: Upload code coverage data
+      uses: codecov/codecov-action@v3
+      with:
+        flags: funTest-analyzer-docker

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,31 +24,29 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.USER_DIR
 
-class StackFunTest : StringSpec() {
-    private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+class StackFunTest : StringSpec({
+    "Dependencies should be resolved correctly for quickcheck-state-machine" {
+        val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
 
-    init {
-        "Dependencies should be resolved correctly for quickcheck-state-machine" {
-            val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
-
-            val result = createStack().resolveSingleProject(definitionFile)
-            val expectedOutput = if (Os.isWindows) {
-                "external/quickcheck-state-machine-expected-output-win32.yml"
-            } else {
-                "external/quickcheck-state-machine-expected-output.yml"
-            }
-            val expectedResult = projectsDir.resolve(expectedOutput).readText()
-            val actualResult = result.toYaml()
-
-            actualResult shouldBe expectedResult
+        val result = createStack().resolveSingleProject(definitionFile)
+        val expectedOutput = if (Os.isWindows) {
+            "external/quickcheck-state-machine-expected-output-win32.yml"
+        } else {
+            "external/quickcheck-state-machine-expected-output.yml"
         }
-    }
+        val expectedResult = projectsDir.resolve(expectedOutput).readText()
+        val actualResult = result.toYaml()
 
-    private fun createStack() =
-        Stack("Stack", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
-}
+        actualResult shouldBe expectedResult
+    }
+})
+
+private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+
+private fun createStack() =
+    Stack("Stack", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

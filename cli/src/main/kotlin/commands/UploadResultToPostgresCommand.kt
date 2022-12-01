@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
@@ -29,8 +29,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.sql.SQLException
 
-import kotlin.time.measureTimedValue
-
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
@@ -39,20 +37,18 @@ import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import org.ossreviewtoolkit.GlobalOptions
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
 import org.ossreviewtoolkit.scanner.storages.utils.jsonb
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class UploadResultToPostgresCommand : CliktCommand(
     name = "upload-result-to-postgres",
@@ -87,14 +83,20 @@ class UploadResultToPostgresCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${duration.inMilliseconds}ms."
-        }
+        val ortResult = readOrtResult(ortFile)
 
         val postgresConfig = globalOptionsForSubcommands.config.scanner.storages?.values
-            ?.filterIsInstance<PostgresStorageConfiguration>()?.singleOrNull()
+            ?.filterIsInstance<PostgresStorageConfiguration>()?.let { configs ->
+                if (configs.size > 1) {
+                    val config = configs.first()
+                    println(
+                        "Multiple PostgreSQL storages are configured, using the first one which points to schema " +
+                                "${config.connection.schema} at ${config.connection.url}."
+                    )
+                }
+
+                configs.firstOrNull()
+            }
 
         requireNotNull(postgresConfig) {
             "No PostgreSQL storage is configured for the scanner."
@@ -109,11 +111,11 @@ class UploadResultToPostgresCommand : CliktCommand(
         }
 
         val dataSource = DatabaseUtils.createHikariDataSource(
-            config = postgresConfig,
+            config = postgresConfig.connection,
             applicationNameSuffix = "upload-result-command"
         )
 
-        Database.connect(dataSource)
+        Database.connect(dataSource.value)
 
         val table = OrtResults(tableName, columnName)
 
@@ -139,7 +141,7 @@ class UploadResultToPostgresCommand : CliktCommand(
         } catch (e: SQLException) {
             e.showStackTrace()
 
-            println("Could not store ORT result: ${e.collectMessagesAsString()}")
+            println("Could not store ORT result: ${e.collectMessages()}")
         }
     }
 }

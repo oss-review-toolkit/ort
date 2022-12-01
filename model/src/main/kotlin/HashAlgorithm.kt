@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,9 +23,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 
 import java.io.File
+import java.io.InputStream
 import java.security.MessageDigest
 
-import org.ossreviewtoolkit.utils.toHexString
+import org.ossreviewtoolkit.utils.common.calculateHash
+import org.ossreviewtoolkit.utils.common.encodeHex
 
 /**
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
@@ -72,10 +74,10 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
      * - https://git-scm.com/book/en/v2/Git-Internals-Git-Objects#_object_storage
      * - https://docs.softwareheritage.org/devel/swh-model/persistent-identifiers.html#git-compatibility
      */
-    SHA1_GIT("SHA-1-GIT", "SHA1-GIT", "SHA1GIT") {
-        override fun getMessageDigest(file: File): MessageDigest =
+    SHA1GIT("SHA-1-GIT", "SHA1-GIT", "SHA1GIT", "SWHID") {
+        override fun getMessageDigest(size: Long): MessageDigest =
             MessageDigest.getInstance(SHA1.toString()).apply {
-                val header = "blob ${file.length()}\u0000"
+                val header = "blob $size\u0000"
                 update(header.toByteArray())
             }
     };
@@ -93,7 +95,7 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
         @JvmStatic
         fun fromString(alias: String): HashAlgorithm =
             enumValues<HashAlgorithm>().find {
-                alias.toUpperCase() in it.aliases
+                alias.uppercase() in it.aliases
             } ?: UNKNOWN
 
         /**
@@ -122,21 +124,28 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     /**
      * Return the hexadecimal digest of this hash for the given [file].
      */
-    fun calculate(file: File): String =
-        file.inputStream().use { inputStream ->
-            // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
-            // lot of memory at the same time, also considering that this function could potentially be run on multiple
-            // threads in parallel.
-            val buffer = ByteArray(4 * 1024 * 1024)
-            val digest = getMessageDigest(file)
+    fun calculate(file: File): String = file.inputStream().use { calculate(it, file.length()) }
 
-            var length: Int
-            while (inputStream.read(buffer).also { length = it } > 0) {
-                digest.update(buffer, 0, length)
-            }
+    /**
+     * Return the hexadecimal digest of this hash for the given [resourceName].
+     */
+    fun calculate(resourceName: String): String? {
+        val resource = javaClass.getResource(resourceName)
+        val size = resource?.openConnection()?.contentLengthLong ?: return null
+        return resource.openStream().use { calculate(it, size) }
+    }
 
-            digest.digest().toHexString()
-        }
+    /**
+     * Return the message digest to use for this [HashAlgorithm], which might depend on the [size].
+     */
+    protected open fun getMessageDigest(size: Long): MessageDigest =
+        // Disregard the size in the standard case.
+        MessageDigest.getInstance(toString())
 
-    protected open fun getMessageDigest(file: File): MessageDigest = MessageDigest.getInstance(toString())
+    /**
+     * Return the hexadecimal digest of this hash for the given [inputStream] and [size]. The caller is responsible for
+     * closing the stream.
+     */
+    private fun calculate(inputStream: InputStream, size: Long): String =
+        calculateHash(inputStream, getMessageDigest(size)).encodeHex()
 }

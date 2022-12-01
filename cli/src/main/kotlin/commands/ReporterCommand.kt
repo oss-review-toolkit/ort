@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -41,11 +41,18 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.GlobalOptions
-import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
+import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
+import org.ossreviewtoolkit.cli.utils.configurationGroup
+import org.ossreviewtoolkit.cli.utils.createProvider
+import org.ossreviewtoolkit.cli.utils.inputGroup
+import org.ossreviewtoolkit.cli.utils.logger
+import org.ossreviewtoolkit.cli.utils.outputGroup
+import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
-import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
@@ -53,35 +60,30 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.readValueOrDefault
+import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.ORT_COPYRIGHT_GARBAGE_FILENAME
-import org.ossreviewtoolkit.utils.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
-import org.ossreviewtoolkit.utils.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
-import org.ossreviewtoolkit.utils.ORT_LICENSE_CLASSIFICATIONS_FILENAME
-import org.ossreviewtoolkit.utils.ORT_REPO_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ORT_RESOLUTIONS_FILENAME
-import org.ossreviewtoolkit.utils.PackageConfigurationOption
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.createProvider
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.formatSizeInMib
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.ortConfigDirectory
-import org.ossreviewtoolkit.utils.perf
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_CUSTOM_LICENSE_TEXTS_DIRNAME
+import org.ossreviewtoolkit.utils.ort.ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class ReporterCommand : CliktCommand(
     name = "report",
     help = "Present Analyzer, Scanner and Evaluator results in various formats."
 ) {
-    private val allReportersByName = Reporter.ALL.associateBy { it.reporterName }
-        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to use."
@@ -102,10 +104,9 @@ class ReporterCommand : CliktCommand(
 
     private val reportFormats by option(
         "--report-formats", "-f",
-        help = "The comma-separated reports to generate, any of ${allReportersByName.keys}."
+        help = "The comma-separated reports to generate, any of ${Reporter.ALL.keys}."
     ).convert { name ->
-        allReportersByName[name]
-            ?: throw BadParameterValue("Report formats must be one or more of ${allReportersByName.keys}.")
+        Reporter.ALL[name] ?: throw BadParameterValue("Report formats must be one or more of ${Reporter.ALL.keys}.")
     }.split(",").required().outputGroup()
 
     private val copyrightGarbageFile by option(
@@ -190,8 +191,8 @@ class ReporterCommand : CliktCommand(
                 "format, and the value is an arbitrary key-value pair. For example: " +
                 "-O NoticeTemplate=template.id=summary"
     ).splitPair().convert { (format, option) ->
-        require(format in allReportersByName.keys) {
-            "Report formats must be one or more of ${allReportersByName.keys}."
+        require(format in Reporter.ALL.keys) {
+            "Report formats must be one or more of ${Reporter.ALL.keys}."
         }
 
         format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
@@ -200,29 +201,40 @@ class ReporterCommand : CliktCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
-        var (ortResult, readDuration) = measureTimedValue { ortFile.readValue<OrtResult>() }
-
-        log.perf {
-            "Read ORT result from '${ortFile.name}' (${ortFile.formatSizeInMib}) in ${readDuration.inMilliseconds}ms."
-        }
+        var ortResult = readOrtResult(ortFile)
 
         repositoryConfigurationFile?.let {
-            ortResult = ortResult.replaceConfig(it.readValue())
+            val config = it.readValueOrDefault(RepositoryConfiguration())
+            ortResult = ortResult.replaceConfig(config)
         }
 
-        val resolutionProvider = DefaultResolutionProvider()
-        resolutionProvider.add(ortResult.getResolutions())
-        resolutionsFile.takeIf { it.isFile }?.readValue<Resolutions>()?.let { resolutionProvider.add(it) }
+        val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
+
+        val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
+
+        val config = globalOptionsForSubcommands.config
+
+        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+            CompositePackageConfigurationProvider(
+                SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
+                packageConfigurationOption.createProvider()
+            )
+        } else {
+            if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
+                logger.info { "Local package configurations were not applied because the feature is not enabled." }
+            }
+
+            packageConfigurationOption.createProvider()
+        }
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
-
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
 
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            archiver = globalOptionsForSubcommands.config.scanner.archive.createFileArchiver(),
-            licenseFilenamePatterns = LicenseFilenamePatterns.getInstance()
+            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
+            archiver = config.scanner.archive.createFileArchiver(),
+            licenseFilePatterns = LicenseFilePatterns.getInstance()
         )
 
         val licenseClassifications =
@@ -239,7 +251,7 @@ class ReporterCommand : CliktCommand(
             globalOptionsForSubcommands.config,
             packageConfigurationProvider,
             resolutionProvider,
-            DefaultLicenseTextProvider(customLicenseTextsDir.takeIf { it.isDirectory }),
+            DefaultLicenseTextProvider(licenseTextDirectories),
             copyrightGarbage,
             licenseInfoResolver,
             licenseClassifications,
@@ -248,8 +260,13 @@ class ReporterCommand : CliktCommand(
 
         val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
-        reportOptions.forEach { (format, option) ->
-            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(format) { mutableMapOf() }
+        config.reporter.options?.forEach { (reporterName, option) ->
+            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
+            reportSpecificOptionsMap += option
+        }
+
+        reportOptions.forEach { (reporterName, option) ->
+            val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
             reportSpecificOptionsMap[option.first] = option.second
         }
 
@@ -258,10 +275,10 @@ class ReporterCommand : CliktCommand(
                 reportFormats.map { reporter ->
                     async {
                         val threadName = Thread.currentThread().name
-                        println("Generating the '${reporter.reporterName}' report in thread '$threadName'...")
+                        println("Generating the '${reporter.name}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportOptionsMap[reporter.reporterName].orEmpty()
+                            val options = reportOptionsMap[reporter.name].orEmpty()
                             runCatching { reporter.generateReport(input, outputDir, options) }
                         }
                     }
@@ -272,22 +289,24 @@ class ReporterCommand : CliktCommand(
         var failureCount = 0
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
-            val name = reporter.reporterName
-            val durationInSeconds = timedValue.duration.inSeconds
+            val name = reporter.name
 
             timedValue.value.onSuccess { files ->
-                println("Successfully created the '$name' report at $files in ${durationInSeconds}s.")
+                val fileList = files.joinToString { "'$it'" }
+                println("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
             }.onFailure { e ->
                 e.showStackTrace()
 
-                log.error { "Could not create '$name' report in ${durationInSeconds}s: ${e.collectMessagesAsString()}" }
+                logger.error {
+                    "Could not create '$name' report in ${timedValue.duration}: ${e.collectMessages()}"
+                }
 
                 ++failureCount
             }
         }
 
         val successCount = reportFormats.size - failureCount
-        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration.inSeconds}s.")
+        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
 
         if (failureCount > 0) throw ProgramResult(2)
     }

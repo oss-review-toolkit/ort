@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,16 +29,20 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
-import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * The [NuGet](https://www.nuget.org/) package manager for .NET.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *directDependenciesOnly*: If true, only direct dependencies are reported. Defaults to false.
  */
 class NuGet(
     name: String,
@@ -54,13 +57,19 @@ class NuGet(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = NuGet(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = NuGet(name, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    private val directDependenciesOnly = options[OPTION_DIRECT_DEPENDENCIES_ONLY].toBoolean()
 
     private val reader = NuGetPackageFileReader()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOf(resolveNuGetDependencies(definitionFile, reader, NuGetSupport.create(definitionFile)))
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+        val support = NuGetSupport(managerName, analysisRoot, reader)
+        val projectAnalyzerResult = support.resolveDependencies(definitionFile, directDependenciesOnly)
+
+        return listOf(projectAnalyzerResult)
+    }
 }
 
 /**
@@ -80,17 +89,24 @@ class NuGetPackageFileReader : XmlPackageFileReader {
         @JacksonXmlProperty(isAttribute = true)
         val id: String,
         @JacksonXmlProperty(isAttribute = true)
-        val version: String
+        val version: String?,
+        @JacksonXmlProperty(isAttribute = true)
+        val targetFramework: String?,
+        @JacksonXmlProperty(isAttribute = true)
+        val developmentDependency: Boolean?
     )
 
-    override fun getPackageReferences(definitionFile: File): Set<Identifier> {
-        val ids = mutableSetOf<Identifier>()
+    override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
         val packagesConfig = NuGetSupport.XML_MAPPER.readValue<PackagesConfig>(definitionFile)
 
-        packagesConfig.packages.forEach {
-            ids += Identifier(type = "NuGet", namespace = "", name = it.id, version = it.version)
+        return packagesConfig.packages.mapTo(mutableSetOf()) { pkg ->
+            NuGetDependency(
+                name = pkg.id,
+                // TODO: Resolve an empty version to the lowest version published.
+                version = pkg.version.orEmpty(),
+                targetFramework = pkg.targetFramework.orEmpty(),
+                developmentDependency = pkg.developmentDependency ?: false
+            )
         }
-
-        return ids
     }
 }

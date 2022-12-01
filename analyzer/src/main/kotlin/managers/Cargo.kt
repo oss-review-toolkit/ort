@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,6 +28,8 @@ import com.moandjiezana.toml.Toml
 import java.io.File
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -45,12 +47,15 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.spdx.SpdxOperator
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ProcessedDeclaredLicense
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * The [Cargo](https://doc.rust-lang.org/cargo/) package manager for Rust.
@@ -61,6 +66,8 @@ class Cargo(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Cargo>("Cargo") {
         override val globsForDefinitionFiles = listOf("Cargo.toml")
 
@@ -68,12 +75,15 @@ class Cargo(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Cargo(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Cargo(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "cargo"
 
-    override fun transformVersion(output: String) = output.removePrefix("cargo ")
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // cargo 1.35.0 (6f3e9c367 2019-04-04)
+        output.removePrefix("cargo ").substringBefore(' ')
 
     private fun runMetadata(workingDir: File): String = run(workingDir, "metadata", "--format-version=1").stdout
 
@@ -93,26 +103,32 @@ class Cargo(
 
     private fun readHashes(lockfile: File): Map<String, String> {
         if (!lockfile.isFile) {
-            log.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
+            logger.debug { "Cannot determine the hashes of remote artifacts because the Cargo lockfile is missing." }
             return emptyMap()
         }
 
         val contents = Toml().read(lockfile)
-        val metadata = contents.getTable("metadata") ?: return emptyMap()
-        val metadataMap = metadata.toMap()
-
-        val metadataMapNotNull = mutableMapOf<String, String>()
-        metadataMap.forEach { (key, value) ->
-            if (key != null && (value as? String) != null) {
-                metadataMapNotNull[key] = value
+        return when (contents.getLong("version")) {
+            3L -> {
+                contents.getTables("package").orEmpty().mapNotNull { pkg ->
+                    pkg.getString("checksum")?.let { checksum ->
+                        val key = "${pkg.getString("name")} ${pkg.getString("version")} (${pkg.getString("source")})"
+                        key to checksum
+                    }
+                }
             }
-        }
 
-        return metadataMapNotNull
+            else -> {
+                val metadata = contents.getTable("metadata")?.toMap().orEmpty()
+                metadata.mapNotNull { (k, v) ->
+                    (v as? String)?.let { k.unquote().removePrefix("checksum ") to v }
+                }
+            }
+        }.toMap()
     }
 
     /**
-     * Check if a package is a project. All path dependencies inside of the analyzer root are treated as project
+     * Check if a package is a project. All path dependencies inside the analyzer root are treated as project
      * dependencies.
      */
     private fun isProjectDependency(id: String) =
@@ -145,14 +161,14 @@ class Cargo(
             }
         }.toSortedSet()
 
-        val id = extractCargoId(node)
+        val id = parseCargoId(node)
         val pkg = packages.getValue(id)
         val linkage = if (isProjectDependency(id)) PackageLinkage.PROJECT_STATIC else PackageLinkage.STATIC
 
         return pkg.toReference(linkage, dependencies)
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // Get the project name and version. If one of them is missing return null, because this is a workspace
         // definition file that does not contain a project.
         val pkgDefinition = Toml().read(definitionFile)
@@ -165,8 +181,8 @@ class Cargo(
         val hashes = readHashes(resolveLockfile(metadata))
 
         val packages = metadata["packages"].associateBy(
-            { extractCargoId(it) },
-            { extractPackage(it, hashes) }
+            { parseCargoId(it) },
+            { parsePackage(it, hashes) }
         )
 
         val projectId = metadata["workspace_members"]
@@ -229,17 +245,23 @@ class Cargo(
 
 private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
 
-private fun checksumKeyOf(metadata: JsonNode): String {
-    val id = extractCargoId(metadata)
-    return "\"checksum $id\""
-}
+private fun parseCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
-private fun extractCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
-
-private fun extractDeclaredLicenses(node: JsonNode): SortedSet<String> =
-    node["license"].textValueOrEmpty().split('/')
+private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
+    val declaredLicenses = node["license"].textValueOrEmpty().split('/')
         .map { it.trim() }
         .filterTo(sortedSetOf()) { it.isNotEmpty() }
+
+    // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
+    // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this
+    // point.
+    // See: https://doc.rust-lang.org/cargo/reference/manifest.html#the-license-and-license-file-fields
+    if (node["license_file"].textValueOrEmpty().isNotBlank()) {
+        declaredLicenses += SpdxConstants.NOASSERTION
+    }
+
+    return declaredLicenses
+}
 
 private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
     // While the previously used "/" was not explicit about the intended license operator, the community consensus
@@ -248,34 +270,36 @@ private fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLic
     // https://github.com/rust-lang/cargo/pull/4920
     DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
-private fun extractPackage(node: JsonNode, hashes: Map<String, String>): Package {
-    val declaredLicenses = extractDeclaredLicenses(node)
+private fun parsePackage(node: JsonNode, hashes: Map<String, String>): Package {
+    val declaredLicenses = parseDeclaredLicenses(node)
     val declaredLicensesProcessed = processDeclaredLicenses(declaredLicenses)
 
     return Package(
-        id = extractPackageId(node),
+        id = parsePackageId(node),
         authors = parseAuthors(node["authors"]),
         declaredLicenses = declaredLicenses,
         declaredLicensesProcessed = declaredLicensesProcessed,
         description = node["description"].textValueOrEmpty(),
         binaryArtifact = RemoteArtifact.EMPTY,
-        sourceArtifact = extractSourceArtifact(node, hashes) ?: RemoteArtifact.EMPTY,
+        sourceArtifact = parseSourceArtifact(node, hashes).orEmpty(),
         homepageUrl = "",
-        vcs = extractVcsInfo(node)
+        vcs = parseVcsInfo(node)
     )
 }
 
-private fun extractPackageId(node: JsonNode) =
+private fun parsePackageId(node: JsonNode) =
     Identifier(
         type = "Crate",
+        // Note that Rust / Cargo do not support package namespaces, see:
+        // https://samsieber.tech/posts/2020/09/registry-structure-influence/
         namespace = "",
         name = node["name"].textValueOrEmpty(),
         version = node["version"].textValueOrEmpty()
     )
 
-private fun extractRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
+private fun parseRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
 
-private fun extractSourceArtifact(
+private fun parseSourceArtifact(
     node: JsonNode,
     hashes: Map<String, String>
 ): RemoteArtifact? {
@@ -286,13 +310,13 @@ private fun extractSourceArtifact(
     val name = node["name"]?.textValue() ?: return null
     val version = node["version"]?.textValue() ?: return null
     val url = "https://crates.io/api/v1/crates/$name/$version/download"
-    val checksum = checksumKeyOf(node)
-    val hash = Hash.create(hashes[checksum].orEmpty())
+    val id = parseCargoId(node)
+    val hash = Hash.create(hashes[id].orEmpty())
     return RemoteArtifact(url, hash)
 }
 
-private fun extractVcsInfo(node: JsonNode) =
-    VcsHost.toVcsInfo(extractRepositoryUrl(node))
+private fun parseVcsInfo(node: JsonNode) =
+    VcsHost.parseUrl(parseRepositoryUrl(node))
 
 private fun getResolvedVersion(
     parentName: String,
@@ -309,7 +333,7 @@ private fun getResolvedVersion(
     // "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)", for more details see
     // https://doc.rust-lang.org/cargo/commands/cargo-metadata.html.
     node["dependencies"].forEach {
-        val substrings = it.textValue().split(' ')
+        val substrings = it.textValue().splitOnWhitespace()
         require(substrings.size > 1) { "Unexpected format while parsing dependency JSON node." }
 
         if (substrings[0] == dependencyName) return substrings[1]
@@ -319,7 +343,7 @@ private fun getResolvedVersion(
 }
 
 /**
- * Extract information about authors from the given [node] with package metadata.
+ * Parse information about authors from the given [node] with package metadata.
  */
 private fun parseAuthors(node: JsonNode?): SortedSet<String> =
     node?.mapNotNullTo(sortedSetOf()) { parseAuthorString(it.textValue()) } ?: sortedSetOf()

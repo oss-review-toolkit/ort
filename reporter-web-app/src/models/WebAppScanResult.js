@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,8 +24,6 @@ class WebAppScanResult {
     #_id;
 
     #endTime;
-
-    #fileCount;
 
     #issues = [];
 
@@ -47,11 +45,7 @@ class WebAppScanResult {
                 this.#endTime = obj.end_time || obj.endTime;
             }
 
-            if (Number.isInteger(obj.file_count) || Number.isInteger(obj.fileCount)) {
-                this.#fileCount = obj.file_count || obj.fileCount;
-            }
-
-            if (obj.issues !== null) {
+            if (obj.issues) {
                 this.#issues = obj.issues;
             }
 
@@ -80,10 +74,6 @@ class WebAppScanResult {
 
     get endTime() {
         return this.#endTime;
-    }
-
-    get fileCount() {
-        return this.#fileCount;
     }
 
     get issues() {

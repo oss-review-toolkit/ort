@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +25,7 @@ import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
 // The Yarn plugin is only applied programmatically for Kotlin projects that target JavaScript. As we do not target
 // JavaScript from Kotlin (yet), manually apply the plugin to make its setup tasks available.
-YarnPlugin.apply(project).version = "1.22.4"
+YarnPlugin.apply(rootProject).version = "1.22.10"
 
 // The Yarn plugin registers tasks always on the root project, see
 // https://github.com/JetBrains/kotlin/blob/1.4.0/libraries/tools/kotlin-gradle-plugin/src/main/kotlin/org/jetbrains/kotlin/gradle/targets/js/yarn/YarnPlugin.kt#L53-L57
@@ -45,10 +44,20 @@ tasks.addRule("Pattern: yarn<Command>") {
     if (taskName.startsWith("yarn")) {
         val command = taskName.removePrefix("yarn").decapitalize()
 
-        tasks.register<Exec>(taskName) {
+        tasks.register<Exec>(taskName).configure {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
             commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
-            outputs.cacheIf { true }
+
+            val oldPath = System.getenv("PATH")
+            val newPath = listOf(
+                // Prepend the directory of the bootstrapped Node.js to the PATH environment.
+                nodeBinDir.path,
+                // Prepend the directory of additional tools like "rescripts" to the PATH environment.
+                projectDir.resolve("node_modules/.bin").path,
+                oldPath
+            ).joinToString(File.pathSeparator)
+
+            environment = environment + mapOf("PATH" to newPath)
         }
     }
 }
@@ -58,13 +67,29 @@ tasks.addRule("Pattern: yarn<Command>") {
  */
 
 tasks {
+    kotlinNodeJsSetup {
+        outputs.cacheIf { nodeExecutable.isFile }
+
+        doFirst {
+            logger.quiet("Setting up Node.js / NPM in '$nodeDir'...")
+        }
+    }
+
+    kotlinYarnSetup {
+        outputs.cacheIf { yarnJs.isFile }
+
+        doFirst {
+            logger.quiet("Setting up Yarn in '$yarnDir'...")
+        }
+    }
+
     "yarnInstall" {
         description = "Use Yarn to install the Node.js dependencies."
         group = "Node"
 
         dependsOn(kotlinYarnSetup)
 
-        inputs.files(listOf("package.json", "yarn.lock"))
+        inputs.files(".yarnrc", "package.json", "yarn.lock")
         outputs.dir("node_modules")
     }
 
@@ -74,10 +99,9 @@ tasks {
 
         dependsOn("yarnInstall")
 
-        inputs.dir("config")
+        inputs.files(".rescriptsrc.js")
         inputs.dir("node_modules")
         inputs.dir("public")
-        inputs.dir("scripts")
         inputs.dir("src")
 
         outputs.dir("build")
@@ -95,15 +119,15 @@ tasks {
  * Resemble the Java plugin tasks for convenience.
  */
 
-tasks.register("build") {
+tasks.register("build").configure {
     dependsOn(listOf("yarnBuild", "yarnLint"))
 }
 
-tasks.register("check") {
+tasks.register("check").configure {
     dependsOn("yarnLint")
 }
 
-tasks.register<Delete>("clean") {
+tasks.register<Delete>("clean").configure {
     delete("build")
     delete("node_modules")
     delete("yarn-error.log")

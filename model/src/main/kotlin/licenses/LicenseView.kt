@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,7 +21,8 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
 /**
  * A [LicenseView] provides a custom view on the licenses that belong to a [Package]. It can be used to filter the
@@ -131,8 +132,8 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
         return resolvedLicenses.filter { it.license in remainingLicenses }.let { result ->
             if (filterSources) {
                 result.map { resolvedLicense ->
-                    val remainingOriginalExpressions = resolvedLicense.originalExpressions.filterKeys {
-                        it in remainingSources.getValue(resolvedLicense.license)
+                    val remainingOriginalExpressions = resolvedLicense.originalExpressions.filterTo(mutableSetOf()) {
+                        it.source in remainingSources.getValue(resolvedLicense.license)
                     }
 
                     resolvedLicense.copy(originalExpressions = remainingOriginalExpressions)
@@ -141,5 +142,31 @@ class LicenseView(vararg licenseSources: Set<LicenseSource>) {
                 result
             }
         }
+    }
+
+    /**
+     * Use this [LicenseView] to filter a [ResolvedLicenseInfo]. This function will filter the [ResolvedLicense]s based
+     * on the configured [LicenseSource]s, but it will not remove information from other sources. For example, if
+     * [ONLY_CONCLUDED] is used, it will remove all [ResolvedLicense]s that do not have [LicenseSource.CONCLUDED] in
+     * their [sources][ResolvedLicense.sources], but it will not remove any information about declared or detected
+     * licenses from the [ResolvedLicense] object. This is so, because even if only concluded licenses are requested, it
+     * can still be required to access the detected locations or copyrights for the licenses. This function only changes
+     * [ResolvedLicenseInfo.licenses], all other properties of the class are kept unchanged.
+     *
+     * If [filterSources] is true, only the license sources are kept that caused the [ResolvedLicense] to be part of the
+     * result. Otherwise all original license sources are kept.
+     *
+     * Additionally, the [licenseChoices] are applied, removing all licenses that were not chosen from the
+     * [ResolvedLicenseInfo]. The information is still obtainable through the [ResolvedLicense.originalExpressions].
+     */
+    @JvmOverloads
+    fun filter(
+        resolvedLicenseInfo: ResolvedLicenseInfo,
+        licenseChoices: List<SpdxLicenseChoice>,
+        filterSources: Boolean = false
+    ): ResolvedLicenseInfo {
+        val filteredResolvedLicenseInfo = filter(resolvedLicenseInfo, filterSources)
+
+        return filteredResolvedLicenseInfo.applyChoices(licenseChoices, this)
     }
 }

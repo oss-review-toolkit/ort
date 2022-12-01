@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019-2020 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,6 +17,7 @@
  * License-Filename: LICENSE
  */
 
+import Metadata from './Metadata';
 import Repository from './Repository';
 import Statistics from './Statistics';
 import WebAppCopyright from './WebAppCopyright';
@@ -31,6 +32,7 @@ import WebAppScopeExclude from './WebAppScopeExclude';
 import WebAppTreeNode from './WebAppTreeNode';
 import WebAppRuleViolation from './WebAppRuleViolation';
 import WebAppResolution from './WebAppResolution';
+import WebAppVulnerability from './WebAppVulnerability';
 
 class WebAppOrtResult {
     #concludedLicensePackages = [];
@@ -51,6 +53,8 @@ class WebAppOrtResult {
 
     #detectedLicensesProcessed = [];
 
+    #effectiveLicensePackages = [];
+
     #issues = [];
 
     #issuesByPackageIndexMap = new Map();
@@ -64,6 +68,8 @@ class WebAppOrtResult {
     #licenses = [];
 
     #licensesIndexesByNameMap = new Map();
+
+    #metadata = {};
 
     #packages = [];
 
@@ -95,6 +101,12 @@ class WebAppOrtResult {
 
     #ruleViolationResolutions = [];
 
+    #vulnerabilities = [];
+
+    #vulnerabilitiesByPackageIndexMap = new Map();
+
+    #vulnerabilityResolutions = [];
+
     constructor(obj) {
         if (obj instanceof Object) {
             if (obj.copyrights) {
@@ -115,6 +127,10 @@ class WebAppOrtResult {
                     this.#licensesIndexesByNameMap.set(licenses[i].id, i);
                     this.#licenses.push(new WebAppLicense(licenses[i]));
                 }
+            }
+
+            if (obj.meta_data || obj.metaData || obj.metadata) {
+                this.#metadata = new Metadata(obj.meta_data || obj.metaData || obj.metadata);
             }
 
             if (obj.packages) {
@@ -144,6 +160,11 @@ class WebAppOrtResult {
                         ...webAppPackage.detectedLicenses
                     ]);
                     this.#detectedLicenses = Array.from(detectedLicenses).sort();
+
+                    if (webAppPackage.effectiveLicense
+                        && webAppPackage.effectiveLicense.length > 0) {
+                        this.#effectiveLicensePackages.push(webAppPackage);
+                    }
                 }
             }
 
@@ -165,9 +186,11 @@ class WebAppOrtResult {
             if (obj.scan_results || obj.scanResults) {
                 const scanResults = obj.scan_results || obj.scanResults;
 
-                for (let i = 0, len = scanResults.length; i < len; i++) {
-                    this.#scanResults.push(new WebAppScanResult(scanResults[i]));
-                }
+                setTimeout(() => {
+                    for (let i = 0, len = scanResults.length; i < len; i++) {
+                        this.#scanResults.push(new WebAppScanResult(scanResults[i]));
+                    }
+                }, 0);
             }
 
             if (obj.repository) {
@@ -275,6 +298,32 @@ class WebAppOrtResult {
                 }
             }
 
+            if (obj.vulnerabilities) {
+                const vulnerabilities = obj.vulnerabilities;
+                this.#vulnerabilitiesByPackageIndexMap.clear();
+
+                for (let i = 0, len = vulnerabilities.length; i < len; i++) {
+                    const webAppVulnerability = new WebAppVulnerability(vulnerabilities[i], this);
+                    const { packageIndex } = webAppVulnerability;
+                    this.#vulnerabilities.push(webAppVulnerability);
+
+                    if (!this.#vulnerabilitiesByPackageIndexMap.has(packageIndex)) {
+                        this.#vulnerabilitiesByPackageIndexMap.set(packageIndex, [webAppVulnerability]);
+                    } else {
+                        this.#vulnerabilitiesByPackageIndexMap.get(packageIndex).push(webAppVulnerability);
+                    }
+                }
+            }
+
+            if (obj.vulnerabilities_resolutions || obj.vulnerabilitiesResolutions) {
+                const vulnerabilityResolutions = obj.vulnerabilities_resolutions
+                    || obj.vulnerabilitiesResolutions;
+
+                for (let i = 0, len = vulnerabilityResolutions.length; i < len; i++) {
+                    this.#vulnerabilityResolutions.push(new WebAppResolution(vulnerabilityResolutions[i]));
+                }
+            }
+
             if (obj.dependency_trees || obj.dependencyTrees) {
                 const dependencyTrees = obj.dependency_trees || obj.dependencyTrees;
                 const treeNodesByPackageIndexMap = new Map();
@@ -300,13 +349,15 @@ class WebAppOrtResult {
                 };
 
                 for (let i = 0, len = dependencyTrees.length; i < len; i++) {
-                    this.#dependencyTrees.push(
-                        new WebAppTreeNode(
-                            dependencyTrees[i],
-                            this,
-                            callback
-                        )
-                    );
+                    setTimeout(() => {
+                        this.#dependencyTrees.push(
+                            new WebAppTreeNode(
+                                dependencyTrees[i],
+                                this,
+                                callback
+                            )
+                        );
+                    }, 0);
                 }
 
                 this.#treeNodesByPackageIndexMap = treeNodesByPackageIndexMap;
@@ -351,6 +402,10 @@ class WebAppOrtResult {
         return this.#detectedLicensesProcessed;
     }
 
+    get effectiveLicensePackages() {
+        return this.#effectiveLicensePackages;
+    }
+
     get issues() {
         return this.#issues;
     }
@@ -369,6 +424,10 @@ class WebAppOrtResult {
 
     get licenses() {
         return this.#licenses;
+    }
+
+    get metadata() {
+        return this.#metadata;
     }
 
     get packages() {
@@ -417,6 +476,14 @@ class WebAppOrtResult {
 
     get statistics() {
         return this.#statistics;
+    }
+
+    get vulnerabilities() {
+        return this.#vulnerabilities;
+    }
+
+    get vulnerabilityResolutions() {
+        return this.#ruleViolationResolutions;
     }
 
     getCopyrightByIndex(val) {
@@ -483,6 +550,14 @@ class WebAppOrtResult {
         return this.#ruleViolationsByPackageIndexMap.get(val) || [];
     }
 
+    getVulnerabilitiesForPackageIndex(val) {
+        return this.#vulnerabilitiesByPackageIndexMap.get(val) || [];
+    }
+
+    getVulnerabilityResolutionByIndex(val) {
+        return this.#vulnerabilityResolutions[val] || null;
+    }
+
     hasConcludedLicenses() {
         return this.#concludedLicensePackages.length > 0;
     }
@@ -501,6 +576,10 @@ class WebAppOrtResult {
 
     hasDetectedLicensesProcessed() {
         return this.#detectedLicensesProcessed.length > 0;
+    }
+
+    hasEffectiveLicenses() {
+        return this.#effectiveLicensePackages.length > 0;
     }
 
     hasExcludes() {
@@ -571,6 +650,10 @@ class WebAppOrtResult {
 
     hasScopeExcludes() {
         return this.#scopeExcludes.length > 0;
+    }
+
+    hasVulnerabilities() {
+        return this.#vulnerabilities.length > 0;
     }
 }
 

@@ -1,7 +1,7 @@
 # The `resolutions.yml` file
 
-Resolutions allow you to *resolve* issues or policy rule violations by providing a reason why they are acceptable and
-can be ignored.
+Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by providing a reason why they are
+acceptable and can be ignored.
 
 You can use the [resolutions.yml example](../examples/resolutions.yml) as the base configuration file for your scans.
 
@@ -13,7 +13,7 @@ The sections below explain how to create resolutions in the `resolutions.yml` fi
 the _reporter_, applies to each scan made. If a resolution is project-specific, then add it in the
 [.ort.yml](config-file-ort-yml.md) file for the project.
 
-Resolutions are only taken into account by the _reporter_, while the _analyzer_ and `scanner` ignore them.
+Resolutions are only taken into account by the _reporter_, while the _analyzer_ and _scanner_ ignore them.
 
 ## Resolution Basics
 
@@ -62,7 +62,7 @@ notices. To resolve a license policy rule violation either add a local `license_
 [.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
 
-The code below shows the structure of a policy rule violation resolution in the `resolutions.yml`file:
+The code below shows the structure of a policy rule violation resolution in the `resolutions.yml` file:
 
 ```yaml
 rule_violations:
@@ -82,6 +82,30 @@ rule_violations:
 - message: ".*LicenseRef-scancode-qt-commercial-1.1 found in 'third-party/qt/LICENSE'.*"
   reason: "LICENSE_ACQUIRED_EXCEPTION"
   comment: "Org-wide commercial Qt license was purchased, for details see https://jira.example.com/issues/SOURCING-1234"
+```
+
+### Resolving Vulnerabilities
+
+The code below shows the structure of a vulnerability resolution in the `resolutions.yml` file:
+
+```yaml
+vulnerabilities:
+- id: "A regular expression matching the vulnerability id."
+  reason: "One of VulnerabilityResolutionReason e.g. CANT_FIX_VULNERABILITY, INEFFECTIVE_VULNERABILITY."
+  comment: "A comment further explaining why the reason above is applicable."
+```
+
+Where the list of available options for `reason` is defined in
+[VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
+
+For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your
+`resolutions.yml` could include:
+
+```yaml
+vulnerabilities:
+- id: "CVE-9999-9999"
+  reason: "INEFFECTIVE_VULNERABILITY"
+  comment: "CVE-9999-9999 is a false positive"
 ```
 
 ## Command Line

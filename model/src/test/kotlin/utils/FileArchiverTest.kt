@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,29 +21,29 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.file.exist
+import io.kotest.matchers.file.shouldContainNFiles
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import java.io.File
-
-import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.safeMkdirs
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
         type = VcsType.GIT,
         url = "url",
-        revision = "0000000000000000000000000000000000000000",
-        resolvedRevision = "0000000000000000000000000000000000000000"
-    )
+        revision = "0000000000000000000000000000000000000000"
+    ),
+    resolvedRevision = "0000000000000000000000000000000000000000"
 )
 
 class FileArchiverTest : StringSpec() {
@@ -52,17 +52,11 @@ class FileArchiverTest : StringSpec() {
     private lateinit var targetDir: File
     private lateinit var storage: LocalFileStorage
 
-    override fun beforeTest(testCase: TestCase) {
-        workingDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-workingDir").toFile()
-        storageDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-storageDir").toFile()
-        targetDir = createTempDirectory("$ORT_NAME-${javaClass.simpleName}-targetDir").toFile()
+    override suspend fun beforeTest(testCase: TestCase) {
+        workingDir = createTestTempDir("workingDir")
+        storageDir = createTestTempDir("storageDir")
+        targetDir = createTestTempDir("targetDir")
         storage = LocalFileStorage(storageDir)
-    }
-
-    override fun afterTest(testCase: TestCase, result: TestResult) {
-        workingDir.safeDeleteRecursively()
-        storageDir.safeDeleteRecursively()
-        targetDir.safeDeleteRecursively()
     }
 
     private fun createFile(path: String) {
@@ -71,13 +65,50 @@ class FileArchiverTest : StringSpec() {
         file.writeText(path)
     }
 
-    private fun File.assertFileContent(path: String) {
+    /**
+     * Assert that this directory contains a file at [path] which contains the [path] as text.
+     */
+    private fun File.shouldContainFileWithContent(path: String) {
         val file = resolve(path)
-        file.isFile shouldBe true
+        file shouldBe aFile()
         file.readText() shouldBe path
     }
 
     init {
+        "LICENSE files are archived by default, independently of the directory" {
+            createFile("LICENSE")
+            createFile("path/LICENSE")
+
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
+
+            result shouldBe true
+            with(targetDir) {
+                shouldContainFileWithContent("LICENSE")
+                shouldContainFileWithContent("path/LICENSE")
+            }
+        }
+
+        "The pattern matching is case-insensitive" {
+            createFile("a/LICENSE")
+            createFile("b/License")
+            createFile("c/license")
+            createFile("d/LiCeNsE")
+
+            val archiver = FileArchiver.createDefault()
+            archiver.archive(workingDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
+
+            result shouldBe true
+            with(targetDir) {
+                shouldContainFileWithContent("a/LICENSE")
+                shouldContainFileWithContent("b/License")
+                shouldContainFileWithContent("c/license")
+                shouldContainFileWithContent("d/LiCeNsE")
+            }
+        }
+
         "All files matching any of the patterns are archived" {
             createFile("a")
             createFile("b")
@@ -87,18 +118,19 @@ class FileArchiverTest : StringSpec() {
             val archiver = FileArchiver(listOf("a", "**/a"), storage)
 
             archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
+            val result = archiver.unarchive(targetDir, PROVENANCE)
 
-            targetDir.assertFileContent("a")
-            targetDir.assertFileContent("d/a")
+            result shouldBe true
+            targetDir.shouldContainFileWithContent("a")
+            targetDir.shouldContainFileWithContent("d/a")
 
-            fun assertFileNotSaved(path: String) {
+            fun shouldNotContainFile(path: String) {
                 val file = storageDir.resolve("save/$path")
-                file.exists() shouldBe false
+                file shouldNot exist()
             }
 
-            assertFileNotSaved("b")
-            assertFileNotSaved("d/b")
+            shouldNotContainFile("b")
+            shouldNotContainFile("d/b")
         }
 
         "All archived files are unarchived" {
@@ -114,43 +146,20 @@ class FileArchiverTest : StringSpec() {
 
             result shouldBe true
             with(targetDir) {
-                assertFileContent("a")
-                assertFileContent("b")
-                assertFileContent("c/a")
-                assertFileContent("c/b")
+                shouldContainFileWithContent("a")
+                shouldContainFileWithContent("b")
+                shouldContainFileWithContent("c/a")
+                shouldContainFileWithContent("c/b")
             }
         }
 
-        "LICENSE files are archived by default, independently of the directory" {
-            createFile("LICENSE")
-            createFile("path/LICENSE")
-
+        "Empty archives can be handled" {
             val archiver = FileArchiver.createDefault()
+
             archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
 
-            with(targetDir) {
-                assertFileContent("LICENSE")
-                assertFileContent("path/LICENSE")
-            }
-        }
-
-        "The pattern matching is case-insensitive" {
-            createFile("a/LICENSE")
-            createFile("b/License")
-            createFile("c/license")
-            createFile("d/LiCeNsE")
-
-            val archiver = FileArchiver.createDefault()
-            archiver.archive(workingDir, PROVENANCE)
-            archiver.unarchive(targetDir, PROVENANCE)
-
-            with(targetDir) {
-                assertFileContent("a/LICENSE")
-                assertFileContent("b/License")
-                assertFileContent("c/license")
-                assertFileContent("d/LiCeNsE")
-            }
+            archiver.unarchive(targetDir, PROVENANCE) shouldBe true
+            targetDir shouldContainNFiles 0
         }
     }
 }

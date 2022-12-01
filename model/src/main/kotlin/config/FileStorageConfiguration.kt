@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.storage.FileStorage
-import org.ossreviewtoolkit.utils.storage.HttpFileStorage
-import org.ossreviewtoolkit.utils.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.storage.XZCompressedLocalFileStorage
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
+import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 /**
  * The configuration model for a [FileStorage]. Only one of the storage options can be configured.
@@ -43,24 +43,22 @@ data class FileStorageConfiguration(
      * Create a [FileStorage] based on this configuration.
      */
     fun createFileStorage(): FileStorage {
-        require((httpFileStorage == null) xor (localFileStorage == null)) {
+        val storage = requireNotNull(listOfNotNull(httpFileStorage, localFileStorage).singleOrNull()) {
             "Exactly one implementation must be configured for a FileStorage."
         }
 
-        return httpFileStorage?.let { httpFileStorageConfiguration ->
-            HttpFileStorage(
-                httpFileStorageConfiguration.url,
-                httpFileStorageConfiguration.query,
-                httpFileStorageConfiguration.headers
-            )
-        } ?: localFileStorage!!.let { localFileStorageConfiguration ->
-            val directory = localFileStorageConfiguration.directory.expandTilde()
+        if (storage is HttpFileStorageConfiguration) {
+            return HttpFileStorage(storage.url, storage.query, storage.headers)
+        }
 
-            if (localFileStorageConfiguration.compression) {
-                XZCompressedLocalFileStorage(directory)
-            } else {
-                LocalFileStorage(directory)
-            }
+        check(storage is LocalFileStorageConfiguration)
+
+        val directory = storage.directory.expandTilde()
+
+        return if (storage.compression) {
+            XZCompressedLocalFileStorage(directory)
+        } else {
+            LocalFileStorage(directory)
         }
     }
 }

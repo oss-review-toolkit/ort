@@ -1,0 +1,141 @@
+---
+project:
+  id: "Gradle:org.ossreviewtoolkit.gradle.example:Gradle-BOM-Example:1.0.0"
+  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle-bom/build.gradle"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/gradle-bom"
+  homepage_url: ""
+  scopes:
+  - name: "compileClasspath"
+    dependencies:
+    - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
+  - name: "runtimeClasspath"
+    dependencies:
+    - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
+  - name: "testCompileClasspath"
+    dependencies:
+    - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
+    - id: "Maven:org.junit.platform:junit-platform-commons:1.7.2"
+      dependencies:
+      - id: "Maven:org.apiguardian:apiguardian-api:1.1.0"
+  - name: "testRuntimeClasspath"
+    dependencies:
+    - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
+    - id: "Maven:org.junit.platform:junit-platform-commons:1.7.2"
+      dependencies:
+      - id: "Maven:org.apiguardian:apiguardian-api:1.1.0"
+packages:
+- id: "Maven:com.fasterxml.jackson.core:jackson-core:2.12.2"
+  purl: "pkg:maven/com.fasterxml.jackson.core/jackson-core@2.12.2"
+  authors:
+  - "FasterXML"
+  - "Tatu Saloranta"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Core Jackson processing abstractions (aka Streaming API), implementation\
+    \ for JSON"
+  homepage_url: "https://github.com/FasterXML/jackson-core"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.2/jackson-core-2.12.2.jar"
+    hash:
+      value: "8df50138521d05561a308ec2799cc8dda20c06df"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/com/fasterxml/jackson/core/jackson-core/2.12.2/jackson-core-2.12.2-sources.jar"
+    hash:
+      value: "882b7c5f3b71f22f181e0b4c88d5a1f818de04a6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git@github.com:FasterXML/jackson-core.git"
+    revision: "jackson-core-2.12.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "ssh://git@github.com/FasterXML/jackson-core.git"
+    revision: "jackson-core-2.12.2"
+    path: ""
+- id: "Maven:org.apiguardian:apiguardian-api:1.1.0"
+  purl: "pkg:maven/org.apiguardian/apiguardian-api@1.1.0"
+  authors:
+  - "@API Guardian Team"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "@API Guardian"
+  homepage_url: "https://github.com/apiguardian-team/apiguardian"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0.jar"
+    hash:
+      value: "fc9dff4bb36d627bdc553de77e1f17efd790876c"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apiguardian/apiguardian-api/1.1.0/apiguardian-api-1.1.0-sources.jar"
+    hash:
+      value: "f3c15fe970af864390c8d0634c9f16aca1b064a8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/apiguardian-team/apiguardian.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apiguardian-team/apiguardian.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.junit.platform:junit-platform-commons:1.7.2"
+  purl: "pkg:maven/org.junit.platform/junit-platform-commons@1.7.2"
+  authors:
+  - "Christian Stein"
+  - "Johannes Link"
+  - "Juliette de Rancourt"
+  - "Marc Philipp"
+  - "Matthias Merdes"
+  - "Sam Brannen"
+  - "Stefan Bechtold"
+  declared_licenses:
+  - "Eclipse Public License v2.0"
+  declared_licenses_processed:
+    spdx_expression: "EPL-2.0"
+    mapped:
+      Eclipse Public License v2.0: "EPL-2.0"
+  description: "Module \"junit-platform-commons\" of JUnit 5."
+  homepage_url: "https://junit.org/junit5/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.7.2/junit-platform-commons-1.7.2.jar"
+    hash:
+      value: "34adfea6c13fc4a996cf38cdad80800ce850d198"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/junit/platform/junit-platform-commons/1.7.2/junit-platform-commons-1.7.2-sources.jar"
+    hash:
+      value: "1ff6be63f8bb2ef0d8c20b771a1d9160b6077a81"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/junit-team/junit5.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/junit-team/junit5.git"
+    revision: ""
+    path: ""

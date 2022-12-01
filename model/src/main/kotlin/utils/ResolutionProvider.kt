@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -53,4 +52,19 @@ interface ResolutionProvider {
      * in [ortResult].
      */
     fun getResolutionsFor(ortResult: OrtResult): Resolutions
+
+    /**
+     * Return true if there is at least one issue resolution that matches [issue].
+     */
+    fun isResolved(issue: OrtIssue): Boolean = getIssueResolutionsFor(issue).isNotEmpty()
+
+    /**
+     * Return true if there is at least one rule violation resolution that matches [violation].
+     */
+    fun isResolved(violation: RuleViolation): Boolean = getRuleViolationResolutionsFor(violation).isNotEmpty()
+
+    /**
+     * Return true if there is at least one vulnerability resolution that matches [vulnerability].
+     */
+    fun isResolved(vulnerability: Vulnerability): Boolean = getVulnerabilityResolutionsFor(vulnerability).isNotEmpty()
 }

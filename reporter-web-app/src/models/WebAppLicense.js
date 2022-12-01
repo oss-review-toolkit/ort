@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,12 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import { UNIQUE_COLORS } from '../data/colors';
+import { licenseToHslColor } from '../utils';
 
 class WebAppLicense {
     #_id;
 
     #id;
+
+    #color;
 
     constructor(obj) {
         if (obj) {
@@ -34,8 +36,7 @@ class WebAppLicense {
                 this.#id = obj.id;
             }
 
-            const { data: colors } = UNIQUE_COLORS;
-            this.color = colors[this.#_id % colors.length];
+            this.#color = licenseToHslColor(this.#id);
         }
     }
 
@@ -45,6 +46,10 @@ class WebAppLicense {
 
     get id() {
         return this.#id;
+    }
+
+    get color() {
+        return this.#color;
     }
 }
 

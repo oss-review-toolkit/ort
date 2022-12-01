@@ -1,0 +1,12 @@
+# See https://help.sonatype.com/lift/configuring-lift.
+
+jdkVersion = "11"
+
+disableTools = [ "detekt", "eslint" ]
+
+ignoreFiles = """
+**/funTest/assets/
+**/funTest/resources/
+**/test/assets/
+**/test/resources/
+"""

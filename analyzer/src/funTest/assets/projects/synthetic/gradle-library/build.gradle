@@ -2,3 +2,5 @@ subprojects {
     group 'org.ossreviewtoolkit.gradle.example'
     version '1.0.0'
 }
+
+logger.quiet("The current working directory is set to: " + System.properties['user.dir'])

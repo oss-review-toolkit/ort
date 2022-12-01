@@ -1,6 +1,7 @@
 # Integrating with SW360
 
-OSS Review Toolkit (ORT) offers several ways to integrate with the software component catalog application [Eclipse SW360][sw360]:
+OSS Review Toolkit (ORT) offers several ways to integrate with the software component catalog application
+[Eclipse SW360][sw360]:
 
 - Upload ORT results to SW360
 - Use SW360 package metadata curations as input for the ORT _analyzer_
@@ -17,29 +18,27 @@ To add packages found by ORT to projects and releases in SW360.
 ### Prerequisites
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file (e.g. in `${HOME}/.ort/conf`)or pass it to the ORT command with the `--config` option) as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your
+[config.yml](../README.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
+`--config` option as shown below.
 
+```yaml
+ort:
+  scanner:
+    storages:
+      sw360Configuration:
+        restUrl: "https://your-sw360-rest-url"
+        authUrl: "https://your-authentication-url"
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
 ```
-ort {
-  storages {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
-    }
-  }
-}
-```
-
-For a complete example of the `ort.conf` file see [reference.conf](../model/src/main/resources/reference.conf).
 
 ### Command Line
 
-Uploading to SW360 is a stand-alone ORT command](../cli/src/main/kotlin/commands/UploadResultToSw360Command.kt), which:
+Uploading to SW360 is a stand-alone [ORT command](../cli/src/main/kotlin/commands/UploadResultToSw360Command.kt), which:
 
 1. Takes an _analyzer_ result file as an input,
 2. Creates components/releases in SW360 for the packages and ...
@@ -50,41 +49,38 @@ cli/build/install/ort/bin/ort upload-result-to-sw360
   -i [analyzer-output-dir]/analyzer-result.yml
 ```
 
-## Use SW360 Package Meta-data Curations in ORT
+## Use SW360 Package Metadata Curations in ORT
 
 ### When to use
 
-If you prefer to use the SW360 web frontend to correct package metadata instead of ORT's [curations.yml file](config-file-curations-yml.md).
+If you prefer to use the SW360 web frontend to correct package metadata instead of ORT's
+[curations.yml file](config-file-curations-yml.md).
 
 Note:
 
-1. Currently only the SW360 fields `declaredLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used for curations, all
-   other SW360 fields are ignored as there are no corresponding fields for them in ORT.
+1. Currently, only the SW360 fields `concludedLicenses`, `homepageUrl`, `binaryArtifact` and `sourceArtifact` are used
+   for curations, all other SW360 fields are ignored as there are no corresponding fields for them in ORT.
 2. A release in SW360 needs to be in the approved clearing state, otherwise the curated data will not be used.
 
 ### Prerequisites
 
-In order to be able to use SW360 data in the ORT _analyzer_, first set the connection parameters for your SW360 instance.
-You can do this by defining a `sw360Configuration` within the `analyzer` section of your `ort.conf` file (e.g. in
-`${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
+In order to be able to use SW360 data in the ORT _analyzer_, first set the connection parameters for your SW360
+instance. You can do this by defining a `sw360Configuration` within the `analyzer` section of your
+[config.yml](../README.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
+`--config` option as shown below.
 
+```yaml
+ort:
+  analyzer:
+    sw360Configuration:
+      restUrl: "https://your-sw360-rest-url"
+      authUrl: "https://your-authentication-url"
+      username: username
+      password: password
+      clientId: clientId
+      clientPassword: clientPassword
+      token: token
 ```
-ort {
-  analyzer {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
-    }
-  }
-}
-```
-
-For a complete example of the `ort.conf` file see [reference.conf](../model/src/main/resources/reference.conf).
 
 ### Command Line
 
@@ -101,28 +97,27 @@ cli/build/install/ort/bin/ort analyze
 
 ### When to use
 
-If you prefer to use the SW360 to store the ORT _scanner_ results instead of the other [storage backends][ort-storage-backends].
+If you prefer to use the SW360 to store the ORT _scanner_ results instead of the other
+[storage backends][ort-storage-backends].
 
 ### Prerequisites
 
 In order to be able to store ORT _scanner_ results SW360, first set the connection parameters to your SW360 instance.
-You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `ort.conf` file
-(e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option) as shown below.
+You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your `config.yml` file
+(e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the `--config` option as shown below.
 
-```
-ort {
-  storages {
-    sw360Configuration {
-      restUrl = "https://your-sw360-rest-url"
-      authUrl = "https://your-authentication-url"
-      username = username
-      password = password
-      clientId = clientId
-      clientPassword = clientPassword
-      token = token
-    }
-  }
-}
+```yaml
+ort:
+  scanner:
+    storages:
+      sw360Configuration:
+        restUrl: "https://your-sw360-rest-url"
+        authUrl: "https://your-authentication-url"
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
 ```
 
 The scan results for each package will be uploaded to SW360 once you have completed the above configuration. The
@@ -132,7 +127,8 @@ Note the [SW360 attachment type][sw360-attachment-type] of the uploaded scan res
 
 ### Command Line
 
-Apart from configuring your `ort.conf` to use SW360 to store scanner results, no specific option needs to be passed the _scanner_:
+Apart from configuring your `config.yml` to use SW360 to store scan results, no specific option needs to be passed to
+the _scanner_:
 
 ```bash
 cli/build/install/ort/bin/ort scan 

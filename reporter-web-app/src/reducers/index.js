@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,38 +27,55 @@ const initState = {
         showKey: 'ort-loading'
     },
     summary: {
-        declaredLicensesChart: [],
-        detectedLicensesProcessedChart: [],
-        declaredLicensesFilter: {
-            filteredInfo: {},
-            sortedInfo: {}
+        charts: {
+            declaredLicensesProcessed: [],
+            detectedLicensesProcessed: [],
         },
-        detectedLicensesProcessedFilter: {
-            filteredInfo: {},
-            sortedInfo: {}
+        columns: {
+            declaredLicensesProcessed: {
+                filteredInfo: {},
+                sortedInfo: {}
+            },
+            detectedLicensesProcessed: {
+                filteredInfo: {},
+                sortedInfo: {}
+            },
+            issues: {
+                filteredInfo: {},
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
+            },
+            ruleViolations: {
+                filteredInfo: {},
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
+            },
+            vulnerabilities: {
+                filteredInfo: {},
+                sortedInfo: {
+                    order: 'ascend',
+                    field: 'severityIndex'
+                }
+            }
         },
-        issuesFilter: {
-            filteredInfo: {},
-            sortedInfo: {}
-        },
-        shouldComponentUpdate: false,
-        ruleViolationsFilter: {
-            filteredInfo: {},
-            sortedInfo: {}
-        }
+        shouldComponentUpdate: false
     },
     table: {
-        filter: {
+        columns: {
             filteredInfo: {},
-            sortedInfo: {}
+            filterData: [],
+            sortedInfo: {},
+            showKeys: [
+                'declaredLicensesProcessed',
+                'detectedLicensesProcessed',
+                'levels',
+                'scopeIndexes'
+            ]
         },
-        filterData: [],
-        showColumnKeys: [
-            'declaredLicensesProcessed',
-            'detectedLicensesProcessed',
-            'levels',
-            'scopeIndexes'
-        ],
         showColumnsDropDown: false,
         shouldComponentUpdate: false
     },
@@ -79,7 +96,7 @@ const initState = {
     }
 };
 
-export default (state = initState, action) => {
+const states = (state = initState, action) => {
     switch (action.type) {
     case 'APP::LOADING_DONE': {
         return {
@@ -233,124 +250,108 @@ export default (state = initState, action) => {
             }
         };
     }
-    case 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE': {
-        const {
-            declaredLicensesChart,
-            declaredLicensesFilter
-        } = action.payload;
-
-        return {
-            ...state,
-            summary: {
-                ...state.summary,
-                declaredLicensesChart,
-                declaredLicensesFilter
-            }
-        };
-    }
+    case 'SUMMARY::CHANGE_DECLARED_LICENSES_TABLE':
     case 'SUMMARY::CHANGE_DETECTED_LICENSES_TABLE': {
         const {
-            detectedLicensesProcessedChart,
-            detectedLicensesProcessedFilter
+            charts,
+            columns
         } = action.payload;
 
         return {
             ...state,
             summary: {
                 ...state.summary,
-                detectedLicensesProcessedChart,
-                detectedLicensesProcessedFilter
+                charts: {
+                    ...state.summary.charts,  
+                    ...charts
+                },
+                columns: {
+                    ...state.summary.columns,  
+                    ...columns
+                }
             }
         };
     }
-    case 'SUMMARY::CHANGE_ISSUES_TABLE': {
+    case 'SUMMARY::CHANGE_ISSUES_TABLE':
+    case 'SUMMARY::CHANGE_RULE_VIOLATIONS_TABLE':
+    case 'SUMMARY::CHANGE_VULNERABILITIES_TABLE': {
         const {
-            issuesFilter
+            columns
         } = action.payload;
 
         return {
             ...state,
             summary: {
                 ...state.summary,
-                issuesFilter
+                columns: {
+                    ...state.summary.columns,
+                    ...columns
+                }
             }
         };
     }
-    case 'SUMMARY::CHANGE_RULE_VIOLATIONS_TABLE': {
-        const {
-            ruleViolationsFilter
-        } = action.payload;
-
-        return {
-            ...state,
-            summary: {
-                ...state.summary,
-                ruleViolationsFilter
-            }
-        };
-    }
-    case 'TABLE::COLUMNS_PACKAGES_TABLE_TOGGLE': {
+    case 'TABLE::CHANGE_COLUMNS_PACKAGES_TABLE': {
         const { columnKey } = action.payload;
         let {
             table: {
-                showColumnKeys
+                columns: {
+                    showKeys
+                }
             }
         } = state;
 
-        if (columnKey && showColumnKeys) {
-            const keys = new Set(showColumnKeys);
+        if (columnKey && showKeys) {
+            const keys = new Set(showKeys);
             if (keys.has(columnKey)) {
                 keys.delete(columnKey);
             } else {
                 keys.add(columnKey);
             }
 
-            showColumnKeys = Array.from(keys);
+            showKeys = Array.from(keys);
         }
 
         return {
             ...state,
             table: {
                 ...state.table,
-                showColumnKeys
+                columns: {
+                    ...state.table.columns,
+                    showKeys
+                }
             }
         };
     }
     case 'TABLE::CHANGE_PACKAGES_TABLE': {
-        const { filter, filterData } = action.payload;
+        const { columns } = action.payload;
 
         return {
             ...state,
             table: {
                 ...state.table,
-                filter,
-                filterData
+                columns: {
+                    ...state.table.columns,
+                    ...columns
+                }
             }
         };
     }
-    case 'TABLE::CLEAR_FILTERS_TABLE': {
+    case 'TABLE::RESET_COLUMNS_TABLE': {
         return {
             ...state,
             table: {
                 ...state.table,
-                filter: {
+                columns: {
                     filteredInfo: {},
-                    sortedInfo: {}
-                },
-                filterData: []
-            }
-        };
-    }
-    case 'TABLE::CLEAR_SEARCH_TABLE': {
-        return {
-            ...state,
-            table: {
-                ...state.table,
-                filter: {
-                    filteredInfo: {},
-                    sortedInfo: {}
-                },
-                filterData: []
+                    filterData: [],
+                    sortedInfo: {},
+                    showKeys: [
+                        'declaredLicensesProcessed',
+                        'detectedLicensesProcessed',
+                        'levels',
+                        'scopeIndexes'
+                    ]
+                }
             }
         };
     }
@@ -446,3 +447,5 @@ export default (state = initState, action) => {
         return state;
     }
 };
+
+export default states;

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,9 +26,9 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.logOnce
-import org.ossreviewtoolkit.utils.normalizeLineBreaks
+import org.apache.logging.log4j.kotlin.Logging
+
+import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 
 /**
  * An issue that occurred while executing ORT.
@@ -68,13 +68,15 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 }
 
 /**
- * Create an [OrtIssue] and [log] the message. The log level is aligned with the [severity].
+ * Create an [OrtIssue] and log the message. The log level is aligned with the [severity].
  */
-inline fun <reified T : Any> T.createAndLogIssue(
+inline fun <reified T : Logging> T.createAndLogIssue(
     source: String,
     message: String,
-    severity: Severity = Severity.ERROR
+    severity: Severity? = null
 ): OrtIssue {
-    logOnce(severity.toLog4jLevel()) { message }
-    return OrtIssue(source = source, message = message, severity = severity)
+    val issue = severity?.let { OrtIssue(source = source, message = message, severity = it) }
+        ?: OrtIssue(source = source, message = message)
+    logger.log(issue.severity.toLog4jLevel()) { message }
+    return issue
 }

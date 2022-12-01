@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,57 +19,64 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
-import java.io.IOException
-import java.net.HttpURLConnection
 import java.time.Instant
 
-import kotlin.io.path.createTempDirectory
+import org.apache.logging.log4j.kotlin.Logging
 
-import okhttp3.Request
-
-import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.BuildConfig
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
-import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.unpackZip
+import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.unpackZip
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class Askalono(
+class Askalono internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : LocalScanner(name, scannerConfig, downloaderConfig) {
-    class Factory : AbstractScannerFactory<Askalono>("Askalono") {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
+    companion object : Logging
+
+    class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(scannerName, scannerConfig, downloaderConfig)
+            Askalono(name, scannerConfig)
     }
 
-    override val expectedVersion = "0.4.3"
+    override val name = "Askalono"
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val expectedVersion = BuildConfig.ASKALONO_VERSION
     override val configuration = ""
-    override val resultFileExt = "txt"
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "askalono.exe" else "askalono").joinToString(File.separator)
 
     override fun transformVersion(output: String) =
-        // "askalono --version" returns a string like "askalono 0.2.0-beta.1", so simply remove the prefix.
+        // The version string can be something like:
+        // askalono 0.2.0-beta.1
         output.removePrefix("askalono ")
 
     override fun bootstrap(): File {
+        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
+
+        if (unpackDir.resolve(command()).isFile) {
+            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
+            return unpackDir
+        }
+
         val platform = when {
             Os.isLinux -> "Linux"
             Os.isMac -> "macOS"
@@ -80,92 +87,68 @@ class Askalono(
         val archive = "askalono-$platform.zip"
         val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
 
-        log.info { "Downloading $scannerName from $url... " }
+        logger.info { "Downloading $name from $url... " }
+        val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
 
-        val request = Request.Builder().get().url(url).build()
+        logger.info { "Unpacking '$archive' to '$unpackDir'... " }
+        body.bytes().unpackZip(unpackDir)
 
-        return OkHttpClientHelper.execute(request).use { response ->
-            val body = response.body
-
-            if (response.code != HttpURLConnection.HTTP_OK || body == null) {
-                throw IOException("Failed to download $scannerName from $url.")
-            }
-
-            if (response.cacheResponse != null) {
-                log.info { "Retrieved $scannerName from local cache." }
-            }
-
-            val unpackDir = createTempDirectory("$ORT_NAME-$scannerName-$expectedVersion").toFile().apply {
-                deleteOnExit()
-            }
-
-            log.info { "Unpacking '$archive' to '$unpackDir'... " }
-            body.bytes().unpackZip(unpackDir)
-
-            unpackDir
-        }
+        return unpackDir
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
             scannerPath.absolutePath,
+            "--format", "json",
             "crawl", path.absolutePath
         )
 
         val endTime = Instant.now()
 
-        if (process.stderr.isNotBlank()) {
-            log.debug { process.stderr }
-        }
+        return with(process) {
+            if (stderr.isNotBlank()) logger.debug { stderr }
+            if (isError) throw ScanException(errorMessage)
 
-        with(process) {
-            if (isSuccess) {
-                stdoutFile.copyTo(resultsFile)
-                val result = getRawResult(resultsFile)
-                return generateSummary(startTime, endTime, path, result)
-            } else {
-                throw ScanException(errorMessage)
-            }
+            generateSummary(startTime, endTime, path, stdout)
         }
     }
 
-    override fun getRawResult(resultsFile: File): JsonNode {
-        if (!resultsFile.isFile || resultsFile.length() == 0L) return EMPTY_JSON_NODE
-
-        val yamlNodes = resultsFile.readLines().chunked(3) { (path, license, score) ->
-            val licenseNoOriginalText = license.substringBeforeLast(" (original text)")
-            val yamlString = listOf("Path: $path", licenseNoOriginalText, score).joinToString("\n")
-            yamlMapper.readTree(yamlString)
-        }
-
-        return yamlMapper.createArrayNode().apply { addAll(yamlNodes) }
-    }
-
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
 
-        result.mapTo(licenseFindings) {
-            val filePath = File(it["Path"].textValue())
-            LicenseFinding(
-                license = getSpdxLicenseIdString(it["License"].textValue()),
-                location = TextLocation(
-                    // Turn absolute paths in the native result into relative paths to not expose any information.
-                    relativizePath(scanPath, filePath),
-                    TextLocation.UNKNOWN_LINE
+        result.lines().forEach { line ->
+            val root = jsonMapper.readTree(line)
+            root["result"]?.let { result ->
+                val licenseFinding = LicenseFinding.createAndMap(
+                    license = result["license"]["name"].textValue(),
+                    location = TextLocation(
+                        // Turn absolute paths in the native result into relative paths to not expose any information.
+                        relativizePath(scanPath, File(root["path"].textValue())),
+                        TextLocation.UNKNOWN_LINE
+                    ),
+                    score = result["score"].floatValue(),
+                    detectedLicenseMapping = scannerConfig.detectedLicenseMapping
                 )
-            )
+
+                licenseFindings += licenseFinding
+            }
         }
 
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = result.size(),
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            issues = mutableListOf()
+            issues = listOf(
+                OrtIssue(
+                    source = name,
+                    message = "This scanner is not capable of detecting copyright statements.",
+                    severity = Severity.HINT
+                )
+            )
         )
     }
 }

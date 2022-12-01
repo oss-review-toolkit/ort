@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,7 +28,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
@@ -38,12 +37,11 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.Scope
-import org.ossreviewtoolkit.utils.Environment
 
 class ExcludesTest : WordSpec() {
     private val id = Identifier("type", "namespace", "name", "version")
 
-    private val pkg = CuratedPackage(pkg = Package.EMPTY.copy(id = id))
+    private val pkg = CuratedPackage(metadata = Package.EMPTY.copy(id = id))
 
     private val projectId1 = id.copy(name = "project1")
     private val projectId2 = id.copy(name = "project2")
@@ -55,7 +53,7 @@ class ExcludesTest : WordSpec() {
 
     private val pathExclude1 = PathExclude("path1", PathExcludeReason.BUILD_TOOL_OF, "")
     private val pathExclude2 = PathExclude("path2", PathExcludeReason.BUILD_TOOL_OF, "")
-    private val pathExclude3 = PathExclude("**.ext", PathExcludeReason.BUILD_TOOL_OF, "")
+    private val pathExclude3 = PathExclude("**/*.ext", PathExcludeReason.BUILD_TOOL_OF, "")
     private val pathExclude4 = PathExclude("**/file.ext", PathExcludeReason.BUILD_TOOL_OF, "")
 
     private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
@@ -68,14 +66,10 @@ class ExcludesTest : WordSpec() {
 
     private lateinit var ortResult: OrtResult
 
-    override fun beforeTest(testCase: TestCase) {
+    override suspend fun beforeEach(testCase: TestCase) {
         ortResult = OrtResult(
             repository = Repository.EMPTY,
-            analyzer = AnalyzerRun(
-                environment = Environment(),
-                config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = false),
-                result = AnalyzerResult.EMPTY
-            )
+            analyzer = AnalyzerRun.EMPTY
         )
     }
 
@@ -90,7 +84,7 @@ class ExcludesTest : WordSpec() {
 
     private fun setProjects(vararg projects: Project) {
         val packages = sortedSetOf<CuratedPackage>()
-        if (id in projects.flatMap { it.collectDependencies() }) packages += pkg
+        if (id in projects.flatMap { ortResult.dependencyNavigator.projectDependencies(it) }) packages += pkg
         val analyzerResult = ortResult.analyzer!!.result.copy(
             projects = projects.toSortedSet(),
             packages = packages
@@ -130,7 +124,7 @@ class ExcludesTest : WordSpec() {
             "return an empty list if there are no matching scope excludes" {
                 val excludes = Excludes(scopes = listOf(scopeExclude2))
 
-                excludes.findScopeExcludes(scope1) should beEmpty()
+                excludes.findScopeExcludes(scope1.name) should beEmpty()
             }
 
             "find the correct scope excludes" {
@@ -138,7 +132,7 @@ class ExcludesTest : WordSpec() {
                     scopes = listOf(scopeExclude1, scopeExclude2)
                 )
 
-                val scopeExcludes = excludes.findScopeExcludes(scope1)
+                val scopeExcludes = excludes.findScopeExcludes(scope1.name)
 
                 scopeExcludes should containExactly(scopeExclude1)
             }
@@ -482,19 +476,19 @@ class ExcludesTest : WordSpec() {
             "return true if the scope is excluded" {
                 val excludes = Excludes(scopes = listOf(scopeExclude1))
 
-                excludes.isScopeExcluded(scope1) shouldBe true
+                excludes.isScopeExcluded(scope1.name) shouldBe true
             }
 
             "return true if the scope is excluded using a regex" {
                 val excludes = Excludes(scopes = listOf(scopeExclude1.copy(pattern = "sc.*")))
 
-                excludes.isScopeExcluded(scope1) shouldBe true
+                excludes.isScopeExcluded(scope1.name) shouldBe true
             }
 
             "return false if the scope is not excluded" {
                 val excludes = Excludes()
 
-                excludes.isScopeExcluded(scope1) shouldBe false
+                excludes.isScopeExcluded(scope1.name) shouldBe false
             }
         }
     }

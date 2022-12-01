@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -51,7 +50,7 @@ data class ReporterInput(
     /**
      * A [PackageConfigurationProvider], can be used to obtain [PackageConfiguration]s for packages.
      */
-    val packageConfigurationProvider: PackageConfigurationProvider = SimplePackageConfigurationProvider.EMPTY,
+    val packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
 
     /**
      * A [ResolutionProvider], can be used to check which [OrtIssue]s and [RuleViolation]s are resolved.
@@ -74,8 +73,9 @@ data class ReporterInput(
     val licenseInfoResolver: LicenseInfoResolver = LicenseInfoResolver(
         provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
         copyrightGarbage = copyrightGarbage,
+        addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
         archiver = ortConfig.scanner.archive.createFileArchiver(),
-        licenseFilenamePatterns = ortConfig.licenseFilePatterns
+        licenseFilePatterns = ortConfig.licenseFilePatterns
     ),
 
     /**

@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/package-configuration.yml",
+  "title": "ORT package configuration",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to define path excludes and license finding curations for a specific package (dependency) and provenance in a package configuration file. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-package-configuration-yml.md.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "license_finding_curations": {
+      "items": {
+        "$ref": "#/definitions/licenseFindingCurations"
+      },
+      "type": "array"
+    },
+    "path_excludes": {
+      "items": {
+        "properties": {
+          "comment": {
+            "type": "string"
+          },
+          "pattern": {
+            "type": "string"
+          },
+          "reason": {
+            "$ref": "#/definitions/pathExcludeReason"
+          }
+        },
+        "required": [
+          "pattern",
+          "reason"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "vcs": {
+      "$ref": "#/definitions/vcsMatcher"
+    },
+    "source_artifact_url": {
+      "type": "string"
+    }
+  },
+  "definitions": {
+    "licenseFindingCurationReason": {
+      "enum": [
+        "CODE",
+        "DATA_OF",
+        "DOCUMENTATION_OF",
+        "INCORRECT",
+        "NOT_DETECTED",
+        "REFERENCE"
+      ]
+    },
+    "licenseFindingCurations": {
+      "properties": {
+        "comment": {
+          "type": "string"
+        },
+        "concluded_license": {
+          "type": "string"
+        },
+        "detected_license": {
+          "type": "string"
+        },
+        "line_count": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/licenseFindingCurationReason"
+        },
+        "start_lines": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "concluded_license",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "pathExcludeReason": {
+      "enum": [
+        "BUILD_TOOL_OF",
+        "DATA_FILE_OF",
+        "DOCUMENTATION_OF",
+        "EXAMPLE_OF",
+        "OPTIONAL_COMPONENT_OF",
+        "OTHER",
+        "PROVIDED_BY",
+        "TEST_OF",
+        "TEST_TOOL_OF"
+      ]
+    },
+    "vcsMatcher": {
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "url"
+          ]
+        },
+        {
+          "required": [
+            "revision"
+          ]
+        },
+        {
+          "required": [
+            "path"
+          ]
+        }
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "revision": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "required": [
+    "id"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "vcs"
+      ]
+    },
+    {
+      "required": [
+        "source_artifact_url"
+      ]
+    }
+  ]
+}

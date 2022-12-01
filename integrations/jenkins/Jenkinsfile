@@ -1,0 +1,654 @@
+/*
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * License-Filename: LICENSE
+ */
+
+import com.cloudbees.groovy.cps.NonCPS
+
+import java.io.IOException
+
+import org.jenkinsci.plugins.pipeline.modeldefinition.Utils
+
+final DOCKER_BUILD_ARGS = '--build-arg http_proxy=$http_proxy --build-arg https_proxy=$https_proxy'
+
+// Disable the entry point to work around https://issues.jenkins-ci.org/browse/JENKINS-51307.
+final DOCKER_RUN_ARGS = '-e http_proxy -e https_proxy --entrypoint=""'
+
+// The status code ORT commands return for failures (like rule violations), not errors (like existing output files).
+final ORT_FAILURE_STATUS_CODE = 2
+
+@NonCPS
+static sortProjectsByPathDepth(projects) {
+    return projects.toSorted { it.definition_file_path.count("/") }
+}
+
+def projectVcsCredentials = []
+def ortConfigVcsCredentials = []
+
+pipeline {
+    agent none
+
+    parameters {
+        /*
+         * Parameters about the project to run ORT on.
+         */
+
+        string(
+            name: 'PROJECT_VCS_URL',
+            description: 'The VCS clone URL of the project.',
+            defaultValue: 'https://github.com/vdurmont/semver4j.git'
+        )
+
+        string(
+            name: 'PROJECT_VCS_REVISION',
+            description: 'Optional VCS revision of the project (prefix Git tags with "refs/tags/").',
+            defaultValue: ''
+        )
+
+        credentials(
+            name: 'PROJECT_VCS_CREDENTIALS',
+            description: 'Optional Jenkins credentials to use for the VCS checkout.',
+            defaultValue: ''
+        )
+
+        /*
+         * General ORT parameters.
+         */
+
+        string(
+            name: 'ORT_CONFIG_VCS_URL',
+            description: 'Optional VCS clone URL of the ORT configuration.',
+            defaultValue: 'https://github.com/oss-review-toolkit/ort-config.git'
+        )
+
+        string(
+            name: 'ORT_CONFIG_VCS_REVISION',
+            description: 'Optional VCS revision of the ORT configuration (prefix Git tags with "refs/tags/").',
+            defaultValue: ''
+        )
+
+        credentials(
+            name: 'ORT_CONFIG_VCS_CREDENTIALS',
+            description: 'Optional Jenkins credentials to use for the VCS checkout.',
+            defaultValue: ''
+        )
+
+        choice(
+            name: 'LOG_LEVEL',
+            description: 'The logging level.',
+            choices: ['--info', '--debug', '--error', '--warn', '']
+        )
+
+        booleanParam(
+            name: 'STACKTRACE',
+            description: 'Show the stacktrace for all exceptions.',
+            defaultValue: false
+        )
+
+        /*
+         * ORT analyzer tool parameters.
+         */
+
+        booleanParam(
+            name: 'ALLOW_DYNAMIC_VERSIONS',
+            description: 'Allow dynamic versions of dependencies (support projects without lock files).',
+            defaultValue: false
+        )
+
+        booleanParam(
+            name: 'USE_CLEARLY_DEFINED_CURATIONS',
+            description: 'Use package curation data from the ClearlyDefined service.',
+            defaultValue: true
+        )
+
+        /*
+         * ORT scanner tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_SCANNER',
+            description: 'Run the scanner tool.',
+            defaultValue: true
+        )
+
+        booleanParam(
+            name: 'SKIP_CONCLUDED',
+            description: 'Enable to skip scanning packages that have a concluded license and authors set.',
+            defaultValue: true
+        )
+
+        choice(
+            name: 'PROJECT_SCANNER',
+            description: 'The scanner to use for project source code.',
+            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+        )
+
+        choice(
+            name: 'PACKAGE_SCANNER',
+            description: 'The scanner to use for package source code.',
+            choices: ['ScanCode', 'Askalono', 'BoyterLc', 'Licensee', 'ScanOSS', '<NONE>']
+        )
+
+        booleanParam(
+            name: 'USE_CLEARLY_DEFINED_SCAN_STORAGE',
+            description: 'Use the ClearlyDefined service to retrieve existing scan results. This overrides any other scan storage configuration.',
+            defaultValue: true
+        )
+
+        /*
+         * ORT advisor tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_ADVISOR',
+            description: 'Run the advisor tool. The OSV provider (https://osv.dev/) is enabled by default.',
+            defaultValue: true
+        )
+
+        string(
+            name: 'VULNERABLE_CODE_API_KEY',
+            description: 'Optional API key to enable VulnerableCode (see https://public.vulnerablecode.io/account/request_api_key/).',
+            defaultValue: ''
+        )
+
+        /*
+         * ORT evaluator tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_EVALUATOR',
+            description: 'Run the evaluator tool.',
+            defaultValue: true
+        )
+
+        /*
+         * ORT reporter tool parameters.
+         */
+
+        booleanParam(
+            name: 'RUN_REPORTER',
+            description: 'Run the reporter tool.',
+            defaultValue: true
+        )
+    }
+
+    stages {
+        stage('Configure pipeline') {
+            agent any
+
+            steps {
+                script {
+                    if (!params.PROJECT_VCS_CREDENTIALS.allWhitespace) {
+                        projectVcsCredentials += usernamePassword(credentialsId: params.PROJECT_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')
+                    }
+
+                    if (!params.ORT_CONFIG_VCS_CREDENTIALS.allWhitespace) {
+                        ortConfigVcsCredentials += usernamePassword(credentialsId: params.ORT_CONFIG_VCS_CREDENTIALS, usernameVariable: 'LOGIN', passwordVariable: 'PASSWORD')
+                    }
+                }
+            }
+        }
+
+        /*
+         * This is a "dummy" stage to build the Docker image explicitly (if needed) so that the time for building the
+         * image is not included in other stages.
+         */
+        stage('Build ORT Docker image') {
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                sh '''
+                    ORT_OPTIONS="$LOG_LEVEL"
+
+                    if [ "$STACKTRACE" = "true" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                    fi
+
+                    /opt/ort/bin/ort $ORT_OPTIONS --version
+                '''.trim()
+            }
+        }
+
+        stage('Clone project') {
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                PROJECT_DIR = "${env.HOME}/project"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    sh '''
+                        ORT_OPTIONS="$LOG_LEVEL"
+
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
+
+                        if [ -n "$PROJECT_VCS_REVISION" ]; then
+                            VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
+                        fi
+
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+
+                        rm -fr "$PROJECT_DIR"
+                        /opt/ort/bin/ort $ORT_OPTIONS download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
+
+                        rm -f $HOME/.netrc
+                    '''.trim()
+                }
+            }
+        }
+
+        stage('Clone ORT configuration') {
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            when {
+                beforeAgent true
+
+                expression {
+                    !params.ORT_CONFIG_VCS_URL.allWhitespace
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                ORT_DATA_DIR = "${env.HOME}/.ort"
+            }
+
+            steps {
+                withCredentials(ortConfigVcsCredentials) {
+                    sh '''
+                        ORT_OPTIONS="$LOG_LEVEL"
+
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
+
+                        if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
+                            VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
+                        fi
+
+                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+
+                        rm -fr $ORT_DATA_DIR/config
+                        /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+
+                        rm -f $HOME/.netrc
+                    '''.trim()
+                }
+            }
+        }
+
+        stage('Run ORT analyzer') {
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+                PROJECT_DIR = "${env.HOME}/project"
+            }
+
+            steps {
+                script {
+                    def status = sh returnStatus: true, script: '''
+                        ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
+
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
+
+                        if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
+                            USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
+                        fi
+
+                        /opt/ort/bin/set_gradle_proxy.sh
+
+                        rm -fr out/results
+                        /opt/ort/bin/ort $ORT_OPTIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
+                    '''.trim()
+
+                    if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
+                    else if (status != 0) error('Error executing the analyzer.')
+                }
+
+                sh 'ln -frs out/results/analyzer/analyzer-result.yml out/results/current-result.yml'
+
+                script {
+                    try {
+                        def result = readYaml file: 'out/results/analyzer/analyzer-result.yml'
+                        def projects = result.analyzer?.result?.projects
+
+                        if (projects) {
+                            // Determine the / a root project simply by sorting by path depth.
+                            def sortedProjects = sortProjectsByPathDepth(projects)
+
+                            // There is always at least one (unmanaged) project.
+                            def rootProjectId = sortedProjects.first().id
+
+                            currentBuild.displayName += ": $rootProjectId"
+                        }
+                    } catch (IOException e) {
+                        // Ignore and just skip setting a custom display name.
+                    }
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/analyzer/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT scanner') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_SCANNER
+                }
+            }
+
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            #!/usr/bin/env bash
+
+                            ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
+
+                            if [ "$USE_CLEARLY_DEFINED_SCAN_STORAGE" = "true" ]; then
+                                # Configure the default local file storage explicitly to be able to refer to it.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.localFiles.backend.localFileStorage.directory=$HOME/.ort/scanner/results"
+
+                                # Configure the ClearlyDefined remote storage.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.clearlyDefined.serverUrl=https://api.clearlydefined.io"
+
+                                # Take both storages into use.
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storageReaders=localFiles,clearlyDefined \
+                                    -P ort.scanner.storageWriters=localFiles"
+                            fi
+
+                            if [ "$STACKTRACE" = "true" ]; then
+                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                            fi
+
+                            PACKAGE_TYPES=(project package)
+
+                            if [ "$PROJECT_SCANNER" = "<NONE>" ]; then
+                                PACKAGE_TYPES=(${PACKAGE_TYPES[@]/project})
+                            else
+                                PROJECT_SCANNERS_OPTION="--project-scanners $PROJECT_SCANNER"
+                            fi
+
+                            if [ "$PACKAGE_SCANNER" = "<NONE>" ]; then
+                                PACKAGE_TYPES=(${PACKAGE_TYPES[@]/package})
+                            else
+                                SCANNERS_OPTION="--scanners $PACKAGE_SCANNER"
+                            fi
+
+                            PACKAGE_TYPES_OPTION=${PACKAGE_TYPES[@]}
+                            if [ -n "$PACKAGE_TYPES_OPTION" ]; then
+                                PACKAGE_TYPES_OPTION=${PACKAGE_TYPES_OPTION// /,}
+                                PACKAGE_TYPES_OPTION="--package-types $PACKAGE_TYPES_OPTION"
+
+                                echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+
+                                /opt/ort/bin/ort $ORT_OPTIONS scan \
+                                    -i out/results/current-result.yml \
+                                    -o out/results/scanner \
+                                    $PACKAGE_TYPES_OPTION \
+                                    $PROJECT_SCANNERS_OPTION \
+                                    $SCANNERS_OPTION
+
+                                rm -f $HOME/.netrc
+                            fi
+                        '''.trim()
+
+                        switch (status) {
+                            case 0: if (!fileExists('out/results/scanner/scan-result.yml')) {
+                                sh '''
+                                    mkdir -p out/results/scanner
+                                    cp out/results/current-result.yml out/results/scanner/scan-result.yml
+                                '''.trim()
+
+                                Utils.markStageSkippedForConditional('Run ORT scanner')
+                            }
+
+                            case { it >= ORT_FAILURE_STATUS_CODE }: unstable('Scanner issues found.')
+
+                            default: error('Error executing the scanner.')
+                        }
+                    }
+
+                    sh 'ln -frs out/results/scanner/scan-result.yml out/results/current-result.yml'
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/scanner/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT advisor') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_ADVISOR
+                }
+            }
+
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            ORT_OPTIONS="$LOG_LEVEL"
+
+                            if [ "$STACKTRACE" = "true" ]; then
+                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                            fi
+
+                            ADVISOR_OPTIONS="-a OSV"
+
+                            if [ -n "$VULNERABLE_CODE_API_KEY" ]; then
+                                ORT_OPTIONS="$ORT_OPTIONS -P ort.advisor.vulnerableCode.apiKey=$VULNERABLE_CODE_API_KEY"
+                                ADVISOR_OPTIONS="$ADVISOR_OPTIONS,VulnerableCode"
+                            fi
+
+                            /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
+                        '''.trim()
+
+                        if (status >= ORT_FAILURE_STATUS_CODE) unstable('Advisor issues found.')
+                        else if (status != 0) error('Error executing the advisor.')
+                    }
+
+                    sh 'ln -frs out/results/advisor/advisor-result.yml out/results/current-result.yml'
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/advisor/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT evaluator') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_EVALUATOR
+                }
+            }
+
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                withCredentials(projectVcsCredentials) {
+                    script {
+                        def status = sh returnStatus: true, script: '''
+                            ORT_OPTIONS="$LOG_LEVEL"
+
+                            if [ "$STACKTRACE" = "true" ]; then
+                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                            fi
+
+                            /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl.rules.kts -o out/results/evaluator
+                        '''.trim()
+
+                        if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
+                        else if (status != 0) error('Error executing the evaluator.')
+                    }
+
+                    sh 'ln -frs out/results/evaluator/evaluation-result.yml out/results/current-result.yml'
+                }
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/evaluator/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+
+        stage('Run ORT reporter') {
+            when {
+                beforeAgent true
+
+                expression {
+                    params.RUN_REPORTER
+                }
+            }
+
+            agent {
+                dockerfile {
+                    filename 'docker/legacy/Dockerfile'
+                    additionalBuildArgs DOCKER_BUILD_ARGS
+                    args DOCKER_RUN_ARGS
+                }
+            }
+
+            environment {
+                HOME = "${env.WORKSPACE}@tmp"
+            }
+
+            steps {
+                sh '''
+                    ORT_OPTIONS="$LOG_LEVEL"
+
+                    if [ "$STACKTRACE" = "true" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                    fi
+
+                    /opt/ort/bin/ort $ORT_OPTIONS report \
+                        -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp \
+                        -O NoticeTemplate=template.id=default,summary \
+                        -i out/results/current-result.yml \
+                        -o out/results/reporter
+                '''.trim()
+            }
+
+            post {
+                always {
+                    archiveArtifacts(
+                        artifacts: 'out/results/reporter/*',
+                        fingerprint: true
+                    )
+                }
+            }
+        }
+    }
+}

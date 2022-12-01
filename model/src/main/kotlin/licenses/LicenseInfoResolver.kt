@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,9 +20,6 @@
 package org.ossreviewtoolkit.model.licenses
 
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ConcurrentMap
-
-import kotlin.io.path.createTempDirectory
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
@@ -33,40 +30,42 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
-import org.ossreviewtoolkit.model.config.LicenseFilenamePatterns
+import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.prependPath
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.ORT_NAME
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 class LicenseInfoResolver(
-    val provider: LicenseInfoProvider,
-    val copyrightGarbage: CopyrightGarbage,
+    private val provider: LicenseInfoProvider,
+    private val copyrightGarbage: CopyrightGarbage,
+    val addAuthorsToCopyrights: Boolean,
     val archiver: FileArchiver?,
-    val licenseFilenamePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT
+    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT
 ) {
-    private val resolvedLicenseInfo: ConcurrentMap<Identifier, ResolvedLicenseInfo> = ConcurrentHashMap()
-    private val resolvedLicenseFiles: ConcurrentMap<Identifier, ResolvedLicenseFileInfo> = ConcurrentHashMap()
+    private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
+    private val resolvedLicenseFiles = ConcurrentHashMap<Identifier, ResolvedLicenseFileInfo>()
     private val rootLicenseMatcher = RootLicenseMatcher(
-        licenseFilenamePatterns = licenseFilenamePatterns.copy(rootLicenseFilenames = emptyList())
+        licenseFilePatterns = licenseFilePatterns.copy(rootLicenseFilenames = emptyList())
     )
-    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilenamePatterns))
+    private val findingsMatcher = FindingsMatcher(RootLicenseMatcher(licenseFilePatterns))
 
     /**
      * Get the [ResolvedLicenseInfo] for the project or package identified by [id].
      */
-    fun resolveLicenseInfo(id: Identifier) = resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
+    fun resolveLicenseInfo(id: Identifier): ResolvedLicenseInfo =
+        resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
 
     /**
      * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id]. Requires an [archiver] to be
      * configured, otherwise always returns empty results.
      */
-    fun resolveLicenseFiles(id: Identifier) = resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
+    fun resolveLicenseFiles(id: Identifier): ResolvedLicenseFileInfo =
+        resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
 
     private fun createLicenseInfo(id: Identifier): ResolvedLicenseInfo {
         val licenseInfo = provider.get(id)
@@ -82,8 +81,8 @@ class LicenseInfoResolver(
         // Handle concluded licenses.
         concludedLicenses.forEach { license ->
             license.builder().apply {
-                licenseInfo.concludedLicenseInfo.concludedLicense?.let {
-                    originalExpressions[LicenseSource.CONCLUDED] = setOf(it)
+                licenseInfo.concludedLicenseInfo.concludedLicense?.also {
+                    originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.CONCLUDED)
                 }
             }
         }
@@ -91,28 +90,32 @@ class LicenseInfoResolver(
         // Handle declared licenses.
         declaredLicenses.forEach { license ->
             license.builder().apply {
-                licenseInfo.declaredLicenseInfo.processed.spdxExpression?.let {
-                    originalExpressions[LicenseSource.DECLARED] = setOf(it)
+                licenseInfo.declaredLicenseInfo.processed.spdxExpression?.also {
+                    originalExpressions += ResolvedOriginalExpression(expression = it, source = LicenseSource.DECLARED)
                 }
 
-                originalDeclaredLicenses.addAll(
-                    licenseInfo.declaredLicenseInfo.processed.mapped.filterValues { it == license }.keys
-                )
+                originalDeclaredLicenses += licenseInfo.declaredLicenseInfo.processed.mapped.filterValues {
+                    it == license
+                }.keys
 
-                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() }?.let {
-                    locations.add(ResolvedLicenseLocation(
+                licenseInfo.declaredLicenseInfo.authors.takeIf { it.isNotEmpty() && addAuthorsToCopyrights }?.also {
+                    locations += ResolvedLicenseLocation(
                         provenance = UnknownProvenance,
                         location = UNDEFINED_TEXT_LOCATION,
                         appliedCuration = null,
                         matchingPathExcludes = emptyList(),
-                        copyrights = licenseInfo.declaredLicenseInfo.authors.mapTo(mutableSetOf()) {
+                        copyrights = it.mapTo(mutableSetOf()) { author ->
+                            val statement = "Copyright (C) $author".takeUnless {
+                                author.contains("Copyright", ignoreCase = true)
+                            } ?: author
+
                             ResolvedCopyrightFinding(
-                                statement = "$COPYRIGHT_PREFIX $it",
+                                statement = statement,
                                 location = UNDEFINED_TEXT_LOCATION,
                                 matchingPathExcludes = emptyList()
                             )
                         }
-                    ))
+                    )
                 }
             }
         }
@@ -124,13 +127,30 @@ class LicenseInfoResolver(
 
         val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
         val resolvedLocations = resolveLocations(filteredDetectedLicenseInfo, unmatchedCopyrights)
+        val detectedLicenses = licenseInfo.detectedLicenseInfo.findings.flatMapTo(mutableSetOf()) { findings ->
+            FindingCurationMatcher().applyAll(
+                findings.licenses,
+                findings.licenseFindingCurations,
+                findings.relativeFindingsPath
+            ).mapNotNull { curationResult ->
+                val licenseFinding = curationResult.curatedFinding ?: return@mapNotNull null
+
+                licenseFinding.license to findings.pathExcludes.any { pathExclude ->
+                    pathExclude.matches(licenseFinding.location.prependPath(findings.relativeFindingsPath))
+                }
+            }
+        }.groupBy(keySelector = { it.first }, valueTransform = { it.second }).mapValues { (_, excluded) ->
+            excluded.all { it }
+        }
 
         resolvedLocations.keys.forEach { license ->
             license.builder().apply {
-                resolvedLocations[license]?.let { locations.addAll(it) }
+                resolvedLocations[license]?.also { locations += it }
 
-                licenseInfo.detectedLicenseInfo.findings.forEach { findings ->
-                    originalExpressions[LicenseSource.DETECTED] = findings.licenses.mapTo(mutableSetOf()) { it.license }
+                originalExpressions += detectedLicenses.entries.filter { (expression, _) ->
+                    license in expression.decompose()
+                }.map { (expression, isDetectedExcluded) ->
+                    ResolvedOriginalExpression(expression, LicenseSource.DETECTED, isDetectedExcluded)
                 }
             }
         }
@@ -235,7 +255,7 @@ class LicenseInfoResolver(
         licenseInfo.flatMapTo(mutableSetOf()) { resolvedLicense ->
             resolvedLicense.locations.map { it.provenance }
         }.forEach { provenance ->
-            val archiveDir = createTempDirectory("$ORT_NAME-archive").toFile().apply { deleteOnExit() }
+            val archiveDir = createOrtTempDir("archive").apply { deleteOnExit() }
 
             when (provenance) {
                 is UnknownProvenance -> return@forEach
@@ -265,12 +285,11 @@ class LicenseInfoResolver(
 }
 
 private class ResolvedLicenseBuilder(val license: SpdxSingleLicenseExpression) {
-    var originalDeclaredLicenses = mutableSetOf<String>()
-    var originalExpressions = mutableMapOf<LicenseSource, Set<SpdxExpression>>()
-    var locations = mutableSetOf<ResolvedLicenseLocation>()
+    val originalDeclaredLicenses = mutableSetOf<String>()
+    val originalExpressions = mutableSetOf<ResolvedOriginalExpression>()
+    val locations = mutableSetOf<ResolvedLicenseLocation>()
 
     fun build() = ResolvedLicense(license, originalDeclaredLicenses, originalExpressions, locations)
 }
 
 private val UNDEFINED_TEXT_LOCATION = TextLocation(".", TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
-private const val COPYRIGHT_PREFIX = "Copyright (C)"

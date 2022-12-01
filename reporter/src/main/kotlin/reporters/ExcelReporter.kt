@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,16 +45,16 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.reporter.ReportTableModel.ProjectTable
+import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
+import org.ossreviewtoolkit.reporter.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
+import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_MAP_COMPARATOR
+import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.ProjectTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModel.SummaryTable
-import org.ossreviewtoolkit.reporter.utils.ReportTableModelMapper
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_LIST_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.SCOPE_EXCLUDE_MAP_COMPARATOR
-import org.ossreviewtoolkit.reporter.utils.containsUnresolved
-import org.ossreviewtoolkit.utils.isValidUri
+import org.ossreviewtoolkit.utils.common.isValidUri
 
 private const val OPTION_EXTRA_COLUMNS = "extraColumns"
 
@@ -67,19 +67,24 @@ private const val OPTION_EXTRA_COLUMNS = "extraColumns"
  * - *extraColumns*: A comma separated list of columns that are added to each sheet.
  */
 class ExcelReporter : Reporter {
-    override val reporterName = "Excel"
+    override val name = "Excel"
 
     private val reportFilename = "scan-report.xlsx"
 
     private val defaultColumns = 5
 
-    private val colorMap = DefaultIndexedColorMap()
-    private val borderColor = XSSFColor(Color(211, 211, 211), colorMap)
-    private val errorColor = XSSFColor(Color(240, 128, 128), colorMap)
-    private val excludedColor = XSSFColor(Color(180, 180, 180), colorMap)
-    private val excludedFontColor = XSSFColor(Color(100, 100, 100), colorMap)
-    private val successColor = XSSFColor(Color(173, 216, 230), colorMap)
-    private val warningColor = XSSFColor(Color(255, 255, 224), colorMap)
+    private val colors by lazy {
+        object {
+            private val colorMap = DefaultIndexedColorMap()
+
+            val border = XSSFColor(Color(211, 211, 211), colorMap)
+            val error = XSSFColor(Color(240, 128, 128), colorMap)
+            val excluded = XSSFColor(Color(180, 180, 180), colorMap)
+            val excludedFont = XSSFColor(Color(100, 100, 100), colorMap)
+            val success = XSSFColor(Color(173, 216, 230), colorMap)
+            val warning = XSSFColor(Color(255, 255, 224), colorMap)
+        }
+    }
 
     private lateinit var defaultStyle: CellStyle
     private lateinit var excludedStyle: CellStyle
@@ -117,7 +122,7 @@ class ExcelReporter : Reporter {
             wrapText = true
 
             setBorder(BorderStyle.THIN)
-            setBorderColor(borderColor)
+            setBorderColor(colors.border)
         }
 
         defaultFont = workbook.createFont().apply {
@@ -131,7 +136,7 @@ class ExcelReporter : Reporter {
 
         excludedFont = workbook.createFont().apply {
             fontHeightInPoints = 11
-            setColor(excludedFontColor)
+            setColor(colors.excludedFont)
         }
 
         headerStyle = workbook.createCellStyle().apply {
@@ -141,25 +146,25 @@ class ExcelReporter : Reporter {
 
         successStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(successColor)
+            setFillForegroundColor(colors.success)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         warningStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(warningColor)
+            setFillForegroundColor(colors.warning)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         errorStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(errorColor)
+            setFillForegroundColor(colors.error)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
         excludedStyle = workbook.createCellStyle().apply {
             cloneStyleFrom(defaultStyle)
-            setFillForegroundColor(excludedColor)
+            setFillForegroundColor(colors.excluded)
             fillPattern = FillPatternType.SOLID_FOREGROUND
         }
 
@@ -204,6 +209,7 @@ class ExcelReporter : Reporter {
 
         var currentRow = 0
 
+        @Suppress("UnnecessaryApply")
         sheet.createRow(currentRow).apply {
             CellUtil.createCell(this, 0, "Labels", headerStyle)
         }
@@ -274,7 +280,7 @@ class ExcelReporter : Reporter {
                     }
             }
 
-            val scopesLines = row.scopes.size + row.scopes.toList().sumBy { it.second.size } +
+            val scopesLines = row.scopes.size + row.scopes.toList().sumOf { it.second.size } +
                     row.scopes.flatMap { it.value.values }.size
 
             val analyzerIssuesText = buildString {
@@ -366,7 +372,7 @@ class ExcelReporter : Reporter {
             sheet.createRow(currentRow++).apply {
                 createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
-                createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 2, row.declaredLicenses.map { it.license }.joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.map { it.license }.joinToString(" \n"), font, cellStyle)
                 createCell(this, 4, row.analyzerIssues.joinToString(" \n") { it.description }, font, cellStyle)
                 createCell(this, 5, row.scanIssues.joinToString(" \n") { it.description }, font, cellStyle)
@@ -406,6 +412,7 @@ class ExcelReporter : Reporter {
 
         var rows = 2
 
+        @Suppress("UnnecessaryApply")
         sheet.createRow(++rows).apply {
             CellUtil.createCell(this, 0, "VCS", headerStyle)
         }
@@ -473,7 +480,7 @@ private const val MAX_SENSITIVE_SHEET_NAME_LEN = 31
 
 internal fun createUniqueSheetName(workbook: XSSFWorkbook, name: String): String {
     fun isSheetNameTaken(workbook: XSSFWorkbook, name: String) =
-        name.toLowerCase() in Sequence { workbook.sheetIterator() }.map { it.sheetName.toLowerCase() }
+        name.lowercase() in Sequence { workbook.sheetIterator() }.map { it.sheetName.lowercase() }
 
     var uniqueName = WorkbookUtil.createSafeSheetName(name)
     var i = 0

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,23 +22,23 @@ package org.ossreviewtoolkit.evaluator
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 
 class DependencyRuleTest : WordSpec() {
-    private val ruleSet = RuleSet(ortResult)
+    private val ruleSet = ruleSet(ortResult)
 
     private fun createRule(pkg: Package, dependency: PackageReference) =
         DependencyRule(
             ruleSet = ruleSet,
             name = "test",
-            pkg = pkg,
-            curations = emptyList(),
+            pkg = CuratedPackage(pkg),
             resolvedLicenseInfo = ruleSet.licenseInfoResolver.resolveLicenseInfo(pkg.id),
             dependency = dependency,
             ancestors = emptyList(),
             level = 0,
-            scope = scopeIncluded,
+            scopeName = scopeIncluded.name,
             project = projectIncluded
         )
 

@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonSubTypes
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
-import org.ossreviewtoolkit.utils.storage.FileStorage
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
  * Root of a class hierarchy for configuration classes for scan storage implementations.
@@ -40,7 +41,7 @@ import org.ossreviewtoolkit.utils.storage.FileStorage
     Type(PostgresStorageConfiguration::class),
     Type(Sw360StorageConfiguration::class)
 )
-sealed class ScanStorageConfiguration
+sealed interface ScanStorageConfiguration
 
 /**
  * The configuration model of a storage based on ClearlyDefined.
@@ -50,7 +51,7 @@ data class ClearlyDefinedStorageConfiguration(
      * The URL of the ClearlyDefined server.
      */
     val serverUrl: String
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
 
 /**
  * The configuration model of a file based storage.
@@ -59,63 +60,28 @@ data class FileBasedStorageConfiguration(
     /**
      * The configuration of the [FileStorage] used to store the files.
      */
-    val backend: FileStorageConfiguration
-) : ScanStorageConfiguration()
+    val backend: FileStorageConfiguration,
+
+    /**
+     * The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED].
+     */
+    val type: StorageType = StorageType.PROVENANCE_BASED
+) : ScanStorageConfiguration
 
 /**
  * A class to hold the configuration for using Postgres as a storage.
  */
 data class PostgresStorageConfiguration(
     /**
-     * The database URL in JDBC format.
+     * The configuration of the PostgreSQL database.
      */
-    val url: String,
+    val connection: PostgresConnection,
 
     /**
-     * The name of the database to use.
+     * The way that scan results are stored, defaults to [StorageType.PROVENANCE_BASED].
      */
-    val schema: String,
-
-    /**
-     * The username to use for authentication.
-     */
-    val username: String,
-
-    /**
-     * The password to use for authentication.
-     */
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String = "",
-
-    /**
-     * The SSL mode to use, one of "disable", "allow", "prefer", "require", "verify-ca" or "verify-full".
-     * See: https://jdbc.postgresql.org/documentation/head/ssl-client.html
-     */
-    val sslmode: String = "verify-full",
-
-    /**
-     * The full path of the certificate file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslcert: String? = null,
-
-    /**
-     * The full path of the key file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslkey: String? = null,
-
-    /**
-     * The full path of the root certificate file.
-     * See: https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-    val sslrootcert: String? = null
-
-    /**
-     * TODO: Make additional parameters configurable, see:
-     *       https://jdbc.postgresql.org/documentation/head/connect.html
-     */
-) : ScanStorageConfiguration()
+    val type: StorageType = StorageType.PROVENANCE_BASED
+) : ScanStorageConfiguration
 
 /**
  * A class to hold the configuration for SW360.
@@ -143,7 +109,7 @@ data class Sw360StorageConfiguration(
     val password: String = "",
 
     /**
-     * The client ID of the SW360 instance for the two step authentication.
+     * The client ID of the SW360 instance for the two-step authentication.
      */
     val clientId: String,
 
@@ -159,4 +125,19 @@ data class Sw360StorageConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val token: String = ""
-) : ScanStorageConfiguration()
+) : ScanStorageConfiguration
+
+/**
+ * An enum to describe different types of storages.
+ */
+enum class StorageType {
+    /**
+     * A storage that stores scan results by [Package].
+     */
+    PACKAGE_BASED,
+
+    /**
+     * A storage that stores scan results by [Provenance].
+     */
+    PROVENANCE_BASED
+}

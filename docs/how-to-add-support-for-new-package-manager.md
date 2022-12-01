@@ -26,7 +26,7 @@ You can't say the same for `package.json` as there are multiple package managers
 
 __2. How can you get the declared license for a pnpm package?__
 
-The pnpm package manager is part of Node.js ecosystem so it has package.json and
+The pnpm package manager is part of Node.js ecosystem, so it has package.json and
 uses npmjs.com as its central package repository.
 
 __3. How can one get the dependency tree including package names, versions?__
@@ -41,7 +41,7 @@ __5. How can one separate code dependencies from build/test ones in pnpm?__
 
 Npmne.com has same scopes as `npm` and `yarn` - `dependencies` amd `devDependencies` 
 
-__6. Can you provide you provide some pnpm projects to test implementation?__
+__6. Can you provide some pnpm projects to test implementation?__
 
 > https://github.com/zkochan/packages/tree/2cb8e0072168869e86d8a81206330352455746cd/rename-overwrite
 

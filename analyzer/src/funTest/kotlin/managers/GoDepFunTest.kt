@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,10 +32,9 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.Ci
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -46,7 +45,8 @@ class GoDepFunTest : WordSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
-    private val gitHubProject = normalizedVcsUrl.substringAfter("://").substringBefore(".git")
+    private val gitHubProject = normalizedVcsUrl.replaceCredentialsInUri()
+        .substringAfter("://").substringBefore(".git")
 
     init {
         "GoDep" should {
@@ -82,12 +82,9 @@ class GoDepFunTest : WordSpec() {
                 }
             }
 
-            // Disabled on Azure Windows because it fails for unknown reasons.
-            "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set".config(
-                enabled = !Ci.isAzureWindows
-            ) {
+            "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
                 val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(ignoreToolVersions = false, allowDynamicVersions = true)
+                val config = AnalyzerConfiguration(allowDynamicVersions = true)
                 val result = createGoDep(config).resolveSingleProject(manifestFile)
 
                 with(result) {
@@ -150,6 +147,6 @@ class GoDepFunTest : WordSpec() {
         }
     }
 
-    private fun createGoDep(config: AnalyzerConfiguration = DEFAULT_ANALYZER_CONFIGURATION) =
-        GoDep("GoDep", USER_DIR, config, DEFAULT_REPOSITORY_CONFIGURATION)
+    private fun createGoDep(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
+        GoDep("GoDep", USER_DIR, config, RepositoryConfiguration())
 }

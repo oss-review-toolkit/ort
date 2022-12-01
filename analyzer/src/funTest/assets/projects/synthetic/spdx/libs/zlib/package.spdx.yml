@@ -1,0 +1,27 @@
+SPDXID: "SPDXRef-DOCUMENT"
+spdxVersion: "SPDX-2.2"
+creationInfo:
+  created: "2021-03-05T13:43:22Z"
+  creators:
+  - "Organization: Robert Bosch GmbH"
+name: "zlib-1.2.11"
+dataLicense: "CC0-1.0"
+documentNamespace: "http://spdx.org/spdxdocs/spdx-document-zlib"
+documentDescribes:
+- "SPDXRef-Package-zlib"
+packages:
+- SPDXID: "SPDXRef-Package-zlib"
+  description: "zlib 1.2.11 is a general purpose data compression library."
+  copyrightText: "(C) 1995-2017 Jean-loup Gailly and Mark Adler"
+  downloadLocation: "http://zlib.net/zlib-1.2.11.tar.gz"
+  externalRefs:
+  - referenceCategory: "SECURITY"
+    referenceLocator: "cpe:/a:compress:zlib:1.2.11:::en-us"
+    referenceType: "cpe22Type"
+  filesAnalyzed: false
+  homepage: "http://zlib.net"
+  licenseConcluded: "NOASSERTION"
+  licenseDeclared: "Zlib"
+  name: "zlib"
+  versionInfo: "1.2.11"
+  originator: "Person: Mark Adler, Jean-loup Gailly"

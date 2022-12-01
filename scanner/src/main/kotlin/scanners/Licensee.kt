@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,42 +19,46 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import java.io.File
 import java.time.Instant
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readJsonFile
-import org.ossreviewtoolkit.scanner.AbstractScannerFactory
-import org.ossreviewtoolkit.scanner.LocalScanner
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
+import org.ossreviewtoolkit.scanner.BuildConfig
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
+import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
-import org.ossreviewtoolkit.spdx.calculatePackageVerificationCode
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class Licensee(
+class Licensee internal constructor(
     name: String,
-    scannerConfig: ScannerConfiguration,
-    downloaderConfig: DownloaderConfiguration
-) : LocalScanner(name, scannerConfig, downloaderConfig) {
-    class Factory : AbstractScannerFactory<Licensee>("Licensee") {
-        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(scannerName, scannerConfig, downloaderConfig)
-    }
-
-    companion object {
+    private val scannerConfig: ScannerConfiguration
+) : CommandLinePathScannerWrapper(name) {
+    companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
 
-    override val expectedVersion = "9.13.0"
+    class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
+        override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
+            Licensee(name, scannerConfig)
+    }
+
+    override val name = "Licensee"
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
+    override val expectedVersion = BuildConfig.LICENSEE_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
-    override val resultFileExt = "json"
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
@@ -64,13 +68,6 @@ class Licensee(
     override fun bootstrap(): File {
         val gem = if (Os.isWindows) "gem.cmd" else "gem"
 
-        if (Os.isWindows) {
-            // Version 0.28.0 of rugged broke building on Windows and the fix is unreleased yet, see
-            // https://github.com/libgit2/rugged/commit/2f5a8f6c8f4ae9b94a2d1f6ffabc315f2592868d. So install the latest
-            // version < 0.28.0 (and => 0.24.0) manually to satisfy Licensee's needs.
-            ProcessCapture(gem, "install", "rugged", "-v", "0.27.10.1").requireSuccess()
-        }
-
         ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
 
         val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
@@ -79,7 +76,7 @@ class Licensee(
         return File(userDir, "bin")
     }
 
-    override fun scanPathInternal(path: File, resultsFile: File): ScanSummary {
+    override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val process = ProcessCapture(
@@ -91,47 +88,47 @@ class Licensee(
 
         val endTime = Instant.now()
 
-        if (process.stderr.isNotBlank()) {
-            log.debug { process.stderr }
-        }
+        return with(process) {
+            if (stderr.isNotBlank()) logger.debug { stderr }
+            if (isError) throw ScanException(errorMessage)
 
-        with(process) {
-            if (isSuccess) {
-                stdoutFile.copyTo(resultsFile)
-                val result = getRawResult(resultsFile)
-                return generateSummary(startTime, endTime, path, result)
-            } else {
-                throw ScanException(errorMessage)
-            }
+            generateSummary(startTime, endTime, path, stdout)
         }
     }
 
-    override fun getRawResult(resultsFile: File) = readJsonFile(resultsFile)
-
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: JsonNode): ScanSummary {
-        val matchedFiles = result["matched_files"]
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
         val licenseFindings = sortedSetOf<LicenseFinding>()
+
+        val json = jsonMapper.readTree(result)
+        val matchedFiles = json["matched_files"]
 
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())
-            LicenseFinding(
-                license = getSpdxLicenseIdString(it["matched_license"].textValue()),
+            LicenseFinding.createAndMap(
+                license = it["matched_license"].textValue(),
                 location = TextLocation(
                     // The path is already relative.
                     filePath.path,
                     TextLocation.UNKNOWN_LINE
-                )
+                ),
+                score = it["matcher"]["confidence"].floatValue(),
+                detectedLicenseMapping = scannerConfig.detectedLicenseMapping
             )
         }
 
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            fileCount = matchedFiles.count(),
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
-            issues = mutableListOf()
+            issues = listOf(
+                OrtIssue(
+                    source = name,
+                    message = "This scanner is not capable of detecting copyright statements.",
+                    severity = Severity.HINT
+                )
+            )
         )
     }
 }

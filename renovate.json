@@ -1,0 +1,35 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "docker:disable"
+  ],
+  "batect": {
+    "enabled": false
+  },
+  "ignoreDeps": [
+    "org.eclipse.sw360:client"
+  ],
+  "ignorePaths": [
+    "reporter-web-app",
+    "**/src/funTest/assets/**",
+    "**/src/test/assets/**"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.apache.maven.resolver:maven-resolver-connector-basic",
+        "org.apache.maven.resolver:maven-resolver-transport-file",
+        "org.apache.maven.resolver:maven-resolver-transport-http",
+        "org.apache.maven.resolver:maven-resolver-transport-wagon"
+      ],
+      "allowedVersions": "< 1.8.0"
+    },
+    {
+      "matchPackageNames": [
+        "org.springframework:spring-core"
+      ],
+      "allowedVersions": "< 6.0.0"
+    }
+  ]
+}

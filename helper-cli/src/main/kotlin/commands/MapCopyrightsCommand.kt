@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,10 +25,10 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.utils.processAllCopyrightStatements
+import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MapCopyrightsCommand : CliktCommand(
     help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +
@@ -50,8 +50,8 @@ internal class MapCopyrightsCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
         .required()
 
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file",
         help = "The ORT file utilized for mapping the processed to unprocessed statements."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -59,15 +59,9 @@ internal class MapCopyrightsCommand : CliktCommand(
         .required()
 
     override fun run() {
-        val processedCopyrightStatements = inputCopyrightGarbageFile
-            .expandTilde()
-            .readText()
-            .lines()
-            .filterNot { it.isBlank() }
+        val processedCopyrightStatements = inputCopyrightGarbageFile.readLines().filterNot { it.isBlank() }
 
-        val unprocessedCopyrightStatements = ortResultFile
-            .expandTilde()
-            .readValue<OrtResult>()
+        val unprocessedCopyrightStatements = readOrtResult(ortFile)
             .getUnprocessedCopyrightStatements(processedCopyrightStatements)
 
         outputCopyrightsFile.writeText(unprocessedCopyrightStatements.joinToString(separator = "\n"))
@@ -79,7 +73,7 @@ private fun OrtResult.getUnprocessedCopyrightStatements(processedStatements: Col
 
     processAllCopyrightStatements().forEach {
         it.rawStatements.forEach { unprocessedStatement ->
-            processedToUnprocessed.getOrPut(it.statement, { mutableSetOf() }) += unprocessedStatement
+            processedToUnprocessed.getOrPut(it.statement) { mutableSetOf() } += unprocessedStatement
         }
     }
 

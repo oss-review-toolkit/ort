@@ -1,0 +1,28 @@
+query IssuesQuery($repo_owner: String!, $repo_name: String!, $page_size: Int!, $cursor: String) {
+    repository(owner: $repo_owner, name: $repo_name) {
+        issues(first: $page_size, after: $cursor, orderBy: { field: CREATED_AT, direction: DESC }) {
+            edges {
+                node {
+                    title
+                    url
+                    bodyText
+                    closed
+                    closedAt
+                    createdAt
+                    lastEditedAt
+                    labels(first: 100) {
+                        edges {
+                            node {
+                                name
+                            }
+                        }
+                    }
+                }
+            }
+            pageInfo {
+                endCursor
+                hasNextPage
+            }
+        }
+    }
+}

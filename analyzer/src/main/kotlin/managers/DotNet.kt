@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -30,17 +29,21 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
-import org.ossreviewtoolkit.analyzer.managers.utils.resolveNuGetDependencies
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
  * embed NuGet package configuration.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *directDependenciesOnly*: If true, only direct dependencies are reported. Defaults to false.
  */
 class DotNet(
     name: String,
@@ -55,13 +58,19 @@ class DotNet(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = DotNet(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = DotNet(name, analysisRoot, analyzerConfig, repoConfig)
     }
+
+    private val directDependenciesOnly = options[OPTION_DIRECT_DEPENDENCIES_ONLY].toBoolean()
 
     private val reader = DotNetPackageFileReader()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> =
-        listOf(resolveNuGetDependencies(definitionFile, reader, NuGetSupport.create(definitionFile)))
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
+        val support = NuGetSupport(managerName, analysisRoot, reader)
+        val projectAnalyzerResult = support.resolveDependencies(definitionFile, directDependenciesOnly)
+
+        return listOf(projectAnalyzerResult)
+    }
 }
 
 /**
@@ -70,30 +79,61 @@ class DotNet(
  */
 class DotNetPackageFileReader : XmlPackageFileReader {
     @JsonIgnoreProperties(ignoreUnknown = true)
+    private data class PropertyGroup(
+        @JsonProperty(value = "TargetFramework")
+        val targetFramework: String?,
+        @JsonProperty(value = "TargetFrameworks")
+        val targetFrameworks: String?
+    )
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
     private data class ItemGroup(
+        @JacksonXmlProperty(isAttribute = true, localName = "Condition")
+        val condition: String?,
         @JsonProperty(value = "PackageReference")
         @JacksonXmlElementWrapper(useWrapping = false)
-        val packageReference: List<PackageReference>?
+        val packageReferences: List<PackageReference>?
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private data class PackageReference(
+        @JacksonXmlProperty(isAttribute = true, localName = "Condition")
+        val condition: String?,
         @JacksonXmlProperty(isAttribute = true, localName = "Include")
         val include: String,
         @JacksonXmlProperty(isAttribute = true, localName = "Version")
-        val version: String
+        val version: String?,
+        @JsonProperty(value = "PrivateAssets")
+        val privateAssets: String?
     )
 
-    override fun getPackageReferences(definitionFile: File): Set<Identifier> {
-        val ids = mutableSetOf<Identifier>()
+    override fun getDependencies(definitionFile: File): Set<NuGetDependency> {
+        // TODO: Find a way to parse both collections at once to not have to parse the file twice. The problem with
+        //       adding propertyGroups and itemGroups to a parent object is that the elements can be mixed and in this
+        //       case Jackson only returns the last match for each list.
+        val propertyGroups = NuGetSupport.XML_MAPPER.readValue<List<PropertyGroup>>(definitionFile)
         val itemGroups = NuGetSupport.XML_MAPPER.readValue<List<ItemGroup>>(definitionFile)
 
-        itemGroups.forEach { itemGroup ->
-            itemGroup.packageReference?.forEach {
-                ids += Identifier(type = "NuGet", namespace = "", name = it.include, version = it.version)
+        val targetFrameworks = propertyGroups.find { it.targetFramework != null }?.targetFramework?.let { listOf(it) }
+            ?: propertyGroups.find { it.targetFrameworks != null }?.targetFrameworks?.split(";")
+            ?: listOf("")
+
+        fun conditionMatchesTargetFramework(condition: String?, targetFramework: String) =
+            condition == null || targetFramework.isEmpty() || condition.contains(targetFramework)
+
+        return targetFrameworks.distinct().flatMapTo(mutableSetOf()) { targetFramework ->
+            itemGroups.filter { conditionMatchesTargetFramework(it.condition, targetFramework) }.flatMap { itemGroup ->
+                itemGroup.packageReferences?.filter { conditionMatchesTargetFramework(it.condition, targetFramework) }
+                    ?.map { packageReference ->
+                        NuGetDependency(
+                            name = packageReference.include,
+                            // TODO: Resolve an empty version to the lowest version published.
+                            version = packageReference.version.orEmpty(),
+                            targetFramework = targetFramework,
+                            developmentDependency = packageReference.privateAssets?.lowercase() == "all"
+                        )
+                    }.orEmpty()
             }
         }
-
-        return ids
     }
 }

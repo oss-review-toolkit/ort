@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,24 +24,24 @@ import com.vdurmont.semver4j.Semver
 
 import java.io.File
 import java.io.IOException
-import java.nio.file.Files
 import java.nio.file.StandardCopyOption
 import java.util.Properties
 
-import kotlin.io.path.createTempDirectory
+import kotlin.io.path.moveTo
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.getCommonFileParent
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.searchUpwardsForSubdirectory
-import org.ossreviewtoolkit.utils.suppressInput
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.getCommonParentFile
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.suppressInput
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 /**
  * The [SBT](https://www.scala-sbt.org/) package manager for Scala.
@@ -52,8 +52,11 @@ class Sbt(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object {
-        private val VERSION_REGEX = Regex("\\[info]\\s+(\\d+\\.\\d+\\.[^\\s]+)")
+    companion object : Logging {
+        // See https://github.com/sbt/sbt/blob/v1.5.1/launcher-package/integration-test/src/test/scala/RunnerTest.scala#L9.
+        private const val SBT_VERSION_PATTERN = "\\d(\\.\\d+){2}(-\\w+)?"
+
+        private val VERSION_REGEX = Regex("\\[info]\\s+($SBT_VERSION_PATTERN)")
         private val PROJECT_REGEX = Regex("\\[info] \t [ *] (.+)")
         private val POM_REGEX = Regex("\\[info] Wrote (.+\\.pom)")
 
@@ -73,7 +76,9 @@ class Sbt(
         // parent process to suspend, for example IntelliJ can be suspended while running the SbtTest.
         private val DISABLE_JLINE = "-Djline.terminal=none".addQuotesOnWindows()
 
-        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE)
+        private val FIXED_USER_HOME = "-Duser.home=${Os.userHomeDirectory}".addQuotesOnWindows()
+
+        private val SBT_OPTIONS = arrayOf(BATCH_MODE, CI_MODE, NO_COLOR, DISABLE_JLINE, FIXED_USER_HOME)
 
         private fun String.addQuotesOnWindows() = if (Os.isWindows) "\"$this\"" else this
     }
@@ -85,7 +90,7 @@ class Sbt(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Sbt(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Sbt(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "sbt.bat" else "sbt"
@@ -95,11 +100,11 @@ class Sbt(
 
         // Avoid newer Sbt versions to warn about "Neither build.sbt nor a 'project' directory in the current directory"
         // and prompt the user to continue or quit on Windows where the "-batch" option is not supported.
-        val dummyProjectDir = createTempDirectory("$ORT_NAME-$managerName").toFile().apply {
-            resolve("build.sbt").createNewFile()
+        val dummyProjectDir = createOrtTempDir(managerName).apply {
+            resolve("project").mkdir()
         }
 
-        return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively() }
+        return super.getVersion(dummyProjectDir).also { dummyProjectDir.safeDeleteRecursively(force = true) }
     }
 
     override fun getVersionArguments() = "${SBT_OPTIONS.joinToString(" ")} sbtVersion"
@@ -110,7 +115,7 @@ class Sbt(
         }
 
         if (versions.isEmpty()) {
-            log.warn { "No version match found in output:\n$output" }
+            logger.warn { "No version match found in output:\n$output" }
         }
 
         return checkForSameSbtVersion(versions)
@@ -125,7 +130,7 @@ class Sbt(
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()
         if (uniqueVersions.size > 1) {
-            log.warn { "Different sbt versions used in the same project: $uniqueVersions" }
+            logger.warn { "Different sbt versions used in the same project: $uniqueVersions" }
         }
 
         return uniqueVersions.firstOrNull()?.toString().orEmpty()
@@ -135,9 +140,9 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles)
 
-        log.info { "Determined '$workingDir' as the $managerName project root directory." }
+        logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         fun runSbt(vararg command: String) =
             suppressInput {
@@ -150,7 +155,7 @@ class Sbt(
         }
 
         if (internalProjectNames.isEmpty()) {
-            log.warn { "No SBT projects found inside the '$workingDir' directory." }
+            logger.warn { "No SBT project found inside the '$workingDir' directory." }
         }
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
@@ -161,7 +166,7 @@ class Sbt(
         }
 
         if (pomFiles.isEmpty()) {
-            log.warn { "No generated POM files found inside the '$workingDir' directory." }
+            logger.warn { "No generated POM files found inside the '$workingDir' directory." }
         }
 
         return pomFiles.distinct().map { moveGeneratedPom(it) }
@@ -171,9 +176,9 @@ class Sbt(
         // Some SBT projects do not have a build file in their root, but they still require "sbt" to be run from the
         // project's root directory. In order to determine the root directory, use the common prefix of all
         // definition file paths.
-        val workingDir = getCommonFileParent(definitionFiles) ?: analysisRoot
+        val workingDir = getCommonParentFile(definitionFiles)
 
-        log.info { "Determined '$workingDir' as the $managerName project root directory." }
+        logger.info { "Determined '$workingDir' as the $managerName project root directory." }
 
         // Determine the SBT version(s) being used.
         val rootPropertiesFile = workingDir.resolve("project").resolve("build.properties")
@@ -181,10 +186,10 @@ class Sbt(
             it.isFile && it.name == "build.properties"
         }
 
-        if (!propertiesFiles.contains(rootPropertiesFile)) {
+        if (rootPropertiesFile !in propertiesFiles) {
             // Note that "sbt sbtVersion" behaves differently when executed inside or outside an SBT project, see
             // https://stackoverflow.com/a/20337575/1127485.
-            checkVersion(analyzerConfig.ignoreToolVersions, workingDir)
+            checkVersion(workingDir)
         } else {
             val versions = mutableListOf<Semver>()
 
@@ -206,13 +211,13 @@ class Sbt(
         }
     }
 
-    override fun resolveDependencies(definitionFiles: List<File>) =
+    override fun resolveDependencies(definitionFiles: List<File>, labels: Map<String, String>) =
         // Simply pass on the list of POM files to Maven, ignoring the SBT build files here.
         Maven(managerName, analysisRoot, analyzerConfig, repoConfig)
             .enableSbtMode()
-            .resolveDependencies(definitionFiles)
+            .resolveDependencies(definitionFiles, labels)
 
-    override fun resolveDependencies(definitionFile: File) =
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>) =
         // This is not implemented in favor over overriding [resolveDependencies].
         throw NotImplementedError()
 }
@@ -222,8 +227,8 @@ private fun moveGeneratedPom(pomFile: File): File {
     val targetFilename = pomFile.relativeTo(targetDirParent).invariantSeparatorsPath.replace('/', '-')
     val targetFile = targetDirParent.resolve(targetFilename)
 
-    if (runCatching { Files.move(pomFile.toPath(), targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
-        Sbt.log.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
+    if (runCatching { pomFile.toPath().moveTo(targetFile.toPath(), StandardCopyOption.ATOMIC_MOVE) }.isFailure) {
+        Sbt.logger.error { "Moving '${pomFile.absolutePath}' to '${targetFile.absolutePath}' failed." }
         return pomFile
     }
 

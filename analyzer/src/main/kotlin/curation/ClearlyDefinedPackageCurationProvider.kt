@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,11 +26,16 @@ import java.net.HttpURLConnection
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import okhttp3.OkHttpClient
+
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
-import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
+import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
+import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -39,14 +44,19 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
-import org.ossreviewtoolkit.spdx.SpdxExpression
-import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import retrofit2.HttpException
+
+/**
+ * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
+ * size of responses reasonably small.
+ */
+private const val BULK_REQUEST_SIZE = 100
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
@@ -80,58 +90,90 @@ fun SourceLocation?.toArtifactOrVcs(): Any? =
     }
 
 /**
- * A provider for curated package meta-data from the [ClearlyDefined](https://clearlydefined.io/) service.
+ * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
-class ClearlyDefinedPackageCurationProvider(server: Server = Server.PRODUCTION) : PackageCurationProvider {
-    private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
+class ClearlyDefinedPackageCurationProvider(
+    serverUrl: String? = null,
+    client: OkHttpClient? = null
+) : PackageCurationProvider {
+    companion object : Logging
 
-    override fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
-        val (type, provider) = pkgId.toClearlyDefinedTypeAndProvider() ?: return emptyList()
-        val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
+    constructor(server: Server) : this(server.apiUrl)
 
-        val curation = try {
-            // TODO: Maybe make PackageCurationProvider.getCurationsFor() a suspend function; then all derived
-            //       classes could deal with coroutines more easily.
-            runBlocking(Dispatchers.IO) { service.getCuration(type, provider, namespace, pkgId.name, pkgId.version) }
-        } catch (e: HttpException) {
-            // A "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a failure.
-            if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
-                e.showStackTrace()
+    private val service by lazy { ClearlyDefinedService.create(serverUrl, client ?: OkHttpClientHelper.buildClient()) }
 
-                log.warn {
-                    val message = e.response()?.errorBody()?.string() ?: e.collectMessagesAsString()
-                    "Getting curations for '${pkgId.toCoordinates()}' failed with code ${e.code()}: $message"
+    override fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>> {
+        val coordinatesToIds = pkgIds.mapNotNull { pkgId ->
+            pkgId.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
+                val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
+                Coordinates(type, provider, namespace, pkgId.name, pkgId.version) to pkgId
+            }
+        }.toMap()
+
+        val contributedCurations = runCatching {
+            buildMap {
+                coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
+                    putAll(runBlocking(Dispatchers.IO) { service.getCurations(coordinates) })
                 }
             }
+        }.onFailure { e ->
+            when (e) {
+                is HttpException -> {
+                    // An "HTTP_NOT_FOUND" is expected for non-existing curations, so only handle other codes as a
+                    // failure.
+                    if (e.code() != HttpURLConnection.HTTP_NOT_FOUND) {
+                        e.showStackTrace()
 
-            return emptyList()
-        } catch (e: JsonMappingException) {
-            e.showStackTrace()
+                        logger.warn {
+                            val message = e.response()?.errorBody()?.string() ?: e.collectMessages()
+                            "Getting curations failed with code ${e.code()}: $message"
+                        }
+                    }
+                }
 
-            log.warn { "Deserializing the ClearlyDefined curation for '${pkgId.toCoordinates()}' failed." }
+                is JsonMappingException -> {
+                    e.showStackTrace()
+                    logger.warn { "Deserializing the curations failed: ${e.collectMessages()}" }
+                }
 
-            return emptyList()
+                else -> {
+                    e.showStackTrace()
+                    logger.warn { "Querying curations failed: ${e.collectMessages()}" }
+                }
+            }
+        }.getOrNull() ?: return emptyMap()
+
+        val curations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
+
+        contributedCurations.forEach { (_, contributions) ->
+            contributions.curations.forEach inner@{ (coordinates, curation) ->
+                val pkgId = coordinatesToIds[coordinates] ?: return@inner
+
+                val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
+                    // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
+                    // particular none that contain "OTHER" as a license, also see
+                    // https://github.com/clearlydefined/curated-data/issues/7836.
+                    runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
+                }
+
+                val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
+
+                val data = PackageCurationData(
+                    concludedLicense = declaredLicenseParsed,
+                    homepageUrl = curation.described?.projectWebsite?.toString(),
+                    sourceArtifact = sourceLocation as? RemoteArtifact,
+                    vcs = sourceLocation as? VcsInfoCurationData
+                )
+
+                if (data != PackageCurationData()) {
+                    curations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
+                        id = pkgId,
+                        data = data.copy(comment = "Provided by ClearlyDefined.")
+                    )
+                }
+            }
         }
 
-        val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
-            // Only take curations of good quality (i.e. those not using deprecated identifiers) and in particular none
-            // that contain "OTHER" as a license, also see https://github.com/clearlydefined/curated-data/issues/7836.
-            runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()?.toString()
-        }
-
-        val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
-
-        val pkgCuration = PackageCuration(
-            id = pkgId,
-            data = PackageCurationData(
-                declaredLicenses = declaredLicenseParsed?.let { sortedSetOf(it) },
-                homepageUrl = curation.described?.projectWebsite?.toString(),
-                sourceArtifact = sourceLocation as? RemoteArtifact,
-                vcs = sourceLocation as? VcsInfoCurationData,
-                comment = "Provided by ClearlyDefined."
-            )
-        )
-
-        return listOf(pkgCuration)
+        return curations.mapValues { (_, curations) -> curations.distinct() }
     }
 }

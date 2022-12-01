@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -27,10 +27,10 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.spdx.SpdxLicenseIdExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 class RuleTest : WordSpec() {
-    private val ruleSet = RuleSet(ortResult)
+    private val ruleSet = ruleSet(ortResult)
     private val id = Identifier("type:namespace:name:version")
     private val license = SpdxLicenseIdExpression("license")
     private val licenseSource = LicenseSource.DECLARED
@@ -144,25 +144,29 @@ class RuleTest : WordSpec() {
 
                 matcher.matches() shouldBe false
             }
-        }
 
-        "labelContains()" should {
             "return true if the ORT result contains the label with the value" {
-                val matcher = createRule().labelContains("list", "value2")
+                val matcher = createRule().hasLabel("list", "value2")
 
                 matcher.matches() shouldBe true
             }
 
             "return false if the ORT result does not contain the label" {
-                val matcher = createRule().labelContains("missing", "value")
+                val matcher = createRule().hasLabel("missing", "value")
 
                 matcher.matches() shouldBe false
             }
 
             "return false if the ORT result does not contain the label with the value" {
-                val matcher = createRule().labelContains("list", "value4")
+                val matcher = createRule().hasLabel("list", "value4")
 
                 matcher.matches() shouldBe false
+            }
+
+            "return true if the ORT result contains the label values which includes commas" {
+                val matcher = createRule().hasLabel("list", "value1, value2, value3", splitValue = false)
+
+                matcher.matches() shouldBe true
             }
         }
     }

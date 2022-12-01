@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,12 +21,12 @@ package org.ossreviewtoolkit.model.licenses
 
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
- * A class for configuring meta data for a specific license referred to by a SPDX license identifier.
+ * A class for configuring metadata for a specific license referred to by a SPDX license identifier.
  *
- * The meta data consists of assignments to generic categories whose exact meaning is customer specific.
+ * The metadata consists of assignments to generic categories whose exact meaning is customer specific.
  * The categories a license belong to can be evaluated by other components, such as rules or templates,
  * which can decide - based on this information - how to handle a specific license.
  */

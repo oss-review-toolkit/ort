@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_EXPAND_TOLERANCE_LINES
 import org.ossreviewtoolkit.model.utils.FindingsMatcher.Companion.DEFAULT_TOLERANCE_LINES
-import org.ossreviewtoolkit.spdx.toSpdx
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 private fun FindingsMatcherResult.getFindings(license: String): Pair<Set<LicenseFinding>, Set<CopyrightFinding>> =
     matchedFindings.filter { it.key.license == license.toSpdx() }.let {
@@ -192,8 +192,9 @@ class FindingsMatcherTest : WordSpec() {
                 setupLicenseFinding("license-nearby", "path", licenseStartLine)
                 setupLicenseFinding("license-far-away", "path", licenseStartLine + 100 * DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding(
-                    "statement1", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES -
-                            DEFAULT_EXPAND_TOLERANCE_LINES - 1
+                    "statement1",
+                    "path",
+                    licenseStartLine - DEFAULT_TOLERANCE_LINES - DEFAULT_EXPAND_TOLERANCE_LINES - 1
                 )
                 setupCopyrightFinding("statement2", "path", licenseStartLine - DEFAULT_TOLERANCE_LINES)
                 setupCopyrightFinding("statement3", "path", licenseStartLine + DEFAULT_TOLERANCE_LINES)
@@ -221,6 +222,70 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
 
                 result.getCopyrights("root-license-1").map { it.statement } should containExactly("statement 1")
+            }
+        }
+
+        "associateLicensesWithExceptions()" should {
+            "merge with the nearest license" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("Apache-2.0", TextLocation("file", 1)),
+                        LicenseFinding("Apache-2.0", TextLocation("file", 100)),
+                        LicenseFinding("LLVM-exception", TextLocation("file", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("Apache-2.0 WITH LLVM-exception", TextLocation("file", 1, 5)),
+                    LicenseFinding("Apache-2.0", TextLocation("file", 100))
+                )
+            }
+
+            "omit exceptions that are already contained in existing findings" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("GPL-1.0-or-later", TextLocation("pom.xml", 45)),
+                        LicenseFinding("GPL-2.0-only WITH Classpath-exception-2.0", TextLocation("pom.xml", 46, 48)),
+                        LicenseFinding("Classpath-exception-2.0", TextLocation("pom.xml", 47))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("GPL-1.0-or-later", TextLocation("pom.xml", 45)),
+                    LicenseFinding("GPL-2.0-only WITH Classpath-exception-2.0", TextLocation("pom.xml", 46, 48))
+                )
+            }
+
+            "associate orphan exceptions by NOASSERTION" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("GPL-2.0-only", TextLocation("file", 1)),
+                        LicenseFinding("389-exception", TextLocation("file", 100))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("GPL-2.0-only", TextLocation("file", 1)),
+                    LicenseFinding("NOASSERTION WITH 389-exception", TextLocation("file", 100))
+                )
+            }
+
+            "not associate licenses and exceptions that do not belong together" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
+                        LicenseFinding("LLVM-exception", TextLocation("file", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("LicenseRef-scancode-unknown", TextLocation("file", 1)),
+                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("file", 5))
+                )
+            }
+
+            "not associate findings from different files" {
+                associateLicensesWithExceptions(
+                    listOf(
+                        LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
+                        LicenseFinding("LLVM-exception", TextLocation("fileB", 5))
+                    )
+                ) should containExactlyInAnyOrder(
+                    LicenseFinding("Apache-2.0", TextLocation("fileA", 1)),
+                    LicenseFinding("NOASSERTION WITH LLVM-exception", TextLocation("fileB", 5))
+                )
             }
         }
     }

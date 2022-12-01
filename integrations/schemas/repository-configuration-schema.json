@@ -1,0 +1,215 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/.ort.yml",
+  "title": "ORT repository configuration",
+  "description": "The OSS-Review-Toolkit (ORT) provides a possibility to configure exclusions, resolutions and more in a file called `.ort.yml`. A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-ort-yml.md.",
+  "type": "object",
+  "properties": {
+    "analyzer": {
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/analyzer-configuration-schema.json"
+    },
+    "excludes": {
+      "type": "object",
+      "description": "Defines which parts of a repository should be excluded.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "description": "A glob to match the path of the project definition file, relative to the root of the repository.",
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/pathExcludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "pattern": {
+                "type": "string"
+              },
+              "reason": {
+                "$ref": "#/definitions/scopeExcludeReason"
+              },
+              "comment": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "pattern",
+              "reason"
+            ]
+          }
+        }
+      }
+    },
+    "resolutions": {
+      "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/resolutions-schema.json"
+    },
+    "curations": {
+      "type": "object",
+      "description": "Curations for artifacts in a repository.",
+      "properties": {
+        "license_findings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/licenseFindingCurations"
+          }
+        },
+        "packages": {
+          "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/curations-schema.json"
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "license_findings"
+          ]
+        },
+        {
+          "required": [
+            "packages"
+          ]
+        }
+      ]
+    },
+    "package_configurations": {
+      "type": "array",
+      "description": "A configuration for a specific package and provenance.",
+      "items": {
+        "$ref": "https://raw.githubusercontent.com/oss-review-toolkit/ort/main/integrations/schemas/package-configuration-schema.json"
+      }
+    },
+    "license_choices": {
+      "type": "object",
+      "description": "A configuration to select a license from a multi-licensed package.",
+      "properties": {
+        "package_license_choices": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "package_id": {
+                "type": "string"
+              },
+              "license_choices": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "given": {
+                      "type": "string"
+                    },
+                    "choice": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "choice"
+                  ]
+                }
+              }
+            },
+            "required": [
+              "package_id",
+              "license_choices"
+            ]
+          }
+        },
+        "repository_license_choices": {
+          "type": "array",
+          "items": {
+            "given": {
+              "type": "string"
+            },
+            "choice": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "licenseFindingCurations": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "start_lines": {
+          "type": [
+            "integer",
+            "string"
+          ]
+        },
+        "line_count": {
+          "type": "integer"
+        },
+        "detected_license": {
+          "type": "string"
+        },
+        "concluded_license": {
+          "type": "string"
+        },
+        "reason": {
+          "$ref": "#/definitions/licenseFindingCurationReason"
+        },
+        "comment": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "concluded_license",
+        "reason"
+      ]
+    },
+    "pathExcludeReason": {
+      "enum": [
+        "BUILD_TOOL_OF",
+        "DATA_FILE_OF",
+        "DOCUMENTATION_OF",
+        "EXAMPLE_OF",
+        "OPTIONAL_COMPONENT_OF",
+        "OTHER",
+        "PROVIDED_BY",
+        "TEST_OF",
+        "TEST_TOOL_OF"
+      ]
+    },
+    "scopeExcludeReason": {
+      "enum": [
+        "BUILD_DEPENDENCY_OF",
+        "DEV_DEPENDENCY_OF",
+        "PROVIDED_DEPENDENCY_OF",
+        "TEST_DEPENDENCY_OF",
+        "RUNTIME_DEPENDENCY_OF"
+      ]
+    },
+    "licenseFindingCurationReason": {
+      "enum": [
+        "CODE",
+        "DATA_OF",
+        "DOCUMENTATION_OF",
+        "INCORRECT",
+        "NOT_DETECTED",
+        "REFERENCE"
+      ]
+    }
+  }
+}

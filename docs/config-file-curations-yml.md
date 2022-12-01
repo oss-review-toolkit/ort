@@ -20,9 +20,12 @@ Curations can be used to:
   * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
   _downloader_ just skips the download and the _scanner_ skips the scan. Also, any _evaluator rule_ may optionally skip
   its execution.
+* set the _is_modified_ flag:
+  * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork
+    of an upstream Open Source project, or a copy of the code in this project's repository. 
 * set the _declared_license_mapping_ property:
   * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
-    be fixed by mapping these strings to a valid license. If multiple curations declare license mapping they get
+    be fixed by mapping these strings to a valid license. If multiple curations declare license mappings, they get
     combined into a single mapping. Thus, multiple curations can contribute to the declared license mapping for the
     package. The effect of its application can be seen in the _declared_license_processed_ property of the respective
     curated package. 
@@ -43,47 +46,64 @@ These curations can be configured in a YAML file that is passed to the _analyzer
 amends the metadata provided by the packages themselves. This way, it is possible to fix broken VCS URLs or provide the
 location of source artifacts.
 
+Hint: If the `concluded_license` _and_ the `authors` are curated, this package will be skipped during the `scan` step,
+as no more information from the scanner is required. This requires the `skipConcluded` scanner option to be enabled in
+the [config.yml](../README.md#ort-configuration-file).
+
 The structure of the curations file consist of one or more `id` entries:
 
-```
-- id: "package identifier."
+```yaml
+- id: "Maven:com.example.app:example:0.0.1"
   curations:
     comment: "An explanation why the curation is needed or the reasoning for a license conclusion"
-    concluded_license: "valid SPDX license expression to override the license findings."
-    declared_licenses:
-    - "license a"
-    - "license b"
-    description: "Curated description"
+    purl: "pkg:Maven/com.example.app/example@0.0.1?arch=arm64-v8a#src/main"
+    cpe: "cpe:2.3:a:example-org:example-package:0.0.1:*:*:*:*:*:*:*"
+    concluded_license: "Valid SPDX license expression to override the license findings."
+    declared_license_mapping:
+      "license a": "Apache-2.0"
+    description: "Curated description."
     homepage_url: "http://example.com"
     binary_artifact:
       url: "http://example.com/binary.zip"
-      hash: "ddce269a1e3d054cae349621c198dd52"
-      hash_algorithm: "MD5"
+      hash: 
+        value: "ddce269a1e3d054cae349621c198dd52"
+        algorithm: "MD5"
     source_artifact:
       url: "http://example.com/sources.zip"
-      hash: "ddce269a1e3d054cae349621c198dd52"
-      hash_algorithm: "MD5"
+      hash: 
+        value: "ddce269a1e3d054cae349621c198dd52"
+        algorithm: "MD5"
     vcs:
-      type: "git"
+      type: "Git"
       url: "http://example.com/repo.git"
       revision: "1234abc"
       path: "subdirectory"
     is_meta_data_only: true
-    declared_license_mapping:
-      "license a": "Apache-2.0"
-````
+    is_modified: true
+```
+Where the list of available options for curations is defined in
+[PackageCurationData.kt](../model/src/main/kotlin/PackageCurationData.kt).
 
 ## Command Line
 
 To use the `curations.yml` file put it to `$ORT_CONFIG_DIR/curations.yml` or pass it to the `--package-curations-file`
 option of the _analyzer_:
 
-```
+```bash
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
 ```
+
+Alternatively specify a directory with multiple curation files using the `--package-curations-dir` to the _analyzer_:
+
+```bash
+cli/build/install/ort/bin/ort analyze
+  -i [source-code-of-project-dir]
+  -o [analyzer-output-dir]
+  --package-curations-dir $ORT_CONFIG_DIR/curations
+``` 
 
 ORT can use [ClearlyDefined](https://clearlydefined.io/) as a source for curated metadata. The preferred workflow is to
 use curations from ClearlyDefined, and to submit curations there. However, this is not always possible, for example in
@@ -91,7 +111,7 @@ case of curations for organization internal packages. To support this workflow, 
 single source for curations or in combination with a `curations.yml` with the `--clearly-defined-curations` option of
 the analyzer:  
 
-```
+```bash
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
@@ -109,5 +129,5 @@ cli/build/install/ort/bin/ort evaluate
   --output-formats YAML
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
-  --rules-file $ORT_CONFIG_DIR/rules.kts
+  --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```

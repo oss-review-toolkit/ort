@@ -1,0 +1,29 @@
+{
+  "id" : "857c31a4-7c25-4e61-8277-c68a8fee0066",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"action\":\"generate_report\",\"group\":\"scans\",\"data\":{\"username\":\"\",\"key\":\"\",\"scan_code\":\"semver4j_semver4j__20220119_094101_delta\",\"report_type\":\"dynamic\",\"selection_type\":\"include_foss\"}}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "<!DOCTYPE HTML PUBLIC \\\"-\\/\\/W3C\\/\\/DTD HTML 4.01\\/\\/EN\\\" \\\"http:\\/\\/www.w3.org\\/TR\\/html4\\/strict.dtd\\\">\n<html>\n<head>\n    <meta charset=\\\"UTF-8\\\">\n    <title>FossID - FOSS Audit Report<\\/title>\n<\\/head>\n<body style='background-color: #eaeaea;'>\n<\\/body>\n<\\/html>",
+    "headers" : {
+      "Cache-Control" : "no-cache",
+      "Content-Disposition" : "attachment; filename=fossid-semver4j_semver4j__20220119_094101_delta-cc1267688905d7493df292786a245297c9fd36ee.html",
+      "Content-Type" : "text/html; charset=utf-8",
+      "Date" : "Mon, 25 Apr 2022 15:59:35 GMT",
+      "Expires" : "Mon, 25 Apr 2022 15:59:34 GMT",
+      "Server" : "nginx/1.14.2",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "857c31a4-7c25-4e61-8277-c68a8fee0066",
+  "persistent" : true,
+  "insertionIndex" : 3
+}

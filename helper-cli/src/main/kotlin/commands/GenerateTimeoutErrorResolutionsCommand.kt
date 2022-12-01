@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,22 +26,20 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.common.getScanIssues
-import org.ossreviewtoolkit.helper.common.replaceConfig
-import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.helper.utils.getScanIssues
+import org.ossreviewtoolkit.helper.utils.readOrtResult
+import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
-import org.ossreviewtoolkit.model.config.Resolutions
-import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     help = "Generates resolutions for scanner timeout errors. The result is written to the standard output."
 ) {
-    private val ortResultFile by option(
-        "--ort-result-file",
+    private val ortFile by option(
+        "--ort-file", "-i",
         help = "The input ORT file containing the scan timeout errors."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -68,25 +66,14 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
     ).flag()
 
     override fun run() {
-        val ortResult = ortResultFile.readValue<OrtResult>().replaceConfig(repositoryConfigurationFile)
+        val ortResult = readOrtResult(ortFile).replaceConfig(repositoryConfigurationFile)
 
-        val resolutionProvider = DefaultResolutionProvider().apply {
-            var resolutions = Resolutions()
-
-            resolutionsFile?.let {
-                resolutions = resolutions.merge(it.readValue())
-            }
-
-            resolutions = resolutions.merge(ortResult.getResolutions())
-
-            add(resolutions)
-        }
+        val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
         val timeoutIssues = ortResult
             .getScanIssues(omitExcluded)
             .filter {
-                it.message.startsWith("ERROR: Timeout")
-                        && resolutionProvider.getIssueResolutionsFor(it).isEmpty()
+                it.message.startsWith("ERROR: Timeout") && !resolutionProvider.isResolved(it)
             }
 
         val generatedResolutions = timeoutIssues.mapTo(mutableSetOf()) {

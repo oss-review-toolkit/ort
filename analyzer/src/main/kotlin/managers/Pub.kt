@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,14 +28,22 @@ import java.io.File
 import java.io.IOException
 import java.util.SortedSet
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
+import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -47,114 +55,60 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.getPathFromEnvironment
-import org.ossreviewtoolkit.utils.isSymbolicLink
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.showStackTrace
-import org.ossreviewtoolkit.utils.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.realFile
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.unpack
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
-private const val GRADLE_VERSION = "5.6.4"
+private const val GRADLE_VERSION = "7.3"
+private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
+
+private val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
+private val dartCommand = if (Os.isWindows) "dart.bat" else "dart"
+
+private val flutterVersion = Os.env["FLUTTER_VERSION"] ?: "3.3.8-stable"
+private val flutterInstallDir = ortToolsDirectory.resolve("flutter-$flutterVersion")
+
+val flutterHome by lazy {
+    Os.getPathFromEnvironment(flutterCommand)?.realFile()?.parentFile?.parentFile
+        ?: Os.env["FLUTTER_HOME"]?.let { File(it) } ?: flutterInstallDir.resolve("flutter")
+}
+
+private val flutterAbsolutePath = flutterHome.resolve("bin")
 
 /**
  * The [Pub](https://pub.dev/) package manager for Dart / Flutter.
+ *
+ * This implementation is using the Pub version that is distributed with Flutter. If Flutter is not installed on the
+ * system it is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
+ * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
  */
+@Suppress("TooManyFunctions")
 class Pub(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
-        override val globsForDefinitionFiles = listOf("pubspec.yaml")
+        override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
 
         override fun create(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pub(managerName, analysisRoot, analyzerConfig, repoConfig)
-    }
-
-    /**
-     * A reader for the Pub cache directory. It looks for files in the ".pub-cache" directory in the user's home
-     * directory. If Flutter is installed it additionally looks for files in the ".pub-cache" directory of Flutter's
-     * installation directory.
-     */
-    private class PubCacheReader {
-        private val pubCacheRoot by lazy {
-            // TODO: Add support for the PUB_CACHE environment variable.
-            if (Os.isWindows) {
-                File(Os.env["APPDATA"], "Pub/Cache")
-            } else {
-                Os.userHomeDirectory.resolve(".pub-cache/")
-            }
-        }
-
-        private val flutterPubCacheRoot by lazy {
-            findFlutterHome()?.resolve(".pub-cache")?.takeIf { it.isDirectory }
-        }
-
-        private fun findFlutterHome(): File? {
-            val flutterCommand = if (Os.isWindows) "flutter.bat" else "flutter"
-            return getPathFromEnvironment(flutterCommand)?.parentFile?.parentFile
-        }
-
-        fun findFile(packageInfo: JsonNode, filename: String): File? {
-            val artifactRootDir = findProjectRoot(packageInfo) ?: return null
-
-            // Try to locate the file directly.
-            val file = artifactRootDir.resolve(filename)
-            if (file.isFile) return file
-
-            // Search the directory tree for the file.
-            return artifactRootDir.walk()
-                .onEnter { !it.isSymbolicLink() }
-                .find { !it.isSymbolicLink() && it.isFile && it.name == filename }
-        }
-
-        fun findProjectRoot(packageInfo: JsonNode): File? {
-            val packageVersion = packageInfo["version"].textValueOrEmpty()
-            val type = packageInfo["source"].textValueOrEmpty()
-            val description = packageInfo["description"]
-            val packageName = description["name"].textValueOrEmpty()
-            val url = description["url"].textValueOrEmpty()
-            val resolvedRef = packageInfo["resolved-ref"].textValueOrEmpty()
-
-            val path = if (type == "hosted" && url.isNotEmpty()) {
-                // Packages with source set to "hosted" and "url" key in description set to "https://pub.dartlang.org".
-                // The path should be resolved to "hosted/pub.dartlang.org/packageName-packageVersion".
-                "hosted/${url.replace("https://", "")}/$packageName-$packageVersion"
-            } else if (type == "git" && resolvedRef.isNotEmpty()) {
-                // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
-                // The path should be resolved to "git/packageName-gitHash".
-                "git/$packageName-$resolvedRef"
-            } else {
-                log.error { "Could not find projectRoot of '$packageName'." }
-
-                // Unsupported type.
-                null
-            }
-
-            if (path != null) {
-                pubCacheRoot.resolve(path).let {
-                    if (it.isDirectory) {
-                        return it
-                    }
-                }
-
-                flutterPubCacheRoot?.resolve(path)?.let {
-                    if (it.isDirectory) {
-                        return it
-                    }
-                }
-            }
-
-            return null
-        }
+        ) = Pub(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private data class ParsePackagesResult(
@@ -162,14 +116,100 @@ class Pub(
         val issues: List<OrtIssue>
     )
 
-    private val processedPackages = mutableListOf<String>()
     private val reader = PubCacheReader()
+    private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
-    override fun transformVersion(output: String) = output.removePrefix("Pub ")
+    override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.2,)")
+    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.10,)")
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun beforeResolution(definitionFiles: List<File>) {
+        gradleDefinitionFilesForPubDefinitionFiles.clear()
+        gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
+
+        logger.info { "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)." }
+
+        gradleDefinitionFilesForPubDefinitionFiles.forEach { (flutterDefinitionFile, gradleDefinitionFiles) ->
+            if (gradleDefinitionFiles.isEmpty()) return@forEach
+
+            logger.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
+
+            gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+                logger.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
+            }
+        }
+
+        if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
+            logger.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
+            return
+        }
+
+        logger.info { "Bootstrapping flutter as it was not found." }
+
+        val archive = when {
+            Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
+            Os.isLinux -> "linux/flutter_linux_$flutterVersion.tar.xz"
+            else -> throw IllegalArgumentException("Unsupported operating system.")
+        }
+
+        val url = "https://storage.googleapis.com/flutter_infra_release/releases/stable/$archive"
+
+        logger.info { "Downloading flutter-$flutterVersion from $url... " }
+        flutterInstallDir.safeMkdirs()
+        val flutterArchive = OkHttpClientHelper.downloadFile(url, flutterInstallDir).getOrThrow()
+
+        logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
+        flutterArchive.unpack(flutterInstallDir)
+
+        if (!flutterArchive.delete()) {
+            logger.warn { "Unable to delete temporary file '$flutterArchive'." }
+        }
+
+        ProcessCapture("$flutterAbsolutePath${File.separator}$flutterCommand", "config", "--no-analytics")
+            .requireSuccess()
+    }
+
+    private fun findGradleDefinitionFiles(pubDefinitionFiles: Collection<File>): Map<File, Set<File>> {
+        val result = mutableMapOf<File, MutableSet<File>>()
+
+        val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOf(Gradle.Factory())).values.flatten()
+
+        val pubDefinitionFilesWithFlutterSdkSorted = pubDefinitionFiles.filter {
+            containsFlutterSdk(it.parentFile)
+        }.sortedByDescending {
+            it.parentFile.canonicalPath.length
+        }
+
+        pubDefinitionFiles.associateWithTo(result) { mutableSetOf() }
+
+        gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+            val pubDefinitionFile = pubDefinitionFilesWithFlutterSdkSorted.firstOrNull {
+                gradleDefinitionFile.parentFile.canonicalFile.startsWith(it.parentFile)
+            } ?: return@forEach
+
+            result.getValue(pubDefinitionFile) += gradleDefinitionFile
+        }
+
+        return result
+    }
+
+    override fun findPackageManagerDependencies(
+        managedFiles: Map<PackageManager, List<File>>
+    ): PackageManagerDependencyResult {
+        // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
+        // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
+        // the path to the Android SDK.
+        val gradle = managedFiles.keys.find { it.managerName == Gradle.Factory().name }
+        val mustRunBefore = if (gradle != null && findGradleDefinitionFiles(managedFiles.getValue(this)).isNotEmpty()) {
+            setOf(gradle.managerName)
+        } else {
+            emptySet()
+        }
+
+        return PackageManagerDependencyResult(mustRunBefore = mustRunBefore, mustRunAfter = emptySet())
+    }
+
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
         val manifest = yamlMapper.readTree(definitionFile)
 
@@ -180,45 +220,67 @@ class Pub(
         val packages = mutableMapOf<Identifier, Package>()
         val scopes = sortedSetOf<Scope>()
         val issues = mutableListOf<OrtIssue>()
+        val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
             installDependencies(workingDir)
 
-            log.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
+            logger.info { "Reading $PUB_LOCK_FILE file in $workingDir." }
 
             val lockFile = yamlMapper.readTree(workingDir.resolve(PUB_LOCK_FILE))
 
-            log.info { "Successfully read lockfile." }
+            logger.info { "Successfully read lockfile." }
 
-            val parsePackagesResult = parseInstalledPackages(lockFile)
+            val parsePackagesResult = parseInstalledPackages(lockFile, labels, workingDir)
+
+            val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
+
+            if (gradleDefinitionFiles.isNotEmpty()) {
+                val gradleName = Gradle.Factory().name
+                val gradleDependencies = gradleDefinitionFiles.map {
+                    PackageManagerDependencyHandler.createPackageManagerDependency(
+                        packageManager = gradleName,
+                        definitionFile = VersionControlSystem.getPathInfo(it).path,
+                        scope = "releaseCompileClasspath",
+                        linkage = PackageLinkage.PROJECT_STATIC
+                    )
+                }.toSortedSet()
+
+                scopes += Scope("android", gradleDependencies)
+            }
+
             packages += parsePackagesResult.packages
             issues += parsePackagesResult.issues
 
-            log.info { "Successfully parsed installed packages." }
+            logger.info { "Successfully parsed installed packages." }
 
-            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages)
-            scopes += parseScope("dev_dependencies", manifest, lockFile, parsePackagesResult.packages)
+            scopes += parseScope("dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir)
+            scopes += parseScope(
+                "dev_dependencies", manifest, lockFile, parsePackagesResult.packages, labels, workingDir
+            )
         }
-
-        log.info { "Reading ${definitionFile.name} file in $workingDir." }
 
         val project = parseProject(definitionFile, manifest, scopes)
 
-        return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues))
+        projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues)
+
+        return projectAnalyzerResults
     }
 
     private fun parseScope(
         scopeName: String,
         manifest: JsonNode,
         lockFile: JsonNode,
-        packages: Map<Identifier, Package>
+        packages: Map<Identifier, Package>,
+        labels: Map<String, String>,
+        workingDir: File
     ): Scope {
         val packageName = manifest["name"].textValue()
 
-        log.info { "Parsing scope '$scopeName' for package '$packageName'." }
+        logger.info { "Parsing scope '$scopeName' for package '$packageName'." }
 
-        val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence()?.toList() ?: listOf<String>()
-        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages)
+        val requiredPackages = manifest[scopeName]?.fieldNames()?.asSequence().orEmpty().toList()
+        val dependencies = buildDependencyTree(requiredPackages, manifest, lockFile, packages, labels, workingDir)
         return Scope(scopeName, dependencies)
     }
 
@@ -226,27 +288,26 @@ class Pub(
         dependencies: List<String>,
         manifest: JsonNode,
         lockFile: JsonNode,
-        packages: Map<Identifier, Package>
+        packages: Map<Identifier, Package>,
+        labels: Map<String, String>,
+        workingDir: File,
+        processedPackages: Set<String> = emptySet()
     ): SortedSet<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
-        val containsFlutter = dependencies.contains("flutter")
+        val containsFlutter = "flutter" in dependencies
 
-        log.info { "buildDependencyTree for package $nameOfCurrentPackage " }
-
-        // Ensure we process every package only once.
-        processedPackages += nameOfCurrentPackage
+        logger.debug { "Building dependency tree for package '$nameOfCurrentPackage'." }
 
         // Lookup the dependencies listed in pubspec.yaml file and build the dependency tree.
         dependencies.forEach { packageName ->
-            // We need to resolve the dependency tree for every package just once. This check ensures we do not run into
-            // infinite loops. When we add this check, and two packages list the same package as dependency, only the
-            // first might be listed.
+            // To prevent infinite loops, resolve the dependency tree for each package just once for each branch of the
+            // dependency tree.
             if (packageName in processedPackages) return@forEach
 
             val pkgInfoFromLockFile = lockFile["packages"][packageName]
             // If the package is marked as SDK (e.g. flutter, flutter_test, dart) we cannot resolve it correctly as
-            // it is not stored in .pub-cache. For now we just ignore those SDK packages.
+            // it is not stored in .pub-cache. For now, we just ignore those SDK packages.
             if (pkgInfoFromLockFile == null || pkgInfoFromLockFile["source"].textValueOrEmpty() == "sdk") return@forEach
 
             val id = Identifier(
@@ -259,25 +320,32 @@ class Pub(
             val packageInfo = packages[id] ?: throw IOException("Could not find package info for $packageName")
 
             try {
-                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                val dependencyYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
                 val requiredPackages =
                     dependencyYamlFile["dependencies"]?.fieldNames()?.asSequence()?.toList().orEmpty()
 
-                val transitiveDependencies =
-                    buildDependencyTree(requiredPackages, dependencyYamlFile, lockFile, packages)
+                val transitiveDependencies = buildDependencyTree(
+                    dependencies = requiredPackages,
+                    manifest = dependencyYamlFile,
+                    lockFile = lockFile,
+                    packages = packages,
+                    labels = labels,
+                    workingDir = workingDir,
+                    processedPackages = processedPackages + nameOfCurrentPackage
+                )
 
-                // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod
+                // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
-                // projectRoot, but not the packages in the .pub-cache folder.
+                // projectRoot, but not the packages in the ".pub-cache" directory.
                 if (containsFlutter) {
-                    scanAndroidPackages(pkgInfoFromLockFile).forEach { resultAndroid ->
+                    scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
                                 .find { it.name == "releaseCompileClasspath" }
                                 ?.dependencies
                         )
                     }
-                    // TODO: Enable support for iOS / Cocoapods once the package manager is implemented.
+                    // TODO: Enable support for iOS / CocoaPods once the package manager is implemented.
                 }
 
                 packageReferences += packageInfo.toReference(dependencies = transitiveDependencies)
@@ -289,7 +357,7 @@ class Pub(
                         createAndLogIssue(
                             source = managerName,
                             message = "Could not resolve dependencies of '$packageName': " +
-                                    e.collectMessagesAsString()
+                                    e.collectMessages()
                         )
                     )
                 )
@@ -301,37 +369,46 @@ class Pub(
 
     private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()
 
-    private fun scanAndroidPackages(packageInfo: JsonNode): List<ProjectAnalyzerResult> {
+    private fun scanAndroidPackages(
+        packageInfo: JsonNode,
+        labels: Map<String, String>,
+        workingDir: File
+    ): List<ProjectAnalyzerResult> {
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
         if (packageName.isEmpty()) return emptyList()
 
-        val projectRoot = reader.findProjectRoot(packageInfo) ?: return emptyList()
+        val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return emptyList()
         val androidDir = projectRoot.resolve("android")
         val packageFile = androidDir.resolve("build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
         if (!packageFile.isFile) return emptyList()
 
-        log.info { "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION." }
-
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            // Use the latest 5.x Gradle version as Flutter / its Android Gradle plugin does not support Gradle 6 yet.
+            logger.info {
+                "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION."
+            }
+
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
-                .resolveDependencies(listOf(packageFile))
-                .getValue(packageFile)
+                .resolveDependencies(listOf(packageFile), labels).run {
+                    projectResults.getValue(packageFile).map { result ->
+                        val project = result.project.withResolvedScopes(dependencyGraph)
+                        result.copy(project = project, packages = sharedPackages.toSortedSet())
+                    }
+                }
         }
     }
 
-    private fun scanIosPackages(packageInfo: JsonNode): ProjectAnalyzerResult? {
-        // TODO: Implement similar to `scanAndroidPackages` once Cocoapods is implemented.
+    private fun scanIosPackages(packageInfo: JsonNode, workingDir: File): ProjectAnalyzerResult? {
+        // TODO: Implement similar to `scanAndroidPackages` once CocoaPods is implemented.
         val packageName = packageInfo["description"]["name"].textValueOrEmpty()
 
         // We cannot find packages without a valid name.
         if (packageName.isEmpty()) return null
 
-        val projectRoot = reader.findProjectRoot(packageInfo) ?: return null
+        val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return null
         val iosDir = projectRoot.resolve("ios")
         val packageFile = iosDir.resolve("$packageName.podspec")
 
@@ -350,12 +427,12 @@ class Pub(
 
     private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: SortedSet<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
-        val rawName = pubspec["description"]["name"]?.textValue() ?: definitionFile.parentFile.name
+        val rawName = pubspec["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()
         val repositoryUrl = pubspec["repository"].textValueOrEmpty()
         val authors = parseAuthors(pubspec)
 
-        val vcs = VcsHost.toVcsInfo(repositoryUrl)
+        val vcs = VcsHost.parseUrl(repositoryUrl)
 
         return Project(
             id = Identifier(
@@ -375,8 +452,12 @@ class Pub(
         )
     }
 
-    private fun parseInstalledPackages(lockFile: JsonNode): ParsePackagesResult {
-        log.info { "Parsing installed Pub packages..." }
+    private fun parseInstalledPackages(
+        lockFile: JsonNode,
+        labels: Map<String, String>,
+        workingDir: File
+    ): ParsePackagesResult {
+        logger.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
         val issues = mutableListOf<OrtIssue>()
@@ -385,7 +466,7 @@ class Pub(
         var containsFlutter = false
 
         listOf("packages"/*, "packages-dev"*/).forEach {
-            lockFile[it]?.forEach { pkgInfoFromLockFile ->
+            lockFile[it]?.fields()?.forEach { (packageName, pkgInfoFromLockFile) ->
                 try {
                     val version = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     var description = ""
@@ -394,18 +475,30 @@ class Pub(
                     var vcs = VcsInfo.EMPTY
                     var authors: SortedSet<String> = sortedSetOf<String>()
 
-                    // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                     when {
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() == "path" -> {
+                            rawName = packageName
+                            val path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
+                            vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
+                                logger.warn {
+                                    "Invalid path of package $rawName: " +
+                                    "'$path' is outside of the project root '$workingDir'."
+                                }
+                                VcsInfo.EMPTY
+                            }
+                        }
+
+                        // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.
                         pkgInfoFromLockFile["source"].textValueOrEmpty() != "sdk" -> {
-                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile)
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
 
                             rawName = pkgInfoFromYamlFile["name"].textValueOrEmpty()
-                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty()
+                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
                             homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
                             authors = parseAuthors(pkgInfoFromYamlFile)
 
                             val repositoryUrl = pkgInfoFromYamlFile["repository"].textValueOrEmpty()
-                            vcs = VcsHost.toVcsInfo(repositoryUrl)
+                            vcs = VcsHost.parseUrl(repositoryUrl)
                         }
 
                         pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
@@ -426,7 +519,7 @@ class Pub(
                     }
 
                     if (version.isEmpty()) {
-                        log.warn { "No version information found for package $rawName." }
+                        logger.warn { "No version information found for package $rawName." }
                     }
 
                     val id = Identifier(
@@ -453,24 +546,23 @@ class Pub(
                 } catch (e: JacksonYAMLParseException) {
                     e.showStackTrace()
 
-                    val packageName = pkgInfoFromLockFile["name"].textValueOrEmpty()
                     val packageVersion = pkgInfoFromLockFile["version"].textValueOrEmpty()
                     issues += createAndLogIssue(
                         source = managerName,
-                        message = "Failed to parse pubspec.yaml for package $packageName:$packageVersion: " +
-                                e.collectMessagesAsString()
+                        message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
+                                e.collectMessages()
                     )
                 }
             }
         }
 
-        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPod dependencies for
+        // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods dependencies for
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
-        // the .pub-cache folder.
+        // the ".pub-cache" directory.
         if (containsFlutter) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
-                scanAndroidPackages(pkgInfoFromLockFile).forEach { result ->
+                scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -479,7 +571,7 @@ class Pub(
                 }
 
                 // As this package contains flutter, trigger CocoaPods manually for it.
-                scanIosPackages(pkgInfoFromLockFile)?.let { result ->
+                scanIosPackages(pkgInfoFromLockFile, workingDir)?.let { result ->
                     result.packages.forEach { pkg ->
                         packages[pkg.id] = pkg
                     }
@@ -492,21 +584,46 @@ class Pub(
         return ParsePackagesResult(packages, issues)
     }
 
-    private fun readPackageInfoFromCache(packageInfo: JsonNode): JsonNode {
-        val definitionFile = reader.findFile(packageInfo, "pubspec.yaml")
+    private fun readPackageInfoFromCache(packageInfo: JsonNode, workingDir: File): JsonNode {
+        val definitionFile = reader.findFile(packageInfo, workingDir, PUBSPEC_YAML)
+        if (definitionFile == null) {
+            createAndLogIssue(
+                source = managerName,
+                message = "Could not find '$PUBSPEC_YAML' for '${packageInfo["name"].textValueOrEmpty()}'.",
+                severity = Severity.WARNING
+            )
+
+            return EMPTY_JSON_NODE
+        }
+
         return yamlMapper.readTree(definitionFile)
     }
 
-    override fun command(workingDir: File?) = if (Os.isWindows) "pub.bat" else "pub"
+    override fun getVersion(workingDir: File?): String {
+        val result = ProcessCapture(workingDir, command(workingDir), getVersionArguments()).requireSuccess()
 
-    private fun commandFlutter() = if (Os.isWindows) "flutter.bat packages" else "flutter packages"
+        return transformVersion(result.stdout)
+    }
 
-    override fun run(workingDir: File?, vararg args: String): ProcessCapture {
-        var result = ProcessCapture(workingDir, *command(workingDir).split(' ').toTypedArray(), *args)
+    override fun command(workingDir: File?): String =
+        if (flutterAbsolutePath.isDirectory) "$flutterAbsolutePath${File.separator}$dartCommand" else dartCommand
+
+    private fun commandPub(): String = "${command()} pub"
+
+    private fun commandFlutter(): String =
+        if (flutterAbsolutePath.isDirectory) {
+            "$flutterAbsolutePath${File.separator}$flutterCommand pub"
+        } else {
+            "$flutterCommand pub"
+        }
+
+    override fun run(workingDir: File?, vararg args: CharSequence): ProcessCapture {
+        var result = ProcessCapture(workingDir, *commandPub().splitOnWhitespace().toTypedArray(), *args)
         if (result.isError) {
             // If Pub fails with the message that Flutter should be used instead, fall back to using Flutter.
-            if (result.errorMessage.contains("Flutter users should run `flutter")) {
-                result = ProcessCapture(workingDir, *commandFlutter().split(' ').toTypedArray(), *args).requireSuccess()
+            if ("Flutter users should run `flutter" in result.errorMessage) {
+                result = ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), *args)
+                    .requireSuccess()
             } else {
                 throw IOException(result.errorMessage)
             }
@@ -517,10 +634,39 @@ class Pub(
     private fun installDependencies(workingDir: File) {
         requireLockfile(workingDir) { workingDir.resolve(PUB_LOCK_FILE).isFile }
 
-        // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
-        // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
-        run(workingDir, "get")
+        if (containsFlutterSdk(workingDir)) {
+            // For Flutter projects it is not enough to run `dart pub get`. Instead, use `flutter pub get` which
+            // installs the required dependencies and also creates the `local.properties` file which is required for
+            // the Android analysis.
+            ProcessCapture(workingDir, *commandFlutter().splitOnWhitespace().toTypedArray(), "get").requireSuccess()
+        } else {
+            // The "get" command creates a "pubspec.lock" file (if not yet present) except for projects without any
+            // dependencies, see https://dart.dev/tools/pub/cmd/pub-get.
+            run(workingDir, "get")
+        }
     }
+
+    /**
+     * Check the [PUBSPEC_YAML] within [workingDir] if the project contains the Flutter SDK.
+     */
+    private fun containsFlutterSdk(workingDir: File): Boolean {
+        val specFile = yamlMapper.readTree(workingDir.resolve(PUBSPEC_YAML))
+
+        return specFile?.get("dependencies")?.get("flutter")?.get("sdk")?.textValue() == "flutter"
+    }
+
+    /**
+     * Create the final [PackageManagerResult] by making sure that packages are removed from [projectResults] that
+     * are also referenced as project dependencies.
+     */
+    override fun createPackageManagerResult(
+        projectResults: Map<File, List<ProjectAnalyzerResult>>
+    ): PackageManagerResult =
+        // TODO: Dependencies on projects should use the correct package linkage. To fix this, all project identifiers
+        //       should already be determined in beforeResolution() so that the linkage can be correctly set when the
+        //       dependency tree is built. Then also project packages could be prevented and the filter below could be
+        //       removed.
+        PackageManagerResult(projectResults.filterProjectPackages())
 }
 
 /**
@@ -530,3 +676,8 @@ private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
     (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
         parseAuthorString(it.textValue())
     }
+
+private fun ProjectAnalyzerResult.collectPackagesByScope(scopeName: String): List<Package> {
+    val scope = project.scopes.find { it.name == scopeName } ?: return emptyList()
+    return packages.filter { it.id in scope }
+}

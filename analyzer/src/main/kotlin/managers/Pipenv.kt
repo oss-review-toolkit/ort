@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,17 +20,24 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import com.vdurmont.semver4j.Requirement
+import com.vdurmont.semver4j.Semver
 
 import java.io.File
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.CommandLineTool
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+
+/**
+ * The version that introduced the requirements command.
+ */
+private val REQUIREMENTS_COMMAND_VERSION = Semver("2022.4.8")
 
 class Pipenv(
     name: String,
@@ -38,6 +45,8 @@ class Pipenv(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Pipenv>("Pipenv") {
         override val globsForDefinitionFiles = listOf("Pipfile.lock")
 
@@ -45,34 +54,40 @@ class Pipenv(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pipenv(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Pipenv(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "pipenv"
 
     override fun transformVersion(output: String) =
-        // "pipenv --version" returns a string like "pipenv, version 2018.11.26", so simply remove the prefix.
+        // The version string can be something like:
+        // pipenv, version 2018.11.26
         output.removePrefix("pipenv, version ")
 
     override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2018.10.9,)")
 
-    override fun beforeResolution(definitionFiles: List<File>) = checkVersion(analyzerConfig.ignoreToolVersions)
+    override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `pipenv` command
         // 2. Use existing "Pip" PackageManager to do the actual dependency resolution
 
         val workingDir = definitionFile.parentFile
-        val requirementsFile = workingDir.resolve("requirements-from-pipenv.txt").apply { deleteOnExit() }
+        val requirementsFile = workingDir.resolve("requirements-from-pipenv.txt")
 
-        log.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
+        logger.info { "Generating '${requirementsFile.name}' file in '$workingDir' directory..." }
 
-        ProcessCapture(workingDir, command(), "lock", "--requirements")
-            .requireSuccess()
-            .stdoutFile
-            .copyTo(requirementsFile)
+        val requirements = if (Semver(getVersion()) >= REQUIREMENTS_COMMAND_VERSION) {
+            ProcessCapture(workingDir, command(), "requirements")
+        } else {
+            ProcessCapture(workingDir, command(), "lock", "--requirements")
+        }.requireSuccess().stdout
 
-        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig).resolveDependencies(requirementsFile)
+        requirementsFile.writeText(requirements)
+
+        return Pip(managerName, analysisRoot, analyzerConfig, repoConfig)
+            .resolveDependencies(requirementsFile, labels)
+            .also { requirementsFile.delete() }
     }
 }

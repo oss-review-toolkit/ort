@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,20 +26,25 @@ import java.io.File
 import java.util.Properties
 import java.util.concurrent.TimeUnit
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.aether.artifact.Artifact
 import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.repository.WorkspaceRepository
 
 import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.events.ProgressListener
 import org.gradle.tooling.internal.consumer.DefaultGradleConnector
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.managers.utils.GradleDependencyGraphBuilder
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.utils.GradleDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.MavenSupport
 import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Project
@@ -49,9 +54,19 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.temporaryProperties
+import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.temporaryProperties
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+
+private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
+
+private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
+private val GRADLE_SETTINGS_FILES = listOf("settings.gradle", "settings.gradle.kts")
+
+private const val JAVA_MAX_HEAP_SIZE_OPTION = "-Xmx"
+private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
@@ -63,20 +78,19 @@ class Gradle(
     repoConfig: RepositoryConfiguration,
     private val gradleVersion: String? = null
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Gradle>("Gradle") {
         // Gradle prefers Groovy ".gradle" files over Kotlin ".gradle.kts" files, but "build" files have to come before
         // "settings" files as we should consider "settings" files only if the same directory does not also contain a
         // "build" file.
-        override val globsForDefinitionFiles = listOf(
-            "build.gradle", "build.gradle.kts",
-            "settings.gradle", "settings.gradle.kts"
-        )
+        override val globsForDefinitionFiles = GRADLE_BUILD_FILES + GRADLE_SETTINGS_FILES
 
         override fun create(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Gradle(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Gradle(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**
@@ -84,25 +98,31 @@ class Gradle(
      */
     private class GradleCacheReader : WorkspaceReader {
         private val workspaceRepository = WorkspaceRepository("gradleCache")
-        private val gradleCacheRoot = Os.userHomeDirectory.resolve(".gradle/caches/modules-2/files-2.1")
+        private val gradleCacheRoot = GRADLE_USER_HOME.resolve("caches/modules-2/files-2.1")
 
         override fun findArtifact(artifact: Artifact): File? {
-            val artifactRootDir = File(
-                gradleCacheRoot,
+            val artifactRootDir = gradleCacheRoot.resolve(
                 "${artifact.groupId}/${artifact.artifactId}/${artifact.version}"
             )
 
-            val artifactFile = artifactRootDir.walk().find {
+            val artifactFiles = artifactRootDir.walk().filter {
                 val classifier = if (artifact.classifier.isNullOrBlank()) "" else "${artifact.classifier}-"
                 it.isFile && it.name == "${artifact.artifactId}-$classifier${artifact.version}.${artifact.extension}"
+            }.sortedByDescending {
+                it.lastModified()
+            }.toList()
+
+            val artifactCoordinate = "${artifact.identifier()}:${artifact.classifier}:${artifact.extension}"
+
+            if (artifactFiles.size > 1) {
+                logger.debug { "Multiple Gradle cache entries matching '$artifactCoordinate' found: $artifactFiles" }
             }
 
-            log.debug {
-                "Gradle cache result for '${artifact.identifier()}:${artifact.classifier}:${artifact.extension}': " +
-                        artifactFile?.invariantSeparatorsPath
+            // Return the most recent file, if any, as that is most likely the correct one, e.g. in case of a silent
+            // update of an already published artifact.
+            return artifactFiles.firstOrNull()?.also { artifactFile ->
+                logger.debug { "Using Gradle cache entry at '$artifactFile' for artifact '$artifactCoordinate'." }
             }
-
-            return artifactFile
         }
 
         override fun findVersions(artifact: Artifact) =
@@ -114,41 +134,36 @@ class Gradle(
     }
 
     private val maven = MavenSupport(GradleCacheReader())
+    private val dependencyHandler = GradleDependencyHandler(managerName, maven)
+    private val graphBuilder = DependencyGraphBuilder(dependencyHandler)
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val gradleSystemProperties = mutableListOf<Pair<String, String>>()
+    // The path to the root project. In a single-project, just points to the project path.
+    private lateinit var rootProjectDir: File
+
+    override fun createPackageManagerResult(projectResults: Map<File, List<ProjectAnalyzerResult>>) =
+        PackageManagerResult(projectResults, graphBuilder.build(), graphBuilder.packages())
+
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val gradleProperties = mutableListOf<Pair<String, String>>()
 
-        // Usually, the Gradle wrapper's Java code handles applying system properties defined in a Gradle properties
-        // file. But as we use the Gradle Tooling API instead of the wrapper to start the build, we need to manually
-        // load any system properties from a Gradle properties file and set them in the process that uses the Tooling
-        // API. A typical use case for this is to apply proxy settings so that the Gradle distribution used by the build
-        // can be downloaded behind a proxy, see https://github.com/gradle/gradle/issues/6825#issuecomment-502720562.
-        // For simplicity, limit the search for system properties to the current user's Gradle properties file for now.
-        val gradlePropertiesFile = Os.userHomeDirectory.resolve(".gradle/gradle.properties")
-        if (gradlePropertiesFile.isFile) {
-            gradlePropertiesFile.inputStream().use {
-                val properties = Properties().apply { load(it) }
+        val projectDir = definitionFile.parentFile
+        val isRootProject = GRADLE_SETTINGS_FILES.any { projectDir.resolve(it).isFile }
 
-                properties.mapNotNullTo(gradleSystemProperties) { (key, value) ->
-                    val systemPropKey = (key as String).removePrefix("systemProp.")
-                    (systemPropKey to (value as String)).takeIf { systemPropKey != key }
-                }
+        // TODO: Improve the logic to work for independent projects that are stored in a directory below another
+        //       independent project.
+        val isIndependentProject = !this::rootProjectDir.isInitialized || !projectDir.startsWith(rootProjectDir)
+
+        // Do not reset the root project directory for subprojects.
+        if (isRootProject || isIndependentProject) rootProjectDir = projectDir
+
+        val userPropertiesFile = GRADLE_USER_HOME.resolve("gradle.properties")
+        if (userPropertiesFile.isFile) {
+            userPropertiesFile.inputStream().use {
+                val properties = Properties().apply { load(it) }
 
                 properties.mapNotNullTo(gradleProperties) { (key, value) ->
                     ((key as String) to (value as String)).takeUnless { key.startsWith("systemProp.") }
                 }
-            }
-
-            log.debug {
-                "Will apply the following system properties defined in file '$gradlePropertiesFile':" +
-                        gradleSystemProperties.joinToString(separator = "\n\t", prefix = "\n\t") {
-                            "${it.first} = ${it.second}"
-                        }
-            }
-        } else {
-            log.debug {
-                "Not applying any system properties as no '$gradlePropertiesFile' file was found."
             }
         }
 
@@ -169,18 +184,17 @@ class Gradle(
         // Set the value to empirically determined 8 GiB if no value is set in "~/.gradle/gradle.properties".
         val jvmArgs = gradleProperties.find { (key, _) ->
             key == "org.gradle.jvmargs"
-        }?.second?.split(' ').orEmpty().toMutableList()
+        }?.second?.splitOnWhitespace().orEmpty().toMutableList()
 
-        if (jvmArgs.none { it.contains("-xmx", ignoreCase = true) }) {
-            jvmArgs += "-Xmx8g"
+        if (jvmArgs.none { it.contains(JAVA_MAX_HEAP_SIZE_OPTION, ignoreCase = true) }) {
+            jvmArgs += "$JAVA_MAX_HEAP_SIZE_OPTION$JAVA_MAX_HEAP_SIZE_VALUE"
         }
 
-        val projectDir = definitionFile.parentFile
         val gradleConnection = gradleConnector.forProjectDirectory(projectDir).connect()
 
-        return temporaryProperties(*gradleSystemProperties.toTypedArray()) {
+        return temporaryProperties("user.dir" to rootProjectDir.path) {
             gradleConnection.use { connection ->
-                val initScriptFile = File.createTempFile("init", ".gradle")
+                val initScriptFile = createOrtTempFile("init", ".gradle")
                 initScriptFile.writeBytes(javaClass.getResource("/scripts/init.gradle").readBytes())
 
                 val stdout = ByteArrayOutputStream()
@@ -189,27 +203,28 @@ class Gradle(
                 val dependencyTreeModel = connection
                     .model(DependencyTreeModel::class.java)
                     .addJvmArguments(jvmArgs)
+                    .addProgressListener(ProgressListener { logger.debug { it.displayName } })
                     .setStandardOutput(stdout)
                     .setStandardError(stderr)
                     .withArguments("-Duser.home=${Os.userHomeDirectory}", "--init-script", initScriptFile.path)
                     .get()
 
                 if (stdout.size() > 0) {
-                    log.debug {
+                    logger.debug {
                         "Analyzing the project in '$projectDir' produced the following standard output:\n" +
                                 stdout.toString().prependIndent("\t")
                     }
                 }
 
                 if (stderr.size() > 0) {
-                    log.warn {
+                    logger.warn {
                         "Analyzing the project in '$projectDir' produced the following error output:\n" +
                                 stderr.toString().prependIndent("\t")
                     }
                 }
 
                 if (!initScriptFile.delete()) {
-                    log.warn { "Init script file '$initScriptFile' could not be deleted." }
+                    logger.warn { "Init script file '$initScriptFile' could not be deleted." }
                 }
 
                 val repositories = dependencyTreeModel.repositories.map {
@@ -217,36 +232,38 @@ class Gradle(
                     RemoteRepository.Builder(it, "default", it).build()
                 }
 
-                log.debug {
+                dependencyHandler.repositories = repositories
+
+                logger.debug {
                     val projectName = dependencyTreeModel.name
                     "The Gradle project '$projectName' uses the following Maven repositories: $repositories"
                 }
 
-                val graphBuilder = GradleDependencyGraphBuilder(managerName, maven)
+                val projectId = Identifier(
+                    type = managerName,
+                    namespace = dependencyTreeModel.group,
+                    name = dependencyTreeModel.name,
+                    version = dependencyTreeModel.version
+                )
+
                 dependencyTreeModel.configurations.forEach { configuration ->
                     configuration.dependencies.forEach { dependency ->
-                        graphBuilder.addDependency(configuration.name, dependency, repositories)
+                        graphBuilder.addDependency(
+                            DependencyGraph.qualifyScope(projectId, configuration.name),
+                            dependency
+                        )
                     }
-
-                    // Make sure that scopes without dependencies are recorded.
-                    graphBuilder.addScope(configuration.name)
                 }
 
                 val project = Project(
-                    id = Identifier(
-                        type = managerName,
-                        namespace = dependencyTreeModel.group,
-                        name = dependencyTreeModel.name,
-                        version = dependencyTreeModel.version
-                    ),
+                    id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = sortedSetOf(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",
-                    scopeDependencies = null,
-                    dependencyGraph = graphBuilder.build()
+                    scopeNames = graphBuilder.scopesFor(projectId)
                 )
 
                 val issues = mutableListOf<OrtIssue>()
@@ -259,7 +276,7 @@ class Gradle(
                     createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
-                listOf(ProjectAnalyzerResult(project, graphBuilder.packages().toSortedSet(), issues))
+                listOf(ProjectAnalyzerResult(project, sortedSetOf(), issues))
             }
         }
     }

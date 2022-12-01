@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.commands
+package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.CliktCommand
@@ -34,19 +34,23 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.GlobalOptions
 import org.ossreviewtoolkit.advisor.Advisor
+import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.utils.SeverityStats
+import org.ossreviewtoolkit.cli.utils.configurationGroup
+import org.ossreviewtoolkit.cli.utils.outputGroup
+import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.utils.expandTilde
-import org.ossreviewtoolkit.utils.safeMkdirs
+import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.safeMkdirs
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies for security vulnerabilities.") {
-    private val allVulnerabilityProvidersByName = Advisor.ALL.associateBy { it.providerName }
-        .toSortedMap(String.CASE_INSENSITIVE_ORDER)
-
-    private val input by option(
+    private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
     ).convert { it.expandTilde() }
@@ -56,7 +60,7 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val outputDir by option(
         "--output-dir", "-o",
-        help = "The directory to write the advisor results as ORT result file(s) to."
+        help = "The directory to write the ORT result file with advisor results to."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
@@ -70,27 +74,32 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
 
     private val labels by option(
         "--label", "-l",
-        help = "Add a label to the ORT result. Can be used multiple times. If an ORT result is used as input for the" +
-                "advisor, any existing label with the same key is overwritten. For example: " +
-                "--label distribution=external"
+        help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
+                "times. For example: --label distribution=external"
     ).associate()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val resolutionsFile by option(
+        "--resolutions-file",
+        help = "A file containing issue and rule violation resolutions."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
+        .configurationGroup()
 
     private val providerFactories by option(
         "--advisors", "-a",
-        help = "The comma-separated advisors to use, any of ${allVulnerabilityProvidersByName.keys}."
+        help = "The comma-separated advisors to use, any of ${Advisor.ALL.keys}."
     ).convert { name ->
-        allVulnerabilityProvidersByName[name]
-            ?: throw BadParameterValue(
-                "Advisor '$name' is not one of ${allVulnerabilityProvidersByName.keys}."
-            )
+        Advisor.ALL[name] ?: throw BadParameterValue("Advisor '$name' is not one of ${Advisor.ALL.keys}.")
     }.split(",").required()
 
     private val skipExcluded by option(
         "--skip-excluded",
         help = "Do not check excluded projects or packages."
     ).flag()
+
+    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
@@ -108,27 +117,27 @@ class AdvisorCommand : CliktCommand(name = "advise", help = "Check dependencies 
         println("The following advisors are activated:")
         println("\t" + distinctProviders.joinToString())
 
-        val advisor = Advisor(distinctProviders, globalOptionsForSubcommands.config.advisor)
+        val config = globalOptionsForSubcommands.config
+        val advisor = Advisor(distinctProviders, config.advisor)
 
-        val ortResult = advisor.retrieveVulnerabilityInformation(input, skipExcluded).mergeLabels(labels)
+        val ortResultInput = readOrtResult(ortFile)
+        val ortResultOutput = advisor.retrieveFindings(ortResultInput, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()
+        writeOrtResult(ortResultOutput, outputFiles, "advisor")
 
-        outputFiles.forEach { file ->
-            println("Writing advisor result to '$file'.")
-            file.mapper().writerWithDefaultPrettyPrinter().writeValue(file, ortResult)
-        }
-
-        val advisorResults = ortResult.advisor?.results
+        val advisorResults = ortResultOutput.advisor?.results
 
         if (advisorResults == null) {
             println("There was an error creating the advisor results.")
             throw ProgramResult(1)
         }
 
-        if (advisorResults.hasIssues) {
-            println("The advisor result contains issues.")
-            throw ProgramResult(2)
-        }
+        val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
+        val (resolvedIssues, unresolvedIssues) =
+            advisorResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
+
+        severityStats.print().conclude(config.severeIssueThreshold, 2)
     }
 }

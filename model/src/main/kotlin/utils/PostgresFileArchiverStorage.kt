@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 HERE Europe B.V.
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.io.IOException
 
 import javax.sql.DataSource
 
-import kotlin.io.path.createTempFile
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -33,18 +33,17 @@ import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
-import org.jetbrains.exposed.sql.transactions.transaction
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.tableExists
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
  * A PostgreSQL based storage for archive files.
@@ -53,30 +52,33 @@ class PostgresFileArchiverStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    dataSource: DataSource
+    dataSource: Lazy<DataSource>
 ) : FileArchiverStorage {
-    init {
-        Database.connect(dataSource).apply { defaultFetchSize(1000) }
+    companion object : Logging
 
-        transaction {
-            withDataBaseLock {
-                if (!tableExists(FileArchiveTable.tableName)) {
-                    checkDatabaseEncoding()
-                    createMissingTablesAndColumns(FileArchiveTable)
+    /** Stores the database connection used by this object. */
+    private val database by lazy {
+        Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
+            transaction {
+                withDataBaseLock {
+                    if (!tableExists(FileArchiveTable.tableName)) {
+                        checkDatabaseEncoding()
+                        createMissingTablesAndColumns(FileArchiveTable)
+                    }
                 }
-            }
 
-            commit()
+                commit()
+            }
         }
     }
 
     override fun hasArchive(provenance: KnownProvenance): Boolean =
-        transaction {
+        database.transaction {
             queryFileArchive(provenance)
         } != null
 
     override fun addArchive(provenance: KnownProvenance, zipFile: File) =
-        transaction {
+        database.transaction {
             if (queryFileArchive(provenance) == null) {
                 try {
                     FileArchive.new {
@@ -87,17 +89,17 @@ class PostgresFileArchiverStorage(
                     // The exception can happen when an archive with the same provenance has been inserted in parallel.
                     // That race condition is possible because [java.sql.Connection.TRANSACTION_READ_COMMITTED] is used
                     // as transaction isolation level (by default).
-                    log.warn(e) { "Could not insert archive for '${provenance.storageKey()}'." }
+                    logger.warn(e) { "Could not insert archive for '${provenance.storageKey()}'." }
                 }
             }
         }
 
     override fun getArchive(provenance: KnownProvenance): File? {
-        val fileArchive = transaction {
+        val fileArchive = database.transaction {
             queryFileArchive(provenance)
         } ?: return null
 
-        val file = createTempFile(ORT_NAME, ".zip").toFile()
+        val file = createOrtTempFile(suffix = ".zip")
 
         try {
             file.writeBytes(fileArchive.zipData)
@@ -125,13 +127,8 @@ internal class FileArchive(id: EntityID<Int>) : IntEntity(id) {
 private fun KnownProvenance.storageKey(): String =
     when (this) {
         is ArtifactProvenance -> "source-artifact|${sourceArtifact.url}|${sourceArtifact.hash}"
-        is RepositoryProvenance -> {
-            // The content on the archives does not depend on the VCS path in general, thus that path must not be part
-            // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
-            // the Git-Repo manifest location rather than the path to be (sparse) checked out.
-            val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
-            "vcs|${vcsInfo.type}|${vcsInfo.url}|${vcsInfo.resolvedRevision}|$path"
-        }
+        // The trailing "|" is kept for backward compatibility because there used to be an additional parameter.
+        is RepositoryProvenance -> "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|"
     }
 
 private fun queryFileArchive(provenance: KnownProvenance): FileArchive? =

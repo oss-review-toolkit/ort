@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,16 +19,11 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
-import java.util.LinkedList
 import java.util.SortedSet
 
 /**
  * The scope class puts package dependencies into context.
  */
-@JsonIgnoreProperties("delivered", "distributed")
 data class Scope(
     /**
      * The respective package manager's native name for the scope, e.g. "compile", "provided" etc. for Maven, or
@@ -80,53 +75,4 @@ data class Scope(
      */
     fun findReferences(id: Identifier) =
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
-
-    /**
-     * Return the depth of the dependency tree rooted at the project associated with this scope.
-     */
-    @JsonIgnore
-    fun getDependencyTreeDepth(): Int {
-        fun getTreeDepthRec(dependencies: Collection<PackageReference>): Int =
-            dependencies.map { dependency -> 1 + getTreeDepthRec(dependency.dependencies) }.maxOrNull() ?: 0
-
-        return getTreeDepthRec(dependencies)
-    }
-
-    /**
-     * Return the shortest path to each dependency in this scope. The path to a dependency is defined by the nodes of
-     * the dependency tree that need to be passed to get to the dependency. For direct dependencies the shortest path is
-     * empty.
-     */
-    @JsonIgnore
-    fun getShortestPaths(): Map<Identifier, List<Identifier>> {
-        data class QueueItem(
-            val pkgRef: PackageReference,
-            val parents: List<Identifier>
-        )
-
-        val remainingIds = collectDependencies().toMutableSet()
-        val queue = LinkedList<QueueItem>()
-        val result = sortedMapOf<Identifier, List<Identifier>>()
-
-        dependencies.forEach { queue.offer(QueueItem(it, emptyList())) }
-
-        while (queue.isNotEmpty()) {
-            val item = queue.poll()
-            if (item.pkgRef.id in remainingIds) {
-                result[item.pkgRef.id] = item.parents
-                remainingIds -= item.pkgRef.id
-            }
-
-            val newParents = item.parents + item.pkgRef.id
-            item.pkgRef.dependencies.forEach { pkgRef ->
-                queue.offer(QueueItem(pkgRef, newParents))
-            }
-        }
-
-        require(remainingIds.isEmpty()) {
-            "Could not find the shortest path for these dependencies: ${remainingIds.joinToString()}"
-        }
-
-        return result
-    }
 }

@@ -8,6 +8,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "angular-tileview": "github:tinydesk/angular-tileview",
     "is-win": "https://registry.npmjs.org/is-win/-/is-win-1.0.8.tgz",
     "is-windows": "https://github.com/jonschlinkert/is-windows/archive/1.0.2.tar.gz"
   },

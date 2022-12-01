@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -34,14 +34,14 @@ data class Project(
 
     val limitDate: String?,
 
-    val productCode: String,
-    val productName: String,
+    val productCode: String?,
+    val productName: String?,
 
-    val description: String,
+    val description: String?,
     val comment: String,
 
     val isArchived: Int,
-    val jiraProjectKey: String,
+    val jiraProjectKey: String?,
     val creationDate: String,
     val dateLimitDate: String?
 )

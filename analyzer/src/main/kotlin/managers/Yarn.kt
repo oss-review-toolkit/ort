@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,19 +19,24 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.managers.utils.hasYarnLockFile
 import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.Os
+import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.utils.common.Os
 
 /**
- * The [Yarn](https://www.yarnpkg.com/) package manager for JavaScript.
+ * The [Yarn](https://classic.yarnpkg.com/) package manager for JavaScript.
  */
 class Yarn(
     name: String,
@@ -39,6 +44,8 @@ class Yarn(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : Npm(name, analysisRoot, analyzerConfig, repoConfig) {
+    companion object : Logging
+
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")
 
@@ -46,10 +53,8 @@ class Yarn(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Yarn(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Yarn(name, analysisRoot, analyzerConfig, repoConfig)
     }
-
-    override val installParameters = arrayOf("--ignore-scripts", "--ignore-engines")
 
     override fun hasLockFile(projectDir: File) = hasYarnLockFile(projectDir)
 
@@ -62,5 +67,14 @@ class Yarn(
     override fun beforeResolution(definitionFiles: List<File>) =
         // We do not actually depend on any features specific to a Yarn version, but we still want to stick to a
         // fixed minor version to be sure to get consistent results.
-        checkVersion(analyzerConfig.ignoreToolVersions)
+        checkVersion()
+
+    override fun runInstall(workingDir: File) = run(workingDir, "install", "--ignore-scripts", "--ignore-engines")
+
+    override fun getRemotePackageDetails(workingDir: File, packageName: String): JsonNode {
+        val process = run(workingDir, "info", "--json", packageName)
+        return jsonMapper.readTree(process.stdout)["data"] ?: jsonMapper.readTree(process.stderr)["data"].also {
+            logger.warn { "Error running '${process.commandLine}' in directory $workingDir: $it" }
+        }
+    }
 }

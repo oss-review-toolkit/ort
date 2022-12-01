@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,13 +22,13 @@ package org.ossreviewtoolkit.model
 import org.apache.logging.log4j.Level
 
 /**
- * A generic class describing a severity, e.g. of issues.
+ * A generic class describing a severity, e.g. of issues, sorted from least severe to most severe.
  */
 enum class Severity {
     /**
-     * An error is something that has to be addressed.
+     * A hint is something that is provided for information only.
      */
-    ERROR,
+    HINT,
 
     /**
      * A warning is something that should be addressed.
@@ -36,17 +36,17 @@ enum class Severity {
     WARNING,
 
     /**
-     * A hint is something that is provided for information only.
+     * An error is something that has to be addressed.
      */
-    HINT;
+    ERROR;
 
     /**
      * Map the [Severity] to a Log4j [Level].
      */
     fun toLog4jLevel(): Level =
         when (this) {
-            ERROR -> Level.ERROR
-            WARNING -> Level.WARN
             HINT -> Level.INFO
+            WARNING -> Level.WARN
+            ERROR -> Level.ERROR
         }
 }

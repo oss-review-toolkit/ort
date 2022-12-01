@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -29,13 +29,13 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ListLicenseCategoriesCommand : CliktCommand(
     help = "Lists the license categories."
 ) {
     private val licenseClassificationsFile by option(
-        "--license-classifications-file",
+        "--license-classifications-file", "-i",
         help = "The license classifications file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
@@ -93,10 +93,7 @@ class ListLicenseCategoriesCommand : CliktCommand(
 
         return buildString {
             append(id)
-
-            if (filteredCategories.isNotEmpty()) {
-                append(": [${filteredCategories.joinToString()}]")
-            }
+            if (filteredCategories.isNotEmpty()) append(": [${filteredCategories.joinToString()}]")
         }
     }
 

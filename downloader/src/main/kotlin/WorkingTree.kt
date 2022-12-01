@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -24,7 +24,7 @@ import java.io.IOException
 
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.filterVersionNames
+import org.ossreviewtoolkit.utils.ort.filterVersionNames
 
 /**
  * A class representing a local VCS working tree. The passed [workingDir] does not necessarily need to be the
@@ -89,17 +89,18 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
     fun guessRevisionName(project: String, version: String): String {
         if (version.isBlank()) throw IOException("Cannot guess a revision name from a blank version.")
 
-        val versionNames = filterVersionNames(version, listRemoteTags(), project)
+        val remoteTags = listRemoteTags()
+        val versionNames = filterVersionNames(version, remoteTags, project)
+
         return when {
             versionNames.isEmpty() ->
                 throw IOException(
-                    "No matching tag found for version '$version'. Please create a tag whose name "
-                            + "contains the version."
+                    "No matching tag for version '$version' found in $remoteTags. Please create a tag whose name " +
+                            "contains the version."
                 )
             versionNames.size > 1 ->
                 throw IOException(
-                    "Multiple matching tags found for version '$version': $versionNames. Please add a "
-                            + "curation."
+                    "Multiple matching tags found for version '$version': $versionNames. Please add a curation."
                 )
             else -> versionNames.first()
         }

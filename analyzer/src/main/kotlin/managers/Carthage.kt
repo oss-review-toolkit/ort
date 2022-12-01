@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
-import java.net.URI
 import java.net.URL
 import java.util.SortedSet
 
@@ -41,7 +40,10 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
+import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
+import org.ossreviewtoolkit.utils.common.unquote
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 /**
  * The [Carthage](https://github.com/Carthage/Carthage) package manager for Objective-C / Swift.
@@ -61,10 +63,10 @@ class Carthage(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Carthage(managerName, analysisRoot, analyzerConfig, repoConfig)
+        ) = Carthage(name, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    override fun resolveDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // Transitive dependencies are only supported if the dependency itself uses Carthage.
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile
@@ -97,9 +99,9 @@ class Carthage(
      */
     private fun getProjectInfoFromVcs(workingDir: File): ProjectInfo {
         val workingTree = VersionControlSystem.forDirectory(workingDir)
-        val vcsInfo = workingTree?.getInfo() ?: VcsInfo.EMPTY
+        val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)
-        val vcsHost = VcsHost.toVcsHost(URI(normalizedVcsUrl))
+        val vcsHost = VcsHost.fromUrl(normalizedVcsUrl)
 
         return ProjectInfo(
             namespace = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
@@ -123,19 +125,19 @@ class Carthage(
     }
 
     private fun parseDependencyLine(line: String, workingDir: String): Package {
-        val split = line.split(' ')
+        val split = line.splitOnWhitespace()
 
         require(split.size == 3) {
             "A dependency line must consist of exactly 3 space separated elements."
         }
 
-        val type = DependencyType.valueOf(split[0].toUpperCase())
-        val id = split[1].removeSurrounding("\"")
-        val revision = split[2].removeSurrounding("\"")
+        val type = DependencyType.valueOf(split[0].uppercase())
+        val id = split[1].unquote()
+        val revision = split[2].unquote()
 
         return when (type) {
             DependencyType.GITHUB -> {
-                // ID consists of github username/project or a github enterprise URL.
+                // ID consists of GitHub username/project or a GitHub enterprise URL.
                 val projectUrl = if (id.split('/').size == 2) {
                     val (username, project) = id.split("/", limit = 2)
                     "https://github.com/$username/$project"
@@ -158,7 +160,7 @@ class Carthage(
             }
 
             DependencyType.BINARY -> {
-                // ID is an URL or a path to a file that contains a Carthage binary project specification.
+                // ID is a URL or a path to a file that contains a Carthage binary project specification.
                 val binarySpecString = if (isFilePath(workingDir, id)) {
                     val filePath = id.removePrefix("file://")
                     val binarySpecFile = when {
@@ -177,9 +179,9 @@ class Carthage(
     }
 
     private fun createPackageFromGenericGitUrl(projectUrl: String, revision: String): Package {
-        val vcsInfoFromUrl = VcsHost.toVcsInfo(projectUrl)
+        val vcsInfoFromUrl = VcsHost.parseUrl(projectUrl)
         val vcsInfo = vcsInfoFromUrl.copy(revision = revision)
-        val vcsHost = VcsHost.toVcsHost(URI(vcsInfo.url))
+        val vcsHost = VcsHost.fromUrl(vcsInfo.url)
 
         return Package(
             id = Identifier(

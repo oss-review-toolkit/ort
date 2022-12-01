@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2019-2021 HERE Europe B.V.
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,15 +23,15 @@ import java.io.File
 import java.io.IOException
 import java.security.MessageDigest
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.ORT_NAME
-import org.ossreviewtoolkit.utils.collectMessagesAsString
-import org.ossreviewtoolkit.utils.log
-import org.ossreviewtoolkit.utils.storage.FileStorage
-import org.ossreviewtoolkit.utils.toHexString
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.encodeHex
+import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
  * A [FileStorage] based storage for archive files.
@@ -42,6 +42,8 @@ class FileArchiverFileStorage(
      */
     private val storage: FileStorage
 ) : FileArchiverStorage {
+    companion object : Logging
+
     override fun hasArchive(provenance: KnownProvenance): Boolean {
         val archivePath = getArchivePath(provenance)
 
@@ -55,7 +57,7 @@ class FileArchiverFileStorage(
     override fun getArchive(provenance: KnownProvenance): File? {
         val archivePath = getArchivePath(provenance)
 
-        val zipFile = kotlin.io.path.createTempFile(ORT_NAME, ".zip").toFile()
+        val zipFile = createOrtTempFile(suffix = ".zip")
 
         return try {
             storage.read(archivePath).use { inputStream ->
@@ -66,7 +68,7 @@ class FileArchiverFileStorage(
 
             zipFile
         } catch (e: IOException) {
-            log.error { "Could not unarchive from $archivePath: ${e.collectMessagesAsString()}" }
+            logger.error { "Could not unarchive from $archivePath: ${e.collectMessages()}" }
 
             null
         }
@@ -81,16 +83,10 @@ private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
 private fun KnownProvenance.hash(): String {
     val key = when (this) {
         is ArtifactProvenance -> "${sourceArtifact.url}${sourceArtifact.hash.value}"
-        is RepositoryProvenance -> {
-            // The content on the archives does not depend on the VCS path in general, thus that path must not be part
-            // of the storage key. However, for Git-Repo that path must be part of the storage key because it denotes
-            // the Git-Repo manifest location rather than the path to be (sparse) checked out.
-            val path = vcsInfo.path.takeIf { vcsInfo.type == VcsType.GIT_REPO }.orEmpty()
-            "${vcsInfo.type}${vcsInfo.url}${vcsInfo.resolvedRevision}$path"
-        }
+        is RepositoryProvenance -> "${vcsInfo.type}${vcsInfo.url}$resolvedRevision"
     }
 
-    return SHA1_DIGEST.digest(key.toByteArray()).toHexString()
+    return SHA1_DIGEST.digest(key.toByteArray()).encodeHex()
 }
 
-private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"
+internal fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"

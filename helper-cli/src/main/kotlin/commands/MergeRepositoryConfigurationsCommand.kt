@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 HERE Europe B.V.
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -28,11 +28,11 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.helper.common.merge
-import org.ossreviewtoolkit.helper.common.writeAsYaml
+import org.ossreviewtoolkit.helper.utils.merge
+import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.expandTilde
+import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +
@@ -55,10 +55,10 @@ internal class MergeRepositoryConfigurationsCommand : CliktCommand(
         var result = RepositoryConfiguration()
 
         inputRepositoryConfigurationFiles.forEach { file ->
-            val repositoryConfiguration = file.expandTilde().readValue<RepositoryConfiguration>()
+            val repositoryConfiguration = file.readValue<RepositoryConfiguration>()
             result = result.merge(repositoryConfiguration)
         }
 
-        result.writeAsYaml(outputRepositoryConfigurationFile)
+        result.write(outputRepositoryConfigurationFile)
     }
 }

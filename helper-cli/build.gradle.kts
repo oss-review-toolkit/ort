@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
- * Copyright (C) 2019 Bosch Software Innovations GmbH
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,25 +17,46 @@
  * License-Filename: LICENSE
  */
 
-val cliktVersion: String by project
-val log4jCoreVersion: String by project
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+import java.nio.charset.Charset
 
 plugins {
     // Apply core plugins.
     application
+
+    // Apply third-party plugins.
+    alias(libs.plugins.shadow)
 }
 
 application {
     applicationName = "orth"
-    mainClassName = "org.ossreviewtoolkit.helper.HelperMainKt"
+    mainClass.set("org.ossreviewtoolkit.helper.HelperMainKt")
 }
 
-tasks.named<CreateStartScripts>("startScripts") {
+tasks.withType<ShadowJar>().configureEach {
+    isZip64 = true
+}
+
+tasks.named<CreateStartScripts>("startScripts").configure {
     doLast {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
         // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
-        windowsScript.writeText(windowsScript.readText().replace(Regex("set CLASSPATH=.*"),
-            "set CLASSPATH=%APP_HOME%\\\\lib\\\\*"))
+        val windowsScriptText = windowsScript.readText(Charset.defaultCharset())
+        windowsScript.writeText(
+            windowsScriptText.replace(
+                Regex("set CLASSPATH=%APP_HOME%\\\\lib\\\\.*"),
+                "set CLASSPATH=%APP_HOME%\\\\lib\\\\*;%APP_HOME%\\\\plugin\\\\*"
+            )
+        )
+
+        val unixScriptText = unixScript.readText(Charset.defaultCharset())
+        unixScript.writeText(
+            unixScriptText.replace(
+                Regex("CLASSPATH=\\\$APP_HOME/lib/.*"),
+                "CLASSPATH=\\\$APP_HOME/lib/*:\\\$APP_HOME/plugin/*"
+            )
+        )
     }
 }
 
@@ -45,7 +65,7 @@ repositories {
     // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
         forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases-local/")
+            maven("https://repo.gradle.org/gradle/libs-releases/")
         }
 
         filter {
@@ -68,9 +88,16 @@ dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
     implementation(project(":scanner"))
-    implementation(project(":utils"))
+    implementation(project(":utils:ort-utils"))
 
-    implementation("com.github.ajalt.clikt:clikt:$cliktVersion")
-    implementation("org.apache.logging.log4j:log4j-core:$log4jCoreVersion")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4jCoreVersion")
+    implementation(libs.clikt)
+    implementation(libs.commonsCompress)
+    implementation(libs.exposedCore)
+    implementation(libs.hikari)
+    implementation(libs.jslt)
+    implementation(libs.log4jApiToSlf4j)
+    implementation(libs.logbackClassic)
+
+    testImplementation(libs.kotestAssertionsCore)
+    testImplementation(libs.kotestRunnerJunit5)
 }

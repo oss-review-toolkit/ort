@@ -1,12 +1,11 @@
 /*
- * Copyright (C) 2019 HERE Europe B.V.
- * Copyright (C) 2020-2021 Bosch.IO GmbH
+ * Copyright (C) 2019 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,27 +19,78 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.sksamuel.hoplite.ConfigLoader
-import com.sksamuel.hoplite.ConfigResult
-import com.sksamuel.hoplite.Node
+import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.PropertySource
-import com.sksamuel.hoplite.PropertySourceContext
+import com.sksamuel.hoplite.addEnvironmentSource
 import com.sksamuel.hoplite.fp.getOrElse
-import com.sksamuel.hoplite.fp.valid
-import com.sksamuel.hoplite.parsers.toNode
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.log
+import org.apache.logging.log4j.kotlin.Logging
+
+import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 
 /**
  * The configuration model for all ORT components.
  */
 data class OrtConfiguration(
     /**
+     * The license file patterns.
+     */
+    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
+
+    /**
+     * A flag to indicate whether authors should be considered as copyright holders.
+     */
+    val addAuthorsToCopyrights: Boolean = false,
+
+    /**
+     * The threshold from which on issues count as severe.
+     */
+    val severeIssueThreshold: Severity = Severity.WARNING,
+
+    /**
+     * The threshold from which on rule violations count as severe.
+     */
+    val severeRuleViolationThreshold: Severity = Severity.WARNING,
+
+    /**
+     * Enable the usage of project-local package curations from the [RepositoryConfiguration]. If set to true, apply
+     * package curations from a local .ort.yml file before applying those specified via the command line i.e. curations
+     * from the.ort.yml take precedence.
+     */
+    val enableRepositoryPackageCurations: Boolean = false,
+
+    /**
+     * Enable the usage of project-local package configurations from the [RepositoryConfiguration]. If set to true,
+     * apply package configurations from a local .ort.yml file before applying those specified via the command line i.e.
+     * configurations from the .ort.yml take precedence.
+     */
+    val enableRepositoryPackageConfigurations: Boolean = false,
+
+    /**
+     * A set with substrings to filter out environment variables before creating child processes to prevent that those
+     * processes can access sensitive information. See [EnvironmentVariableFilter] for further details.
+     */
+    val deniedProcessEnvironmentVariablesSubstrings: Set<String> = EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS,
+
+    /**
+     * A set with the names of environment variables that are explicitly allowed to be passed to child processes,
+     * even if they are matched by one of the [deniedProcessEnvironmentVariablesSubstrings].
+     * See [EnvironmentVariableFilter] for further details.
+     */
+    val allowedProcessEnvironmentVariableNames: Set<String> = EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES,
+
+    /**
      * The configuration of the analyzer.
      */
     val analyzer: AnalyzerConfiguration = AnalyzerConfiguration(),
+
+    /**
+     * The configuration of the advisors, using the advisor's name as the key.
+     */
+    val advisor: AdvisorConfiguration = AdvisorConfiguration(),
 
     /**
      * The configuration of the downloader.
@@ -53,16 +103,16 @@ data class OrtConfiguration(
     val scanner: ScannerConfiguration = ScannerConfiguration(),
 
     /**
-     * The license file patterns.
+     * The configuration of the reporter.
      */
-    val licenseFilePatterns: LicenseFilenamePatterns = LicenseFilenamePatterns.DEFAULT,
+    val reporter: ReporterConfiguration = ReporterConfiguration(),
 
     /**
-     * The configuration of the advisors, using the advisor's name as the key.
+     * The configuration of the notifier.
      */
-    val advisor: AdvisorConfiguration = AdvisorConfiguration()
+    val notifier: NotifierConfiguration = NotifierConfiguration()
 ) {
-    companion object {
+    companion object : Logging {
         /**
          * Load the [OrtConfiguration]. The different sources are used with this priority:
          *
@@ -75,47 +125,53 @@ data class OrtConfiguration(
         fun load(args: Map<String, String>? = null, file: File? = null): OrtConfiguration {
             val sources = listOfNotNull(
                 args?.filterKeys { it.startsWith("ort.") }?.takeUnless { it.isEmpty() }?.let {
-                    log.info {
+                    logger.info {
                         val argsList = it.map { (k, v) -> "\t$k=$v" }
                         "Using ORT configuration arguments:\n" + argsList.joinToString("\n")
                     }
 
-                    argumentsSource(it)
+                    PropertySource.map(it)
                 },
                 file?.takeIf { it.isFile }?.let {
-                    log.info { "Using ORT configuration file '$it'." }
+                    logger.info { "Using ORT configuration file '$it'." }
+
                     PropertySource.file(it)
                 }
             )
 
-            val loader = ConfigLoader.Builder().addSources(sources).build()
+            val loader = ConfigLoaderBuilder.default()
+                .addEnvironmentSource()
+                .addPropertySources(sources)
+                .allowUnresolvedSubstitutions()
+                .build()
+
             val config = loader.loadConfig<OrtConfigurationWrapper>()
 
             return config.getOrElse { failure ->
-                if (sources.isNotEmpty()) {
-                    throw IllegalArgumentException("Failed to load ORT configuration: ${failure.description()}")
+                require(sources.isEmpty()) {
+                    "Failed to load ORT configuration: ${failure.description()}"
                 }
 
                 OrtConfigurationWrapper(OrtConfiguration())
             }.ort
         }
-
-        /**
-         * Generate a [PropertySource] providing access to the [args] the user has passed on the command line.
-         */
-        private fun argumentsSource(args: Map<String, String>): PropertySource {
-            val node = args.toProperties().toNode("arguments").valid()
-            return object : PropertySource {
-                override fun node(context: PropertySourceContext): ConfigResult<Node> = node
-            }
-        }
     }
 }
 
 /**
- * An internal wrapper class to hold an [OrtConfiguration]. This class is needed to correctly map the _ort_
- * prefix in configuration files when they are processed by the underlying configuration library.
+ * A wrapper class to hold an [OrtConfiguration]. This class is needed to correctly map the _ort_ prefix in
+ * configuration files when they are processed by the underlying configuration library.
  */
-internal data class OrtConfigurationWrapper(
+data class OrtConfigurationWrapper(
     val ort: OrtConfiguration
 )
+
+/**
+ * A typealias for key-value pairs, used in several configuration classes.
+ */
+typealias Options = Map<String, String>
+
+/**
+ * The filename of the reference configuration file.
+ */
+const val REFERENCE_CONFIG_FILENAME = "reference.yml"

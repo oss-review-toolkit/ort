@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -31,11 +31,11 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.utils.Os
-import org.ossreviewtoolkit.utils.ProcessCapture
-import org.ossreviewtoolkit.utils.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.DEFAULT_ANALYZER_CONFIGURATION
-import org.ossreviewtoolkit.utils.test.DEFAULT_REPOSITORY_CONFIGURATION
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -49,9 +49,9 @@ class GradleFunTest : StringSpec() {
 
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
-    override fun afterSpec(spec: Spec) {
-        // Reset the Gradle version in the test project to clean up after the tests.
-        Git().run(projectDir, "checkout", ".")
+    override suspend fun afterSpec(spec: Spec) {
+        // Reset the Gradle wrapper files to the committed state.
+        Git().run(projectDir, "checkout", "gradle/", "gradlew*")
     }
 
     init {
@@ -63,7 +63,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -76,7 +76,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -89,7 +89,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -102,7 +102,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
@@ -119,7 +119,7 @@ class GradleFunTest : StringSpec() {
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile)
+            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -175,7 +175,7 @@ class GradleFunTest : StringSpec() {
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveSingleProject(packageFile)
+                val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
 
                 result.toYaml() shouldBe expectedResult
             }
@@ -200,5 +200,5 @@ class GradleFunTest : StringSpec() {
     }
 
     private fun createGradle() =
-        Gradle("Gradle", USER_DIR, DEFAULT_ANALYZER_CONFIGURATION, DEFAULT_REPOSITORY_CONFIGURATION)
+        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 }

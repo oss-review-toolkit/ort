@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -20,33 +20,23 @@
 package org.ossreviewtoolkit.reporter
 
 import java.io.File
-import java.util.ServiceLoader
 
-import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.utils.joinNonBlank
+import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
- * A reporter that creates a human readable report from the [AnalyzerResult] and [ScanRecord] contained in an
- * [OrtResult]. The signatures of public functions in this class define the library API.
+ * A reporter that creates a human-readable report from a given [OrtResult].
  */
-interface Reporter {
+interface Reporter : NamedPlugin {
     companion object {
-        private val LOADER = ServiceLoader.load(Reporter::class.java)!!
-
         /**
-         * The list of all available reporters in the classpath.
+         * All [reporters][Reporter] available in the classpath, associated by their names.
          */
-        val ALL by lazy { LOADER.iterator().asSequence().toList() }
+        val ALL by lazy { NamedPlugin.getAll<Reporter>() }
     }
-
-    /**
-     * The name to use to refer to the reporter.
-     */
-    val reporterName: String
 
     /**
      * Generate a report for the provided [input] and write the generated file(s) to the [outputDir]. If and how the

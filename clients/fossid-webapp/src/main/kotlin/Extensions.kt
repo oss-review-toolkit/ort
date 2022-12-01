@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2020 Bosch.IO GmbH
+ * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,16 +21,24 @@
 
 package org.ossreviewtoolkit.clients.fossid
 
-import kotlin.reflect.KClass
+import java.io.File
 
-private const val SCAN_GROUP = "scans"
+import okio.buffer
+import okio.sink
+
+import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
+import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
+import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
+
+internal const val SCAN_GROUP = "scans"
 private const val PROJECT_GROUP = "projects"
 
 /**
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
  * If [withDataCheck] is true, also the payload data is checked, otherwise that check is skipped.
  */
-fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withDataCheck: Boolean = true): B {
+fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataCheck: Boolean = true): B {
     // The null check is here to avoid the caller to wrap the call of this function in a null check.
     requireNotNull(this)
 
@@ -48,18 +56,22 @@ fun <B : EntityPostResponseBody<T>, T> B?.checkResponse(operation: String, withD
 }
 
 /**
- * The list operations in FossID have inconsistent return types depending on the amount of entities returned.
- * This function streamlines these entities to a list.
+ * Extract the version from the login page.
+ * Example: `<link rel='stylesheet' href='style/fossid.css?v=2021.2.2#7936'>`
  */
-fun <T : Any> EntityPostResponseBody<Any>.toList(cls: KClass<T>): List<T> =
-    // the list  operation returns different json depending on the amount of scans
-    when (val data = data) {
-        is List<*> -> data.map { FossIdRestService.JSON_MAPPER.convertValue(it, cls.java) }
-        is Map<*, *> -> data.values.map { FossIdRestService.JSON_MAPPER.convertValue(it, cls.java) }
-        // the server returns "data: false" when there is no entry -> we streamline it to an empty list
-        is Boolean -> emptyList()
-        else -> error("Cannot process the returned values")
+suspend fun FossIdRestService.getFossIdVersion(): String? {
+    // TODO: replace with an API call when FossID provides a function (starting at version 2021.2).
+    val regex = Regex("^.*fossid.css\\?v=([0-9.]+).*\$")
+
+    getLoginPage().charStream().buffered().useLines { lines ->
+        lines.forEach { line ->
+            val matcher = regex.matchEntire(line)
+            if (matcher != null && matcher.groupValues.size == 2) return matcher.groupValues[1]
+        }
     }
+
+    return null
+}
 
 /**
  * Get the project for the given [projectCode].
@@ -68,7 +80,7 @@ fun <T : Any> EntityPostResponseBody<Any>.toList(cls: KClass<T>): List<T> =
  */
 suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCode: String) =
     getProject(
-        PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+        PostRequestBody("get_information", PROJECT_GROUP, user, apiKey, mapOf("project_code" to projectCode))
     )
 
 /**
@@ -78,7 +90,7 @@ suspend fun FossIdRestService.getProject(user: String, apiKey: String, projectCo
  */
 suspend fun FossIdRestService.listScansForProject(user: String, apiKey: String, projectCode: String) =
     listScansForProject(
-        PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, "project_code" to projectCode)
+        PostRequestBody("get_all_scans", PROJECT_GROUP, user, apiKey, mapOf("project_code" to projectCode))
     )
 
 /**
@@ -99,9 +111,11 @@ suspend fun FossIdRestService.createProject(
             PROJECT_GROUP,
             user,
             apiKey,
-            "project_code" to projectCode,
-            "project_name" to projectName,
-            "comment" to comment
+            mapOf(
+                "project_code" to projectCode,
+                "project_name" to projectName,
+                "comment" to comment
+            )
         )
     )
 
@@ -124,29 +138,37 @@ suspend fun FossIdRestService.createScan(
             SCAN_GROUP,
             user,
             apiKey,
-            "project_code" to projectCode,
-            "scan_code" to scanCode,
-            "scan_name" to scanCode,
-            "git_repo_url" to gitRepoUrl,
-            "git_branch" to gitBranch
+            mapOf(
+                "project_code" to projectCode,
+                "scan_code" to scanCode,
+                "scan_name" to scanCode,
+                "git_repo_url" to gitRepoUrl,
+                "git_branch" to gitBranch
+            )
         )
     )
 
 /**
- * Trigger a scan with the given [scanCode].
+ * Trigger a scan with the given [scanCode]. Additional [options] can be passed to FossID.
  *
  * The HTTP request is sent with [user] and [apiKey] as credentials.
  */
-suspend fun FossIdRestService.runScan(user: String, apiKey: String, scanCode: String) =
+suspend fun FossIdRestService.runScan(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    options: Map<String, String> = emptyMap()
+): EntityResponseBody<Nothing> =
     runScan(
         PostRequestBody(
             "run",
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            "auto_identification_detect_declaration" to "1",
-            "auto_identification_detect_copyright" to "1"
+            buildMap {
+                put("scan_code", scanCode)
+                putAll(options)
+            }
         )
     )
 
@@ -162,9 +184,11 @@ suspend fun FossIdRestService.deleteScan(user: String, apiKey: String, scanCode:
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode,
-            "delete_identifications" to "1"
-        )
+            mapOf(
+                "scan_code" to scanCode,
+                "delete_identifications" to "1"
+            )
+         )
     )
 
 /**
@@ -179,18 +203,8 @@ suspend fun FossIdRestService.downloadFromGit(user: String, apiKey: String, scan
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode
+            mapOf("scan_code" to scanCode)
         )
-    )
-
-/**
- * Get the scan status for the given [scanCode].
- *
- * The HTTP request is sent with [user] and [apiKey] as credentials.
- */
-suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scanCode: String) =
-    checkScanStatus(
-        PostRequestBody("check_status", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
     )
 
 /**
@@ -201,7 +215,7 @@ suspend fun FossIdRestService.checkScanStatus(user: String, apiKey: String, scan
 suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, scanCode: String) =
     checkDownloadStatus(
         PostRequestBody(
-            "check_status_download_content_from_git", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "check_status_download_content_from_git", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -212,7 +226,7 @@ suspend fun FossIdRestService.checkDownloadStatus(user: String, apiKey: String, 
  */
 suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scanCode: String) =
     listScanResults(
-        PostRequestBody("get_results", SCAN_GROUP, user, apiKey, "scan_code" to scanCode)
+        PostRequestBody("get_results", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode))
     )
 
 /**
@@ -227,7 +241,7 @@ suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: 
             SCAN_GROUP,
             user,
             apiKey,
-            "scan_code" to scanCode
+            mapOf("scan_code" to scanCode)
         )
     )
 
@@ -239,7 +253,7 @@ suspend fun FossIdRestService.listMarkedAsIdentifiedFiles(user: String, apiKey: 
 suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, scanCode: String) =
     listIdentifiedFiles(
         PostRequestBody(
-            "get_identified_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_identified_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -251,7 +265,7 @@ suspend fun FossIdRestService.listIdentifiedFiles(user: String, apiKey: String, 
 suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, scanCode: String) =
     listIgnoredFiles(
         PostRequestBody(
-            "get_ignored_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_ignored_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
 
@@ -263,6 +277,115 @@ suspend fun FossIdRestService.listIgnoredFiles(user: String, apiKey: String, sca
 suspend fun FossIdRestService.listPendingFiles(user: String, apiKey: String, scanCode: String) =
     listPendingFiles(
         PostRequestBody(
-            "get_pending_files", SCAN_GROUP, user, apiKey, "scan_code" to scanCode
+            "get_pending_files", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
         )
     )
+
+/**
+ * List ignore rules for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.listIgnoreRules(user: String, apiKey: String, scanCode: String) =
+    listIgnoreRules(
+        PostRequestBody(
+            "ignore_rules_show", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode)
+        )
+    )
+
+/**
+ * Create an 'ignore rule' for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.createIgnoreRule(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    type: RuleType,
+    value: String,
+    scope: RuleScope
+) =
+    createIgnoreRule(
+        PostRequestBody(
+            "ignore_rules_add",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            mapOf(
+                "scan_code" to scanCode,
+                "type" to type.name.lowercase(),
+                "value" to value,
+                "apply_to" to scope.name.lowercase()
+            )
+        )
+    )
+
+/**
+ * Ask the FossID server to generate a [reportType] report containing [selectionType]. The report will be generated in
+ * the [directory].
+ */
+suspend fun FossIdRestService.generateReport(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    reportType: ReportType,
+    selectionType: SelectionType,
+    directory: File
+): Result<File> {
+    val response = generateReport(
+        PostRequestBody(
+            "generate_report",
+            SCAN_GROUP,
+            user,
+            apiKey,
+            mapOf(
+                "scan_code" to scanCode,
+                "report_type" to reportType.toString(),
+                "selection_type" to selectionType.name.lowercase()
+            )
+        )
+    )
+
+    return if (response.isSuccessful) {
+        // The API is quirky here: If the report type is HTML, the result is returned as a standard HTML response,
+        // without filename. For any other report types, the result is returned as an attachment with a filename in the
+        // headers (even for report types generating HTML such as DYNAMIC).
+        val fileName = if (reportType == ReportType.HTML_STATIC) {
+            "fossid-$scanCode-report.html"
+        } else {
+            val contentDisposition = response.headers()["Content-disposition"]
+
+            contentDisposition?.split(';')?.firstNotNullOfOrNull {
+                it.trim().withoutPrefix("filename=")?.removeSurrounding("\"")
+            } ?: return Result.failure<File>(IllegalStateException("Cannot determine name of the report")).also {
+                FossIdRestService.logger.error {
+                    "Cannot determine name of the report with raw headers '$contentDisposition'."
+                }
+            }
+        }
+
+        Result.success(
+            directory.resolve(fileName).apply {
+                sink().buffer().use { target ->
+                    response.body()?.use { target.writeAll(it.source()) }
+                }
+            }
+        )
+    } else {
+        Result.failure(
+            IllegalStateException(
+                """
+                    Report generation failed with error code ${response.code()}: ${response.message()}.
+                    Details: ${response.errorBody()?.string()}
+                """.trimIndent()
+            )
+        )
+    }
+}
+
+/**
+ * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
+ */
+fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
+    this?.removePrefix(prefix)?.takeIf { it != this } ?: missingPrefixValue()

@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2021 Bosch.IO GmbH
+ * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -25,44 +25,60 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentifi
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.common.collectMessages
 
 /**
- * A simple data class to hold FossId raw results.
+ * A data class to hold FossID raw results.
  */
 internal data class RawResults(
     val identifiedFiles: List<IdentifiedFile>,
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
-    val listIgnoredFiles: List<IgnoredFile>
+    val listIgnoredFiles: List<IgnoredFile>,
+    val listPendingFiles: List<String>
 )
 
 /**
- * A simple Triple data class to hold FossId mapped results.
+ * A data class to hold FossID mapped results.
  */
 internal data class FindingsContainer(
-    val filesCount: Int,
     val licenseFindings: MutableList<LicenseFinding>,
     val copyrightFindings: MutableList<CopyrightFinding>
 )
 
 /**
- * Map a fossId Raw result to sections that can be included in a [org.ossreviewtoolkit.model.ScanSummary].
+ * Map a FossID raw result to sections that can be included in a [org.ossreviewtoolkit.model.ScanSummary].
  */
-internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, IgnoredFile>): FindingsContainer {
+internal fun <T : Summarizable> List<T>.mapSummary(
+    ignoredFiles: Map<String, IgnoredFile>,
+    issues: MutableList<OrtIssue>,
+    detectedLicenseMapping: Map<String, String>
+): FindingsContainer {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
-    val files = filterNot { ignoredFiles.contains(it.getFileName()) }
+    val files = filterNot { it.getFileName() in ignoredFiles }
     files.forEach { summarizable ->
         val summary = summarizable.toSummary()
-        val location = TextLocation(summary.path, -1, -1)
+        val location = TextLocation(summary.path, TextLocation.UNKNOWN_LINE, TextLocation.UNKNOWN_LINE)
 
         summary.licences.forEach {
-            val finding = LicenseFinding(it.identifier, location)
-            licenseFindings += finding
+            runCatching {
+                LicenseFinding.createAndMap(it.identifier, location, detectedLicenseMapping = detectedLicenseMapping)
+            }.onSuccess { licenseFinding ->
+                licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())
+            }.onFailure { spdxException ->
+                issues += FossId.createAndLogIssue(
+                    source = "FossId",
+                    message = "Failed to parse license '${it.identifier}' as an SPDX expression: " +
+                            spdxException.collectMessages()
+                )
+            }
         }
 
-        summarizable.getCopyright()?.let {
+        summarizable.getCopyright().let {
             if (it.isNotEmpty()) {
                 copyrightFindings += CopyrightFinding(it, location)
             }
@@ -70,7 +86,6 @@ internal fun <T : Summarizable> List<T>.mapSummary(ignoredFiles: Map<String, Ign
     }
 
     return FindingsContainer(
-        filesCount = files.size,
         licenseFindings = licenseFindings,
         copyrightFindings = copyrightFindings
     )

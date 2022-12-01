@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2019 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,14 +19,15 @@
 
 package org.ossreviewtoolkit.evaluator
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.log
+import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 /**
  * The base class for an evaluator rule. Rules use a set of matchers to determine if they apply, and create a list of
@@ -43,6 +44,8 @@ abstract class Rule(
      */
     val name: String
 ) {
+    companion object : Logging
+
     private val ruleMatcherManager = RuleMatcherManager()
 
     /**
@@ -65,8 +68,8 @@ abstract class Rule(
      */
     private fun matches() = matchers.all { matcher ->
         matcher.matches().also { matches ->
-            log.info { "\t${matcher.description} == $matches" }
-            if (!matches) log.info { "\tRule skipped." }
+            logger.info { "\t${matcher.description} == $matches" }
+            if (!matches) logger.info { "\tRule skipped." }
         }
     }
 
@@ -75,13 +78,13 @@ abstract class Rule(
      * rule are added to the [ruleSet]. To add custom behavior if the rule matches override [runInternal].
      */
     fun evaluate() {
-        log.info { description }
+        logger.info { description }
 
         if (matches()) {
             ruleSet.violations += violations
 
             if (violations.isNotEmpty()) {
-                log.info {
+                logger.info {
                     "\tFound violations:\n\t\t${violations.joinToString("\n\t\t") { "${it.severity}: ${it.message}" }}"
                 }
             }
@@ -104,31 +107,14 @@ abstract class Rule(
 
     /**
      * A [RuleMatcher] that checks whether a [label] exists in the [ORT result][OrtResult.labels]. If [value] is null
-     * the value of the label is ignored.
+     * the value of the label is ignored. If [splitValue] is true, the label value is interpreted as comma-separated
+     * list.
      */
-    fun hasLabel(label: String, value: String? = null) =
+    fun hasLabel(label: String, value: String? = null, splitValue: Boolean = true) =
         object : RuleMatcher {
-            override val description = "hasLabel(${listOfNotNull(label, value).joinToString()})"
+            override val description = "hasLabel(${listOfNotNull(label, value, splitValue).joinToString()})"
 
-            override fun matches() =
-                if (value == null) {
-                    label in ruleSet.ortResult.labels
-                } else {
-                    ruleSet.ortResult.labels[label] == value
-                }
-        }
-
-    /**
-     * A [RuleMatcher] that checks whether a [label] exists in the [ORT result][OrtResult.labels] and contains a
-     * specific [value]. The value of the label is interpreted as a comma-separated list. The check is successful if
-     * this list contains the [value].
-     */
-    fun labelContains(label: String, value: String) =
-        object : RuleMatcher {
-            override val description = "labelContains($label, $value)"
-
-            override fun matches() =
-                ruleSet.ortResult.labels[label]?.split(',')?.map { it.trim() }?.contains(value) ?: false
+            override fun matches() = ruleSet.ortResult.hasLabel(label, value, splitValue)
         }
 
     /**
@@ -143,7 +129,7 @@ abstract class Rule(
      */
     fun issue(
         severity: Severity,
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -164,7 +150,7 @@ abstract class Rule(
      * Add a [hint][Severity.HINT] to the list of [violations].
      */
     fun hint(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -176,7 +162,7 @@ abstract class Rule(
      * Add a [warning][Severity.WARNING] to the list of [violations].
      */
     fun warning(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,
@@ -188,7 +174,7 @@ abstract class Rule(
      * Add an [error][Severity.ERROR] to the list of [violations].
      */
     fun error(
-        pkgId: Identifier,
+        pkgId: Identifier?,
         license: SpdxSingleLicenseExpression?,
         licenseSource: LicenseSource?,
         message: String,

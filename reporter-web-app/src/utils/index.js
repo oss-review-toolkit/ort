@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2020 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -40,4 +40,19 @@ const randomStringGenerator = (length = (Math.floor(Math.random() * 501) + 20)) 
     return alpha(l, symbol(1, alpha(r, []))).join('');
 };
 
-export { randomStringGenerator };
+// Utility function to generate color for given license string 
+const licenseToHslColor = (license) => {
+    let hash = 0;
+    let random = Math.floor(Math.random() * 20 + 5);
+
+    for (let i = 0; i < license.length; i++) {
+        hash = license.charCodeAt(i) + ((hash << 5) - hash);
+        hash |= 0;
+    }
+
+    return 'hsl(' + ((Math.abs(hash) % 320) + random) + ',' +
+        (25 + 70 * Math.random()) + '%,' + 
+        (55 + 10 * Math.random()) + '%)';
+}
+
+export { randomStringGenerator, licenseToHslColor };

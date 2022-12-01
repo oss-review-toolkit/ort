@@ -2,15 +2,9 @@
 # This file only lists the differences to the default configuration at
 # https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml.
 
-comments:
-  AbsentOrWrongFileLicense:
-    active: true
-    licenseTemplateFile: '.detekt.license.template'
-    licenseTemplateIsRegex: true
-
 complexity:
-  ComplexMethod:
-    threshold: 33
+  CyclomaticComplexMethod:
+    threshold: 25
   LongMethod:
     threshold: 158
   LongParameterList:
@@ -22,12 +16,24 @@ complexity:
     thresholdInClasses: 19
     thresholdInObjects: 14
 
+coroutines:
+  InjectDispatcher:
+    active: false
+
 # Formatting rules are implemented via the ktlint plugin. As ktlint does not allow exceptions, we need to disable
 # respective rules completely.
 formatting:
+  AnnotationOnSeparateLine:
+    active: false
+  ArgumentListWrapping:
+    active: false
   ChainWrapping:
     active: false
   FinalNewline:
+    active: false
+  ImportOrdering:
+    active: false
+  Indentation:
     active: false
   MaximumLineLength:
     active: false
@@ -37,18 +43,30 @@ formatting:
     active: false
   ParameterListWrapping:
     active: false
+  SpacingBetweenDeclarationsWithAnnotations:
+    active: false
+
+naming:
+  ConstructorParameterNaming:
+    excludes: ["**/clients/github-graphql/build/generated/**"]
+  InvalidPackageDeclaration:
+    active: false
 
 performance:
   SpreadOperator:
     active: false
 
 style:
+  DestructuringDeclarationWithTooManyEntries:
+    maxDestructuringEntries: 4
   ForbiddenComment:
     active: false
   LoopWithTooManyJumpStatements:
     active: false
   MagicNumber:
     active: false
+  MaxLineLength:
+    excludes: ["**/clients/github-graphql/build/generated/**"]
   ReturnCount:
     active: false
   SpacingBetweenPackageAndImports:
@@ -59,16 +77,22 @@ style:
     active: true
   WildcardImport:
     excludes: ''
-    excludeImports: '
-      org.ossreviewtoolkit.analyzer.managers.*,
-      org.ossreviewtoolkit.commands.*,
-      org.ossreviewtoolkit.downloader.vcs.*,
-      org.ossreviewtoolkit.helper.commands.*,
-      org.ossreviewtoolkit.reporter.reporters.*,
-      org.ossreviewtoolkit.scanner.scanners.*,
-      org.ossreviewtoolkit.scanner.storages.*,
-      org.ossreviewtoolkit.spdx.SpdxLicense.*,
-      org.ossreviewtoolkit.spdx.SpdxLicenseException.*,
-      kotlinx.html.*,
-      kotlinx.html.dom.*
-      '
+    excludeImports:
+      - org.ossreviewtoolkit.analyzer.managers.*
+      - org.ossreviewtoolkit.cli.commands.*
+      - org.ossreviewtoolkit.downloader.vcs.*
+      - org.ossreviewtoolkit.helper.commands.*
+      - org.ossreviewtoolkit.reporter.reporters.*
+      - org.ossreviewtoolkit.scanner.scanners.*
+      - org.ossreviewtoolkit.scanner.storages.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
+      - org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
+      - kotlinx.html.*
+      - kotlinx.html.dom.*
+
+ORT:
+  OrtImportOrder:
+    active: true
+    excludes: ["**/clients/github-graphql/build/generated/**"]
+  OrtPackageNaming:
+    active: true

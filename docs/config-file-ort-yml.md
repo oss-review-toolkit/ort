@@ -1,11 +1,14 @@
 # The `.ort.yml` file
 
 The items below can be configured by adding an `.ort.yml` file to the root of the source code repository.
+All configurations in this file apply only to this Project's context. Usually the global context is preferred for an
+increased degree of automation and local configurations should only be done if there are good reasons.
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
   not included in released artifacts.
-* [license finding curations](#curations) - Overwrite scan results to correct identified licenses.
+* [curations](#curations) - Overwrite package metadata, set a concluded license or correct license findings.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
+* [license choices](#License-Choices) - Select a license for packages which offer a license choice.
 
 The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml) for the
 OSS Review Toolkit itself.
@@ -58,8 +61,8 @@ excludes:
 
 Where the list of available options for `reason` is defined in
 [PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt).
-For how to write a glob pattern, please see this
-[tutorial](https://docs.oracle.com/javase/tutorial/essential/io/fileOps.html#glob).
+For how to write a glob pattern, please see the
+[AntPathMatcher documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html).
 
 The path exclude above has the following effects:
 
@@ -95,7 +98,7 @@ excludes:
     comment: "Packages for testing only."
 ```
 
-The above example excludes all of the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
+The above example excludes all the following scopes for all projects: `testAnnotationProcessor`,`testApi`,
 `testCompile`, `testCompileClasspath`, `testCompileOnly`, `testImplementation`, `testRuntime`, `testRuntimeClasspath`,
 `testRuntimeOnly`.
 
@@ -124,11 +127,11 @@ scopes defined in the examples below match the scopes in your project.
 
 ### When to Use Curations
 
-Project-specific curations should be used when you want to correct the licenses detected in the source code of the
-project. If you need to correct the license findings for a third-party dependency then add a curation to
-[curations.yml](config-file-curations-yml.md) or [package configuration](config-file-package-configuration-yml.md).
+License finding curations should be used when you want to correct the licenses detected in the source code of the
+project. To define curations on global level for third-party packages, please use 
+[curations](config-file-curations-yml.md) or [package configurations](config-file-package-configuration-yml.md).
 
-### Curating License Findings
+### Curating Project License Findings
 
 An `ort scan` result represents the detected licenses as a collection of license findings. A single `LicenseFinding` is
 represented as a tuple: `(license id, file path, start line, end line)`. Applying a `LicenseFindingCuration` changes the
@@ -141,7 +144,7 @@ e.g.:
 ```yaml
 curations:
   license_findings:
-  - path: "src/**.cpp"
+  - path: "src/**/*.cpp"
     start_lines: "3"
     line_count: 11
     detected_license: "GPL-2.0-only"
@@ -150,16 +153,55 @@ curations:
     concluded_license: "Apache-2.0"
  ```
 
+To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings.
+Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
+[config.yml](../README.md#ort-configuration-file).
+```yaml
+package_configurations:
+- id: 'Maven:com.example:package:1.2.3'
+  source_artifact_url: "https://repo.maven.apache.org/maven2/com/example/package/1.2.3/package-1.2.3-sources.jar"
+  license_finding_curations:
+  - path: "path/to/problematic/file.java"
+    start_lines: 22
+    line_count: 1
+    detected_license: "GPL-2.0-only"
+    reason: "CODE"
+    comment: "The scanner matches a variable named `gpl`."
+    concluded_license: "Apache-2.0"
+```
+
 For details of the specification, see 
 [LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
 The list of available options for `reason` are defined in
 [LicenseFindingCurationReason.kt](../model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
 
+### Curating Metadata
+
+Package curations can be added if you want to correct metadata of third-party dependencies.
+
+The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.
+Note that this feature requires `enableRepositoryPackageCurations` to be enabled in the
+[config.yml](../README.md#ort-configuration-file).
+
+e.g.:
+```yaml
+curations:
+  packages:
+  - id: "Maven:com.example:dummy:0.0.1"
+    curations:
+      comment: "An explanation why the curation is needed."
+      source_artifact:
+        url: "https://example.com/sources.zip"
+```
+
+For more information about package curations see
+[the documentation for the curations.yml file](config-file-curations-yml.md).
+
 ## Resolutions
 
 ### When to Use Resolutions
 
-Project-specific resolutions should be used if you are unable to solve an issue by other means.
+Resolutions should be used if you are unable to solve an issue by other means.
 
 If a resolution is not project-specific than add it to [resolutions.yml](./config-file-resolutions-yml.md) so that it is
 applied to each scan.
@@ -208,7 +250,7 @@ resolutions:
 
 ### Resolving Policy Rule Violations
 
-Resolutions should not be not used to resolve license policy rule violations as they do not change the generated open
+Resolutions should not be used to resolve license policy rule violations as they do not change the generated open
 source notices. To resolve a license policy rule violation either add a [license finding curation](#curations) to the
 .ort.yml file if the finding is in your code repository or add a curation to the
 [curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
@@ -261,7 +303,7 @@ resolutions:
     comment: "CVE-9999-9999 is a false positive"
 ```
 
-# License Choices
+## License Choices
 
 ### When to Use License Choices
 
@@ -281,7 +323,7 @@ expression that can represent only a sub-expression of the whole effective SPDX 
 e.g.
 ```yaml
 license_choices:
-  package_license_choice:
+  package_license_choices:
   - package_id: "Maven:com.example:first:0.0.1"
     license_choices:
     # The input of the calculated effective license would be: (A OR B) AND ((C OR D) AND E)
@@ -314,7 +356,7 @@ The license choices for a project can be overwritten by applying a
 e.g.
 ```yaml
 license_choices:
-  repository_license_choice:
+  repository_license_choices:
   - given: "A OR B"
     choice: "B"
 ```

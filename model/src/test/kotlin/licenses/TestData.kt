@@ -1,11 +1,11 @@
 /*
- * Copyright (C) 2017-2021 HERE Europe B.V.
+ * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.model.licenses
 
-import java.time.Instant
-
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CuratedPackage
@@ -31,7 +28,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ScanRecord
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -40,15 +36,12 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.spdx.toSpdx
-import org.ossreviewtoolkit.utils.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.Environment
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 val authors = sortedSetOf("The Author", "The Other Author")
 val projectAuthors = sortedSetOf("The Project Author")
@@ -152,13 +145,8 @@ val scanResults = listOf(
         ScanResult(
             provenance = provenance,
             scanner = ScannerDetails.EMPTY,
-            summary = ScanSummary(
-                startTime = Instant.EPOCH,
-                endTime = Instant.EPOCH,
-                fileCount = 1,
-                packageVerificationCode = "",
+            summary = ScanSummary.EMPTY.copy(
                 licenseFindings = licenseFindings,
-                copyrightFindings = sortedSetOf()
             )
         )
     )
@@ -179,20 +167,13 @@ val ortResult = OrtResult(
             )
         )
     ),
-    analyzer = AnalyzerRun(
-        environment = Environment(),
-        config = AnalyzerConfiguration(ignoreToolVersions = true, allowDynamicVersions = true),
+    analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
             projects = sortedSetOf(project),
             packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
         )
     ),
-    scanner = ScannerRun(
-        environment = Environment(),
-        config = ScannerConfiguration(),
-        results = ScanRecord(
-            scanResults = scanResults,
-            storageStats = AccessStatistics()
-        )
+    scanner = ScannerRun.EMPTY.copy(
+        scanResults = scanResults
     )
 )
