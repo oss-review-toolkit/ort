@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.util.SortedSet
 
@@ -48,6 +46,9 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
 
@@ -58,7 +59,7 @@ internal object PythonInspector : CommandLineTool, Logging {
 
     override fun transformVersion(output: String) = output.removePrefix("Python-inspector version: ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[0.9.2,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[0.9.2,)")
 
     fun run(
         workingDir: File,

@@ -19,11 +19,13 @@
 
 package org.ossreviewtoolkit.utils.common
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.Logging
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 /**
  * An interface to implement by classes that are backed by a command line tool.
@@ -33,7 +35,7 @@ interface CommandLineTool {
         /**
          * A convenience property to require any version.
          */
-        val ANY_VERSION: Requirement = Requirement.buildNPM("*")
+        val ANY_VERSION: RangesList = RangesListFactory.create("*")
     }
 
     /**
@@ -99,10 +101,10 @@ interface CommandLineTool {
      * Run a [command] to check its version against the [required version][getVersionRequirement].
      */
     fun checkVersion(workingDir: File? = null) {
-        val actualVersion = getVersion(workingDir)
+        val actualVersion = Semver.coerce(getVersion(workingDir))
         val requiredVersion = getVersionRequirement()
 
-        if (!requiredVersion.isSatisfiedBy(actualVersion)) {
+        if (!actualVersion.satisfies(requiredVersion)) {
             logger.warn {
                 "The command is required in version $requiredVersion, but you are using version $actualVersion. This " +
                         "could lead to problems."

@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.vdurmont.semver4j.Requirement
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -33,6 +30,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 /**
  * The version that introduced the requirements command.
@@ -64,7 +65,7 @@ class Pipenv(
         // pipenv, version 2018.11.26
         output.removePrefix("pipenv, version ")
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2018.10.9,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2018.10.9,)")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.io.IOException
 import java.net.Authenticator
@@ -56,6 +54,9 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 // TODO: Make this configurable.
 const val GIT_HISTORY_DEPTH = 50
@@ -108,7 +109,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     override fun getVersion() = getVersion(null)
 
     // Require at least Git 2.29 on the client side as it has protocol "v2" enabled by default.
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.29,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.29,)")
 
     override fun getDefaultBranchName(url: String): String {
         val refs = Git.lsRemoteRepository().setRemote(url).callAsMap()

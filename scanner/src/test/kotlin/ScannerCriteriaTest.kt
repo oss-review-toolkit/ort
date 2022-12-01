@@ -19,14 +19,14 @@
 
 package org.ossreviewtoolkit.scanner
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+
+import org.semver4j.Semver
 
 class ScannerCriteriaTest : WordSpec({
     "ScannerCriteria" should {
@@ -75,7 +75,7 @@ class ScannerCriteriaTest : WordSpec({
             val criteria = ScannerCriteria.fromConfig(testDetails, config)
 
             criteria.regScannerName shouldBe SCANNER_NAME
-            criteria.minVersion.originalValue shouldBe SCANNER_VERSION
+            criteria.minVersion.version shouldBe SCANNER_VERSION
             criteria.maxVersion shouldBe Semver(SCANNER_VERSION).nextMinor()
         }
 
@@ -91,8 +91,8 @@ class ScannerCriteriaTest : WordSpec({
             val criteria = ScannerCriteria.fromConfig(testDetails, config)
 
             criteria.regScannerName shouldBe "foo"
-            criteria.minVersion.originalValue shouldBe "1.2.3"
-            criteria.maxVersion.originalValue shouldBe "4.5.6"
+            criteria.minVersion.version shouldBe "1.2.3"
+            criteria.maxVersion.version shouldBe "4.5.6"
         }
 
         "parse versions in a lenient way" {
@@ -105,8 +105,8 @@ class ScannerCriteriaTest : WordSpec({
 
             val criteria = ScannerCriteria.fromConfig(testDetails, config)
 
-            criteria.minVersion.originalValue shouldBe "1.0.0"
-            criteria.maxVersion.originalValue shouldBe "3.7.0"
+            criteria.minVersion.version shouldBe "1.0.0"
+            criteria.maxVersion.version shouldBe "3.7.0"
         }
 
         "use an exact configuration matcher" {

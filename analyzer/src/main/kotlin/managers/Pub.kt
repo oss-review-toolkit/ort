@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 import java.io.IOException
 import java.util.SortedSet
@@ -67,6 +65,9 @@ import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 private const val GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
@@ -121,7 +122,7 @@ class Pub(
 
     override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildIvy("[2.10,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
         gradleDefinitionFilesForPubDefinitionFiles.clear()

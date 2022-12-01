@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 import kotlin.time.Duration.Companion.days
@@ -39,6 +37,9 @@ import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 private val yarnInfoCache = DiskCache(
     directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
@@ -71,7 +72,7 @@ class Yarn(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "yarn.cmd" else "yarn"
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM("1.3.* - 1.22.*")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("1.3.* - 1.22.*")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn(definitionFiles).toList()
 

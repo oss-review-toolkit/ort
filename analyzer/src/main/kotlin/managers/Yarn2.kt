@@ -25,8 +25,6 @@ import com.fasterxml.jackson.databind.node.NullNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.readValues
 
-import com.vdurmont.semver4j.Requirement
-
 import java.io.File
 
 import kotlinx.coroutines.Dispatchers
@@ -71,6 +69,9 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
 
 internal const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
 
@@ -189,7 +190,7 @@ class Yarn2(
         // TODO: An alternative would be to collate the versions of all tools in `yarn2CommandsByPath`.
         if (workingDir == null) "" else super.getVersion(workingDir)
 
-    override fun getVersionRequirement(): Requirement = Requirement.buildNPM(">=2.0.0")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.0.0")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>) = mapDefinitionFilesForYarn2(definitionFiles).toList()
 

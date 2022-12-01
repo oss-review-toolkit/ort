@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
-import com.vdurmont.semver4j.Semver
-
 import io.kotest.core.listeners.TestListener
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
@@ -51,6 +49,8 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+
+import org.semver4j.Semver
 
 private val DUMMY_TEXT_LOCATION = TextLocation("fakepath", 13, 21)
 
