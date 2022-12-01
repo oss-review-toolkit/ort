@@ -185,6 +185,9 @@ RUN arch=$(arch | sed s/aarch64/arm64/) \
         rm requirements.txt; \
        fi
 
+FROM scratch AS python
+COPY --from=pythonbuild /opt/python /opt/python
+
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
 FROM ort-base-image AS rubybuild
