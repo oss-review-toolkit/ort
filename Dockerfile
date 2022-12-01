@@ -156,12 +156,10 @@ ARG PYTHON_VERSION=3.10.8
 ARG PYENV_GIT_TAG=v2.3.7
 
 ENV PYENV_ROOT=/opt/python
-RUN curl -kSs https://pyenv.run | bash
-ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
-RUN pyenv install -v ${PYTHON_VERSION}
-RUN pyenv global ${PYTHON_VERSION}
-
-COPY docker/python.sh /etc/profile.d
+ENV PATH=$PATH:${PYENV_ROOT}/shims:${PYENV_ROOT}/bin
+RUN curl -kSs https://pyenv.run | bash \
+    && pyenv install -v ${PYTHON_VERSION} \
+    && pyenv global ${PYTHON_VERSION}
 
 ARG CONAN_VERSION=1.53.0
 ARG PYTHON_INSPECTOR_VERSION=0.9.2
@@ -169,8 +167,6 @@ ARG PYTHON_PIPENV_VERSION=2022.9.24
 ARG PYTHON_POETRY_VERSION=1.2.2
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=31.2.1
-ENV PYENV_ROOT=/opt/python
-ENV PATH=${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:$PATH
 
 RUN pip install -U \
     pip=="${PIPTOOL_VERSION}" \
