@@ -152,8 +152,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=3.10.6
-ARG PYENV_GIT_TAG=v2.3.4
+ARG PYTHON_VERSION=3.10.8
+ARG PYENV_GIT_TAG=v2.3.7
 
 ENV PYENV_ROOT=/opt/python
 RUN curl -kSs https://pyenv.run | bash
