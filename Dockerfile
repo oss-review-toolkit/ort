@@ -168,10 +168,11 @@ ARG PYTHON_POETRY_VERSION=1.2.2
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=31.2.1
 
-RUN pip install -U \
+# Scancode need restrict commoncode  version
+RUN pip install --no-cache-dir -U \
     pip=="${PIPTOOL_VERSION}" \
     wheel \
-    && pip install -U \
+    && pip install --no-cache-dir -U \
     Mercurial \
     conan=="${CONAN_VERSION}" \
     pipenv=="${PYTHON_PIPENV_VERSION}" \
