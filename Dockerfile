@@ -344,10 +344,10 @@ FROM ort-base-image as run
 RUN rm -rf /etc/scripts
 
 # Python
-ARG PYENV_ROOT=/opt/python
-COPY --chown=$USERNAME:$USERNAME --from=pythonbuild ${PYENV_ROOT} ${PYENV_ROOT}
-COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
-RUN chmod o+rwx ${PYENV_ROOT}
+ENV PYENV_ROOT=/opt/python
+ENV PATH=$PATH:${PYENV_ROOT}/shims:${PYENV_ROOT}/bin
+COPY --from=python ${PYENV_ROOT} ${PYENV_ROOT}
+#RUN sudo chown -R ${USER}.${USER} ${PYENV_ROOT}
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
