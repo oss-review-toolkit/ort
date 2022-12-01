@@ -168,7 +168,6 @@ ARG PYTHON_POETRY_VERSION=1.2.2
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=31.2.1
 
-# Scancode need restrict commoncode  version
 RUN pip install --no-cache-dir -U \
     pip=="${PIPTOOL_VERSION}" \
     wheel \
@@ -176,12 +175,15 @@ RUN pip install --no-cache-dir -U \
     Mercurial \
     conan=="${CONAN_VERSION}" \
     pipenv=="${PYTHON_PIPENV_VERSION}" \
-    poetry==${PYTHON_POETRY_VERSION} \
+    poetry=="${PYTHON_POETRY_VERSION}" \
     python-inspector=="${PYTHON_INSPECTOR_VERSION}"
 
-RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt && \
-    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION && \
-    rm requirements.txt
+RUN arch=$(arch | sed s/aarch64/arm64/) \
+    && if [ "$arch" != "arm64" ]; then \
+        curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+        pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+        rm requirements.txt; \
+       fi
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
