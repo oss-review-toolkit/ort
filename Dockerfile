@@ -322,9 +322,9 @@ RUN chmod o+rwx ${PYENV_ROOT}
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
+ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:${RBENV_ROOT}/plugins/ruby-install/bin
 COPY --from=ruby ${RBENV_ROOT} ${RBENV_ROOT}
-RUN chmod o+rwx ${RBENV_ROOT}
 
 # NodeJS
 ARG NODEJS_VERSION=18.12.1
