@@ -193,14 +193,16 @@ COPY docker/ruby.sh /etc/profile.d
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
-FROM build AS nodebuild
+FROM ort-base-image AS nodebuild
 
 ARG BOWER_VERSION=1.8.12
 ARG NODEJS_VERSION=16.17.1
 ARG NPM_VERSION=8.15.1
-ARG NVM_DIR=/opt/nvm
 ARG PNPM_VERSION=7.8.0
 ARG YARN_VERSION=1.22.10
+
+ENV NVM_DIR=/opt/nvm
+ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 
 RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
 RUN . $NVM_DIR/nvm.sh \
