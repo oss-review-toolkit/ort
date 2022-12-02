@@ -323,9 +323,10 @@ COPY --from=pythonbuild /etc/profile.d/python.sh /etc/profile.d/
 RUN chmod o+rwx ${PYENV_ROOT}
 
 # Ruby
-ARG RBENV_ROOT=/opt/rbenv/
-COPY --chown=$USERNAME:$USERNAME --from=rubybuild ${RBENV_ROOT} ${RBENV_ROOT}
+ENV RBENV_ROOT=/opt/rbenv/
+ENV PATH=$PATH:${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:${RBENV_ROOT}/plugins/ruby-install/bin
 COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
+COPY --from=ruby ${RBENV_ROOT} ${RBENV_ROOT}
 RUN chmod o+rwx ${RBENV_ROOT}
 
 # NodeJS
