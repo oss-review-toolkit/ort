@@ -289,8 +289,6 @@ RUN --mount=type=tmpfs,target=/android \
 RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | tee $ANDROID_HOME/cmdline-tools/bin/repo > /dev/null 2>&1 \
     && sudo chmod a+x $ANDROID_HOME/cmdline-tools/bin/repo
 
-COPY docker/android.sh /etc/profile.d
-
 FROM scratch AS android
 COPY --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
 
