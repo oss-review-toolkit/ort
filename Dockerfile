@@ -250,28 +250,23 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     unzip \
     && sudo rm -rf /var/lib/apt/lists/*
 
-RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | sudo tee /usr/bin/repo > /dev/null 2>&1 \
-    && sudo chmod a+x /usr/bin/repo
-
-RUN --mount=type=tmpfs,target=/android \
-
 ARG ANDROID_CMD_VERSION=8512546
 ENV ANDROID_HOME=/opt/android-sdk
 
-RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/bin/repo \
-    && chmod a+x /usr/bin/repo
-
-RUN curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
+RUN --mount=type=tmpfs,target=/android \
+    cd /android \
+    && curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
     && unzip -q commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip -d $ANDROID_HOME \
-    && rm commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
-    && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS \
-    --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest" \
-    && chmod -R o+rw $ANDROID_HOME
+    && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
+
+RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | tee $ANDROID_HOME/cmdline-tools/bin/repo > /dev/null 2>&1 \
+    && sudo chmod a+x $ANDROID_HOME/cmdline-tools/bin/repo
+
 COPY docker/android.sh /etc/profile.d
 
 #------------------------------------------------------------------------
