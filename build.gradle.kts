@@ -248,7 +248,6 @@ subprojects {
 
     tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
-            "-Xallow-any-scripts-in-source-roots",
             "-Xallow-result-return-type",
             "-opt-in=kotlin.contracts.ExperimentalContracts",
             "-opt-in=kotlin.io.path.ExperimentalPathApi",
