@@ -241,7 +241,19 @@ RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d /usr/bin
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
-FROM build AS androidbuild
+FROM ort-base-image AS androidbuild
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    unzip \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | sudo tee /usr/bin/repo > /dev/null 2>&1 \
+    && sudo chmod a+x /usr/bin/repo
+
+RUN --mount=type=tmpfs,target=/android \
 
 ARG ANDROID_CMD_VERSION=8512546
 ENV ANDROID_HOME=/opt/android-sdk
