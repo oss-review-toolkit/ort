@@ -211,6 +211,9 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm use default \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
+FROM scratch AS node
+COPY --from=nodebuild ${NVM_DIR} ${NVM_DIR}
+
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
 FROM ort-base-image AS rustbuild
