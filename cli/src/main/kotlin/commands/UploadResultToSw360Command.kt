@@ -56,9 +56,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 class UploadResultToSw360Command : CliktCommand(
     name = "upload-result-to-sw360",
-    help = "Upload an ORT result to SW360.",
-    epilog = "EXPERIMENTAL: The command is still in development and usage will likely change in the near future. The " +
-            "command expects that a Sw360Storage for the scanner is configured."
+    help = "Upload an ORT result to SW360."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",

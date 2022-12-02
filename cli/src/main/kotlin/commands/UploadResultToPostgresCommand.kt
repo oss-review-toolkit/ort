@@ -52,9 +52,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 class UploadResultToPostgresCommand : CliktCommand(
     name = "upload-result-to-postgres",
-    help = "Upload an ORT result to a PostgreSQL database.",
-    epilog = "EXPERIMENTAL: The command is still in development and usage will likely change in the near future. The " +
-            "command expects that a PostgresStorage for the scanner is configured."
+    help = "Upload an ORT result to a PostgreSQL database."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
