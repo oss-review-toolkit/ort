@@ -41,10 +41,6 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
-    ide {
-        acceptedLocations(ScriptAcceptedLocation.Everywhere)
-    }
-
     compilerOptions("-jvm-target", Environment().javaVersion.substringBefore('.'))
 
     defaultImports(
@@ -52,10 +48,6 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
         "org.ossreviewtoolkit.utils.ort.*",
         "java.util.*"
     )
-
-    jvm {
-        dependenciesFromCurrentContext(wholeClasspath = true)
-    }
 
     hostConfiguration(
         ScriptingHostConfiguration {
@@ -71,6 +63,14 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
             }
         }
     )
+
+    ide {
+        acceptedLocations(ScriptAcceptedLocation.Everywhere)
+    }
+
+    jvm {
+        dependenciesFromCurrentContext(wholeClasspath = true)
+    }
 })
 
 // Use MD5 for speed.
