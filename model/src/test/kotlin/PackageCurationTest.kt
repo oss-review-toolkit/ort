@@ -428,12 +428,14 @@ class PackageCurationTest : WordSpec({
             }
         }
 
-        "comply to the ivy version matchers specifications" {
-            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
-            packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
-            packageCurationForVersion("[1.0,2.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
-            packageCurationForVersion("1.+").isApplicable(identifierForVersion("1.23")) shouldBe true
-            packageCurationForVersion("]1.0,)").isApplicable(identifierForVersion("1.0")) shouldBe false
+        "comply to the Ivy version matchers specifications" {
+            assertSoftly {
+                packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
+                packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+                packageCurationForVersion("[1.0,2.0]").isApplicable(identifierForVersion("1.23")) shouldBe true
+                packageCurationForVersion("1.+").isApplicable(identifierForVersion("1.23")) shouldBe true
+                packageCurationForVersion("]1.0,)").isApplicable(identifierForVersion("1.0")) shouldBe false
+            }
         }
     }
 })
