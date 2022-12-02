@@ -202,8 +202,6 @@ RUN rbenv install ${RUBY_VERSION} -v \
     && rbenv global ${RUBY_VERSION} \
     && gem install bundler cocoapods:${COCOAPODS_VERSION}
 
-COPY docker/ruby.sh /etc/profile.d
-
 FROM scratch AS ruby
 COPY --from=rubybuild ${RBENV_ROOT} ${RBENV_ROOT}
 
@@ -325,7 +323,6 @@ RUN chmod o+rwx ${PYENV_ROOT}
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
 ENV PATH=$PATH:${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:${RBENV_ROOT}/plugins/ruby-install/bin
-COPY --from=rubybuild /etc/profile.d/ruby.sh /etc/profile.d/
 COPY --from=ruby ${RBENV_ROOT} ${RBENV_ROOT}
 RUN chmod o+rwx ${RBENV_ROOT}
 
