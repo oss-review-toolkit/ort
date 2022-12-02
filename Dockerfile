@@ -173,7 +173,20 @@ RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
-FROM build as rubybuild
+FROM ort-base-image AS rubybuild
+
+# hadolint ignore=DL3004
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    libreadline6-dev \
+    libssl-dev \
+    libz-dev \
+    make \
+    xvfb \
+    zlib1g-dev \
+    && sudo rm -rf /var/lib/apt/lists/*
 
 ARG COCOAPODS_VERSION=1.11.2
 ARG RUBY_VERSION=3.1.2
