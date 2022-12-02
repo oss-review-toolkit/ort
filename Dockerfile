@@ -291,6 +291,9 @@ RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | tee $ANDR
 
 COPY docker/android.sh /etc/profile.d
 
+FROM scratch AS android
+COPY --from=androidbuild ${ANDROID_HOME} ${ANDROID_HOME}
+
 #------------------------------------------------------------------------
 # ORT
 FROM build as ortbuild
