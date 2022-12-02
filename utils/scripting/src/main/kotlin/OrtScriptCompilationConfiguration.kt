@@ -29,6 +29,7 @@ import kotlin.script.experimental.api.compilerOptions
 import kotlin.script.experimental.api.defaultImports
 import kotlin.script.experimental.api.hostConfiguration
 import kotlin.script.experimental.api.ide
+import kotlin.script.experimental.api.isStandalone
 import kotlin.script.experimental.host.ScriptingHostConfiguration
 import kotlin.script.experimental.jvm.compilationCache
 import kotlin.script.experimental.jvm.dependenciesFromCurrentContext
@@ -67,6 +68,8 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     ide {
         acceptedLocations(ScriptAcceptedLocation.Everywhere)
     }
+
+    isStandalone(false)
 
     jvm {
         dependenciesFromCurrentContext(wholeClasspath = true)
