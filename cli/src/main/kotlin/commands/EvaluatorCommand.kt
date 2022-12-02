@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
@@ -43,6 +42,7 @@ import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
+import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -81,7 +81,10 @@ import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class EvaluatorCommand : CliktCommand(name = "evaluate", help = "Evaluate ORT result files against policy rules.") {
+class EvaluatorCommand : OrtCommand(
+    name = "evaluate",
+    help = "Evaluate ORT result files against policy rules."
+) {
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
@@ -41,6 +40,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
@@ -67,7 +67,10 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class ScannerCommand : CliktCommand(name = "scan", help = "Run external license / copyright scanners.") {
+class ScannerCommand : OrtCommand(
+    name = "scan",
+    help = "Run external license / copyright scanners."
+) {
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
@@ -37,6 +36,7 @@ import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.clients.utils.SW360ClientException
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.readOrtResult
@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.utils.common.packZip
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
-class UploadResultToSw360Command : CliktCommand(
+class UploadResultToSw360Command : OrtCommand(
     name = "upload-result-to-sw360",
     help = "Upload an ORT result to SW360."
 ) {

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.cli.commands
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
@@ -31,13 +30,17 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.cli.GlobalOptions
+import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ConfigCommand : CliktCommand(name = "config", help = "Show different ORT configurations") {
+class ConfigCommand : OrtCommand(
+    name = "config",
+    help = "Show different ORT configurations"
+) {
     private val showDefault by option(
         "--show-default",
         help = "Show the default configuration used when no custom configuration is present."

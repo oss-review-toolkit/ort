@@ -1,0 +1,12 @@
+org.ossreviewtoolkit.cli.commands.AdvisorCommand
+org.ossreviewtoolkit.cli.commands.AnalyzerCommand
+org.ossreviewtoolkit.cli.commands.ConfigCommand
+org.ossreviewtoolkit.cli.commands.DownloaderCommand
+org.ossreviewtoolkit.cli.commands.EvaluatorCommand
+org.ossreviewtoolkit.cli.commands.NotifierCommand
+org.ossreviewtoolkit.cli.commands.ReporterCommand
+org.ossreviewtoolkit.cli.commands.RequirementsCommand
+org.ossreviewtoolkit.cli.commands.ScannerCommand
+org.ossreviewtoolkit.cli.commands.UploadCurationsCommand
+org.ossreviewtoolkit.cli.commands.UploadResultToPostgresCommand
+org.ossreviewtoolkit.cli.commands.UploadResultToSw360Command
