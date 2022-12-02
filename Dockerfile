@@ -311,11 +311,10 @@ RUN chmod o+rwx ${RBENV_ROOT}
 
 # NodeJS
 ARG NODEJS_VERSION=16.17.1
-ARG NVM_DIR=/opt/nvm
+ENV NVM_DIR=/opt/nvm
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
-ENV PATH $NVM_DIR/versions/node/v$NODEJS_VERSION/bin:$PATH
-COPY --chown=$USERNAME:$USERNAME --from=nodebuild ${NVM_DIR} ${NVM_DIR}
-RUN chmod o+rwx ${NVM_DIR}
+ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
+COPY --from=node ${NVM_DIR} ${NVM_DIR}
 
 # Rust
 ARG RUST_HOME=/opt/rust
