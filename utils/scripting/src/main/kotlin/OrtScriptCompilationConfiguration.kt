@@ -76,8 +76,7 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     }
 })
 
-// Use MD5 for speed.
-private val digest = MessageDigest.getInstance("MD5")
+private val digest = MessageDigest.getInstance("SHA-1")
 
 private fun generateUniqueName(script: SourceCode, configuration: ScriptCompilationConfiguration): String {
     digest.reset()
