@@ -204,6 +204,9 @@ RUN rbenv install ${RUBY_VERSION} -v \
 
 COPY docker/ruby.sh /etc/profile.d
 
+FROM scratch AS ruby
+COPY --from=rubybuild ${RBENV_ROOT} ${RBENV_ROOT}
+
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
 FROM ort-base-image AS nodebuild
