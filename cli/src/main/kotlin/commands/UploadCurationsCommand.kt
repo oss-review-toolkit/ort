@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -35,6 +34,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
+import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
@@ -58,7 +58,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 import retrofit2.HttpException
 
-class UploadCurationsCommand : CliktCommand(
+class UploadCurationsCommand : OrtCommand(
     name = "upload-curations",
     help = "Upload ORT package curations to ClearlyDefined."
 ) {

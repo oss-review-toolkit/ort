@@ -151,20 +151,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             helpFormatter = OrtHelpFormatter()
         }
 
-        subcommands(
-            AdvisorCommand(),
-            AnalyzerCommand(),
-            ConfigCommand(),
-            DownloaderCommand(),
-            EvaluatorCommand(),
-            NotifierCommand(),
-            ReporterCommand(),
-            RequirementsCommand(),
-            ScannerCommand(),
-            UploadCurationsCommand(),
-            UploadResultToPostgresCommand(),
-            UploadResultToSw360Command()
-        )
+        subcommands(OrtCommand.ALL.values)
 
         versionOption(
             version = env.ortVersion,
