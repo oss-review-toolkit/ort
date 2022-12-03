@@ -355,6 +355,7 @@ subprojects {
     }
 
     tasks.withType<Jar>().configureEach {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         isPreserveFileTimestamps = false
         isReproducibleFileOrder = true
 
