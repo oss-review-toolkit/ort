@@ -31,22 +31,16 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
-import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.withoutPrefix
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
@@ -63,9 +57,9 @@ import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
  *   contain an SPDX expression.
  */
 class ScanCode internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+) : CommandLinePathScannerWrapper() {
     companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 
@@ -103,9 +97,7 @@ class ScanCode internal constructor(
             ScanCode(name, scannerConfig)
     }
 
-    override val name = SCANNER_NAME
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-    override val expectedVersion = BuildConfig.SCANCODE_VERSION
 
     override val configuration by lazy {
         buildList {
@@ -141,43 +133,6 @@ class ScanCode internal constructor(
         }.orEmpty()
     }
 
-    override fun bootstrap(): File {
-        val versionWithoutHyphen = expectedVersion.replace("-", "")
-        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
-        val scannerDir = unpackDir.resolve("scancode-toolkit-$versionWithoutHyphen")
-
-        if (scannerDir.resolve(command()).isFile) {
-            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
-            return scannerDir
-        }
-
-        val archive = when {
-            // Use the .zip file despite it being slightly larger than the .tar.gz file here as the latter for some
-            // reason does not complete to unpack on Windows.
-            Os.isWindows -> "v$versionWithoutHyphen.zip"
-            else -> "v$versionWithoutHyphen.tar.gz"
-        }
-
-        // Use the source code archive instead of the release artifact from S3 to enable OkHttp to cache the download
-        // locally. For details see https://github.com/square/okhttp/issues/4355#issuecomment-435679393.
-        val url = "https://github.com/nexB/scancode-toolkit/archive/$archive"
-
-        // Download ScanCode to a file instead of unpacking directly from the response body as doing so on the > 200 MiB
-        // archive causes issues.
-        logger.info { "Downloading $name from $url... " }
-        unpackDir.safeMkdirs()
-        val scannerArchive = OkHttpClientHelper.downloadFile(url, unpackDir).getOrThrow()
-
-        logger.info { "Unpacking '$scannerArchive' to '$unpackDir'... " }
-        scannerArchive.unpack(unpackDir)
-
-        if (!scannerArchive.delete()) {
-            logger.warn { "Unable to delete temporary file '$scannerArchive'." }
-        }
-
-        return scannerDir
-    }
-
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val resultFile = createOrtTempDir().resolve("result.json")
         val process = runScanCode(path, resultFile)
@@ -211,8 +166,7 @@ class ScanCode internal constructor(
     internal fun runScanCode(
         path: File,
         resultFile: File
-    ) = ProcessCapture(
-        scannerPath.absolutePath,
+    ) = run(
         *commandLineOptions.toTypedArray(),
         path.absolutePath,
         OUTPUT_FORMAT_OPTION,
