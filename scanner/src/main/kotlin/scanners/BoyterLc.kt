@@ -33,24 +33,19 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class BoyterLc internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+) : CommandLinePathScannerWrapper() {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.
@@ -63,9 +58,7 @@ class BoyterLc internal constructor(
             BoyterLc(name, scannerConfig)
     }
 
-    override val name = "BoyterLc"
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-    override val expectedVersion = BuildConfig.BOYTER_LC_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
     override fun command(workingDir: File?) =
@@ -76,39 +69,11 @@ class BoyterLc internal constructor(
         // licensechecker version 1.1.1
         output.removePrefix("licensechecker version ")
 
-    override fun bootstrap(): File {
-        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
-
-        if (unpackDir.resolve(command()).isFile) {
-            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
-            return unpackDir
-        }
-
-        val platform = when {
-            Os.isLinux -> "x86_64-unknown-linux"
-            Os.isMac -> "x86_64-apple-darwin"
-            Os.isWindows -> "x86_64-pc-windows"
-            else -> throw IllegalArgumentException("Unsupported operating system.")
-        }
-
-        val archive = "lc-$expectedVersion-$platform.zip"
-        val url = "https://github.com/boyter/lc/releases/download/v$expectedVersion/$archive"
-
-        logger.info { "Downloading $name from $url... " }
-        val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
-
-        logger.info { "Unpacking '$archive' to '$unpackDir'... " }
-        body.bytes().unpackZip(unpackDir)
-
-        return unpackDir
-    }
-
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
         val resultFile = createOrtTempDir().resolve("result.json")
-        val process = ProcessCapture(
-            scannerPath.absolutePath,
+        val process = run(
             *CONFIGURATION_OPTIONS.toTypedArray(),
             "--output", resultFile.absolutePath,
             path.absolutePath

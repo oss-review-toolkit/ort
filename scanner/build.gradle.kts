@@ -65,15 +65,6 @@ dependencies {
     testImplementation(libs.wiremock)
 }
 
-buildConfig {
-    packageName("org.ossreviewtoolkit.scanner")
-
-    buildConfigField("String", "ASKALONO_VERSION", "\"$askalonoVersion\"")
-    buildConfigField("String", "BOYTER_LC_VERSION", "\"$boyterLcVersion\"")
-    buildConfigField("String", "LICENSEE_VERSION", "\"$licenseeVersion\"")
-    buildConfigField("String", "SCANCODE_VERSION", "\"$scancodeVersion\"")
-}
-
 tasks.withType<KotlinCompile>().configureEach {
     val customCompilerArgs = listOf(
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"

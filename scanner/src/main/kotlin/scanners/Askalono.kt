@@ -33,22 +33,17 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Askalono internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+) : CommandLinePathScannerWrapper() {
     companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
@@ -56,9 +51,7 @@ class Askalono internal constructor(
             Askalono(name, scannerConfig)
     }
 
-    override val name = "Askalono"
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-    override val expectedVersion = BuildConfig.ASKALONO_VERSION
     override val configuration = ""
 
     override fun command(workingDir: File?) =
@@ -69,38 +62,10 @@ class Askalono internal constructor(
         // askalono 0.2.0-beta.1
         output.removePrefix("askalono ")
 
-    override fun bootstrap(): File {
-        val unpackDir = ortToolsDirectory.resolve(name).resolve(expectedVersion)
-
-        if (unpackDir.resolve(command()).isFile) {
-            logger.info { "Skipping to bootstrap $name as it was found in $unpackDir." }
-            return unpackDir
-        }
-
-        val platform = when {
-            Os.isLinux -> "Linux"
-            Os.isMac -> "macOS"
-            Os.isWindows -> "Windows"
-            else -> throw IllegalArgumentException("Unsupported operating system.")
-        }
-
-        val archive = "askalono-$platform.zip"
-        val url = "https://github.com/amzn/askalono/releases/download/$expectedVersion/$archive"
-
-        logger.info { "Downloading $name from $url... " }
-        val (_, body) = OkHttpClientHelper.download(url).getOrThrow()
-
-        logger.info { "Unpacking '$archive' to '$unpackDir'... " }
-        body.bytes().unpackZip(unpackDir)
-
-        return unpackDir
-    }
-
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
-        val process = ProcessCapture(
-            scannerPath.absolutePath,
+        val process = run(
             "--format", "json",
             "crawl", path.absolutePath
         )

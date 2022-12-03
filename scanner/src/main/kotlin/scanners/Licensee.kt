@@ -33,19 +33,17 @@ import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.BuildConfig
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(
-    name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper(name) {
+) : CommandLinePathScannerWrapper() {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf("--json")
     }
@@ -55,9 +53,7 @@ class Licensee internal constructor(
             Licensee(name, scannerConfig)
     }
 
-    override val name = "Licensee"
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-    override val expectedVersion = BuildConfig.LICENSEE_VERSION
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
     override fun command(workingDir: File?) =
@@ -65,22 +61,10 @@ class Licensee internal constructor(
 
     override fun getVersionArguments() = "version"
 
-    override fun bootstrap(): File {
-        val gem = if (Os.isWindows) "gem.cmd" else "gem"
-
-        ProcessCapture(gem, "install", "--user-install", "licensee", "-v", expectedVersion).requireSuccess()
-
-        val ruby = ProcessCapture("ruby", "-r", "rubygems", "-e", "puts Gem.user_dir").requireSuccess()
-        val userDir = ruby.stdout.trimEnd()
-
-        return File(userDir, "bin")
-    }
-
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
-        val process = ProcessCapture(
-            scannerPath.absolutePath,
+        val process = run(
             "detect",
             *CONFIGURATION_OPTIONS.toTypedArray(),
             path.absolutePath
