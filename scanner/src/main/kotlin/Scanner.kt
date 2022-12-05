@@ -122,14 +122,14 @@ class Scanner(
         val filteredScannerOptions = mutableMapOf<String, Options>()
 
         projectScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.options?.get(scannerWrapper.details.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.details.name] = scannerWrapper.filterSecretOptions(options)
             }
         }
 
         packageScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.options?.get(scannerWrapper.details.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.details.name] = scannerWrapper.filterSecretOptions(options)
             }
         }
 
@@ -245,16 +245,17 @@ class Scanner(
                     val hasNestedProvenance = controller.getNestedProvenance(pkg.id) != null
                     if (!hasNestedProvenance) {
                         logger.debug {
-                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner ${scanner.name} as no " +
-                                    "nested provenance for the package could be resolved."
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner " +
+                                    "'${scanner.details.name}' as no nested provenance for the package could be " +
+                                    "resolved."
                         }
                     }
 
                     val hasCompleteScanResult = controller.hasCompleteScanResult(scanner, pkg)
                     if (hasCompleteScanResult) {
                         logger.debug {
-                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
-                                    "stored results are available."
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner " +
+                                    "'${scanner.details.name}' as stored results are available."
                         }
                     }
 
@@ -262,7 +263,10 @@ class Scanner(
                 }
 
                 if (packagesWithIncompleteScanResult.isEmpty()) {
-                    logger.info { "Skipping scan with package scanner '${scanner.name}' as all packages have results." }
+                    logger.info {
+                        "Skipping scan with package scanner '${scanner.details.name}' as all packages have results."
+                    }
+
                     return@scanner
                 }
 
@@ -285,13 +289,15 @@ class Scanner(
                 }
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name} started."
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.details.name} " +
+                            "started."
                 }
 
                 val scanResult = scanner.scanPackage(referencePackage, context)
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}' finished."
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.details.name}' " +
+                            "finished."
                 }
 
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
@@ -320,7 +326,7 @@ class Scanner(
                 if (controller.hasScanResult(scanner, provenance)) {
                     logger.debug {
                         "Skipping $provenance scan (${index + 1} of ${provenances.size}) with provenance scanner " +
-                                "'${scanner.name}' as a result is already available."
+                                "'${scanner.details.name}' as a result is already available."
                     }
 
                     return@scanner
@@ -328,7 +334,7 @@ class Scanner(
 
                 logger.info {
                     "Scanning $provenance (${index + 1} of ${provenances.size}) with provenance scanner " +
-                            "'${scanner.name}'."
+                            "'${scanner.details.name}'."
                 }
 
                 val scanResult = scanner.scanProvenance(provenance, context)
@@ -423,7 +429,7 @@ class Scanner(
         controller.scanners.forEach { scanner ->
             val results = controller.getScanResults(scanner)
             logger.info {
-                "\t${scanner.name}: Result(s) for ${results.size} of ${allKnownProvenances.size} provenance(s)."
+                "\t${scanner.details.name}: Result(s) for ${results.size} of ${allKnownProvenances.size} provenance(s)."
             }
         }
     }
@@ -514,11 +520,11 @@ class Scanner(
 
         return try {
             scanners.associateWith { scanner ->
-                logger.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
+                logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' started." }
 
                 val summary = scanner.scanPath(downloadDir, context)
 
-                logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
+                logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' finished." }
 
                 ScanResult(provenance, scanner.details, summary)
             }

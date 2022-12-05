@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 
 class ScanOss internal constructor(
-    override val name: String,
+    private val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : PathScannerWrapper {
     companion object : Logging

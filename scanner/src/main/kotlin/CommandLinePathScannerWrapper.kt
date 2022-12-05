@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 /**
  * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
  */
-abstract class CommandLinePathScannerWrapper : PathScannerWrapper, CommandLineTool {
+abstract class CommandLinePathScannerWrapper(name: String) : PathScannerWrapper, CommandLineTool {
     companion object : Logging
 
     /**

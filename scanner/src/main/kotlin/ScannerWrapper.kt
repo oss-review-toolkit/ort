@@ -43,11 +43,6 @@ sealed interface ScannerWrapper {
     }
 
     /**
-     * The name of the scanner.
-     */
-    val name: String
-
-    /**
      * The details of the scanner.
      */
     val details: ScannerDetails
