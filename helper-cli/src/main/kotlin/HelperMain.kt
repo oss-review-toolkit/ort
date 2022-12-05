@@ -74,10 +74,10 @@ fun main(args: Array<String>) {
 
 internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
-        "--debug" to Level.DEBUG,
         "--error" to Level.ERROR,
+        "--warn" to Level.WARN,
         "--info" to Level.INFO,
-        "--warn" to Level.WARN
+        "--debug" to Level.DEBUG
     ).default(Level.WARN)
 
     private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
