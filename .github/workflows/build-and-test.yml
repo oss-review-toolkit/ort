@@ -97,6 +97,8 @@ jobs:
           pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION
     - name: Checkout Repository
       uses: actions/checkout@v3
+      with:
+        submodules: recursive
     - name: Setup Java
       uses: actions/setup-java@v3
       with:
