@@ -97,11 +97,11 @@ class ConfigCommand : OrtCommand(
             println(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
         }
 
-        if (checkSyntax != null) {
+        checkSyntax?.run {
             runCatching {
-                OrtConfiguration.load(file = checkSyntax)
+                OrtConfiguration.load(file = this)
             }.onSuccess {
-                println("The syntax of the configuration file '$checkSyntax' is valid.")
+                println("The syntax of the configuration file '$this' is valid.")
             }.onFailure {
                 println(it.collectMessages())
                 throw ProgramResult(2)
