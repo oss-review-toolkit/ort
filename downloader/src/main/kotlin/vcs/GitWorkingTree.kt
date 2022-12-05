@@ -70,18 +70,17 @@ open class GitWorkingTree(
             SubmoduleWalk.forIndex(repo).use { walk ->
                 while (walk.next()) {
                     val path = "$prefix${walk.path}"
-                    paths += path
 
                     if (walk.repository == null) {
                         logger.info {
                             "Git submodule at '$path' not initialized. Cannot recursively list its submodules."
                         }
+                    } else {
+                        paths += path
 
-                        continue
-                    }
-
-                    walk.repository.use { submoduleRepo ->
-                        listSubmodules(path, submoduleRepo, paths)
+                        walk.repository.use { submoduleRepo ->
+                            listSubmodules(path, submoduleRepo, paths)
+                        }
                     }
                 }
             }
