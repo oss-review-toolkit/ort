@@ -110,7 +110,7 @@ Files: clients/github-graphql/src/main/assets/schema.graphql
 Copyright: 2017 Gregor Martynus
 License: MIT
 
-Files: evaluator/src/main/resources/rules/osadl-matrix-with-explanations.json
+Files: evaluator/src/main/resources/rules/matrixseqexpl.json
 Copyright: 2021 Open Source Automation Development Lab (OSADL) eG
 License: CC-BY-4.0
 
