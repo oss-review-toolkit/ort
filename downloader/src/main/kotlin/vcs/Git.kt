@@ -231,7 +231,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }
 
     private fun updateSubmodules(workingTree: WorkingTree) {
-        if (!workingTree.workingDir.resolve(".gitmodules").isFile) return
+        if (!workingTree.getRootPath().resolve(".gitmodules").isFile) return
 
         val configOption = REPOSITORY_URL_PREFIX_REPLACEMENTS.flatMap { (prefix, replacement) ->
             listOf("-c", "url.$replacement.insteadOf=$prefix")
