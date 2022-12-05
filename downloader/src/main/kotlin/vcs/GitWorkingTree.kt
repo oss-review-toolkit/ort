@@ -72,7 +72,7 @@ open class GitWorkingTree(
                     val path = "$prefix${walk.path}"
 
                     if (walk.repository == null) {
-                        logger.info {
+                        logger.warn {
                             "Git submodule at '$path' not initialized. Cannot recursively list its submodules."
                         }
                     } else {
