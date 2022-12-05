@@ -43,9 +43,9 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class BoyterLc internal constructor(
-    override val name: String,
+    private val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper() {
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         val CONFIGURATION_OPTIONS = listOf(
             "--confidence", "0.95", // Cut-off value to only get most relevant matches.

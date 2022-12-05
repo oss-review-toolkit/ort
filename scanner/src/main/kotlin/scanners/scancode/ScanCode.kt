@@ -57,9 +57,9 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  *   contain an SPDX expression.
  */
 class ScanCode internal constructor(
-    override val name: String,
+    private val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper() {
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 

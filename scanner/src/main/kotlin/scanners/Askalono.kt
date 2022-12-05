@@ -41,9 +41,9 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Askalono internal constructor(
-    override val name: String,
+    private val name: String,
     private val scannerConfig: ScannerConfiguration
-) : CommandLinePathScannerWrapper() {
+) : CommandLinePathScannerWrapper(name) {
     companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {

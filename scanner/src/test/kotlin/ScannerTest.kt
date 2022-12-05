@@ -253,7 +253,7 @@ class ScannerTest : WordSpec({
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()
             val scannerWrapper = FakePathScannerWrapper()
-            val provenanceDownloader = spyk(FakeProvenanceDownloader("${scannerWrapper.name}.txt"))
+            val provenanceDownloader = spyk(FakeProvenanceDownloader("${scannerWrapper.details.name}.txt"))
             val scanner = createScanner(
                 provenanceDownloader = provenanceDownloader,
                 packageScannerWrappers = listOf(scannerWrapper)
@@ -800,7 +800,6 @@ private class FakePackageScannerWrapper(
     name: String = "fake"
 ) : PackageScannerWrapper {
     override val details = ScannerDetails(name, "1.0.0", "config")
-    override val name = details.name
     override val criteria: ScannerCriteria? = ScannerCriteria.forDetails(details)
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
@@ -812,7 +811,6 @@ private class FakePackageScannerWrapper(
  */
 private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
-    override val name = details.name
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanProvenance(provenance: KnownProvenance, context: ScanContext): ScanResult =
@@ -824,7 +822,6 @@ private class FakeProvenanceScannerWrapper : ProvenanceScannerWrapper {
  */
 private class FakePathScannerWrapper : PathScannerWrapper {
     override val details = ScannerDetails("fake", "1.0.0", "config")
-    override val name = details.name
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
