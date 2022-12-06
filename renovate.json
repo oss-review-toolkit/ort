@@ -4,7 +4,7 @@
     "config:base",
     "docker:disable"
   ],
-  "dependencyDashboard:false",
+  "dependencyDashboard": false,
   "batect": {
     "enabled": false
   },
