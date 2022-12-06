@@ -277,10 +277,21 @@ COPY --from=gobuild /opt/go /opt/go
 
 #------------------------------------------------------------------------
 # HASKELL STACK
-FROM build AS haskellbuild
+FROM ort-base-image AS haskellbuild
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    zlib1g-dev \
+    && sudo rm -rf /var/lib/apt/lists/*
 
 ARG HASKELL_STACK_VERSION=2.7.5
-RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d /usr/bin
+
+ENV HASKELL_HOME=/opt/haskell
+ENV PATH=$PATH:${HASKELL_HOME}/bin
+
+RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d ${HASKELL_HOME}/bin
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
