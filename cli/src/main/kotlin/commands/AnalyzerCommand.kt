@@ -115,8 +115,8 @@ class AnalyzerCommand : OrtCommand(
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "A file containing the repository configuration. If set, the '$ORT_REPO_CONFIG_FILENAME' file from " +
-                "the repository is ignored."
+        help = "A file containing the repository configuration. If set, overrides any repository configuration " +
+                "contained in a '$ORT_REPO_CONFIG_FILENAME' file in the repository."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
