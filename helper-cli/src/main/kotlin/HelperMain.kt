@@ -33,26 +33,7 @@ import com.github.ajalt.clikt.parameters.options.switch
 
 import kotlin.system.exitProcess
 
-import org.ossreviewtoolkit.helper.commands.ConvertOrtFileCommand
-import org.ossreviewtoolkit.helper.commands.CreateAnalyzerResultCommand
-import org.ossreviewtoolkit.helper.commands.DownloadResultsFromPostgresCommand
-import org.ossreviewtoolkit.helper.commands.ExtractRepositoryConfigurationCommand
-import org.ossreviewtoolkit.helper.commands.GenerateTimeoutErrorResolutionsCommand
-import org.ossreviewtoolkit.helper.commands.GetPackageLicensesCommand
-import org.ossreviewtoolkit.helper.commands.ImportCopyrightGarbageCommand
-import org.ossreviewtoolkit.helper.commands.ImportScanResultsCommand
-import org.ossreviewtoolkit.helper.commands.ListCopyrightsCommand
-import org.ossreviewtoolkit.helper.commands.ListLicenseCategoriesCommand
-import org.ossreviewtoolkit.helper.commands.ListLicensesCommand
-import org.ossreviewtoolkit.helper.commands.ListPackagesCommand
-import org.ossreviewtoolkit.helper.commands.ListStoredScanResultsCommand
-import org.ossreviewtoolkit.helper.commands.MapCopyrightsCommand
-import org.ossreviewtoolkit.helper.commands.MergeRepositoryConfigurationsCommand
-import org.ossreviewtoolkit.helper.commands.SetDependencyRepresentationCommand
-import org.ossreviewtoolkit.helper.commands.SetLabelsCommand
-import org.ossreviewtoolkit.helper.commands.SubtractScanResultsCommand
-import org.ossreviewtoolkit.helper.commands.TransformResultCommand
-import org.ossreviewtoolkit.helper.commands.VerifySourceArtifactCurationsCommand
+import org.ossreviewtoolkit.helper.commands.*
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
