@@ -23,6 +23,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -163,4 +164,96 @@ class LicenseClassificationsTest : WordSpec({
             )
         }
     }
+
+    "merge()" should {
+        "keep disjunct classifications" {
+            val a = classify(
+                "aLic1" to setOf("aCat1"),
+                "aLic2" to setOf("aCat2")
+            )
+            val b = classify(
+                "bLic1" to setOf("bCat1"),
+                "bLic2" to setOf("bCat2")
+            )
+
+            val actual = a.merge(b)
+
+            val expected = classify(
+                "aLic1" to setOf("aCat1"),
+                "aLic2" to setOf("aCat2"),
+                "bLic1" to setOf("bCat1"),
+                "bLic2" to setOf("bCat2")
+            )
+            actual.categories shouldContainExactlyInAnyOrder expected.categories
+            actual.categorizations shouldContainExactlyInAnyOrder expected.categorizations
+        }
+
+        "overwrite existing with other classifications" {
+            val a = classify(
+                "lic1" to setOf("cat1"),
+                "lic2" to setOf("cat2")
+            )
+            val b = classify(
+                "lic1" to setOf("cat2"),
+                "lic2" to setOf("cat1")
+            )
+
+            val actual = a.merge(b)
+
+            val expected = classify(
+                "lic1" to setOf("cat2"),
+                "lic2" to setOf("cat1")
+            )
+            actual.categories shouldContainExactlyInAnyOrder expected.categories
+            actual.categorizations shouldContainExactlyInAnyOrder expected.categorizations
+        }
+
+        "merge categories for existing licenses" {
+            val a = classify(
+                "lic1" to setOf("cat1")
+            )
+
+            val b = classify(
+                "lic1" to setOf("cat2")
+            )
+
+            val actual = a.merge(b)
+
+            val expected = classify(
+                "lic1" to setOf("cat1", "cat2")
+            )
+            actual.categories shouldContainExactlyInAnyOrder expected.categories
+            actual.categorizations shouldContainExactlyInAnyOrder expected.categorizations
+        }
+
+        "remove categories that are also used in the other classification" {
+            val a = classify(
+                "lic1" to setOf("cat1"),
+                "lic2" to setOf("cat2")
+            )
+
+            val b = classify(
+                "lic2" to setOf("cat1")
+            )
+
+            val actual = a.merge(b)
+
+            val expected = classify(
+                "lic2" to setOf("cat2", "cat1")
+            )
+
+            actual.categories shouldContainExactlyInAnyOrder expected.categories
+            actual.categorizations shouldContainExactlyInAnyOrder expected.categorizations
+        }
+    }
 })
+
+private fun classify(vararg classifications: Pair<String, Set<String>>) =
+    LicenseClassifications(
+        categories = classifications.flatMap { (_, categories) ->
+            categories.map { LicenseCategory(name = it) }
+        }.distinct(),
+        categorizations = classifications.map { (id, categories) ->
+            LicenseCategorization(SpdxSingleLicenseExpression.parse(id), categories)
+        }
+    )

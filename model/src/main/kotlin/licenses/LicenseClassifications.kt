@@ -108,6 +108,34 @@ data class LicenseClassifications(
 
     /** A convenience function to check whether there is a categorization for the given license [id]. */
     fun isCategorized(id: SpdxExpression) = id in categoriesByLicense
+
+    /**
+     * Merge [other] into these classifications, overwriting any conflicting existing classifications.
+     */
+    fun merge(other: LicenseClassifications): LicenseClassifications {
+        val filteredCategoriesByLicense = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<String>>()
+
+        // Remove categories that are also used in the other classification as different classifications might use
+        // different semantics for the same category name.
+        categorizations.forEach { (id, categories) ->
+            val filteredCategories = categories.filterTo(mutableSetOf()) { it !in other.categoryNames }
+            if (filteredCategories.isNotEmpty()) filteredCategoriesByLicense[id] = filteredCategories
+        }
+
+        // Merge other into existing categories for each license.
+        other.categorizations.forEach { (id, categories) ->
+            filteredCategoriesByLicense.getOrPut(id) { mutableSetOf() } += categories
+        }
+
+        val usedCategories = filteredCategoriesByLicense.values.flatten().toSet()
+
+        return LicenseClassifications(
+            categories = (categories + other.categories).toSet().filter { it.name in usedCategories },
+            categorizations = filteredCategoriesByLicense.map { (id, categories) ->
+                LicenseCategorization(id, categories)
+            }
+        )
+    }
 }
 
 /**
