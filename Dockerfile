@@ -334,6 +334,17 @@ FROM scratch AS dart
 COPY --from=dartbuild ${DART_SDK} ${DART_SDK}
 
 #------------------------------------------------------------------------
+# SBT
+FROM ort-base-image AS sbtbuild
+
+ARG SBT_VERSION=1.6.1
+
+ENV SBT_HOME=/opt/sbt
+ENV PATH=$PATH:${SBT_HOME}/bin
+
+RUN curl -L https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz | tar -C /opt -xz
+
+#------------------------------------------------------------------------
 # ORT
 FROM build as ortbuild
 
@@ -411,20 +422,12 @@ ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:${DART_SDK}/bin
 COPY --from=dart ${DART_SDK} ${DART_SDK}
 
-# External repositories for SBT
-ARG SBT_VERSION=1.6.1
-RUN KEYURL="https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89B84B2DF73499E82A75642AC823" \
-    && echo "deb https://repo.scala-sbt.org/scalasbt/debian all main" | tee /etc/apt/sources.list.d/sbt.list \
-    && echo "deb https://repo.scala-sbt.org/scalasbt/debian /" | tee /etc/apt/sources.list.d/sbt_old.list \
-    && curl -ksS "$KEYURL" | gpg --dearmor | tee "/etc/apt/trusted.gpg.d/scala_ubuntu.gpg" > /dev/null
-
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
         php \
-        sbt=$SBT_VERSION \
         subversion \
     && rm -rf /var/lib/apt/lists/*
 
