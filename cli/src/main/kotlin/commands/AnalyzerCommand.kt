@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.defaultLazy
 import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -119,6 +120,7 @@ class AnalyzerCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
+        .defaultLazy { inputDir.resolve(ORT_REPO_CONFIG_FILENAME) }
         .configurationGroup()
 
     private val resolutionsFile by option(
@@ -193,15 +195,10 @@ class AnalyzerCommand : OrtCommand(
             }
         }
 
-        // Manually set a default value based on another option to avoid a "Cannot read from option delegate before
-        // parsing command line" error.
-        val actualRepositoryConfigurationFile = repositoryConfigurationFile
-            ?: inputDir.resolve(ORT_REPO_CONFIG_FILENAME)
-
         val configurationFiles = listOf(
             packageCurationsFile,
             packageCurationsDir,
-            actualRepositoryConfigurationFile,
+            repositoryConfigurationFile,
             resolutionsFile
         )
 
@@ -225,7 +222,7 @@ class AnalyzerCommand : OrtCommand(
 
         println("Analyzing project path:\n\t$inputDir")
 
-        val repositoryConfiguration = actualRepositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
+        val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
 
         val analyzerConfiguration =
