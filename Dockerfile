@@ -344,6 +344,9 @@ ENV PATH=$PATH:${SBT_HOME}/bin
 
 RUN curl -L https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz | tar -C /opt -xz
 
+FROM scratch AS sbt
+COPY --from=sbtbuild ${DART_SDK} ${DART_SDK}
+
 #------------------------------------------------------------------------
 # ORT
 FROM build as ortbuild
