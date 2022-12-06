@@ -424,7 +424,9 @@ ENV PATH=$PATH:/opt/go/bin
 COPY --from=golang /opt/go /opt/go
 
 # Haskell
-COPY --from=haskellbuild /usr/bin/stack /usr/bin
+ENV HASKELL_HOME=/opt/haskell
+ENV PATH=$PATH:${HASKELL_HOME}/bin
+COPY --from=haskell ${HASKELL_HOME} ${HASKELL_HOME}
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
