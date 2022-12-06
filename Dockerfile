@@ -425,6 +425,12 @@ ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:${DART_SDK}/bin
 COPY --from=dart ${DART_SDK} ${DART_SDK}
 
+# SBT
+ENV SBT_HOME=/opt/sbt
+ENV PATH=$PATH:${SBT_HOME}/bin
+
+COPY --from=sbt ${SBT_HOME} ${SBT_HOME}
+
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
