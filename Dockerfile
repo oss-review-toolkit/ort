@@ -293,6 +293,9 @@ ENV PATH=$PATH:${HASKELL_HOME}/bin
 
 RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d ${HASKELL_HOME}/bin
 
+FROM scratch AS haskell
+COPY --from=haskellbuild ${HASKELL_HOME} ${HASKELL_HOME}
+
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
 FROM ort-base-image AS androidbuild
