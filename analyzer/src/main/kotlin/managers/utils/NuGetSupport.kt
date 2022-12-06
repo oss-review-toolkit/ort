@@ -114,6 +114,14 @@ class NuGetSupport(
         return readValue(text)
     }
 
+    private fun getPackageData(id: Identifier, registrationBaseUrl: String): PackageData? =
+        runCatching {
+            // Note: The package name in the URL is case-sensitive and must be lower-case!
+            val lowerId = id.name.lowercase()
+            val dataUrl = "$registrationBaseUrl/$lowerId/${id.version}.json"
+            JSON_MAPPER.readValueFromUrl<PackageData>(dataUrl)
+        }.getOrNull()
+
     private fun getAllPackageData(
         directDependencies: Collection<Identifier>,
         registrationsBaseUrls: Collection<String>,
@@ -126,14 +134,7 @@ class NuGetSupport(
             val id = queue.removeFirst()
             if (id in result) continue
 
-            val packageData = registrationsBaseUrls.firstNotNullOfOrNull { baseUrl ->
-                runCatching {
-                    // Note: The package name in the URL is case-sensitive and must be lower-case!
-                    val lowerId = id.name.lowercase()
-                    val dataUrl = "$baseUrl/$lowerId/${id.version}.json"
-                    JSON_MAPPER.readValueFromUrl<PackageData>(dataUrl)
-                }.getOrNull()
-            }
+            val packageData = registrationsBaseUrls.firstNotNullOfOrNull { getPackageData(id, it) }
 
             if (packageData == null) {
                 issues += createAndLogIssue(
