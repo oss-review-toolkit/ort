@@ -187,6 +187,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             println(getOrtHeader(env.ortVersion))
             println("Looking for ORT configuration in the following file:")
             println("\t" + configFile.absolutePath + " (does not exist)".takeIf { !configFile.exists() }.orEmpty())
+            println()
         }
     }
 
