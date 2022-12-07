@@ -237,9 +237,10 @@ class OrtMainFunTest : StringSpec() {
                 runMain(
                     "-c", configFile.path,
                     "evaluate",
-                    "-i", "build.gradle.kts",
-                    "--rules-file", "build.gradle.kts",
-                    "--rules-resource", "DUMMY"
+                    "-i", "src/funTest/assets/semver4j-ort-result.yml",
+                    "--rules-resource", "/rules/osadl.rules.kts",
+                    "--package-configuration-dir", "src",
+                    "--package-configuration-file", "build.gradle.kts"
                 )
             }
         }
