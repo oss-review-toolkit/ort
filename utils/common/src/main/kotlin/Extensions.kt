@@ -24,8 +24,6 @@ package org.ossreviewtoolkit.utils.common
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.util.ClassUtil
 
-import com.vdurmont.semver4j.Semver
-
 import java.io.File
 import java.io.IOException
 import java.net.URI
@@ -366,12 +364,6 @@ fun String.fileSystemEncode() =
  * Return true if the string represents a false value, otherwise return false.
  */
 fun String?.isFalse() = this?.toBoolean()?.not() ?: false
-
-/**
- * True if the string is a valid semantic version of the given [type], false otherwise.
- */
-fun String.isSemanticVersion(type: Semver.SemverType = Semver.SemverType.STRICT) =
-    runCatching { Semver(this, type) }.isSuccess
 
 /**
  * Return true if the string represents a true value, otherwise return false.
