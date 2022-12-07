@@ -37,76 +37,74 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class NuGetFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/nuget").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-    private val packageFile = projectDir.resolve("packages.config")
+class NuGetFunTest : StringSpec({
+    val projectDir = File("src/funTest/assets/projects/synthetic/nuget").absoluteFile
+    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
+    val packageFile = projectDir.resolve("packages.config")
 
-    init {
-        "Definition file is correctly read" {
-            val reader = NuGetPackageFileReader()
-            val result = reader.getDependencies(packageFile)
+    "Definition file is correctly read" {
+        val reader = NuGetPackageFileReader()
+        val result = reader.getDependencies(packageFile)
 
-            result should containExactly(
-                NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
-                NuGetDependency(name = "System.Threading", version = "4.0.11", targetFramework = "netcoreapp3.1"),
-                NuGetDependency(
-                    name = "System.Threading.Tasks.Extensions",
-                    version = "4.5.4",
-                    targetFramework = "net45"
-                ),
-                NuGetDependency(
-                    name = "WebGrease",
-                    version = "1.5.2",
-                    targetFramework = "netcoreapp3.1",
-                    developmentDependency = true
-                ),
-                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "netcoreapp3.1")
-            )
-        }
-
-        "Project dependencies are detected correctly" {
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("nuget-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
-            val result = createNuGet().resolveSingleProject(packageFile)
-
-            patchActualResult(result.toYaml()) shouldBe expectedResult
-        }
-
-        "Direct project dependencies are detected correctly" {
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("nuget-direct-dependencies-only-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
-            val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(packageFile)
-
-            patchActualResult(result.toYaml()) shouldBe expectedResult
-        }
+        result should containExactly(
+            NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
+            NuGetDependency(name = "System.Threading", version = "4.0.11", targetFramework = "netcoreapp3.1"),
+            NuGetDependency(
+                name = "System.Threading.Tasks.Extensions",
+                version = "4.5.4",
+                targetFramework = "net45"
+            ),
+            NuGetDependency(
+                name = "WebGrease",
+                version = "1.5.2",
+                targetFramework = "netcoreapp3.1",
+                developmentDependency = true
+            ),
+            NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "netcoreapp3.1")
+        )
     }
 
-    private fun createNuGet(directDependenciesOnly: Boolean = false) =
-        NuGet(
-            "NuGet",
-            USER_DIR,
-            AnalyzerConfiguration(
-                packageManagers = mapOf(
-                    "NuGet" to PackageManagerConfiguration(
-                        options = mapOf(
-                            OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
-                        )
+    "Project dependencies are detected correctly" {
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        val expectedResult = patchExpectedResult(
+            projectDir.parentFile.resolve("nuget-expected-output.yml"),
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
+        val result = createNuGet().resolveSingleProject(packageFile)
+
+        patchActualResult(result.toYaml()) shouldBe expectedResult
+    }
+
+    "Direct project dependencies are detected correctly" {
+        val vcsPath = vcsDir.getPathToRoot(projectDir)
+        val expectedResult = patchExpectedResult(
+            projectDir.parentFile.resolve("nuget-direct-dependencies-only-expected-output.yml"),
+            url = normalizeVcsUrl(vcsUrl),
+            revision = vcsRevision,
+            path = vcsPath
+        )
+        val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(packageFile)
+
+        patchActualResult(result.toYaml()) shouldBe expectedResult
+    }
+})
+
+private fun createNuGet(directDependenciesOnly: Boolean = false) =
+    NuGet(
+        "NuGet",
+        USER_DIR,
+        AnalyzerConfiguration(
+            packageManagers = mapOf(
+                "NuGet" to PackageManagerConfiguration(
+                    options = mapOf(
+                        OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
                     )
                 )
-            ),
-            RepositoryConfiguration()
-        )
-}
+            )
+        ),
+        RepositoryConfiguration()
+    )
