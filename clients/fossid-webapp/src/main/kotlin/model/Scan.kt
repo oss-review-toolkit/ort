@@ -61,7 +61,8 @@ data class Scan(
 
     val importedMetadata: String?,
 
-    val hasFileExtension: Int?,
+    @JsonDeserialize(using = IntBooleanDeserializer::class)
+    val hasFileExtension: Boolean?,
 
     val jarExtraction: String?,
 
