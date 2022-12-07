@@ -94,6 +94,7 @@ dependencies {
     implementation(libs.commonsCompress)
     implementation(libs.exposedCore)
     implementation(libs.hikari)
+    implementation(libs.jacksonModuleKotlin)
     implementation(libs.jslt)
     implementation(libs.log4jApiToSlf4j)
     implementation(libs.logbackClassic)

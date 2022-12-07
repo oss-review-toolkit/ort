@@ -34,6 +34,7 @@ import com.github.ajalt.clikt.parameters.options.switch
 import kotlin.system.exitProcess
 
 import org.ossreviewtoolkit.helper.commands.*
+import org.ossreviewtoolkit.helper.commands.classifications.LicenseClassificationsCommand
 import org.ossreviewtoolkit.helper.commands.packageconfig.PackageConfigurationCommand
 import org.ossreviewtoolkit.helper.commands.packagecuration.PackageCurationsCommand
 import org.ossreviewtoolkit.helper.commands.repoconfig.RepositoryConfigurationCommand
@@ -78,6 +79,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             DownloadResultsFromPostgresCommand(),
             ImportCopyrightGarbageCommand(),
             ImportScanResultsCommand(),
+            LicenseClassificationsCommand(),
             ListCopyrightsCommand(),
             ListLicenseCategoriesCommand(),
             ListLicensesCommand(),
