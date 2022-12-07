@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.cli.commands
 
+import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
-import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
@@ -40,11 +40,8 @@ import kotlin.time.measureTimedValue
 
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
-import org.ossreviewtoolkit.cli.GroupTypes.FileType
-import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
-import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_RULE
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
@@ -106,20 +103,18 @@ class EvaluatorCommand : OrtCommand(
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
-    private val rules by mutuallyExclusiveOptions(
-        option(
-            "--rules-file", "-r",
-            help = "The name of a script file containing rules. Must not be used together with '--rules-resource'."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { FileType(it.absoluteFile.normalize()) },
-        option(
-            "--rules-resource",
-            help = "The name of a script resource on the classpath that contains rules. Must not be used together " +
-                    "with '--rules-file'."
-        ).convert { StringType(it) },
-        name = OPTION_GROUP_RULE
-    ).single().default(FileType(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)))
+    private val rulesFile by option(
+        "--rules-file", "-r",
+        help = "The name of a script file containing rules."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
+        .default(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME))
+
+    private val rulesResource by option(
+        "--rules-resource",
+        help = "The name of a script resource on the classpath that contains rules."
+    )
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
@@ -208,6 +203,15 @@ class EvaluatorCommand : OrtCommand(
     private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
 
     override fun run() {
+        val scriptUrls = listOfNotNull(
+            rulesFile.takeIf { it.isFile }?.toURI()?.toURL(),
+            rulesResource?.let { javaClass.getResource(it) }
+        )
+
+        if (scriptUrls.isEmpty()) {
+            throw BadParameterValue("Neither a rules file nor a rules resource was specified.")
+        }
+
         val configurationFiles = listOfNotNull(
                 copyrightGarbageFile,
                 licenseClassificationsFile,
@@ -238,24 +242,21 @@ class EvaluatorCommand : OrtCommand(
             }
         }
 
-        val script = when (rules) {
-            is FileType -> (rules as FileType).file.readText()
-
-            is StringType -> {
-                val rulesResource = (rules as StringType).string
-                javaClass.getResource(rulesResource)?.readText()
-                    ?: throw UsageError("Invalid rules resource '$rulesResource'.")
-            }
-        }
-
         if (checkSyntax) {
-            if (Evaluator().checkSyntax(script)) {
-                println("Syntax check succeeded.")
-                return
+            val evaluator = Evaluator()
+
+            var allChecksSucceeded = true
+
+            scriptUrls.forEach {
+                if (evaluator.checkSyntax(it.readText())) {
+                    println("Syntax check for $it succeeded.")
+                } else {
+                    println("Syntax check for $it failed.")
+                    allChecksSucceeded = false
+                }
             }
 
-            println("Syntax check failed.")
-            throw ProgramResult(2)
+            if (allChecksSucceeded) return else throw ProgramResult(2)
         }
 
         val existingOrtFile = requireNotNull(ortFile) {
@@ -304,9 +305,12 @@ class EvaluatorCommand : OrtCommand(
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
         val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
 
-        val (evaluatorRun, duration) = measureTimedValue { evaluator.run(script) }
+        val (evaluatorRun, duration) = measureTimedValue {
+            val scripts = scriptUrls.map { it.readText() }
+            evaluator.run(*scripts.toTypedArray())
+        }
 
-        logger.info { "Executed the evaluator in $duration." }
+        logger.info { "Evaluation of ${scriptUrls.size} script(s) took $duration." }
 
         evaluatorRun.violations.forEach { violation ->
             println(violation.format())

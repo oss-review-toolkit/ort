@@ -49,11 +49,16 @@ class Evaluator(
         scriptsInstancesSharing(true)
     }
 
-    fun run(script: String): EvaluatorRun {
+    fun run(vararg scripts: String): EvaluatorRun {
         val startTime = Instant.now()
-        val scriptInstance = runScript(script).scriptInstance as RulesScriptTemplate
+
+        val violations = scripts.flatMapTo(mutableListOf()) {
+            val scriptInstance = runScript(it).scriptInstance as RulesScriptTemplate
+            scriptInstance.ruleViolations
+        }
+
         val endTime = Instant.now()
 
-        return EvaluatorRun(startTime, endTime, scriptInstance.ruleViolations)
+        return EvaluatorRun(startTime, endTime, violations)
     }
 }
