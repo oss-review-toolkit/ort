@@ -64,7 +64,7 @@ internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
-private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',')
+private val VERSION_RANGE_CHARS = charArrayOf('[', ']', '(', ')', ',', '*', '+')
 
 private val JSON_MAPPER = JsonMapper().registerKotlinModule()
 
@@ -137,11 +137,16 @@ class NuGetSupport(
             val packageData = registrationsBaseUrls.firstNotNullOfOrNull { getPackageData(id, it) }
 
             if (packageData == null) {
+                val hint = " Support for non-fixed version '${id.version}' is not implemented.".takeIf {
+                    !id.version.isFixedVersion()
+                }.orEmpty()
+
                 issues += createAndLogIssue(
                     source = "NuGet",
                     message = "Failed to get package data for '${id.toCoordinates()}' from any of " +
-                            "$registrationsBaseUrls."
+                            "$registrationsBaseUrls.$hint"
                 )
+
                 continue
             }
 
@@ -382,3 +387,5 @@ interface XmlPackageFileReader {
      */
     fun getDependencies(definitionFile: File): Set<NuGetDependency>
 }
+
+private fun String.isFixedVersion() = VERSION_RANGE_CHARS.none { it in this } && isNotBlank()
