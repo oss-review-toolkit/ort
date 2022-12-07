@@ -343,16 +343,6 @@ class ExtensionsTest : WordSpec({
         }
     }
 
-    "String.isSemanticVersion" should {
-        "return true for a semantic version" {
-            "1.0.0".isSemanticVersion() shouldBe true
-        }
-
-        "return false for a URL" {
-            "https://registry.npmjs.org/form-data/-/form-data-0.2.0.tgz".isSemanticVersion() shouldBe false
-        }
-    }
-
     "String.isValidUri" should {
         "return true for a valid URI" {
             "https://github.com/oss-review-toolkit/ort".isValidUri() shouldBe true
