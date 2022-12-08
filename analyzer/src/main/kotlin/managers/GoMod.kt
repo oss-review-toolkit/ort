@@ -101,7 +101,7 @@ class GoMod(
         val projectDir = definitionFile.parentFile
 
         stashDirectories(projectDir.resolve("vendor")).use { _ ->
-            val moduleInfoForModuleName = getModuleInfos(projectDir).associateBy({ it.path }, { it })
+            val moduleInfoForModuleName = getModuleInfos(projectDir)
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
@@ -180,7 +180,11 @@ class GoMod(
             graph.addEdge(parent, child)
         }
 
-        val vendorModules = getVendorModules(graph, projectDir)
+        val replacedModules = moduleInfoForModuleName.mapNotNull { (name, info) ->
+            (info.path to name).takeIf { name != info.path }
+        }.toMap()
+
+        val vendorModules = getVendorModules(graph, projectDir, replacedModules)
         if (vendorModules.size < graph.size()) {
             logger.debug {
                 "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph."
@@ -222,7 +226,7 @@ class GoMod(
      * Return the list of all modules contained in the dependency tree with resolved versions and the 'replace'
      * directive applied.
      */
-    private fun getModuleInfos(projectDir: File): List<ModuleInfo> {
+    private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
         val list = run("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
         list.stdout.byteInputStream().use { inputStream ->
@@ -238,7 +242,19 @@ class GoMod(
                 }
             }
 
-            return result.map { it.replace ?: it }
+            return buildMap {
+                result.forEach { moduleInfo ->
+                    if (moduleInfo.replace != null) {
+                        // The `replace` object in the output of `go list` does not have the `indirect` flag, so copy it
+                        // from the replaced module.
+                        val replace = moduleInfo.replace.copy(indirect = moduleInfo.indirect)
+                        put(moduleInfo.path, replace)
+                        put(moduleInfo.replace.path, replace)
+                    } else {
+                        put(moduleInfo.path, moduleInfo)
+                    }
+                }
+            }
         }
     }
 
@@ -246,17 +262,22 @@ class GoMod(
      * Return the subset of the modules in [graph] required for building and testing the main module. So, test
      * dependencies of dependencies are filtered out.
      */
-    private fun getVendorModules(graph: Graph, projectDir: File): Set<Identifier> {
+    private fun getVendorModules(
+        graph: Graph,
+        projectDir: File,
+        replacedModules: Map<String, String>
+    ): Set<Identifier> {
         val vendorModuleNames = mutableSetOf(graph.projectId().name)
 
         graph.nodes().chunked(WHY_CHUNK_SIZE).forEach { ids ->
-            val moduleNames = ids.map { it.name }.toTypedArray()
+            // Use the names of replaced modules, because `go mod why` returns only results for those.
+            val moduleNames = ids.map { replacedModules[it.name] ?: it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
             vendorModuleNames += parseWhyOutput(run(projectDir, "mod", "why", "-m", "-vendor", *moduleNames).stdout)
         }
 
-        return graph.nodes().filterTo(mutableSetOf()) { it.name in vendorModuleNames }
+        return graph.nodes().filterTo(mutableSetOf()) { (replacedModules[it.name] ?: it.name) in vendorModuleNames }
     }
 
     /**
