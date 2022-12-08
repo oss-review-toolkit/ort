@@ -728,7 +728,7 @@ following formats are supported (reporter names are case-insensitive):
   [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo)
   (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
-* [Excel](https://www.microsoft.com/en-us/microsoft-365/excel) sheet (`-f Excel`)
+* [Excel](https://en.wikipedia.org/wiki/Microsoft_Excel) sheet (`-f Excel`)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
   (`-f GitLabLicenseModel`)
   * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
