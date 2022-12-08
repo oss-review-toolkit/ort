@@ -69,15 +69,15 @@ project:
     - id: "Go::github.com/stretchr/testify:1.7.2"
       linkage: "PROJECT_STATIC"
       dependencies:
-      - id: "Go::github.com/davecgh/go-spew:1.1.0"
+      - id: "Go::github.com/atomtree/go-spew:1.1.0"
         linkage: "PROJECT_STATIC"
       - id: "Go::github.com/pmezard/go-difflib:1.0.0"
         linkage: "PROJECT_STATIC"
       - id: "Go::gopkg.in/yaml.v3:3.0.1"
         linkage: "PROJECT_STATIC"
 packages:
-- id: "Go::github.com/davecgh/go-spew:1.1.0"
-  purl: "pkg:golang/github.com%2Fdavecgh%2Fgo-spew@1.1.0"
+- id: "Go::github.com/atomtree/go-spew:1.1.0"
+  purl: "pkg:golang/github.com%2Fatomtree%2Fgo-spew@1.1.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
@@ -94,12 +94,12 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "https://github.com/davecgh/go-spew.git"
+    url: "https://github.com/atomtree/go-spew.git"
     revision: "v1.1.0"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/davecgh/go-spew.git"
+    url: "https://github.com/atomtree/go-spew.git"
     revision: "v1.1.0"
     path: ""
 - id: "Go::github.com/fatih/color:1.13.0"
