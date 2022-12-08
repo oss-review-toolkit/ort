@@ -99,56 +99,50 @@ Gradle and download all required dependencies).
 
 ## Basic usage
 
-ORT can now be run using
+Depending on how ORT was installed, it can be run in the following ways:
 
-    ./cli/build/install/ort/bin/ort --help
+- If the binary was downloaded from JitPack, use
 
-Note that if you make any changes to ORT's source code, you would have to regenerate the distribution using the steps
-above.
+      java -jar ort.jar --help
 
-To avoid that, you can also build and run ORT in one go (if you have the prerequisites from the
-[Build natively](#build-natively) section installed):
+- If the Docker image was built, use
 
-    ./gradlew cli:run --args="--help"
+      docker run ort --help
 
-Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
-located in (see https://github.com/gradle/gradle/issues/6074).
+  You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
+
+- If the ORT distribution was built from sources, use
+
+      ./cli/build/install/ort/bin/ort --help
+
+- If running directly from sources via Gradle, use
+
+      ./gradlew cli:run --args="--help"
+
+  Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
+  located in (see https://github.com/gradle/gradle/issues/6074).
+
+For simplicity of the following usage examples, the above ORT invocations are unified to just `ort --help`.
 
 # Running the tools
-
-Like for building ORT from sources you have the option to run ORT from a Docker image (which comes with all runtime
-dependencies) or to run ORT natively (in which case some additional requirements need to be fulfilled).
-
-## Run using Docker
-
-After you have built the image as [described above](#build-using-docker), simply run
-`docker run <DOCKER_ARGS> ort <ORT_ARGS>`. You typically use `<DOCKER_ARGS>` to mount the project directory to analyze
-into the container for ORT to access it, like:
-
-    docker run -v /workspace:/project ort --info analyze -f JSON -i /project -o /project/ort/analyzer
-
-You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
-
-## Run natively
 
 First, make sure that the locale of your system is set to `en_US.UTF-8` as using other locales might lead to issues with
 parsing the output of some external tools.
 
-Then install any missing external command line tools as listed by
+Then, let ORT check whether all required external tools are available by running
 
-    ./cli/build/install/ort/bin/ort requirements
+    ort requirements
 
-or
+and install any missing tools or add compatible versions as indicated.
 
-    ./gradlew cli:run --args="requirements"
+Finally, ORT tools like the _analyzer_ can be run like
 
-Then run ORT like
+    ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 
-    ./cli/build/install/ort/bin/ort --info analyze -f JSON -i /project -o /project/ort/analyzer
+Just the like top-level `ort` command, the subcommands for all tools provide a `--help` option for detailed usage help.
+Use it like `ort analyze --help`.
 
-or
-
-    ./gradlew cli:run --args="--info analyze -f JSON -i /project -o /project/ort/analyzer"
+Please see [Getting Started](./docs/getting-started.md) for an introduction to the individual tools.
 
 ## Running on CI
 
@@ -158,10 +152,6 @@ A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily
 itself for documentation of the required Jenkins plugins. The job accepts various parameters that are translated to ORT
 command line arguments. Additionally, one can trigger a downstream job which e.g. further processes scan results. Note
 that it is the downstream job's responsibility to copy any artifacts it needs from the upstream job.
-
-## Getting started
-
-Please see [Getting Started](./docs/getting-started.md) for an introduction to the individual tools.
 
 ## Configuration
 
