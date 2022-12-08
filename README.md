@@ -712,7 +712,7 @@ script is wrapped into a minimal [evaluator-rules](./examples/evaluator-rules) p
 The _reporter_ generates a wide variety of documents in different formats from ORT result files. Currently, the
 following formats are supported (reporter names are case-insensitive):
 
-* [AsciiDoc Template](docs/reporters/AsciiDocTemplateReporter.md) (`-f AsciiDocTemplate`)
+* [AsciiDoc Template](docs/reporters/asciidoc-templates.md) (`-f AsciiDocTemplate`)
   * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and
     [AsciiDoc](https://asciidoc.org/)
   * PDF style customizable with Asciidoctor
