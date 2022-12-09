@@ -233,7 +233,10 @@ abstract class VersionControlSystem {
             throw DownloadException("Failed to initialize $type working tree at '$targetDir'.", e)
         }
 
-        val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions)
+        val revisionCandidates = getRevisionCandidates(workingTree, pkg, allowMovingRevisions).getOrElse {
+            throw DownloadException("$type failed to get revisions from URL '${pkg.vcsProcessed.url}'.", it)
+        }
+
         val results = mutableListOf<Result<String>>()
 
         for ((index, revision) in revisionCandidates.withIndex()) {
@@ -282,7 +285,7 @@ abstract class VersionControlSystem {
         workingTree: WorkingTree,
         pkg: Package,
         allowMovingRevisions: Boolean
-    ): List<String> {
+    ): Result<List<String>> {
         val revisionCandidates = mutableListOf<String>()
         val emptyRevisionCandidatesException = DownloadException("Unable to determine a revision to checkout.")
 
@@ -353,9 +356,11 @@ abstract class VersionControlSystem {
             }
         }
 
-        if (revisionCandidates.isEmpty()) throw emptyRevisionCandidatesException
-
-        return revisionCandidates
+        return if (revisionCandidates.isEmpty()) {
+            Result.failure(emptyRevisionCandidatesException)
+        } else {
+            Result.success(revisionCandidates)
+        }
     }
 
     /**

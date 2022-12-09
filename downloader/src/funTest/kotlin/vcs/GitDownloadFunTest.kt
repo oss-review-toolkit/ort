@@ -59,7 +59,7 @@ class GitDownloadFunTest : StringSpec() {
             val exception = shouldThrow<DownloadException> {
                 git.download(pkg, outputDir, allowMovingRevisions = true)
             }
-            exception.message shouldBe "Git failed to download from URL '$url'."
+            exception.message shouldBe "Git failed to get revisions from URL '$url'."
         }
 
         "Git can download a given revision".config(tags = setOf(ExpensiveTag)) {
