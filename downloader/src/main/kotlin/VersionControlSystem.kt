@@ -282,8 +282,8 @@ abstract class VersionControlSystem {
         workingTree: WorkingTree,
         pkg: Package,
         allowMovingRevisions: Boolean
-    ): Set<String> {
-        val revisionCandidates = mutableSetOf<String>()
+    ): List<String> {
+        val revisionCandidates = mutableListOf<String>()
         val emptyRevisionCandidatesException = DownloadException("Unable to determine a revision to checkout.")
 
         runCatching {
