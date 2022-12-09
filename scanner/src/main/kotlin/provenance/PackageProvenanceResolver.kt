@@ -251,15 +251,15 @@ class DefaultPackageProvenanceResolver(
 
                 val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
 
-                storage.putProvenance(
-                    pkg.id,
-                    pkg.vcsProcessed,
-                    ResolvedRepositoryProvenance(
-                        repositoryProvenance, revision, vcs.isFixedRevision(workingTree, revision)
+                vcs.isFixedRevision(workingTree, revision).onSuccess { isFixedRevision ->
+                    storage.putProvenance(
+                        pkg.id,
+                        pkg.vcsProcessed,
+                        ResolvedRepositoryProvenance(repositoryProvenance, revision, isFixedRevision)
                     )
-                )
 
-                return@use repositoryProvenance
+                    return@use repositoryProvenance
+                }
             }
 
             val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with " +

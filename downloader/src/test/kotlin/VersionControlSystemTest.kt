@@ -87,8 +87,7 @@ class VersionControlSystemTest : WordSpec({
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
             Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
-                "v1.6.0",
-                "master"
+                "v1.6.0"
             )
         }
     }
