@@ -460,6 +460,14 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 ARG COMPOSER_VERSION=2.2
 RUN curl -ksS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --$COMPOSER_VERSION
 
+# nuget-inspector
+ARG NUGET_INSPECTOR_VERSION=0.5.0
+RUN mkdir -p nuget-inspector \
+    && curl -L https://github.com/nexB/nuget-inspector/releases/download/v${NUGET_INSPECTOR_VERSION}/nuget-inspector-${NUGET_INSPECTOR_VERSION}-linux-x64.tar.gz \
+    | tar -C ./nuget-inspector -xz
+COPY --chown=$USERNAME:$USERNAME nuget-inspector /opt/nuget-inspector
+# RUN chmod 755 /opt/nuget-inspector/nuget-inspector
+
 # ORT
 COPY --chown=$USERNAME:$USERNAME --from=ortbuild /opt/ort /opt/ort
 COPY docker/ort-wrapper.sh /usr/bin/ort

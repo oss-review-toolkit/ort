@@ -29,14 +29,15 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
-import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport
+import org.ossreviewtoolkit.analyzer.managers.utils.*
 import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
-import org.ossreviewtoolkit.analyzer.managers.utils.XmlPackageFileReader
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
@@ -66,11 +67,49 @@ class DotNet(
     private val reader = DotNetPackageFileReader()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        val support = NuGetSupport(managerName, analysisRoot, reader)
-        val projectAnalyzerResult = support.resolveDependencies(definitionFile, directDependenciesOnly)
+        val result = runNugetInspector(definitionFile)
 
-        return listOf(projectAnalyzerResult)
+        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
+
+        val nestedPackages: MutableList<NugetInspector.ParentDep> = mutableListOf()
+
+        result.packages.forEach() {
+            it.packages.map() { nestedPackages.add(it) }
+        }
+
+        val packageData : MutableSet<NugetInspector.PackageData> = mutableSetOf()
+
+        nestedPackages.forEach(){
+            it.dependencies.map(){packageData.add(it)}
+            packageData.add(it.parent)
+        }
+
+        val packages = packageData.toOrtPackages()
+
+        return listOf(ProjectAnalyzerResult(project, packages))
     }
+
+    private fun runNugetInspector(definitionFile: File): NugetInspector.Result {
+        val workingDir = definitionFile.parentFile
+        return runCatching {
+            try {
+                NugetInspector.run(
+                    workingDir = workingDir,
+                    definitionFile = definitionFile,
+                )
+            } finally {
+                workingDir.resolve(".cache").safeDeleteRecursively(force = true)
+            }
+        }.onFailure { e ->
+            e.showStackTrace()
+
+            logger.error {
+                "Unable to determine dependencies for definition file '${definitionFile.absolutePath}': " +
+                        e.collectMessages()
+            }
+        }.getOrThrow()
+    }
+
 }
 
 /**
