@@ -329,30 +329,28 @@ abstract class VersionControlSystem {
         }
 
         pkg.vcsProcessed.revision.takeIf { it.isNotBlank() && it !in revisionCandidates }?.also { revision ->
-            val isFixedRevision = runCatching {
-                isFixedRevision(workingTree, revision)
+            isFixedRevision(workingTree, revision).onSuccess { isFixedRevision ->
+                if (isFixedRevision) {
+                    logger.info {
+                        "Adding $type fixed revision '$revision' (taken from package metadata) as a candidate."
+                    }
+
+                    // Add a fixed revision from package metadata with the highest priority.
+                    revisionCandidates.add(0, revision)
+                } else if (allowMovingRevisions) {
+                    logger.info {
+                        "Adding $type moving revision '$revision' (taken from package metadata) as a candidate."
+                    }
+
+                    // Add a moving revision from package metadata with lower priority than guessed fixed revisions.
+                    revisionCandidates += revision
+                }
             }.onFailure {
                 logger.info {
                     "Metadata has invalid $type revision '$revision': ${it.collectMessages()}"
                 }
 
                 emptyRevisionCandidatesException.addSuppressed(it)
-            }.getOrDefault(false)
-
-            if (isFixedRevision) {
-                logger.info {
-                    "Adding $type fixed revision '$revision' (taken from package metadata) as a candidate."
-                }
-
-                // Add a fixed revision from package metadata with the highest priority.
-                revisionCandidates.add(0, revision)
-            } else if (allowMovingRevisions) {
-                logger.info {
-                    "Adding $type moving revision '$revision' (taken from package metadata) as a candidate."
-                }
-
-                // Add a moving revision from package metadata with lower priority than guessed fixed revisions.
-                revisionCandidates += revision
             }
         }
 
@@ -383,12 +381,15 @@ abstract class VersionControlSystem {
     ): Result<String>
 
     /**
-     * Check whether the given [revision] is likely to name a fixed revision that does not move.
+     * Check whether the given [revision] is likely to name a fixed revision that does not move. Return a [Result] with
+     * a [Boolean] on success, or with a [Throwable] is there was a failure.
      */
-    fun isFixedRevision(workingTree: WorkingTree, revision: String) =
-        revision.isNotBlank()
-                && revision !in latestRevisionNames
-                && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
+    fun isFixedRevision(workingTree: WorkingTree, revision: String): Result<Boolean> =
+        runCatching {
+            revision.isNotBlank()
+                    && revision !in latestRevisionNames
+                    && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
+        }
 
     /**
      * Check whether the VCS tool is at least of the specified [expectedVersion], e.g. to check for features.
