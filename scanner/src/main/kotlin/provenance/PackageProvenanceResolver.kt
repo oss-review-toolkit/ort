@@ -205,9 +205,8 @@ class DefaultPackageProvenanceResolver(
         }
 
         return workingTreeCache.use(pkg.vcsProcessed) { vcs, workingTree ->
-            val revisionCandidates = runCatching {
-                vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true)
-            }.getOrDefault(emptySet())
+            val revisionCandidates = vcs.getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true)
+                .getOrDefault(emptySet())
 
             val messages = mutableListOf<String>()
 

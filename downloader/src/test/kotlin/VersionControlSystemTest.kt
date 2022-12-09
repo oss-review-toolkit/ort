@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
@@ -85,7 +86,7 @@ class VersionControlSystemTest : WordSpec({
 
             every { workingTree.guessRevisionName(any(), any()) } returns "v1.6.0"
 
-            Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBe listOf(
+            Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0",
                 "master"
             )
