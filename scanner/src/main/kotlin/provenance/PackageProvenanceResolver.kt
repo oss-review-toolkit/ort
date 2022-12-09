@@ -237,28 +237,29 @@ class DefaultPackageProvenanceResolver(
                     return@forEachIndexed
                 }
 
-                result.onSuccess {
-                    val resolvedRevision = workingTree.getRevision()
-
-                    logger.info {
-                        "Resolved revision for package '${pkg.id.toCoordinates()}' to $resolvedRevision based on " +
-                                "guessed revision $revision."
-                    }
-
-                    val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
-
-                    storage.putProvenance(
-                        pkg.id,
-                        pkg.vcsProcessed,
-                        ResolvedRepositoryProvenance(
-                            repositoryProvenance, revision, vcs.isFixedRevision(workingTree, revision)
-                        )
-                    )
-
-                    return@use repositoryProvenance
-                }.onFailure {
+                result.onFailure {
                     addAndLogMessage("Could not resolve revision candidate '$revision': ${it.collectMessages()}")
+                    return@forEachIndexed
                 }
+
+                val resolvedRevision = workingTree.getRevision()
+
+                logger.info {
+                    "Resolved revision for package '${pkg.id.toCoordinates()}' to $resolvedRevision based on " +
+                            "guessed revision $revision."
+                }
+
+                val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
+
+                storage.putProvenance(
+                    pkg.id,
+                    pkg.vcsProcessed,
+                    ResolvedRepositoryProvenance(
+                        repositoryProvenance, revision, vcs.isFixedRevision(workingTree, revision)
+                    )
+                )
+
+                return@use repositoryProvenance
             }
 
             val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with " +
