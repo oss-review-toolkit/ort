@@ -386,6 +386,9 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
     && cp -a ${HOME}/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
     && cp -a ${HOME}/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
+FROM scratch AS ort
+COPY --from=ortbuild /opt/ort /opt/ort 
+
 #------------------------------------------------------------------------
 # Main container
 FROM ort-base-image as run
