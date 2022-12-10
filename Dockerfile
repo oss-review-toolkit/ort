@@ -363,26 +363,28 @@ COPY --from=sbtbuild ${DART_SDK} ${DART_SDK}
 
 #------------------------------------------------------------------------
 # ORT
-FROM build as ortbuild
+FROM ort-base-image as ortbuild
 
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
 
-COPY . /usr/local/src/ort
-WORKDIR /usr/local/src/ort
+WORKDIR ${HOME}/src/ort
 
 # Prepare Gradle
-RUN scripts/import_proxy_certs.sh /usr/local/src/ort/gradle.properties \
+RUN --mount=type=cache,target=/var/tmp/gradle \
+    --mount=type=bind,target=${HOME}/src/ort,rw \
+    export GRADLE_USER_HOME=/var/tmp/gradle \
+    && scripts/import_proxy_certs.sh \
     && scripts/set_gradle_proxy.sh \
-    && ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:distTar :helper-cli:startScripts
-
-RUN mkdir -p /opt/ort \
-    && tar xf /usr/local/src/ort/cli/build/distributions/ort-$ORT_VERSION.tar -C /opt/ort --strip-components 1 \
-    && cp -a /usr/local/src/ort/scripts/*.sh /opt/ort/bin/ \
-    && cp -a /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
-    && cp -a /usr/local/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/ \
-    && cd \
-    && rm -rf /usr/local/src
+    && ./gradlew --no-daemon --stacktrace \
+        -Pversion=$ORT_VERSION \
+        :cli:installDist \
+        :helper-cli:startScripts \
+    && mkdir /opt/ort \
+    && cp -a ${HOME}/src/ort/cli/build/install/ort /opt/ \
+    && cp -a ${HOME}/src/ort/scripts/*.sh /opt/ort/bin/ \
+    && cp -a ${HOME}/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
+    && cp -a ${HOME}/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
 
 #------------------------------------------------------------------------
 # Main container
