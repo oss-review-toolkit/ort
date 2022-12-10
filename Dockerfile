@@ -90,8 +90,6 @@ RUN chgrp $USER /opt \
 RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
-COPY docker/00-add_local_path.sh /etc/profile.d/
-
 # Import certificates scripts only
 COPY scripts/import_certificates.sh /etc/scripts/import_certificates.sh
 
@@ -466,12 +464,10 @@ ARG COMPOSER_VERSION=2.2
 RUN curl -ksS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --$COMPOSER_VERSION
 
 # ORT
-COPY --chown=$USERNAME:$USERNAME --from=ortbuild /opt/ort /opt/ort
-COPY docker/ort-wrapper.sh /usr/bin/ort
-COPY docker/ort-wrapper.sh /usr/bin/orth
-RUN chmod 755 /usr/bin/ort
+COPY --from=ort /opt/ort /opt/ort
+ENV PATH=$PATH:/opt/ort/bin
 
 USER $USERNAME
 WORKDIR $HOMEDIR
 
-ENTRYPOINT ["/usr/bin/ort"]
+ENTRYPOINT ["/opt/ort/bin/ort"]
