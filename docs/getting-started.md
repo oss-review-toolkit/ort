@@ -264,8 +264,8 @@ that explores the source code of a software package could be integrated. The act
 same machine, for example we will soon integrate the [ClearlyDefined](https://clearlydefined.io/) scanner backend which
 will perform the actual scanning remotely.
 
-For this tutorial we will use `ScanCode`. You do not have to install the tool manually, it will automatically be
-bootstrapped by the `scanner`.
+For this tutorial [ScanCode](https://github.com/nexB/scancode-toolkit) is used as a scanner. Please install it according
+to [these instructions](https://github.com/nexB/scancode-toolkit/#installation) first.
 
 As for the _analyzer_ you can get the command line options for the `scanner` using the `--help` option:
 
