@@ -367,6 +367,15 @@ FROM ort-base-image as components
 # Remove ort build scripts
 RUN rm -rf /etc/scripts
 
+# Apt install commands.
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+        php \
+        subversion \
+    && rm -rf /var/lib/apt/lists/*
+
 # Python
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:${PYENV_ROOT}/shims:${PYENV_ROOT}/bin
@@ -421,15 +430,6 @@ COPY --from=dart ${DART_SDK} ${DART_SDK}
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:${SBT_HOME}/bin
 COPY --from=sbt ${SBT_HOME} ${SBT_HOME}
-
-# Apt install commands.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        php \
-        subversion \
-    && rm -rf /var/lib/apt/lists/*
 
 # PHP composer
 ARG COMPOSER_VERSION=2.2
