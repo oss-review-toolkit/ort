@@ -23,6 +23,8 @@ package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import com.vdurmont.semver4j.Semver
+
 import java.io.File
 import java.time.Instant
 import java.time.ZoneId
@@ -249,6 +251,15 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
     val copyrightFindings = mutableListOf<CopyrightFinding>()
 
     val input = getInputPath(result)
+
+    val header = result["headers"].single()
+    val outputFormatVersion = header["output_format_version"]?.textValue()?.let { Semver(it) }
+    val copyrightKeyName = if (outputFormatVersion == null || outputFormatVersion < Semver("2.0.0")) {
+        "value"
+    } else {
+        "copyright"
+    }
+
     val files = result["files"]?.asSequence().orEmpty()
 
     files.flatMapTo(copyrightFindings) { file ->
@@ -257,7 +268,7 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
         copyrights.map { copyright ->
             CopyrightFinding(
-                statement = (copyright["value"] ?: copyright["copyright"]).textValue(),
+                statement = copyright[copyrightKeyName].textValue(),
                 location = TextLocation(
                     path = path,
                     startLine = copyright["start_line"].intValue(),
