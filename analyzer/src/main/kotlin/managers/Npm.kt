@@ -209,7 +209,13 @@ open class Npm(
 
         // TODO: add support for peerDependencies and bundledDependencies.
 
-        return listOf(ProjectAnalyzerResult(project.copy(scopeNames = scopeNames.toSortedSet()), emptySet()))
+        return listOf(
+            ProjectAnalyzerResult(
+                project = project.copy(scopeNames = scopeNames.toSortedSet()),
+                // Packages are set later by createPackageManagerResult().
+                packages = emptySet()
+            )
+        )
     }
 
     private fun parseInstalledModules(rootDirectory: File): Map<String, Package> {
