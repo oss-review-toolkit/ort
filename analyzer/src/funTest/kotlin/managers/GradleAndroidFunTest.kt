@@ -79,10 +79,7 @@ class GradleAndroidFunTest : StringSpec() {
             result.toYaml() shouldBe expectedResult
         }
 
-        "Cyclic dependencies over multiple libraries can be handled".config(
-            tags = setOf(AndroidTag, ExpensiveTag),
-            enabled = false
-        ) {
+        "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
             val cyclicProjectDir = File("src/funTest/assets/projects/synthetic/gradle-android-cyclic").absoluteFile
             val packageFile = cyclicProjectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
