@@ -228,6 +228,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          */
         private Dependency fetchDependency(DependencyResult dependencyResult, Project project,
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> visited) {
+            // Ignore version constraints, because they are not real dependencies but only document why a certain
+            // version of their parent was chosen.
+            if (dependencyResult.constraint) return null
+
             // Ignore this dependency if it is a BOM imported from Maven, because BOMs do not define dependencies but
             // version constraints.
             // See: https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import
@@ -282,8 +286,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                                            Set<ResolvedArtifact> resolvedArtifacts, Set<String> parents) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
                 List<Dependency> dependencies = dependencyResult.selected.dependencies.findResults { dependency ->
+                    // Do not follow constraints, because they are not real dependencies but only document why a certain
+                    // version of their parent was chosen.
                     // Do not follow circular dependencies, these can exist for project dependencies.
-                    if (!(dependencyResult.requested.displayName in parents)) {
+                    if (!dependencyResult.constraint && !(dependencyResult.requested.displayName in parents)) {
                         fetchDependency(dependency, project, resolvedArtifacts,
                                 parents + dependencyResult.requested.displayName)
                     } else {
@@ -394,8 +400,9 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
             def resultDependencies = dependencyResult instanceof ResolvedDependencyResult ?
                     dependencyResult.selected.dependencies : [] as Set<DependencyResult>
-            // Ignore the BOM dependencies for calculating the count since they are skipped by `fetchDependency`.
-            if (dependency.dependencies.size() != resultDependencies.count { !isBom(it) }) {
+            // Ignore constraints and BOM dependencies for calculating the count since they are skipped by
+            // `fetchDependency`.
+            if (dependency.dependencies.size() != resultDependencies.count { !it.constraint && !isBom(it) }) {
                 return false
             }
 
