@@ -102,6 +102,8 @@ RUN /etc/scripts/import_certificates.sh \
         /etc/scripts/import_certificates.sh /tmp/certificates/; \
     fi
 
+ENTRYPOINT [ "/bin/bash" ]
+
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
 FROM ort-base-image as pythonbuild
