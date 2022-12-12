@@ -361,8 +361,8 @@ FROM scratch AS ort
 COPY --from=ortbuild /opt/ort /opt/ort 
 
 #------------------------------------------------------------------------
-# Main container
-FROM ort-base-image as run
+# Components container
+FROM ort-base-image as components
 
 # Remove ort build scripts
 RUN rm -rf /etc/scripts
@@ -435,6 +435,12 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # PHP composer
 ARG COMPOSER_VERSION=2.2
 RUN curl -ksS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --$COMPOSER_VERSION
+
+ENTRYPOINT ["/bin/bash"]
+
+#------------------------------------------------------------------------
+# Main Runtime container
+FROM components AS run
 
 # ORT
 COPY --from=ort /opt/ort /opt/ort
