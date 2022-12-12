@@ -365,7 +365,7 @@ COPY --from=ortbuild /opt/ort /opt/ort
 FROM ort-base-image as components
 
 # Remove ort build scripts
-RUN rm -rf /etc/scripts
+RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
