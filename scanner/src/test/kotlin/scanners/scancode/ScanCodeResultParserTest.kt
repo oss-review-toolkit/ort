@@ -247,6 +247,18 @@ class ScanCodeResultParserTest : FreeSpec({
                 details.configuration shouldContain "--processes 3"
             }
         }
+
+        "for output format 2.0.0 should" - {
+            "properly parse details" {
+                val result = File("src/test/assets/scancode-output-format-2.0.0_mime-types-2.1.18.json").readTree()
+
+                val details = generateScannerDetails(result)
+                details.name shouldBe ScanCode.SCANNER_NAME
+                details.version shouldBe "31.2.1"
+                details.configuration shouldContain "--timeout 300.0"
+                details.configuration shouldContain "--processes 3"
+            }
+        }
     }
 
     "replaceLicenseKeys() should" - {

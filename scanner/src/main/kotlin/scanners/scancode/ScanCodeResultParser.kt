@@ -257,7 +257,7 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
         copyrights.map { copyright ->
             CopyrightFinding(
-                statement = copyright["value"].textValue(),
+                statement = (copyright["value"] ?: copyright["copyright"]).textValue(),
                 location = TextLocation(
                     path = path,
                     startLine = copyright["start_line"].intValue(),
