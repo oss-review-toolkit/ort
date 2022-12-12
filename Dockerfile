@@ -103,35 +103,6 @@ RUN /etc/scripts/import_certificates.sh \
     fi
 
 #------------------------------------------------------------------------
-FROM ort-base-image AS build
-
-#------------------------------------------------------------------------
-# Ubuntu build toolchain
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-        build-essential \
-        dpkg-dev \
-        libbluetooth-dev \
-        libbz2-dev \
-        libc6-dev \
-        libexpat1-dev \
-        libffi-dev \
-        libgmp-dev \
-        libgdbm-dev \
-        liblzma-dev \
-        libmpdec-dev \
-        libncursesw5-dev \
-        libreadline-dev \
-        libsqlite3-dev \
-        libssl-dev \
-        make \
-        tk-dev \
-        zlib1g-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-#------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
 FROM ort-base-image as pythonbuild
 
