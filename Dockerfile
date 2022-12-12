@@ -420,7 +420,6 @@ COPY --from=dart ${DART_SDK} ${DART_SDK}
 # SBT
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:${SBT_HOME}/bin
-
 COPY --from=sbt ${SBT_HOME} ${SBT_HOME}
 
 # Apt install commands.
