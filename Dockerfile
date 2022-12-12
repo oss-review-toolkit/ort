@@ -94,7 +94,7 @@ RUN echo "$USERNAME ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/$USERNAME \
 COPY scripts/import_certificates.sh /etc/scripts/import_certificates.sh
 
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
-ARG CRT_FILES=""
+ARG CRT_FILES="*.crt"
 COPY "$CRT_FILES" /tmp/certificates/
 
 RUN /etc/scripts/import_certificates.sh \
