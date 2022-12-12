@@ -27,6 +27,7 @@ import io.mockk.every
 import io.mockk.mockk
 
 import java.io.File
+import java.io.IOException
 
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
@@ -88,6 +89,32 @@ class VersionControlSystemTest : WordSpec({
 
             Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
                 "v1.6.0"
+            )
+        }
+
+        "add 'main' as a candidate for Git if otherwise 'master' is the only one" {
+            val pkg = Package.EMPTY.copy(
+                id = Identifier("NuGet::Microsoft.NETFramework.ReferenceAssemblies.net40:1.0.0-preview.2"),
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/Microsoft/dotnet.git",
+                    revision = "master",
+                    path = "releases/reference-assemblies"
+                )
+            )
+
+            val workingTree = mockk<WorkingTree>()
+
+            every {
+                workingTree.guessRevisionName(any(), any())
+            } throws IOException("No matching revision name found.")
+
+            every { workingTree.listRemoteBranches() } returns listOf("main")
+            every { workingTree.listRemoteTags() } returns emptyList()
+
+            Git().getRevisionCandidates(workingTree, pkg, allowMovingRevisions = true) shouldBeSuccess listOf(
+                "master",
+                "main"
             )
         }
     }

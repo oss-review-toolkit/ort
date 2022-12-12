@@ -358,6 +358,11 @@ abstract class VersionControlSystem {
 
         addMetadataRevision(pkg.vcsProcessed.revision)
 
+        if (type == VcsType.GIT && pkg.vcsProcessed.revision == "master") {
+            // Also try with Git's upcoming default branch name in case the repository is already using it.
+            addMetadataRevision("main")
+        }
+
         return if (revisionCandidates.isEmpty()) {
             Result.failure(emptyRevisionCandidatesException)
         } else {
