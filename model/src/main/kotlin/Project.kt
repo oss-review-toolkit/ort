@@ -155,7 +155,12 @@ data class Project(
     /**
      * A comparison function to sort projects by their identifier.
      */
-    override fun compareTo(other: Project) = id.compareTo(other.id)
+    override fun compareTo(other: Project) =
+        when {
+            id < other.id -> -1
+            id > other.id -> 1
+            else -> if (this == other) 0 else 1 // Return arbitrary inequality.
+        }
 
     /**
      * Return whether the package identified by [id] is contained as a (transitive) dependency in this project.

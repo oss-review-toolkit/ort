@@ -98,7 +98,12 @@ data class PackageReference(
      * A comparison function to sort package references by their identifier. This function ignores all other properties
      * except for [id].
      */
-    override fun compareTo(other: PackageReference) = id.compareTo(other.id)
+    override fun compareTo(other: PackageReference) =
+        when {
+            id < other.id -> -1
+            id > other.id -> 1
+            else -> if (this == other) 0 else 1 // Return arbitrary inequality.
+        }
 
     /**
      * Return whether the package identified by [id] is a (transitive) dependency of this reference.

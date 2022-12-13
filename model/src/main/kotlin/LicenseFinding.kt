@@ -50,7 +50,7 @@ data class LicenseFinding(
     val score: Float? = null
 ) : Comparable<LicenseFinding> {
     companion object {
-        private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
+        private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location }, { it.score })
 
         /**
          * Create a [LicenseFinding] with [detectedLicenseMapping]s applied.

@@ -332,10 +332,14 @@ class DependencyReference(
      * Define an order on [DependencyReference] instances. Instances are ordered by their indices and fragment indices.
      */
     override fun compareTo(other: DependencyReference): Int =
-        if (pkg != other.pkg) {
-            pkg - other.pkg
-        } else {
-            fragment - other.fragment
+        when {
+            pkg < other.pkg -> -1
+            pkg > other.pkg -> 1
+            else -> when {
+                fragment < other.fragment -> -1
+                fragment > other.fragment -> 1
+                else -> if (this == other) 0 else 1 // Return arbitrary inequality.
+            }
         }
 }
 

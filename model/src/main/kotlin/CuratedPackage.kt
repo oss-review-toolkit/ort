@@ -44,7 +44,12 @@ data class CuratedPackage(
     /**
      * A comparison function to sort packages by their identifier.
      */
-    override fun compareTo(other: CuratedPackage) = metadata.id.compareTo(other.metadata.id)
+    override fun compareTo(other: CuratedPackage) =
+        when {
+            metadata.id < other.metadata.id -> -1
+            metadata.id > other.metadata.id -> 1
+            else -> if (this == other) 0 else 1 // Return arbitrary inequality.
+        }
 
     /**
      * Return a [Package] representing the same package as this one but which does not have any curations applied.

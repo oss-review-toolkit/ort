@@ -155,7 +155,12 @@ data class Package(
     /**
      * A comparison function to sort packages by their identifier.
      */
-    override fun compareTo(other: Package) = id.compareTo(other.id)
+    override fun compareTo(other: Package) =
+        when {
+            id < other.id -> -1
+            id > other.id -> 1
+            else -> if (this == other) 0 else 1 // Return arbitrary inequality.
+        }
 
     /**
      * Compares this package with [other] and creates a [PackageCurationData] containing the values from this package
