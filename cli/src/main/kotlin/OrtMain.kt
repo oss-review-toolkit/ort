@@ -201,6 +201,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         val commandName = currentContext.invokedSubcommand?.commandName
         val command = commandName?.let { " '$commandName'" }.orEmpty()
+        val user = System.getProperty("user.name")
 
         val header = mutableListOf<String>()
         val maxMemInMib = env.maxMemory / (1024 * 1024)
@@ -209,8 +210,8 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             ________ _____________________
             \_____  \\______   \__    ___/ the OSS Review Toolkit, version $version.
              /   |   \|       _/ |    |
-            /    |    \    |   \ |    |    Running$command under Java ${env.javaVersion} on ${env.os} with
-            \_______  /____|_  / |____|    ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
+            /    |    \    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
+            \_______  /____|_  / |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
                     \/       \/
         """.trimIndent().lines().mapTo(header) { it.trimEnd() }
 
