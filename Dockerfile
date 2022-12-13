@@ -103,6 +103,9 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
+USER $USER
+WORKDIR $HOME
+
 ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
@@ -447,8 +450,8 @@ FROM components AS run
 COPY --from=ort --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
-USER $USERNAME
-WORKDIR $HOMEDIR
+USER $USER
+WORKDIR $HOME
 
 # Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
 RUN mkdir -p "$HOMEDIR/.ort"
