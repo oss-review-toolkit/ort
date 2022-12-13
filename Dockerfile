@@ -371,11 +371,11 @@ RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
         php \
         subversion \
-    && rm -rf /var/lib/apt/lists/*
+    && sudo rm -rf /var/lib/apt/lists/*
 
 # Python
 ENV PYENV_ROOT=/opt/python
