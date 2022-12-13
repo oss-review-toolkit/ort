@@ -65,24 +65,25 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
                 when (compatibilityInfo.compatibility) {
                     Compatibility.CONTEXTUAL -> warning(
-                        "Whether the outbound license $outboundLicenseString of project '$projectCoords' is " +
-                                "compatible with the inbound license $inboundLicenseString of its dependency " +
-                                "'$depCoords' depends on the context. " + compatibilityInfo.explanation,
-                        "Get legal advice and eventually create a (global) rule violation resolution."
+                        message = "Whether the outbound license $outboundLicenseString of project '$projectCoords' " +
+                                "is compatible with the inbound license $inboundLicenseString of its dependency " +
+                                "'$depCoords' depends on the context. ${compatibilityInfo.explanation}",
+                        howToFix = "Get legal advice and eventually create a (global) rule violation resolution."
                     )
 
                     Compatibility.UNKNOWN -> warning(
-                        "It is unknown whether the outbound license $outboundLicenseString of project " +
+                        message = "It is unknown whether the outbound license $outboundLicenseString of project " +
                                 "'$projectCoords' is compatible with the inbound license $inboundLicenseString of " +
-                                "its dependency '$depCoords'. " + compatibilityInfo.explanation,
-                        "Get legal advice and eventually create a (global) rule violation resolution."
+                                "its dependency '$depCoords'. ${compatibilityInfo.explanation}",
+                        howToFix = "Get legal advice and eventually create a (global) rule violation resolution."
                     )
 
                     else -> error(
-                        "The outbound license $outboundLicenseString of project '$projectCoords' is incompatible " +
-                                "with the inbound license $inboundLicenseString of its dependency '$depCoords'. " +
-                                compatibilityInfo.explanation,
-                        "Remove the dependency on '$depCoords' or put '$projectCoords' under a different license."
+                        message = "The outbound license $outboundLicenseString of project '$projectCoords' is " +
+                                "incompatible with the inbound license $inboundLicenseString of its dependency " +
+                                "'$depCoords'. ${compatibilityInfo.explanation}",
+                        howToFix = "Remove the dependency on '$depCoords' or put '$projectCoords' under a different " +
+                                "license."
                     )
                 }
             }
