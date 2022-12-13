@@ -678,6 +678,7 @@ following formats are supported (reporter names are case-insensitive):
   (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://en.wikipedia.org/wiki/Microsoft_Excel) sheet (`-f Excel`)
+* [FossId](https://fossid.com/open-source-compliance/) report download (HTML, SPDX, and Excel types)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
   (`-f GitLabLicenseModel`)
   * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
@@ -690,6 +691,9 @@ following formats are supported (reporter names are case-insensitive):
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
 * Web App (`-f WebApp`)
+  * Also see the [EvaluatedModelReporter](reporter/src/main/kotlin/reporters/evaluatedmodel/EvaluatedModelReporter.kt)
+    (`-f EvaluatedModel`) which is the JSON / YAML format used by the Web App report that is also suitable for custom
+    post-processing.
 
 # System requirements
 
