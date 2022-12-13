@@ -227,6 +227,21 @@ fun File.toSafeUri(): URI {
 }
 
 /**
+ * Return the bytes equal to this [Int] number of kibibytes (KiB).
+ */
+inline val Int.kibibytes get(): Long = this * 1024L
+
+/**
+ * Return the bytes equal to this [Int] number of mebibytes (MiB).
+ */
+inline val Int.mebibytes get(): Long = kibibytes * 1024L
+
+/**
+ * Return the bytes equal to this [Int] number of gibibytes (GiB).
+ */
+inline val Int.gibibytes get(): Long = mebibytes * 1024L
+
+/**
  * Return the next value in the iteration, or null if there is no next value.
  */
 fun <T> Iterator<T>.nextOrNull() = if (hasNext()) next() else null
@@ -305,7 +320,7 @@ fun <K, V : Set<T>, T> Map<K, V>.zipWithCollections(other: Map<K, V>): Map<K, V>
 /**
  * Converts this [Number] from bytes to mebibytes (MiB).
  */
-fun Number.bytesToMib(): Double = toDouble() / (1024 * 1024)
+fun Number.bytesToMib(): Double = toDouble() / 1.mebibytes
 
 /**
  * Trim leading and trailing whitespace, and collapse consecutive inner whitespace to a single space.

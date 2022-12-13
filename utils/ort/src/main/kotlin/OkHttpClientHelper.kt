@@ -47,6 +47,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 
@@ -67,7 +68,7 @@ object OkHttpClientHelper : Logging {
     const val HTTP_TOO_MANY_REQUESTS = 429
 
     private const val CACHE_DIRECTORY = "cache/http"
-    private const val MAX_CACHE_SIZE_IN_BYTES = 1024L * 1024L * 1024L
+    private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
     private const val READ_TIMEOUT_IN_SECONDS = 30L
 
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()

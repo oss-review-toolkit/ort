@@ -55,7 +55,7 @@ fun calculateHash(inputStream: InputStream, digest: MessageDigest = MessageDiges
     // 4MB has been chosen rather arbitrarily, hoping that it provides good performance while not consuming a
     // lot of memory at the same time, also considering that this function could potentially be run on multiple
     // threads in parallel.
-    val buffer = ByteArray(4 * 1024 * 1024)
+    val buffer = ByteArray(4.mebibytes.toInt())
 
     var length: Int
     while (inputStream.read(buffer).also { length = it } > 0) {
