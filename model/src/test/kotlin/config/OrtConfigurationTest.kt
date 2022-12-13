@@ -248,10 +248,20 @@ class OrtConfigurationTest : WordSpec({
                           schema: public
                           username: username
                           password: password
+                    provenanceStorage:
+                      postgresStorage:
+                        connection:
+                          url: "postgresql://your-postgresql-server:5444/your-database"
+                          schema: public
+                          username: username
+                          password: password
                 """.trimIndent()
             )
 
-            val env = mapOf("ort.scanner.storages.postgres.connection.password" to "envPassword")
+            val env = mapOf(
+                "ort.scanner.storages.postgres.connection.password" to "envPassword",
+                "ort.scanner.provenanceStorage.postgresStorage.connection.password" to "envPassword"
+            )
 
             withEnvironment(env) {
                 val config = OrtConfiguration.load(
@@ -270,6 +280,16 @@ class OrtConfigurationTest : WordSpec({
                         username shouldBe "username"
                         schema shouldBe "argsSchema"
                         password shouldBe "envPassword"
+                    }
+                }
+
+                config.scanner.provenanceStorage shouldNotBeNull {
+                    postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>().also { postgresStorage ->
+                        with(postgresStorage.connection) {
+                            username shouldBe "username"
+                            schema shouldBe "public"
+                            password shouldBe "envPassword"
+                        }
                     }
                 }
             }
