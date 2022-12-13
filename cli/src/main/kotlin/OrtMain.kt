@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
+import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
@@ -204,7 +205,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         val user = System.getProperty("user.name")
 
         val header = mutableListOf<String>()
-        val maxMemInMib = env.maxMemory / (1024 * 1024)
+        val maxMemInMib = env.maxMemory / 1.mebibytes
 
         """
              ______________________________

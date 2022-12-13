@@ -87,6 +87,7 @@ import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -117,7 +118,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         private val remoteArtifactCache = DiskCache(
             directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
-            maxCacheSizeInBytes = 1024L * 1024L * 1024L,
+            maxCacheSizeInBytes = 1.gibibytes,
             maxCacheEntryAgeInSeconds = 6.hours.inWholeSeconds
         )
 

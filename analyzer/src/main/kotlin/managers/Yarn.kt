@@ -37,11 +37,12 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.mebibytes
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 
 private val yarnInfoCache = DiskCache(
     directory = ortDataDirectory.resolve("cache/analyzer/yarn/info"),
-    maxCacheSizeInBytes = 100L * 1024L * 1024L,
+    maxCacheSizeInBytes = 100.mebibytes,
     maxCacheEntryAgeInSeconds = 7.days.inWholeSeconds
 )
 
