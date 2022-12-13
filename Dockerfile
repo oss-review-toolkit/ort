@@ -435,7 +435,10 @@ COPY --from=sbt ${SBT_HOME} ${SBT_HOME}
 
 # PHP composer
 ARG COMPOSER_VERSION=2.2
-RUN curl -ksS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --$COMPOSER_VERSION
+
+ENV PATH=$PATH:/opt/php/bin
+RUN mkdir -p /opt/php/bin \
+    && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
 
 ENTRYPOINT ["/bin/bash"]
 
