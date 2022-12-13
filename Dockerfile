@@ -381,57 +381,55 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 # Python
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:${PYENV_ROOT}/shims:${PYENV_ROOT}/bin
-COPY --from=python ${PYENV_ROOT} ${PYENV_ROOT}
-#RUN sudo chown -R ${USER}.${USER} ${PYENV_ROOT}
+COPY --from=python --chown=$USER:$USER ${PYENV_ROOT} ${PYENV_ROOT}
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:${RBENV_ROOT}/bin:${RBENV_ROOT}/shims:${RBENV_ROOT}/plugins/ruby-install/bin
-COPY --from=ruby ${RBENV_ROOT} ${RBENV_ROOT}
+COPY --from=ruby --chown=$USER:$USER ${RBENV_ROOT} ${RBENV_ROOT}
 
 # NodeJS
 ARG NODEJS_VERSION=18.12.1
 ENV NVM_DIR=/opt/nvm
 ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=node ${NVM_DIR} ${NVM_DIR}
+COPY --from=node --chown=$USER:$USER ${NVM_DIR} ${NVM_DIR}
 
 # Rust
 ENV RUST_HOME=/opt/rust
 ENV CARGO_HOME=${RUST_HOME}/cargo
 ENV RUSTUP_HOME=${RUST_HOME}/rustup
 ENV PATH=$PATH:${CARGO_HOME}/bin:${RUSTUP_HOME}/bin
-
-COPY --chown=$USER:$USER --from=rust /opt/rust /opt/rust
+COPY --from=rust --chown=$USER:$USER /opt/rust /opt/rust
 RUN chmod o+rwx ${CARGO_HOME}
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
-COPY --from=golang /opt/go /opt/go
+COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
 
 # Haskell
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:${HASKELL_HOME}/bin
-COPY --from=haskell ${HASKELL_HOME} ${HASKELL_HOME}
+COPY --from=haskell --chown=$USER:$USER ${HASKELL_HOME} ${HASKELL_HOME}
 
 # Repo and Android
 ENV ANDROID_HOME=/opt/android-sdk
 ENV ANDROID_USER_HOME=${HOME}/.android
 ENV PATH=$PATH:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/cmdline-tools/bin
 ENV PATH=$PATH:${ANDROID_HOME}/platform-tools
-COPY --from=android ${ANDROID_HOME} ${ANDROID_HOME}
+COPY --from=android --chown=$USER:$USER ${ANDROID_HOME} ${ANDROID_HOME}
 RUN chmod -R o+rw ${ANDROID_HOME}
 
 # Dart
 ENV DART_SDK=/opt/dart-sdk
 ENV PATH=$PATH:${DART_SDK}/bin
-COPY --from=dart ${DART_SDK} ${DART_SDK}
+COPY --from=dart --chown=$USER:$USER ${DART_SDK} ${DART_SDK}
 
 # SBT
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:${SBT_HOME}/bin
-COPY --from=sbt ${SBT_HOME} ${SBT_HOME}
+COPY --from=sbt --chown=$USER:$USER ${SBT_HOME} ${SBT_HOME}
 
 # PHP composer
 ARG COMPOSER_VERSION=2.2
@@ -447,7 +445,7 @@ ENTRYPOINT ["/bin/bash"]
 FROM components AS run
 
 # ORT
-COPY --from=ort /opt/ort /opt/ort
+COPY --from=ort --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
 USER $USERNAME
