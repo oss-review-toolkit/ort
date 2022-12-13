@@ -452,6 +452,12 @@ whether compatible scan results are already available in one of the storages dec
 are fetched and reused. Otherwise, the package's source code is downloaded and scanned. Afterwards, the new scan
 results can be put into a storage for later reuse.
 
+This reuse of scan results can actually happen on a per-repository (`type: "PROVENANCE_BASED"`) or per-package
+(`type: "PACKAGE_BASED"`) basis. For all storages based on `FileBasedStorage` or `PostgresStorage`, the scanner wrapper
+groups packages by their provenance before scanning. This ensures that a certain revision of a VCS repository is only
+scanned once, and the results are shared for all packages that are provided by this repository. In the case of
+repositories that provide a lot of packages, this can bring a significant performance improvement.
+
 It is possible to configure multiple storages to read scan results from or to write scan results to. For reading,
 the declaration order in the configuration is important, as the scanner queries the storages in this order and uses
 the first matching result. This allows a fine-grained control over the sources, from which existing scan results are
@@ -568,60 +574,6 @@ ort:
         serverUrl: "https://api.clearlydefined.io"
 
     storageReaders: ["clearlyDefined"]
-```
-
-## Experimental Scanner
-
-ORT provides an alternative scanner implementation which is currently called "experimental scanner". By now, this
-implementation can be considered stable, and it will replace the default scanner implementation in the middle of
-September 2022. Therefore, we encourage all ORT users to test the new implementation and report any discovered issues.
-
-The main difference to the old implementation is that the experimental scanner groups packages by their provenance
-before scanning. This ensures that a certain revision of a VCS repository is only scanned once, and the results are
-shared for all packages that are provided by this repository. In the case of repositories that provide a lot of
-packages, this can bring a significant performance improvement.
-
-Also, the new implementation better tracks if the VCS revision provided by the metadata of a package points to a moving
-revision, like a Git branch, and resolves the revision before reusing any scan results from a storage. This fixes an
-issue where ORT would reuse scan results for a branch even if they do not match the current revision of the branch
-anymore (see https://github.com/oss-review-toolkit/ort/issues/4562).
-
-The experimental scanner can be enabled by using the `--experimental-scanners` (and optional
-`--experimental-project-scanners`) option of the `scan` command. For details run `ort scan --help`.
-
-### Storage backends
-
-To fully benefit from the experimental scanner improvements, the storages need to be configured to store scan results by
-provenance instead of by package. This is supported by the local file storage, the HTTP storage, and the PostgreSQL
-storage (see above). To enable the feature add `type = "PROVENANCE_BASED` to the storage configuration, for example:
-
-```yaml
-postgres:
-  type: "PROVENANCE_BASED"
-
-  connection: ...
-```
-
-Existing package based storages can still be used to avoid having to scan all sources again when switching to the
-experimental scanner. For this purpose the old package based storage can be configured as read-only storage, for
-example:
-
-```yaml
-storages:
-  postgresLegacy:
-    type: "PACKAGE_BASED"
-
-    connection:
-      ...
-
-  postgres:
-    type: "PROVENANCE_BASED"
-
-    connection:
-      ...
-
-storageReaders: ["postgresLegacy", "postgres"]
-storageWriters: ["postgres"]
 ```
 
 <a name="advisor">&nbsp;</a>
