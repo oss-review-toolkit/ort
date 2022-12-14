@@ -109,7 +109,7 @@ class GoDep(
         }
 
         val projects = parseProjects(workingDir, gopath)
-        val packages = sortedSetOf<Package>()
+        val packages = mutableSetOf<Package>()
         val packageRefs = mutableListOf<PackageReference>()
 
         for (project in projects) {

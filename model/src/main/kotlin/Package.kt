@@ -130,7 +130,7 @@ data class Package(
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val isModified: Boolean = false
-) : Comparable<Package> {
+) {
     companion object {
         /**
          * A constant for a [Package] where all properties are empty.
@@ -151,11 +151,6 @@ data class Package(
             vcsProcessed = VcsInfo.EMPTY
         )
     }
-
-    /**
-     * A comparison function to sort packages by their identifier.
-     */
-    override fun compareTo(other: Package) = id.compareTo(other.id)
 
     /**
      * Compares this package with [other] and creates a [PackageCurationData] containing the values from this package

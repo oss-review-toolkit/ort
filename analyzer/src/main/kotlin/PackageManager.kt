@@ -292,7 +292,7 @@ abstract class PackageManager(
                         )
                     )
 
-                    result[definitionFile] = listOf(ProjectAnalyzerResult(projectWithIssues, sortedSetOf(), issues))
+                    result[definitionFile] = listOf(ProjectAnalyzerResult(projectWithIssues, emptySet(), issues))
                 }
             }
 
@@ -333,7 +333,7 @@ abstract class PackageManager(
             entry.value.map { projectResult ->
                 val projectReferences = projectResult.packages.filterTo(mutableSetOf()) { it.id in projectIds }
                 projectResult.takeIf { projectReferences.isEmpty() }
-                    ?: projectResult.copy(packages = (projectResult.packages - projectReferences).toSortedSet())
+                    ?: projectResult.copy(packages = projectResult.packages - projectReferences)
                         .also {
                             logger.info { "Removing ${projectReferences.size} packages that are projects." }
 

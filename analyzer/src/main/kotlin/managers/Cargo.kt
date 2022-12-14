@@ -237,7 +237,7 @@ class Cargo(
 
         val nonProjectPackages = packages
             .filterNot { isProjectDependency(it.key) }
-            .mapTo(sortedSetOf()) { it.value }
+            .mapTo(mutableSetOf()) { it.value }
 
         return listOf(ProjectAnalyzerResult(project, nonProjectPackages))
     }

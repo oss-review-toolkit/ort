@@ -276,7 +276,7 @@ class Gradle(
                     createAndLogIssue(source = managerName, message = it, severity = Severity.WARNING)
                 }
 
-                listOf(ProjectAnalyzerResult(project, sortedSetOf(), issues))
+                listOf(ProjectAnalyzerResult(project, emptySet(), issues))
             }
         }
     }

@@ -205,7 +205,7 @@ class Bundler(
             val allProjectDeps = groupedDeps.values.flatten().toSet()
             val hasBundlerDep = BUNDLER_GEM_NAME in allProjectDeps
 
-            val packages = gemSpecs.values.mapNotNullTo(sortedSetOf()) { gemSpec ->
+            val packages = gemSpecs.values.mapNotNullTo(mutableSetOf()) { gemSpec ->
                 getPackageFromGemspec(gemSpec).takeUnless { gemSpec.name == BUNDLER_GEM_NAME && !hasBundlerDep }
             }
 

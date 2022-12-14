@@ -240,7 +240,7 @@ class NuGetSupport(
     fun resolveDependencies(definitionFile: File, directDependenciesOnly: Boolean): ProjectAnalyzerResult {
         val workingDir = definitionFile.parentFile
 
-        val packages = sortedSetOf<Package>()
+        val packages = mutableSetOf<Package>()
 
         val references = reader.getDependencies(definitionFile)
         val referencesByFramework = references.groupBy { it.targetFramework }

@@ -105,7 +105,7 @@ class GoMod(
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
             val packageIds = graph.nodes() - projectId
-            val packages = packageIds.mapTo(sortedSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
+            val packages = packageIds.mapTo(mutableSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
             val projectVcs = processProjectVcs(projectDir)
 
             val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->

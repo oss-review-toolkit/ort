@@ -164,7 +164,7 @@ class Maven(
             }
         }
 
-        return listOf(ProjectAnalyzerResult(project, sortedSetOf(), issues))
+        return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
     }
 }
 

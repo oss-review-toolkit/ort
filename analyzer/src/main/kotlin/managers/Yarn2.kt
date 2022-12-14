@@ -236,7 +236,7 @@ class Yarn2(
             val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packagedDetails)
             val scopeNames = YarnDependencyType.values().map { it.type }.toSortedSet()
             return allProjects.values.map { project ->
-                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), sortedSetOf(), issues)
+                ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
             }.toList()
         }
     }

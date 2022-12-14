@@ -161,7 +161,7 @@ class Composer(
 
             val project = parseProject(definitionFile, scopes)
 
-            return listOf(ProjectAnalyzerResult(project, packages.values.toSortedSet()))
+            return listOf(ProjectAnalyzerResult(project, packages.values.toSet()))
         }
     }
 

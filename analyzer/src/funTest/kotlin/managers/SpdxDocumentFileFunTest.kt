@@ -116,7 +116,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         Scope("default")
                     )
                 ),
-                sortedSetOf()
+                emptySet()
             )
 
             actualResult[opensslId] shouldBe ProjectAnalyzerResult(
@@ -137,7 +137,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         Scope("default")
                     )
                 ),
-                sortedSetOf()
+                emptySet()
             )
 
             actualResult[zlibId] shouldBe ProjectAnalyzerResult(
@@ -158,7 +158,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         Scope("default")
                     )
                 ),
-                sortedSetOf()
+                emptySet()
             )
         }
 

@@ -262,7 +262,7 @@ class Pub(
 
         val project = parseProject(definitionFile, manifest, scopes)
 
-        projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSortedSet(), issues)
+        projectAnalyzerResults += ProjectAnalyzerResult(project, packages.values.toSet(), issues)
 
         return projectAnalyzerResults
     }
@@ -395,7 +395,7 @@ class Pub(
                 .resolveDependencies(listOf(packageFile), labels).run {
                     projectResults.getValue(packageFile).map { result ->
                         val project = result.project.withResolvedScopes(dependencyGraph)
-                        result.copy(project = project, packages = sharedPackages.toSortedSet())
+                        result.copy(project = project, packages = sharedPackages)
                     }
                 }
         }
@@ -422,7 +422,7 @@ class Pub(
                     "implemented."
         )
 
-        return ProjectAnalyzerResult(Project.EMPTY, sortedSetOf(), listOf(issue))
+        return ProjectAnalyzerResult(Project.EMPTY, emptySet(), listOf(issue))
     }
 
     private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: SortedSet<Scope>): Project {

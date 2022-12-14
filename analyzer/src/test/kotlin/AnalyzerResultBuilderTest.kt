@@ -111,10 +111,10 @@ class AnalyzerResultBuilderTest : WordSpec() {
         )
 
     private val analyzerResult1 = ProjectAnalyzerResult(
-        project1, sortedSetOf(package1), listOf(issue3, issue4)
+        project1, setOf(package1), listOf(issue3, issue4)
     )
     private val analyzerResult2 = ProjectAnalyzerResult(
-        project2, sortedSetOf(package1, package2, package3), listOf(issue4)
+        project2, setOf(package1, package2, package3), listOf(issue4)
     )
 
     init {
@@ -236,10 +236,10 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-1"))
                 val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-3"))
                 val analyzerResult = AnalyzerResultBuilder()
-                    .addResult(ProjectAnalyzerResult(p1, sortedSetOf()))
+                    .addResult(ProjectAnalyzerResult(p1, emptySet()))
                     .addDependencyGraph(p1.id.type, graph1)
-                    .addResult(ProjectAnalyzerResult(project3, sortedSetOf()))
-                    .addResult(ProjectAnalyzerResult(p2, sortedSetOf()))
+                    .addResult(ProjectAnalyzerResult(project3, emptySet()))
+                    .addResult(ProjectAnalyzerResult(p2, emptySet()))
                     .addDependencyGraph(p2.id.type, graph2)
                     .build()
 
@@ -333,7 +333,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 val projectAnalyzerResult = ProjectAnalyzerResult(
                     project = project,
-                    packages = sortedSetOf(package1)
+                    packages = setOf(package1)
                 )
 
                 val analyzerResult = AnalyzerResultBuilder().run {

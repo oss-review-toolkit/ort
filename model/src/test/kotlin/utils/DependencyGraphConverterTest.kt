@@ -203,7 +203,7 @@ private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): 
  * Create a [ProjectAnalyzerResult] based on this test project.
  */
 private fun Project.createResult(): ProjectAnalyzerResult {
-    val packages = scopes.flatMap { it.dependencies }.mapTo(sortedSetOf()) { ref ->
+    val packages = scopes.flatMap { it.dependencies }.mapTo(mutableSetOf()) { ref ->
         Package.EMPTY.copy(id = ref.id)
     }
 
