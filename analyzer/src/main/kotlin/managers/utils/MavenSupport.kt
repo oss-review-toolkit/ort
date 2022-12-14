@@ -310,7 +310,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$hash"
             }
 
-            val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrNull() ?: return false
+            val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrElse { return false }
             return !remoteArtifact.hash.verify(parseChecksum(checksum, remoteArtifact.hash.algorithm.name))
         }
     }

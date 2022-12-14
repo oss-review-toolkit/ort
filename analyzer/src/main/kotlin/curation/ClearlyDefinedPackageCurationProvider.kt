@@ -141,7 +141,9 @@ class ClearlyDefinedPackageCurationProvider(
                     logger.warn { "Querying curations failed: ${e.collectMessages()}" }
                 }
             }
-        }.getOrNull() ?: return emptyMap()
+        }.getOrElse {
+            return emptyMap()
+        }
 
         val curations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
 
