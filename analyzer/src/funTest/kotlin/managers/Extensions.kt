@@ -91,7 +91,7 @@ fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): Pr
  * NOTE: The project is known to use the scopes structure for storing its dependencies; therefore, a
  * [DependencyTreeNavigator] can be used to access this information.
  */
-private fun Project.filterReferencedPackages(allPackages: Set<Package>): List<Package> {
+private fun Project.filterReferencedPackages(allPackages: Set<Package>): Set<Package> {
     val projectDependencies = DependencyTreeNavigator.projectDependencies(this)
-    return allPackages.filter { it.id in projectDependencies }
+    return allPackages.filterTo(mutableSetOf()) { it.id in projectDependencies }
 }
