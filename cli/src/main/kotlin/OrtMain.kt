@@ -207,12 +207,12 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         val maxMemInMib = env.maxMemory / (1024 * 1024)
 
         """
-            ________ _____________________
-            \_____  \\______   \__    ___/ the OSS Review Toolkit, version $version.
-             /   |   \|       _/ |    |
-            /    |    \    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
-            \_______  /____|_  / |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
-                    \/       \/
+             ______________________________
+            /        \_______   \__    ___/ the OSS Review Toolkit, version $version.
+            |    |   | |       _/ |    |
+            |    |   | |    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
+            \________/ |____|___/ |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
+
         """.trimIndent().lines().mapTo(header) { it.trimEnd() }
 
         if (variables.isNotEmpty()) {
