@@ -286,8 +286,8 @@ private fun processDeclaredLicenses(id: Identifier, declaredLicenses: SortedSet<
     return declaredLicensesProcessed
 }
 
-internal fun List<PythonInspector.Package>.toOrtPackages(): SortedSet<Package> =
-    groupBy { "${it.name}:${it.version}" }.mapTo(sortedSetOf()) { (_, packages) ->
+internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
+    groupBy { "${it.name}:${it.version}" }.mapTo(mutableSetOf()) { (_, packages) ->
         // The python inspector currently often contains two entries for a package where the only difference is the
         // download URL. In this case, one package contains the URL of the binary artifact, the other for the source
         // artifact. So take all metadata from the first package except for the artifacts.

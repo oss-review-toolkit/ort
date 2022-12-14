@@ -523,7 +523,7 @@ class SpdxDocumentFile(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, packages.toSortedSet()))
+        return listOf(ProjectAnalyzerResult(project, packages))
     }
 
     /**

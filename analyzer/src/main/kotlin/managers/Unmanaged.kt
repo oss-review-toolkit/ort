@@ -113,7 +113,7 @@ class Unmanaged(
         return listOf(
             ProjectAnalyzerResult(
                 project = Project.EMPTY.copy(id = id, vcsProcessed = vcsInfo),
-                packages = sortedSetOf()
+                packages = emptySet()
             )
         )
     }

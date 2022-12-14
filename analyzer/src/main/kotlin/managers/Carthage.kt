@@ -23,7 +23,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 import java.net.URL
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -111,10 +110,10 @@ class Carthage(
         )
     }
 
-    private fun parseCarthageDependencies(definitionFile: File): SortedSet<Package> {
+    private fun parseCarthageDependencies(definitionFile: File): Set<Package> {
         val dependencyLines = definitionFile.readLines()
         val workingDir = definitionFile.parent
-        val packages = sortedSetOf<Package>()
+        val packages = mutableSetOf<Package>()
 
         dependencyLines.forEach { line ->
             if (line.isBlank() || line.isComment()) return@forEach

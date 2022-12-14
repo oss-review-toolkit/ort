@@ -83,7 +83,7 @@ fun PackageManagerResult.resolveScopes(projectResult: ProjectAnalyzerResult): Pr
     // all packages; this handles corner cases with package managers producing packages not assigned to project scopes.
     val packages = projectResult.packages.takeUnless { it.isEmpty() }
         ?: if (projectResults.size > 1) resolvedProject.filterReferencedPackages(sharedPackages) else sharedPackages
-    return projectResult.copy(project = resolvedProject, packages = packages.toSortedSet())
+    return projectResult.copy(project = resolvedProject, packages = packages)
 }
 
 /**

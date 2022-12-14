@@ -20,8 +20,9 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedSet
+import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
 
 /**
  * A class that bundles all information generated during an analysis.
@@ -36,7 +37,8 @@ data class ProjectAnalyzerResult(
     /**
      * The set of identified packages used by the project.
      */
-    val packages: SortedSet<Package>,
+    @JsonSerialize(converter = PackageSortedSetConverter::class)
+    val packages: Set<Package>,
 
     /**
      * The list of issues that occurred during dependency resolution. Defaults to an empty list.

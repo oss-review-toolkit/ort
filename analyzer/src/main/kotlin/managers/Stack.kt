@@ -221,7 +221,7 @@ class Stack(
             scopeDependencies = scopes
         )
 
-        return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSortedSet()))
+        return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSet()))
     }
 
     private fun getPackageUrl(name: String, version: String) =

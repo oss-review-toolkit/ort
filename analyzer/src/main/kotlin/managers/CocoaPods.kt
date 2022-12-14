@@ -132,7 +132,7 @@ class CocoaPods(
         val lockfile = workingDir.resolve(LOCKFILE_FILENAME)
 
         val scopes = sortedSetOf<Scope>()
-        val packages = sortedSetOf<Package>()
+        val packages = mutableSetOf<Package>()
         val issues = mutableListOf<OrtIssue>()
 
         if (lockfile.isFile) {
