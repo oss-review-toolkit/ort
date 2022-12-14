@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
+import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
@@ -88,7 +89,7 @@ class UploadCurationsCommand : OrtCommand(
             }
         }.toMap()
 
-        val definitions = service.callBlocking { getDefinitions(curationsToCoordinates.values) }
+        val definitions = service.getDefinitionsChunked(curationsToCoordinates.values)
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
             definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {

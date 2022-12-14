@@ -300,6 +300,20 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
 fun <T> ClearlyDefinedService.callBlocking(block: suspend ClearlyDefinedService.() -> T): T =
     runBlocking(Dispatchers.IO) { call(block) }
 
+fun ClearlyDefinedService.getDefinitionsChunked(
+    coordinates: Collection<Coordinates>,
+    chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
+): Map<Coordinates, ClearlyDefinedService.Defined> =
+    buildMap {
+        runBlocking(Dispatchers.IO) {
+            coordinates.chunked(chunkSize).map { chunk ->
+                async { call { getDefinitions(chunk) } }
+            }.awaitAll()
+        }.forEach {
+            putAll(it)
+        }
+    }
+
 fun ClearlyDefinedService.getCurationsChunked(
     coordinates: Collection<Coordinates>,
     chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
