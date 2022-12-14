@@ -169,7 +169,23 @@ fun File.safeMkdirs() {
         return
     }
 
-    throw IOException("Could not create directory '$absolutePath'.")
+    val message = buildString {
+        append("Could not create directory '$absolutePath'.")
+        if (exists()) append(" It exists but is not a directory.")
+        appendLine()
+
+        appendLine("Parent permissions are:")
+        var currentParent = parentFile
+        while (currentParent != null) {
+            appendLine(
+                "${currentParent.name}: exists=${exists()}, execute=${canExecute()}, read=${canRead()}, " +
+                        "write=${canWrite()}."
+            )
+            currentParent = currentParent.parentFile
+        }
+    }
+
+    throw IOException(message)
 }
 
 /**
