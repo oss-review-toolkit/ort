@@ -24,6 +24,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
+import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -162,7 +163,7 @@ class PackageManagerTest : WordSpec({
         "find no files if no package managers are active" {
             val managedFiles = PackageManager.findManagedFiles(projectDir, emptySet())
 
-            managedFiles.size shouldBe 0
+            managedFiles should beEmpty()
         }
 
         "fail if the provided file is not a directory" {
