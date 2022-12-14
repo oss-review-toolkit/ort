@@ -335,7 +335,7 @@ enum class VcsHost(
         fun parseUrl(vcsUrl: String): VcsInfo {
             val projectUrl = vcsUrl.takeUnless { it.isBlank() } ?: return VcsInfo.EMPTY
             val unknownVcsInfo = VcsInfo.EMPTY.copy(url = projectUrl)
-            val projectUri = projectUrl.toUri().getOrNull() ?: return unknownVcsInfo
+            val projectUri = projectUrl.toUri().getOrElse { return unknownVcsInfo }
 
             fun URI.isTfsGitUrl() = path != null && host != null &&
                     ("/tfs/" in path || ".visualstudio.com" in host) && "/_git/" in path

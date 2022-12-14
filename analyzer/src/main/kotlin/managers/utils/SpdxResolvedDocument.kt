@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.addBasicAuthorization
@@ -349,14 +350,14 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
             }
         }
 
-        val file = client.downloadFile(uri.toString(), tempDir).getOrNull() ?: run {
+        val file = client.downloadFile(uri.toString(), tempDir).getOrElse {
             return ResolutionResult(
                 document = null,
                 uri = uri,
                 issue = SpdxResolvedDocument.createAndLogIssue(
                     source = managerName,
                     message = "Failed to download SPDX document from $uri (referred from $baseUri as part of " +
-                            "'$externalDocumentId')."
+                            "'$externalDocumentId'): ${it.collectMessages()}"
                 )
             )
         }
