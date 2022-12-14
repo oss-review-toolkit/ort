@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
-import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
+import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -49,12 +49,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import retrofit2.HttpException
-
-/**
- * The number of elements to request at once in a bulk request. This value was chosen more or less randomly to keep the
- * size of responses reasonably small.
- */
-private const val BULK_REQUEST_SIZE = 100
 
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
@@ -108,12 +102,8 @@ class ClearlyDefinedPackageCurationProvider(
             }
         }.toMap()
 
-        val contributedCurations = runCatching {
-            buildMap {
-                coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
-                    putAll(service.callBlocking { getCurations(coordinates) })
-                }
-            }
+        val curations = runCatching {
+            service.getCurationsChunked(coordinatesToIds.keys)
         }.onFailure { e ->
             when (e) {
                 is HttpException -> {
@@ -143,37 +133,35 @@ class ClearlyDefinedPackageCurationProvider(
             return emptyMap()
         }
 
-        val curations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
+        val pkgCurations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
 
-        contributedCurations.forEach { (_, contributions) ->
-            contributions.curations.forEach inner@{ (coordinates, curation) ->
-                val pkgId = coordinatesToIds[coordinates] ?: return@inner
+        curations.forEach inner@{ (coordinates, curation) ->
+            val pkgId = coordinatesToIds[coordinates] ?: return@inner
 
-                val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
-                    // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
-                    // particular none that contain "OTHER" as a license, also see
-                    // https://github.com/clearlydefined/curated-data/issues/7836.
-                    runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
-                }
+            val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->
+                // Only take curations of good quality (i.e. those not using deprecated identifiers) and in
+                // particular none that contain "OTHER" as a license, also see
+                // https://github.com/clearlydefined/curated-data/issues/7836.
+                runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
+            }
 
-                val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
+            val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
 
-                val data = PackageCurationData(
-                    concludedLicense = declaredLicenseParsed,
-                    homepageUrl = curation.described?.projectWebsite?.toString(),
-                    sourceArtifact = sourceLocation as? RemoteArtifact,
-                    vcs = sourceLocation as? VcsInfoCurationData
+            val data = PackageCurationData(
+                concludedLicense = declaredLicenseParsed,
+                homepageUrl = curation.described?.projectWebsite?.toString(),
+                sourceArtifact = sourceLocation as? RemoteArtifact,
+                vcs = sourceLocation as? VcsInfoCurationData
+            )
+
+            if (data != PackageCurationData()) {
+                pkgCurations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
+                    id = pkgId,
+                    data = data.copy(comment = "Provided by ClearlyDefined.")
                 )
-
-                if (data != PackageCurationData()) {
-                    curations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
-                        id = pkgId,
-                        data = data.copy(comment = "Provided by ClearlyDefined.")
-                    )
-                }
             }
         }
 
-        return curations.mapValues { (_, curations) -> curations.distinct() }
+        return pkgCurations.mapValues { (_, curations) -> curations.distinct() }
     }
 }

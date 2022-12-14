@@ -24,6 +24,8 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import java.io.IOException
 
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -50,6 +52,12 @@ import retrofit2.http.Query
  */
 interface ClearlyDefinedService {
     companion object {
+        /**
+         * The maximum number of elements to request at once in a chunked request. This value was chosen more or less
+         * arbitrary to keep the size of responses reasonably small.
+         */
+        const val MAX_REQUEST_CHUNK_SIZE = 100
+
         /**
          * The JSON (de-)serialization object used by this service.
          */
@@ -291,3 +299,17 @@ suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.
 
 fun <T> ClearlyDefinedService.callBlocking(block: suspend ClearlyDefinedService.() -> T): T =
     runBlocking(Dispatchers.IO) { call(block) }
+
+fun ClearlyDefinedService.getCurationsChunked(
+    coordinates: Collection<Coordinates>,
+    chunkSize: Int = ClearlyDefinedService.MAX_REQUEST_CHUNK_SIZE
+): Map<Coordinates, Curation> =
+    buildMap {
+        runBlocking(Dispatchers.IO) {
+            coordinates.chunked(chunkSize).map { chunk ->
+                async { call { getCurations(chunk).values } }
+            }.awaitAll()
+        }.flatten().forEach {
+            putAll(it.curations)
+        }
+    }
