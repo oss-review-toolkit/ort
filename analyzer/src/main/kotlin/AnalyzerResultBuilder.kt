@@ -47,9 +47,10 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {
-        val duplicateIds = (projects.map { it.id } + packages.map { it.metadata.id }).getDuplicates()
-        require(duplicateIds.isEmpty()) {
-            "AnalyzerResult contains packages that are also projects. Duplicates: '$duplicateIds'."
+        val duplicates = (projects.map { it.toPackage() } + packages.map { it.metadata }).getDuplicates { it.id }
+        require(duplicates.isEmpty()) {
+            "Unable to create the AnalyzerResult as it contains contains packages and projects with the same ids: " +
+                    duplicates.values
         }
 
         return AnalyzerResult(projects, packages, issues, dependencyGraphs)
