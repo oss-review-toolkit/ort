@@ -448,4 +448,7 @@ ENV PATH=$PATH:/opt/ort/bin
 USER $USERNAME
 WORKDIR $HOMEDIR
 
+# Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
+RUN mkdir -p "$HOMEDIR/.ort"
+
 ENTRYPOINT ["/opt/ort/bin/ort"]
