@@ -53,11 +53,11 @@ class ClearlyDefinedServiceFunTest : WordSpec({
 
     "Downloading a contribution patch" should {
         val coordinates = Coordinates(
-            ComponentType.MAVEN,
-            Provider.MAVEN_CENTRAL,
-            "javax.servlet",
-            "javax.servlet-api",
-            "3.1.0"
+            type = ComponentType.MAVEN,
+            provider = Provider.MAVEN_CENTRAL,
+            namespace = "javax.servlet",
+            name = "javax.servlet-api",
+            revision = "3.1.0"
         )
 
         "return single curation data" {
