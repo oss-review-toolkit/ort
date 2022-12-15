@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -67,7 +66,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.readTree
@@ -413,23 +411,6 @@ open class Npm(
         return targetScope.takeUnless { moduleDependencies.isEmpty() }
     }
 
-    private fun getPackageReferenceForMissingModule(moduleName: String, rootModuleDir: File): PackageReference {
-        val issue = createAndLogIssue(
-            source = managerName,
-            message = "Package '$moduleName' was not installed, because the package file could not be found " +
-                    "anywhere in '$rootModuleDir'. This might be fine if the module was not installed because it is " +
-                    "specific to a different platform.",
-            severity = Severity.WARNING
-        )
-
-        val (namespace, name) = splitNpmNamespaceAndName(moduleName)
-
-        return PackageReference(
-            id = Identifier(managerName, namespace, name, ""),
-            issues = listOf(issue)
-        )
-    }
-
     private fun getModuleDependencies(moduleDir: File, scopes: Set<String>): Set<NpmModuleInfo> {
         val workspaceModuleDirs = findWorkspaceSubmodules(moduleDir)
 
@@ -481,8 +462,11 @@ open class Npm(
                 return@forEach
             }
 
-            logger.debug { "Could not find module dir for '$dependencyName' within: '${pathToRoot.joinToString()}'." }
-            getPackageReferenceForMissingModule(dependencyName, pathToRoot.first())
+            logger.debug {
+                "It seems that the '$dependencyName' module was not installed as the package file could not be found " +
+                    "anywhere in '${pathToRoot.joinToString()}'. This might be fine if the module is specific to a " +
+                        "platform other than the one ORT is running on. A typical example is the 'fsevents' module."
+            }
         }
 
         return NpmModuleInfo(moduleId, moduleDir, moduleInfo.packageJson, dependencies)
