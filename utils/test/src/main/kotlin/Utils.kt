@@ -72,12 +72,13 @@ fun patchExpectedResult(
 
 fun patchActualResult(
     result: String,
+    custom: Map<String, String> = emptyMap(),
     patchStartAndEndTime: Boolean = false
 ): String {
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
         if (condition) replace(regex, transform) else this
 
-    return result
+    return custom.entries.fold(result) { text, entry -> text.replace(entry.key, entry.value) }
         .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
         .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${System.getProperty("java.version")}\"" }
         .replace(ENV_VAR_REGEX) { "${it.groupValues[1]} {}" }
@@ -90,7 +91,7 @@ fun patchActualResult(
     result: OrtResult,
     patchStartAndEndTime: Boolean = false
 ): String =
-    patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime)
+    patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime = patchStartAndEndTime)
 
 fun patchActualResultObject(result: OrtResult, patchStartAndEndTime: Boolean = false): OrtResult =
     yamlMapper.readValue(patchActualResult(result, patchStartAndEndTime))
