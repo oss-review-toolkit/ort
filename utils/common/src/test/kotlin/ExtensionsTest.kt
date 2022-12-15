@@ -25,6 +25,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
@@ -50,6 +51,39 @@ class ExtensionsTest : WordSpec({
     "ByteArray.toHexString" should {
         "correctly convert a byte array to a string of hexadecimal digits" {
             byteArrayOf(0xde.toByte(), 0xad.toByte(), 0xbe.toByte(), 0xef.toByte()).encodeHex() shouldBe "deadbeef"
+        }
+    }
+
+    "Collection.getDuplicates" should {
+        "return no duplicates if there are none" {
+            emptyList<String>().getDuplicates() should beEmpty()
+            listOf("no", "dupes", "in", "here").getDuplicates() should beEmpty()
+        }
+
+        "return all duplicates" {
+            val strings = listOf("foo", "bar", "baz", "foo", "bar", "bar")
+
+            strings.getDuplicates().shouldContainExactlyInAnyOrder("foo", "bar")
+        }
+
+        "return duplicates according to a selector" {
+            val pairs = listOf(
+                "a" to "b",
+                "b" to "b",
+                "c" to "d",
+                "a" to "z",
+                "b" to "c",
+                "o" to "z"
+            )
+
+            pairs.getDuplicates { it.first } shouldBe mapOf(
+                "a" to listOf("a" to "b", "a" to "z"),
+                "b" to listOf("b" to "b", "b" to "c")
+            )
+            pairs.getDuplicates { it.second } shouldBe mapOf(
+                "b" to listOf("a" to "b", "b" to "b"),
+                "z" to listOf("a" to "z", "o" to "z")
+            )
         }
     }
 
