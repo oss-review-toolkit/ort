@@ -208,7 +208,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         """
              ______________________________
-            /        \_______   \__    ___/ the OSS Review Toolkit, version $version.
+            /        \_______   \__    ___/ The OSS Review Toolkit, version $version.
             |    |   | |       _/ |    |
             |    |   | |    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
             \________/ |____|___/ |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
