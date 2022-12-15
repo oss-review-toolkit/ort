@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.isTrue
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -166,7 +167,8 @@ class ScanCode internal constructor(
     internal fun runScanCode(
         path: File,
         resultFile: File
-    ) = run(
+    ) = ProcessCapture(
+        command(),
         *commandLineOptions.toTypedArray(),
         path.absolutePath,
         OUTPUT_FORMAT_OPTION,
