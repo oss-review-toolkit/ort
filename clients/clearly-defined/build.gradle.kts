@@ -31,6 +31,7 @@ plugins {
 dependencies {
     api(libs.retrofit)
 
+    implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxSerialization)
     implementation(libs.retrofitConverterKotlinxSerialization)
     implementation(libs.retrofitConverterScalars)
