@@ -27,12 +27,7 @@ import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.IOException
 import java.net.URI
-
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.inputGroup
@@ -45,9 +40,9 @@ import org.ossreviewtoolkit.clients.clearlydefined.ContributionType
 import org.ossreviewtoolkit.clients.clearlydefined.Curation
 import org.ossreviewtoolkit.clients.clearlydefined.CurationDescribed
 import org.ossreviewtoolkit.clients.clearlydefined.CurationLicensed
-import org.ossreviewtoolkit.clients.clearlydefined.ErrorResponse
 import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
+import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
@@ -55,8 +50,6 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-import retrofit2.HttpException
 
 class UploadCurationsCommand : OrtCommand(
     name = "upload-curations",
@@ -78,22 +71,6 @@ class UploadCurationsCommand : OrtCommand(
 
     private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }
 
-    private fun <S, T> S.call(block: suspend S.() -> T): T =
-        try {
-            runBlocking { block() }
-        } catch (e: HttpException) {
-            val errorMessage = e.response()?.errorBody()?.let {
-                val errorResponse = Json.Default.decodeFromString<ErrorResponse>(it.string())
-                val innerError = errorResponse.error.innererror
-
-                logger.debug { innerError.stack }
-
-                "The HTTP service call failed with: ${innerError.message}"
-            } ?: "The HTTP service call failed with code ${e.code()}: ${e.message()}"
-
-            throw IOException(errorMessage, e)
-        }
-
     override fun run() {
         val allCurations = inputFile.readValueOrDefault(emptyList<PackageCuration>())
 
@@ -111,7 +88,7 @@ class UploadCurationsCommand : OrtCommand(
             }
         }.toMap()
 
-        val definitions = service.call { getDefinitions(curationsToCoordinates.values) }
+        val definitions = service.callBlocking { getDefinitions(curationsToCoordinates.values) }
 
         val curationsByHarvestStatus = curations.groupBy { curation ->
             definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
@@ -148,7 +125,7 @@ class UploadCurationsCommand : OrtCommand(
                 )
 
                 runCatching {
-                    service.call { putCuration(patch) }
+                    service.callBlocking { putCuration(patch) }
                 }.onSuccess {
                     println("was uploaded successfully:\n${it.url}")
                     ++uploadedCurationsCount

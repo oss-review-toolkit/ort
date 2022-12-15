@@ -23,9 +23,6 @@ import com.fasterxml.jackson.databind.JsonMappingException
 
 import java.net.HttpURLConnection
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-
 import okhttp3.OkHttpClient
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -36,6 +33,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
+import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -113,7 +111,7 @@ class ClearlyDefinedPackageCurationProvider(
         val contributedCurations = runCatching {
             buildMap {
                 coordinatesToIds.keys.chunked(BULK_REQUEST_SIZE).forEach { coordinates ->
-                    putAll(runBlocking(Dispatchers.IO) { service.getCurations(coordinates) })
+                    putAll(service.callBlocking { getCurations(coordinates) })
                 }
             }
         }.onFailure { e ->

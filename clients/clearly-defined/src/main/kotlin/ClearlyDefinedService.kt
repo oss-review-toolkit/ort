@@ -21,14 +21,20 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
+import java.io.IOException
+
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.Body
@@ -268,3 +274,20 @@ interface ClearlyDefinedService {
         @Path("toolVersion") toolVersion: String
     ): ResponseBody
 }
+
+suspend fun <T> ClearlyDefinedService.call(block: suspend ClearlyDefinedService.() -> T): T =
+    try {
+        block()
+    } catch (e: HttpException) {
+        val errorMessage = e.response()?.errorBody()?.let {
+            val errorResponse = ClearlyDefinedService.JSON.decodeFromString<ErrorResponse>(it.string())
+            val innerError = errorResponse.error.innererror
+
+            "The ClearlyDefined service call failed with: ${innerError.message}"
+        } ?: "The ClearlyDefined service call failed with code ${e.code()}: ${e.message()}"
+
+        throw IOException(errorMessage, e)
+    }
+
+fun <T> ClearlyDefinedService.callBlocking(block: suspend ClearlyDefinedService.() -> T): T =
+    runBlocking(Dispatchers.IO) { call(block) }
