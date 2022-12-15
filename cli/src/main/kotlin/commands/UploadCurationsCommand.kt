@@ -136,14 +136,24 @@ class UploadCurationsCommand : OrtCommand(
                 curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
 
         uploadableCurations.forEachIndexed { index, curation ->
-            print("Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' ")
+            val patch = curation.toContributionPatch()
 
-            when (val summary = curation.toContributionPatch()?.let { service.call { putCuration(it) } }) {
-                null -> println("failed to be uploaded.")
-                else -> {
-                    println("was uploaded successfully:\n${summary.url}")
+            if (patch == null) {
+                println(
+                    "Unable to convert $curation (${index + 1} of ${uploadableCurations.size}) to a contribution patch."
+                )
+            } else {
+                print(
+                    "Curation ${index + 1} of ${uploadableCurations.size} for package '${curation.id.toCoordinates()}' "
+                )
 
+                runCatching {
+                    service.call { putCuration(patch) }
+                }.onSuccess {
+                    println("was uploaded successfully:\n${it.url}")
                     ++uploadedCurationsCount
+                }.onFailure {
+                    println("failed to be uploaded.")
                 }
             }
         }
