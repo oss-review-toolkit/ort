@@ -18,6 +18,9 @@
 forbid_telemetry: true
 
 config_variables:
+  docker_build_user_id:
+    description: The id to use for the user running ORT
+    default: 1000
   gradle_build_scan:
     description: Enabling of Gradle build scans
     # Supported values: "true", "false"
@@ -58,6 +61,8 @@ containers:
     image: eclipse-temurin:11-jdk-jammy
     <<: *common-container-config
   run:
+    build_args:
+      USER_ID: <{docker_build_user_id}
     build_directory: <{batect.project_directory}
     build_target: run
     <<: *common-container-config
