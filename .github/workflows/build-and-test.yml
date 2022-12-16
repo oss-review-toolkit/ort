@@ -129,7 +129,11 @@ jobs:
     - name: Run functional tests
       run: |
           echo "Running as $(id)."
-          BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit --config-var gradle_build_scan=true --config-var gradle_console=plain funTestAnalyzer
+          BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit \
+              --config-var docker_build_user_id=1001 \
+              --config-var gradle_build_scan=true \
+              --config-var gradle_console=plain \
+              funTestAnalyzer
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
