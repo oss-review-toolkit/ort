@@ -152,8 +152,7 @@ class Maven(
             scopeNames = graphBuilder.scopesFor(projectId)
         )
 
-        val packages = graphBuilder.packages().toSortedSet()
-        val issues = packages.mapNotNull { pkg ->
+        val issues = graphBuilder.packages().mapNotNull { pkg ->
             if (pkg.description == "POM was created by Sonatype Nexus") {
                 createAndLogIssue(
                     managerName,
