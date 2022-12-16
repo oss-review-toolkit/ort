@@ -77,7 +77,7 @@ class DefaultWorkingTreeCache : WorkingTreeCache {
     private fun getVcs(vcsInfo: VcsInfo) =
         VersionControlSystem.forType(vcsInfo.type)
             ?: VersionControlSystem.forUrl(vcsInfo.url)
-            ?: throw IOException("Could not determine VCS type for (type=$${vcsInfo.type}, url=${vcsInfo.url}).")
+            ?: throw IOException("Could not determine VCS for type '${vcsInfo.type}' and URL ${vcsInfo.url}.")
 
     private fun getWorkingTree(vcsInfo: VcsInfo, vcs: VersionControlSystem) =
         workingTrees.getOrPut(getKey(vcsInfo)) {
