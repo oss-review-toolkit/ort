@@ -131,7 +131,7 @@ class DefaultPackageProvenanceResolver(
 
             else -> {
                 logger.info {
-                    "Could not find a stored artifact resolution result for package '${pkg.id.toCoordinates()}'," +
+                    "Could not find a stored artifact resolution result for package '${pkg.id.toCoordinates()}', " +
                             "attempting resolution."
                 }
             }
@@ -198,7 +198,7 @@ class DefaultPackageProvenanceResolver(
 
             else -> {
                 logger.info {
-                    "Could not find a stored repository resolution result for package '${pkg.id.toCoordinates()}'," +
+                    "Could not find a stored repository resolution result for package '${pkg.id.toCoordinates()}', " +
                             "attempting resolution."
                 }
             }
