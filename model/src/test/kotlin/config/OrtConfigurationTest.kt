@@ -260,7 +260,7 @@ class OrtConfigurationTest : WordSpec({
 
             val env = mapOf(
                 "ort.scanner.storages.postgres.connection.password" to "envPassword",
-                "ort.scanner.provenanceStorage.postgresStorage.connection.password" to "envPassword"
+                "ORT__SCANNER__PROVENANCESTORAGE__POSTGRESSTORAGE__CONNECTION__PASSWORD" to "envPassword"
             )
 
             withEnvironment(env) {
