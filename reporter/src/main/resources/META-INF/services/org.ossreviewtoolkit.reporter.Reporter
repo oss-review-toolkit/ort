@@ -1,3 +1,4 @@
+org.ossreviewtoolkit.reporter.reporters.BakedResultReporter
 org.ossreviewtoolkit.reporter.reporters.CycloneDxReporter
 org.ossreviewtoolkit.reporter.reporters.ExcelReporter
 org.ossreviewtoolkit.reporter.reporters.OpossumReporter
