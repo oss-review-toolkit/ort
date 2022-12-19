@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -202,8 +200,8 @@ data class OrtResult(
      * to packages in the result. If no analyzer result is present an empty set is returned.
      */
     @Suppress("UNUSED") // This is intended to be mostly used via scripting.
-    fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): SortedSet<Package> {
-        val vendorPackages = sortedSetOf<Package>()
+    fun getOrgPackages(vararg names: String, omitExcluded: Boolean = false): Set<Package> {
+        val vendorPackages = mutableSetOf<Package>()
 
         getProjects().filter {
             it.id.isFromOrg(*names) && (!omitExcluded || !isExcluded(it.id))
