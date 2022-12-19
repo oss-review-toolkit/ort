@@ -250,8 +250,7 @@ class UtilsTest : WordSpec({
                 "v3.9.0.99"
             )
 
-            filterVersionNames("3.9.0.99", names) shouldContainExactly
-                    listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+            filterVersionNames("3.9.0.99", names).shouldContainExactly("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
         }
     }
 
