@@ -86,9 +86,6 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     val fullMatches = names.filter { it.equals(version, ignoreCase = true) }
     if (fullMatches.isNotEmpty()) return fullMatches
 
-    // The list of supported version separators.
-    val versionHasSeparator = versionSeparators.any { it in version }
-
     // Create variants of the version string to recognize.
     data class VersionVariant(val name: String, val separators: List<Char>)
 
@@ -99,6 +96,9 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
     versionSeparators.mapTo(versionVariants) {
         VersionVariant(versionLower.replace(separatorRegex, it.toString()), listOf(it))
     }
+
+    // The list of supported version separators.
+    val versionHasSeparator = versionSeparators.any { it in version }
 
     val filteredNames = names.filter {
         val name = it.lowercase().replace(ignorablePrefixSuffixRegex, "")
