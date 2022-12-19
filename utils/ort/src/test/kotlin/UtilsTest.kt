@@ -207,27 +207,48 @@ class UtilsTest : WordSpec({
 
         "find names when others with trailing digits are present" {
             val names = listOf(
-                "1.11.6", "1.11.60", "1.11.61", "1.11.62", "1.11.63", "1.11.64", "1.11.65", "1.11.66", "1.11.67",
-                "1.11.68", "1.11.69"
+                "1.11.6",
+                "1.11.60",
+                "1.11.61",
+                "1.11.62",
+                "1.11.63",
+                "1.11.64",
+                "1.11.65",
+                "1.11.66",
+                "1.11.67",
+                "1.11.68",
+                "1.11.69"
             )
 
             filterVersionNames("1.11.6", names) shouldHaveSingleElement "1.11.6"
         }
 
         "find names with only a single revision number as the version" {
-            val names = listOf("my_project-123", "my_project-4711", "my_project-8888")
+            val names = listOf(
+                "my_project-123",
+                "my_project-4711",
+                "my_project-8888"
+            )
 
             filterVersionNames("4711", names) shouldHaveSingleElement "my_project-4711"
         }
 
         "find names that have a numeric suffix as part of the name" {
-            val names = listOf("my_project_v1-1.0.2", "my_project_v1-1.0.3", "my_project_v1-1.1.0")
+            val names = listOf(
+                "my_project_v1-1.0.2",
+                "my_project_v1-1.0.3",
+                "my_project_v1-1.1.0"
+            )
 
             filterVersionNames("1.0.3", names) shouldHaveSingleElement "my_project_v1-1.0.3"
         }
 
         "find names that use an abbreviated SHA1 as the suffix" {
-            val names = listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
+            val names = listOf(
+                "3.9.0.99-a3d9827",
+                "sdk-3.9.0.99",
+                "v3.9.0.99"
+            )
 
             filterVersionNames("3.9.0.99", names) shouldContainExactly
                     listOf("3.9.0.99-a3d9827", "sdk-3.9.0.99", "v3.9.0.99")
