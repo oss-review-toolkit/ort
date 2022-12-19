@@ -51,6 +51,7 @@ data class LicenseFinding(
 ) : Comparable<LicenseFinding> {
     companion object {
         private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
+            .thenByDescending { it.score }
 
         /**
          * Create a [LicenseFinding] with [detectedLicenseMapping]s applied.
