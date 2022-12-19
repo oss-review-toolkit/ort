@@ -20,9 +20,9 @@
 package org.ossreviewtoolkit.scanner.scanners.scanoss
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.should
 
 import java.io.File
@@ -56,26 +56,22 @@ class ScanOssResultParserTest : WordSpec({
             )
 
             summary.licenseFindings should haveSize(201)
-            summary.licenseFindings should containAll(
-                LicenseFinding(
-                    license = "Apache-2.0",
-                    location = TextLocation(
-                        path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
-                        startLine = TextLocation.UNKNOWN_LINE,
-                        endLine = TextLocation.UNKNOWN_LINE
-                    )
+            summary.licenseFindings shouldContain LicenseFinding(
+                license = "Apache-2.0",
+                location = TextLocation(
+                    path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                    startLine = TextLocation.UNKNOWN_LINE,
+                    endLine = TextLocation.UNKNOWN_LINE
                 )
             )
 
             summary.copyrightFindings should haveSize(7)
-            summary.copyrightFindings should containAll(
-                CopyrightFinding(
-                    statement = "Copyright 2013 LinkedIn Corp.",
-                    location = TextLocation(
-                        path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
-                        startLine = TextLocation.UNKNOWN_LINE,
-                        endLine = TextLocation.UNKNOWN_LINE
-                    )
+            summary.copyrightFindings shouldContain CopyrightFinding(
+                statement = "Copyright 2013 LinkedIn Corp.",
+                location = TextLocation(
+                    path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
+                    startLine = TextLocation.UNKNOWN_LINE,
+                    endLine = TextLocation.UNKNOWN_LINE
                 )
             )
         }
