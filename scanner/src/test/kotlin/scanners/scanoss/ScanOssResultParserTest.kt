@@ -62,7 +62,8 @@ class ScanOssResultParserTest : WordSpec({
                     path = "hopscotch-rails-0.1.2.1/vendor/assets/javascripts/hopscotch.js",
                     startLine = TextLocation.UNKNOWN_LINE,
                     endLine = TextLocation.UNKNOWN_LINE
-                )
+                ),
+                score = 100.0f
             )
 
             summary.copyrightFindings should haveSize(7)
