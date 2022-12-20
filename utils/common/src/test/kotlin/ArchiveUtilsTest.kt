@@ -420,7 +420,7 @@ class ArchiveUtilsTest : WordSpec() {
         "packZip" should {
             "not follow symbolic links".config(enabled = Os.isLinux) {
                 val inputDir = createTestTempDir()
-                val parentDir = inputDir.resolve("parent").apply { safeMkdirs() }
+                val parentDir = inputDir.resolve("parent").safeMkdirs()
                 val readmeFile = parentDir.resolve("readme.txt").apply { writeText("Hello World!") }
 
                 withContext(Dispatchers.IO) {

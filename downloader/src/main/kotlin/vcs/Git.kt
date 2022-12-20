@@ -151,7 +151,7 @@ class Git : VersionControlSystem(), CommandLineTool {
 
                     git.repository.config.setBoolean("core", null, "sparseCheckout", true)
 
-                    val gitInfoDir = targetDir.resolve(".git/info").apply { safeMkdirs() }
+                    val gitInfoDir = targetDir.resolve(".git/info").safeMkdirs()
                     val path = vcs.path.let { if (it.startsWith("/")) it else "/$it" }
                     val globPatterns = getSparseCheckoutGlobPatterns() + path
 

@@ -53,7 +53,7 @@ class OrtScriptCompilationConfiguration : ScriptCompilationConfiguration({
     hostConfiguration(
         ScriptingHostConfiguration {
             jvm {
-                val scriptCacheDir = ortDataDirectory.resolve("cache/scripts").apply { safeMkdirs() }
+                val scriptCacheDir = ortDataDirectory.resolve("cache/scripts").safeMkdirs()
 
                 compilationCache(
                     CompiledScriptJarsCache { script, configuration ->

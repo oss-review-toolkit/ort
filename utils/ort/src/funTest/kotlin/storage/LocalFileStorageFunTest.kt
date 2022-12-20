@@ -135,8 +135,7 @@ class LocalFileStorageFunTest : WordSpec() {
 
             "fail if the target path is a directory" {
                 storage { storage, directory ->
-                    val dir = directory.resolve("dir")
-                    dir.safeMkdirs()
+                    val dir = directory.resolve("dir").safeMkdirs()
 
                     shouldThrow<FileNotFoundException> {
                         storage.write("dir", "content".byteInputStream())
