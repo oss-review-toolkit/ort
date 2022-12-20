@@ -26,13 +26,16 @@ ARG ORT_VERSION="DOCKER-SNAPSHOT"
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES=""
 
+# Set this to the Java version to use in the base image (and to build and run ORT with).
+ARG JAVA_VERSION=17
+
 # Set this to the ScanCode version to use.
 ARG SCANCODE_VERSION="31.2.1"
 
 # Set this to the Python Inspector version to use.
 ARG PYTHON_INSPECTOR_VERSION="0.9.2"
 
-FROM eclipse-temurin:11-jdk-jammy AS build
+FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS build
 
 COPY . /usr/local/src/ort
 
@@ -46,7 +49,7 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     scripts/set_gradle_proxy.sh && \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:installDist :helper-cli:startScripts
 
-FROM eclipse-temurin:11-jdk-jammy AS run
+FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS run
 
 ENV \
     # Package manager versions.
