@@ -26,6 +26,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beInstanceOf
 import io.kotest.matchers.types.shouldBeSameInstanceAs
+import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 
 import io.mockk.every
 import io.mockk.mockk
@@ -57,6 +58,24 @@ class OkHttpClientHelperTest : WordSpec({
             val clientB = OkHttpClientHelper.buildClient(timeout)
 
             clientA shouldBeSameInstanceAs clientB
+        }
+
+        "return different clients when specifying different configurations" {
+            val timeoutA: BuilderConfiguration = { readTimeout(Duration.ofSeconds(100)) }
+            val timeoutB: BuilderConfiguration = { readTimeout(Duration.ofSeconds(500)) }
+            val clientA = OkHttpClientHelper.buildClient(timeoutA)
+            val clientB = OkHttpClientHelper.buildClient(timeoutB)
+
+            clientA shouldNotBeSameInstanceAs clientB
+        }
+
+        "return different clients when specifying the same configuration using different instances" {
+            val timeoutA: BuilderConfiguration = { readTimeout(Duration.ofSeconds(100)) }
+            val timeoutB: BuilderConfiguration = { readTimeout(Duration.ofSeconds(100)) }
+            val clientA = OkHttpClientHelper.buildClient(timeoutA)
+            val clientB = OkHttpClientHelper.buildClient(timeoutB)
+
+            clientA shouldNotBeSameInstanceAs clientB
         }
     }
 
