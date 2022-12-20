@@ -2,13 +2,13 @@
 repository:
   vcs:
     type: "Git"
-    url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-    revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-    revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
     path: ""
   config: {}
 analyzer:
@@ -26,7 +26,7 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-      - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+      - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
         definition_file_path: "common/target-scala-2.12-common_2.12-0.1-SNAPSHOT.pom"
         authors:
           - "com.pbassiner"
@@ -39,14 +39,14 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
           path: "common"
         homepage_url: ""
         scope_names:
           - "compile"
           - "test"
-      - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
+      - id: "SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT"
         definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1-SNAPSHOT.pom"
         authors:
           - "com.pbassiner"
@@ -59,14 +59,14 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
           path: "multi1"
         homepage_url: ""
         scope_names:
           - "compile"
           - "test"
-      - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
+      - id: "SBT:com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT"
         definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1-SNAPSHOT.pom"
         authors:
           - "com.pbassiner"
@@ -79,8 +79,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
           path: "multi2"
         homepage_url: ""
         scope_names:
@@ -99,8 +99,8 @@ analyzer:
           path: ""
         vcs_processed:
           type: "Git"
-          url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-          revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+          url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+          revision: "3c4e434b241b1f1addc97794932043b86afc2548"
           path: ""
         homepage_url: ""
         scope_names:
@@ -762,7 +762,7 @@ analyzer:
             path: ""
         curations: []
       - package:
-          id: "Maven:org.scala-lang:scala-library:2.12.3"
+          id: "Maven:org.scala-lang:scala-library:2.12.15"
           purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
           authors:
             - "LAMP/EPFL"
@@ -1254,7 +1254,7 @@ analyzer:
           - "Maven:com.fasterxml.jackson.core:jackson-databind:2.8.9"
           - "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
           - "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-          - "Maven:org.scala-lang:scala-library:2.12.3"
+          - "Maven:org.scala-lang:scala-library:2.12.15"
           - "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
           - "Maven:org.scalacheck:scalacheck_2.12:1.13.5"
           - "Maven:org.scala-sbt:test-interface:1.0"
@@ -1266,13 +1266,13 @@ analyzer:
           - "Maven:org.scalaz:scalaz-core_2.12:7.2.8"
           - "Maven:com.github.julien-truffaut:monocle-macro_2.12:1.4.0"
           - "Maven:org.typelevel:macro-compat_2.12:1.1.1"
-          - "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+          - "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
           - "Maven:com.github.pureconfig:pureconfig_2.12:0.8.0"
           - "Maven:com.chuusai:shapeless_2.12:2.3.2"
           - "Maven:com.github.pureconfig:pureconfig-macros_2.12:0.8.0"
           - "Maven:org.scala-lang:scala-compiler:2.12.3"
         scopes:
-          com.pbassiner:common_2.12:0.1-SNAPSHOT:compile:
+          com.pbassiner:common_2.12:0.1.0-SNAPSHOT:compile:
             - root: 0
             - root: 3
             - root: 4
@@ -1280,10 +1280,10 @@ analyzer:
             - root: 11
             - root: 15
             - root: 16
-          com.pbassiner:common_2.12:0.1-SNAPSHOT:test:
+          com.pbassiner:common_2.12:0.1.0-SNAPSHOT:test:
             - root: 17
             - root: 19
-          com.pbassiner:multi1_2.12:0.1-SNAPSHOT:compile:
+          com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT:compile:
             - root: 0
             - root: 23
             - root: 25
@@ -1294,10 +1294,10 @@ analyzer:
             - root: 15
             - root: 16
             - root: 27
-          com.pbassiner:multi1_2.12:0.1-SNAPSHOT:test:
+          com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT:test:
             - root: 17
             - root: 19
-          com.pbassiner:multi2_2.12:0.1-SNAPSHOT:compile:
+          com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT:compile:
             - root: 0
             - root: 28
             - root: 3
@@ -1307,7 +1307,7 @@ analyzer:
             - root: 15
             - root: 16
             - root: 27
-          com.pbassiner:multi2_2.12:0.1-SNAPSHOT:test:
+          com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT:test:
             - root: 17
             - root: 19
           com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT:compile:

@@ -2,13 +2,13 @@
 repository:
   vcs:
     type: "Git"
-    url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-    revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-    revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+    url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+    revision: "3c4e434b241b1f1addc97794932043b86afc2548"
     path: ""
   config: {}
 analyzer:
@@ -26,8 +26,8 @@ analyzer:
     allow_dynamic_versions: false
   result:
     projects:
-    - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
-      definition_file_path: "common/target-scala-2.12-common_2.12-0.1-SNAPSHOT.pom"
+    - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
+      definition_file_path: "common/target-scala-2.12-common_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
       declared_licenses: []
@@ -39,8 +39,8 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
         path: "common"
       homepage_url: ""
       scopes:
@@ -67,7 +67,7 @@ analyzer:
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-        - id: "Maven:org.scala-lang:scala-library:2.12.3"
+        - id: "Maven:org.scala-lang:scala-library:2.12.15"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
       - name: "test"
         dependencies:
@@ -79,8 +79,8 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1-SNAPSHOT.pom"
+    - id: "SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT"
+      definition_file_path: "multi1/target-scala-2.12-multi1_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
       declared_licenses: []
@@ -92,8 +92,8 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
         path: "multi1"
       homepage_url: ""
       scopes:
@@ -126,9 +126,9 @@ analyzer:
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-        - id: "Maven:org.scala-lang:scala-library:2.12.3"
+        - id: "Maven:org.scala-lang:scala-library:2.12.15"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-        - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+        - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
           linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
@@ -140,8 +140,8 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:multi2_2.12:0.1-SNAPSHOT"
-      definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1-SNAPSHOT.pom"
+    - id: "SBT:com.pbassiner:multi2_2.12:0.1.0-SNAPSHOT"
+      definition_file_path: "multi2/target-scala-2.12-multi2_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
       declared_licenses: []
@@ -153,8 +153,8 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
         path: "multi2"
       homepage_url: ""
       scopes:
@@ -188,9 +188,9 @@ analyzer:
             dependencies:
             - id: "Maven:com.fasterxml.jackson.core:jackson-annotations:2.8.0"
             - id: "Maven:com.fasterxml.jackson.core:jackson-core:2.8.9"
-        - id: "Maven:org.scala-lang:scala-library:2.12.3"
+        - id: "Maven:org.scala-lang:scala-library:2.12.15"
         - id: "Maven:org.slf4j:jcl-over-slf4j:1.7.25"
-        - id: "SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT"
+        - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"
           linkage: "PROJECT_DYNAMIC"
       - name: "test"
         dependencies:
@@ -202,8 +202,8 @@ analyzer:
           - id: "Maven:org.scala-lang.modules:scala-parser-combinators_2.12:1.0.4"
           - id: "Maven:org.scala-lang.modules:scala-xml_2.12:1.0.5"
           - id: "Maven:org.scalactic:scalactic_2.12:3.0.4"
-    - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT"
-      definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1-SNAPSHOT.pom"
+    - id: "SBT:com.pbassiner:sbt-multi-project-example_2.12:0.1.0-SNAPSHOT"
+      definition_file_path: "target-scala-2.12-sbt-multi-project-example_2.12-0.1.0-SNAPSHOT.pom"
       authors:
       - "com.pbassiner"
       declared_licenses: []
@@ -215,14 +215,14 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/pbassiner/sbt-multi-project-example.git"
-        revision: "31687c099ea6d645e819ef9d6ac9fc4c757a96bc"
+        url: "https://github.com/oss-review-toolkit/sbt-multi-project-example.git"
+        revision: "3c4e434b241b1f1addc97794932043b86afc2548"
         path: ""
       homepage_url: ""
       scopes:
       - name: "compile"
         dependencies:
-        - id: "Maven:org.scala-lang:scala-library:2.12.3"
+        - id: "Maven:org.scala-lang:scala-library:2.12.15"
     packages:
     - metadata:
         id: "Maven:ch.qos.logback:logback-classic:1.2.3"
@@ -880,28 +880,26 @@ analyzer:
           path: ""
       curations: []
     - metadata:
-        id: "Maven:org.scala-lang:scala-library:2.12.3"
-        purl: "pkg:maven/org.scala-lang/scala-library@2.12.3"
+        id: "Maven:org.scala-lang:scala-library:2.12.15"
+        purl: "pkg:maven/org.scala-lang/scala-library@2.12.15"
         authors:
         - "LAMP/EPFL"
         - "Lightbend, Inc."
         declared_licenses:
-        - "BSD 3-Clause"
+        - "Apache-2.0"
         declared_licenses_processed:
-          spdx_expression: "BSD-3-Clause"
-          mapped:
-            BSD 3-Clause: "BSD-3-Clause"
+          spdx_expression: "Apache-2.0"
         description: "Standard library for the Scala Programming Language"
-        homepage_url: "http://www.scala-lang.org/"
+        homepage_url: "https://www.scala-lang.org/"
         binary_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3.jar"
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.15/scala-library-2.12.15.jar"
           hash:
-            value: "f2e496f21af2d80b48e0a61773f84c3a76a0d06f"
+            value: "0f2e89c89340282c9625ac57efb451056f31af57"
             algorithm: "SHA-1"
         source_artifact:
-          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.3/scala-library-2.12.3-sources.jar"
+          url: "https://repo.maven.apache.org/maven2/org/scala-lang/scala-library/2.12.15/scala-library-2.12.15-sources.jar"
           hash:
-            value: "499c91b0a64bc706eee174481a3b7dde81b3591d"
+            value: "5e789d895ee2b8b02577db7b6bbb5409798b7daf"
             algorithm: "SHA-1"
         vcs:
           type: "Git"
