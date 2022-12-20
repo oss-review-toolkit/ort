@@ -17,8 +17,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
+# Set this to the Java version to use in the base image (and to build and run ORT with).
+ARG JAVA_VERSION=17
+
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:11-jdk-jammy as ort-base-image
+FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy as ort-base-image
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
