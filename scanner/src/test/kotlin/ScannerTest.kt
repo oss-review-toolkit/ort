@@ -127,13 +127,15 @@ class ScannerTest : WordSpec({
         "return a scan result for each package" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val pkgWithVcs = Package.new(name = "repository").withValidVcs()
-            val scannerWrapper = spyk(FakePackageScannerWrapper())
-            val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
 
-            every { scannerWrapper.scanPackage(pkgWithArtifact, any()) } returns
-                    createScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
-            every { scannerWrapper.scanPackage(pkgWithVcs, any()) } returns
-                    createScanResult(pkgWithVcs.repositoryProvenance(), scannerWrapper.details)
+            val scannerWrapper = spyk(FakePackageScannerWrapper()) {
+                every { scanPackage(pkgWithArtifact, any()) } returns
+                        createScanResult(pkgWithArtifact.artifactProvenance(), details)
+                every { scanPackage(pkgWithVcs, any()) } returns
+                        createScanResult(pkgWithVcs.repositoryProvenance(), details)
+            }
+
+            val scanner = createScanner(packageScannerWrappers = listOf(scannerWrapper))
 
             val result = scanner.scan(setOf(pkgWithArtifact, pkgWithVcs), createContext())
 
@@ -318,11 +320,12 @@ class ScannerTest : WordSpec({
         "prefer a stored result over a new scan" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
-            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details))
 
-            every { reader.read(pkgWithArtifact.id, any()) } returns listOf(
-                createStoredNestedScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
-            )
+            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
+                every { read(pkgWithArtifact.id, any()) } returns listOf(
+                    createStoredNestedScanResult(pkgWithArtifact.artifactProvenance(), scannerWrapper.details)
+                )
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -348,9 +351,9 @@ class ScannerTest : WordSpec({
         "start a scan if no stored result is available" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakePackageScannerWrapper())
-            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details))
-
-            every { reader.read(any(), any()) } returns emptyList()
+            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
+                every { read(any(), any()) } returns emptyList()
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -418,18 +421,16 @@ class ScannerTest : WordSpec({
                 it.copy(scanResults = scanResults)
             }
 
-            val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver())
+            val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver()) {
+                every { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
+                        nestedProvenanceCompletelyScanned
+                every { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
+                        nestedProvenancePartlyScanned
+            }
 
-            every {
-                nestedProvenanceResolver.resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance())
-            } returns nestedProvenanceCompletelyScanned
-            every {
-                nestedProvenanceResolver.resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance())
-            } returns nestedProvenancePartlyScanned
-
-            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details))
-
-            every { reader.read(pkgCompletelyScanned.id, any()) } returns listOf(nestedScanResultCompletelyScanned)
+            val reader = spyk(FakePackageBasedStorageReader(scannerWrapper.details)) {
+                every { read(pkgCompletelyScanned.id, any()) } returns listOf(nestedScanResultCompletelyScanned)
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -488,9 +489,10 @@ class ScannerTest : WordSpec({
         "start a scan if no stored result is available" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
             val scannerWrapper = spyk(FakeProvenanceScannerWrapper())
-            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
 
-            every { reader.read(any()) } returns emptyList()
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
+                every { read(any()) } returns emptyList()
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -559,18 +561,16 @@ class ScannerTest : WordSpec({
                 )
             )
 
-            val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver())
+            val nestedProvenanceResolver = spyk(FakeNestedProvenanceResolver()) {
+                every { resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance()) } returns
+                        nestedProvenanceCompletelyScanned
+                every { resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance()) } returns
+                        nestedProvenancePartlyScanned
+            }
 
-            every {
-                nestedProvenanceResolver.resolveNestedProvenance(pkgCompletelyScanned.repositoryProvenance())
-            } returns nestedProvenanceCompletelyScanned
-            every {
-                nestedProvenanceResolver.resolveNestedProvenance(pkgPartlyScanned.repositoryProvenance())
-            } returns nestedProvenancePartlyScanned
-
-            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
-
-            every { reader.read(unscannedSubRepository) } returns emptyList()
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
+                every { read(unscannedSubRepository) } returns emptyList()
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -634,8 +634,6 @@ class ScannerTest : WordSpec({
 
             val scannerWrapper = FakePathScannerWrapper()
 
-            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details))
-
             val scanResult = createScanResult(
                 provenanceWithoutVcsPath,
                 scannerWrapper.details,
@@ -649,7 +647,9 @@ class ScannerTest : WordSpec({
                 )
             )
 
-            every { reader.read(any()) } returns listOf(scanResult)
+            val reader = spyk(FakeProvenanceBasedStorageReader(scannerWrapper.details)) {
+                every { read(any()) } returns listOf(scanResult)
+            }
 
             val scanner = createScanner(
                 storageReaders = listOf(reader),
@@ -762,9 +762,10 @@ class ScannerTest : WordSpec({
     "scanning with a scanner that does not provide criteria" should {
         "not store the scan results" {
             val pkgWithArtifact = Package.new(name = "artifact").withValidSourceArtifact()
-            val scannerWrapper = spyk(FakePackageScannerWrapper())
 
-            every { scannerWrapper.criteria } returns null
+            val scannerWrapper = spyk(FakePackageScannerWrapper()) {
+                every { criteria } returns null
+            }
 
             val writer = spyk(FakeProvenanceBasedStorageWriter())
 
