@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
-import org.ossreviewtoolkit.utils.test.patchActualResultObject
+import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PnpmFunTest : WordSpec({
@@ -53,10 +53,7 @@ class PnpmFunTest : WordSpec({
 
             val expectedResult = getExpectedResult(rootProjectDir, "pnpm-workspaces-expected-output.yml")
 
-            patchActualResultObject(
-                ortResult,
-                patchStartAndEndTime = true
-            ).withResolvedScopes().toYaml() shouldBe expectedResult
+            patchActualResult(ortResult.withResolvedScopes(), patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 })
