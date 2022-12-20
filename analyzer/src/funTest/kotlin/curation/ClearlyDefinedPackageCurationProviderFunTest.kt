@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-class ClearlyDefinedPackageCurationProviderTest : WordSpec({
+class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     "The production server" should {
         val provider = ClearlyDefinedPackageCurationProvider()
 
