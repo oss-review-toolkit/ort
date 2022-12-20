@@ -92,9 +92,6 @@ fun patchActualResult(
 ): String =
     patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime)
 
-fun patchActualResultObject(result: OrtResult, patchStartAndEndTime: Boolean = false): OrtResult =
-    yamlMapper.readValue(patchActualResult(result, patchStartAndEndTime))
-
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
