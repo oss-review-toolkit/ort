@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
  * A test for [ClearlyDefinedPackageCurationProvider], which uses a mock server. This allows testing some specific
  * error conditions.
  */
-class ClearlyDefinedPackageCurationProviderMockTest : WordSpec({
+class ClearlyDefinedPackageCurationProviderTest : WordSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
