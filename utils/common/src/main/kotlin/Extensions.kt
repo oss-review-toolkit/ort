@@ -110,8 +110,7 @@ fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
                 // Windows, so do a better check here.
                 if (dir.toFile().isSymbolicLink()) return FileVisitResult.SKIP_SUBTREE
 
-                val targetDir = targetPath.resolve(sourcePath.relativize(dir))
-                targetDir.toFile().safeMkdirs()
+                targetPath.resolve(sourcePath.relativize(dir)).toFile().safeMkdirs()
 
                 return FileVisitResult.CONTINUE
             }
@@ -157,16 +156,15 @@ fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = nu
 }
 
 /**
- * Create all missing intermediate directories without failing if any already exists.
- *
- * @throws IOException if any missing directory could not be created.
+ * Create all missing intermediate directories without failing if any already exists. Returns the [File] it was called
+ * on if successful, otherwise throws an [IOException].
  */
-fun File.safeMkdirs() {
+fun File.safeMkdirs(): File {
     // Do not blindly trust mkdirs() returning "false" as it can fail for edge-cases like
     // File(File("/tmp/parent1/parent2"), "/").mkdirs() if parent1 does not exist, although the directory is
     // successfully created.
     if (isDirectory || mkdirs() || isDirectory) {
-        return
+        return this
     }
 
     throw IOException("Could not create directory '$absolutePath'.")

@@ -114,7 +114,7 @@ class ExtensionsTest : WordSpec({
     "File.isSymbolicLink" should {
         val tempDir = createSpecTempDir()
         val file = tempDir.resolve("file").apply { createNewFile() }
-        val directory = tempDir.resolve("directory").apply { safeMkdirs() }
+        val directory = tempDir.resolve("directory").safeMkdirs()
 
         "return 'false' for non-existent files" {
             tempDir.resolve("non-existent").let { nonExistent ->
