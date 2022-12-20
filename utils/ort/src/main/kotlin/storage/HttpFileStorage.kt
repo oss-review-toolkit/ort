@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.ort.storage
 
 import java.io.IOException
 import java.io.InputStream
+import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
@@ -31,6 +32,9 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.execute
+
+private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
@@ -62,6 +66,12 @@ class HttpFileStorage(
 ) : FileStorage {
     companion object : Logging
 
+    private val httpClient by lazy {
+        OkHttpClientHelper.buildClient {
+            connectTimeout(Duration.ofSeconds(HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS))
+        }
+    }
+
     override fun exists(path: String): Boolean {
         val request = Request.Builder()
             .headers(headers.toHeaders())
@@ -70,7 +80,7 @@ class HttpFileStorage(
             .url(urlForPath(path))
             .build()
 
-        return OkHttpClientHelper.execute(request).isSuccessful
+        return httpClient.execute(request).isSuccessful
     }
 
     override fun read(path: String): InputStream {
@@ -83,7 +93,7 @@ class HttpFileStorage(
 
         logger.debug { "Reading file from storage: ${request.url}" }
 
-        val response = OkHttpClientHelper.execute(request)
+        val response = httpClient.execute(request)
         if (response.isSuccessful) {
             response.body?.let { body ->
                 return body.byteStream()
@@ -107,7 +117,7 @@ class HttpFileStorage(
 
             logger.debug { "Writing file to storage: ${request.url}" }
 
-            return OkHttpClientHelper.execute(request).use { response ->
+            return httpClient.execute(request).use { response ->
                 if (!response.isSuccessful) {
                     throw IOException(
                         "Could not store file at '${request.url}': ${response.code} - ${response.message}"
