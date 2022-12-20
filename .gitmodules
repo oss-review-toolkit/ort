@@ -12,7 +12,7 @@
 	ignore = untracked
 [submodule "sbt-multi-project-example"]
 	path = analyzer/src/funTest/assets/projects/external/sbt-multi-project-example
-	url = https://github.com/pbassiner/sbt-multi-project-example.git
+	url = https://github.com/oss-review-toolkit/sbt-multi-project-example.git
 	ignore = untracked
 [submodule "dart-http"]
 	path = analyzer/src/funTest/assets/projects/external/dart-http

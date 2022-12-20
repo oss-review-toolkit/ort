@@ -94,7 +94,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                     this should containAll(
                         Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"),
                         Identifier("Maven:org.scala-lang:scala-reflect:2.12.2"),
-                        Identifier("Maven:org.scala-lang:scala-library:2.12.3")
+                        Identifier("Maven:org.scala-lang:scala-library:2.12.15")
                     )
                 }
 
@@ -157,7 +157,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                 compileDependencies should containAll(
                     Identifier("Maven:com.typesafe.akka:akka-actor_2.12:2.5.6"),
                     Identifier("Maven:org.scala-lang:scala-reflect:2.12.2"),
-                    Identifier("Maven:org.scala-lang:scala-library:2.12.3")
+                    Identifier("Maven:org.scala-lang:scala-library:2.12.15")
                 )
             }
 
@@ -263,7 +263,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                             Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
                         ),
                         Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11") to emptyList(),
-                        Identifier("Maven:org.scala-lang:scala-library:2.12.3") to emptyList(),
+                        Identifier("Maven:org.scala-lang:scala-library:2.12.15") to emptyList(),
                         Identifier("Maven:org.scala-lang:scala-reflect:2.12.2") to listOf(
                             Identifier("Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2")
                         ),
@@ -304,7 +304,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                     Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6"),
                     Identifier("Maven:com.typesafe.scala-logging:scala-logging_2.12:3.7.2"),
                     Identifier("Maven:net.logstash.logback:logstash-logback-encoder:4.11"),
-                    Identifier("Maven:org.scala-lang:scala-library:2.12.3"),
+                    Identifier("Maven:org.scala-lang:scala-library:2.12.15"),
                     Identifier("Maven:org.slf4j:jcl-over-slf4j:1.7.25"),
                     Identifier("Maven:org.scalacheck:scalacheck_2.12:1.13.5"),
                     Identifier("Maven:org.scalatest:scalatest_2.12:3.0.4")
@@ -320,7 +320,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
         "collectSubProjects" should {
             "find all the sub projects of a project" {
-                val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1-SNAPSHOT")
+                val projectId = Identifier("SBT:com.pbassiner:multi1_2.12:0.1.0-SNAPSHOT")
                 testResult.getProject(projectId) shouldNotBeNull {
                     val subProjectIds = navigator.collectSubProjects(this)
 
@@ -402,4 +402,4 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 }
 
 /** Identifier of the project used by the tests. */
-private val PROJECT_ID = Identifier("SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT")
+private val PROJECT_ID = Identifier("SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT")
