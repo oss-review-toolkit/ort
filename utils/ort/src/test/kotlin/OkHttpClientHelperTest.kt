@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.utils.ort
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.result.shouldBeFailure
 import io.kotest.matchers.should
@@ -42,67 +42,73 @@ import okhttp3.ResponseBody
 
 import okio.BufferedSource
 
-class OkHttpClientHelperTest : StringSpec({
-    "Passing no lambda blocks should return the same client" {
-        val clientA = OkHttpClientHelper.buildClient()
-        val clientB = OkHttpClientHelper.buildClient()
+class OkHttpClientHelperTest : WordSpec({
+    "buildClient()" should {
+        "return the same client instance when no configuration is specified" {
+            val clientA = OkHttpClientHelper.buildClient()
+            val clientB = OkHttpClientHelper.buildClient()
 
-        clientA shouldBeSameInstanceAs clientB
-    }
+            clientA shouldBeSameInstanceAs clientB
+        }
 
-    "Passing the same lambda blocks should return the same client" {
-        val timeout: BuilderConfiguration = { readTimeout(Duration.ofSeconds(100)) }
-        val clientA = OkHttpClientHelper.buildClient(timeout)
-        val clientB = OkHttpClientHelper.buildClient(timeout)
+        "return the same client instance when specifying the same configuration instance" {
+            val timeout: BuilderConfiguration = { readTimeout(Duration.ofSeconds(100)) }
+            val clientA = OkHttpClientHelper.buildClient(timeout)
+            val clientB = OkHttpClientHelper.buildClient(timeout)
 
-        clientA shouldBeSameInstanceAs clientB
-    }
-
-    "Exceptions during file download should be handled" {
-        val outputDirectory = tempdir()
-        val invalidUrl = "https://example.org/folder/"
-
-        mockkStatic(OkHttpClient::download)
-        val response = mockk<Response>(relaxed = true)
-        val request = mockk<Request>(relaxed = true)
-        val body = mockk<ResponseBody>(relaxed = true)
-        val source = mockk<BufferedSource>(relaxed = true)
-
-        every { request.url } returns invalidUrl.toHttpUrl()
-        every { response.headers(any()) } returns emptyList()
-        every { response.request } returns request
-        every { body.source() } returns source
-        every { source.read(any(), any()) } returnsMany listOf(100, -1)
-
-        val client = OkHttpClientHelper.buildClient()
-        every { client.download(any(), any()) } returns Result.success(response to body)
-
-        val result = client.downloadFile(invalidUrl, outputDirectory)
-        result.shouldBeFailure {
-            it should beInstanceOf<IOException>()
+            clientA shouldBeSameInstanceAs clientB
         }
     }
 
-    "Exceptions when accessing the response body should be handled" {
-        val failureUrl = "https://example.org/fault/"
-        val exception = IOException("Connection closed")
+    "downloadFile()" should {
+        "handle exceptions during file download" {
+            val outputDirectory = tempdir()
+            val invalidUrl = "https://example.org/folder/"
 
-        mockkStatic(OkHttpClient::download)
-        val response = mockk<Response>(relaxed = true)
-        val request = mockk<Request>(relaxed = true)
-        val body = mockk<ResponseBody>(relaxed = true)
+            mockkStatic(OkHttpClient::download)
+            val response = mockk<Response>(relaxed = true)
+            val request = mockk<Request>(relaxed = true)
+            val body = mockk<ResponseBody>(relaxed = true)
+            val source = mockk<BufferedSource>(relaxed = true)
 
-        every { request.url } returns failureUrl.toHttpUrl()
-        every { response.headers(any()) } returns emptyList()
-        every { response.request } returns request
-        every { body.string() } throws exception
+            every { request.url } returns invalidUrl.toHttpUrl()
+            every { response.headers(any()) } returns emptyList()
+            every { response.request } returns request
+            every { body.source() } returns source
+            every { source.read(any(), any()) } returnsMany listOf(100, -1)
 
-        val client = OkHttpClientHelper.buildClient()
-        every { client.download(any(), any()) } returns Result.success(response to body)
+            val client = OkHttpClientHelper.buildClient()
+            every { client.download(any(), any()) } returns Result.success(response to body)
 
-        val result = client.downloadText(failureUrl)
-        result.shouldBeFailure {
-            it shouldBe exception
+            val result = client.downloadFile(invalidUrl, outputDirectory)
+            result.shouldBeFailure {
+                it should beInstanceOf<IOException>()
+            }
+        }
+    }
+
+    "downloadText()" should {
+        "handle exceptions when accessing the response body" {
+            val failureUrl = "https://example.org/fault/"
+            val exception = IOException("Connection closed")
+
+            mockkStatic(OkHttpClient::download)
+            val response = mockk<Response>(relaxed = true)
+            val request = mockk<Request>(relaxed = true)
+            val body = mockk<ResponseBody>(relaxed = true)
+
+            every { request.url } returns failureUrl.toHttpUrl()
+            every { response.headers(any()) } returns emptyList()
+            every { response.request } returns request
+            every { body.string() } throws exception
+
+            val client = OkHttpClientHelper.buildClient()
+            every { client.download(any(), any()) } returns Result.success(response to body)
+
+            val result = client.downloadText(failureUrl)
+            result.shouldBeFailure {
+                it shouldBe exception
+            }
         }
     }
 })
