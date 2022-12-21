@@ -56,6 +56,7 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
@@ -81,6 +82,11 @@ private const val BUNDLER_GEM_NAME = "bundler"
  * The name of the option to specify the Bundler version.
  */
 private const val OPTION_BUNDLER_VERSION = "bundlerVersion"
+
+/**
+ * The name of the file where Bundler stores locked down dependency information.
+ */
+internal const val BUNDLER_LOCKFILE_NAME = "Gemfile.lock"
 
 private fun runScriptCode(code: String, workingDir: File? = null): String {
     val bytes = ByteArrayOutputStream()
@@ -112,12 +118,19 @@ private fun runScriptResource(resource: String, workingDir: File? = null): Strin
     return stdout
 }
 
+internal fun parseBundlerVersionFromLockfile(lockfile: File): String? {
+    val bundledWithLines = lockfile.readLines().dropWhile { it != "BUNDLED WITH" }
+    if (bundledWithLines.size < 2) return null
+    return bundledWithLines[1].trim()
+}
+
 /**
  * The [Bundler][1] package manager for Ruby. Also see [Clarifying the Roles of the .gemspec and Gemfile][2].
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *bundlerVersion*: The Bundler version to resolve dependencies for. Defaults to the version that ships with JRuby,
- *   and can currently only be set to a higher version than the default version.
+ * - *bundlerVersion*: The Bundler version to resolve dependencies for. By default, this is the highest version declared
+ *   in any present lockfile, or the version that ships with JRuby if no lockfiles are present. In any case, the value
+ *   can currently only be set to a higher version than the version that ships with JRuby.
  *
  * [1]: https://bundler.io/
  * [2]: http://yehudakatz.com/2010/12/16/clarifying-the-roles-of-the-gemspec-and-gemfile/
@@ -149,7 +162,14 @@ class Bundler(
         // [1]: https://github.com/jruby/jruby/blob/9.3.8.0/lib/pom.rb#L21
         // [2]: https://github.com/jruby/jruby/discussions/7403
 
-        options[OPTION_BUNDLER_VERSION]?.let { bundlerVersion ->
+        val lockfiles = definitionFiles.map { it.resolveSibling(BUNDLER_LOCKFILE_NAME) }.filter { it.isFile }
+        val lockFilesBundlerVersion = lockfiles.mapNotNull {
+            parseBundlerVersionFromLockfile(it)
+        }.sortedWith(AlphaNumericComparator).lastOrNull()
+
+        val bundlerVersion = options[OPTION_BUNDLER_VERSION] ?: lockFilesBundlerVersion
+
+        if (bundlerVersion != null) {
             val duration = measureTime {
                 val output = runScriptCode(
                     """
@@ -177,7 +197,8 @@ class Bundler(
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
-        requireLockfile(workingDir) { workingDir.resolve("Gemfile.lock").isFile }
+
+        requireLockfile(workingDir) { workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile }
 
         val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<OrtIssue>()

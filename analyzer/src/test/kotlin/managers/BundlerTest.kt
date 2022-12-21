@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -30,26 +30,52 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class BundlerTest : StringSpec({
-    "createFromJson() parses JSON metadata for a Gem correctly" {
-        val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.yaml")
+class BundlerTest : WordSpec({
+    "parseBundlerVersionFromLockfile()" should {
+        "correctly parse the Bundler version" {
+            val lockfile = createTestTempDir().resolve(BUNDLER_LOCKFILE_NAME).apply {
+                writeText(
+                    """
+                    GEM
+                      remote: https://rubygems.org/
+                      specs:
+                        zeitwerk (2.6.0)
 
-        val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
+                    PLATFORMS
+                      ruby
 
-        gemspec shouldBe GemSpec(
-            name = "rspec",
-            version = "3.7.0",
-            homepageUrl = "http://github.com/rspec",
-            authors = sortedSetOf("Steven Baker", "David Chelimsky", "Myron Marston"),
-            declaredLicenses = sortedSetOf("MIT"),
-            description = "BDD for Ruby",
-            runtimeDependencies = setOf("rspec-core", "rspec-expectations", "rspec-mocks"),
-            vcs = VcsInfo(VcsType.GIT, "http://github.com/rspec/rspec.git", ""),
-            artifact = RemoteArtifact(
-                "https://rubygems.org/gems/rspec-3.7.0.gem",
-                Hash("0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404", HashAlgorithm.SHA256)
+                    BUNDLED WITH
+                       2.3.20
+                    """.trimIndent()
+                )
+            }
+
+            parseBundlerVersionFromLockfile(lockfile) shouldBe "2.3.20"
+        }
+    }
+
+    "createFromJson()" should {
+        "parse JSON metadata for a Gem correctly" {
+            val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.yaml")
+
+            val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
+
+            gemspec shouldBe GemSpec(
+                name = "rspec",
+                version = "3.7.0",
+                homepageUrl = "http://github.com/rspec",
+                authors = sortedSetOf("Steven Baker", "David Chelimsky", "Myron Marston"),
+                declaredLicenses = sortedSetOf("MIT"),
+                description = "BDD for Ruby",
+                runtimeDependencies = setOf("rspec-core", "rspec-expectations", "rspec-mocks"),
+                vcs = VcsInfo(VcsType.GIT, "http://github.com/rspec/rspec.git", ""),
+                artifact = RemoteArtifact(
+                    "https://rubygems.org/gems/rspec-3.7.0.gem",
+                    Hash("0174cfbed780e42aa181227af623e2ae37511f20a2fdfec48b54f6cf4d7a6404", HashAlgorithm.SHA256)
+                )
             )
-        )
+        }
     }
 })
