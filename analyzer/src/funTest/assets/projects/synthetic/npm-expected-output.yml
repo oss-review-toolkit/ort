@@ -1186,3 +1186,11 @@ packages:
     url: "https://github.com/DefinitelyTyped/DefinitelyTyped.git"
     revision: ""
     path: "types/node"
+issues:
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "The <REPLACE_LOCKFILE_NAME> file was created with an old version of npm,\n\
+    so supplemental metadata must be fetched from the registry.\nThis is a one-time\
+    \ fix-up, please be patient...\ncoffee-script@1.12.7: CoffeeScript on NPM has\
+    \ moved to \"coffeescript\" (no hyphen)"
+  severity: "WARNING"

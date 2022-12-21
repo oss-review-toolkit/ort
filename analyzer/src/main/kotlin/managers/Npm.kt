@@ -27,7 +27,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 
 import kotlinx.coroutines.Deferred
@@ -57,6 +56,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -80,7 +80,6 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
-import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
@@ -177,14 +176,23 @@ open class Npm(
         // Actually installing the dependencies is the easiest way to get the metadata of all transitive
         // dependencies (i.e. their respective "package.json" files). As NPM uses a global cache, the same
         // dependency is only ever downloaded once.
-        installDependencies(workingDir)
+        val issues = installDependencies(workingDir)
+
+        val project = runCatching {
+            parseProject(definitionFile)
+        }.getOrElse {
+            logger.error { "Failed to parse project information: ${it.collectMessages()}" }
+            Project.EMPTY
+        }
+
+        if (issues.any { it.severity == Severity.ERROR }) {
+            return listOf(ProjectAnalyzerResult(project, emptySet(), issues))
+        }
 
         // Create packages for all modules found in the workspace and add them to the graph builder. They are
         // reused when they are referenced by scope dependencies.
         val packages = parseInstalledModules(workingDir)
         graphBuilder.addPackages(packages.values)
-
-        val project = parseProject(definitionFile)
 
         val scopeNames = listOfNotNull(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when
@@ -211,7 +219,8 @@ open class Npm(
             ProjectAnalyzerResult(
                 project = project.copy(scopeNames = scopeNames.toSortedSet()),
                 // Packages are set later by createPackageManagerResult().
-                packages = emptySet()
+                packages = emptySet(),
+                issues = issues
             )
         )
     }
@@ -571,15 +580,41 @@ open class Npm(
     /**
      * Install dependencies using the given package manager command.
      */
-    private fun installDependencies(workingDir: File) {
+    private fun installDependencies(workingDir: File): List<OrtIssue> {
         requireLockfile(workingDir) { hasLockFile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         val process = runInstall(workingDir)
 
-        // TODO: Capture warnings from npm output, e.g. "Unsupported platform" which happens for fsevents on all
-        //       platforms except for Mac.
-        process.stderr.withoutPrefix("Error: ")?.also { throw IOException(it.lineSequence().first()) }
+        val lines = process.stderr.lines()
+        val issues = mutableListOf<OrtIssue>()
+        val commonSecondaryPrefixes = listOf(
+            "JSON.parse ",
+            "deprecated ",
+            "enoent ",
+            "old lockfile "
+        )
+
+        fun mapLinesToOrtIssues(prefix: String, severity: Severity) {
+            val issueLines = lines.takeWhile { it.startsWith(prefix) }.mapNotNull { line ->
+                line.removePrefix(prefix).let {
+                    commonSecondaryPrefixes.fold(it) { remainder, prefix -> remainder.removePrefix(prefix) }
+                }.takeUnless { it.isBlank() }
+            }
+
+            if (issueLines.isNotEmpty()) {
+                issues += OrtIssue(
+                    source = managerName,
+                    message = issueLines.joinToString("\n"),
+                    severity = severity
+                )
+            }
+        }
+
+        mapLinesToOrtIssues("npm WARN ", Severity.WARNING)
+        mapLinesToOrtIssues("npm ERR! ", Severity.ERROR)
+
+        return issues
     }
 
     protected open fun runInstall(workingDir: File): ProcessCapture {
@@ -589,7 +624,8 @@ open class Npm(
             "--legacy-peer-deps".takeIf { legacyPeerDeps }
         )
 
-        return run(workingDir, if (hasLockFile(workingDir)) "ci" else "install", *options.toTypedArray())
+        val subcommand = if (hasLockFile(workingDir)) "ci" else "install"
+        return ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
     }
 }
 
