@@ -369,7 +369,7 @@ class Bundler(
     }
 }
 
-data class GemSpec(
+internal data class GemSpec(
     val name: String,
     val version: String,
     val homepageUrl: String,
