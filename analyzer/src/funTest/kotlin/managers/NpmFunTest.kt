@@ -76,7 +76,7 @@ class NpmFunTest : WordSpec() {
                 result.toYaml() shouldBe expectedResult
             }
 
-            "show error if no lockfile is present" {
+            "show an error if no lockfile is present" {
                 val workingDir = projectsDir.resolve("no-lockfile")
                 val packageFile = workingDir.resolve("package.json")
 
@@ -94,7 +94,7 @@ class NpmFunTest : WordSpec() {
                 patchActualResult(result.toYaml()) shouldBe expectedResult
             }
 
-            "resolve dependencies even if the node_modules directory already exists" {
+            "resolve dependencies even if the 'node_modules' directory already exists" {
                 val workingDir = projectsDir.resolve("node-modules")
                 val packageFile = workingDir.resolve("package.json")
 
