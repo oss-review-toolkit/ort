@@ -29,6 +29,24 @@
         </component>
 
         <!--
+         | APK (Android application: https://simpligility.github.io/android-maven-plugin/apk.html)
+         |-->
+        <component>
+            <role>org.apache.maven.lifecycle.mapping.LifecycleMapping</role>
+            <role-hint>apk</role-hint>
+            <implementation>org.apache.maven.lifecycle.mapping.DefaultLifecycleMapping</implementation>
+            <configuration>
+                <lifecycles>
+                    <lifecycle>
+                        <id>default</id>
+                        <phases>
+                        </phases>
+                    </lifecycle>
+                </lifecycles>
+            </configuration>
+        </component>
+
+        <!--
          | OSGi Bundle (http://felix.apache.org/documentation/subprojects/apache-felix-maven-bundle-plugin-bnd.html)
          |-->
         <component>
