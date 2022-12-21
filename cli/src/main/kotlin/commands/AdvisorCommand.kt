@@ -136,6 +136,16 @@ class AdvisorCommand : OrtCommand(
             throw ProgramResult(1)
         }
 
+        with(advisorResults.getVulnerabilities()) {
+            val totalPackageCount = ortResultOutput.getPackages(omitExcluded = true).size
+            val vulnerabilityCount = values.sumOf { it.size }
+
+            println(
+                "$size of $totalPackageCount package(s) (not counting excluded ones) are vulnerable, with " +
+                        "$vulnerabilityCount vulnerabilities in total."
+            )
+        }
+
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
         val (resolvedIssues, unresolvedIssues) =
             advisorResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
