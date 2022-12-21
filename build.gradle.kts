@@ -298,6 +298,11 @@ subprojects {
     }
 
     tasks.withType<Test>().configureEach {
+        if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
+            // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
+            jvmArgs("--add-opens=java.base/java.util=ALL-UNNAMED")
+        }
+
         val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
 
         listOf(
