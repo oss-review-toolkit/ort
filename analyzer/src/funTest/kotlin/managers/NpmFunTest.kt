@@ -20,15 +20,19 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -48,14 +52,17 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
-                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
+                    custom = mapOf(
+                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
+                    ),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
                 )
 
-                result.toYaml() shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe expectedResult
             }
 
             "resolve package-lock dependencies correctly" {
@@ -66,14 +73,21 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
-                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
+                    custom = mapOf(
+                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
+                    ),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
                 )
 
-                result.toYaml() shouldBe expectedResult
+                patchActualResult(
+                    result.toYaml(),
+                    // Deal with wrapping depending on the lockfile name length.
+                    custom = mapOf("so\\\n    \\ supplemental metadata" to "\\\n    so supplemental metadata")
+                ) shouldBe expectedResult
             }
 
             "show an error if no lockfile is present" {
@@ -94,6 +108,20 @@ class NpmFunTest : WordSpec() {
                 patchActualResult(result.toYaml()) shouldBe expectedResult
             }
 
+            "show an error if the 'package.json' file is invalid" {
+                val workingDir = createTestTempDir()
+                val packageFile = workingDir.resolve("package.json").apply { writeText("<>") }
+
+                val result = createNpm(allowDynamicVersions = true).resolveSingleProject(packageFile)
+
+                result.issues shouldHaveSize 1
+                with(result.issues.first()) {
+                    source shouldBe "NPM"
+                    severity shouldBe Severity.ERROR
+                    message shouldContain "Unexpected token \"<\" (0x3C) in JSON at position 0 while parsing \"<>\""
+                }
+            }
+
             "resolve dependencies even if the 'node_modules' directory already exists" {
                 val workingDir = projectsDir.resolve("node-modules")
                 val packageFile = workingDir.resolve("package.json")
@@ -102,18 +130,25 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
-                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
+                    custom = mapOf(
+                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
+                    ),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
                 )
 
-                result.toYaml() shouldBe expectedResult
+                patchActualResult(
+                    result.toYaml(),
+                    // Deal with wrapping depending on the lockfile name length.
+                    custom = mapOf("so\\\n    \\ supplemental metadata" to "\\\n    so supplemental metadata")
+                ) shouldBe expectedResult
             }
         }
     }
 
-    private fun createNpm() =
-        Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+    private fun createNpm(allowDynamicVersions: Boolean = false) =
+        Npm("NPM", USER_DIR, AnalyzerConfiguration(allowDynamicVersions), RepositoryConfiguration())
 }

@@ -19,14 +19,19 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.io.File
+import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -45,19 +50,31 @@ class NpmVersionUrlFunTest : WordSpec() {
                 val config = AnalyzerConfiguration(allowDynamicVersions = true)
                 val result = createNpm(config).resolveSingleProject(packageFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResult = patchExpectedResult(
+                val expectedResultYaml = patchExpectedResult(
                     projectDir.parentFile.resolve("npm-version-urls-expected-output.yml"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
                     path = vcsPath
                 )
+                val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
 
-                result.toYaml() shouldBe expectedResult
+                result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
             }
         }
     }
 
     private fun createNpm(config: AnalyzerConfiguration) =
         Npm("NPM", USER_DIR, config, RepositoryConfiguration())
+
+    private fun ProjectAnalyzerResult.withInvariantIssues() =
+        copy(
+            issues = issues.map {
+                it.copy(
+                    timestamp = Instant.EPOCH,
+                    // Account for different NPM versions to return issues in different order.
+                    message = it.message.lines().sorted().joinToString("\n")
+                )
+            }
+        )
 }
