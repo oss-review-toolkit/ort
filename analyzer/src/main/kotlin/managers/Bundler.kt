@@ -168,8 +168,8 @@ class Bundler(
 
         runCatching {
             runScriptCode("puts(Gem::Specification.find_by_name('$BUNDLER_GEM_NAME').version)").trim()
-        }.onSuccess { bundlerVersion ->
-            logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $bundlerVersion." }
+        }.onSuccess { installedBundlerVersion ->
+            logger.info { "Using the '$BUNDLER_GEM_NAME' Gem in version $installedBundlerVersion." }
         }.onFailure {
             logger.warn { "Unable to determine the '$BUNDLER_GEM_NAME' Gem version." }
         }
