@@ -34,7 +34,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.execute
 
-private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
+private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 60L
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
