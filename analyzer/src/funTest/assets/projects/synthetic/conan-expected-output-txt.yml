@@ -63,11 +63,9 @@ packages:
 - id: "Conan::libiconv:1.17"
   purl: "pkg:conan/libiconv@1.17"
   declared_licenses:
-  - "LGPL-2.1"
+  - "LGPL-2.1-or-later"
   declared_licenses_processed:
-    spdx_expression: "LGPL-2.1-only"
-    mapped:
-      LGPL-2.1: "LGPL-2.1-only"
+    spdx_expression: "LGPL-2.1-or-later"
   description: "Convert text to and from Unicode"
   homepage_url: "https://www.gnu.org/software/libiconv/"
   binary_artifact:
