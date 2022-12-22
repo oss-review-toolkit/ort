@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.execute
 
 private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
-private const val HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS = 5 * 60L
+private const val HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS = 1 * 60L
 private const val HTTP_CLIENT_MAX_IDLE_CONNECTIONS = 5
 
 /**
