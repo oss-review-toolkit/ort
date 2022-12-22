@@ -495,12 +495,11 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          * @return the array with the coordinates (always 3 components)
          */
         private static String[] displayNameToCoordinates(String displayName) {
-            if (displayName.startsWith('project :')) {
-                def coordinates = displayName.split(':', 2)
-                return ['<project>', coordinates[1], '']
-            }
-
             def coordinates = displayName.split(':')
+
+            if (displayName.startsWith('project :')) {
+                return ['<project>', coordinates.tail().join('/'), '']
+            }
 
             if (coordinates.length == 3) {
                 return coordinates
