@@ -25,6 +25,7 @@ import java.time.Duration
 import java.util.concurrent.TimeUnit
 
 import okhttp3.CacheControl
+import okhttp3.ConnectionPool
 import okhttp3.Headers.Companion.toHeaders
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -35,6 +36,8 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.execute
 
 private const val HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS = 30L
+private const val HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS = 5 * 60L
+private const val HTTP_CLIENT_MAX_IDLE_CONNECTIONS = 5
 
 /**
  * A [FileStorage] that stores files on an HTTP server.
@@ -68,6 +71,13 @@ class HttpFileStorage(
 
     private val httpClient by lazy {
         OkHttpClientHelper.buildClient {
+            val connectionPool = ConnectionPool(
+                HTTP_CLIENT_MAX_IDLE_CONNECTIONS,
+                HTTP_CLIENT_KEEP_ALIVE_DURATION_IN_SECONDS,
+                TimeUnit.SECONDS
+            )
+
+            connectionPool(connectionPool)
             connectTimeout(Duration.ofSeconds(HTTP_CLIENT_CONNECT_TIMEOUT_IN_SECONDS))
         }
     }
