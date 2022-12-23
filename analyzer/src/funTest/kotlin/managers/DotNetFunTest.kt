@@ -42,12 +42,12 @@ class DotNetFunTest : StringSpec() {
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
-    private val packageFile = projectDir.resolve("subProjectTest/test.csproj")
+    private val definitionFile = projectDir.resolve("subProjectTest/test.csproj")
 
     init {
         "Definition file is correctly read" {
             val reader = DotNetPackageFileReader()
-            val result = reader.getDependencies(packageFile)
+            val result = reader.getDependencies(definitionFile)
 
             result should containExactlyInAnyOrder(
                 NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
@@ -78,7 +78,7 @@ class DotNetFunTest : StringSpec() {
                 revision = vcsRevision,
                 path = "$vcsPath/subProjectTest"
             )
-            val result = createDotNet().resolveSingleProject(packageFile)
+            val result = createDotNet().resolveSingleProject(definitionFile)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
@@ -94,7 +94,7 @@ class DotNetFunTest : StringSpec() {
                 revision = vcsRevision,
                 path = "$vcsPath/subProjectTest"
             )
-            val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(packageFile)
+            val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }

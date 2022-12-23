@@ -53,12 +53,12 @@ class PubFunTest : WordSpec() {
                 projectsDirExternal.resolve("dart-http-pubspec.lock").copyTo(lockFile, overwrite = true)
 
                 try {
-                    val packageFile = workingDir.resolve("pubspec.yaml")
+                    val definitionFile = workingDir.resolve("pubspec.yaml")
                     val expectedResult = getExpectedResult("dart-http-expected-output.yml", workingDir)
 
                     val result = createPub(
                         AnalyzerConfiguration(allowDynamicVersions = true)
-                    ).resolveSingleProject(packageFile)
+                    ).resolveSingleProject(definitionFile)
 
                     result.toYaml() shouldBe expectedResult
                 } finally {
@@ -68,10 +68,10 @@ class PubFunTest : WordSpec() {
 
             "resolve dependencies for a project with dependencies without a static version" {
                 val workingDir = projectsDir.resolve("any-version")
-                val packageFile = workingDir.resolve("pubspec.yaml")
+                val definitionFile = workingDir.resolve("pubspec.yaml")
                 val expectedResult = getExpectedResult("pub-expected-output-any-version.yml", workingDir)
 
-                val result = createPub().resolveSingleProject(packageFile)
+                val result = createPub().resolveSingleProject(definitionFile)
 
                 result.toYaml() shouldBe expectedResult
             }
@@ -99,9 +99,9 @@ class PubFunTest : WordSpec() {
 
             "show an error if no lockfile is present" {
                 val workingDir = projectsDir.resolve("no-lockfile")
-                val packageFile = workingDir.resolve("pubspec.yaml")
+                val definitionFile = workingDir.resolve("pubspec.yaml")
 
-                val result = createPub().resolveSingleProject(packageFile)
+                val result = createPub().resolveSingleProject(definitionFile)
 
                 with(result) {
                     packages should beEmpty()

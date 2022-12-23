@@ -46,9 +46,9 @@ class NpmFunTest : WordSpec() {
         "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
                 val workingDir = projectsDir.resolve("shrinkwrap")
-                val packageFile = workingDir.resolve("package.json")
+                val definitionFile = workingDir.resolve("package.json")
 
-                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
+                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
@@ -67,9 +67,9 @@ class NpmFunTest : WordSpec() {
 
             "resolve package-lock dependencies correctly" {
                 val workingDir = projectsDir.resolve("package-lock")
-                val packageFile = workingDir.resolve("package.json")
+                val definitionFile = workingDir.resolve("package.json")
 
-                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
+                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),
@@ -92,9 +92,9 @@ class NpmFunTest : WordSpec() {
 
             "show an error if no lockfile is present" {
                 val workingDir = projectsDir.resolve("no-lockfile")
-                val packageFile = workingDir.resolve("package.json")
+                val definitionFile = workingDir.resolve("package.json")
 
-                val result = createNpm().resolveSingleProject(packageFile)
+                val result = createNpm().resolveSingleProject(definitionFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output-no-lockfile.yml"),
@@ -110,9 +110,9 @@ class NpmFunTest : WordSpec() {
 
             "show an error if the 'package.json' file is invalid" {
                 val workingDir = createTestTempDir()
-                val packageFile = workingDir.resolve("package.json").apply { writeText("<>") }
+                val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
-                val result = createNpm(allowDynamicVersions = true).resolveSingleProject(packageFile)
+                val result = createNpm(allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
                 result.issues shouldHaveSize 1
                 with(result.issues.first()) {
@@ -124,9 +124,9 @@ class NpmFunTest : WordSpec() {
 
             "resolve dependencies even if the 'node_modules' directory already exists" {
                 val workingDir = projectsDir.resolve("node-modules")
-                val packageFile = workingDir.resolve("package.json")
+                val definitionFile = workingDir.resolve("package.json")
 
-                val result = createNpm().resolveSingleProject(packageFile, resolveScopes = true)
+                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.parentFile.resolve("npm-expected-output.yml"),

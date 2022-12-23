@@ -39,7 +39,7 @@ class CargoFunTest : StringSpec() {
 
     init {
         "Projects dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("Cargo.toml")
+            val definitionFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("cargo-expected-output.yml"),
@@ -49,7 +49,7 @@ class CargoFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveSingleProject(packageFile)
+            val result = createCargo().resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }

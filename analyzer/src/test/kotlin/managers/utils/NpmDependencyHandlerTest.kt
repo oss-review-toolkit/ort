@@ -65,8 +65,8 @@ class NpmDependencyHandlerTest : StringSpec({
     }
 
     "a package can be created for a module" {
-        val pkgJsonFile = File("src/test/assets/test-package.json")
-        val module = createModuleInfo(createIdentifier("packageTest"), packageFile = pkgJsonFile)
+        val definitionFile = File("src/test/assets/test-package.json")
+        val module = createModuleInfo(createIdentifier("packageTest"), definitionFile)
 
         val handler = createHandler()
 

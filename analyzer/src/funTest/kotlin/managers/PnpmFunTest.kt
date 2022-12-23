@@ -59,8 +59,8 @@ class PnpmFunTest : WordSpec({
 })
 
 private fun resolveDependencies(projectDir: File): String {
-    val packageFile = projectDir.resolve("package.json")
-    val result = createPnpm().resolveSingleProject(packageFile, resolveScopes = true)
+    val definitionFile = projectDir.resolve("package.json")
+    val result = createPnpm().resolveSingleProject(definitionFile, resolveScopes = true)
 
     return result.toYaml()
 }

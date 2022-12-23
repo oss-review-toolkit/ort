@@ -74,14 +74,14 @@ private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: Stri
 }
 
 private fun resolveDependencies(projectDir: File): String {
-    val packageFile = projectDir.resolve("package.json")
-    val result = createYarn2().resolveSingleProject(packageFile, resolveScopes = true)
+    val definitionFile = projectDir.resolve("package.json")
+    val result = createYarn2().resolveSingleProject(definitionFile, resolveScopes = true)
     return result.toYaml()
 }
 
 private fun resolveMultipleDependencies(projectDir: File): String {
-    val packageFile = projectDir.resolve("package.json")
-    val result = createYarn2().collateMultipleProjects(packageFile)
+    val definitionFile = projectDir.resolve("package.json")
+    val result = createYarn2().collateMultipleProjects(definitionFile)
     // Remove the dependency graph and add scope information.
     return result.withResolvedScopes().toYaml()
 }

@@ -41,55 +41,55 @@ class GradleAndroidFunTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = projectDir.resolve("build.gradle")
+            val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-android-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = projectDir.resolve("app/build.gradle")
+            val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-android-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val packageFile = projectDir.resolve("lib/build.gradle")
+            val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-android-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
             val cyclicProjectDir = File("src/funTest/assets/projects/synthetic/gradle-android-cyclic").absoluteFile
-            val packageFile = cyclicProjectDir.resolve("app/build.gradle")
+            val definitionFile = cyclicProjectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-android-cyclic-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
-                definitionFilePath = packageFile.absolutePath
+                definitionFilePath = definitionFile.absolutePath
             )
 
-            val result = createGradle().resolveDependencies(listOf(packageFile), emptyMap())
+            val result = createGradle().resolveDependencies(listOf(definitionFile), emptyMap())
 
             result.toYaml() shouldBe expectedResult
         }
