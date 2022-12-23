@@ -39,40 +39,40 @@ class GradleLibraryFunTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("build.gradle")
+            val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-library-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("app/build.gradle")
+            val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-library-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("lib/build.gradle")
+            val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-library-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }

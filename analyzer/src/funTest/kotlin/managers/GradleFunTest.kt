@@ -56,53 +56,53 @@ class GradleFunTest : StringSpec() {
 
     init {
         "Root project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("build.gradle")
+            val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("app/build.gradle")
+            val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "External dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("lib/build.gradle")
+            val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Unresolved dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("lib-without-repo/build.gradle")
+            val definitionFile = projectDir.resolve("lib-without-repo/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-expected-output-lib-without-repo.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
@@ -112,14 +112,14 @@ class GradleFunTest : StringSpec() {
         //
         // [1] https://github.com/gradle/gradle/blob/REL_2.13/subprojects/docs/src/samples/toolingApi/customModel/plugin/src/main/java/org/gradle/sample/plugin/CustomPlugin.java
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
-            val packageFile = projectDir.parentFile.resolve("gradle-unsupported-version/build.gradle")
+            val definitionFile = projectDir.parentFile.resolve("gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("gradle-expected-output-unsupported-version.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
@@ -168,14 +168,14 @@ class GradleFunTest : StringSpec() {
             forAll(gradleVersionTable) { version, resultsFileSuffix ->
                 installGradleWrapper(version)
 
-                val packageFile = projectDir.resolve("app/build.gradle")
+                val definitionFile = projectDir.resolve("app/build.gradle")
                 val expectedResult = patchExpectedResult(
                     projectDir.parentFile.resolve("gradle-expected-output-app$resultsFileSuffix.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )
 
-                val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+                val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
                 result.toYaml() shouldBe expectedResult
             }

@@ -39,7 +39,7 @@ class CargoSubcrateFunTest : StringSpec() {
 
     init {
         "Lib project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("Cargo.toml")
+            val definitionFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("cargo-subcrate-lib-expected-output.yml"),
@@ -49,14 +49,14 @@ class CargoSubcrateFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveSingleProject(packageFile)
+            val result = createCargo().resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Integration sub-project dependencies are detected correctly" {
             val integrationProjectDir = projectDir.resolve("integration")
-            val packageFile = integrationProjectDir.resolve("Cargo.toml")
+            val definitionFile = integrationProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(integrationProjectDir)
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("cargo-subcrate-integration-expected-output.yml"),
@@ -66,14 +66,14 @@ class CargoSubcrateFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveSingleProject(packageFile)
+            val result = createCargo().resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }
 
         "Client sub-project dependencies are detected correctly" {
             val clientProjectDir = projectDir.resolve("client")
-            val packageFile = clientProjectDir.resolve("Cargo.toml")
+            val definitionFile = clientProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(clientProjectDir)
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("cargo-subcrate-client-expected-output.yml"),
@@ -83,7 +83,7 @@ class CargoSubcrateFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createCargo().resolveSingleProject(packageFile)
+            val result = createCargo().resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }

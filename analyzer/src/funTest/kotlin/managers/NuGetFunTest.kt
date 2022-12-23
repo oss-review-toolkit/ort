@@ -42,11 +42,11 @@ class NuGetFunTest : StringSpec({
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()
-    val packageFile = projectDir.resolve("packages.config")
+    val definitionFile = projectDir.resolve("packages.config")
 
     "Definition file is correctly read" {
         val reader = NuGetPackageFileReader()
-        val result = reader.getDependencies(packageFile)
+        val result = reader.getDependencies(definitionFile)
 
         result should containExactly(
             NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
@@ -74,7 +74,7 @@ class NuGetFunTest : StringSpec({
             revision = vcsRevision,
             path = vcsPath
         )
-        val result = createNuGet().resolveSingleProject(packageFile)
+        val result = createNuGet().resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe expectedResult
     }
@@ -87,7 +87,7 @@ class NuGetFunTest : StringSpec({
             revision = vcsRevision,
             path = vcsPath
         )
-        val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(packageFile)
+        val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe expectedResult
     }

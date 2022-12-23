@@ -40,14 +40,14 @@ class BabelFunTest : WordSpec({
 
     "Babel dependencies" should {
         "be correctly analyzed" {
-            val packageFile = projectDir.resolve("package.json")
+            val definitionFile = projectDir.resolve("package.json")
 
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("npm-babel-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
-            val actualResult = createNPM().resolveSingleProject(packageFile, resolveScopes = true)
+            val actualResult = createNPM().resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(actualResult.toYaml()) shouldBe expectedResult
         }

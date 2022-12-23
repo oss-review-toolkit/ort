@@ -39,7 +39,7 @@ class BowerFunTest : StringSpec() {
 
     init {
         "Project dependencies are detected correctly" {
-            val packageFile = projectDir.resolve("bower.json")
+            val definitionFile = projectDir.resolve("bower.json")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
                 projectDir.parentFile.resolve("bower-expected-output.yml"),
@@ -49,7 +49,7 @@ class BowerFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrl)
             )
 
-            val result = createBower().resolveSingleProject(packageFile)
+            val result = createBower().resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResult
         }
