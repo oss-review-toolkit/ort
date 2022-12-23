@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer.managers.utils
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
+import java.net.URI
 import java.util.regex.Pattern
 
 import kotlin.time.Duration.Companion.hours
@@ -66,12 +67,12 @@ import org.eclipse.aether.repository.RemoteRepository
 import org.eclipse.aether.repository.WorkspaceReader
 import org.eclipse.aether.resolution.ArtifactDescriptorRequest
 import org.eclipse.aether.spi.connector.ArtifactDownload
+import org.eclipse.aether.spi.connector.layout.RepositoryLayout
 import org.eclipse.aether.spi.connector.layout.RepositoryLayoutProvider
 import org.eclipse.aether.spi.connector.transport.GetTask
 import org.eclipse.aether.spi.connector.transport.TransporterProvider
 import org.eclipse.aether.transfer.AbstractTransferListener
 import org.eclipse.aether.transfer.NoRepositoryConnectorException
-import org.eclipse.aether.transfer.NoRepositoryLayoutException
 import org.eclipse.aether.transfer.TransferEvent
 import org.eclipse.aether.util.repository.JreProxySelector
 
@@ -521,27 +522,41 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         logger.debug { "Searching for '$artifact' in $remoteRepositories." }
 
+        data class ArtifactLocationInfo(
+            val repository: RemoteRepository,
+            val layout: RepositoryLayout,
+            val location: URI,
+            val downloadUrl: String
+        )
+
+        val locationInfo = remoteRepositories.mapNotNull { repository ->
+            val repositoryLayout = runCatching {
+                repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
+            }.onFailure {
+                it.showStackTrace()
+
+                logger.warn { "Could not search for '$artifact' in '$repository': ${it.collectMessages()}" }
+            }.getOrNull()
+
+            repositoryLayout?.let { layout ->
+                val location = layout.getLocation(artifact, false)
+                val downloadUrl = "${repository.url.trimEnd('/')}/$location"
+                ArtifactLocationInfo(repository, layout, location, downloadUrl)
+            }
+        }
+
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
-        remoteRepositories.forEach { repository ->
-            val repositoryLayout = try {
-                repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
-            } catch (e: NoRepositoryLayoutException) {
-                e.showStackTrace()
-
-                logger.warn { "Could not search for '$artifact' in '$repository': ${e.collectMessages()}" }
-
-                return@forEach
-            }
-
-            val remoteLocation = repositoryLayout.getLocation(artifact, false)
-            logger.debug { "Remote location for '$artifact': $remoteLocation" }
+        locationInfo.forEach { info ->
+            logger.debug { "Trying to download artifact '$artifact' from ${info.downloadUrl}." }
 
             val snapshot = artifact.isSnapshot
-            val policy = remoteRepositoryManager.getPolicy(repositorySystemSession, repository, !snapshot, snapshot)
+            val policy = remoteRepositoryManager.getPolicy(
+                repositorySystemSession, info.repository, !snapshot, snapshot
+            )
 
             val localPath = repositorySystemSession.localRepositoryManager
-                .getPathForRemoteArtifact(artifact, repository, "project")
+                .getPathForRemoteArtifact(artifact, info.repository, "project")
             val downloadFile = File(repositorySystemSession.localRepositoryManager.repository.basedir, localPath)
 
             val artifactDownload = ArtifactDownload(artifact, "project", downloadFile, policy.checksumPolicy)
@@ -558,28 +573,28 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             try {
                 wrapMavenSession {
-                    repositoryConnectorProvider.newRepositoryConnector(repositorySystemSession, repository).use {
+                    repositoryConnectorProvider.newRepositoryConnector(repositorySystemSession, info.repository).use {
                         it.get(listOf(artifactDownload), null)
                     }
                 }
             } catch (e: NoRepositoryConnectorException) {
                 e.showStackTrace()
 
-                logger.warn { "Could not create connector for repository '$repository': ${e.collectMessages()}" }
+                logger.warn { "Could not create connector for repository '${info.repository}': ${e.collectMessages()}" }
 
                 return@forEach
             }
 
             if (artifactDownload.exception == null) {
-                logger.debug { "Found '$artifact' in '$repository'." }
+                logger.debug { "Found '$artifact' in '${info.repository}'." }
 
-                val checksums = repositoryLayout.getChecksums(artifact, false, remoteLocation)
+                val checksums = info.layout.getChecksums(artifact, false, info.location)
                 logger.debug { "Checksums: $checksums" }
 
                 // TODO: Could store multiple checksums in model instead of only the first.
                 val checksum = checksums.first()
 
-                val transporter = transporterProvider.newTransporter(repositorySystemSession, repository)
+                val transporter = transporterProvider.newTransporter(repositorySystemSession, info.repository)
 
                 val hash = runCatching {
                     val task = GetTask(checksum.location)
@@ -595,22 +610,22 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     Hash.NONE
                 }
 
-                val downloadUrl = "${repository.url.trimEnd('/')}/$remoteLocation"
-
-                return RemoteArtifact(downloadUrl, hash).also {
+                return RemoteArtifact(info.downloadUrl, hash).also {
                     logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
                     remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
                 }
             } else {
                 logger.debug {
-                    "Could not find '$artifact' in '$repository': " +
+                    "Could not find '$artifact' in '${info.repository}': " +
                             artifactDownload.exception.collectMessages()
                 }
             }
         }
 
         val level = if (artifact.classifier == "sources") Level.DEBUG else Level.WARN
-        logger.log(level) { "Unable to find '$artifact' in any of ${remoteRepositories.map { it.url }}." }
+        logger.log(level) {
+            "Unable to download '$artifact' from any of ${locationInfo.map { it.downloadUrl }.distinct()}."
+        }
 
         return RemoteArtifact.EMPTY.also {
             logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
