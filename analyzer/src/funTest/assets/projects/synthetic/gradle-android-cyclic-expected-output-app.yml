@@ -67,7 +67,6 @@ dependency_graph:
   - "Maven:androidx.appcompat:appcompat-resources:1.5.0"
   - "Maven:androidx.appcompat:appcompat:1.5.0"
   - "Maven:androidx.arch.core:core-common:2.1.0"
-  - "Maven:androidx.arch.core:core-runtime:2.0.0"
   - "Maven:androidx.arch.core:core-runtime:2.1.0"
   - "Maven:androidx.cardview:cardview:1.0.0"
   - "Maven:androidx.collection:collection:1.1.0"
@@ -75,7 +74,6 @@ dependency_graph:
   - "Maven:androidx.constraintlayout:constraintlayout-solver:2.0.1"
   - "Maven:androidx.constraintlayout:constraintlayout:2.0.1"
   - "Maven:androidx.coordinatorlayout:coordinatorlayout:1.1.0"
-  - "Maven:androidx.core:core-ktx:1.2.0"
   - "Maven:androidx.core:core-ktx:1.8.0"
   - "Maven:androidx.core:core:1.8.0"
   - "Maven:androidx.cursoradapter:cursoradapter:1.0.0"
@@ -113,11 +111,9 @@ dependency_graph:
   - "Maven:com.google.guava:listenablefuture:1.0"
   - "Maven:junit:junit:4.12"
   - "Maven:org.hamcrest:hamcrest-core:1.3"
-  - "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21"
   - "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10"
   - "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0"
   - "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0"
-  - "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
   - "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
   - "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
   - "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1"
@@ -126,362 +122,348 @@ dependency_graph:
   scopes:
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugAndroidTestCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugAndroidTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoDebugUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonDemoReleaseUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugAndroidTestCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugAndroidTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullDebugUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:amazonFullReleaseUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugAndroidTestCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugAndroidTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoDebugUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleDemoReleaseUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugAndroidTestCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugAndroidTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullDebugUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseCompileClasspath:
     - root: 4
-    - root: 37
-    - root: 48
+    - root: 35
+    - root: 46
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
       fragment: 1
-    - root: 48
+    - root: 46
       fragment: 1
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseUnitTestCompileClasspath:
     - root: 4
-    - root: 37
+    - root: 35
+    - root: 46
     - root: 48
-    - root: 50
     org.ossreviewtoolkit.gradle.example:app:1.0.0:googleFullReleaseUnitTestRuntimeClasspath:
     - root: 4
       fragment: 1
-    - root: 37
+    - root: 35
+      fragment: 1
+    - root: 46
       fragment: 1
     - root: 48
-      fragment: 1
-    - root: 50
   nodes:
   - pkg: 2
   - pkg: 1
   - pkg: 5
-  - pkg: 27
-  - pkg: 31
-  - pkg: 9
-  - pkg: 45
-  - pkg: 16
-  - pkg: 52
-  - pkg: 61
-  - pkg: 56
-  - pkg: 33
-  - pkg: 14
-  - pkg: 28
-  - pkg: 39
-  - pkg: 54
-  - pkg: 55
-  - pkg: 59
-  - pkg: 60
-  - pkg: 58
-  - pkg: 32
-  - {}
-  - pkg: 44
   - pkg: 25
-  - pkg: 43
-  - pkg: 3
-  - pkg: 17
-  - pkg: 18
-  - pkg: 20
-  - pkg: 47
-  - pkg: 6
   - pkg: 29
+  - pkg: 8
+  - pkg: 43
+  - pkg: 14
+  - pkg: 50
+  - pkg: 57
+  - pkg: 53
+  - pkg: 31
+  - pkg: 13
+  - pkg: 26
+  - pkg: 37
+  - pkg: 51
+  - pkg: 52
+  - pkg: 55
+  - pkg: 56
+  - pkg: 54
+  - pkg: 30
+  - {}
+  - pkg: 42
+  - pkg: 23
+  - pkg: 41
+  - pkg: 3
+  - pkg: 15
+  - pkg: 16
+  - pkg: 18
+  - pkg: 45
+  - pkg: 6
+  - pkg: 27
+  - pkg: 32
+  - pkg: 22
+  - pkg: 4
+  - pkg: 7
+  - pkg: 12
+  - pkg: 10
+  - pkg: 11
+  - pkg: 17
+  - pkg: 33
   - pkg: 34
   - pkg: 24
-  - pkg: 4
-  - pkg: 8
-  - pkg: 13
-  - pkg: 11
-  - pkg: 12
   - pkg: 19
   - pkg: 35
-  - pkg: 36
-  - pkg: 26
-  - pkg: 21
-  - pkg: 37
-  - pkg: 42
-  - pkg: 46
-  - pkg: 48
-  - pkg: 49
-  - pkg: 10
-  - pkg: 7
-  - pkg: 31
-    fragment: 1
-  - pkg: 16
-    fragment: 1
-  - pkg: 53
-  - pkg: 57
-  - pkg: 33
-    fragment: 1
-  - pkg: 15
-  - pkg: 28
-    fragment: 1
-  - pkg: 39
-    fragment: 1
-  - pkg: 54
-    fragment: 1
-  - pkg: 55
-    fragment: 1
-  - pkg: 59
-    fragment: 1
-  - pkg: 60
-    fragment: 1
-  - pkg: 58
-    fragment: 1
-  - pkg: 32
-    fragment: 1
-  - pkg: 41
-  - fragment: 1
-  - pkg: 44
-    fragment: 1
-  - pkg: 43
-    fragment: 1
-  - pkg: 3
-    fragment: 1
-  - pkg: 18
-    fragment: 1
-  - pkg: 20
-    fragment: 1
   - pkg: 40
-  - pkg: 30
-  - pkg: 23
-  - pkg: 22
+  - pkg: 44
+  - pkg: 46
   - pkg: 47
-    fragment: 1
+  - pkg: 9
   - pkg: 29
     fragment: 1
-  - pkg: 34
-    fragment: 1
-  - pkg: 24
-    fragment: 1
-  - pkg: 38
-  - pkg: 4
+  - pkg: 14
     fragment: 1
   - pkg: 13
     fragment: 1
-  - pkg: 12
-    fragment: 1
   - pkg: 26
-    fragment: 1
-  - pkg: 21
     fragment: 1
   - pkg: 37
     fragment: 1
+  - pkg: 30
+    fragment: 1
+  - pkg: 39
+  - fragment: 1
   - pkg: 42
+    fragment: 1
+  - pkg: 41
+    fragment: 1
+  - pkg: 3
+    fragment: 1
+  - pkg: 16
+    fragment: 1
+  - pkg: 18
+    fragment: 1
+  - pkg: 38
+  - pkg: 28
+  - pkg: 21
+  - pkg: 20
+  - pkg: 45
+    fragment: 1
+  - pkg: 27
+    fragment: 1
+  - pkg: 32
+    fragment: 1
+  - pkg: 22
+    fragment: 1
+  - pkg: 36
+  - pkg: 4
+    fragment: 1
+  - pkg: 12
+    fragment: 1
+  - pkg: 11
+    fragment: 1
+  - pkg: 24
+    fragment: 1
+  - pkg: 19
+    fragment: 1
+  - pkg: 35
+    fragment: 1
+  - pkg: 40
+    fragment: 1
+  - pkg: 44
     fragment: 1
   - pkg: 46
     fragment: 1
+  - pkg: 49
   - pkg: 48
-    fragment: 1
-  - pkg: 51
-  - pkg: 50
   edges:
   - from: 2
     to: 0
@@ -767,328 +749,300 @@ dependency_graph:
     to: 0
   - from: 50
     to: 2
+  - from: 50
+    to: 3
+  - from: 50
+    to: 30
   - from: 51
     to: 0
   - from: 51
-    to: 2
-  - from: 51
-    to: 3
+    to: 1
   - from: 51
     to: 50
+  - from: 51
+    to: 6
+  - from: 51
+    to: 5
+  - from: 51
+    to: 49
   - from: 52
     to: 0
-  - from: 52
-    to: 1
   - from: 52
     to: 51
   - from: 52
-    to: 6
-  - from: 52
-    to: 5
-  - from: 52
-    to: 49
+    to: 10
+  - from: 53
+    to: 2
+  - from: 53
+    to: 3
+  - from: 53
+    to: 30
   - from: 54
-    to: 9
+    to: 0
   - from: 54
+    to: 2
+  - from: 54
+    to: 3
+  - from: 54
+    to: 10
+  - from: 55
+    to: 0
+  - from: 55
+    to: 11
+  - from: 55
+    to: 10
+  - from: 55
+    to: 52
+  - from: 55
     to: 53
   - from: 55
-    to: 0
+    to: 54
   - from: 55
-    to: 54
+    to: 19
   - from: 56
     to: 0
-  - from: 56
-    to: 52
-  - from: 56
-    to: 54
   - from: 57
-    to: 2
+    to: 0
   - from: 57
-    to: 3
+    to: 51
   - from: 57
     to: 50
+  - from: 57
+    to: 5
+  - from: 57
+    to: 11
+  - from: 57
+    to: 10
+  - from: 57
+    to: 55
+  - from: 57
+    to: 54
+  - from: 57
+    to: 56
   - from: 58
     to: 0
   - from: 58
-    to: 2
+    to: 51
   - from: 58
-    to: 3
-  - from: 58
-    to: 54
+    to: 5
   - from: 59
-    to: 54
+    to: 5
+  - from: 59
+    to: 58
+  - from: 59
+    to: 23
+  - from: 60
+    to: 0
+  - from: 60
+    to: 51
+  - from: 60
+    to: 5
+  - from: 60
+    to: 58
   - from: 60
     to: 59
-  - from: 60
-    to: 54
   - from: 61
-    to: 60
+    to: 0
   - from: 61
-    to: 53
+    to: 51
+  - from: 61
+    to: 5
+  - from: 62
+    to: 0
+  - from: 62
+    to: 51
   - from: 62
     to: 61
   - from: 63
-    to: 62
+    to: 0
   - from: 63
-    to: 60
+    to: 56
   - from: 64
     to: 0
   - from: 64
-    to: 55
-  - from: 64
-    to: 57
-  - from: 64
-    to: 58
+    to: 50
   - from: 64
     to: 63
-  - from: 64
-    to: 54
-  - from: 64
-    to: 56
   - from: 65
     to: 0
-  - from: 66
-    to: 0
-  - from: 66
-    to: 52
+  - from: 65
+    to: 51
+  - from: 65
+    to: 5
+  - from: 65
+    to: 64
+  - from: 65
+    to: 63
   - from: 66
     to: 51
   - from: 66
     to: 5
   - from: 66
-    to: 55
-  - from: 66
-    to: 64
-  - from: 66
-    to: 58
-  - from: 66
-    to: 54
-  - from: 66
     to: 65
   - from: 67
     to: 0
   - from: 67
-    to: 52
+    to: 51
   - from: 67
-    to: 5
+    to: 61
   - from: 68
-    to: 5
+    to: 2
   - from: 68
-    to: 67
+    to: 53
   - from: 68
-    to: 23
+    to: 30
   - from: 69
     to: 0
   - from: 69
-    to: 52
+    to: 51
   - from: 69
-    to: 5
-  - from: 69
-    to: 67
+    to: 11
   - from: 69
     to: 68
   - from: 70
+    to: 57
+  - from: 70
     to: 0
   - from: 70
-    to: 52
+    to: 51
+  - from: 70
+    to: 1
   - from: 70
     to: 5
+  - from: 70
+    to: 11
+  - from: 70
+    to: 55
+  - from: 70
+    to: 53
+  - from: 70
+    to: 54
+  - from: 70
+    to: 67
+  - from: 70
+    to: 69
   - from: 71
     to: 0
-  - from: 71
-    to: 52
-  - from: 71
-    to: 70
+  - from: 72
+    to: 57
   - from: 72
     to: 0
+  - from: 72
+    to: 51
+  - from: 72
+    to: 50
+  - from: 72
+    to: 5
+  - from: 72
+    to: 11
+  - from: 72
+    to: 10
+  - from: 72
+    to: 52
+  - from: 72
+    to: 54
+  - from: 72
+    to: 60
+  - from: 72
+    to: 26
+  - from: 72
+    to: 62
+  - from: 72
+    to: 70
   - from: 72
     to: 65
+  - from: 72
+    to: 66
+  - from: 72
+    to: 71
   - from: 73
     to: 0
   - from: 73
     to: 51
   - from: 73
+    to: 5
+  - from: 73
+    to: 61
+  - from: 74
     to: 72
   - from: 74
+    to: 51
+  - from: 74
+    to: 37
+  - from: 75
     to: 0
-  - from: 74
-    to: 52
-  - from: 74
-    to: 5
-  - from: 74
-    to: 73
-  - from: 74
-    to: 72
   - from: 75
-    to: 52
+    to: 51
   - from: 75
-    to: 5
+    to: 69
   - from: 75
-    to: 74
+    to: 39
+  - from: 75
+    to: 40
+  - from: 75
+    to: 41
   - from: 76
+    to: 51
+  - from: 76
+    to: 5
+  - from: 76
+    to: 75
+  - from: 77
     to: 0
-  - from: 76
-    to: 52
-  - from: 76
+  - from: 77
+    to: 51
+  - from: 77
+    to: 5
+  - from: 77
+    to: 61
+  - from: 78
+    to: 0
+  - from: 78
+    to: 51
+  - from: 78
+    to: 5
+  - from: 79
+    to: 0
+  - from: 79
+    to: 51
+  - from: 79
+    to: 5
+  - from: 79
     to: 70
-  - from: 77
-    to: 2
-  - from: 77
-    to: 57
-  - from: 77
-    to: 50
-  - from: 78
-    to: 0
-  - from: 78
-    to: 52
-  - from: 78
-    to: 55
-  - from: 78
+  - from: 79
     to: 77
-  - from: 79
-    to: 66
-  - from: 79
-    to: 0
-  - from: 79
-    to: 52
-  - from: 79
-    to: 1
-  - from: 79
-    to: 5
-  - from: 79
-    to: 55
-  - from: 79
-    to: 64
-  - from: 79
-    to: 57
-  - from: 79
-    to: 58
-  - from: 79
-    to: 76
-  - from: 79
-    to: 78
+  - from: 80
+    to: 72
   - from: 80
     to: 0
-  - from: 81
-    to: 66
-  - from: 81
-    to: 0
-  - from: 81
-    to: 52
-  - from: 81
+  - from: 80
     to: 51
-  - from: 81
-    to: 5
-  - from: 81
-    to: 55
-  - from: 81
-    to: 58
-  - from: 81
-    to: 69
-  - from: 81
-    to: 26
-  - from: 81
-    to: 71
-  - from: 81
-    to: 79
-  - from: 81
-    to: 54
-  - from: 81
-    to: 56
-  - from: 81
-    to: 74
-  - from: 81
-    to: 75
-  - from: 81
-    to: 80
-  - from: 82
-    to: 0
-  - from: 82
-    to: 52
-  - from: 82
-    to: 5
-  - from: 82
-    to: 70
-  - from: 83
-    to: 81
-  - from: 83
-    to: 52
-  - from: 83
-    to: 37
-  - from: 84
-    to: 0
-  - from: 84
-    to: 52
-  - from: 84
-    to: 78
-  - from: 84
-    to: 39
-  - from: 84
-    to: 40
-  - from: 84
-    to: 41
-  - from: 85
-    to: 52
-  - from: 85
-    to: 5
-  - from: 85
-    to: 84
-  - from: 86
-    to: 0
-  - from: 86
-    to: 52
-  - from: 86
-    to: 5
-  - from: 86
-    to: 70
-  - from: 87
-    to: 0
-  - from: 87
-    to: 52
-  - from: 87
-    to: 5
-  - from: 88
-    to: 0
-  - from: 88
-    to: 52
-  - from: 88
-    to: 5
-  - from: 88
-    to: 79
-  - from: 88
-    to: 86
-  - from: 89
-    to: 81
-  - from: 89
-    to: 0
-  - from: 89
-    to: 52
-  - from: 89
+  - from: 80
     to: 1
-  - from: 89
-    to: 51
-  - from: 89
-    to: 67
-  - from: 89
-    to: 71
-  - from: 89
-    to: 79
-  - from: 89
+  - from: 80
+    to: 50
+  - from: 80
+    to: 58
+  - from: 80
+    to: 62
+  - from: 80
+    to: 70
+  - from: 80
     to: 35
-  - from: 89
-    to: 82
-  - from: 89
-    to: 83
-  - from: 89
-    to: 85
-  - from: 89
-    to: 86
-  - from: 89
-    to: 87
-  - from: 89
-    to: 88
-  - from: 91
-    to: 90
+  - from: 80
+    to: 73
+  - from: 80
+    to: 74
+  - from: 80
+    to: 76
+  - from: 80
+    to: 77
+  - from: 80
+    to: 78
+  - from: 80
+    to: 79
+  - from: 82
+    to: 81
 shared_packages:
 - id: "Maven:androidx.appcompat:appcompat:1.5.0"
   purl: "pkg:maven/androidx.appcompat/appcompat@1.5.0"
@@ -1454,8 +1408,8 @@ shared_packages:
     url: "https://android.googlesource.com/platform/frameworks/support"
     revision: ""
     path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.6.21"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.6.21"
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.7.10"
   authors:
   - "JetBrains"
   declared_licenses:
@@ -1467,14 +1421,14 @@ shared_packages:
   description: "Kotlin Standard Library for JVM"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.6.21/kotlin-stdlib-1.6.21.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.10/kotlin-stdlib-1.7.10.jar"
     hash:
-      value: "11ef67f1900634fd951bad28c53ec957fabbe5b8"
+      value: "d2abf9e77736acc4450dc4a3f707fa2c10f5099d"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.6.21/kotlin-stdlib-1.6.21-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.10/kotlin-stdlib-1.7.10-sources.jar"
     hash:
-      value: "bc58085192d5abb48080e3670915133715a33ce0"
+      value: "a47f6071d3ba1c695174371ffeb95ac2df2089a5"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -1486,8 +1440,8 @@ shared_packages:
     url: "https://github.com/JetBrains/kotlin.git"
     revision: ""
     path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.6.21"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.6.21"
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.7.10"
   authors:
   - "JetBrains"
   declared_licenses:
@@ -1499,14 +1453,14 @@ shared_packages:
   description: "Kotlin Common Standard Library"
   homepage_url: "https://kotlinlang.org/"
   binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.21/kotlin-stdlib-common-1.6.21.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.10/kotlin-stdlib-common-1.7.10.jar"
     hash:
-      value: "5e5b55c26dbc80372a920aef60eb774b714559b8"
+      value: "bac80c520d0a9e3f3673bc2658c6ed02ef45a76a"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.6.21/kotlin-stdlib-common-1.6.21-sources.jar"
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.10/kotlin-stdlib-common-1.7.10-sources.jar"
     hash:
-      value: "4161056305b7cdaf52a6fd0c051b06ad03f9bd49"
+      value: "60408164a8fbfb0ae8febb3413e2f4bf5a06c97f"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -1582,8 +1536,8 @@ shared_packages:
     url: "https://android.googlesource.com/platform/frameworks/support"
     revision: ""
     path: ""
-- id: "Maven:androidx.core:core-ktx:1.2.0"
-  purl: "pkg:maven/androidx.core/core-ktx@1.2.0"
+- id: "Maven:androidx.core:core-ktx:1.8.0"
+  purl: "pkg:maven/androidx.core/core-ktx@1.8.0"
   authors:
   - "The Android Open Source Project"
   declared_licenses:
@@ -1593,16 +1547,16 @@ shared_packages:
     mapped:
       The Apache Software License, Version 2.0: "Apache-2.0"
   description: "Kotlin extensions for 'core' artifact"
-  homepage_url: "https://developer.android.com/jetpack/androidx"
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/core#1.8.0"
   binary_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.2.0/core-ktx-1.2.0.aar"
+    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.8.0/core-ktx-1.8.0.aar"
     hash:
-      value: "6756534f262c845d4d06b55aaf8b751db0e48822"
+      value: "4c72a0f8fa6cd11a21ef86be9c1d5d257068b225"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.2.0/core-ktx-1.2.0-sources.jar"
+    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.8.0/core-ktx-1.8.0-sources.jar"
     hash:
-      value: "75eb613f7dec270f611d0adff5fcb0e8b617fe0a"
+      value: "3850f60ae5c85d51335279f163e90163587e2bef"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -2214,8 +2168,8 @@ shared_packages:
     url: "https://android.googlesource.com/platform/frameworks/support"
     revision: ""
     path: ""
-- id: "Maven:androidx.arch.core:core-runtime:2.0.0"
-  purl: "pkg:maven/androidx.arch.core/core-runtime@2.0.0"
+- id: "Maven:androidx.arch.core:core-runtime:2.1.0"
+  purl: "pkg:maven/androidx.arch.core/core-runtime@2.1.0"
   authors:
   - "The Android Open Source Project"
   declared_licenses:
@@ -2227,14 +2181,14 @@ shared_packages:
   description: "Android Arch-Runtime"
   homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
   binary_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0.aar"
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.1.0/core-runtime-2.1.0.aar"
     hash:
-      value: "c5be9edf9ca9135a465d23939f6e7d0e1cf90b41"
+      value: "2df0e03029caae7863ccb4825addaadc8ab6780c"
       algorithm: "SHA-1"
   source_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0-sources.jar"
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.1.0/core-runtime-2.1.0-sources.jar"
     hash:
-      value: "bc41b287c95bc50a3cd27cb1b7cfb301805ba7f1"
+      value: "f19886651c9946b39f83d8c184fd0e2ce9f43c16"
       algorithm: "SHA-1"
   vcs:
     type: "Git"
@@ -2756,134 +2710,6 @@ shared_packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/google/guava.git"
-    revision: ""
-    path: ""
-- id: "Maven:androidx.arch.core:core-runtime:2.1.0"
-  purl: "pkg:maven/androidx.arch.core/core-runtime@2.1.0"
-  authors:
-  - "The Android Open Source Project"
-  declared_licenses:
-  - "The Apache Software License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      The Apache Software License, Version 2.0: "Apache-2.0"
-  description: "Android Arch-Runtime"
-  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-  binary_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.1.0/core-runtime-2.1.0.aar"
-    hash:
-      value: "2df0e03029caae7863ccb4825addaadc8ab6780c"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.1.0/core-runtime-2.1.0-sources.jar"
-    hash:
-      value: "f19886651c9946b39f83d8c184fd0e2ce9f43c16"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://android.googlesource.com/platform/frameworks/support"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://android.googlesource.com/platform/frameworks/support"
-    revision: ""
-    path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.10"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.7.10"
-  authors:
-  - "JetBrains"
-  declared_licenses:
-  - "The Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      The Apache License, Version 2.0: "Apache-2.0"
-  description: "Kotlin Standard Library for JVM"
-  homepage_url: "https://kotlinlang.org/"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.10/kotlin-stdlib-1.7.10.jar"
-    hash:
-      value: "d2abf9e77736acc4450dc4a3f707fa2c10f5099d"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.7.10/kotlin-stdlib-1.7.10-sources.jar"
-    hash:
-      value: "a47f6071d3ba1c695174371ffeb95ac2df2089a5"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/JetBrains/kotlin.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/JetBrains/kotlin.git"
-    revision: ""
-    path: ""
-- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.10"
-  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.7.10"
-  authors:
-  - "JetBrains"
-  declared_licenses:
-  - "The Apache License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      The Apache License, Version 2.0: "Apache-2.0"
-  description: "Kotlin Common Standard Library"
-  homepage_url: "https://kotlinlang.org/"
-  binary_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.10/kotlin-stdlib-common-1.7.10.jar"
-    hash:
-      value: "bac80c520d0a9e3f3673bc2658c6ed02ef45a76a"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.10/kotlin-stdlib-common-1.7.10-sources.jar"
-    hash:
-      value: "60408164a8fbfb0ae8febb3413e2f4bf5a06c97f"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/JetBrains/kotlin.git"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://github.com/JetBrains/kotlin.git"
-    revision: ""
-    path: ""
-- id: "Maven:androidx.core:core-ktx:1.8.0"
-  purl: "pkg:maven/androidx.core/core-ktx@1.8.0"
-  authors:
-  - "The Android Open Source Project"
-  declared_licenses:
-  - "The Apache Software License, Version 2.0"
-  declared_licenses_processed:
-    spdx_expression: "Apache-2.0"
-    mapped:
-      The Apache Software License, Version 2.0: "Apache-2.0"
-  description: "Kotlin extensions for 'core' artifact"
-  homepage_url: "https://developer.android.com/jetpack/androidx/releases/core#1.8.0"
-  binary_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.8.0/core-ktx-1.8.0.aar"
-    hash:
-      value: "4c72a0f8fa6cd11a21ef86be9c1d5d257068b225"
-      algorithm: "SHA-1"
-  source_artifact:
-    url: "https://dl.google.com/dl/android/maven2/androidx/core/core-ktx/1.8.0/core-ktx-1.8.0-sources.jar"
-    hash:
-      value: "3850f60ae5c85d51335279f163e90163587e2bef"
-      algorithm: "SHA-1"
-  vcs:
-    type: "Git"
-    url: "https://android.googlesource.com/platform/frameworks/support"
-    revision: ""
-    path: ""
-  vcs_processed:
-    type: "Git"
-    url: "https://android.googlesource.com/platform/frameworks/support"
     revision: ""
     path: ""
 - id: "Maven:androidx.tracing:tracing:1.0.0"
