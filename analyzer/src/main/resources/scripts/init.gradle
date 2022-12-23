@@ -323,11 +323,14 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     }
 
                     def artifact = resolvedArtifacts.find {
+                        // Accept JVM variants for multi-platform artifacts.
+                        def hasMatchingName = it.owner.id.name in [id.module, "${id.module}-jvm"]
+
                         // Cannot use instanceof because the classes below do not exist in all Gradle versions.
                         if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier') {
-                            id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.version
+                            id.group == it.owner.id.group && hasMatchingName && id.version == it.owner.version
                         } else if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.ivyservice.dynamicversions.DefaultResolvedModuleVersion') {
-                            id.group == it.owner.id.group && id.module == it.owner.id.name && id.version == it.owner.id.version
+                            id.group == it.owner.id.group && hasMatchingName && id.version == it.owner.id.version
                         } else {
                             error = "Unknown artifact owner type: ${it.owner.getClass().name}".toString()
                             false
