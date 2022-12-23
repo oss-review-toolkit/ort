@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 import com.fasterxml.jackson.databind.node.MissingNode
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
@@ -60,6 +61,6 @@ private val loaderOptions = LoaderOptions().apply {
     codePointLimit = 1.gibibytes.toInt()
 }
 private val yamlFactory = YAMLFactory.builder().loaderOptions(loaderOptions).build()
-val yamlMapper = YAMLMapper(yamlFactory).apply(mapperConfig)
+val yamlMapper = YAMLMapper(yamlFactory).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()

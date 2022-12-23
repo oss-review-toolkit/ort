@@ -881,10 +881,9 @@ processed_statements:
   - "Copyright (c) 2015 Composer"
   - "Copyright (c) 2016 Composer"
   - "Copyright (c) 2017 Composer"
-  ? Copyright (c) 2016 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer <sebastian@phpeople.de>
-    , Sebastian Bergmann <sebastian@phpunit.de> , and contributors
-  : - "Copyright (c) 2016 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer <sebastian@phpeople.de>\
-      \ , Sebastian Bergmann <sebastian@phpunit.de> , and contributors"
+  Copyright (c) 2016 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer <sebastian@phpeople.de> , Sebastian Bergmann <sebastian@phpunit.de> , and contributors:
+  - "Copyright (c) 2016 Arne Blankerts <arne@blankerts.de> , Sebastian Heuer <sebastian@phpeople.de>\
+    \ , Sebastian Bergmann <sebastian@phpunit.de> , and contributors"
   Copyright (c) 2016 Blaine Bublitz, Tyler Kellen and other contributors:
   - "Copyright (c) 2016 Blaine Bublitz, Tyler Kellen and other contributors"
   Copyright (c) 2016 Chad Engler:
