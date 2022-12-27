@@ -279,6 +279,15 @@ class AnalyzerCommand : OrtCommand(
 
         val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
 
+        outputDir.safeMkdirs()
+        writeOrtResult(ortResult, outputFiles, "analyzer")
+
+        val analyzerRun = ortResult.analyzer
+        if (analyzerRun == null) {
+            println("No analyzer run was created.")
+            throw ProgramResult(1)
+        }
+
         val projects = ortResult.getProjects(omitExcluded = true)
         val packages = ortResult.getPackages(omitExcluded = true)
         println(
@@ -288,19 +297,9 @@ class AnalyzerCommand : OrtCommand(
         val curationCount = packages.sumOf { it.curations.size }
         println("Applied $curationCount curation(s) from ${curationProviders.size} provider(s).")
 
-        outputDir.safeMkdirs()
-        writeOrtResult(ortResult, outputFiles, "analyzer")
-
-        val analyzerResult = ortResult.analyzer?.result
-
-        if (analyzerResult == null) {
-            println("There was an error creating the analyzer result.")
-            throw ProgramResult(1)
-        }
-
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) =
-            analyzerResult.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val (resolvedIssues, unresolvedIssues) = analyzerRun.result.collectIssues().flatMap { it.value }
+            .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
         severityStats.print().conclude(config.severeIssueThreshold, 2)

@@ -129,14 +129,13 @@ class AdvisorCommand : OrtCommand(
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, "advisor")
 
-        val advisorResults = ortResultOutput.advisor?.results
-
-        if (advisorResults == null) {
-            println("There was an error creating the advisor results.")
+        val advisorRun = ortResultOutput.advisor
+        if (advisorRun == null) {
+            println("No advisor run was created.")
             throw ProgramResult(1)
         }
 
-        with(advisorResults.getVulnerabilities()) {
+        with(advisorRun.results.getVulnerabilities()) {
             val totalPackageCount = ortResultOutput.getPackages(omitExcluded = true).size
             val vulnerabilityCount = values.sumOf { it.size }
 
@@ -147,8 +146,8 @@ class AdvisorCommand : OrtCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) =
-            advisorResults.collectIssues().flatMap { it.value }.partition { resolutionProvider.isResolved(it) }
+        val (resolvedIssues, unresolvedIssues) = advisorRun.results.collectIssues().flatMap { it.value }
+            .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
         severityStats.print().conclude(config.severeIssueThreshold, 2)
