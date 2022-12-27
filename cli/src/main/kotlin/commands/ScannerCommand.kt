@@ -43,7 +43,6 @@ import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -143,21 +142,20 @@ class ScannerCommand : OrtCommand(
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("scan-result.${format.fileExtension}")
         }
 
-        if (!globalOptionsForSubcommands.forceOverwrite) {
+        if (!ortConfig.forceOverwrite) {
             val existingOutputFiles = outputFiles.filter { it.exists() }
             if (existingOutputFiles.isNotEmpty()) {
                 throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
             }
         }
 
-        val ortConfig = globalOptionsForSubcommands.config
         val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
 
         outputDir.safeMkdirs()

@@ -28,11 +28,11 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
@@ -77,17 +77,17 @@ class NotifierCommand : OrtCommand(
                 "same name. Can be used multiple times. For example: --label distribution=external"
     ).associate()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
-        val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
-
         val ortResult = readOrtResult(ortFile).mergeLabels(labels)
+        val notifier = Notifier(
+            ortResult,
+            ortConfig.notifier,
+            DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        )
 
-        val config = globalOptionsForSubcommands.config.notifier
-
-        val notifier = Notifier(ortResult, config, DefaultResolutionProvider.create(ortResult, resolutionsFile))
-
+        val script = notificationsFile?.readText() ?: readDefaultNotificationsFile()
         notifier.run(script)
     }
 

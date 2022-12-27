@@ -29,7 +29,6 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
@@ -69,7 +68,7 @@ class ConfigCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     private val mapper = YAMLMapper().apply {
         registerKotlinModule()
@@ -88,7 +87,7 @@ class ConfigCommand : OrtCommand(
         if (showActive) {
             println("The active configuration is:")
             println()
-            println(globalOptionsForSubcommands.config.renderYaml())
+            println(ortConfig.renderYaml())
         }
 
         if (showReference) {

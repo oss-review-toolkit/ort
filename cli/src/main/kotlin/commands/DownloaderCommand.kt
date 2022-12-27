@@ -36,7 +36,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.OrtCommand
@@ -56,6 +55,7 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -179,7 +179,7 @@ class DownloaderCommand : OrtCommand(
                 "result to limit downloads to. If not specified, all packages are downloaded."
     ).split(",")
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val failureMessages = mutableListOf<String>()
@@ -240,7 +240,7 @@ class DownloaderCommand : OrtCommand(
             }
         }
 
-        val includedLicenseCategories = globalOptionsForSubcommands.config.downloader.includedLicenseCategories
+        val includedLicenseCategories = ortConfig.downloader.includedLicenseCategories
         if (includedLicenseCategories.isNotEmpty() && licenseClassificationsFile.isFile) {
             val originalCount = packages.size
 
@@ -271,7 +271,7 @@ class DownloaderCommand : OrtCommand(
 
         packageDownloadDirs.forEach { (pkg, dir) ->
             try {
-                Downloader(globalOptionsForSubcommands.config.downloader).download(pkg, dir)
+                Downloader(ortConfig.downloader).download(pkg, dir)
 
                 if (archiveMode == ArchiveMode.ENTITY) {
                     val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
@@ -372,7 +372,7 @@ class DownloaderCommand : OrtCommand(
             // Always allow moving revisions when directly downloading a single project only. This is for
             // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
             // project needs to be downloaded.
-            val config = globalOptionsForSubcommands.config.downloader.copy(allowMovingRevisions = true)
+            val config = ortConfig.downloader.copy(allowMovingRevisions = true)
             val provenance = Downloader(config).download(dummyPackage, outputDir)
             println("Successfully downloaded $provenance.")
         }.onFailure {

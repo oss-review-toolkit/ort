@@ -40,7 +40,6 @@ import java.time.Duration
 import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -57,6 +56,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -201,7 +201,7 @@ class EvaluatorCommand : OrtCommand(
         help = "Do not evaluate the script but only check its syntax. No output is written in this case."
     ).flag()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val scriptUrls = listOfNotNull(
@@ -235,7 +235,7 @@ class EvaluatorCommand : OrtCommand(
                 absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 
-            if (!globalOptionsForSubcommands.forceOverwrite) {
+            if (!ortConfig.forceOverwrite) {
                 val existingOutputFiles = outputFiles.filter { it.exists() }
                 if (existingOutputFiles.isNotEmpty()) {
                     throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
@@ -275,8 +275,6 @@ class EvaluatorCommand : OrtCommand(
             val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
-
-        val ortConfig = globalOptionsForSubcommands.config
 
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
