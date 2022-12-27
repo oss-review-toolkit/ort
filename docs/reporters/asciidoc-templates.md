@@ -9,8 +9,10 @@ intermediate file is created that can be processed by AsciidoctorJ. If no option
 
 ## General report options
 
-* `template.id`: A comma-separated list of IDs of templates provided by ORT. Currently, the "disclosure_document" and
-                 "vulnerability_report" templates are available.
+* `template.id`: A comma-separated list of IDs for templates built into ORT. Currently, the following IDs are supported:
+  * "[disclosure_document](../../reporter/src/main/resources/templates/asciidoc/disclosure_document.ftl)"
+  * "[vulnerability_report](../../reporter/src/main/resources/templates/asciidoc/vulnerability_report.ftl)"
+  * "[defect_report](../../reporter/src/main/resources/templates/asciidoc/defect_report.ftl)"
 * `template.path`: A comma-separated list of paths to template files provided by the user.
 
 ## Supported formats
