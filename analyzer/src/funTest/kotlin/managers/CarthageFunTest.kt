@@ -45,7 +45,7 @@ class CarthageFunTest : StringSpec() {
             val cartfileResolved = projectDir.resolve("Cartfile.resolved")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("carthage-expected-output.yml"),
+                projectDir.resolveSibling("carthage-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cartfile.resolved",
                 path = vcsPath,
                 revision = vcsRevision,

@@ -41,7 +41,7 @@ class GradleLibraryFunTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-library-expected-output-root.yml"),
+                projectDir.resolveSibling("gradle-library-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -54,7 +54,7 @@ class GradleLibraryFunTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-library-expected-output-app.yml"),
+                projectDir.resolveSibling("gradle-library-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -67,7 +67,7 @@ class GradleLibraryFunTest : StringSpec() {
         "External dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-library-expected-output-lib.yml"),
+                projectDir.resolveSibling("gradle-library-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

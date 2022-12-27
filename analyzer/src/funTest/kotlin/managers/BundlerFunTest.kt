@@ -50,7 +50,7 @@ class BundlerFunTest : WordSpec() {
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        projectsDir.parentFile.resolve("bundler-expected-output-lockfile.yml"),
+                        projectsDir.resolveSibling("bundler-expected-output-lockfile.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -83,7 +83,7 @@ class BundlerFunTest : WordSpec() {
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        projectsDir.parentFile.resolve("bundler-expected-output-gemspec.yml"),
+                        projectsDir.resolveSibling("bundler-expected-output-gemspec.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)

@@ -37,7 +37,7 @@ class YarnFunTest : WordSpec() {
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val vcsRevision = vcsDir.getRevision()
-        val expectedOutputTemplate = projectDir.parentFile.resolve(expectedResultTemplateFile)
+        val expectedOutputTemplate = projectDir.resolveSibling(expectedResultTemplateFile)
 
         return patchExpectedResult(
             result = expectedOutputTemplate,

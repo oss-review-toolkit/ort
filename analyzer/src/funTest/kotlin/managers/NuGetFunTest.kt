@@ -69,7 +69,7 @@ class NuGetFunTest : StringSpec({
     "Project dependencies are detected correctly" {
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val expectedResult = patchExpectedResult(
-            projectDir.parentFile.resolve("nuget-expected-output.yml"),
+            projectDir.resolveSibling("nuget-expected-output.yml"),
             url = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath
@@ -82,7 +82,7 @@ class NuGetFunTest : StringSpec({
     "Direct project dependencies are detected correctly" {
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val expectedResult = patchExpectedResult(
-            projectDir.parentFile.resolve("nuget-direct-dependencies-only-expected-output.yml"),
+            projectDir.resolveSibling("nuget-direct-dependencies-only-expected-output.yml"),
             url = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath

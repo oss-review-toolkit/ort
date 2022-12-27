@@ -51,7 +51,7 @@ class NpmFunTest : WordSpec() {
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
-                    projectsDir.parentFile.resolve("npm-expected-output.yml"),
+                    projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
                         "npm-project" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
@@ -72,7 +72,7 @@ class NpmFunTest : WordSpec() {
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
-                    projectsDir.parentFile.resolve("npm-expected-output.yml"),
+                    projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
                         "npm-project" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
@@ -97,7 +97,7 @@ class NpmFunTest : WordSpec() {
                 val result = createNpm().resolveSingleProject(definitionFile)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
-                    projectsDir.parentFile.resolve("npm-expected-output-no-lockfile.yml"),
+                    projectsDir.resolveSibling("npm-expected-output-no-lockfile.yml"),
                     custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
@@ -129,7 +129,7 @@ class NpmFunTest : WordSpec() {
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
-                    projectsDir.parentFile.resolve("npm-expected-output.yml"),
+                    projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
                         "npm-project" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"

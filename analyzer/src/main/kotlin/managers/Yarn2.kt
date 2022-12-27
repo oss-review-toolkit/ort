@@ -433,7 +433,7 @@ class Yarn2(
         var homepageUrl = manifest["Homepage"].textValueOrEmpty()
 
         val id = if (header.type == "workspace") {
-            val projectFile = definitionFile.parentFile.resolve(header.version).resolve(definitionFile.name)
+            val projectFile = definitionFile.resolveSibling(header.version).resolve(definitionFile.name)
             val workingDir = definitionFile.parentFile
 
             val additionalData = getProjectAdditionalData(workingDir, name, version)

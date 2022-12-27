@@ -47,7 +47,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("composer-expected-output.yml"),
+                projectsDir.resolveSibling("composer-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -78,7 +78,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("composer-expected-output-no-deps.yml"),
+                projectsDir.resolveSibling("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -93,7 +93,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("composer-expected-output-no-deps.yml"),
+                projectsDir.resolveSibling("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -108,7 +108,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("composer-expected-output-with-provide.yml"),
+                projectsDir.resolveSibling("composer-expected-output-with-provide.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -122,7 +122,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.parentFile.resolve("composer-expected-output-with-replace.yml"),
+                projectsDir.resolveSibling("composer-expected-output-with-replace.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
