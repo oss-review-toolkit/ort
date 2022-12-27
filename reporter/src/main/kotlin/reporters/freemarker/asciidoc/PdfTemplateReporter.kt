@@ -59,25 +59,22 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
         private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
     }
 
-    override fun processTemplateOptions(options: MutableMap<String, String>): Attributes {
-        val attributesBuilder = Attributes.builder()
+    override fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
+        Attributes.builder().apply {
+            options.remove(OPTION_PDF_THEME_FILE)?.let {
+                val pdfThemeFile = File(it).absoluteFile
 
-        options.remove(OPTION_PDF_THEME_FILE)?.let {
-            val pdfThemeFile = File(it).absoluteFile
+                require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
 
-            require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
+                attribute("pdf-theme", pdfThemeFile.toString())
+            }
 
-            attributesBuilder.attribute("pdf-theme", pdfThemeFile.toString())
-        }
+            options.remove(OPTION_PDF_FONTS_DIR)?.let {
+                val pdfFontsDir = File(it).absoluteFile
 
-        options.remove(OPTION_PDF_FONTS_DIR)?.let {
-            val pdfFontsDir = File(it).absoluteFile
+                require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
 
-            require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
-
-            attributesBuilder.attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
-        }
-
-        return attributesBuilder.build()
-    }
+                attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
+            }
+        }.build()
 }
