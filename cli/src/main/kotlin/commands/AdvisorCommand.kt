@@ -38,7 +38,6 @@ import java.time.Duration
 import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.advisor.Advisor
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
@@ -46,6 +45,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -106,14 +106,14 @@ class AdvisorCommand : OrtCommand(
         help = "Do not check excluded projects or packages."
     ).flag()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("advisor-result.${format.fileExtension}")
         }
 
-        if (!globalOptionsForSubcommands.forceOverwrite) {
+        if (!ortConfig.forceOverwrite) {
             val existingOutputFiles = outputFiles.filter { it.exists() }
             if (existingOutputFiles.isNotEmpty()) {
                 throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
@@ -124,7 +124,6 @@ class AdvisorCommand : OrtCommand(
         println("The following advisors are activated:")
         println("\t" + distinctProviders.joinToString())
 
-        val ortConfig = globalOptionsForSubcommands.config
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)

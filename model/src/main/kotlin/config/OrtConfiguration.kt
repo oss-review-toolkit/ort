@@ -68,6 +68,11 @@ data class OrtConfiguration(
     val enableRepositoryPackageCurations: Boolean = false,
 
     /**
+     * Force overwriting of any existing output files.
+     */
+    val forceOverwrite: Boolean = false,
+
+    /**
      * The license file patterns.
      */
     val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,

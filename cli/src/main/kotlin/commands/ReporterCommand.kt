@@ -40,7 +40,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
 import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
@@ -52,6 +51,7 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -197,7 +197,7 @@ class ReporterCommand : OrtCommand(
         format to Pair(option.substringBefore("="), option.substringAfter("=", ""))
     }.multiple()
 
-    private val globalOptionsForSubcommands by requireObject<GlobalOptions>()
+    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         var ortResult = readOrtResult(ortFile)
@@ -210,8 +210,6 @@ class ReporterCommand : OrtCommand(
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
-
-        val ortConfig = globalOptionsForSubcommands.config
 
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
@@ -247,7 +245,7 @@ class ReporterCommand : OrtCommand(
 
         val input = ReporterInput(
             ortResult,
-            globalOptionsForSubcommands.config,
+            ortConfig,
             packageConfigurationProvider,
             resolutionProvider,
             DefaultLicenseTextProvider(licenseTextDirectories),
