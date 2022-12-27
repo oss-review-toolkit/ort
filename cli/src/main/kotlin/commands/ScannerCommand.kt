@@ -37,6 +37,10 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.time.Duration
+
+import kotlin.time.toKotlinDuration
+
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.GlobalOptions
@@ -164,6 +168,9 @@ class ScannerCommand : OrtCommand(
             println("No scanner run was created.")
             throw ProgramResult(1)
         }
+
+        val duration = with(scannerRun) { Duration.between(startTime, endTime).toKotlinDuration() }
+        println("The scan took $duration.")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
         val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }
