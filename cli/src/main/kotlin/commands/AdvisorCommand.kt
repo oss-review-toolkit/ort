@@ -33,6 +33,10 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.time.Duration
+
+import kotlin.time.toKotlinDuration
+
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.GlobalOptions
 import org.ossreviewtoolkit.cli.OrtCommand
@@ -134,6 +138,9 @@ class AdvisorCommand : OrtCommand(
             println("No advisor run was created.")
             throw ProgramResult(1)
         }
+
+        val duration = with(advisorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
+        println("The advice took $duration.")
 
         with(advisorRun.results.getVulnerabilities()) {
             val totalPackageCount = ortResultOutput.getPackages(omitExcluded = true).size

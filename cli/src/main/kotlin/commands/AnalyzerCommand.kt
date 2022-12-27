@@ -35,6 +35,10 @@ import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
+import java.time.Duration
+
+import kotlin.time.toKotlinDuration
+
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
@@ -287,6 +291,9 @@ class AnalyzerCommand : OrtCommand(
             println("No analyzer run was created.")
             throw ProgramResult(1)
         }
+
+        val duration = with(analyzerRun) { Duration.between(startTime, endTime).toKotlinDuration() }
+        println("The analysis took $duration.")
 
         val projects = ortResult.getProjects(omitExcluded = true)
         val packages = ortResult.getPackages(omitExcluded = true)
