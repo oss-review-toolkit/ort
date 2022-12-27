@@ -36,14 +36,41 @@ import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
  */
 data class OrtConfiguration(
     /**
-     * The license file patterns.
-     */
-    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
-
-    /**
      * A flag to indicate whether authors should be considered as copyright holders.
      */
     val addAuthorsToCopyrights: Boolean = false,
+
+    /**
+     * A set with the names of environment variables that are explicitly allowed to be passed to child processes,
+     * even if they are matched by one of the [deniedProcessEnvironmentVariablesSubstrings].
+     * See [EnvironmentVariableFilter] for further details.
+     */
+    val allowedProcessEnvironmentVariableNames: Set<String> = EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES,
+
+    /**
+     * A set with substrings to filter out environment variables before creating child processes to prevent that those
+     * processes can access sensitive information. See [EnvironmentVariableFilter] for further details.
+     */
+    val deniedProcessEnvironmentVariablesSubstrings: Set<String> = EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS,
+
+    /**
+     * Enable the usage of project-local package configurations from the [RepositoryConfiguration]. If set to true,
+     * apply package configurations from a local .ort.yml file before applying those specified via the command line i.e.
+     * configurations from the .ort.yml take precedence.
+     */
+    val enableRepositoryPackageConfigurations: Boolean = false,
+
+    /**
+     * Enable the usage of project-local package curations from the [RepositoryConfiguration]. If set to true, apply
+     * package curations from a local .ort.yml file before applying those specified via the command line i.e. curations
+     * from the.ort.yml take precedence.
+     */
+    val enableRepositoryPackageCurations: Boolean = false,
+
+    /**
+     * The license file patterns.
+     */
+    val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
 
     /**
      * The threshold from which on issues count as severe.
@@ -54,33 +81,6 @@ data class OrtConfiguration(
      * The threshold from which on rule violations count as severe.
      */
     val severeRuleViolationThreshold: Severity = Severity.WARNING,
-
-    /**
-     * Enable the usage of project-local package curations from the [RepositoryConfiguration]. If set to true, apply
-     * package curations from a local .ort.yml file before applying those specified via the command line i.e. curations
-     * from the.ort.yml take precedence.
-     */
-    val enableRepositoryPackageCurations: Boolean = false,
-
-    /**
-     * Enable the usage of project-local package configurations from the [RepositoryConfiguration]. If set to true,
-     * apply package configurations from a local .ort.yml file before applying those specified via the command line i.e.
-     * configurations from the .ort.yml take precedence.
-     */
-    val enableRepositoryPackageConfigurations: Boolean = false,
-
-    /**
-     * A set with substrings to filter out environment variables before creating child processes to prevent that those
-     * processes can access sensitive information. See [EnvironmentVariableFilter] for further details.
-     */
-    val deniedProcessEnvironmentVariablesSubstrings: Set<String> = EnvironmentVariableFilter.DEFAULT_DENY_SUBSTRINGS,
-
-    /**
-     * A set with the names of environment variables that are explicitly allowed to be passed to child processes,
-     * even if they are matched by one of the [deniedProcessEnvironmentVariablesSubstrings].
-     * See [EnvironmentVariableFilter] for further details.
-     */
-    val allowedProcessEnvironmentVariableNames: Set<String> = EnvironmentVariableFilter.DEFAULT_ALLOW_NAMES,
 
     /**
      * The configuration of the analyzer.
