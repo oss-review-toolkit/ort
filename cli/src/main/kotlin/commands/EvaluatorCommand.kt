@@ -35,8 +35,9 @@ import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
+import java.time.Duration
 
-import kotlin.time.measureTimedValue
+import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.GlobalOptions
@@ -305,12 +306,11 @@ class EvaluatorCommand : OrtCommand(
             licenseClassificationsFile.takeIf { it.isFile }?.readValue<LicenseClassifications>().orEmpty()
         val evaluator = Evaluator(ortResultInput, licenseInfoResolver, resolutionProvider, licenseClassifications)
 
-        val (evaluatorRun, duration) = measureTimedValue {
-            val scripts = scriptUrls.map { it.readText() }
-            evaluator.run(*scripts.toTypedArray())
-        }
+        val scripts = scriptUrls.map { it.readText() }
+        val evaluatorRun = evaluator.run(*scripts.toTypedArray())
 
-        logger.info { "Evaluation of ${scriptUrls.size} script(s) took $duration." }
+        val duration = with(evaluatorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
+        println("The evaluation of ${scriptUrls.size} script(s) took $duration.")
 
         evaluatorRun.violations.forEach { violation ->
             println(violation.format())
