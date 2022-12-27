@@ -381,10 +381,10 @@ class Pub(
 
         val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return emptyList()
         val androidDir = projectRoot.resolve("android")
-        val packageFile = androidDir.resolve("build.gradle")
+        val definitionFile = androidDir.resolve("build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
-        if (!packageFile.isFile) return emptyList()
+        if (!definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
             logger.info {
@@ -392,8 +392,8 @@ class Pub(
             }
 
             Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
-                .resolveDependencies(listOf(packageFile), labels).run {
-                    projectResults.getValue(packageFile).map { result ->
+                .resolveDependencies(listOf(definitionFile), labels).run {
+                    projectResults.getValue(definitionFile).map { result ->
                         val project = result.project.withResolvedScopes(dependencyGraph)
                         result.copy(project = project, packages = sharedPackages)
                     }
@@ -410,10 +410,10 @@ class Pub(
 
         val projectRoot = reader.findProjectRoot(packageInfo, workingDir) ?: return null
         val iosDir = projectRoot.resolve("ios")
-        val packageFile = iosDir.resolve("$packageName.podspec")
+        val definitionFile = iosDir.resolve("$packageName.podspec")
 
         // Check for build.gradle failed, no Gradle scan required.
-        if (!packageFile.isFile) return null
+        if (!definitionFile.isFile) return null
 
         val issue = createAndLogIssue(
             source = managerName,
