@@ -68,7 +68,7 @@ open class AsciiDocTemplateReporter(private val backend: String, override val na
         val templateOptions = options.toMutableMap()
         val asciidoctorAttributes = processTemplateOptions(templateOptions)
         val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
-        val reports = processAsciiDocFiles(outputDir, asciiDocFiles, asciidoctorAttributes)
+        val reports = processAsciiDocFiles(input, outputDir, asciiDocFiles, asciidoctorAttributes)
 
         asciiDocOutputDir.safeDeleteRecursively()
 
@@ -106,6 +106,7 @@ open class AsciiDocTemplateReporter(private val backend: String, override val na
      * [asciidoctorAttributes].
      */
     protected open fun processAsciiDocFiles(
+        input: ReporterInput,
         outputDir: File,
         asciiDocFiles: List<File>,
         asciidoctorAttributes: Attributes

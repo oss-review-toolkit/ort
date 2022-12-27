@@ -24,6 +24,7 @@ import java.io.File
 import org.asciidoctor.Attributes
 
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
  * A [Reporter] that uses [Apache Freemarker][1] templates to create AsciiDoc[2] files.
@@ -33,8 +34,14 @@ import org.ossreviewtoolkit.reporter.Reporter
  */
 class AdocTemplateReporter : AsciiDocTemplateReporter("adoc", "AdocTemplate") {
     override fun processAsciiDocFiles(
+        input: ReporterInput,
         outputDir: File,
         asciiDocFiles: List<File>,
         asciidoctorAttributes: Attributes
-    ) = asciiDocFiles.map { it.copyTo(outputDir.resolve(it.name)) }
+    ) = asciiDocFiles.map {
+        it.copyTo(
+            target = outputDir.resolve(it.name),
+            overwrite = input.ortConfig.forceOverwrite
+        )
+    }
 }
