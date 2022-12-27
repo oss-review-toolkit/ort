@@ -42,7 +42,7 @@ class CargoSubcrateFunTest : StringSpec() {
             val definitionFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("cargo-subcrate-lib-expected-output.yml"),
+                projectDir.resolveSibling("cargo-subcrate-lib-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,
@@ -59,7 +59,7 @@ class CargoSubcrateFunTest : StringSpec() {
             val definitionFile = integrationProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(integrationProjectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("cargo-subcrate-integration-expected-output.yml"),
+                projectDir.resolveSibling("cargo-subcrate-integration-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,
@@ -76,7 +76,7 @@ class CargoSubcrateFunTest : StringSpec() {
             val definitionFile = clientProjectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(clientProjectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("cargo-subcrate-client-expected-output.yml"),
+                projectDir.resolveSibling("cargo-subcrate-client-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,

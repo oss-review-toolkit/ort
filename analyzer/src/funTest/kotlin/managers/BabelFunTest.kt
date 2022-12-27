@@ -43,7 +43,7 @@ class BabelFunTest : WordSpec({
             val definitionFile = projectDir.resolve("package.json")
 
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("npm-babel-expected-output.yml"),
+                projectDir.resolveSibling("npm-babel-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

@@ -41,7 +41,7 @@ class GradleBomFunTest : StringSpec() {
         "Gradle BOM dependencies are ignored" {
             val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-bom-expected-output.yml"),
+                projectDir.resolveSibling("gradle-bom-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

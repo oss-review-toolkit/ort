@@ -42,7 +42,7 @@ class CargoFunTest : StringSpec() {
             val definitionFile = projectDir.resolve("Cargo.toml")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("cargo-expected-output.yml"),
+                projectDir.resolveSibling("cargo-expected-output.yml"),
                 definitionFilePath = "$vcsPath/Cargo.toml",
                 path = vcsPath,
                 revision = vcsRevision,

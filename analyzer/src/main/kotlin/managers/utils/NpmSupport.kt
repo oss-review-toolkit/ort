@@ -230,7 +230,7 @@ private fun getPnpmWorkspaceMatchers(definitionFile: File): List<PathMatcher> {
 
     fun String.isComment() = trim().startsWith("#")
 
-    val pnpmWorkspaceFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
+    val pnpmWorkspaceFile = definitionFile.resolveSibling("pnpm-workspace.yaml")
 
     return if (pnpmWorkspaceFile.isFile && pnpmWorkspaceFile.readLines().any { !it.isComment() }) {
         val workspaceMatchers = pnpmWorkspaceFile.readValue<PnpmWorkspaces>().packages
@@ -250,7 +250,7 @@ private fun getPnpmWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
     val result = mutableSetOf<File>()
 
     definitionFiles.forEach { definitionFile ->
-        val pnpmWorkspacesFile = definitionFile.parentFile.resolve("pnpm-workspace.yaml")
+        val pnpmWorkspacesFile = definitionFile.resolveSibling("pnpm-workspace.yaml")
 
         if (pnpmWorkspacesFile.isFile) {
             val pathMatchers = getPnpmWorkspaceMatchers(definitionFile)

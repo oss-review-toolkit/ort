@@ -42,7 +42,7 @@ class BowerFunTest : StringSpec() {
             val definitionFile = projectDir.resolve("bower.json")
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("bower-expected-output.yml"),
+                projectDir.resolveSibling("bower-expected-output.yml"),
                 definitionFilePath = "$vcsPath/bower.json",
                 path = vcsPath,
                 revision = vcsRevision,

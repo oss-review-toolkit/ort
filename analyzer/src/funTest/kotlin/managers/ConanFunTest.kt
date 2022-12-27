@@ -48,7 +48,7 @@ class ConanFunTest : StringSpec() {
             val definitionFile = projectsDirTxt.resolve("conanfile.txt")
             val vcsPath = vcsDirTxt.getPathToRoot(projectsDirTxt)
             val expectedResult = patchExpectedResult(
-                projectsDirTxt.parentFile.resolve("conan-expected-output-txt.yml"),
+                projectsDirTxt.resolveSibling("conan-expected-output-txt.yml"),
                 definitionFilePath = "$vcsPath/conanfile.txt",
                 path = vcsPath,
                 revision = vcsRevisionTxt,
@@ -64,7 +64,7 @@ class ConanFunTest : StringSpec() {
             val definitionFile = projectsDirPy.resolve("conanfile.py")
             val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
             val expectedResult = patchExpectedResult(
-                projectsDirPy.parentFile.resolve("conan-expected-output-py.yml"),
+                projectsDirPy.resolveSibling("conan-expected-output-py.yml"),
                 definitionFilePath = "$vcsPath/conanfile.py",
                 path = vcsPath,
                 revision = vcsRevisionPy,

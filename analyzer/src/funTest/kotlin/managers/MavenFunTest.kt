@@ -47,7 +47,7 @@ class MavenFunTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("maven-expected-output-root.yml"),
+                projectDir.resolveSibling("maven-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -61,7 +61,7 @@ class MavenFunTest : StringSpec() {
             val pomFileApp = projectDir.resolve("app/pom.xml")
             val pomFileLib = projectDir.resolve("lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("maven-expected-output-app.yml"),
+                projectDir.resolveSibling("maven-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -80,7 +80,7 @@ class MavenFunTest : StringSpec() {
         "External dependencies are detected correctly" {
             val pomFile = projectDir.resolve("lib/pom.xml")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("maven-expected-output-lib.yml"),
+                projectDir.resolveSibling("maven-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -99,7 +99,7 @@ class MavenFunTest : StringSpec() {
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent").absoluteFile
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("maven-parent-expected-output-root.yml"),
+                projectDir.resolveSibling("maven-parent-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -113,7 +113,7 @@ class MavenFunTest : StringSpec() {
             val projectDir = File("src/funTest/assets/projects/synthetic/maven-wagon").absoluteFile
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("maven-wagon-expected-output.yml"),
+                projectDir.resolveSibling("maven-wagon-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )

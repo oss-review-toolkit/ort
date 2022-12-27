@@ -36,7 +36,7 @@ class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
         val projectName = "sbt-multi-project-example"
         val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
-        val expectedResult = patchExpectedResult(projectDir.parentFile.resolve("$projectName-expected-output.yml"))
+        val expectedResult = patchExpectedResult(projectDir.resolveSibling("$projectName-expected-output.yml"))
 
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
@@ -55,7 +55,7 @@ class SbtFunTest : StringSpec({
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsRevision = vcsDir.getRevision()
         val expectedResult = patchExpectedResult(
-            projectDir.parentFile.resolve("$projectName-expected-output.yml"),
+            projectDir.resolveSibling("$projectName-expected-output.yml"),
             url = vcsUrl,
             revision = vcsRevision,
             urlProcessed = normalizeVcsUrl(vcsUrl)

@@ -43,7 +43,7 @@ class GradleAndroidFunTest : StringSpec() {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-android-expected-output-root.yml"),
+                projectDir.resolveSibling("gradle-android-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -56,7 +56,7 @@ class GradleAndroidFunTest : StringSpec() {
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-android-expected-output-app.yml"),
+                projectDir.resolveSibling("gradle-android-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -69,7 +69,7 @@ class GradleAndroidFunTest : StringSpec() {
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-android-expected-output-lib.yml"),
+                projectDir.resolveSibling("gradle-android-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -83,7 +83,7 @@ class GradleAndroidFunTest : StringSpec() {
             val cyclicProjectDir = File("src/funTest/assets/projects/synthetic/gradle-android-cyclic").absoluteFile
             val definitionFile = cyclicProjectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-android-cyclic-expected-output-app.yml"),
+                projectDir.resolveSibling("gradle-android-cyclic-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 definitionFilePath = definitionFile.absolutePath

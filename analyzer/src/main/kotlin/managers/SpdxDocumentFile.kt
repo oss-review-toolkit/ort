@@ -358,7 +358,7 @@ class SpdxDocumentFile(
 
         val scope = spdxPackage.extractScopeFromExternalReferences() ?: return null
 
-        val packageFile = definitionFile.parentFile.resolve(spdxPackage.packageFilename)
+        val packageFile = definitionFile.resolveSibling(spdxPackage.packageFilename)
 
         if (packageFile.isFile) {
             val managedFiles = findManagedFiles(packageFile.parentFile)

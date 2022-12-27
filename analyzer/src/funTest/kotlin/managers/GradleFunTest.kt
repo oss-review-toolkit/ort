@@ -58,7 +58,7 @@ class GradleFunTest : StringSpec() {
         "Root project dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-expected-output-root.yml"),
+                projectDir.resolveSibling("gradle-expected-output-root.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -71,7 +71,7 @@ class GradleFunTest : StringSpec() {
         "Project dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-expected-output-app.yml"),
+                projectDir.resolveSibling("gradle-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -84,7 +84,7 @@ class GradleFunTest : StringSpec() {
         "External dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("lib/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-expected-output-lib.yml"),
+                projectDir.resolveSibling("gradle-expected-output-lib.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -97,7 +97,7 @@ class GradleFunTest : StringSpec() {
         "Unresolved dependencies are detected correctly" {
             val definitionFile = projectDir.resolve("lib-without-repo/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-expected-output-lib-without-repo.yml"),
+                projectDir.resolveSibling("gradle-expected-output-lib-without-repo.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -114,7 +114,7 @@ class GradleFunTest : StringSpec() {
         "Fails nicely for Gradle version < 2.14".config(enabled = false) {
             val definitionFile = projectDir.parentFile.resolve("gradle-unsupported-version/build.gradle")
             val expectedResult = patchExpectedResult(
-                projectDir.parentFile.resolve("gradle-expected-output-unsupported-version.yml"),
+                projectDir.resolveSibling("gradle-expected-output-unsupported-version.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
@@ -170,7 +170,7 @@ class GradleFunTest : StringSpec() {
 
                 val definitionFile = projectDir.resolve("app/build.gradle")
                 val expectedResult = patchExpectedResult(
-                    projectDir.parentFile.resolve("gradle-expected-output-app$resultsFileSuffix.yml"),
+                    projectDir.resolveSibling("gradle-expected-output-app$resultsFileSuffix.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )
