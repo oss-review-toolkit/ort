@@ -154,24 +154,20 @@ class ScannerCommand : OrtCommand(
         }
 
         val config = globalOptionsForSubcommands.config
-
         val ortResult = runScanners(scanners, projectScanners ?: scanners, config).mergeLabels(labels)
 
-        // Write the result.
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "scan")
 
         val scannerRun = ortResult.scanner
-
         if (scannerRun == null) {
-            println("There was an error creating the scan results.")
+            println("No scanner run was created.")
             throw ProgramResult(1)
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }.partition {
-            resolutionProvider.isResolved(it)
-        }
+        val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }
+            .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
         severityStats.print().conclude(config.severeIssueThreshold, 2)
