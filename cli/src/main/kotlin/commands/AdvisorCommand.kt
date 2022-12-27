@@ -124,8 +124,8 @@ class AdvisorCommand : OrtCommand(
         println("The following advisors are activated:")
         println("\t" + distinctProviders.joinToString())
 
-        val config = globalOptionsForSubcommands.config
-        val advisor = Advisor(distinctProviders, config.advisor)
+        val ortConfig = globalOptionsForSubcommands.config
+        val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
         val ortResultOutput = advisor.retrieveFindings(ortResultInput, skipExcluded).mergeLabels(labels)
@@ -157,6 +157,6 @@ class AdvisorCommand : OrtCommand(
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 }

@@ -157,8 +157,8 @@ class ScannerCommand : OrtCommand(
             }
         }
 
-        val config = globalOptionsForSubcommands.config
-        val ortResult = runScanners(scanners, projectScanners ?: scanners, config).mergeLabels(labels)
+        val ortConfig = globalOptionsForSubcommands.config
+        val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "scan")
@@ -177,20 +177,20 @@ class ScannerCommand : OrtCommand(
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 
     private fun runScanners(
         scannerWrapperFactories: List<ScannerWrapperFactory>,
         projectScannerWrapperFactories: List<ScannerWrapperFactory>,
-        config: OrtConfiguration
+        ortConfig: OrtConfiguration
     ): OrtResult {
         val packageScannerWrappers = scannerWrapperFactories
             .takeIf { PackageType.PACKAGE in packageTypes }.orEmpty()
-            .map { it.create(config.scanner, config.downloader) }
+            .map { it.create(ortConfig.scanner, ortConfig.downloader) }
         val projectScannerWrappers = projectScannerWrapperFactories
             .takeIf { PackageType.PROJECT in packageTypes }.orEmpty()
-            .map { it.create(config.scanner, config.downloader) }
+            .map { it.create(ortConfig.scanner, ortConfig.downloader) }
 
         if (projectScannerWrappers.isNotEmpty()) {
             println("Scanning projects with:")
@@ -206,14 +206,14 @@ class ScannerCommand : OrtCommand(
             println("Packages will not be scanned.")
         }
 
-        val scanStorages = ScanStorages.createFromConfig(config.scanner)
+        val scanStorages = ScanStorages.createFromConfig(ortConfig.scanner)
         val workingTreeCache = DefaultWorkingTreeCache()
 
         try {
             val scanner = Scanner(
-                scannerConfig = config.scanner,
-                downloaderConfig = config.downloader,
-                provenanceDownloader = DefaultProvenanceDownloader(config.downloader, workingTreeCache),
+                scannerConfig = ortConfig.scanner,
+                downloaderConfig = ortConfig.downloader,
+                provenanceDownloader = DefaultProvenanceDownloader(ortConfig.downloader, workingTreeCache),
                 storageReaders = scanStorages.readers,
                 storageWriters = scanStorages.writers,
                 packageProvenanceResolver = DefaultPackageProvenanceResolver(

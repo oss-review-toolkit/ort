@@ -276,9 +276,9 @@ class EvaluatorCommand : OrtCommand(
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 
-        val config = globalOptionsForSubcommands.config
+        val ortConfig = globalOptionsForSubcommands.config
 
-        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResultInput.repository.config.packageConfigurations),
                 packageConfigurationOption.createProvider()
@@ -296,8 +296,8 @@ class EvaluatorCommand : OrtCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResultInput, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
-            archiver = config.scanner.archive.createFileArchiver(),
+            addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
+            archiver = ortConfig.scanner.archive.createFileArchiver(),
             licenseFilePatterns = LicenseFilePatterns.getInstance()
         )
 
@@ -328,7 +328,7 @@ class EvaluatorCommand : OrtCommand(
             evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
 
-        severityStats.print().conclude(config.severeRuleViolationThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeRuleViolationThreshold, 2)
     }
 }
 

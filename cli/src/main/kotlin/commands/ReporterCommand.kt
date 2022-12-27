@@ -211,9 +211,9 @@ class ReporterCommand : OrtCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
-        val config = globalOptionsForSubcommands.config
+        val ortConfig = globalOptionsForSubcommands.config
 
-        val packageConfigurationProvider = if (config.enableRepositoryPackageConfigurations) {
+        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
                 packageConfigurationOption.createProvider()
@@ -231,8 +231,8 @@ class ReporterCommand : OrtCommand(
         val licenseInfoResolver = LicenseInfoResolver(
             provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
             copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = config.addAuthorsToCopyrights,
-            archiver = config.scanner.archive.createFileArchiver(),
+            addAuthorsToCopyrights = ortConfig.addAuthorsToCopyrights,
+            archiver = ortConfig.scanner.archive.createFileArchiver(),
             licenseFilePatterns = LicenseFilePatterns.getInstance()
         )
 
@@ -259,7 +259,7 @@ class ReporterCommand : OrtCommand(
 
         val reportOptionsMap = sortedMapOf<String, MutableMap<String, String>>(String.CASE_INSENSITIVE_ORDER)
 
-        config.reporter.options?.forEach { (reporterName, option) ->
+        ortConfig.reporter.options?.forEach { (reporterName, option) ->
             val reportSpecificOptionsMap = reportOptionsMap.getOrPut(reporterName) { mutableMapOf() }
             reportSpecificOptionsMap += option
         }

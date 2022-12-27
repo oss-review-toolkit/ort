@@ -171,13 +171,13 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         printStackTrace = stacktrace
 
         // Make options available to subcommands and apply static configuration.
-        val ortConfiguration = OrtConfiguration.load(configArguments, configFile)
-        currentContext.findOrSetObject { GlobalOptions(ortConfiguration, forceOverwrite) }
-        LicenseFilePatterns.configure(ortConfiguration.licenseFilePatterns)
+        val ortConfig = OrtConfiguration.load(configArguments, configFile)
+        currentContext.findOrSetObject { GlobalOptions(ortConfig, forceOverwrite) }
+        LicenseFilePatterns.configure(ortConfig.licenseFilePatterns)
 
         EnvironmentVariableFilter.reset(
-            ortConfiguration.deniedProcessEnvironmentVariablesSubstrings,
-            ortConfiguration.allowedProcessEnvironmentVariableNames
+            ortConfig.deniedProcessEnvironmentVariablesSubstrings,
+            ortConfig.allowedProcessEnvironmentVariableNames
         )
 
         if (helpAll) {
