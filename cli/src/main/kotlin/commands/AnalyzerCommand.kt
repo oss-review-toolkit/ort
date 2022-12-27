@@ -213,12 +213,12 @@ class AnalyzerCommand : OrtCommand(
         println("Looking for analyzer-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
-        val config = globalOptionsForSubcommands.config
+        val ortConfig = globalOptionsForSubcommands.config
 
         val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
             (enabledPackageManagers ?: PackageManager.ALL.values).toSet() - disabledPackageManagers.orEmpty().toSet()
         } else {
-            config.analyzer.determineEnabledPackageManagers()
+            ortConfig.analyzer.determineEnabledPackageManagers()
         }
 
         println("The following package managers are enabled:")
@@ -230,7 +230,7 @@ class AnalyzerCommand : OrtCommand(
             ?: RepositoryConfiguration()
 
         val analyzerConfiguration =
-            repositoryConfiguration.analyzer?.let { config.analyzer.merge(it) } ?: config.analyzer
+            repositoryConfiguration.analyzer?.let { ortConfig.analyzer.merge(it) } ?: ortConfig.analyzer
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
@@ -241,7 +241,7 @@ class AnalyzerCommand : OrtCommand(
 
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
-            if (config.enableRepositoryPackageCurations) {
+            if (ortConfig.enableRepositoryPackageCurations) {
                 add(SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
                 logger.warn {
@@ -253,7 +253,7 @@ class AnalyzerCommand : OrtCommand(
 
         val curationProviders = listOfNotNull(
             CompositePackageCurationProvider(defaultCurationProviders),
-            config.analyzer.sw360Configuration?.let {
+            ortConfig.analyzer.sw360Configuration?.let {
                 Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
             },
             ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
@@ -309,7 +309,7 @@ class AnalyzerCommand : OrtCommand(
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(config.severeIssueThreshold, 2)
+        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 }
 
