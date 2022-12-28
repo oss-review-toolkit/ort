@@ -90,8 +90,10 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 
+@Suppress("LargeClass")
 class FossIdTest : WordSpec({
     beforeSpec {
         mockkStatic("org.ossreviewtoolkit.clients.fossid.ExtensionsKt")
@@ -518,6 +520,11 @@ class FossIdTest : WordSpec({
                 severity shouldBe Severity.HINT
             }
 
+            with(result) {
+                additionalData[SCAN_CODE_KEY] shouldBe scanCode
+                additionalData[SCAN_ID_KEY] shouldBe "1"
+            }
+
             coVerify(exactly = 0) {
                 service.checkScanStatus(USER, API_KEY, any())
             }
@@ -795,7 +802,7 @@ class FossIdTest : WordSpec({
 
             val result = fossId.scan(createPackage(pkgId, vcsInfo))
 
-            val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode)
+            val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to "1")
 
             result.additionalData shouldBe expectedAdditionalData
         }
