@@ -637,7 +637,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         val level = if (artifact.classifier == "sources") Level.DEBUG else Level.WARN
         logger.log(level) {
-            "Unable to download '$artifact' from any of ${locationInfo.map { it.downloadUrl }.distinct()}."
+            "Could not find artifact $artifact in any of ${locationInfo.map { it.downloadUrl }.distinct()}."
         }
 
         return RemoteArtifact.EMPTY.also {
