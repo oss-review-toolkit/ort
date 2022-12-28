@@ -202,7 +202,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                 revision = vcsRevision
             )
 
-            val analyzer = Analyzer(AnalyzerConfiguration())
+            val analyzer = Analyzer(AnalyzerConfiguration(allowDynamicVersions = true))
             val managedFiles = analyzer.findManagedFiles(testProjectDir)
 
             val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()

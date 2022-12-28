@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.yamlMapper
@@ -52,6 +53,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.toUri
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
@@ -61,6 +63,9 @@ import org.semver4j.RangesListFactory
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *lockfileName*: The name of the lockfile, which is used for analysis if allowDynamicVersions is set to false.
+ *   The lockfile should be located in the analysis root. Currently only one lockfile is supported per Conan project.
  * TODO: Add support for `python_requires`.
  */
 @Suppress("TooManyFunctions")
@@ -106,9 +111,7 @@ class Conan(
 
     override fun command(workingDir: File?) = "conan"
 
-    // TODO: Add support for Conan lock files.
-
-    // protected open fun hasLockFile(projectDir: File) = null
+    private fun hasLockFile(file: String) = File(file).isFile
 
     override fun transformVersion(output: String) =
         // Conan could report version strings like:
@@ -144,8 +147,17 @@ class Conan(
         stashDirectories(directoryToStash).use {
             configureRemoteAuthentication(conanConfig)
 
+            // TODO: Support lockfiles which are located in a different directory than the definition file.
+            val lockfileName = analyzerConfig.packageManagers?.get(managerName)?.options?.get("lockfileName")
+            requireLockfile(workingDir) { lockfileName?.let { hasLockFile(workingDir.resolve(it).path) } ?: false }
+
             val jsonFile = createOrtTempDir().resolve("info.json")
-            run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
+            if (lockfileName != null) {
+                verifyLockfileBelongsToProject(workingDir, lockfileName)
+                run(workingDir, "info", definitionFile.name, "-l", lockfileName, "--json", jsonFile.absolutePath)
+            } else {
+                run(workingDir, "info", definitionFile.name, "--json", jsonFile.absolutePath, *DUMMY_COMPILER_SETTINGS)
+            }
 
             val pkgInfos = jsonMapper.readTree(jsonFile)
             jsonFile.parentFile.safeDeleteRecursively(force = true)
@@ -155,11 +167,13 @@ class Conan(
 
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
-                dependencies = parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
+                dependencies =
+                    parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
-                dependencies = parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                dependencies =
+                    parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
             )
 
             val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
@@ -183,6 +197,14 @@ class Conan(
                     packages = packages.values.toSet()
                 )
             )
+        }
+    }
+
+    private fun verifyLockfileBelongsToProject(workingDir: File, lockfileName: String?) {
+        require(workingDir.resolve(lockfileName.orEmpty()).canonicalFile.startsWith(workingDir.canonicalFile)) {
+            "The provided lockfile path points to the directory outside of the analyzed project: '$lockfileName' and " +
+                    "potentially does not belong to the project. Please move the lockfile to the '$workingDir' and " +
+                    "set the path in '$ORT_CONFIG_FILENAME' accordingly."
         }
     }
 
