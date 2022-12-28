@@ -106,6 +106,9 @@ class FossId internal constructor(
         @JvmStatic
         internal val SCAN_CODE_KEY = "scancode"
 
+        @JvmStatic
+        internal val SCAN_ID_KEY = "scanid"
+
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -258,7 +261,7 @@ class FossId internal constructor(
                         .checkResponse("list scans for project").data
                     checkNotNull(scans)
 
-                    val scanCode = if (config.deltaScans) {
+                    val (scanCode, scanId) = if (config.deltaScans) {
                         checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName)
                     } else {
                         checkAndCreateScan(scans, url, revision, projectCode, projectName)
@@ -266,7 +269,7 @@ class FossId internal constructor(
 
                     if (config.waitForResult) {
                         val rawResults = getRawResults(scanCode)
-                        createResultSummary(startTime, provenance, rawResults, scanCode)
+                        createResultSummary(startTime, provenance, rawResults, scanCode, scanId)
                     } else {
                         val issue = createAndLogIssue(
                             source = name,
@@ -278,7 +281,12 @@ class FossId internal constructor(
                             startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue)
                         )
 
-                        ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode))
+                        ScanResult(
+                            provenance,
+                            details,
+                            summary,
+                            mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId)
+                        )
                     }
                 } catch (e: IllegalStateException) {
                     e.showStackTrace()
@@ -352,45 +360,55 @@ class FossId internal constructor(
         !isArchived && urlWithoutCredentials == url && (revision == null || it.gitBranch == revision)
     }.sortedByDescending { scan -> scan.id }
 
+    /**
+     * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
+     */
     private suspend fun checkAndCreateScan(
         scans: List<Scan>,
         url: String,
         revision: String,
         projectCode: String,
         projectName: String
-    ): String {
+    ): Pair<String, String> {
         val existingScan = scans.recentScansForRepository(url, revision).findLatestPendingOrFinishedScan()
 
-        val scanCode = if (existingScan == null) {
+        val scanCodeAndId = if (existingScan == null) {
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
 
             val scanCode = namingProvider.createScanCode(projectName)
             val newUrl = urlProvider.getUrl(url)
-            createScan(projectCode, scanCode, newUrl, revision)
+            val scanId = createScan(projectCode, scanCode, newUrl, revision)
 
             logger.info { "Initiating the download..." }
             service.downloadFromGit(config.user, config.apiKey, scanCode)
                 .checkResponse("download data from Git", false)
 
-            scanCode
+            scanCode to scanId
         } else {
             logger.info { "Scan '${existingScan.code}' found for $url and revision $revision." }
 
-            requireNotNull(existingScan.code) {
+            val existingScanCode = requireNotNull(existingScan.code) {
                 "The code for an existing scan must not be null."
             }
+
+            existingScanCode to existingScan.id.toString()
         }
-        if (config.waitForResult) checkScan(scanCode)
-        return scanCode
+
+        if (config.waitForResult) checkScan(scanCodeAndId.first)
+
+        return scanCodeAndId
     }
 
+    /**
+     * Call FossID service, initiate a delta scan and return scan data: Scan Code and Scan Id
+     */
     private suspend fun checkAndCreateDeltaScan(
         scans: List<Scan>,
         url: String,
         revision: String,
         projectCode: String,
         projectName: String
-    ): String {
+    ): Pair<String, String> {
         val urlWithoutCredentials = url.replaceCredentialsInUri()
         if (urlWithoutCredentials != url) {
             logger.warn {
@@ -415,7 +433,7 @@ class FossId internal constructor(
 
         val newUrl = urlProvider.getUrl(urlWithoutCredentials)
 
-        createScan(projectCode, scanCode, newUrl, revision)
+        val scanId = createScan(projectCode, scanCode, newUrl, revision)
 
         logger.info { "Initiating the download..." }
         service.downloadFromGit(config.user, config.apiKey, scanCode)
@@ -460,7 +478,7 @@ class FossId internal constructor(
             enforceDeltaScanLimit(recentScans)
         }
 
-        return scanCode
+        return scanCode to scanId
     }
 
     /**
@@ -486,7 +504,7 @@ class FossId internal constructor(
     }
 
     /**
-     * Create a new scan in the FossID server and return the scan code.
+     * Create a new scan in the FossID server and return the scan id.
      */
     private suspend fun createScan(
         projectCode: String,
@@ -505,7 +523,8 @@ class FossId internal constructor(
 
         logger.info { "Scan has been created with ID $scanId." }
         createdScans.add(scanCode)
-        return scanCode
+
+        return scanId
     }
 
     /**
@@ -664,7 +683,8 @@ class FossId internal constructor(
         startTime: Instant,
         provenance: Provenance,
         rawResults: RawResults,
-        scanCode: String
+        scanCode: String,
+        scanId: String
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
         val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
@@ -686,6 +706,6 @@ class FossId internal constructor(
             issues = issues
         )
 
-        return ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode))
+        return ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId))
     }
 }
