@@ -225,7 +225,7 @@ subprojects {
     }
 
     dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${rootProject.libs.versions.kotlinPlugin.get()}")
+        implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.libs.versions.kotlinPlugin.get()}")
     }
 
     configurations.all {
