@@ -96,6 +96,12 @@ ort:
           # intercept requests to the registry.
           disableRegistryCertificateVerification: false
 
+      Conan:
+        # Holds a name of the lockfile. Required if allowDynamicVersions = false.
+        # The lockfile should be located in the same directory as the conanfile.py or conanfile.txt.
+        options:
+          lockfileName: "lockfile.lock"
+
   advisor:
     nexusIq:
       serverUrl: 'https://rest-api-url-of-your-nexus-iq-server'
