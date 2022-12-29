@@ -66,7 +66,7 @@ ENV \
     PYTHON_PIPENV_VERSION=2022.9.24 \
     PYTHON_POETRY_VERSION=1.2.2 \
     SBT_VERSION=1.6.1 \
-    YARN_VERSION=1.22.10 \
+    YARN_VERSION=1.22.17 \
     # SDK versions.
     ANDROID_SDK_VERSION=6858069 \
     # Installation directories.
