@@ -55,6 +55,8 @@ use):
 * [_Notifier_](./notifier) - sends result notifications via different channels (like
   [emails](./examples/notifications/src/main/resources/example.notifications.kts) and / or JIRA tickets).
 
+Also see the [list of related tools](#related-tools) that help with running ORT. 
+
 # Installation
 
 ## From binaries
@@ -753,6 +755,8 @@ created run configuration to your needs, e.g. by adding an argument and options 
 For running tests and individual test cases from the IDE, the
 [kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterwards tests can be run
 via the green "Play" icon from the gutter as described above.
+
+# Related Tools
 
 # Want to Help or have Questions?
 
