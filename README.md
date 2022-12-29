@@ -758,6 +758,10 @@ via the green "Play" icon from the gutter as described above.
 
 # Related Tools
 
+## ORT Config Repository
+
+A [repository](https://github.com/oss-review-toolkit/ort-config) with exemplary ORT configuration files.
+
 ## ORT Workbench
 
 The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the
