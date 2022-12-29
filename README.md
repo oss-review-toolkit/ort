@@ -777,6 +777,11 @@ A [GitHub Action](https://github.com/oss-review-toolkit/ort-ci-github-action) to
 
 A [GitLab Pipeline](https://github.com/oss-review-toolkit/ort-gitlab-ci) to run ORT for your GitLab repositories.
 
+## ORTHW
+
+A [bash script](https://github.com/oss-review-toolkit/orthw) that helps to simplify and speed up common tasks performed
+when processing ORT results.
+
 # Want to Help or have Questions?
 
 All contributions are welcome. If you are interested in contributing, please read our
