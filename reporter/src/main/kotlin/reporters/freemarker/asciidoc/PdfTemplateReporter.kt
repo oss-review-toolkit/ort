@@ -24,6 +24,7 @@ import java.io.File
 import org.asciidoctor.Attributes
 
 import org.ossreviewtoolkit.reporter.Reporter
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
@@ -59,7 +60,7 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
         private const val OPTION_PDF_FONTS_DIR = "pdf.fonts.dir"
     }
 
-    override fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
+    override fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().apply {
             val pdfThemeAttribute = options.remove(OPTION_PDF_THEME_FILE)?.let {
                 val pdfThemeFile = File(it).absoluteFile
@@ -67,7 +68,18 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
                 require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
 
                 pdfThemeFile.path
-            } ?: "uri:classloader:/templates/asciidoc/pdf-theme.yml"
+            } ?: run {
+                // Images are being looked up relative to the themes directory. As images currently are the only use for
+                // the themes directory, point it at the images directory. However, the themes directory does not
+                // support the "uri:classloader:" syntax and can only refer to local paths, see
+                // https://github.com/asciidoctor/asciidoctor-pdf/issues/2383. So extract the images resource to the
+                // temporary directory and point to there.
+                val imagesDir = outputDir.resolve("images").safeMkdirs()
+                extractImageResources(imagesDir)
+                attribute("pdf-themesdir", imagesDir.absolutePath)
+
+                "uri:classloader:/templates/asciidoc/pdf-theme.yml"
+            }
 
             attribute("pdf-theme", pdfThemeAttribute)
 
@@ -81,4 +93,17 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
 
             attribute("pdf-fontsdir", "$pdfFontsDirAttribute,GEM_FONTS_DIR")
         }.build()
+
+    private fun extractImageResources(targetDir: File) {
+        val imagesResourceDir = "/images"
+        val imageNames = listOf("ort.png")
+
+        imageNames.forEach { imageName ->
+            javaClass.getResourceAsStream("$imagesResourceDir/$imageName").use { inputStream ->
+                targetDir.resolve(imageName).outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
+            }
+        }
+    }
 }
