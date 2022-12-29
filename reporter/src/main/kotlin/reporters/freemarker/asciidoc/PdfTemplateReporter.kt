@@ -61,20 +61,24 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
 
     override fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
         Attributes.builder().apply {
-            options.remove(OPTION_PDF_THEME_FILE)?.let {
+            val pdfThemeAttribute = options.remove(OPTION_PDF_THEME_FILE)?.let {
                 val pdfThemeFile = File(it).absoluteFile
 
                 require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
 
-                attribute("pdf-theme", pdfThemeFile.toString())
-            }
+                pdfThemeFile.path
+            } ?: "uri:classloader:/templates/asciidoc/pdf-theme.yml"
 
-            options.remove(OPTION_PDF_FONTS_DIR)?.let {
+            attribute("pdf-theme", pdfThemeAttribute)
+
+            val pdfFontsDirAttribute = options.remove(OPTION_PDF_FONTS_DIR)?.let {
                 val pdfFontsDir = File(it).absoluteFile
 
                 require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
 
-                attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
-            }
+                pdfFontsDir.path
+            } ?: "uri:classloader:/fonts"
+
+            attribute("pdf-fontsdir", "$pdfFontsDirAttribute,GEM_FONTS_DIR")
         }.build()
 }

@@ -467,6 +467,7 @@ val copyrightExcludedPaths = listOf(
     "integrations/completions/",
     "reporter/src/main/resources/META_INF/",
     "reporter/src/main/resources/prismjs/",
+    "reporter/src/main/resources/templates/asciidoc/pdf-theme.yml",
     "reporter/src/main/resources/templates/freemarker_implicit.ftl",
     "reporter-web-app/yarn.lock",
     "resources/META-INF/",
