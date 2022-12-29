@@ -769,6 +769,10 @@ ORT core team. It can be used as an alternative to creating a [report](#reporter
 
 A [GitHub Action](https://github.com/oss-review-toolkit/ort-ci-github-action) to run ORT for your GitHub repositories. 
 
+## ORT GitLab Pipeline
+
+A [GitLab Pipeline](https://github.com/oss-review-toolkit/ort-gitlab-ci) to run ORT for your GitLab repositories.
+
 # Want to Help or have Questions?
 
 All contributions are welcome. If you are interested in contributing, please read our
