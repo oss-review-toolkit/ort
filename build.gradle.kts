@@ -484,7 +484,8 @@ val copyrightExcludedExtensions = listOf(
     "json",
     "md",
     "png",
-    "svg"
+    "svg",
+    "ttf"
 )
 
 fun getCopyrightableFiles(rootDir: File): List<File> =
