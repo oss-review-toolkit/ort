@@ -758,6 +758,13 @@ via the green "Play" icon from the gutter as described above.
 
 # Related Tools
 
+## ORT Workbench
+
+The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the
+ORT core team. It can be used as an alternative to creating a [report](#reporter) to review the ORT output. 
+
+![Screenshot](https://github.com/oss-review-toolkit/ort-workbench/raw/main/assets/screenshot.png)
+
 # Want to Help or have Questions?
 
 All contributions are welcome. If you are interested in contributing, please read our
