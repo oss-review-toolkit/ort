@@ -765,6 +765,10 @@ ORT core team. It can be used as an alternative to creating a [report](#reporter
 
 ![Screenshot](https://github.com/oss-review-toolkit/ort-workbench/raw/main/assets/screenshot.png)
 
+## ORT GitHub Action
+
+A [GitHub Action](https://github.com/oss-review-toolkit/ort-ci-github-action) to run ORT for your GitHub repositories. 
+
 # Want to Help or have Questions?
 
 All contributions are welcome. If you are interested in contributing, please read our
