@@ -1,6 +1,6 @@
 # See https://help.sonatype.com/lift/configuring-lift.
 
-jdkVersion = "11"
+jdkVersion = "17"
 
 disableTools = [ "detekt", "eslint" ]
 

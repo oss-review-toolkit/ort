@@ -263,7 +263,7 @@ subprojects {
     tasks.dokkaHtml.configure {
         dokkaSourceSets {
             configureEach {
-                jdkVersion.set(11)
+                jdkVersion.set(17)
 
                 val jacksonVersion = libs.versions.jackson.get()
                 val log4jApiVersion = libs.versions.log4jApi.get()
