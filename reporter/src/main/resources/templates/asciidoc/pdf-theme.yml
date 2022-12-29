@@ -9,6 +9,8 @@ font:
 extends: default
 base:
   font-family: FiraSans
+title-page:
+  background-image: image:ort.png[position=top]
 list:
   text_align: left
 role:

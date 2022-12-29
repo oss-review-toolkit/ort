@@ -59,14 +59,14 @@ open class AsciiDocTemplateReporter(private val backend: String, override val na
     )
     private val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
-    protected open fun processTemplateOptions(options: MutableMap<String, String>): Attributes =
+    protected open fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().build()
 
     final override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val asciiDocOutputDir = createOrtTempDir("asciidoc")
 
         val templateOptions = options.toMutableMap()
-        val asciidoctorAttributes = processTemplateOptions(templateOptions)
+        val asciidoctorAttributes = processTemplateOptions(asciiDocOutputDir, templateOptions)
         val asciiDocFiles = generateAsciiDocFiles(input, asciiDocOutputDir, templateOptions)
         val reports = processAsciiDocFiles(input, outputDir, asciiDocFiles, asciidoctorAttributes)
 
