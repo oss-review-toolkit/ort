@@ -28,7 +28,6 @@ import com.fasterxml.jackson.module.kotlin.readValues
 import com.vdurmont.semver4j.Requirement
 
 import java.io.File
-import java.util.SortedSet
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -742,6 +741,6 @@ class Yarn2(
         val homepage: String = "",
         val downloadUrl: String = "",
         val hash: Hash = Hash.NONE,
-        val author: SortedSet<String> = emptySet<String>().toSortedSet()
+        val author: Set<String> = emptySet()
     )
 }

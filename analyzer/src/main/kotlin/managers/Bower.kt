@@ -101,8 +101,8 @@ class Bower(
          * there are two formats to specify the authors of a package (similar to NPM). The difference is that the
          * strings or objects are inside an array.
          */
-        private fun parseAuthors(node: JsonNode): SortedSet<String> =
-            sortedSetOf<String>().apply {
+        private fun parseAuthors(node: JsonNode): Set<String> =
+            mutableSetOf<String>().apply {
                 node["pkgMeta"]["authors"]?.mapNotNull { authorNode ->
                     when {
                         authorNode.isObject -> authorNode["name"]?.textValue()

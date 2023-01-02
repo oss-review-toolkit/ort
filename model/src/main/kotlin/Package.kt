@@ -21,10 +21,12 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -61,7 +63,8 @@ data class Package(
      * The set of authors declared for this package.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val authors: SortedSet<String> = sortedSetOf(),
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val authors: Set<String> = emptySet(),
 
     /**
      * The set of licenses declared for this package. This does not necessarily correspond to the licenses as detected
@@ -139,7 +142,7 @@ data class Package(
         val EMPTY = Package(
             id = Identifier.EMPTY,
             purl = "",
-            authors = sortedSetOf(),
+            authors = emptySet(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,

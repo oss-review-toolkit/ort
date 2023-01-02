@@ -22,9 +22,11 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -58,7 +60,8 @@ data class Project(
      * The set of authors declared for this project.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val authors: SortedSet<String> = sortedSetOf(),
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val authors: Set<String> = emptySet(),
 
     /**
      * The set of licenses declared for this project. This does not necessarily correspond to the licenses as detected
@@ -112,7 +115,7 @@ data class Project(
         val EMPTY = Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
-            authors = sortedSetOf(),
+            authors = emptySet(),
             declaredLicenses = sortedSetOf(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,

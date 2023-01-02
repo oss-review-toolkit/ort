@@ -43,7 +43,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
-            authors = sortedSetOf("author"),
+            authors = setOf("author"),
             declaredLicenses = sortedSetOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
@@ -61,7 +61,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
-            authors = sortedSetOf("other author"),
+            authors = setOf("other author"),
             declaredLicenses = sortedSetOf("other declared license"),
             description = "other description",
             homepageUrl = "other homepageUrl",
@@ -92,7 +92,7 @@ class PackageTest : StringSpec({
                 name = "name",
                 version = "version"
             ),
-            authors = sortedSetOf("author"),
+            authors = setOf("author"),
             declaredLicenses = sortedSetOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",

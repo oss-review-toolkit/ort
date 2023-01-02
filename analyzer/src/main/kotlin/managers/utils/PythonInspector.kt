@@ -202,7 +202,7 @@ internal fun PythonInspector.Result.toOrtProject(
     return Project(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-        authors = projectData?.parties?.toAuthors() ?: sortedSetOf(),
+        authors = projectData?.parties?.toAuthors() ?: emptySet(),
         declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses() ?: sortedSetOf(),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl),
@@ -332,8 +332,8 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
         )
     }
 
-private fun List<PythonInspector.Party>.toAuthors(): SortedSet<String> =
-    filter { it.role == "author" }.mapNotNullTo(sortedSetOf()) { party ->
+private fun List<PythonInspector.Party>.toAuthors(): Set<String> =
+    filter { it.role == "author" }.mapNotNullTo(mutableSetOf()) { party ->
         buildString {
             party.name?.let { append(it) }
             party.email?.let {

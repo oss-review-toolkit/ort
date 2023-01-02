@@ -159,7 +159,7 @@ class CocoaPods(
                     version = ""
                 ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir),
@@ -185,7 +185,7 @@ class CocoaPods(
 
         return Package(
             id = id,
-            authors = sortedSetOf(),
+            authors = emptySet(),
             declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = podspec.summary,
             homepageUrl = podspec.homepage,

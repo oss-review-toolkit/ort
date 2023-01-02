@@ -258,7 +258,7 @@ class Gradle(
                 val project = Project(
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                    authors = sortedSetOf(),
+                    authors = emptySet(),
                     declaredLicenses = sortedSetOf(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),

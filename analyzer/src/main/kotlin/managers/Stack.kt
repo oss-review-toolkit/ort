@@ -349,7 +349,7 @@ class Stack(
                 .split(',')
                 .map(String::trim)
                 .filter(String::isNotEmpty)
-                .mapTo(sortedSetOf(), ::parseAuthorString),
+                .mapNotNullTo(mutableSetOf(), ::parseAuthorString),
             declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,

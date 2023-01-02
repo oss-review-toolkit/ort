@@ -73,7 +73,7 @@ class DefaultLicenseInfoProvider(
                 appliedCurations = curations.filter { it.curation.declaredLicenseMapping.isNotEmpty() }
             )
         } ?: DeclaredLicenseInfo(
-            authors = sortedSetOf(),
+            authors = emptySet(),
             licenses = emptySet(),
             processed = ProcessedDeclaredLicense(null),
             appliedCurations = emptyList()

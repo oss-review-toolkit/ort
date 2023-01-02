@@ -199,20 +199,20 @@ private fun String.sanitize(): String = replace(':', ' ').collapseWhitespace()
 /**
  * Wrap any "present" SPDX value in a sorted set, or return an empty sorted set otherwise.
  */
-private fun String?.wrapPresentInSortedSet(): SortedSet<String> {
+private fun String?.wrapPresentInSet(): Set<String> {
     if (SpdxConstants.isPresent(this)) {
         withoutPrefix(SpdxConstants.PERSON)?.let { persons ->
             // In case of a person, allow a comma-separated list of persons.
-            return persons.split(',').mapTo(sortedSetOf()) { it.trim() }
+            return persons.split(',').mapTo(mutableSetOf()) { it.trim() }
         }
 
         // Do not split an organization like "Acme, Inc." by comma.
         withoutPrefix(SpdxConstants.ORGANIZATION)?.let {
-            return sortedSetOf(it)
+            return setOf(it)
         }
     }
 
-    return sortedSetOf()
+    return emptySet()
 }
 
 /**
@@ -315,7 +315,7 @@ class SpdxDocumentFile(
             id = id,
             purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
             cpe = locateCpe(),
-            authors = originator.wrapPresentInSortedSet(),
+            authors = originator.wrapPresentInSet(),
             declaredLicenses = sortedSetOf(licenseDeclared),
             concludedLicense = getConcludedLicense(),
             description = packageDescription,
@@ -516,7 +516,7 @@ class SpdxDocumentFile(
             id = projectPackage.toIdentifier(),
             cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-            authors = projectPackage.originator.wrapPresentInSortedSet(),
+            authors = projectPackage.originator.wrapPresentInSet(),
             declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
             vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY),
             homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
