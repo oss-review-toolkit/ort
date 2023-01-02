@@ -316,7 +316,7 @@ class SpdxDocumentFile(
             purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
             cpe = locateCpe(),
             authors = originator.wrapPresentInSet(),
-            declaredLicenses = sortedSetOf(licenseDeclared),
+            declaredLicenses = setOf(licenseDeclared),
             concludedLicense = getConcludedLicense(),
             description = packageDescription,
             homepageUrl = homepage.mapNotPresentToEmpty(),
@@ -517,7 +517,7 @@ class SpdxDocumentFile(
             cpe = projectPackage.locateCpe(),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
             authors = projectPackage.originator.wrapPresentInSet(),
-            declaredLicenses = sortedSetOf(projectPackage.licenseDeclared),
+            declaredLicenses = setOf(projectPackage.licenseDeclared),
             vcs = processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY),
             homepageUrl = projectPackage.homepage.mapNotPresentToEmpty(),
             scopeDependencies = scopes

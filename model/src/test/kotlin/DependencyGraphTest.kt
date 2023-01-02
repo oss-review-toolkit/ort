@@ -197,7 +197,7 @@ class DependencyGraphTest : WordSpec({
             val project = Project(
                 id = projectId,
                 definitionFilePath = "/some/path/pom.xml",
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 homepageUrl = "https://project.example.org",
                 vcs = VcsInfo.EMPTY
             )

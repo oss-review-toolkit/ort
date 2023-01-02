@@ -163,9 +163,9 @@ class UploadResultToSw360Command : OrtCommand(
 
     private fun createSw360Release(pkg: Package, client: SW360ReleaseClientAdapter): SW360Release? {
         // TODO: This omits operators and exceptions from licenses. We yet need to find a way to pass these to SW360.
-        val licenseShortNames = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().toSortedSet()
+        val licenseShortNames = pkg.declaredLicensesProcessed.spdxExpression?.licenses().orEmpty().toSet()
 
-        val unmappedLicenses = pkg.declaredLicensesProcessed.unmapped.toSortedSet()
+        val unmappedLicenses = pkg.declaredLicensesProcessed.unmapped
         if (unmappedLicenses.isNotEmpty()) {
             logger.warn {
                 "The following licenses could not be mapped in order to create a SW360 release: $unmappedLicenses"

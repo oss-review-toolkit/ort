@@ -175,7 +175,7 @@ data class ReportTableModel(
         /**
          * The licenses declared by the package.
          */
-        val declaredLicenses: SortedSet<String>,
+        val declaredLicenses: Set<String>,
 
         /**
          * The detected licenses aggregated from all [ScanResult]s for this package.
@@ -199,7 +199,7 @@ data class ReportTableModel(
                     left.zipWithCollections(right).toSortedMap()
                 }.toSortedMap(),
                 concludedLicenses = (concludedLicenses + other.concludedLicenses),
-                declaredLicenses = (declaredLicenses + other.declaredLicenses).toSortedSet(),
+                declaredLicenses = declaredLicenses + other.declaredLicenses,
                 detectedLicenses = (detectedLicenses + other.detectedLicenses).toSortedSet(),
                 analyzerIssues = analyzerIssues.zipWithCollections(other.analyzerIssues).toSortedMap(),
                 scanIssues = scanIssues.zipWithCollections(other.scanIssues).toSortedMap()

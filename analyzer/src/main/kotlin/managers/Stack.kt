@@ -166,7 +166,7 @@ class Stack(
             val fallback = Package.EMPTY.copy(
                 id = id,
                 purl = id.toPurl(),
-                declaredLicenses = sortedSetOf(dependency.license)
+                declaredLicenses = setOf(dependency.license)
             )
 
             val pkg = when (dependency.location?.type) {
@@ -350,7 +350,7 @@ class Stack(
                 .map(String::trim)
                 .filter(String::isNotEmpty)
                 .mapNotNullTo(mutableSetOf(), ::parseAuthorString),
-            declaredLicenses = map["license"]?.let { sortedSetOf(it) } ?: sortedSetOf(),
+            declaredLicenses = map["license"]?.let { setOf(it) } ?: emptySet(),
             description = map["description"].orEmpty(),
             homepageUrl = homepageUrl,
             binaryArtifact = RemoteArtifact.EMPTY,

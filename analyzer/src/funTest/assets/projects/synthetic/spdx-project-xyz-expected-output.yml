@@ -7,7 +7,7 @@ project:
   declared_licenses:
   - "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
   declared_licenses_processed:
-    spdx_expression: "Apache-2.0 AND curl AND LicenseRef-Proprietary-ExampleInc"
+    spdx_expression: "Apache-2.0 AND LicenseRef-Proprietary-ExampleInc AND curl"
   vcs:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"

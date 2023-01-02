@@ -274,7 +274,7 @@ private fun createOrtResult(): OrtResult {
                 projects = sortedSetOf(
                     Project(
                         id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
-                        declaredLicenses = sortedSetOf("MIT"),
+                        declaredLicenses = setOf("MIT"),
                         definitionFilePath = "pom.xml",
                         homepageUrl = "first project's homepage",
                         scopeDependencies = sortedSetOf(
@@ -311,7 +311,7 @@ private fun createOrtResult(): OrtResult {
                     ),
                     Project(
                         id = Identifier("NPM:second-project-group:second-project-name:0.0.1"),
-                        declaredLicenses = sortedSetOf("BSD-3-Clause"),
+                        declaredLicenses = setOf("BSD-3-Clause"),
                         definitionFilePath = "npm-project/package.json",
                         homepageUrl = "first project's homepage",
                         scopeDependencies = sortedSetOf(
@@ -351,7 +351,7 @@ private fun createOrtResult(): OrtResult {
                             id = Identifier("Maven:first-package-group:first-package:0.0.1"),
                             binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
                             concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
-                            declaredLicenses = sortedSetOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
+                            declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                             description = "A package with all supported attributes set, with a VCS URL containing a " +
                                     "user name, and with a scan result containing two copyright finding matched to a " +
                                     "license finding.",
@@ -369,7 +369,7 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:second-package-group:second-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf(),
+                            declaredLicenses = emptySet(),
                             description = "A package with minimal attributes set.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
@@ -380,7 +380,7 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:third-package-group:third-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("unmappable license"),
+                            declaredLicenses = setOf("unmappable license"),
                             description = "A package with only unmapped declared license.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
@@ -391,7 +391,7 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("unmappable license", "MIT"),
+                            declaredLicenses = setOf("unmappable license", "MIT"),
                             description = "A package with partially mapped declared license.",
                             homepageUrl = "",
                             sourceArtifact = RemoteArtifact.EMPTY,
@@ -402,7 +402,7 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
+                            declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
                             concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
                             description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
                                     "IDs in the declared and concluded license.",
@@ -415,7 +415,7 @@ private fun createOrtResult(): OrtResult {
                         metadata = Package(
                             id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
                             binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = sortedSetOf("LicenseRef-scancode-asmus"),
+                            declaredLicenses = setOf("LicenseRef-scancode-asmus"),
                             concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
                             description = "A package with non-SPDX license IDs in the declared and concluded license.",
                             homepageUrl = "",
@@ -435,7 +435,7 @@ private fun createOrtResult(): OrtResult {
                             metadata = Package(
                                 id = it,
                                 binaryArtifact = RemoteArtifact.EMPTY,
-                                declaredLicenses = sortedSetOf("MIT"),
+                                declaredLicenses = setOf("MIT"),
                                 description = "Package of $it",
                                 homepageUrl = "",
                                 sourceArtifact = RemoteArtifact.EMPTY,

@@ -201,7 +201,7 @@ private fun ScannedPackage.toPackage(): Package {
 
     return Package(
         id = id,
-        declaredLicenses = sortedSetOf(),
+        declaredLicenses = emptySet(),
         concludedLicense = null,
         description = "",
         homepageUrl = "",

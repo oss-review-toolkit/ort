@@ -324,16 +324,16 @@ class NuGetSupport(
 /**
  * Parse information about the licenses of a package from the given [spec].
  */
-private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
-    val data = spec?.metadata ?: return sortedSetOf()
+private fun parseLicenses(spec: PackageSpec?): Set<String> {
+    val data = spec?.metadata ?: return emptySet()
 
     // Prefer "license" over "licenseUrl" as the latter has been deprecated, see
     // https://docs.microsoft.com/en-us/nuget/reference/nuspec#licenseurl
     val license = data.license?.value?.takeUnless { data.license.type == "file" }
-    if (license != null) return sortedSetOf(license)
+    if (license != null) return setOf(license)
 
-    val licenseUrl = data.licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" } ?: return sortedSetOf()
-    return sortedSetOf(licenseUrl)
+    val licenseUrl = data.licenseUrl?.takeUnless { it == "https://aka.ms/deprecateLicenseUrl" } ?: return emptySet()
+    return setOf(licenseUrl)
 }
 
 /**

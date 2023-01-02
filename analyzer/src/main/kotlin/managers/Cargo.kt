@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.moandjiezana.toml.Toml
 
 import java.io.File
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -247,10 +246,10 @@ private val PATH_DEPENDENCY_REGEX = Regex("""^.*\(path\+file://(.*)\)$""")
 
 private fun parseCargoId(node: JsonNode) = node["id"].textValueOrEmpty()
 
-private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> {
+private fun parseDeclaredLicenses(node: JsonNode): Set<String> {
     val declaredLicenses = node["license"].textValueOrEmpty().split('/')
         .map { it.trim() }
-        .filterTo(sortedSetOf()) { it.isNotEmpty() }
+        .filterTo(mutableSetOf()) { it.isNotEmpty() }
 
     // Cargo allows declaring non-SPDX licenses only by referencing a license file. If a license file is specified, add
     // an unknown declared license to indicate that there is a declared license, but we cannot know which it is at this

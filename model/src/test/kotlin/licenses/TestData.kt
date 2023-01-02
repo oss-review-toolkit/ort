@@ -47,7 +47,7 @@ val authors = setOf("The Author", "The Other Author")
 val projectAuthors = setOf("The Project Author")
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
-val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")
+val declaredLicenses = setOf("LicenseRef-a", "LicenseRef-b")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
 val licenseFindings = sortedSetOf(

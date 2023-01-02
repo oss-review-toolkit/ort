@@ -103,7 +103,7 @@ class ProjectTest : WordSpec({
             val project = Project(
                 id = projectId,
                 definitionFilePath = "/some/path",
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 vcs = VcsInfo.EMPTY,
                 homepageUrl = "https//www.test-project.org",
             )

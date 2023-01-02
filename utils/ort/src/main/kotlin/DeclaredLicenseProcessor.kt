@@ -21,9 +21,12 @@ package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.unquote
 import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
@@ -144,6 +147,7 @@ data class ProcessedDeclaredLicense(
      * The resulting SPDX expression, or null if no license could be mapped.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonSerialize(converter = SpdxExpressionSortedConverter::class)
     val spdxExpression: SpdxExpression?,
 
     /**
@@ -151,12 +155,14 @@ data class ProcessedDeclaredLicense(
      * declared license string and the processed declared license are identical they are not contained in this map.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonPropertyOrder(alphabetic = true)
     val mapped: Map<String, SpdxExpression> = emptyMap(),
 
     /**
      * Declared licenses that could not be mapped to an SPDX expression.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = StringSortedSetConverter::class)
     val unmapped: Set<String> = emptySet()
 ) {
     companion object {

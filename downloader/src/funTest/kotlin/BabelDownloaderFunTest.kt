@@ -62,7 +62,7 @@ class BabelDownloaderFunTest : StringSpec() {
                     name = "babel-cli",
                     version = "6.26.0"
                 ),
-                declaredLicenses = sortedSetOf("MIT"),
+                declaredLicenses = setOf("MIT"),
                 description = "Babel command line.",
                 homepageUrl = "https://babeljs.io/",
                 binaryArtifact = RemoteArtifact(

@@ -132,7 +132,7 @@ private fun createOrtResult(): OrtResult {
                 packages = sortedSetOf(
                     curatedPackage(
                         id = Identifier("Maven:some-group:first-package:0.0.1"),
-                        declaredLicenses = listOf(
+                        declaredLicenses = setOf(
                             "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT",
                             "BSD-2-Clause",
                             "Some unmappable license string",
@@ -141,15 +141,15 @@ private fun createOrtResult(): OrtResult {
                     ),
                     curatedPackage(
                         id = Identifier("PIP::second-package:0.0.2"),
-                        declaredLicenses = listOf("BSD-2-Clause AND Apache-2.0")
+                        declaredLicenses = setOf("BSD-2-Clause AND Apache-2.0")
                     ),
                     curatedPackage(
                         id = Identifier("PIP::unreferenced-package:0.0.3"),
-                        declaredLicenses = listOf("LicenseRef-scancode-public-domain-disclaimer")
+                        declaredLicenses = setOf("LicenseRef-scancode-public-domain-disclaimer")
                     ),
                     curatedPackage(
                         id = Identifier("Maven:some-group:excluded-package:0.0.4"),
-                        declaredLicenses = listOf("LicenseRef-scancode-josl-1.0")
+                        declaredLicenses = setOf("LicenseRef-scancode-josl-1.0")
                     )
                 )
             )
@@ -157,12 +157,12 @@ private fun createOrtResult(): OrtResult {
     )
 }
 
-private fun curatedPackage(id: Identifier, declaredLicenses: Collection<String>): CuratedPackage =
+private fun curatedPackage(id: Identifier, declaredLicenses: Set<String>): CuratedPackage =
     CuratedPackage(
         metadata = Package(
             id = id,
             binaryArtifact = RemoteArtifact.EMPTY,
-            declaredLicenses = declaredLicenses.toSortedSet(),
+            declaredLicenses = declaredLicenses,
             description = "",
             homepageUrl = "",
             sourceArtifact = RemoteArtifact.EMPTY,

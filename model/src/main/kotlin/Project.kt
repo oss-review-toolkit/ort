@@ -67,7 +67,8 @@ data class Project(
      * The set of licenses declared for this project. This does not necessarily correspond to the licenses as detected
      * by a scanner. Both need to be taken into account for any conclusions.
      */
-    val declaredLicenses: SortedSet<String>,
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val declaredLicenses: Set<String>,
 
     /**
      * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
@@ -116,7 +117,7 @@ data class Project(
             id = Identifier.EMPTY,
             definitionFilePath = "",
             authors = emptySet(),
-            declaredLicenses = sortedSetOf(),
+            declaredLicenses = emptySet(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,

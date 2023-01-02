@@ -90,8 +90,8 @@ class Bower(
                 revision = parseRevision(node)
             )
 
-        private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> =
-            sortedSetOf<String>().apply {
+        private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
+            mutableSetOf<String>().apply {
                 val license = node["pkgMeta"]["license"].textValueOrEmpty()
                 if (license.isNotEmpty()) add(license)
             }

@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 val concludedLicense = "LicenseRef-a OR LicenseRef-b OR LicenseRef-c or LicenseRef-d".toSpdx()
-val declaredLicenses = sortedSetOf("Apache-2.0", "MIT")
+val declaredLicenses = setOf("Apache-2.0", "MIT")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
 val packageExcluded = Package.EMPTY.copy(

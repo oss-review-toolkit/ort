@@ -240,7 +240,7 @@ class OrtResultTest : WordSpec({
                             Project.EMPTY.copy(
                                 id = Identifier("Maven:org.oss-review-toolkit:excluded:1.0"),
                                 definitionFilePath = "excluded/pom.xml",
-                                declaredLicenses = sortedSetOf()
+                                declaredLicenses = emptySet()
                             )
                         ),
                         packages = sortedSetOf(),

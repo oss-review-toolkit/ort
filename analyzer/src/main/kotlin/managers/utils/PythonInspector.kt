@@ -203,7 +203,7 @@ internal fun PythonInspector.Result.toOrtProject(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         authors = projectData?.parties?.toAuthors() ?: emptySet(),
-        declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses() ?: sortedSetOf(),
+        declaredLicenses = projectData?.declaredLicense?.getDeclaredLicenses() ?: emptySet(),
         vcs = VcsInfo.EMPTY,
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile, VcsInfo.EMPTY, homepageUrl),
         homepageUrl = homepageUrl,
@@ -260,12 +260,12 @@ private fun PythonInspector.Result.resolveIdentifier(
 }
 
 private fun PythonInspector.DeclaredLicense.getDeclaredLicenses() =
-    buildList {
+    buildSet {
         getLicenseFromLicenseField(license)?.let { add(it) }
         addAll(classifiers.mapNotNull { getLicenseFromClassifier(it) })
-    }.toSortedSet()
+    }
 
-private fun processDeclaredLicenses(id: Identifier, declaredLicenses: SortedSet<String>): ProcessedDeclaredLicense {
+private fun processDeclaredLicenses(id: Identifier, declaredLicenses: Set<String>): ProcessedDeclaredLicense {
     var declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
     // Python's classifiers only support a coarse license declaration of "BSD License". So if there is another
@@ -304,7 +304,7 @@ internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
             } ?: RemoteArtifact.EMPTY
 
         val id = Identifier(type = TYPE, namespace = "", name = pkg.name, version = pkg.version)
-        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses() ?: sortedSetOf()
+        val declaredLicenses = pkg.declaredLicense?.getDeclaredLicenses() ?: emptySet()
         val declaredLicensesProcessed = processDeclaredLicenses(id, declaredLicenses)
 
         Package(

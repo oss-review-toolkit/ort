@@ -41,7 +41,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf("license a", "license b"),
+                declaredLicenses = setOf("license a", "license b"),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -116,7 +116,7 @@ class PackageCurationTest : WordSpec({
                 ),
                 cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
                 authors = setOf("author 1", "author 2"),
-                declaredLicenses = sortedSetOf("license a", "license b"),
+                declaredLicenses = setOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -178,7 +178,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = setOf("author 1", "author 2"),
-                declaredLicenses = sortedSetOf("license a", "license b"),
+                declaredLicenses = setOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -218,7 +218,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -252,7 +252,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -282,7 +282,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -377,7 +377,7 @@ class PackageCurationTest : WordSpec({
             val pkg = Package(
                 id = Identifier("type", "namespace", "name", "version"),
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf("license a", "license b", "license c"),
+                declaredLicenses = setOf("license a", "license b", "license c"),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
