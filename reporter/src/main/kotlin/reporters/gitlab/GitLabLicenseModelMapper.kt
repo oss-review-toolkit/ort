@@ -47,7 +47,7 @@ internal object GitLabLicenseModelMapper : Logging {
 
 private fun Collection<Package>.toLicenses(): List<License> {
     val decomposedLicenses = flatMapTo(mutableSetOf()) { pkg ->
-        pkg.declaredLicensesProcessed.spdxExpression?.decompose().orEmpty()
+        pkg.declaredLicensesProcessed.decompose()
     }
 
     return decomposedLicenses.map { singleLicenseExpression ->
@@ -85,7 +85,7 @@ private fun Package.toDependency(definitionFilePaths: Collection<String>): Depen
     Dependency(
         name = id.name,
         version = id.version,
-        licenses = declaredLicensesProcessed.spdxExpression?.decompose().orEmpty().map { it.toString() },
+        licenses = declaredLicensesProcessed.decompose().map { it.toString() },
         path = definitionFilePaths.sorted().joinToString(","),
         packageManager = id.toPackageManagerName()
     )

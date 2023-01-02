@@ -71,7 +71,7 @@ class LicenseInfoResolver(
         val licenseInfo = provider.get(id)
 
         val concludedLicenses = licenseInfo.concludedLicenseInfo.concludedLicense?.decompose().orEmpty()
-        val declaredLicenses = licenseInfo.declaredLicenseInfo.processed.spdxExpression?.decompose().orEmpty()
+        val declaredLicenses = licenseInfo.declaredLicenseInfo.processed.decompose()
 
         val resolvedLicenses = mutableMapOf<SpdxSingleLicenseExpression, ResolvedLicenseBuilder>()
 
