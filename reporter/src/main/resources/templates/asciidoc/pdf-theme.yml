@@ -1,3 +1,4 @@
+extends: default
 font:
   catalog:
     merge: true
@@ -6,7 +7,6 @@ font:
       normal: FiraSans-Regular.ttf
       italic: FiraSans-Italic.ttf
       bold_italic: FiraSans-BoldItalic.ttf
-extends: default
 base:
   font-family: FiraSans
 title-page:
@@ -15,6 +15,12 @@ title-page:
     image: image:ort.png[pdfwidth=80%]
 list:
   text_align: left
+ulist:
+  marker:
+    circle:
+      content: "\u2022"
+    square:
+      content: "\u2022"
 role:
   alert:
     font-color: #cc0000
@@ -30,9 +36,3 @@ role:
     background-color: #f4861d
   severity-critical:
     background-color: #bc012f
-ulist:
-  marker:
-    circle:
-      content: "\u2022"
-    square:
-      content: "\u2022"
