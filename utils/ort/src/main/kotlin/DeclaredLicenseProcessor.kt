@@ -172,5 +172,10 @@ data class ProcessedDeclaredLicense(
      * The list of all mapped and unmapped licenses.
      */
     @JsonIgnore
-    val allLicenses = spdxExpression?.decompose().orEmpty().map { it.toString() } + unmapped
+    val allLicenses = decompose().map { it.toString() } + unmapped
+
+    /**
+     * [Decompose][SpdxExpression.decompose] the [spdxExpression] or return an empty string if it is null.
+     */
+    fun decompose() = spdxExpression?.decompose().orEmpty()
 }
