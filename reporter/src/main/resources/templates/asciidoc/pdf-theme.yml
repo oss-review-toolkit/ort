@@ -10,7 +10,9 @@ extends: default
 base:
   font-family: FiraSans
 title-page:
-  background-image: image:ort.png[position=top]
+  logo:
+    align: center
+    image: image:ort.png[pdfwidth=80%]
 list:
   text_align: left
 role:
