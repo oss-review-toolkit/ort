@@ -462,6 +462,6 @@ class Conan(
      * Parse information about the package author from the given JSON [node]. If present, return a set containing the
      * author name; otherwise, return an empty set.
      */
-    private fun parseAuthors(node: JsonNode): SortedSet<String> =
-        parseAuthorString(node["author"]?.textValue(), '<', '(')?.let { sortedSetOf(it) } ?: sortedSetOf()
+    private fun parseAuthors(node: JsonNode): Set<String> =
+        parseAuthorString(node["author"]?.textValue(), '<', '(')?.let { setOf(it) } ?: emptySet()
 }

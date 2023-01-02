@@ -324,8 +324,8 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
  * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
  * specify the author of a package: An object with multiple properties or a single string.
  */
-fun parseNpmAuthors(json: JsonNode): SortedSet<String> =
-    sortedSetOf<String>().apply {
+fun parseNpmAuthors(json: JsonNode): Set<String> =
+    mutableSetOf<String>().apply {
         json["author"]?.let { authorNode ->
             when {
                 authorNode.isObject -> authorNode["name"]?.textValue()

@@ -29,7 +29,7 @@ class PackageCurationDataTest : WordSpec({
         comment = "original",
         purl = "original",
         cpe = "original",
-        authors = sortedSetOf("original"),
+        authors = setOf("original"),
         concludedLicense = "original".toSpdx(),
         description = "original",
         homepageUrl = "original",
@@ -56,7 +56,7 @@ class PackageCurationDataTest : WordSpec({
         comment = "other",
         purl = "other",
         cpe = "other",
-        authors = sortedSetOf("other"),
+        authors = setOf("other"),
         concludedLicense = "other".toSpdx(),
         description = "other",
         homepageUrl = "other",
@@ -109,7 +109,7 @@ class PackageCurationDataTest : WordSpec({
         "keep existing original data" {
             original.merge(other) shouldBe original.copy(
                 comment = "original\nother",
-                authors = sortedSetOf("original", "other"),
+                authors = setOf("original", "other"),
                 concludedLicense = "original AND other".toSpdx(),
                 declaredLicenseMapping = mapOf(
                     "original" to "original".toSpdx(),

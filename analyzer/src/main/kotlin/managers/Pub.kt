@@ -473,7 +473,7 @@ class Pub(
                     var rawName = ""
                     var homepageUrl = ""
                     var vcs = VcsInfo.EMPTY
-                    var authors: SortedSet<String> = sortedSetOf<String>()
+                    var authors = emptySet<String>()
 
                     when {
                         pkgInfoFromLockFile["source"].textValueOrEmpty() == "path" -> {
@@ -672,8 +672,8 @@ class Pub(
 /**
  * Extract information about package authors from the given [pubspec].
  */
-private fun parseAuthors(pubspec: JsonNode): SortedSet<String> =
-    (listOfNotNull(pubspec["author"]) + pubspec["authors"]?.toList().orEmpty()).mapNotNullTo(sortedSetOf()) {
+private fun parseAuthors(pubspec: JsonNode): Set<String> =
+    (setOfNotNull(pubspec["author"]) + pubspec["authors"]?.toSet().orEmpty()).mapNotNullTo(mutableSetOf()) {
         parseAuthorString(it.textValue())
     }
 

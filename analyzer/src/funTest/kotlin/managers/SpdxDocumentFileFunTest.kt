@@ -103,7 +103,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                     id = curlId,
                     cpe = "cpe:2.3:a:http:curl:7.70.0:*:*:*:*:*:*:*",
                     definitionFilePath = vcsDir.getPathToRoot(curlPackageFile),
-                    authors = sortedSetOf("Daniel Stenberg (daniel@haxx.se)"),
+                    authors = setOf("Daniel Stenberg (daniel@haxx.se)"),
                     declaredLicenses = sortedSetOf("curl"),
                     vcs = VcsInfo(
                         type = VcsType.GIT,
@@ -124,7 +124,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                     id = opensslId,
                     cpe = "cpe:2.3:a:a-name:openssl:1.1.1g:*:*:*:*:*:*:*",
                     definitionFilePath = vcsDir.getPathToRoot(opensslPackageFile),
-                    authors = sortedSetOf("OpenSSL Development Team"),
+                    authors = setOf("OpenSSL Development Team"),
                     declaredLicenses = sortedSetOf("Apache-2.0"),
                     vcs = VcsInfo(
                         type = VcsType.GIT,
@@ -145,7 +145,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                     id = zlibId,
                     cpe = "cpe:/a:compress:zlib:1.2.11:::en-us",
                     definitionFilePath = vcsDir.getPathToRoot(zlibPackageFile),
-                    authors = sortedSetOf("Jean-loup Gailly", "Mark Adler"),
+                    authors = setOf("Jean-loup Gailly", "Mark Adler"),
                     declaredLicenses = sortedSetOf("Zlib"),
                     vcs = VcsInfo(
                         type = VcsType.GIT,

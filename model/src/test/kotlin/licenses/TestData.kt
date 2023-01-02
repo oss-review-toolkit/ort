@@ -43,8 +43,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
-val authors = sortedSetOf("The Author", "The Other Author")
-val projectAuthors = sortedSetOf("The Project Author")
+val authors = setOf("The Author", "The Other Author")
+val projectAuthors = setOf("The Project Author")
 
 val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = sortedSetOf("LicenseRef-a", "LicenseRef-b")

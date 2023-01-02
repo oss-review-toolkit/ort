@@ -339,11 +339,11 @@ private fun parseLicenses(spec: PackageSpec?): SortedSet<String> {
 /**
  * Parse information about the authors of a package from the given [spec].
  */
-private fun parseAuthors(spec: PackageSpec?): SortedSet<String> =
+private fun parseAuthors(spec: PackageSpec?): Set<String> =
     spec?.metadata?.authors?.split(',', ';').orEmpty()
         .map(String::trim)
         .filterNot(String::isEmpty)
-        .toSortedSet()
+        .toSet()
 
 /**
  * Try to find a .nuspec file for the given [definitionFile]. The file is looked up in the same directory.

@@ -345,5 +345,5 @@ private fun getResolvedVersion(
 /**
  * Parse information about authors from the given [node] with package metadata.
  */
-private fun parseAuthors(node: JsonNode?): SortedSet<String> =
-    node?.mapNotNullTo(sortedSetOf()) { parseAuthorString(it.textValue()) } ?: sortedSetOf()
+private fun parseAuthors(node: JsonNode?): Set<String> =
+    node?.mapNotNullTo(mutableSetOf()) { parseAuthorString(it.textValue()) } ?: emptySet()

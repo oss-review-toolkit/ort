@@ -40,7 +40,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "",
                 homepageUrl = "",
@@ -56,7 +56,7 @@ class PackageCurationTest : WordSpec({
                 data = PackageCurationData(
                     purl = "pkg:maven/org.hamcrest/hamcrest-core@1.3#subpath=src/main/java/org/hamcrest/core",
                     cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
-                    authors = sortedSetOf("author 1", "author 2"),
+                    authors = setOf("author 1", "author 2"),
                     declaredLicenseMapping = mapOf("license a" to "Apache-2.0".toSpdx()),
                     concludedLicense = "license1 OR license2".toSpdx(),
                     description = "description",
@@ -115,7 +115,7 @@ class PackageCurationTest : WordSpec({
                     version = "1.3"
                 ),
                 cpe = "cpe:2.3:a:apache:commons_io:2.8.0:rc2:*:*:*:*:*:*",
-                authors = sortedSetOf("author 1", "author 2"),
+                authors = setOf("author 1", "author 2"),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
@@ -177,7 +177,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
-                authors = sortedSetOf("author 1", "author 2"),
+                authors = setOf("author 1", "author 2"),
                 declaredLicenses = sortedSetOf("license a", "license b"),
                 description = "description",
                 homepageUrl = "homepageUrl",
@@ -217,7 +217,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -251,7 +251,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -281,7 +281,7 @@ class PackageCurationTest : WordSpec({
                     name = "hamcrest-core",
                     version = "1.3"
                 ),
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf(),
                 description = "",
                 homepageUrl = "",
@@ -376,7 +376,7 @@ class PackageCurationTest : WordSpec({
         "accumulate the map entries and override the entries with same key" {
             val pkg = Package(
                 id = Identifier("type", "namespace", "name", "version"),
-                authors = sortedSetOf(),
+                authors = emptySet(),
                 declaredLicenses = sortedSetOf("license a", "license b", "license c"),
                 description = "",
                 homepageUrl = "",

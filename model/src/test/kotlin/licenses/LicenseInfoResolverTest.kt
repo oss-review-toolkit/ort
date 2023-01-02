@@ -36,7 +36,6 @@ import io.kotest.matchers.types.shouldBeTypeOf
 
 import java.io.File
 import java.lang.IllegalArgumentException
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
@@ -675,7 +674,7 @@ private fun createResolver(
 
 private fun createLicenseInfo(
     id: Identifier,
-    authors: SortedSet<String> = sortedSetOf(),
+    authors: Set<String> = emptySet(),
     declaredLicenses: Set<String> = emptySet(),
     detectedLicenses: List<Findings> = emptyList(),
     concludedLicense: SpdxExpression? = null

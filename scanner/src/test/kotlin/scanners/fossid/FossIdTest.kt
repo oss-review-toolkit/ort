@@ -947,7 +947,7 @@ private fun createIdentifier(index: Int = 1): Identifier =
  * Create a test [Package] with the given [id] , [vcsInfo], and [authors].
  */
 private fun createPackage(id: Identifier, vcsInfo: VcsInfo, authors: Set<String> = emptySet()): Package =
-    Package.EMPTY.copy(id = id, vcsProcessed = vcsInfo, authors = authors.toSortedSet())
+    Package.EMPTY.copy(id = id, vcsProcessed = vcsInfo, authors = authors)
 
 /**
  * Generate the path to a test file based on the given [index].
