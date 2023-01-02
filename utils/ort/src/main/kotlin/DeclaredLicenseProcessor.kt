@@ -108,7 +108,7 @@ object DeclaredLicenseProcessor : Logging {
         operator: SpdxOperator = SpdxOperator.AND
     ): ProcessedDeclaredLicense {
         val processedLicenses = mutableMapOf<String, SpdxExpression>()
-        val unmapped = mutableListOf<String>()
+        val unmapped = mutableSetOf<String>()
 
         declaredLicenses.forEach { declaredLicense ->
             process(declaredLicense, customLicenseMapping)?.let {
@@ -157,14 +157,14 @@ data class ProcessedDeclaredLicense(
      * Declared licenses that could not be mapped to an SPDX expression.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val unmapped: List<String> = emptyList()
+    val unmapped: Set<String> = emptySet()
 ) {
     companion object {
         @JvmField
         val EMPTY = ProcessedDeclaredLicense(
             spdxExpression = null,
             mapped = emptyMap(),
-            unmapped = emptyList()
+            unmapped = emptySet()
         )
     }
 
