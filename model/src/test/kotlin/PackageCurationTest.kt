@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.maps.shouldContainExactly
 import io.kotest.matchers.should
@@ -89,7 +89,7 @@ class PackageCurationTest : WordSpec({
                 authors shouldBe curation.data.authors
                 declaredLicenses shouldBe pkg.declaredLicenses
                 declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0".toSpdx()
-                declaredLicensesProcessed.unmapped should containExactlyInAnyOrder("license b")
+                declaredLicensesProcessed.unmapped should containExactly("license b")
                 concludedLicense shouldBe curation.data.concludedLicense
                 description shouldBe curation.data.description
                 homepageUrl shouldBe curation.data.homepageUrl
