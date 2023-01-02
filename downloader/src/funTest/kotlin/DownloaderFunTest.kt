@@ -61,7 +61,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "junit",
                     version = "4.12"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -98,7 +98,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "junit",
                     version = "4.12"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -133,7 +133,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "junit",
                     version = "4.12"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -178,7 +178,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "junit",
                     version = "4.12"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -220,7 +220,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "tyrex",
                     version = "1.0.1"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,
@@ -252,7 +252,7 @@ class DownloaderFunTest : StringSpec() {
                     name = "tslib",
                     version = "1.10.0"
                 ),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 description = "",
                 homepageUrl = "",
                 binaryArtifact = RemoteArtifact.EMPTY,

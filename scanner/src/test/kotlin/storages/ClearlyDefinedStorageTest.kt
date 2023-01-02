@@ -94,7 +94,7 @@ private val TEST_IDENTIFIER =
 private val TEST_PACKAGE =
     Package(
         id = TEST_IDENTIFIER,
-        declaredLicenses = sortedSetOf(),
+        declaredLicenses = emptySet(),
         description = "test package description",
         homepageUrl = "https://www.test-package.com",
         vcs = VcsInfo.EMPTY,

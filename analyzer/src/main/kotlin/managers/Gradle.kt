@@ -259,7 +259,7 @@ class Gradle(
                     id = projectId,
                     definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                     authors = emptySet(),
-                    declaredLicenses = sortedSetOf(),
+                    declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(definitionFile.parentFile),
                     homepageUrl = "",

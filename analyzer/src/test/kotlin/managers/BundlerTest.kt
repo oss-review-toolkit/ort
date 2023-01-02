@@ -67,7 +67,7 @@ class BundlerTest : WordSpec({
                 version = "3.7.0",
                 homepageUrl = "http://github.com/rspec",
                 authors = setOf("Steven Baker", "David Chelimsky", "Myron Marston"),
-                declaredLicenses = sortedSetOf("MIT"),
+                declaredLicenses = setOf("MIT"),
                 description = "BDD for Ruby",
                 runtimeDependencies = setOf("rspec-core", "rspec-expectations", "rspec-mocks"),
                 vcs = VcsInfo(VcsType.GIT, "http://github.com/rspec/rspec.git", ""),

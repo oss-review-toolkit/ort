@@ -57,7 +57,7 @@ class BeanUtilsFunTest : StringSpec() {
                     name = "commons-beanutils-bean-collections",
                     version = "1.8.3"
                 ),
-                declaredLicenses = sortedSetOf("The Apache Software License, Version 2.0"),
+                declaredLicenses = setOf("The Apache Software License, Version 2.0"),
                 description = "",
                 homepageUrl = "http://commons.apache.org/beanutils/",
                 binaryArtifact = RemoteArtifact.EMPTY,

@@ -70,7 +70,8 @@ data class Package(
      * The set of licenses declared for this package. This does not necessarily correspond to the licenses as detected
      * by a scanner. Both need to be taken into account for any conclusions.
      */
-    val declaredLicenses: SortedSet<String>,
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val declaredLicenses: Set<String>,
 
     /**
      * The declared licenses as [SpdxExpression]. If [declaredLicenses] contains multiple licenses they are
@@ -143,7 +144,7 @@ data class Package(
             id = Identifier.EMPTY,
             purl = "",
             authors = emptySet(),
-            declaredLicenses = sortedSetOf(),
+            declaredLicenses = emptySet(),
             declaredLicensesProcessed = ProcessedDeclaredLicense.EMPTY,
             concludedLicense = null,
             description = "",

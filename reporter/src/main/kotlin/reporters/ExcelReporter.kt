@@ -310,7 +310,7 @@ class ExcelReporter : Reporter {
             sheet.createRow(currentRow++).apply {
                 createCell(this, 0, row.id.toCoordinates(), font, cellStyle)
                 createCell(this, 1, scopesText, cellStyle)
-                createCell(this, 2, row.declaredLicenses.joinToString(" \n"), font, cellStyle)
+                createCell(this, 2, row.declaredLicenses.sorted().joinToString(" \n"), font, cellStyle)
                 createCell(this, 3, row.detectedLicenses.joinToString(" \n"), font, cellStyle)
                 createCell(this, 4, analyzerIssuesText, font, cellStyle)
                 createCell(this, 5, scanIssuesText, font, cellStyle)

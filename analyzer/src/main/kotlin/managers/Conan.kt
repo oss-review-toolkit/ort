@@ -329,8 +329,8 @@ class Conan(
     /**
      * Return the set of declared licenses contained in [node].
      */
-    private fun parseDeclaredLicenses(node: JsonNode): SortedSet<String> =
-        sortedSetOf<String>().also { licenses ->
+    private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
+        mutableSetOf<String>().also { licenses ->
             node["license"]?.mapNotNullTo(licenses) { it.textValue() }
         }
 

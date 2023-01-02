@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode
 import java.io.File
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -338,7 +337,7 @@ fun parseNpmAuthors(json: JsonNode): Set<String> =
 /**
  * Parse information about licenses from the [package.json][json] file of a module.
  */
-fun parseNpmLicenses(json: JsonNode): SortedSet<String> {
+fun parseNpmLicenses(json: JsonNode): Set<String> {
     val declaredLicenses = mutableListOf<String>()
 
     // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
@@ -360,7 +359,7 @@ fun parseNpmLicenses(json: JsonNode): SortedSet<String> {
         licenseNode["type"]?.textValue()
     }
 
-    return declaredLicenses.mapNotNullTo(sortedSetOf()) { declaredLicense ->
+    return declaredLicenses.mapNotNullTo(mutableSetOf()) { declaredLicense ->
         when {
             // NPM does not mean https://unlicense.org/ here, but the wish to not "grant others the right to use
             // a private or unpublished package under any terms", which corresponds to SPDX's "NONE".

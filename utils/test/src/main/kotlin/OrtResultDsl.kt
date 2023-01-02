@@ -69,7 +69,7 @@ class OrtResultBuilder {
                 dependencies = getDependencies(rootIds)
             )
 
-            val declaredLicenses = sortedSetOf(license)
+            val declaredLicenses = setOf(license)
 
             return Project.EMPTY.copy(
                 id = Identifier(id),
@@ -94,7 +94,7 @@ class OrtResultBuilder {
         }
 
         fun build(): Package {
-            val declaredLicenses = sortedSetOf(license)
+            val declaredLicenses = setOf(license)
 
             return Package.EMPTY.copy(
                 id = Identifier(id),

@@ -27,7 +27,6 @@ import java.io.File
 import java.io.IOException
 import java.io.PrintStream
 import java.net.HttpURLConnection
-import java.util.SortedSet
 
 import kotlin.time.measureTime
 
@@ -217,7 +216,7 @@ class Bundler(
                 id = projectId,
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = authors,
-                declaredLicenses = declaredLicenses.toSortedSet(),
+                declaredLicenses = declaredLicenses,
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
@@ -320,7 +319,7 @@ class Bundler(
             version = "",
             homepageUrl = "",
             authors = emptySet(),
-            declaredLicenses = sortedSetOf(),
+            declaredLicenses = emptySet(),
             description = "",
             runtimeDependencies = emptySet(),
             vcs = VcsInfo.EMPTY,
@@ -395,7 +394,7 @@ internal data class GemSpec(
     val version: String,
     val homepageUrl: String,
     val authors: Set<String>,
-    val declaredLicenses: SortedSet<String>,
+    val declaredLicenses: Set<String>,
     val description: String,
     val runtimeDependencies: Set<String>,
     val vcs: VcsInfo,
@@ -412,8 +411,8 @@ internal data class GemSpec(
                 node["name"].textValue(),
                 node["version"]["version"].textValue(),
                 homepage,
-                node["authors"]?.toList().mapToSortedSetOfNotEmptyStrings(),
-                node["licenses"]?.toList().mapToSortedSetOfNotEmptyStrings(),
+                node["authors"]?.toList().mapToSetOfNotEmptyStrings(),
+                node["licenses"]?.toList().mapToSetOfNotEmptyStrings(),
                 node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 VcsHost.parseUrl(homepage),
@@ -443,8 +442,8 @@ internal data class GemSpec(
                 node["name"].textValue(),
                 node["version"].textValue(),
                 node["homepage_uri"].textValueOrEmpty(),
-                node["authors"].textValueOrEmpty().split(',').mapToSortedSetOfNotEmptyStrings(),
-                node["licenses"]?.toList().mapToSortedSetOfNotEmptyStrings(),
+                node["authors"].textValueOrEmpty().split(',').mapToSetOfNotEmptyStrings(),
+                node["licenses"]?.toList().mapToSetOfNotEmptyStrings(),
                 node["description"].textValueOrEmpty(),
                 runtimeDependencies.orEmpty(),
                 vcs,
@@ -452,15 +451,15 @@ internal data class GemSpec(
             )
         }
 
-        private inline fun <reified T> Collection<T>?.mapToSortedSetOfNotEmptyStrings(): SortedSet<String> =
-            this?.mapNotNullTo(sortedSetOf()) { entry ->
+        private inline fun <reified T> Collection<T>?.mapToSetOfNotEmptyStrings(): Set<String> =
+            this?.mapNotNullTo(mutableSetOf()) { entry ->
                 val text = when (T::class) {
                     JsonNode::class -> (entry as JsonNode).textValue()
                     else -> entry.toString()
                 }
 
                 text?.trim()?.takeIf { it.isNotEmpty() }
-            } ?: sortedSetOf()
+            } ?: emptySet()
     }
 
     fun merge(other: GemSpec): GemSpec {

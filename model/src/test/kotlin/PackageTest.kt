@@ -44,7 +44,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             authors = setOf("author"),
-            declaredLicenses = sortedSetOf("declared license"),
+            declaredLicenses = setOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),
@@ -62,7 +62,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             authors = setOf("other author"),
-            declaredLicenses = sortedSetOf("other declared license"),
+            declaredLicenses = setOf("other declared license"),
             description = "other description",
             homepageUrl = "other homepageUrl",
             binaryArtifact = RemoteArtifact("other url", Hash.create("other hash")),
@@ -93,7 +93,7 @@ class PackageTest : StringSpec({
                 version = "version"
             ),
             authors = setOf("author"),
-            declaredLicenses = sortedSetOf("declared license"),
+            declaredLicenses = setOf("declared license"),
             description = "description",
             homepageUrl = "homepageUrl",
             binaryArtifact = RemoteArtifact("url", Hash.create("hash")),

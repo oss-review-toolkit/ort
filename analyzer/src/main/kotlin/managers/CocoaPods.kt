@@ -160,7 +160,7 @@ class CocoaPods(
                 ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 authors = emptySet(),
-                declaredLicenses = sortedSetOf(),
+                declaredLicenses = emptySet(),
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir),
                 scopeDependencies = scopes,
@@ -186,7 +186,7 @@ class CocoaPods(
         return Package(
             id = id,
             authors = emptySet(),
-            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { sortedSetOf(it) } ?: sortedSetOf(),
+            declaredLicenses = podspec.license.takeUnless { it.isEmpty() }?.let { setOf(it) } ?: emptySet(),
             description = podspec.summary,
             homepageUrl = podspec.homepage,
             binaryArtifact = RemoteArtifact.EMPTY,

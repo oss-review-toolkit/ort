@@ -91,7 +91,7 @@ val ORT_RESULT = OrtResult(
                 Project(
                     id = Identifier("NPM:@ort:project-with-findings:1.0"),
                     definitionFilePath = "project-with-findings/package.json",
-                    declaredLicenses = sortedSetOf(),
+                    declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = sortedSetOf(
@@ -128,7 +128,7 @@ val ORT_RESULT = OrtResult(
                 Project(
                     id = Identifier("NPM:@ort:project-without-findings:1.0"),
                     definitionFilePath = "project-without-findings/package.json",
-                    declaredLicenses = sortedSetOf(),
+                    declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = sortedSetOf(
@@ -141,7 +141,7 @@ val ORT_RESULT = OrtResult(
                 Project(
                     id = Identifier("NPM:@ort:excluded-project:1.0"),
                     definitionFilePath = "excluded-project/package.json",
-                    declaredLicenses = sortedSetOf("BSD-2-Clause"),
+                    declaredLicenses = setOf("BSD-2-Clause"),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
                     scopeDependencies = sortedSetOf()
@@ -151,7 +151,7 @@ val ORT_RESULT = OrtResult(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:no-license-file:1.0"),
-                        declaredLicenses = sortedSetOf(),
+                        declaredLicenses = emptySet(),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
                         binaryArtifact = RemoteArtifact.EMPTY,
@@ -162,7 +162,7 @@ val ORT_RESULT = OrtResult(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:license-file:1.0"),
-                        declaredLicenses = sortedSetOf(),
+                        declaredLicenses = emptySet(),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
                         binaryArtifact = RemoteArtifact.EMPTY,
@@ -179,7 +179,7 @@ val ORT_RESULT = OrtResult(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
-                        declaredLicenses = sortedSetOf(),
+                        declaredLicenses = emptySet(),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
                         binaryArtifact = RemoteArtifact.EMPTY,
@@ -196,7 +196,7 @@ val ORT_RESULT = OrtResult(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:concluded-license:1.0"),
-                        declaredLicenses = sortedSetOf("BSD-3-Clause"),
+                        declaredLicenses = setOf("BSD-3-Clause"),
                         concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
@@ -214,7 +214,7 @@ val ORT_RESULT = OrtResult(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:declared-license:1.0"),
-                        declaredLicenses = sortedSetOf("MIT"),
+                        declaredLicenses = setOf("MIT"),
                         description = "",
                         homepageUrl = "https://github.com/oss-review-toolkit/ort",
                         binaryArtifact = RemoteArtifact.EMPTY,

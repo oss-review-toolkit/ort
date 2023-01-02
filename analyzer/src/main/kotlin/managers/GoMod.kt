@@ -134,7 +134,7 @@ class GoMod(
                         ),
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         authors = emptySet(), // Go mod doesn't support author information.
-                        declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
+                        declaredLicenses = emptySet(), // Go mod doesn't support declared licenses.
                         vcs = projectVcs,
                         vcsProcessed = projectVcs,
                         homepageUrl = "",
@@ -306,7 +306,7 @@ class GoMod(
         return Package(
             id = toId(),
             authors = emptySet(), // Go mod doesn't support author information.
-            declaredLicenses = sortedSetOf(), // Go mod doesn't support declared licenses.
+            declaredLicenses = emptySet(), // Go mod doesn't support declared licenses.
             description = "",
             homepageUrl = "",
             binaryArtifact = RemoteArtifact.EMPTY,

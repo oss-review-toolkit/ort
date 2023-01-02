@@ -378,7 +378,7 @@ private fun createMavenSupport(): MavenSupport {
         val id = Identifier("Maven", artifact.groupId, artifact.artifactId, artifact.version)
         Package(
             id,
-            declaredLicenses = sortedSetOf(),
+            declaredLicenses = emptySet(),
             binaryArtifact = RemoteArtifact.EMPTY,
             sourceArtifact = RemoteArtifact.EMPTY,
             homepageUrl = "www.${artifact.artifactId}.org",

@@ -292,7 +292,7 @@ packages:
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Raw FFI bindings to platform libraries like libc.\n"
   homepage_url: ""
   binary_artifact:
@@ -513,7 +513,7 @@ packages:
   declared_licenses:
   - "MIT OR Apache-2.0"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "Random number generator based on timing jitter"
   homepage_url: ""
   binary_artifact:

@@ -175,7 +175,7 @@ class ReportTableModelMapper(
                         id = row.id,
                         scopes = sortedMapOf(project.id to row.scopes),
                         concludedLicenses = row.concludedLicense?.let { setOf(it) }.orEmpty(),
-                        declaredLicenses = row.declaredLicenses.mapTo(sortedSetOf()) { it.license.toString() },
+                        declaredLicenses = row.declaredLicenses.mapTo(mutableSetOf()) { it.license.toString() },
                         detectedLicenses = row.detectedLicenses.mapTo(sortedSetOf()) { it.license.toString() },
                         analyzerIssues = if (nonExcludedAnalyzerIssues.isNotEmpty()) {
                             sortedMapOf(project.id to nonExcludedAnalyzerIssues)

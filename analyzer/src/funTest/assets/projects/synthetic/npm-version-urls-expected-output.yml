@@ -887,7 +887,7 @@ packages:
   declared_licenses:
   - "(MIT OR Apache-2.0)"
   declared_licenses_processed:
-    spdx_expression: "MIT OR Apache-2.0"
+    spdx_expression: "Apache-2.0 OR MIT"
   description: "atob for Node.JS and Linux / Mac / Windows CLI (it's a one-liner)"
   homepage_url: "https://git.coolaj86.com/coolaj86/atob.js.git"
   binary_artifact:
