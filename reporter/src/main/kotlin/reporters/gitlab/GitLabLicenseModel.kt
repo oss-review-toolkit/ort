@@ -19,6 +19,10 @@
 
 package org.ossreviewtoolkit.reporter.reporters.gitlab
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
+
 private const val GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR = "2.1"
 
 /**
@@ -34,9 +38,10 @@ internal data class GitLabLicenseModel(
     val version: String = GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR,
 
     /**
-     * The complete and distinct list of licenses referred to by [dependencies].
+     * The complete set of licenses referred to by [dependencies].
      */
-    val licenses: List<License>,
+    @JsonSerialize(converter = LicenseSortedSetConverter::class)
+    val licenses: Set<License>,
 
     /**
      * The list of all dependencies.
@@ -85,8 +90,9 @@ internal data class GitLabLicenseModel(
         val path: String,
 
         /**
-         * The declared license of this dependency.
+         * The declared licenses of this dependency.
          */
-        val licenses: List<String>
+        @JsonSerialize(converter = StringSortedSetConverter::class)
+        val licenses: Set<String>
     )
 }
