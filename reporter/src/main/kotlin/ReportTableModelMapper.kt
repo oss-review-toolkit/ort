@@ -161,7 +161,7 @@ class ReportTableModelMapper(
                         LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
                         ortResult.getPackageLicenseChoices(id),
                         ortResult.getRepositoryLicenseChoices()
-                    )?.sort(),
+                    )?.sorted(),
                     analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
                     scanIssues = scanIssues.map { it.toResolvableIssue() }
                 ).also { row ->

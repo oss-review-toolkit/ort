@@ -127,7 +127,7 @@ private fun Collection<LicenseFinding>.toSpdxExpression(): String =
     if (isEmpty()) {
         SpdxConstants.NONE
     } else {
-        asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sort().toString()
+        asSequence().map { it.license }.distinct().reduce(SpdxExpression::and).sorted().toString()
     }
 
 private data class Result(
