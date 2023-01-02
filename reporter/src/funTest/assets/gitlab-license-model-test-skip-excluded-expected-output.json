@@ -26,12 +26,12 @@
     "version" : "0.0.1",
     "package_manager" : "maven",
     "path" : "some/path/build.gradle",
-    "licenses" : [ "BSD-2-Clause", "GPL-2.0-or-later WITH Classpath-exception-2.0", "MIT", "LicenseRef-scancode-asmus" ]
+    "licenses" : [ "BSD-2-Clause", "GPL-2.0-or-later WITH Classpath-exception-2.0", "LicenseRef-scancode-asmus", "MIT" ]
   }, {
     "name" : "second-package",
     "version" : "0.0.2",
     "package_manager" : "pip",
     "path" : "",
-    "licenses" : [ "BSD-2-Clause", "Apache-2.0" ]
+    "licenses" : [ "Apache-2.0", "BSD-2-Clause" ]
   } ]
 }
