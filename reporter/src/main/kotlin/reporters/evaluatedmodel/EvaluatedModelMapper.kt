@@ -312,7 +312,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                 LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
                 input.ortResult.getPackageLicenseChoices(pkg.id),
                 input.ortResult.getRepositoryLicenseChoices()
-            )?.sort(),
+            )?.sorted(),
             description = pkg.description,
             homepageUrl = pkg.homepageUrl,
             binaryArtifact = pkg.binaryArtifact,

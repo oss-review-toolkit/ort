@@ -397,18 +397,18 @@ class SpdxExpressionTest : WordSpec() {
 
         "sort()" should {
             "not change already sorted expressions" {
-                "a AND b".toSpdx().sort() should beString("a AND b")
-                "(a OR b) AND (c OR d)".toSpdx().sort() should beString("(a OR b) AND (c OR d)")
+                "a AND b".toSpdx().sorted() should beString("a AND b")
+                "(a OR b) AND (c OR d)".toSpdx().sorted() should beString("(a OR b) AND (c OR d)")
             }
 
             "correctly sort simple expressions" {
-                "b AND a".toSpdx().sort() should beString("a AND b")
-                "b OR a".toSpdx().sort() should beString("a OR b")
-                "c AND b AND a".toSpdx().sort() should beString("a AND b AND c")
+                "b AND a".toSpdx().sorted() should beString("a AND b")
+                "b OR a".toSpdx().sorted() should beString("a OR b")
+                "c AND b AND a".toSpdx().sorted() should beString("a AND b AND c")
             }
 
             "correctly sort a complex expression" {
-                "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sort() should
+                "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sorted() should
                         beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
             }
         }
