@@ -30,8 +30,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 
-import java.util.Collections.emptySortedSet
-
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -50,13 +48,13 @@ class LicenseClassificationsTest : WordSpec({
 
         "detect duplicate license IDs" {
             val lic1 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-1"), emptySortedSet()
+                SpdxSingleLicenseExpression.parse("ASL-1"), emptySet()
             )
             val lic2 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-2"), emptySortedSet()
+                SpdxSingleLicenseExpression.parse("ASL-2"), emptySet()
             )
             val lic3 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf("permissive")
+                SpdxSingleLicenseExpression.parse("ASL-1"), setOf("permissive")
             )
 
             val exception = shouldThrow<IllegalArgumentException> {
@@ -69,13 +67,13 @@ class LicenseClassificationsTest : WordSpec({
             val cat1 = LicenseCategory("Category 1")
             val cat2 = LicenseCategory("Category 2")
             val lic1 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf(cat1.name)
+                SpdxSingleLicenseExpression.parse("ASL-1"), setOf(cat1.name)
             )
             val lic2 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-2"), sortedSetOf("unknownCategory")
+                SpdxSingleLicenseExpression.parse("ASL-2"), setOf("unknownCategory")
             )
             val lic3 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("BSD"), sortedSetOf("anotherUnknownCategory")
+                SpdxSingleLicenseExpression.parse("BSD"), setOf("anotherUnknownCategory")
             )
 
             val exception = shouldThrow<IllegalArgumentException> {
@@ -94,13 +92,13 @@ class LicenseClassificationsTest : WordSpec({
             val cat1 = LicenseCategory("permissive", "Permissive licenses")
             val cat2 = LicenseCategory("non permissive", "Strict licenses")
             val lic1 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-1"), sortedSetOf("permissive")
+                SpdxSingleLicenseExpression.parse("ASL-1"), setOf("permissive")
             )
             val lic2 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("ASL-2"), sortedSetOf("permissive")
+                SpdxSingleLicenseExpression.parse("ASL-2"), setOf("permissive")
             )
             val lic3 = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("GPL"), sortedSetOf("non permissive")
+                SpdxSingleLicenseExpression.parse("GPL"), setOf("non permissive")
             )
             val licenseClassifications = LicenseClassifications(
                 categories = listOf(cat1, cat2),
@@ -125,7 +123,7 @@ class LicenseClassificationsTest : WordSpec({
         "return null when querying the licenses for an unknown category" {
             val cat = LicenseCategory("oneAndOnlyCategory")
             val lic = LicenseCategorization(
-                SpdxSingleLicenseExpression.parse("LICENSE"), sortedSetOf(cat.name)
+                SpdxSingleLicenseExpression.parse("LICENSE"), setOf(cat.name)
             )
             val licenseClassifications = LicenseClassifications(categorizations = listOf(lic), categories = listOf(cat))
 
