@@ -91,6 +91,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
+import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 
 @Suppress("LargeClass")
@@ -523,6 +524,7 @@ class FossIdTest : WordSpec({
             with(result) {
                 additionalData[SCAN_CODE_KEY] shouldBe scanCode
                 additionalData[SCAN_ID_KEY] shouldBe "1"
+                additionalData[SERVER_URL_KEY] shouldBe "https://www.example.org/fossid"
             }
 
             coVerify(exactly = 0) {
@@ -802,7 +804,11 @@ class FossIdTest : WordSpec({
 
             val result = fossId.scan(createPackage(pkgId, vcsInfo))
 
-            val expectedAdditionalData = mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to "1")
+            val expectedAdditionalData = mapOf(
+                SCAN_CODE_KEY to scanCode,
+                SCAN_ID_KEY to "1",
+                SERVER_URL_KEY to "https://www.example.org/fossid"
+            )
 
             result.additionalData shouldBe expectedAdditionalData
         }
