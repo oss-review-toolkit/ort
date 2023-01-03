@@ -133,7 +133,9 @@ class CycloneDxReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val outputFiles = mutableListOf<File>()
-        val projects = input.ortResult.getProjects(omitExcluded = true)
+
+        val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
+        val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
         val schemaVersion = enumValues<CycloneDxSchema.Version>().find {
             it.versionString == options[OPTION_SCHEMA_VERSION]
@@ -175,7 +177,7 @@ class CycloneDxReporter : Reporter {
                 input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
             }
 
-            input.ortResult.getPackages(omitExcluded = true).forEach { (pkg, _) ->
+            packages.forEach { (pkg, _) ->
                 val dependencyType = if (pkg.id in allDirectDependencies) "direct" else "transitive"
                 addPackageToBom(input, pkg, bom, dependencyType)
             }
@@ -211,13 +213,12 @@ class CycloneDxReporter : Reporter {
                 )
 
                 val dependencies = input.ortResult.dependencyNavigator.projectDependencies(project)
-                val packages = input.ortResult.getPackages(omitExcluded = true).mapNotNull { (pkg, _) ->
+                val dependencyPackages = packages.mapNotNull { (pkg, _) ->
                     pkg.takeIf { it.id in dependencies }
                 }
 
-                val directDependencies =
-                    input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
-                packages.forEach { pkg ->
+                val directDependencies = input.ortResult.dependencyNavigator.projectDependencies(project, maxDepth = 1)
+                dependencyPackages.forEach { pkg ->
                     val dependencyType = if (pkg.id in directDependencies) "direct" else "transitive"
                     addPackageToBom(input, pkg, bom, dependencyType)
                 }
