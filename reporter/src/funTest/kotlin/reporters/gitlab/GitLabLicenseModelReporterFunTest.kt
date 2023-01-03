@@ -92,7 +92,7 @@ private fun createOrtResult(): OrtResult {
         analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),
             result = AnalyzerResult(
-                projects = sortedSetOf(
+                projects = setOf(
                     Project.EMPTY.copy(
                         id = Identifier("Gradle:some-group:some-gradle-project:0.0.1"),
                         definitionFilePath = "some/path/build.gradle",
@@ -129,7 +129,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     )
                 ),
-                packages = sortedSetOf(
+                packages = setOf(
                     curatedPackage(
                         id = Identifier("Maven:some-group:first-package:0.0.1"),
                         declaredLicenses = setOf(

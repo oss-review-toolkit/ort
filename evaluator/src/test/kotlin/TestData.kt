@@ -211,11 +211,11 @@ val ortResult = OrtResult(
     analyzer = AnalyzerRun.EMPTY.copy(
         config = AnalyzerConfiguration(allowDynamicVersions = true),
         result = AnalyzerResult(
-            projects = sortedSetOf(
+            projects = setOf(
                 projectExcluded,
                 projectIncluded
             ),
-            packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
+            packages = allPackages.mapTo(mutableSetOf()) { CuratedPackage(it) }
         )
     ),
     advisor = AdvisorRun(

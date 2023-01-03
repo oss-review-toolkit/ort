@@ -87,7 +87,7 @@ val ORT_RESULT = OrtResult(
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
-            projects = sortedSetOf(
+            projects = setOf(
                 Project(
                     id = Identifier("NPM:@ort:project-with-findings:1.0"),
                     definitionFilePath = "project-with-findings/package.json",
@@ -147,7 +147,7 @@ val ORT_RESULT = OrtResult(
                     scopeDependencies = sortedSetOf()
                 )
             ),
-            packages = sortedSetOf(
+            packages = setOf(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("NPM:@ort:no-license-file:1.0"),

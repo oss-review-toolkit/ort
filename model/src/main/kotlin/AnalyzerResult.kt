@@ -21,9 +21,11 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedMap
-import java.util.SortedSet
+import org.ossreviewtoolkit.model.utils.CuratedPackageSortedSetConverter
+import org.ossreviewtoolkit.model.utils.ProjectSortedSetConverter
 
 /**
  * A class that merges all information from individual [ProjectAnalyzerResult]s created for each found definition file.
@@ -33,12 +35,14 @@ data class AnalyzerResult(
     /**
      * Sorted set of the projects, as they appear in the individual analyzer results.
      */
-    val projects: SortedSet<Project>,
+    @JsonSerialize(converter = ProjectSortedSetConverter::class)
+    val projects: Set<Project>,
 
     /**
      * The set of identified packages for all projects.
      */
-    val packages: SortedSet<CuratedPackage>,
+    @JsonSerialize(converter = CuratedPackageSortedSetConverter::class)
+    val packages: Set<CuratedPackage>,
 
     /**
      * The lists of [OrtIssue]s that occurred within the analyzed projects themselves. Issues related to project
@@ -47,7 +51,8 @@ data class AnalyzerResult(
      * at all, [AnalyzerResult.hasIssues] already contains that information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: SortedMap<Identifier, List<OrtIssue>> = sortedMapOf(),
+    @JsonPropertyOrder(alphabetic = true)
+    val issues: Map<Identifier, List<OrtIssue>> = emptyMap(),
 
     /**
      * A map with [DependencyGraph]s keyed by the name of the package manager that created this graph. Package
@@ -55,7 +60,8 @@ data class AnalyzerResult(
      * this map.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val dependencyGraphs: Map<String, DependencyGraph> = sortedMapOf()
+    @JsonPropertyOrder(alphabetic = true)
+    val dependencyGraphs: Map<String, DependencyGraph> = emptyMap()
 ) {
     companion object {
         /**
@@ -63,9 +69,9 @@ data class AnalyzerResult(
          */
         @JvmField
         val EMPTY = AnalyzerResult(
-            projects = sortedSetOf(),
-            packages = sortedSetOf(),
-            issues = sortedMapOf()
+            projects = emptySet(),
+            packages = emptySet(),
+            issues = emptyMap()
         )
     }
 
@@ -108,8 +114,8 @@ data class AnalyzerResult(
     fun withResolvedScopes(): AnalyzerResult =
         if (dependencyGraphs.isNotEmpty()) {
             copy(
-                projects = projects.map { it.withResolvedScopes(dependencyGraphs[it.id.type]) }.toSortedSet(),
-                dependencyGraphs = sortedMapOf()
+                projects = projects.mapTo(mutableSetOf()) { it.withResolvedScopes(dependencyGraphs[it.id.type]) },
+                dependencyGraphs = emptyMap()
             )
         } else {
             this

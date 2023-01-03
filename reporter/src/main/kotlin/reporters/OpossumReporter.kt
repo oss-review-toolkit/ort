@@ -318,7 +318,7 @@ class OpossumReporter : Reporter {
 
         private fun addDependency(
             dependency: PackageReference,
-            curatedPackages: SortedSet<CuratedPackage>,
+            curatedPackages: Set<CuratedPackage>,
             relRoot: String,
             level: Int = 1
         ) {
@@ -344,7 +344,7 @@ class OpossumReporter : Reporter {
 
         private fun addDependencyScope(
             scope: Scope,
-            curatedPackages: SortedSet<CuratedPackage>,
+            curatedPackages: Set<CuratedPackage>,
             relRoot: String = "/"
         ) {
             val name = scope.name
@@ -370,7 +370,7 @@ class OpossumReporter : Reporter {
 
         fun addProject(
             project: Project,
-            curatedPackages: SortedSet<CuratedPackage>,
+            curatedPackages: Set<CuratedPackage>,
             excludedScopes: Set<String>,
             relRoot: String = "/"
         ) {
@@ -488,7 +488,7 @@ class OpossumReporter : Reporter {
             addSignal(signal, paths.map { resolvePath(it) }.toSortedSet())
         }
 
-        fun addPackagesThatAreRootless(analyzerResultPackages: SortedSet<CuratedPackage>) {
+        fun addPackagesThatAreRootless(analyzerResultPackages: Set<CuratedPackage>) {
             val rootlessPackages = analyzerResultPackages.filter { packageToRoot[it.metadata.id] == null }
 
             rootlessPackages.forEach {

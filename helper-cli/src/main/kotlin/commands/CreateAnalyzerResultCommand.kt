@@ -170,8 +170,8 @@ private fun createAnalyzerResult(packages: Collection<ScannedPackage>) = OrtResu
         environment = Environment(),
         config = AnalyzerConfiguration(),
         result = AnalyzerResult(
-            projects = sortedSetOf(),
-            packages = packages.mapTo(sortedSetOf()) { CuratedPackage(it.toPackage()) }
+            projects = emptySet(),
+            packages = packages.mapTo(mutableSetOf()) { CuratedPackage(it.toPackage()) }
         )
     )
 )

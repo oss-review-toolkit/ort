@@ -308,12 +308,12 @@ data class OrtResult(
         copy(
             analyzer = analyzer?.copy(
                 result = analyzer.result.copy(
-                    packages = getPackages().map { curatedPackage ->
+                    packages = getPackages().mapTo(mutableSetOf()) { curatedPackage ->
                         val uncuratedPackage = CuratedPackage(curatedPackage.toUncuratedPackage())
                         curations
                             .filter { it.isApplicable(curatedPackage.metadata.id) }
                             .fold(uncuratedPackage) { current, packageCuration -> packageCuration.apply(current) }
-                    }.toSortedSet()
+                    }
                 )
             )
         )

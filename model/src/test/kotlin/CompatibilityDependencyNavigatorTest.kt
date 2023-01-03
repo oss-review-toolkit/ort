@@ -80,8 +80,8 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
                 val project = createProject("dummy", scopeNames = sortedSetOf())
 
                 val analyzerResult = AnalyzerResult(
-                    projects = sortedSetOf(project),
-                    packages = sortedSetOf(),
+                    projects = setOf(project),
+                    packages = emptySet(),
                     dependencyGraphs = mapOf()
                 )
                 val analyzerRun = AnalyzerRun.EMPTY.copy(result = analyzerResult)
@@ -232,8 +232,8 @@ private fun createOrtResult(vararg projects: Project): OrtResult =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(
-                projects = sortedSetOf(*projects),
-                packages = sortedSetOf(),
+                projects = setOf(*projects),
+                packages = emptySet(),
                 dependencyGraphs = mapOf("test" to DependencyGraph())
             )
         )

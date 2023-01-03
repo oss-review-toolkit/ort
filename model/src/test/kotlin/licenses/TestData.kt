@@ -169,8 +169,8 @@ val ortResult = OrtResult(
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
-            projects = sortedSetOf(project),
-            packages = allPackages.mapTo(sortedSetOf()) { CuratedPackage(it) }
+            projects = setOf(project),
+            packages = allPackages.mapTo(mutableSetOf()) { CuratedPackage(it) }
         )
     ),
     scanner = ScannerRun.EMPTY.copy(

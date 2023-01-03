@@ -209,7 +209,7 @@ private fun createOrtResult(
         repository = Repository(vcsInfo),
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult.EMPTY.copy(
-                projects = sortedSetOf(
+                projects = setOf(
                     Project.EMPTY.copy(
                         id = id,
                         vcsProcessed = vcsInfo

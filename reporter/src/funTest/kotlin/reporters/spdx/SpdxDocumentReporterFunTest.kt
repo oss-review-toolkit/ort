@@ -163,7 +163,7 @@ private val ortResult = OrtResult(
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
-            projects = sortedSetOf(
+            projects = setOf(
                 Project(
                     id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
                     declaredLicenses = setOf("MIT"),
@@ -202,7 +202,7 @@ private val ortResult = OrtResult(
                     vcs = analyzedVcs
                 )
             ),
-            packages = sortedSetOf(
+            packages = setOf(
                 CuratedPackage(
                     metadata = Package(
                         id = Identifier("Maven:first-package-group:first-package:0.0.1"),
