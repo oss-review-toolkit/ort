@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.analyzer
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
@@ -94,44 +95,44 @@ class PackageManagerTest : WordSpec({
             }.toMap()
 
             assertSoftly {
-                managedFilesByName["Bower"] should containExactlyInAnyOrder("bower/bower.json")
-                managedFilesByName["Bundler"] should containExactlyInAnyOrder("bundler/Gemfile")
-                managedFilesByName["Cargo"] should containExactlyInAnyOrder("cargo/Cargo.toml")
-                managedFilesByName["Carthage"] should containExactlyInAnyOrder("carthage/Cartfile.resolved")
-                managedFilesByName["CocoaPods"] should containExactlyInAnyOrder("cocoapods/Podfile")
-                managedFilesByName["Composer"] should containExactlyInAnyOrder("composer/composer.json")
+                managedFilesByName["Bower"] should containExactly("bower/bower.json")
+                managedFilesByName["Bundler"] should containExactly("bundler/Gemfile")
+                managedFilesByName["Cargo"] should containExactly("cargo/Cargo.toml")
+                managedFilesByName["Carthage"] should containExactly("carthage/Cartfile.resolved")
+                managedFilesByName["CocoaPods"] should containExactly("cocoapods/Podfile")
+                managedFilesByName["Composer"] should containExactly("composer/composer.json")
                 managedFilesByName["Conan"] should containExactlyInAnyOrder(
                     "conan-py/conanfile.py",
                     "conan-txt/conanfile.txt"
                 )
-                managedFilesByName["DotNet"] should containExactlyInAnyOrder("dotnet/dotnet.csproj")
+                managedFilesByName["DotNet"] should containExactly("dotnet/dotnet.csproj")
                 managedFilesByName["GoDep"] should containExactlyInAnyOrder(
                     "glide/glide.yaml",
                     "godep/Gopkg.toml", "godeps/Godeps.json"
                 )
-                managedFilesByName["GoMod"] should containExactlyInAnyOrder("gomod/go.mod")
+                managedFilesByName["GoMod"] should containExactly("gomod/go.mod")
                 managedFilesByName["Gradle"] should containExactlyInAnyOrder(
                     "gradle-groovy/build.gradle",
                     "gradle-kotlin/build.gradle.kts"
                 )
-                managedFilesByName["Maven"] should containExactlyInAnyOrder("maven/pom.xml")
-                managedFilesByName["NPM"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["NuGet"] should containExactlyInAnyOrder("nuget/packages.config")
+                managedFilesByName["Maven"] should containExactly("maven/pom.xml")
+                managedFilesByName["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
+                managedFilesByName["NuGet"] should containExactly("nuget/packages.config")
                 managedFilesByName["PIP"] should containExactlyInAnyOrder(
                     "pip-requirements/requirements.txt",
                     "pip-setup/setup.py"
                 )
-                managedFilesByName["Pipenv"] should containExactlyInAnyOrder("pipenv/Pipfile.lock")
-                managedFilesByName["PNPM"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["Poetry"] should containExactlyInAnyOrder("poetry/poetry.lock")
-                managedFilesByName["Pub"] should containExactlyInAnyOrder("pub/pubspec.yaml")
-                managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
+                managedFilesByName["Pipenv"] should containExactly("pipenv/Pipfile.lock")
+                managedFilesByName["PNPM"] should containExactly("npm-pnpm-and-yarn/package.json")
+                managedFilesByName["Poetry"] should containExactly("poetry/poetry.lock")
+                managedFilesByName["Pub"] should containExactly("pub/pubspec.yaml")
+                managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
                 managedFilesByName["SpdxDocumentFile"] should containExactlyInAnyOrder(
                     "spdx-package/package.spdx.yml",
                     "spdx-project/project.spdx.yml"
                 )
-                managedFilesByName["Stack"] should containExactlyInAnyOrder("stack/stack.yaml")
-                managedFilesByName["Yarn"] should containExactlyInAnyOrder("npm-pnpm-and-yarn/package.json")
+                managedFilesByName["Stack"] should containExactly("stack/stack.yaml")
+                managedFilesByName["Yarn"] should containExactly("npm-pnpm-and-yarn/package.json")
             }
         }
 
@@ -157,7 +158,7 @@ class PackageManagerTest : WordSpec({
                 "pip-requirements/requirements.txt",
                 "pip-setup/setup.py"
             )
-            managedFilesByName["SBT"] should containExactlyInAnyOrder("sbt/build.sbt")
+            managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
         }
 
         "find no files if no package managers are active" {

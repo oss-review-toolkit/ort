@@ -27,6 +27,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.neverNullMatcher
 import io.kotest.matchers.should
@@ -337,7 +338,7 @@ class SpdxExpressionTest : WordSpec() {
             fun String.decompose() = toSpdx().decompose().map { it.toString() }
 
             "not split-up compound expressions with a WITH operator" {
-                "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() should containExactlyInAnyOrder(
+                "GPL-2.0-or-later WITH Classpath-exception-2.0".decompose() should containExactly(
                     "GPL-2.0-or-later WITH Classpath-exception-2.0"
                 )
             }
@@ -424,7 +425,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "not contain a duplicate valid choice for a simple expression" {
-                "a AND a".toSpdx().validChoices() should containExactlyInAnyOrder("a".toSpdx())
+                "a AND a".toSpdx().validChoices() should containExactly("a".toSpdx())
             }
 
             "not contain duplicate valid choice for a complex expression" {
@@ -436,9 +437,7 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "not contain duplicate valid choice different left and right expressions" {
-                "a AND a AND b".toSpdx().validChoices() should containExactlyInAnyOrder(
-                    "a AND b".toSpdx()
-                )
+                "a AND a AND b".toSpdx().validChoices() should containExactly("a AND b".toSpdx())
             }
         }
 

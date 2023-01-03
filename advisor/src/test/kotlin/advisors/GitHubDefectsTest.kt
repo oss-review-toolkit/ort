@@ -344,7 +344,7 @@ class GitHubDefectsTest : WordSpec({
             val advisor = createAdvisor(labelFilter = labelFilter)
             val result = advisor.getSingleResult(pkg)
 
-            result.defects should containExactlyInAnyOrder(createDefect(index = 2))
+            result.defects should containExactly(createDefect(index = 2))
         }
 
         "do regex matches on label names" {
