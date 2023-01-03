@@ -40,12 +40,10 @@ abstract class AdviceProvider(val providerName: String) {
     companion object : Logging
 
     /**
-     * For a given list of [Package]s, retrieve  findings and return a map that associates each package with a list
-     * of [AdvisorResult]s. Needs to be implemented by child classes.
+     * For a given list of [Package]s, retrieve findings and return a map that associates each package with a list of
+     * [AdvisorResult]s. Needs to be implemented by child classes.
      */
-    abstract suspend fun retrievePackageFindings(
-        packages: List<Package>
-    ): Map<Package, List<AdvisorResult>>
+    abstract suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>>
 
     /**
      * An object with detail information about this [AdviceProvider].
@@ -53,8 +51,8 @@ abstract class AdviceProvider(val providerName: String) {
     abstract val details: AdvisorDetails
 
     /**
-     * A generic method that creates a failed [AdvisorResult] for [Package]s if there was an issue
-     * constructing the provider-specific information.
+     * A generic method that creates a failed [AdvisorResult] for [Package]s if there was an issue constructing the
+     * provider-specific information.
      */
     protected fun createFailedResults(
         startTime: Instant,
