@@ -220,7 +220,7 @@ class Cargo(
 
         val homepageUrl = pkgDefinition.getString("package.homepage").orEmpty()
         val authors = pkgDefinition.getList("package.authors", emptyList<String>())
-            .mapNotNullTo(sortedSetOf(), ::parseAuthorString)
+            .mapNotNullTo(mutableSetOf(), ::parseAuthorString)
 
         val project = Project(
             id = projectPkg.id,

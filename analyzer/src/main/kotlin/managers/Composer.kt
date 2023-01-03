@@ -315,8 +315,8 @@ class Composer(
             packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
         }.toSet()
 
-    private fun parseAuthors(packageInfo: JsonNode) =
-        sortedSetOf<String>().also { authors ->
+    private fun parseAuthors(packageInfo: JsonNode): Set<String> =
+        mutableSetOf<String>().also { authors ->
             packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
         }
 
