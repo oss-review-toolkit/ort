@@ -112,11 +112,11 @@ class FreemarkerTemplateProcessor(
         options: Map<String, String>,
         projectsAsPackages: Set<Identifier>
     ): List<File> {
-        val projects = input.ortResult.getProjects().map { project ->
+        val projects = input.ortResult.getProjects().sortedBy { it.id }.map { project ->
             PackageModel(project.id, input)
         }
 
-        val packages = input.ortResult.getPackages().map { pkg ->
+        val packages = input.ortResult.getPackages().sortedBy { it.metadata.id }.map { pkg ->
             PackageModel(pkg.metadata.id, input)
         }
 
