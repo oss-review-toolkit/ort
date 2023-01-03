@@ -32,6 +32,7 @@ import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
+import io.mockk.unmockkAll
 import io.mockk.verify
 
 import java.net.URI
@@ -62,6 +63,10 @@ import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class GitHubDefectsTest : WordSpec({
+    afterTest {
+        unmockkAll()
+    }
+
     "retrievePackageFindings" should {
         "return an empty result for packages not hosted on GitHub" {
             val vcs = VcsInfo(type = VcsType.GIT, url = "https://www.example.org/repo/test.git", revision = "1")

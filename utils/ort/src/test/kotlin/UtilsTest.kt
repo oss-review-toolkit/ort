@@ -31,6 +31,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkObject
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import io.mockk.verify
 
 import java.net.Authenticator
@@ -420,17 +421,22 @@ class UtilsTest : WordSpec({
             mockkObject(OrtAuthenticator)
             mockkObject(OrtProxySelector)
             mockkStatic(Authenticator::class)
-            val passwordAuth = mockk<PasswordAuthentication>()
 
-            every {
-                Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
-            } returns passwordAuth
+            try {
+                val passwordAuth = mockk<PasswordAuthentication>()
 
-            requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
+                every {
+                    Authenticator.requestPasswordAuthentication(host, null, port, scheme, null, null)
+                } returns passwordAuth
 
-            verify {
-                OrtAuthenticator.install()
-                OrtProxySelector.install()
+                requestPasswordAuthentication(host, port, scheme) shouldBe passwordAuth
+
+                verify {
+                    OrtAuthenticator.install()
+                    OrtProxySelector.install()
+                }
+            } finally {
+                unmockkAll()
             }
         }
 

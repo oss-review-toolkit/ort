@@ -31,6 +31,7 @@ import io.kotest.matchers.types.shouldNotBeSameInstanceAs
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 
 import java.io.IOException
 import java.time.Duration
@@ -44,6 +45,10 @@ import okhttp3.ResponseBody
 import okio.BufferedSource
 
 class OkHttpClientHelperTest : WordSpec({
+    afterTest {
+        unmockkAll()
+    }
+
     "buildClient()" should {
         "return the same client instance when no configuration is specified" {
             val clientA = OkHttpClientHelper.buildClient()

@@ -29,6 +29,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.runs
+import io.mockk.unmockkAll
 import io.mockk.verify
 
 import java.net.Authenticator
@@ -57,6 +58,10 @@ class GitTest : WordSpec({
     afterSpec {
         Authenticator.setDefault(originalAuthenticator)
         CredentialsProvider.setDefault(originalCredentialsProvider)
+    }
+
+    afterTest {
+        unmockkAll()
     }
 
     "Git" should {
