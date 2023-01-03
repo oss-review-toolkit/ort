@@ -233,7 +233,9 @@ private val packagesRequestJson = generatePackagesRequest()
 private fun WireMockServer.stubPackagesRequest(responseFile: String) {
     stubFor(
         post(urlPathEqualTo("/api/packages/bulk_search"))
-            .withRequestBody(equalToJson(packagesRequestJson, false, false))
+            .withRequestBody(
+                equalToJson(packagesRequestJson, /* ignoreArrayOrder = */ true, /* ignoreExtraElements = */ false)
+            )
             .withHeader("Content-Type", equalTo("application/json; charset=UTF-8"))
             .willReturn(
                 aResponse().withStatus(200)
