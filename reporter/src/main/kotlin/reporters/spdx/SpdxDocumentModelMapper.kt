@@ -70,7 +70,8 @@ object SpdxDocumentModelMapper {
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
 
-        val projectPackages = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).map { project ->
+        val projects = ortResult.getProjects(omitExcluded = true, includeSubProjects = false).sortedBy { it.id }
+        val projectPackages = projects.map { project ->
             val spdxProjectPackage = project.toPackage().toSpdxPackage(licenseInfoResolver, isProject = true)
 
             ortResult.collectDependencies(project.id, 1).mapTo(relationships) { dependency ->
@@ -84,7 +85,7 @@ object SpdxDocumentModelMapper {
             spdxProjectPackage
         }
 
-        ortResult.getPackages(omitExcluded = true).forEach { curatedPackage ->
+        ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }.forEach { curatedPackage ->
             val pkg = curatedPackage.metadata
             val binaryPackage = pkg.toSpdxPackage(licenseInfoResolver)
 
