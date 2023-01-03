@@ -107,10 +107,10 @@ private fun createLicenseClassifications(): LicenseClassifications {
     val includeNoticeCategory = LicenseCategory("include-in-notice-file")
     val includeSourceCategory = LicenseCategory("include-source-code-offer-in-notice-file")
     val mitLicense = LicenseCategorization(
-        SpdxSingleLicenseExpression.parse("MIT"), sortedSetOf(includeNoticeCategory.name)
+        SpdxSingleLicenseExpression.parse("MIT"), setOf(includeNoticeCategory.name)
     )
     val bsdLicense = LicenseCategorization(
-        SpdxSingleLicenseExpression.parse("BSD-3-Clause"), sortedSetOf(includeSourceCategory.name)
+        SpdxSingleLicenseExpression.parse("BSD-3-Clause"), setOf(includeSourceCategory.name)
     )
     return LicenseClassifications(
         categories = listOf(includeNoticeCategory, includeSourceCategory),
