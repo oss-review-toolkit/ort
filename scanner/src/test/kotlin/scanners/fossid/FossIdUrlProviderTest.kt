@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 
 import java.net.PasswordAuthentication
 import java.net.URI
@@ -32,6 +33,10 @@ import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.requestPasswordAuthentication
 
 class FossIdUrlProviderTest : StringSpec({
+    afterTest {
+        unmockkAll()
+    }
+
     "URLs are not changed if no mapping is provided" {
         val urlProvider = FossIdUrlProvider.create()
 

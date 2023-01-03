@@ -31,6 +31,7 @@ import io.kotest.matchers.string.contain
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 
 import java.io.IOException
 
@@ -50,6 +51,10 @@ import org.ossreviewtoolkit.model.Severity
 class MavenDependencyHandlerTest : WordSpec({
     beforeSpec {
         mockkStatic(Artifact::identifier)
+    }
+
+    afterSpec {
+        unmockkAll()
     }
 
     "identifierFor" should {

@@ -20,11 +20,15 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.core.Tuple2
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import io.kotest.matchers.shouldBe
 
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 
 import java.io.File
 import java.net.URL
@@ -37,6 +41,10 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 class CarthageTest : WordSpec() {
     private val carthage =
         Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+
+    override fun afterTest(f: suspend (Tuple2<TestCase, TestResult>) -> Unit) {
+        unmockkAll()
+    }
 
     init {
         "resolveDependencies" should {
