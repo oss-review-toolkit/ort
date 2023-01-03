@@ -320,9 +320,9 @@ class Composer(
             packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
         }
 
-    private fun parseDeclaredLicenses(packageInfo: JsonNode) =
-        sortedSetOf<String>().also { set ->
-            packageInfo["license"]?.mapNotNullTo(set) { it.textValue() }
+    private fun parseDeclaredLicenses(packageInfo: JsonNode): Set<String> =
+        mutableSetOf<String>().also { licenses ->
+            packageInfo["license"]?.mapNotNullTo(licenses) { it.textValue() }
         }
 
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =

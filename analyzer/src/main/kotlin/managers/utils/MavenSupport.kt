@@ -147,10 +147,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 addAll(developers)
             }
 
-        fun parseLicenses(mavenProject: MavenProject) =
-            mavenProject.licenses.mapNotNull { license ->
+        fun parseLicenses(mavenProject: MavenProject): Set<String> =
+            mavenProject.licenses.mapNotNullTo(mutableSetOf()) { license ->
                 listOfNotNull(license.name, license.url, license.comments).firstOrNull { it.isNotBlank() }
-            }.toSortedSet()
+            }
 
         fun processDeclaredLicenses(licenses: Set<String>): ProcessedDeclaredLicense =
             // See http://maven.apache.org/ref/3.6.3/maven-model/maven.html#project which says: "If multiple licenses
