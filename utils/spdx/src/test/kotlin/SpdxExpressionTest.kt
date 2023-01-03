@@ -352,9 +352,9 @@ class SpdxExpressionTest : WordSpec() {
             "work with LicenseRef-* identifiers" {
                 "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
                     .decompose() should containExactlyInAnyOrder(
-                    "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
-                    "LicenseRef-scancode-commercial-license"
-                )
+                        "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                        "LicenseRef-scancode-commercial-license"
+                    )
             }
 
             "return distinct strings" {
@@ -365,9 +365,9 @@ class SpdxExpressionTest : WordSpec() {
             "not merge license-exception pairs with single matching licenses" {
                 "GPL-2.0-or-later WITH Classpath-exception-2.0 AND GPL-2.0-or-later"
                     .decompose() should containExactlyInAnyOrder(
-                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                    "GPL-2.0-or-later"
-                )
+                        "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                        "GPL-2.0-or-later"
+                    )
             }
         }
 
