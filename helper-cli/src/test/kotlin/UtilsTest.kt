@@ -18,7 +18,7 @@
  */
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.helper.utils.greedySetCover
@@ -32,7 +32,7 @@ class UtilsTest : WordSpec({
                 "c" to setOf(1, 2)
             )
 
-            greedySetCover(sets) should containExactlyInAnyOrder("c")
+            greedySetCover(sets) should containExactly("c")
         }
 
         "resolve a tie using the given comparator" {
@@ -43,11 +43,11 @@ class UtilsTest : WordSpec({
 
             greedySetCover(sets) { a, b ->
                 a.length - b.length
-            } should containExactlyInAnyOrder("aa")
+            } should containExactly("aa")
 
             greedySetCover(sets) { a, b ->
                 b.length - a.length
-            } should containExactlyInAnyOrder("b")
+            } should containExactly("b")
         }
     }
 })

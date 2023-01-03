@@ -23,7 +23,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
 import io.mockk.every
@@ -87,7 +87,7 @@ class ScanOssScannerFileTest : StringSpec({
         }
 
         with(summary) {
-            licenseFindings should containExactlyInAnyOrder(
+            licenseFindings should containExactly(
                 LicenseFinding(
                     license = "Apache-2.0",
                     location = TextLocation(

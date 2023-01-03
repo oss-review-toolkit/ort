@@ -30,7 +30,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
@@ -79,12 +78,12 @@ class OssIndexTest : WordSpec({
             val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
 
             result shouldNot beEmptyMap()
-            result.keys should containExactlyInAnyOrder(ID_JUNIT)
+            result.keys should containExactly(ID_JUNIT)
             result[ID_JUNIT] shouldNotBeNull {
                 this should haveSize(1)
                 with(single()) {
                     advisor shouldBe ossIndex.details
-                    vulnerabilities should containExactlyInAnyOrder(
+                    vulnerabilities should containExactly(
                         Vulnerability(
                             id = "CVE-2020-15250",
                             summary = "[CVE-2020-15250] In JUnit4 from version 4.7 and before 4.13.1,...",

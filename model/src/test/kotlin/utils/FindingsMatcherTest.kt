@@ -82,8 +82,8 @@ class FindingsMatcherTest : WordSpec() {
                 val result = matcher.match(licenseFindings, copyrightFindings)
                 val (licenseFindings, copyrightFindings) = result.getFindings("some-id")
 
-                licenseFindings.map { it.location.path } should containExactlyInAnyOrder("LICENSE")
-                copyrightFindings.map { it.statement } should containExactlyInAnyOrder("some stmt")
+                licenseFindings.map { it.location.path } should containExactly("LICENSE")
+                copyrightFindings.map { it.statement } should containExactly("some stmt")
             }
         }
 

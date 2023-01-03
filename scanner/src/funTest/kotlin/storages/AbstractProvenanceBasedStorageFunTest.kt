@@ -128,7 +128,7 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
 
                 val readResult = storage.read(provenance2)
 
-                readResult should containExactlyInAnyOrder(scanResult.copy(provenance = provenance2))
+                readResult should containExactly(scanResult.copy(provenance = provenance2))
             }
 
             "fail if the provenance contains a VCS path" {
@@ -151,7 +151,7 @@ abstract class AbstractProvenanceBasedStorageFunTest(vararg listeners: TestListe
                     ScannerCriteria.forDetails(scanResult1.scanner)
                 )
 
-                readResult should containExactlyInAnyOrder(scanResult1)
+                readResult should containExactly(scanResult1)
             }
 
             "find all scan results for scanners with names matching a pattern" {

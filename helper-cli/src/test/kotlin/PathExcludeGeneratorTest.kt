@@ -18,6 +18,7 @@
  */
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -48,7 +49,7 @@ class PathExcludeGeneratorTest : WordSpec({
         "exclude only the topmost possible directory" {
             generateDirectoryExcludes(
                 "build/m4/file.ext"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "build/**"
             )
         }
@@ -56,7 +57,7 @@ class PathExcludeGeneratorTest : WordSpec({
         "return excludes for a directory which contains regex special characters, e.g. the dot" {
             generateDirectoryExcludes(
                 ".github/file.ext"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 ".github/**"
             )
         }
@@ -90,7 +91,7 @@ class PathExcludeGeneratorTest : WordSpec({
 
             val patterns = generateFileExcludes(files).map { it.pattern }
 
-            patterns should containExactlyInAnyOrder("build*.sh")
+            patterns should containExactly("build*.sh")
         }
     }
 
@@ -115,13 +116,13 @@ class PathExcludeGeneratorTest : WordSpec({
         "return the expected pattern if only a single file matches" {
             getPatternsForFiles(
                 "src/some_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "src/some_test.go"
             )
 
             getPatternsForFiles(
                 "some_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "some_test.go"
             )
         }
@@ -130,14 +131,14 @@ class PathExcludeGeneratorTest : WordSpec({
             getPatternsForFiles(
                 "src/some_test.go",
                 "src/module/some_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "src/**/some_test.go"
             )
 
             getPatternsForFiles(
                 "some_test.go",
                 "module/some_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "**/some_test.go"
             )
         }
@@ -146,14 +147,14 @@ class PathExcludeGeneratorTest : WordSpec({
             getPatternsForFiles(
                 "src/some_test.go",
                 "src/other_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "src/*_test.go"
             )
 
             getPatternsForFiles(
                 "some_test.go",
                 "other_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "*_test.go"
             )
         }
@@ -162,14 +163,14 @@ class PathExcludeGeneratorTest : WordSpec({
             getPatternsForFiles(
                 "src/some_test.go",
                 "src/module/other_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "src/**/*_test.go"
             )
 
             getPatternsForFiles(
                 "some_test.go",
                 "module/other_test.go"
-            ) should containExactlyInAnyOrder(
+            ) should containExactly(
                 "**/*_test.go"
             )
         }
