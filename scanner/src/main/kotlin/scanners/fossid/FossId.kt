@@ -109,6 +109,9 @@ class FossId internal constructor(
         @JvmStatic
         internal val SCAN_ID_KEY = "scanid"
 
+        @JvmStatic
+        internal val SERVER_URL_KEY = "serverurl"
+
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -162,7 +165,7 @@ class FossId internal constructor(
         DELTA
     }
 
-    private val secretKeys = listOf("serverUrl", "apiKey", "user")
+    private val secretKeys = listOf("apiKey", "user")
     private val namingProvider = config.createNamingProvider()
     private val urlProvider = config.createUrlProvider()
 
@@ -285,7 +288,7 @@ class FossId internal constructor(
                             provenance,
                             details,
                             summary,
-                            mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId)
+                            mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
                         )
                     }
                 } catch (e: IllegalStateException) {
@@ -706,6 +709,11 @@ class FossId internal constructor(
             issues = issues
         )
 
-        return ScanResult(provenance, details, summary, mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId))
+        return ScanResult(
+            provenance,
+            details,
+            summary,
+            mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
+        )
     }
 }
