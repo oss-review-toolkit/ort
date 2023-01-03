@@ -89,11 +89,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         createExcludeInfo()
         createScopes()
 
-        input.ortResult.analyzer?.result?.projects?.forEach { project ->
+        val resultProjects = input.ortResult.getProjects().sortedBy { it.id }
+        val resultPackages = input.ortResult.getPackages().sortedBy { it.metadata.id }
+
+        resultProjects.forEach { project ->
             addProject(project)
         }
 
-        input.ortResult.analyzer?.result?.packages?.forEach { curatedPkg ->
+        resultPackages.forEach { curatedPkg ->
             addPackage(curatedPkg)
         }
 
@@ -109,12 +112,12 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             }
         }
 
-        input.ortResult.analyzer?.result?.projects?.forEach { project ->
+        resultProjects.forEach { project ->
             val pkg = packages.getValue(project.id)
             addDependencyTree(project, pkg, deduplicateDependencyTree)
         }
 
-        input.ortResult.analyzer?.result?.projects?.forEach { project ->
+        resultProjects.forEach { project ->
             addShortestPaths(project)
         }
 
