@@ -41,10 +41,10 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
     companion object : Logging
 
-    private val projects = sortedSetOf<Project>()
-    private val packages = sortedSetOf<CuratedPackage>()
-    private val issues = sortedMapOf<Identifier, List<OrtIssue>>()
-    private val dependencyGraphs = sortedMapOf<String, DependencyGraph>()
+    private val projects = mutableSetOf<Project>()
+    private val packages = mutableSetOf<CuratedPackage>()
+    private val issues = mutableMapOf<Identifier, List<OrtIssue>>()
+    private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages.map { it.metadata }).getDuplicates { it.id }

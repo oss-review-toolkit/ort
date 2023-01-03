@@ -91,10 +91,11 @@ class DependencyGraphConverterTest : WordSpec({
             val orgResult = createAnalyzerResult(gradleProject.createResult())
             val resultWithGraph = DependencyGraphConverter.convert(orgResult)
             val mixedResult = resultWithGraph.copy(
-                projects = sortedSetOf(
-                    goProject1,
-                    goProject2
-                ).apply { addAll(resultWithGraph.projects) }
+                projects = buildSet {
+                    add(goProject1)
+                    add(goProject2)
+                    addAll(resultWithGraph.projects)
+                }
             )
 
             val convertedResult = DependencyGraphConverter.convert(mixedResult)
@@ -131,7 +132,10 @@ class DependencyGraphConverterTest : WordSpec({
             val orgResult = createAnalyzerResult(gradleProject.createResult())
             val resultWithGraph = DependencyGraphConverter.convert(orgResult)
             val mixedResult = resultWithGraph.copy(
-                projects = sortedSetOf(gradleEmptyProject).apply { addAll(resultWithGraph.projects) }
+                projects = buildSet {
+                    add(gradleEmptyProject)
+                    addAll(resultWithGraph.projects)
+                }
             )
 
             val convertedResult = DependencyGraphConverter.convert(mixedResult)
@@ -193,8 +197,8 @@ private fun createIssues(index: Int): List<OrtIssue> =
  * Construct an [AnalyzerResult] from the given sequence of [projectResults].
  */
 private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): AnalyzerResult {
-    val projects = projectResults.mapTo(sortedSetOf()) { it.project }
-    val packages = projectResults.flatMap { it.packages }.mapTo(sortedSetOf()) { CuratedPackage(it) }
+    val projects = projectResults.mapTo(mutableSetOf()) { it.project }
+    val packages = projectResults.flatMap { it.packages }.mapTo(mutableSetOf()) { CuratedPackage(it) }
 
     return AnalyzerResult(projects, packages)
 }

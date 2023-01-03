@@ -135,9 +135,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
                 val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
                 val result = AnalyzerResult(
-                    projects = sortedSetOf(p1, p2, project3),
-                    packages = sortedSetOf(),
-                    dependencyGraphs = sortedMapOf(
+                    projects = setOf(p1, p2, project3),
+                    packages = emptySet(),
+                    dependencyGraphs = mapOf(
                         project1.id.type to graph1,
                         project2.id.type to graph2
                     )
@@ -153,9 +153,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
                 val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
                 val result = AnalyzerResult(
-                    projects = sortedSetOf(p1, p2, project3),
-                    packages = sortedSetOf(),
-                    dependencyGraphs = sortedMapOf(
+                    projects = setOf(p1, p2, project3),
+                    packages = emptySet(),
+                    dependencyGraphs = mapOf(
                         project1.id.type to graph1,
                         project2.id.type to graph2
                     )
@@ -189,9 +189,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                 val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
                 val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
                 val result = AnalyzerResult(
-                    projects = sortedSetOf(p1, p2, project3),
-                    packages = sortedSetOf(),
-                    dependencyGraphs = sortedMapOf(
+                    projects = setOf(p1, p2, project3),
+                    packages = emptySet(),
+                    dependencyGraphs = mapOf(
                         project1.id.type to graph1,
                         project2.id.type to emptyGraph
                     )
@@ -277,13 +277,21 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                mergedResults.projects shouldBe sortedSetOf(project1, project2)
-                mergedResults.packages shouldBe sortedSetOf(
-                    package1.toCuratedPackage(), package2.toCuratedPackage(),
+                mergedResults.projects.map {
+                    it.withResolvedScopes(mergedResults.dependencyGraphs[it.id.type])
+                } shouldBe setOf(
+                    project1,
+                    project2
+                )
+                mergedResults.packages shouldBe setOf(
+                    package1.toCuratedPackage(),
+                    package2.toCuratedPackage(),
                     package3.toCuratedPackage()
                 )
-                mergedResults.issues shouldBe
-                        sortedMapOf(project1.id to analyzerResult1.issues, project2.id to analyzerResult2.issues)
+                mergedResults.issues shouldBe mapOf(
+                    project1.id to analyzerResult1.issues,
+                    project2.id to analyzerResult2.issues
+                )
             }
 
             "convert to the dependency graph representation when building" {

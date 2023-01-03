@@ -36,13 +36,13 @@ annotation class OrtResultDsl
 
 @OrtResultDsl
 class OrtResultBuilder {
-    private val projects = mutableListOf<Project>()
-    private val packages = mutableListOf<Package>()
-    private val parentChildIds = mutableMapOf<String, MutableList<String>>()
+    private val projects = mutableSetOf<Project>()
+    private val packages = mutableSetOf<Package>()
+    private val parentChildIds = mutableMapOf<String, MutableSet<String>>()
 
     @OrtResultDsl
     inner class ProjectBuilder(private val id: String) {
-        private val rootIds = mutableListOf<String>()
+        private val rootIds = mutableSetOf<String>()
 
         @OrtResultDsl
         var license = "Apache-2.0"
@@ -55,7 +55,7 @@ class OrtResultBuilder {
             return pkg
         }
 
-        private fun getDependencies(ids: List<String>): SortedSet<PackageReference> =
+        private fun getDependencies(ids: Set<String>): SortedSet<PackageReference> =
             ids.mapTo(sortedSetOf()) {
                 PackageReference(
                     id = Identifier(it),
@@ -87,7 +87,7 @@ class OrtResultBuilder {
 
         @OrtResultDsl
         fun pkg(id: String, setup: PkgBuilder.() -> Unit): Package {
-            this@OrtResultBuilder.parentChildIds.getOrPut(this@PkgBuilder.id) { mutableListOf() } += id
+            this@OrtResultBuilder.parentChildIds.getOrPut(this@PkgBuilder.id) { mutableSetOf() } += id
             val pkg = this@OrtResultBuilder.PkgBuilder(id).apply(setup).build()
             this@OrtResultBuilder.packages += pkg
             return pkg
@@ -115,8 +115,8 @@ class OrtResultBuilder {
         return OrtResult.EMPTY.copy(
             analyzer = AnalyzerRun.EMPTY.copy(
                 result = AnalyzerResult(
-                    projects = projects.toSortedSet(),
-                    packages = packages.mapTo(sortedSetOf()) { it.toCuratedPackage() }
+                    projects = projects,
+                    packages = packages.mapTo(mutableSetOf()) { it.toCuratedPackage() }
                 )
             )
         )

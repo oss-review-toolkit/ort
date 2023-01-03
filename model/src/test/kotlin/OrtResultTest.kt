@@ -109,7 +109,7 @@ class OrtResultTest : WordSpec({
                     )
                 ),
                 AnalyzerRun.EMPTY.copy(
-                    result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project1, project2, project3))
+                    result = AnalyzerResult.EMPTY.copy(projects = setOf(project1, project2, project3))
                 )
             )
 
@@ -136,7 +136,7 @@ class OrtResultTest : WordSpec({
                     )
                 ),
                 AnalyzerRun.EMPTY.copy(
-                    result = AnalyzerResult.EMPTY.copy(projects = sortedSetOf(project))
+                    result = AnalyzerResult.EMPTY.copy(projects = setOf(project))
                 )
             )
 
@@ -166,9 +166,9 @@ class OrtResultTest : WordSpec({
                 ),
                 analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
-                        projects = sortedSetOf(),
-                        packages = sortedSetOf(),
-                        issues = sortedMapOf(
+                        projects = emptySet(),
+                        packages = emptySet(),
+                        issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to
                                     listOf(
                                         OrtIssue(message = "Issue message to resolve", source = ""),
@@ -191,9 +191,9 @@ class OrtResultTest : WordSpec({
             val ortResult = OrtResult.EMPTY.copy(
                 analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
-                        projects = sortedSetOf(),
-                        packages = sortedSetOf(),
-                        issues = sortedMapOf(
+                        projects = emptySet(),
+                        packages = emptySet(),
+                        issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to
                                     listOf(
                                         OrtIssue(
@@ -236,15 +236,15 @@ class OrtResultTest : WordSpec({
                 ),
                 analyzer = AnalyzerRun.EMPTY.copy(
                     result = AnalyzerResult(
-                        projects = sortedSetOf(
+                        projects = setOf(
                             Project.EMPTY.copy(
                                 id = Identifier("Maven:org.oss-review-toolkit:excluded:1.0"),
                                 definitionFilePath = "excluded/pom.xml",
                                 declaredLicenses = emptySet()
                             )
                         ),
-                        packages = sortedSetOf(),
-                        issues = sortedMapOf(
+                        packages = emptySet(),
+                        issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
                                     listOf(OrtIssue(message = "Excluded issue", source = "")),
                             Identifier("Maven:org.oss-review-toolkit:included:1.0") to

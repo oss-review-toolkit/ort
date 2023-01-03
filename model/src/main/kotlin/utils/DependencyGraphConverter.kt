@@ -53,7 +53,7 @@ object DependencyGraphConverter {
 
         return result.copy(
             dependencyGraphs = result.dependencyGraphs + graphs,
-            projects = result.projects.mapTo(sortedSetOf()) { it.convertToScopeNames() }
+            projects = result.projects.mapTo(mutableSetOf()) { it.convertToScopeNames() }
         )
     }
 
@@ -61,7 +61,7 @@ object DependencyGraphConverter {
      * Build [DependencyGraph]s for the given [projects]. The resulting map contains one graph for each package
      * manager involved.
      */
-    private fun buildDependencyGraphs(projects: List<Project>): Map<String, DependencyGraph> {
+    private fun buildDependencyGraphs(projects: Set<Project>): Map<String, DependencyGraph> {
         val graphs = mutableMapOf<String, DependencyGraph>()
 
         projects.groupBy { it.id.type }.forEach { (type, projectsForType) ->
@@ -86,8 +86,8 @@ object DependencyGraphConverter {
      * Determine the projects in this [AnalyzerResult] that require a conversion. These are the projects that manage
      * their dependencies in a scope structure.
      */
-    private fun AnalyzerResult.projectsWithScopes(): List<Project> =
-        projects.filter { it.scopeDependencies?.isNotEmpty() ?: false }
+    private fun AnalyzerResult.projectsWithScopes(): Set<Project> =
+        projects.filterTo(mutableSetOf()) { it.scopeDependencies?.isNotEmpty() ?: false }
 
     /**
      * Convert the dependency representation used by this [Project] to the dependency graph format, i.e. a set of

@@ -271,7 +271,7 @@ private fun createOrtResult(): OrtResult {
         analyzer = AnalyzerRun.EMPTY.copy(
             config = AnalyzerConfiguration(allowDynamicVersions = true),
             result = AnalyzerResult(
-                projects = sortedSetOf(
+                projects = setOf(
                     Project(
                         id = Identifier("Maven:first-project-group:first-project-name:0.0.1"),
                         declaredLicenses = setOf("MIT"),
@@ -345,7 +345,7 @@ private fun createOrtResult(): OrtResult {
                         vcs = analyzedVcs
                     )
                 ),
-                packages = sortedSetOf(
+                packages = setOf(
                     CuratedPackage(
                         metadata = Package(
                             id = Identifier("Maven:first-package-group:first-package:0.0.1"),
@@ -424,7 +424,7 @@ private fun createOrtResult(): OrtResult {
                         )
                     )
                 ).plus(
-                    sortedSetOf(
+                    setOf(
                         Identifier("NPM:second-project-group:second-project-name:0.0.1"),
                         Identifier("NPM:@something:somepackage:1.2.3"),
                         Identifier("NPM:@something:somepackage-dep:1.2.3"),
@@ -443,8 +443,8 @@ private fun createOrtResult(): OrtResult {
                             )
                         )
                     }
-                ).toSortedSet(),
-                issues = sortedMapOf(
+                ),
+                issues = mapOf(
                     Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
                         OrtIssue(
                             source = "Source-1",

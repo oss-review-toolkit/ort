@@ -130,13 +130,13 @@ class PubFunTest : WordSpec() {
 }
 
 private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
-    val projects = projects.filterTo(sortedSetOf()) { it.id.type == "Pub" }
-    val scopes = projects.flatMap { it.scopes }
+    val pubProjects = projects.filterTo(mutableSetOf()) { it.id.type == "Pub" }
+    val scopes = pubProjects.flatMap { it.scopes }
     val dependencies = scopes.flatMap { it.collectDependencies() }
 
     return AnalyzerResult(
-        projects = projects,
-        packages = packages.filterTo(sortedSetOf()) { it.metadata.id in dependencies },
+        projects = pubProjects,
+        packages = packages.filterTo(mutableSetOf()) { it.metadata.id in dependencies },
         issues = issues
     )
 }
@@ -157,7 +157,7 @@ private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
  * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
  */
 private fun AnalyzerResult.patchPackages(): AnalyzerResult {
-    val patchedPackages = packages.mapTo(sortedSetOf()) { pkg ->
+    val patchedPackages = packages.mapTo(mutableSetOf()) { pkg ->
         pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
                 metadata = pkg.metadata.copy(

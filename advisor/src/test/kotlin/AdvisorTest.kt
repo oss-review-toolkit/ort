@@ -132,8 +132,8 @@ private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(
-                projects = sortedSetOf(Project.EMPTY.copy(id = Identifier.EMPTY.copy(name = "test-project"))),
-                packages = packages.map { CuratedPackage(it) }.toSortedSet()
+                projects = setOf(Project.EMPTY.copy(id = Identifier.EMPTY.copy(name = "test-project"))),
+                packages = packages.mapTo(mutableSetOf()) { CuratedPackage(it) }
             )
         )
     )

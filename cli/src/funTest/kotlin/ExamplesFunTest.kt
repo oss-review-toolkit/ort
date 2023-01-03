@@ -218,7 +218,7 @@ private fun createOrtResultWithIssue() =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult.EMPTY.copy(
-                issues = sortedMapOf(
+                issues = mapOf(
                     Identifier("Maven:org.oss-review-toolkit:example:1.0") to listOf(
                         OrtIssue(source = "", message = "issue")
                     )

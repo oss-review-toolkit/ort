@@ -123,7 +123,7 @@ private val ORT_RESULT = OrtResult(
     ),
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult.EMPTY.copy(
-            projects = sortedSetOf(
+            projects = setOf(
                 Project.EMPTY.copy(
                     id = idRootProject,
                     definitionFilePath = "package.json",
@@ -623,7 +623,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 id = id,
                 cpe = "cpe:2.3:a:test:${id.name}:${id.version}:-:-:-:-:-:-:-"
             )
-            val analyzerResult = ORT_RESULT.analyzer!!.result.copy(packages = sortedSetOf(CuratedPackage(pkg)))
+            val analyzerResult = ORT_RESULT.analyzer!!.result.copy(packages = setOf(CuratedPackage(pkg)))
             val analyzerRun = ORT_RESULT.analyzer!!.copy(result = analyzerResult)
 
             val input = ReporterInput(ORT_RESULT.copy(analyzer = analyzerRun))
