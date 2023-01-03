@@ -67,7 +67,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
         httpClient = OkHttpClientHelper.buildClient()
     )
 
-    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val vulnerabilitiesForPackage = getVulnerabilitiesForPackage(packages)
@@ -88,7 +88,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
         }
     }
 
-    private fun getVulnerabilitiesForPackage(packages: List<Package>): Map<Identifier, List<Vulnerability>> {
+    private fun getVulnerabilitiesForPackage(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {
         val vulnerabilityIdsForPackageId = getVulnerabilityIdsForPackages(packages)
         val allVulnerabilityIds = vulnerabilityIdsForPackageId.values.flatten().toSet()
         val vulnerabilityForId = getVulnerabilitiesForIds(allVulnerabilityIds).associateBy { it.id }
@@ -98,7 +98,7 @@ class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProv
         }
     }
 
-    private fun getVulnerabilityIdsForPackages(packages: List<Package>): Map<Identifier, List<String>> {
+    private fun getVulnerabilityIdsForPackages(packages: Set<Package>): Map<Identifier, List<String>> {
         val requests = packages.mapNotNull { pkg ->
             createRequest(pkg)?.let { pkg to it }
         }

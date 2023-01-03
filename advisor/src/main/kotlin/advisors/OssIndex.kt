@@ -68,7 +68,7 @@ class OssIndex(name: String, serverUrl: String? = null) : AdviceProvider(name) {
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val purls = packages.map { it.purl }

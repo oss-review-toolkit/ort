@@ -65,7 +65,7 @@ class Advisor(
 
         val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
-        val packages = ortResult.getPackages(skipExcluded).map { it.metadata }
+        val packages = ortResult.getPackages(skipExcluded).mapTo(mutableSetOf()) { it.metadata }
         if (packages.isEmpty()) {
             logger.info { "There are no packages to give advice for." }
         } else {

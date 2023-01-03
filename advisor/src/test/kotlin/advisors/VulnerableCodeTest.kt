@@ -264,8 +264,8 @@ private fun resultFile(): File = File(TEST_FILES_ROOT, TEST_RESULT_NAME)
 /**
  * Return a list with [Package]s from the analyzer result file that serve as input for the [VulnerableCode] advisor.
  */
-private fun inputPackages(): List<Package> =
-    resultFile().readValue<OrtResult>().getPackages(false).map { it.metadata }
+private fun inputPackages(): Set<Package> =
+    resultFile().readValue<OrtResult>().getPackages().mapTo(mutableSetOf()) { it.metadata }
 
 /**
  * Generate the JSON body of the request to query information about packages. It mainly consists of an array with the
