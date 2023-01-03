@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.readValue
 class OsvFunTest : StringSpec({
     "retrievePackageFindings() returns vulnerabilities for the supported ecosystems" {
         val osv = createOsv()
-        val packages = listOf(
+        val packages = setOf(
             "Crate::sys-info:0.7.0",
             "Composer:prestashop:ps_facetedsearch:3.0.0",
             "Gem::rack:2.0.4",
@@ -47,7 +47,9 @@ class OsvFunTest : StringSpec({
             "NuGet::Microsoft.ChakraCore:1.10.0",
             "Pub::http:0.13.1",
             "PyPI::Plone:3.2"
-        ).map { identifierToPackage(it) }
+        ).mapTo(mutableSetOf()) {
+            identifierToPackage(it)
+        }
 
         val packageFindings = osv.retrievePackageFindings(packages)
 
@@ -63,14 +65,16 @@ class OsvFunTest : StringSpec({
         val osv = createOsv()
         // The following packages have been chosen because they have only one vulnerability with the oldest possible
         // modified date from the current OSV database, in order to hopefully minimize the flakiness.
-        val packages = listOf(
+        val packages = setOf(
             // Package with severity:
             "NPM::find-my-way:3.0.0",
             // Package without severity, but with severity inside the databaseSpecific JSON object:
             "NPM::discord-markdown:2.3.0",
             // Package without severity:
             "PyPI::donfig:0.2.0"
-        ).map { identifierToPackage(it) }
+        ).mapTo(mutableSetOf()) {
+            identifierToPackage(it)
+        }
 
         val packageFindings = osv.retrievePackageFindings(packages).mapKeys { it.key.id }
 

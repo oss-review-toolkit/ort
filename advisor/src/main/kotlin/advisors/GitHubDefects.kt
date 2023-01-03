@@ -117,7 +117,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> =
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> =
         Executors.newFixedThreadPool(parallelRequests).asCoroutineDispatcher().use { context ->
             withContext(context) {
                 packages.associateWith { async { findDefectsForPackage(it) } }

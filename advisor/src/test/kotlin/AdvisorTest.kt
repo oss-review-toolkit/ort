@@ -57,7 +57,7 @@ class AdvisorTest : WordSpec({
 
         "return an ORT result with an empty advisor run if there are no packages" {
             val provider = mockkAdviceProvider()
-            val originResult = createOrtResultWithPackages(emptyList())
+            val originResult = createOrtResultWithPackages(emptySet())
 
             val advisor = createAdvisor(listOf(provider))
 
@@ -75,7 +75,7 @@ class AdvisorTest : WordSpec({
         "return the merged results of advice providers" {
             val pkg1 = createPackage(1)
             val pkg2 = createPackage(2)
-            val packages = listOf(pkg1, pkg2)
+            val packages = setOf(pkg1, pkg2)
             val originResult = createOrtResultWithPackages(packages)
 
             val advisorResult1 = mockk<AdvisorResult>()
@@ -128,7 +128,7 @@ private fun createAdvisor(providers: List<AdviceProvider>): Advisor {
 /**
  * Create an [OrtResult] containing the given [packages].
  */
-private fun createOrtResultWithPackages(packages: List<Package>): OrtResult =
+private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
     OrtResult.EMPTY.copy(
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(

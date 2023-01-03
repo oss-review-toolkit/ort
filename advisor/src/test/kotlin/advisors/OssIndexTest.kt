@@ -73,7 +73,9 @@ class OssIndexTest : WordSpec({
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
             val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
-            val packages = COMPONENTS_REQUEST_IDS.map { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
+            val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
+                Package.EMPTY.copy(id = it, purl = it.toPurl())
+            }
 
             val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
 
@@ -119,7 +121,9 @@ class OssIndexTest : WordSpec({
                     )
             )
             val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
-            val packages = COMPONENTS_REQUEST_IDS.map { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
+            val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
+                Package.EMPTY.copy(id = it, purl = it.toPurl())
+            }
 
             val result = ossIndex.retrievePackageFindings(packages).mapKeys { it.key.id }
 

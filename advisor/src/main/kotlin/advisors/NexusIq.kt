@@ -80,7 +80,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: List<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
         val components = packages.map { pkg ->

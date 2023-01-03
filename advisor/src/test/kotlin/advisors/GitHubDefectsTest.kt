@@ -73,7 +73,7 @@ class GitHubDefectsTest : WordSpec({
             val pkg = Package.EMPTY.copy(vcs = vcs, vcsProcessed = vcs)
 
             val advisor = createAdvisor()
-            val results = advisor.retrievePackageFindings(listOf(pkg))
+            val results = advisor.retrievePackageFindings(setOf(pkg))
 
             results.keys should containExactly(pkg)
             results[pkg] shouldNotBeNull {
@@ -90,7 +90,7 @@ class GitHubDefectsTest : WordSpec({
             createGitHubServiceMock().configureResults(emptyList(), releases)
 
             val advisor = createAdvisor()
-            val results = advisor.retrievePackageFindings(listOf(pkg))
+            val results = advisor.retrievePackageFindings(setOf(pkg))
 
             results.keys should containExactly(pkg)
             results[pkg] shouldNotBeNull {
@@ -309,7 +309,7 @@ class GitHubDefectsTest : WordSpec({
             createGitHubServiceMock(endpointUri).configureResults(emptyList(), emptyList())
 
             val advisor = createAdvisor(url = endpointUri.toString())
-            advisor.retrievePackageFindings(listOf(createPackage()))
+            advisor.retrievePackageFindings(setOf(createPackage()))
 
             verify {
                 GitHubService.create(GITHUB_TOKEN, endpointUri, any())
@@ -447,7 +447,7 @@ private fun createAdvisor(
  * Invoke this advisor for the given [package][pkg]. Make sure that a single result is available and return it.
  */
 private suspend fun GitHubDefects.getSingleResult(pkg: Package): AdvisorResult {
-    val results = retrievePackageFindings(listOf(pkg))
+    val results = retrievePackageFindings(setOf(pkg))
 
     results.keys should containExactly(pkg)
     val result = results.getValue(pkg).single()
