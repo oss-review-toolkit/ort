@@ -1364,7 +1364,7 @@ analyzer:
             revision: ""
             path: ""
         curations: []
-    has_issues: false
+    has_issues: true
 scanner: null
 advisor: null
 evaluator: null
