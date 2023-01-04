@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.CompositePackageCurationProvider
-import org.ossreviewtoolkit.analyzer.curation.FallbackPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.OrtConfigPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
@@ -232,7 +231,13 @@ class AnalyzerCommand : OrtCommand(
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
-        val defaultCurationProviders = buildList {
+        val curationProviders = buildList {
+            if (useClearlyDefinedCurations) add(ClearlyDefinedPackageCurationProvider())
+
+            if (useSw360Curations) {
+                ortConfig.analyzer.sw360Configuration?.let { add(Sw360PackageCurationProvider(it)) }
+            }
+
             if (useOrtCurations) add(OrtConfigPackageCurationProvider())
 
             add(FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir))
@@ -249,15 +254,7 @@ class AnalyzerCommand : OrtCommand(
             }
         }
 
-        val curationProviders = listOfNotNull(
-            CompositePackageCurationProvider(defaultCurationProviders),
-            ortConfig.analyzer.sw360Configuration?.let {
-                Sw360PackageCurationProvider(it).takeIf { useSw360Curations }
-            },
-            ClearlyDefinedPackageCurationProvider().takeIf { useClearlyDefinedCurations }
-        )
-
-        val curationProvider = FallbackPackageCurationProvider(curationProviders)
+        val curationProvider = CompositePackageCurationProvider(curationProviders)
 
         val info = analyzer.findManagedFiles(inputDir, enabledPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
