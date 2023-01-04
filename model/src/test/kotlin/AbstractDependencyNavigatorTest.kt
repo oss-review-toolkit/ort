@@ -343,27 +343,30 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
         "projectIssues" should {
             "return the issues of a project" {
                 val ortResultWithIssues = File(resultWithIssuesFileName).readValue<OrtResult>()
-                val project = ortResultWithIssues.analyzer?.result?.projects.orEmpty().first()
                 val navigator = ortResultWithIssues.dependencyNavigator
+                val projectIdWithIssues = Identifier("SBT:com.pbassiner:common_2.12:0.1-SNAPSHOT")
+                val project = ortResultWithIssues.getProject(projectIdWithIssues)
 
-                val issues = navigator.projectIssues(project)
+                project shouldNotBeNull {
+                    val issues = navigator.projectIssues(this)
 
-                issues should containExactlyEntries(
-                    Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0") to setOf(
-                        OrtIssue(
-                            Instant.EPOCH,
-                            "Gradle",
-                            "Test issue 1"
-                        )
-                    ),
-                    Identifier("Maven:org.scalactic:scalactic_2.12:3.0.4") to setOf(
-                        OrtIssue(
-                            Instant.EPOCH,
-                            "Gradle",
-                            "Test issue 2"
+                    issues should containExactlyEntries(
+                        Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0") to setOf(
+                            OrtIssue(
+                                Instant.EPOCH,
+                                "Gradle",
+                                "Test issue 1"
+                            )
+                        ),
+                        Identifier("Maven:org.scalactic:scalactic_2.12:3.0.4") to setOf(
+                            OrtIssue(
+                                Instant.EPOCH,
+                                "Gradle",
+                                "Test issue 2"
+                            )
                         )
                     )
-                )
+                }
             }
         }
 
