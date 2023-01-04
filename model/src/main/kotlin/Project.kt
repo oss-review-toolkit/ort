@@ -107,7 +107,7 @@ data class Project(
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val scopeNames: SortedSet<String>? = null
-) : Comparable<Project> {
+) {
     companion object {
         /**
          * A constant for a [Project] where all properties are empty.
@@ -155,11 +155,6 @@ data class Project(
         } else {
             this
         }
-
-    /**
-     * A comparison function to sort projects by their identifier.
-     */
-    override fun compareTo(other: Project) = id.compareTo(other.id)
 
     /**
      * Return whether the package identified by [id] is contained as a (transitive) dependency in this project.

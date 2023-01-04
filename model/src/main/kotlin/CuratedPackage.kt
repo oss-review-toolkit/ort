@@ -40,12 +40,7 @@ data class CuratedPackage(
      * The curations in the order they were applied.
      */
     val curations: List<PackageCurationResult> = emptyList()
-) : Comparable<CuratedPackage> {
-    /**
-     * A comparison function to sort packages by their identifier.
-     */
-    override fun compareTo(other: CuratedPackage) = metadata.id.compareTo(other.metadata.id)
-
+) {
     /**
      * Return a [Package] representing the same package as this one but which does not have any curations applied.
      */
