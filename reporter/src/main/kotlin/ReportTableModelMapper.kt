@@ -221,7 +221,7 @@ class ReportTableModelMapper(
                 ortResult.getDefinitionFilePathRelativeToAnalyzerRoot(project),
                 pathExcludes
             )
-        }.orEmpty().toSortedMap()
+        }.orEmpty().toSortedMap(compareBy { it.id })
 
         val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
 
