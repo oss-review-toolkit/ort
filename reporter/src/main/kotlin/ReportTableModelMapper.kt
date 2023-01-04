@@ -223,11 +223,11 @@ class ReportTableModelMapper(
             )
         }.orEmpty().toSortedMap(compareBy { it.id })
 
-        val issueSummaryTable = IssueTable(issueSummaryRows.values.toList().sortedBy { it.id })
+        val issueSummaryTable = IssueTable(issueSummaryRows.values.sortedBy { it.id })
 
         val summaryTable = SummaryTable(
             // Sort excluded rows to the end of the list.
-            summaryRows.values.toList().sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id }))
+            summaryRows.values.sortedWith(compareBy({ ortResult.isExcluded(it.id) }, { it.id }))
         )
 
         // TODO: Use the prefixes up until the first '.' (which below get discarded) for some visual grouping in the
