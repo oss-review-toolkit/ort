@@ -47,3 +47,14 @@ interface NamedPlugin {
      */
     val name: String
 }
+
+/**
+ * An interface to be implemented by plugin factories. Plugin factories are required if a plugin needs configuration
+ * on initialization and can therefore not be created directly by the [ServiceLoader].
+ */
+interface ConfigurablePluginFactory<out PLUGIN> : NamedPlugin {
+    /**
+     * Create a new instance of [PLUGIN] from [config].
+     */
+    fun create(config: Map<String, String>): PLUGIN
+}
