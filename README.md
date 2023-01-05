@@ -791,7 +791,7 @@ to any of your questions we recommend you
 
 # License
 
-Copyright (C) 2017-2022 [The ORT Project Authors](./NOTICE).
+Copyright (C) 2017-2023 [The ORT Project Authors](./NOTICE).
 
 See the [LICENSE](./LICENSE) file in the root of this project for license details.
 
