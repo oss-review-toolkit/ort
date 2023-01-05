@@ -211,8 +211,8 @@ private fun MutableMap<LicenseFinding, MutableSet<CopyrightFinding>>.merge(
 
 /**
  * Process [findings] for stand-alone license exceptions and associate them with nearby (according to [toleranceLines])
- * applicable licenses. Orphan license exceptions will get associated by [NOASSERTION]. Return the list of resulting
- * findings.
+ * applicable licenses. Orphan license exceptions will get associated by [SpdxConstants.NOASSERTION]. Return the list of
+ * resulting findings.
  */
 fun associateLicensesWithExceptions(
     findings: List<LicenseFinding>,
