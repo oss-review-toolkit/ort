@@ -51,37 +51,6 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 import retrofit2.HttpException
 
 /**
- * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
- */
-fun SourceLocation?.toArtifactOrVcs(): Any? =
-    this?.let { sourceLocation ->
-        when (sourceLocation.type) {
-            ComponentType.GIT -> {
-                VcsInfoCurationData(
-                    type = VcsType.GIT,
-                    url = sourceLocation.url,
-                    revision = sourceLocation.revision,
-                    path = sourceLocation.path
-                )
-            }
-
-            else -> {
-                val url = sourceLocation.url ?: run {
-                    when (sourceLocation.provider) {
-                        // TODO: Implement provider-specific mapping of coordinates to URLs.
-                        else -> ""
-                    }
-                }
-
-                RemoteArtifact(
-                    url = url,
-                    hash = Hash.NONE
-                )
-            }
-        }
-    }
-
-/**
  * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(
@@ -165,3 +134,34 @@ class ClearlyDefinedPackageCurationProvider(
         return pkgCurations.mapValues { (_, curations) -> curations.distinct() }
     }
 }
+
+/**
+ * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
+ */
+fun SourceLocation?.toArtifactOrVcs(): Any? =
+    this?.let { sourceLocation ->
+        when (sourceLocation.type) {
+            ComponentType.GIT -> {
+                VcsInfoCurationData(
+                    type = VcsType.GIT,
+                    url = sourceLocation.url,
+                    revision = sourceLocation.revision,
+                    path = sourceLocation.path
+                )
+            }
+
+            else -> {
+                val url = sourceLocation.url ?: run {
+                    when (sourceLocation.provider) {
+                        // TODO: Implement provider-specific mapping of coordinates to URLs.
+                        else -> ""
+                    }
+                }
+
+                RemoteArtifact(
+                    url = url,
+                    hash = Hash.NONE
+                )
+            }
+        }
+    }
