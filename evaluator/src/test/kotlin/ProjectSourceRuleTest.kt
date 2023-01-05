@@ -161,9 +161,11 @@ class ProjectSourceRuleTest : WordSpec({
 
 private fun createRule(projectSourcesDir: File, ortResult: OrtResult = OrtResult.EMPTY) =
     ProjectSourceRule(
-        ruleSet = ruleSet(ortResult),
-        name = "RULE_NAME",
-        projectSourceResolver = SourceTreeResolver.forLocalDirectory(projectSourcesDir)
+        ruleSet = ruleSet(
+            ortResult = ortResult,
+            projectSourceResolver = SourceTreeResolver.forLocalDirectory(projectSourcesDir)
+        ),
+        name = "RULE_NAME"
     )
 
 private fun File.addFiles(vararg paths: String, content: String = "") {
