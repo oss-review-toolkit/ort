@@ -227,10 +227,7 @@ object CopyrightStatementsProcessor {
          * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
          */
         val unprocessedStatements: SortedSet<String>
-    ) {
-        @get:JsonIgnore
-        val allStatements by lazy { unprocessedStatements + processedStatements.keys }
-    }
+    )
 
     /**
      * Split the [copyrightStatement] into its [Parts], or return null if the [Parts] could not be determined.
@@ -265,13 +262,12 @@ object CopyrightStatementsProcessor {
         if (prefixStripResult.second.isEmpty()) return null
 
         val yearsStripResult = stripYears(prefixStripResult.first)
-        val owner = yearsStripResult.first.trimStart(*INVALID_OWNER_START_CHARS).collapseWhitespace()
-        if (owner.isEmpty()) return null
-
         return Parts(
             prefix = prefixStripResult.second,
             years = yearsStripResult.second,
-            owner = owner,
+            owner = yearsStripResult.first
+                .trimStart(*INVALID_OWNER_START_CHARS)
+                .collapseWhitespace(),
             originalStatements = listOf(copyrightStatement)
         )
     }

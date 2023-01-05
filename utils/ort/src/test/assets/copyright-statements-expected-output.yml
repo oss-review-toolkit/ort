@@ -71,6 +71,8 @@ processed_statements:
   - "(c) 2014 Jack Moore"
   (c) 2015 Acme Inc.:
   - "(c) 2015 Acme Inc."
+  (c) 2016:
+  - "(c) 2016"
   (c) 2016 Jon Schlinkert (https://github.com/jonschlinkert).:
   - "(c) 2016, Jon Schlinkert (https://github.com/jonschlinkert)."
   "(c) 2\x7f:u +oXxIeOU cO":
@@ -436,6 +438,17 @@ processed_statements:
   - "Copyright (c) 2007 Nick Sieger <nicksieger@gmail.com>"
   - "Copyright (c) 2007-2011 Nick Sieger <nicksieger@gmail.com>"
   - "Copyright (c) 2011 Nick Sieger <nicksieger@gmail.com>"
+  Copyright (c) 2006-2011, 2013-2016:
+  - "Copyright (c) 2006"
+  - "Copyright (c) 2007"
+  - "Copyright (c) 2008"
+  - "Copyright (c) 2009"
+  - "Copyright (c) 2009-2011"
+  - "Copyright (c) 2010"
+  - "Copyright (c) 2013-2016"
+  - "Copyright (c) 2015"
+  - "Copyright (c) 2015-2016"
+  - "Copyright (c) 2016"
   Copyright (c) 2006-2013 Charles Oliver Nutter <headius@headius.com>:
   - "Copyright (c) 2006 Charles Oliver Nutter <headius@headius.com>"
   - "Copyright (c) 2007 Charles Oliver Nutter <headius@headius.com>"
@@ -1124,6 +1137,16 @@ processed_statements:
   Copyright 2007, 2009 Neal Norwitz:
   - "Copyright 2007 Neal Norwitz"
   - "Copyright 2009 Neal Norwitz"
+  Copyright 2007, 2014-2018:
+  - "Copyright 2007."
+  - "Copyright 2014"
+  - "Copyright 2015"
+  - "Copyright 2015-2016"
+  - "Copyright 2015-2017"
+  - "Copyright 2016"
+  - "Copyright 2016-2017"
+  - "Copyright 2017"
+  - "Copyright 2018"
   Copyright 2007-2011 Baptiste Lepilleur:
   - "Copyright 2007-2010 Baptiste Lepilleur"
   - "Copyright 2007-2011 Baptiste Lepilleur"
@@ -1340,6 +1363,9 @@ processed_statements:
   - "copyright 2014-2018 Thomas Kemmer"
   copyright 2015 Michael Dowling:
   - "copyright u'2015, Michael Dowling"
+  copyright 2015-2016:
+  - "copyright 2015"
+  - "copyright 2016"
   copyright 2016 Google, Inc.:
   - "copyright 2016, Google, Inc."
   copyright Arne Blankerts <arne@blankerts.de>:
@@ -1361,7 +1387,6 @@ processed_statements:
   - "portions (c) 2003 EFG"
   - "portions (c) 2004 EFG"
 unprocessed_statements:
-- "(c) 2016"
 - "AAaEAOUaaCacCceZzDidEeEoeooouEeuE (c) TMe"
 - "AaSs (c) SZzZCZzcsYzAAAACCEEEEIIIINOOOOOSUUUUUETaaaaacceeeeiiiinooooosuuuuuety"
 - "Aeo4aRi C/\x1a \x17o+Y'AoDz1/2u\x16PS\x11Esa (c) EjSS"
@@ -1370,25 +1395,6 @@ unprocessed_statements:
 - "Ao (c) Y1"
 - "BbCcDW (c) WdYYFfGgMmPwpwSyWwsAAAAACEEEEIIIIWNOOOOOTUUUUYYaaaaaaceeeeiiiiwnoooootuuuuyyy"
 - "Code copyright 2012-2018 AJ ONeal"
-- "Copyright (c) 2006"
-- "Copyright (c) 2007"
-- "Copyright (c) 2008"
-- "Copyright (c) 2009"
-- "Copyright (c) 2009-2011"
-- "Copyright (c) 2010"
-- "Copyright (c) 2013-2016"
-- "Copyright (c) 2015"
-- "Copyright (c) 2015-2016"
-- "Copyright (c) 2016"
-- "Copyright 2007."
-- "Copyright 2014"
-- "Copyright 2015"
-- "Copyright 2015-2016"
-- "Copyright 2015-2017"
-- "Copyright 2016"
-- "Copyright 2016-2017"
-- "Copyright 2017"
-- "Copyright 2018"
 - "Cw (c) Ie"
 - "DAeX (c) OjNduV"
 - "E-UO8 (c) A9icOY"
@@ -1398,6 +1404,4 @@ unprocessed_statements:
 - "TarHeader (c)"
 - "Ui vEak.\x19O7!Y\x0eciBuqu2kim',cJoSo2olm\x13 (c) EMoK"
 - "Vi EEL64eaae!2TeOau\x19 (c) Noj"
-- "copyright 2015"
-- "copyright 2016"
 - "use (c)"
