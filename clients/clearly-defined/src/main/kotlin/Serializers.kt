@@ -69,7 +69,7 @@ inline fun <reified T : Any> toStringSerializer(noinline create: (String) -> T):
     ToStringSerializer(T::class.java.name, create)
 
 /**
- * A serializer with the given [serialName] that uses [Any] instance's [toString] function for serialization and the
+ * A serializer with the given serial name that uses [Any] instance's [toString] function for serialization and the
  * given [create] function for deserialization.
  */
 class ToStringSerializer<T : Any>(serialName: String, private val create: (String) -> T) : KSerializer<T> {
