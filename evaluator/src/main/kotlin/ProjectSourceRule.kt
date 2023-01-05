@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.evaluator
 import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.getRepositoryPath
@@ -33,15 +32,14 @@ import org.ossreviewtoolkit.utils.common.FileMatcher
  */
 open class ProjectSourceRule(
     ruleSet: RuleSet,
-    name: String,
-    projectSourceResolver: SourceTreeResolver = ruleSet.ortResult.createResolver()
+    name: String
 ) : OrtResultRule(ruleSet, name) {
     /**
      * The directory containing the source code of the project. Accessing the property for the first time triggers a
      * clone and may take a while.
      */
     @Suppress("MemberVisibilityCanBePrivate") // This property is used in rules.
-    val projectSourcesDir: File by lazy { projectSourceResolver.rootDir }
+    val projectSourcesDir: File by lazy { ruleSet.projectSourceResolver.rootDir }
 
     private val detectedLicensesForFilePath: Map<String, Set<String>> by lazy {
         val result = mutableMapOf<String, MutableSet<String>>()
@@ -160,6 +158,3 @@ open class ProjectSourceRule(
                 projectSourceGetVcsType() in types
         }
 }
-
-private fun OrtResult.createResolver() =
-    SourceTreeResolver.forRemoteRepository(repository.vcsProcessed)
