@@ -21,6 +21,29 @@ package org.ossreviewtoolkit.analyzer
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
+import org.ossreviewtoolkit.utils.common.NamedPlugin
+
+/**
+ * The extension point for [PackageCurationProvider]s.
+ */
+interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
+    companion object {
+        val ALL = NamedPlugin.getAll<PackageCurationProviderFactory<*>>()
+    }
+
+    override fun create(config: Map<String, String>): PackageCurationProvider = create(parseConfig(config))
+
+    /**
+     * Create a new [PackageCurationProvider] with [config].
+     */
+    fun create(config: CONFIG): PackageCurationProvider
+
+    /**
+     * Parse the [config] map into an object.
+     */
+    fun parseConfig(config: Map<String, String>): CONFIG
+}
 
 /**
  * A provider for [PackageCuration]s.

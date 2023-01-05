@@ -28,6 +28,7 @@ import okhttp3.OkHttpClient
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
@@ -49,6 +50,24 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 import retrofit2.HttpException
+
+class ClearlyDefinedPackageCurationProviderConfig(
+    /**
+     * The URL of the ClearlyDefined server to use. If null, uses the [production server][Server.PRODUCTION.apiUrl].
+     */
+    val serverUrl: String? = null
+)
+
+class ClearlyDefinedPackageCurationProviderFactory :
+    PackageCurationProviderFactory<ClearlyDefinedPackageCurationProviderConfig> {
+    override val name = "ClearlyDefined"
+
+    override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
+        ClearlyDefinedPackageCurationProvider(serverUrl = config.serverUrl)
+
+    override fun parseConfig(config: Map<String, String>) =
+        ClearlyDefinedPackageCurationProviderConfig(serverUrl = config["serverUrl"])
+}
 
 /**
  * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
