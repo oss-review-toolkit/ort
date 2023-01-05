@@ -26,8 +26,8 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
-private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
-private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
+private val INVALID_HOLDER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
+private val INVALID_HOLDER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_HOLDER_START_CHARS
 
 private const val YEAR_PLACEHOLDER = "<ORT_YEAR_PLACEHOLDER_TRO>"
 
@@ -178,8 +178,8 @@ private fun replaceYears(copyrightStatement: String): Pair<String, Set<Int>> {
 }
 
 /**
- * A copyright statement consists in most cases of three parts: a copyright prefix, years and the owner. For legal
- * reasons the prefix part must not be modified at all while adjusting some special characters in the owner part is
+ * A copyright statement consists in most cases of three parts: a copyright prefix, years and the holder. For legal
+ * reasons the prefix part must not be modified at all while adjusting some special characters in the holder part is
  * acceptable. Entries can be merged by year as well. The main idea of the algorithm is to process only entries with
  * a known copyright prefix. This allows stripping the prefix and processing the remaining string separately and thus
  * guarantees that the prefix part is not modified at all.
@@ -190,10 +190,10 @@ object CopyrightStatementsProcessor {
     data class Parts(
         val prefix: String,
         val years: Set<Int>,
-        val owner: String
+        val holder: String
     ) : Comparable<Parts> {
         companion object {
-            private val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
+            private val COMPARATOR = compareBy<Parts>({ it.holder }, { prettyPrintYears(it.years) }, { it.prefix })
         }
 
         override fun compareTo(other: Parts) = COMPARATOR.compare(this, other)
@@ -207,9 +207,9 @@ object CopyrightStatementsProcessor {
                     append(prettyPrintYears(years))
                 }
 
-                if (owner.isNotEmpty()) {
+                if (holder.isNotEmpty()) {
                     append(" ")
-                    append(owner)
+                    append(holder)
                 }
             }
     }
@@ -264,25 +264,25 @@ object CopyrightStatementsProcessor {
         if (prefixStripResult.second.isEmpty()) return null
 
         val yearsStripResult = stripYears(prefixStripResult.first)
-        val owner = yearsStripResult.first.trimStart(*INVALID_OWNER_START_CHARS).collapseWhitespace()
-        if (owner.isEmpty()) return null
+        val holder = yearsStripResult.first.trimStart(*INVALID_HOLDER_START_CHARS).collapseWhitespace()
+        if (holder.isEmpty()) return null
 
         return Parts(
             prefix = prefixStripResult.second,
             years = yearsStripResult.second,
-            owner = owner
+            holder = holder
         )
     }
 
     /**
-     * Try to process the [copyrightStatements] into a more condensed form grouped by owner / prefix and with years
+     * Try to process the [copyrightStatements] into a more condensed form grouped by holder / prefix and with years
      * collapsed. The returned [Result] contains successfully processed as well as unprocessed statements.
      */
     fun process(copyrightStatements: Collection<String>): Result {
         /**
-         * Return a normalized Copyright owner to group statement parts by.
+         * Return a normalized Copyright holder to group statement parts by.
          */
-        fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
+        fun String.toNormalizedHolderKey() = filter { it !in INVALID_HOLDER_KEY_CHARS }.uppercase()
 
         val processableStatements = sortedMapOf<Parts, SortedSet<String>>()
         val unprocessedStatements = sortedSetOf<String>()
@@ -299,7 +299,7 @@ object CopyrightStatementsProcessor {
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
 
         processableStatements.keys.groupBy { parts ->
-            "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
+            "${parts.prefix}:${parts.holder.toNormalizedHolderKey()}"
         }.values.forEach { parts ->
             val mergedParts = parts.reduce { merged, other ->
                 merged.copy(years = merged.years + other.years)

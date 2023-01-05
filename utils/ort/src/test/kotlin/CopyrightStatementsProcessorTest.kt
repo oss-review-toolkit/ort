@@ -34,7 +34,7 @@ class CopyrightStatementsProcessorTest : WordSpec({
         val storedStatements = File("src/test/assets/copyright-statements.txt").readLines()
         val expectedResult = File("src/test/assets/copyright-statements-expected-output.yml").readText()
 
-        "return a result with items merged by owner and prefix, sorted by owner and year" {
+        "return a result with items merged by holder and prefix, sorted by holder and year" {
             val actualResult = CopyrightStatementsProcessor.process(storedStatements.shuffled()).toYaml()
 
             actualResult shouldBe expectedResult
