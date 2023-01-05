@@ -147,11 +147,11 @@ internal fun OrtResult.processAllCopyrightStatements(
 
             val processResult = CopyrightStatementsProcessor.process(copyrights)
 
-            processResult.processedStatements.filterNot { it.key in copyrightGarbage }.forEach {
+            processResult.processedStatements.filterNot { it.key.toString() in copyrightGarbage }.forEach {
                 result += ProcessedCopyrightStatement(
                     packageId = id,
                     license = resolvedLicense.license,
-                    statement = it.key,
+                    statement = it.key.toString(),
                     rawStatements = it.value.toSet()
                 )
             }

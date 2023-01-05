@@ -49,7 +49,11 @@ class CopyrightStatementsProcessorTest : WordSpec({
             val actualResult = CopyrightStatementsProcessor.process(statements)
 
             actualResult.processedStatements shouldHaveSize 1
-            actualResult.processedStatements.keys.first() shouldBe "Copyright (C) 2017, 2022 The ORT Project Authors"
+            actualResult.processedStatements.keys.first() shouldBe CopyrightStatementsProcessor.Parts(
+                prefix = "Copyright (C)",
+                years = setOf(2017, 2022),
+                owner = "The ORT Project Authors",
+            )
             actualResult.unprocessedStatements should beEmpty()
         }
     }

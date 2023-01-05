@@ -216,12 +216,12 @@ object CopyrightStatementsProcessor {
 
     data class Result(
         /**
-         * The copyright statements that were processed by the [CopyrightStatementsProcessor], mapped to the original
-         * copyright statements. An original statement can be identical to the processed statement if the processor did
-         * process but not modify it.
+         * The copyright statement [Parts] that were determined by the [CopyrightStatementsProcessor], mapped to the
+         * original copyright statements. An original statement can be identical to the processed statement if the
+         * processor did process but not modify it.
          */
         @JsonPropertyOrder(alphabetic = true)
-        val processedStatements: Map<String, Set<String>>,
+        val processedStatements: Map<Parts, Set<String>>,
 
         /**
          * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
@@ -230,7 +230,7 @@ object CopyrightStatementsProcessor {
         val unprocessedStatements: Set<String>
     ) {
         @get:JsonIgnore
-        val allStatements by lazy { unprocessedStatements + processedStatements.keys }
+        val allStatements by lazy { unprocessedStatements + processedStatements.keys.map { it.toString() } }
     }
 
     /**
@@ -297,7 +297,7 @@ object CopyrightStatementsProcessor {
             }
         }
 
-        val processedStatements = mutableMapOf<String, MutableSet<String>>()
+        val processedStatements = mutableMapOf<Parts, MutableSet<String>>()
 
         processableStatements.keys.groupBy { parts ->
             "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
@@ -307,7 +307,7 @@ object CopyrightStatementsProcessor {
             }
 
             if (mergedParts.owner.isNotEmpty()) {
-                val mergedStatements = processedStatements.getOrPut(mergedParts.toString()) { sortedSetOf() }
+                val mergedStatements = processedStatements.getOrPut(mergedParts) { sortedSetOf() }
                 parts.forEach { mergedStatements += processableStatements.getValue(it) }
             }
         }

@@ -131,7 +131,7 @@ internal fun Collection<ResolvedCopyrightFinding>.toResolvedCopyrights(process: 
 
     val processedCopyrights = result.processedStatements.map { (statement, originalStatements) ->
         val findings = originalStatements.flatMapTo(mutableSetOf()) { statementToFindings.getValue(it) }
-        ResolvedCopyright(statement, findings)
+        ResolvedCopyright(statement.toString(), findings)
     }
 
     val unprocessedCopyrights = result.unprocessedStatements.mapNotNull { statement ->
