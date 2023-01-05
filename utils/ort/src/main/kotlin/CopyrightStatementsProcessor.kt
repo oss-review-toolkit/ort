@@ -20,10 +20,10 @@
 package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedMap
-import java.util.SortedSet
-
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
@@ -220,12 +220,14 @@ object CopyrightStatementsProcessor {
          * copyright statements. An original statement can be identical to the processed statement if the processor did
          * process but not modify it.
          */
-        val processedStatements: SortedMap<String, SortedSet<String>>,
+        @JsonPropertyOrder(alphabetic = true)
+        val processedStatements: Map<String, Set<String>>,
 
         /**
          * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
          */
-        val unprocessedStatements: SortedSet<String>
+        @JsonSerialize(converter = StringSortedSetConverter::class)
+        val unprocessedStatements: Set<String>
     ) {
         @get:JsonIgnore
         val allStatements by lazy { unprocessedStatements + processedStatements.keys }
@@ -283,19 +285,19 @@ object CopyrightStatementsProcessor {
          */
         fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
 
-        val processableStatements = sortedMapOf<Parts, SortedSet<String>>()
-        val unprocessedStatements = sortedSetOf<String>()
+        val processableStatements = mutableMapOf<Parts, MutableSet<String>>()
+        val unprocessedStatements = mutableSetOf<String>()
 
         copyrightStatements.distinct().forEach { statement ->
             val parts = determineParts(statement)
             if (parts != null) {
-                processableStatements.getOrPut(parts) { sortedSetOf() } += statement
+                processableStatements.getOrPut(parts) { mutableSetOf() } += statement
             } else {
                 unprocessedStatements += statement
             }
         }
 
-        val processedStatements = sortedMapOf<String, SortedSet<String>>()
+        val processedStatements = mutableMapOf<String, MutableSet<String>>()
 
         processableStatements.keys.groupBy { parts ->
             "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
