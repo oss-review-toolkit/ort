@@ -25,19 +25,68 @@ import java.io.IOException
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.getDuplicates
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
+import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
+
+class FilePackageCurationProviderConfig(
+    /**
+     * The path of the package curation file or directory.
+     */
+    val path: String
+)
+
+class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
+    override val name = "File"
+
+    override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
+
+    override fun parseConfig(config: Map<String, String>) =
+        FilePackageCurationProviderConfig(path = config.getValue("path"))
+}
+
+class DefaultFilePackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
+    override val name = "DefaultFile"
+
+    override fun create(config: Unit) =
+        ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME).let { curationsFile ->
+            when {
+                curationsFile.isFile -> FilePackageCurationProvider(curationsFile)
+                else -> PackageCurationProvider.EMPTY
+            }
+        }
+
+    override fun parseConfig(config: Map<String, String>) = Unit
+}
+
+class DefaultDirPackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
+    override val name = "DefaultDir"
+
+    override fun create(config: Unit) =
+        ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME).let { curationsDir ->
+            when {
+                curationsDir.isDirectory -> FilePackageCurationProvider(curationsDir)
+                else -> PackageCurationProvider.EMPTY
+            }
+        }
+
+    override fun parseConfig(config: Map<String, String>) = Unit
+}
 
 /**
  * A [PackageCurationProvider] that loads [PackageCuration]s from all given curation files. Supports all file formats
  * specified in [FileFormat].
  */
 class FilePackageCurationProvider(
-    curationFiles: Collection<File>
+    curationFiles: List<File>
 ) : SimplePackageCurationProvider(readCurationFiles(curationFiles)) {
     constructor(curationFile: File) : this(listOf(curationFile))
+    constructor(config: FilePackageCurationProviderConfig) : this(File(config.path))
 
     companion object : Logging {
         fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {

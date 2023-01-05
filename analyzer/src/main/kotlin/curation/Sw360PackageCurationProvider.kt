@@ -33,6 +33,7 @@ import org.eclipse.sw360.http.HttpClientFactoryImpl
 import org.eclipse.sw360.http.config.HttpClientConfig
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -44,6 +45,23 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+
+class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360StorageConfiguration> {
+    override val name = "SW360"
+
+    override fun create(config: Sw360StorageConfiguration) = Sw360PackageCurationProvider(config)
+
+    override fun parseConfig(config: Map<String, String>) =
+        Sw360StorageConfiguration(
+            restUrl = config.getValue("restUrl"),
+            authUrl = config.getValue("authUrl"),
+            username = config.getValue("username"),
+            password = config["password"].orEmpty(),
+            clientId = config.getValue("clientId"),
+            clientPassword = config["clientPassword"].orEmpty(),
+            token = config["token"].orEmpty()
+        )
+}
 
 /**
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
