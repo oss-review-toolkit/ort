@@ -39,6 +39,30 @@ ort:
     - PASSPORT
     - USER_HOME
 
+  packageCurationProviders:
+    - name: DefaultFile
+    - name: DefaultDir
+    - name: File
+      config:
+        path: '/some-path/curations.yml'
+    - name: File
+      config:
+        path: '/some-path/curations-dir'
+    - name: OrtConfig
+      enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
+    - name: ClearlyDefined
+      config:
+        serverUrl: 'https://api.clearlydefined.io'
+    - name: SW360
+      config:
+        restUrl: 'https://your-sw360-rest-url'
+        authUrl: 'https://your-authentication-url'
+        username: username
+        password: password
+        clientId: clientId
+        clientPassword: clientPassword
+        token: token
+
   analyzer:
     allowDynamicVersions: true
 
