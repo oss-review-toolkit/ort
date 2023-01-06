@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.NamedPlugin
 
@@ -30,6 +31,11 @@ import org.ossreviewtoolkit.utils.common.NamedPlugin
 interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
     companion object {
         val ALL = NamedPlugin.getAll<PackageCurationProviderFactory<*>>()
+
+        fun create(configurations: List<PackageCurationProviderConfiguration>) =
+            // Reverse the list so that curations from providers with higher priority are applied later and can
+            // overwrite curations from providers with lower priority.
+            configurations.filter { it.enabled }.map { ALL.getValue(it.name).create(it.config) }.asReversed()
     }
 
     override fun create(config: Map<String, String>): PackageCurationProvider = create(parseConfig(config))

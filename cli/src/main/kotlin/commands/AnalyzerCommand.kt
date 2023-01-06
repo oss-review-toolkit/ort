@@ -28,7 +28,6 @@ import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.defaultLazy
 import com.github.ajalt.clikt.parameters.options.deprecated
-import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -40,14 +39,11 @@ import java.time.Duration
 import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.analyzer.curation.ClearlyDefinedPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.CompositePackageCurationProvider
-import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
-import org.ossreviewtoolkit.analyzer.curation.OrtConfigPackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
-import org.ossreviewtoolkit.analyzer.curation.Sw360PackageCurationProvider
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
@@ -64,8 +60,6 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
-import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
@@ -98,24 +92,6 @@ class AnalyzerCommand : OrtCommand(
         help = "The list of output formats to be used for the ORT result file(s)."
     ).enum<FileFormat>().split(",").default(listOf(FileFormat.YAML)).outputGroup()
 
-    private val packageCurationsFile by option(
-        "--package-curations-file",
-        help = "A file containing package curation data."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME))
-        .configurationGroup()
-
-    private val packageCurationsDir by option(
-        "--package-curations-dir",
-        help = "A directory containing package curation data."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-        .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME))
-        .configurationGroup()
-
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides any repository configuration " +
@@ -134,21 +110,6 @@ class AnalyzerCommand : OrtCommand(
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
-
-    private val useClearlyDefinedCurations by option(
-        "--clearly-defined-curations",
-        help = "Whether to fall back to package curation data from the ClearlyDefine service or not."
-    ).flag()
-
-    private val useOrtCurations by option(
-        "--ort-curations",
-        help = "Whether to fall back to package curation data from the ort-config repository or not."
-    ).flag()
-
-    private val useSw360Curations by option(
-        "--sw360-curations",
-        help = "Whether to fall back to package curation data from the SW360 service or not."
-    ).flag()
 
     private val labels by option(
         "--label", "-l",
@@ -199,8 +160,6 @@ class AnalyzerCommand : OrtCommand(
         }
 
         val configurationFiles = listOf(
-            packageCurationsFile,
-            packageCurationsDir,
             repositoryConfigurationFile,
             resolutionsFile
         )
@@ -232,15 +191,7 @@ class AnalyzerCommand : OrtCommand(
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
         val curationProviders = buildList {
-            if (useClearlyDefinedCurations) add(ClearlyDefinedPackageCurationProvider())
-
-            if (useSw360Curations) {
-                ortConfig.analyzer.sw360Configuration?.let { add(Sw360PackageCurationProvider(it)) }
-            }
-
-            if (useOrtCurations) add(OrtConfigPackageCurationProvider())
-
-            add(FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir))
+            addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
 
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
