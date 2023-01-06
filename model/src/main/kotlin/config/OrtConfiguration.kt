@@ -63,7 +63,7 @@ data class OrtConfiguration(
     /**
      * Enable the usage of project-local package curations from the [RepositoryConfiguration]. If set to true, apply
      * package curations from a local .ort.yml file before applying those specified via the command line i.e. curations
-     * from the.ort.yml take precedence.
+     * from the .ort.yml take precedence.
      */
     val enableRepositoryPackageCurations: Boolean = false,
 
