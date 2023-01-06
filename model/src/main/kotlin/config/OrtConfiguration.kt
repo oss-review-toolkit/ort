@@ -30,6 +30,8 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 
 /**
  * The configuration model for all ORT components.
@@ -76,6 +78,17 @@ data class OrtConfiguration(
      * The license file patterns.
      */
     val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT,
+
+    /**
+     * The package curation providers to use. Defaults to providers for the default configuration locations
+     * [ORT_PACKAGE_CURATIONS_FILENAME] and [ORT_PACKAGE_CURATIONS_DIRNAME] are added. The order of this list defines
+     * the priority of the providers: Providers that appear earlier in the list can overwrite curations for the same
+     * package from providers that appear later in the list.
+     */
+    val packageCurationProviders: List<PackageCurationProviderConfiguration> = listOf(
+        PackageCurationProviderConfiguration("DefaultDir"),
+        PackageCurationProviderConfiguration("DefaultFile")
+    ),
 
     /**
      * The threshold from which on issues count as severe.
