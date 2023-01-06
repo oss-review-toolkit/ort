@@ -190,8 +190,7 @@ object CopyrightStatementsProcessor {
     data class Parts(
         val prefix: String,
         val years: Set<Int>,
-        val owner: String,
-        val originalStatements: List<String>
+        val owner: String
     ) : Comparable<Parts> {
         companion object {
             private val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
@@ -265,13 +264,13 @@ object CopyrightStatementsProcessor {
         if (prefixStripResult.second.isEmpty()) return null
 
         val yearsStripResult = stripYears(prefixStripResult.first)
+        val owner = yearsStripResult.first.trimStart(*INVALID_OWNER_START_CHARS).collapseWhitespace()
+        if (owner.isEmpty()) return null
+
         return Parts(
             prefix = prefixStripResult.second,
             years = yearsStripResult.second,
-            owner = yearsStripResult.first
-                .trimStart(*INVALID_OWNER_START_CHARS)
-                .collapseWhitespace(),
-            originalStatements = listOf(copyrightStatement)
+            owner = owner
         )
     }
 
@@ -285,48 +284,29 @@ object CopyrightStatementsProcessor {
          */
         fun String.toNormalizedOwnerKey() = filter { it !in INVALID_OWNER_KEY_CHARS }.uppercase()
 
-        /**
-         * Group this collection of [Parts] by prefix and owner and return a list of [Parts] with years and original
-         * statements merged accordingly.
-         */
-        fun Collection<Parts>.groupByPrefixAndOwner(): List<Parts> {
-            val map = mutableMapOf<String, Parts>()
-
-            forEach { part ->
-                val key = "${part.prefix}:${part.owner.toNormalizedOwnerKey()}"
-                map.merge(key, part) { existing, other ->
-                    Parts(
-                        prefix = existing.prefix,
-                        years = existing.years + other.years,
-                        owner = existing.owner,
-                        originalStatements = existing.originalStatements + other.originalStatements
-                    )
-                }
-            }
-
-            return map.values.toList()
-        }
-
+        val processableStatements = sortedMapOf<Parts, SortedSet<String>>()
         val unprocessedStatements = sortedSetOf<String>()
-        val processableStatements = mutableListOf<Parts>()
 
         copyrightStatements.distinct().forEach { statement ->
             val parts = determineParts(statement)
             if (parts != null) {
-                processableStatements += parts
+                processableStatements.getOrPut(parts) { sortedSetOf() } += statement
             } else {
                 unprocessedStatements += statement
             }
         }
 
-        val mergedParts = processableStatements.sorted().groupByPrefixAndOwner()
-
         val processedStatements = sortedMapOf<String, SortedSet<String>>()
-        mergedParts.forEach {
-            if (it.owner.isNotEmpty()) {
-                val statement = it.toString()
-                processedStatements[statement] = it.originalStatements.toSortedSet()
+
+        processableStatements.keys.groupBy { parts ->
+            "${parts.prefix}:${parts.owner.toNormalizedOwnerKey()}"
+        }.values.forEach { parts ->
+            val mergedParts = parts.reduce { merged, other ->
+                merged.copy(years = merged.years + other.years)
             }
+
+            val mergedStatements = processedStatements.getOrPut(mergedParts.toString()) { sortedSetOf() }
+            parts.forEach { mergedStatements += processableStatements.getValue(it) }
         }
 
         return Result(
