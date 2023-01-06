@@ -20,10 +20,10 @@
 package org.ossreviewtoolkit.utils.ort
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedMap
-import java.util.SortedSet
-
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
@@ -221,12 +221,15 @@ object CopyrightStatementsProcessor {
          * copyright statements. An original statement can be identical to the processed statement if the processor did
          * process but not modify it.
          */
-        val processedStatements: SortedMap<String, SortedSet<String>>,
+        @JsonPropertyOrder(alphabetic = true)
+        @JsonSerialize(contentConverter = StringSortedSetConverter::class)
+        val processedStatements: Map<String, Set<String>>,
 
         /**
          * The copyright statements that were ignored by the [CopyrightStatementsProcessor].
          */
-        val unprocessedStatements: SortedSet<String>
+        @JsonSerialize(converter = StringSortedSetConverter::class)
+        val unprocessedStatements: Set<String>
     ) {
         @get:JsonIgnore
         val allStatements by lazy { unprocessedStatements + processedStatements.keys }
@@ -307,7 +310,7 @@ object CopyrightStatementsProcessor {
             return map.values.toList()
         }
 
-        val unprocessedStatements = sortedSetOf<String>()
+        val unprocessedStatements = mutableSetOf<String>()
         val processableStatements = mutableListOf<Parts>()
 
         copyrightStatements.distinct().forEach { statement ->
@@ -321,11 +324,11 @@ object CopyrightStatementsProcessor {
 
         val mergedParts = processableStatements.sorted().groupByPrefixAndOwner()
 
-        val processedStatements = sortedMapOf<String, SortedSet<String>>()
+        val processedStatements = mutableMapOf<String, Set<String>>()
         mergedParts.forEach {
             if (it.owner.isNotEmpty()) {
                 val statement = it.toString()
-                processedStatements[statement] = it.originalStatements.toSortedSet()
+                processedStatements[statement] = it.originalStatements.toSet()
             }
         }
 
