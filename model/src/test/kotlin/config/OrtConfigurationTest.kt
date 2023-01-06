@@ -53,6 +53,36 @@ class OrtConfigurationTest : WordSpec({
             )
             ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")
 
+            ortConfig.packageCurationProviders should containExactly(
+                PackageCurationProviderConfiguration(name = "DefaultFile"),
+                PackageCurationProviderConfiguration(name = "DefaultDir"),
+                PackageCurationProviderConfiguration(
+                    name = "File",
+                    config = mapOf("path" to "/some-path/curations.yml")
+                ),
+                PackageCurationProviderConfiguration(
+                    name = "File",
+                    config = mapOf("path" to "/some-path/curations-dir")
+                ),
+                PackageCurationProviderConfiguration(name = "OrtConfig", enabled = true),
+                PackageCurationProviderConfiguration(
+                    name = "ClearlyDefined",
+                    config = mapOf("serverUrl" to "https://api.clearlydefined.io")
+                ),
+                PackageCurationProviderConfiguration(
+                    name = "SW360",
+                    config = mapOf(
+                        "restUrl" to "https://your-sw360-rest-url",
+                        "authUrl" to "https://your-authentication-url",
+                        "username" to "username",
+                        "password" to "password",
+                        "clientId" to "clientId",
+                        "clientPassword" to "clientPassword",
+                        "token" to "token"
+                    )
+                ),
+            )
+
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
 
