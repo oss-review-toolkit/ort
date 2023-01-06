@@ -101,10 +101,10 @@ internal class ListCopyrightsCommand : CliktCommand(
             .mapValues { it.value.flatten().toSortedSet() }
 
         val result = buildString {
-            copyrightStatements.forEach { (processedStatement, unprocessedStatements) ->
+            copyrightStatements.toSortedMap().forEach { (processedStatement, unprocessedStatements) ->
                 appendLine(processedStatement)
                 if (showRawStatements && unprocessedStatements.size > 1) {
-                    unprocessedStatements.forEach {
+                    unprocessedStatements.sorted().forEach {
                         appendLine("  $it")
                     }
                 }
