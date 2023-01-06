@@ -8,7 +8,7 @@
 
 [![Build and Test][7]][8] [![JitPack build status][9]][10] [![Code coverage][11]][12]
 
-[![TODOs][13]][14] [![LGTM][15]][16] [![REUSE status][17]][18] [![CII][19]][20]
+[![TODOs][13]][14] [![REUSE status][15]][16] [![CII][17]][18]
 
 [1]: https://img.shields.io/badge/Join_us_on_Slack!-ort--talk-blue.svg?longCache=true&logo=slack
 [2]: https://join.slack.com/t/ort-talk/shared_invite/zt-1c7yi4sj6-mk7R1fAa6ZdW5MQ6DfAVRg
@@ -24,12 +24,10 @@
 [12]: https://app.codecov.io/gh/oss-review-toolkit/ort
 [13]: https://badgen.net/https/api.tickgit.com/badgen/github.com/oss-review-toolkit/ort
 [14]: https://www.tickgit.com/browse?repo=github.com/oss-review-toolkit/ort
-[15]: https://img.shields.io/lgtm/alerts/g/oss-review-toolkit/ort.svg?logo=lgtm&logoWidth=18
-[16]: https://lgtm.com/projects/g/oss-review-toolkit/ort/alerts/
-[17]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
-[18]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
-[19]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
-[20]: https://bestpractices.coreinfrastructure.org/projects/4618
+[15]: https://api.reuse.software/badge/github.com/oss-review-toolkit/ort
+[16]: https://api.reuse.software/info/github.com/oss-review-toolkit/ort
+[17]: https://bestpractices.coreinfrastructure.org/projects/4618/badge
+[18]: https://bestpractices.coreinfrastructure.org/projects/4618
 
 # Introduction
 
