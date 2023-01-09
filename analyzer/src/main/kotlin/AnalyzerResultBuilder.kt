@@ -49,7 +49,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
     fun build(): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages.map { it.metadata }).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
-            "Unable to create the AnalyzerResult as it contains contains packages and projects with the same ids: " +
+            "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
                     duplicates.values
         }
 
