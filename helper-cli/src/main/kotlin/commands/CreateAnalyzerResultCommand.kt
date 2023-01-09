@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
+import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -107,7 +108,8 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
         val ortConfig = OrtConfiguration.load(configArguments, configFile)
 
         val storageConfig = ortConfig.scanner.storages.orEmpty().values
-            .filterIsInstance<PostgresStorageConfiguration>().firstOrNull()
+            .filterIsInstance<PostgresStorageConfiguration>()
+            .firstOrNull { it.type == StorageType.PACKAGE_BASED }
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(
