@@ -9,7 +9,7 @@ set -l ort_subcommands 'advise analyze config download evaluate notify report re
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l config -s c -r -F -d 'The path to a configuration file.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l info -l debug -d 'Set the verbosity level of log output.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l stacktrace -d 'Print out the stacktrace for all exceptions.'
-complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -s P -r -d 'Override a key-value pair in the configuration file. For example: -P ort.scanner.storages.postgres.schema=testSchema'
+complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -s P -r -d 'Override a key-value pair in the configuration file. For example: -P ort.scanner.storages.postgres.connection.schema=testSchema'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l force-overwrite -d 'Overwrite any output files if they already exist.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l help-all -d 'Display help for all subcommands.'
 complete -c ort -n "not __fish_seen_subcommand_from $ort_subcommands" -l generate-completion

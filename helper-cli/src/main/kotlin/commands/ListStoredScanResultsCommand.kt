@@ -57,7 +57,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgres.schema=testSchema"
+                "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
     override fun run() {
