@@ -145,6 +145,7 @@ private fun getScannedPackages(
         "p.vcs_revision IS NOT DISTINCT FROM s.vcs_revision",
         "p.artifact_url IS NOT DISTINCT FROM s.artifact_url",
         "p.artifact_hash IS NOT DISTINCT FROM s.artifact_hash",
+        "s.scanner_name = 'ScanCode'",
         scanCodeVersion?.takeUnless { it.isEmpty() }?.let { "s.scanner_version = '$it'" }
     ).joinToString(" AND ")
 
