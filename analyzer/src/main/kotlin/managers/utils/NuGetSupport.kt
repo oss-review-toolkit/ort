@@ -362,7 +362,7 @@ private fun Dependency.getId(): Identifier {
     val version = range.trim { it.isWhitespace() || it in VERSION_RANGE_CHARS }
         .split(',').first().trim()
 
-    // TODO: Add support resolving to the highest version for floating versions, see
+    // TODO: Add support for resolving floating versions to the highest version, see
     //       https://docs.microsoft.com/en-us/nuget/concepts/dependency-resolution#floating-versions.
 
     return getIdentifier(id, version)
