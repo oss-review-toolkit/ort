@@ -149,7 +149,7 @@ private fun getScannedPackages(
     ).joinToString(" AND ")
 
     val query = """
-        SELECT
+        SELECT DISTINCT
             p.id,
             p.identifier,
             p.result
