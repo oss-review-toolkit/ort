@@ -49,6 +49,9 @@ import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.config.StorageType
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
+import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolutionResult
+import org.ossreviewtoolkit.scanner.provenance.ResolvedArtifactProvenance
+import org.ossreviewtoolkit.scanner.provenance.ResolvedRepositoryProvenance
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
@@ -97,7 +100,8 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
         val ids = packageIdsFile.readLines().filterNot { it.isBlank() }.map { Identifier(it.trim()) }
         val packages = openDatabaseConnection().use { connection ->
             getScannedPackages(connection, ids, scancodeVersion?.takeIf { it.isNotBlank() })
-        }.filterMaxByDate()
+        }.filterMaxByRowId()
+
         val ortResult = createAnalyzerResult(packages)
 
         println("Writing analyzer result with ${packages.size} packages to '${ortFile.absolutePath}'.")
@@ -109,7 +113,7 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
 
         val storageConfig = ortConfig.scanner.storages.orEmpty().values
             .filterIsInstance<PostgresStorageConfiguration>()
-            .firstOrNull { it.type == StorageType.PACKAGE_BASED }
+            .firstOrNull { it.type == StorageType.PROVENANCE_BASED }
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(
@@ -123,9 +127,10 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
 }
 
 private data class ScannedPackage(
+    val rowId: Int,
     val id: Identifier,
-    val provenance: Provenance,
-    val scanTime: Instant
+    val provenance: Provenance
+
 )
 
 private fun getScannedPackages(
@@ -134,17 +139,22 @@ private fun getScannedPackages(
     scanCodeVersion: String?
 ): List<ScannedPackage> {
     val whereClause = listOfNotNull(
-        "s.identifier = ANY(?)",
-        scanCodeVersion?.takeUnless { it.isEmpty() }?.let { "s.scan_result->'scanner'->>'version' = '$it'" }
+        "p.identifier = ANY(?)",
+        "p.vcs_type IS NOT DISTINCT FROM s.vcs_type",
+        "p.vcs_url IS NOT DISTINCT FROM s.vcs_url",
+        "p.vcs_revision IS NOT DISTINCT FROM s.vcs_revision",
+        "p.artifact_url IS NOT DISTINCT FROM s.artifact_url",
+        "p.artifact_hash IS NOT DISTINCT FROM s.artifact_hash",
+        scanCodeVersion?.takeUnless { it.isEmpty() }?.let { "s.scanner_version = '$it'" }
     ).joinToString(" AND ")
 
     val query = """
-        SELECT 
-            s.identifier as id,
-            s.scan_result->>'provenance' as provenance,
-            (s.scan_result->'summary'->>'start_time')::timestamp as start_time
+        SELECT
+            p.id,
+            p.identifier,
+            p.result
         FROM 
-            scan_results s 
+            package_provenances p, provenance_scan_results s 
         WHERE
             $whereClause;
     """.trimIndent()
@@ -157,11 +167,21 @@ private fun getScannedPackages(
     val result = mutableListOf<ScannedPackage>()
 
     while (resultSet.next()) {
-        val id = Identifier(resultSet.getString("id"))
-        val provenance = jsonMapper.readValue(resultSet.getString("provenance"), Provenance::class.java)
-        val startTime = resultSet.getTimestamp("start_time").toInstant()
+        val rowId = resultSet.getInt("id")
+        val id = Identifier(resultSet.getString("identifier"))
 
-        result += ScannedPackage(id, provenance, startTime)
+        val provenanceResolutionResult = jsonMapper.readValue(
+            resultSet.getString("result"),
+            PackageProvenanceResolutionResult::class.java
+        )
+
+        val provenance = when (provenanceResolutionResult) {
+            is ResolvedRepositoryProvenance -> provenanceResolutionResult.provenance
+            is ResolvedArtifactProvenance -> provenanceResolutionResult.provenance
+            else -> continue
+        }
+
+        result += ScannedPackage(rowId, id, provenance)
     }
 
     return result.distinct()
@@ -180,14 +200,14 @@ private fun createAnalyzerResult(packages: Collection<ScannedPackage>) = OrtResu
     )
 )
 
-private fun Collection<ScannedPackage>.filterMaxByDate(): List<ScannedPackage> {
-    fun filterMaxByDate(predicate: (ScannedPackage) -> Boolean) =
+private fun Collection<ScannedPackage>.filterMaxByRowId(): List<ScannedPackage> {
+    fun filterMaxByRowId(predicate: (ScannedPackage) -> Boolean) =
         filter(predicate).groupBy { it.id }.mapNotNull { (_, packages) ->
-            packages.maxByOrNull { it.scanTime }
+            packages.maxByOrNull { it.rowId }
         }
 
-    return filterMaxByDate { it.provenance is RepositoryProvenance } +
-        filterMaxByDate { it.provenance is ArtifactProvenance }
+    return filterMaxByRowId { it.provenance is RepositoryProvenance } +
+        filterMaxByRowId { it.provenance is ArtifactProvenance }
 }
 
 private fun ScannedPackage.toPackage(): Package {
