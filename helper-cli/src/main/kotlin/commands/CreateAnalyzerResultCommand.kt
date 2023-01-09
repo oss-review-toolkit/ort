@@ -106,8 +106,8 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
     private fun openDatabaseConnection(): Connection {
         val ortConfig = OrtConfiguration.load(configArguments, configFile)
 
-        val storageConfig = ortConfig.scanner.storages?.values
-            ?.filterIsInstance<PostgresStorageConfiguration>()?.firstOrNull()
+        val storageConfig = ortConfig.scanner.storages.orEmpty().values
+            .filterIsInstance<PostgresStorageConfiguration>().firstOrNull()
             ?: throw IllegalArgumentException("postgresStorage not configured.")
 
         val dataSource = DatabaseUtils.createHikariDataSource(
