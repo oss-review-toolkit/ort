@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class CreateAnalyzerResultCommand : CliktCommand(
     help = "Creates an analyzer result that contains packages for the given list of package ids. The result contains " +
-            "only packages which have a corresponding result in the postgres storage."
+            "only packages which have a corresponding ScanCode scan result in the postgres storage."
 ) {
     private val packageIdsFile by option(
         "--package-ids-file",
