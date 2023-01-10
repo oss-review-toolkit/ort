@@ -37,6 +37,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import java.io.File
 import java.lang.IllegalArgumentException
 
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.test.createTestTempFile
@@ -92,8 +93,14 @@ class OrtConfigurationTest : WordSpec({
                 ),
             )
 
+            ortConfig.severeIssueThreshold shouldBe Severity.ERROR
+            ortConfig.severeRuleViolationThreshold shouldBe Severity.ERROR
+
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
+
+                enabledPackageManagers shouldContainExactlyInAnyOrder listOf("DotNet", "Gradle")
+                disabledPackageManagers shouldContainExactlyInAnyOrder listOf("Maven", "NPM")
 
                 packageManagers shouldNotBeNull {
                     get("Gradle") shouldNotBeNull {
@@ -103,6 +110,12 @@ class OrtConfigurationTest : WordSpec({
                     get("DotNet") shouldNotBeNull {
                         options shouldNotBeNull {
                             this shouldContainExactly mapOf("directDependenciesOnly" to "true")
+                        }
+                    }
+
+                    get("Yarn2") shouldNotBeNull {
+                        options shouldNotBeNull {
+                            this shouldContainExactly mapOf("disableRegistryCertificateVerification" to "false")
                         }
                     }
 
@@ -125,12 +138,32 @@ class OrtConfigurationTest : WordSpec({
             with(ortConfig.advisor) {
                 nexusIq shouldNotBeNull {
                     serverUrl shouldBe "https://rest-api-url-of-your-nexus-iq-server"
+                    browseUrl shouldBe "https://web-browsing-url-of-your-nexus-iq-server"
                     username shouldBe "username"
                     password shouldBe "password"
                 }
 
                 vulnerableCode shouldNotBeNull {
                     serverUrl shouldBe "http://localhost:8000"
+                    apiKey shouldBe "0123456789012345678901234567890123456789"
+                }
+
+                gitHubDefects shouldNotBeNull {
+                    token shouldBe "githubAccessToken"
+                    labelFilter shouldContainExactlyInAnyOrder listOf(
+                        "!duplicate",
+                        "!enhancement",
+                        "!invalid",
+                        "!question",
+                        "!documentation",
+                        "*"
+                    )
+                    maxNumberOfIssuesPerRepository shouldBe 50
+                    parallelRequests shouldBe 5
+                }
+
+                osv shouldNotBeNull {
+                    serverUrl shouldBe "https://api.osv.dev"
                 }
 
                 options shouldNotBeNull {
@@ -138,13 +171,18 @@ class OrtConfigurationTest : WordSpec({
                 }
             }
 
-            ortConfig.downloader shouldNotBeNull {
+            with(ortConfig.downloader) {
+                allowMovingRevisions shouldBe true
                 includedLicenseCategories should containExactly("category-a", "category-b")
                 sourceCodeOrigins should containExactly(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)
             }
 
             with(ortConfig.scanner) {
+                skipConcluded shouldBe true
+
                 archive shouldNotBeNull {
+                    enabled shouldBe true
+
                     fileStorage shouldNotBeNull {
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {
@@ -168,11 +206,46 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
+                createMissingArchives shouldBe false
+
+                detectedLicenseMapping shouldContainExactly mapOf(
+                    "BSD (Three Clause License)" to "BSD-3-clause",
+                    "LicenseRef-scancode-generic-cla" to "NOASSERTION"
+                )
+
                 options shouldNotBeNull {
-                    val fossIdOptions = getValue("FossId")
-                    val mapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
-                            "ssh://my-mapped-repo.example.org\${repoPath}"
-                    fossIdOptions["urlMappingExample"] shouldBe mapping
+                    get("ScanCode") shouldNotBeNull {
+                        this shouldContainExactly mapOf(
+                            "commandLine" to "--copyright --license --info --strip-root --timeout 300",
+                            "parseLicenseExpressions" to "true",
+                            "minVersion" to "3.2.1-rc2",
+                            "maxVersion" to "32.0.0"
+                        )
+                    }
+
+                    get("FossId") shouldNotBeNull {
+                        val urlMapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
+                                "ssh://my-mapped-repo.example.org\${repoPath}"
+
+                        this shouldContainExactly mapOf(
+                            "serverUrl" to "https://fossid.example.com/instance/",
+                            "user" to "user",
+                            "apiKey" to "XYZ",
+                            "namingProjectPattern" to "\$Var1_\$Var2",
+                            "namingScanPattern" to "\$Var1_#projectBaseCode_\$Var3",
+                            "namingVariableVar1" to "myOrg",
+                            "namingVariableVar2" to "myTeam",
+                            "namingVariableVar3" to "myUnit",
+                            "waitForResult" to "false",
+                            "keepFailedScans" to "false",
+                            "deltaScans" to "true",
+                            "deltaScanLimit" to "10",
+                            "detectLicenseDeclarations" to "true",
+                            "detectCopyrightStatements" to "true",
+                            "timeout" to "60",
+                            "urlMappingExample" to urlMapping
+                        )
+                    }
                 }
 
                 storages shouldNotBeNull {
@@ -184,12 +257,14 @@ class OrtConfigurationTest : WordSpec({
                     localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
                     localStorage.backend.localFileStorage shouldNotBeNull {
                         directory shouldBe File("~/.ort/scanner/results")
+                        compression shouldBe false
                     }
 
                     val httpStorage = this["http"]
                     httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
                     httpStorage.backend.httpFileStorage shouldNotBeNull {
                         url shouldBe "https://your-http-server"
+                        query shouldBe "?username=user&password=123"
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                     }
 
@@ -209,6 +284,7 @@ class OrtConfigurationTest : WordSpec({
                         sslkey shouldBe "/defaultdir/postgresql.pk8"
                         sslrootcert shouldBe "/defaultdir/root.crt"
                     }
+                    postgresStorage.type shouldBe StorageType.PROVENANCE_BASED
 
                     val sw360Storage = this["sw360Configuration"]
                     sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
@@ -231,6 +307,7 @@ class OrtConfigurationTest : WordSpec({
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {
                             directory shouldBe File("~/.ort/scanner/provenance")
+                            compression shouldBe false
                         }
                     }
 
@@ -245,6 +322,20 @@ class OrtConfigurationTest : WordSpec({
                             sslkey shouldBe "/defaultdir/postgresql.pk8"
                             sslrootcert shouldBe "/defaultdir/root.crt"
                         }
+                    }
+                }
+            }
+
+            with(ortConfig.reporter) {
+                options shouldNotBeNull {
+                    keys shouldContainExactlyInAnyOrder setOf("FossId")
+
+                    get("FossId") shouldNotBeNull {
+                        this shouldContainExactly mapOf(
+                            "serverUrl" to "https://fossid.example.com/instance/",
+                            "user" to "user",
+                            "apiKey" to "XYZ"
+                        )
                     }
                 }
             }
