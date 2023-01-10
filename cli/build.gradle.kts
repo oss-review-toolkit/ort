@@ -18,13 +18,16 @@
  */
 
 import java.nio.charset.Charset
+import java.nio.file.Files
+
+import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
 plugins {
     // Apply core plugins.
     application
 
     // Apply third-party plugins.
-    alias(libs.plugins.graal)
+    alias(libs.plugins.graalVmNativeImage)
 }
 
 application {
@@ -36,32 +39,49 @@ application {
     mainClass.set("org.ossreviewtoolkit.cli.OrtMainKt")
 }
 
-graal {
-    graalVersion(libs.versions.graal.get())
-    javaVersion("17")
+graalvmNative {
+    toolchainDetection.set(true)
 
-    // Build a standalone native executable or report a failure.
-    option("--no-fallback")
+    // For options see https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html.
+    binaries {
+        named("main") {
+            imageName.set("ort")
+        }
+    }
 
-    // Work-around for:
-    // "WARNING: Unknown module: org.graalvm.nativeimage.llvm specified to --add-exports"
-    option("-J--add-modules")
-    option("-JALL-SYSTEM")
+    metadataRepository {
+        enabled.set(true)
+    }
+}
 
-    // Work-around for:
-    // "Error: Classes that should be initialized at run time got initialized during image building"
-    option("--initialize-at-build-time=org.jruby.util.RubyFileTypeDetector")
+tasks.named<BuildNativeImageTask>("nativeCompile").configure {
+    // Gradle's "Copy" task cannot handle symbolic links, see https://github.com/gradle/gradle/issues/3982. That is why
+    // links contained in the GraalVM distribution archive get broken during provisioning and are replaced by empty
+    // files. Address this by recreating the links in the toolchain directory.
+    val toolchainDir = options.get().javaLauncher.get().executablePath.asFile.parentFile.run {
+        if (name == "bin") parentFile else this
+    }
 
-    // Work-around for:
-    // "Unsupported method java.lang.invoke.MethodHandleNatives.setCallSiteTargetNormal() is reachable"
-    option("--report-unsupported-elements-at-runtime")
+    val toolchainFiles = toolchainDir.walkTopDown().filter { it.isFile }
+    val emptyFiles = toolchainFiles.filter { it.length() == 0L }
 
-    // Work-around for:
-    // "Error: Non-reducible loop requires too much duplication"
-    option("-H:MaxDuplicationFactor=3.0")
+    // Find empty toolchain files that are named like other toolchain files and assume these should have been links.
+    val links = toolchainFiles.mapNotNull { file ->
+        emptyFiles.singleOrNull { it != file && it.name == file.name }?.let {
+            file to it
+        }
+    }
 
-    mainClass("org.ossreviewtoolkit.cli.OrtMainKt")
-    outputName("ort")
+    // Fix up symbolic links.
+    links.forEach { (target, link) ->
+        logger.quiet("Fixing up '$link' to link to '$target'.")
+
+        if (link.delete()) {
+            Files.createSymbolicLink(link.toPath(), target.toPath())
+        } else {
+            logger.warn("Unable to delete '$link'.")
+        }
+    }
 }
 
 tasks.named<CreateStartScripts>("startScripts").configure {
