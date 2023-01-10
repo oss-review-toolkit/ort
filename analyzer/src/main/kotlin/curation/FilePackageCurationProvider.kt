@@ -43,7 +43,7 @@ class FilePackageCurationProvider(
         fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
             val curationFiles = mutableListOf<File>()
             file?.takeIf { it.isFile }?.let { curationFiles += it }
-            dir?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
+            dir?.takeIf { it.isDirectory }?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
 
             return FilePackageCurationProvider(curationFiles)
         }
