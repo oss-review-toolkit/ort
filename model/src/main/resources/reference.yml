@@ -19,25 +19,22 @@
 # exclusive, so this file is only used to show all options and to validate the configuration.
 
 ort:
-  licenseFilePatterns:
-    licenseFilenames: ['license*']
-    patentFilenames: [patents]
-    rootLicenseFilenames: ['readme*']
-
-  severeIssueThreshold: ERROR
-  severeRuleViolationThreshold: ERROR
-
-  enableRepositoryPackageCurations: true
-  enableRepositoryPackageConfigurations: true
-
+  allowedProcessEnvironmentVariableNames:
+    - PASSPORT
+    - USER_HOME
   deniedProcessEnvironmentVariablesSubstrings:
     - PASS
     - SECRET
     - TOKEN
     - USER
-  allowedProcessEnvironmentVariableNames:
-    - PASSPORT
-    - USER_HOME
+
+  enableRepositoryPackageConfigurations: true
+  enableRepositoryPackageCurations: true
+
+  licenseFilePatterns:
+    licenseFilenames: ['license*']
+    patentFilenames: [patents]
+    rootLicenseFilenames: ['readme*']
 
   packageCurationProviders:
     - name: DefaultFile
@@ -62,6 +59,9 @@ ort:
         clientId: clientId
         clientPassword: clientPassword
         token: token
+
+  severeIssueThreshold: ERROR
+  severeRuleViolationThreshold: ERROR
 
   analyzer:
     allowDynamicVersions: true
