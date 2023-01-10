@@ -48,10 +48,19 @@ class OrtConfigurationTest : WordSpec({
             val refConfig = File("src/main/resources/$REFERENCE_CONFIG_FILENAME")
             val ortConfig = OrtConfiguration.load(file = refConfig)
 
+            ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")
             ortConfig.deniedProcessEnvironmentVariablesSubstrings should containExactlyInAnyOrder(
                 "PASS", "SECRET", "TOKEN", "USER"
             )
-            ortConfig.allowedProcessEnvironmentVariableNames should containExactlyInAnyOrder("PASSPORT", "USER_HOME")
+
+            ortConfig.enableRepositoryPackageConfigurations shouldBe true
+            ortConfig.enableRepositoryPackageCurations shouldBe true
+
+            with(ortConfig.licenseFilePatterns) {
+                licenseFilenames shouldContainExactly listOf("license*")
+                patentFilenames shouldContainExactly listOf("patents")
+                rootLicenseFilenames shouldContainExactly listOf("readme*")
+            }
 
             ortConfig.packageCurationProviders should containExactly(
                 PackageCurationProviderConfiguration(name = "DefaultFile"),
@@ -159,10 +168,24 @@ class OrtConfigurationTest : WordSpec({
                     }
                 }
 
+                options shouldNotBeNull {
+                    val fossIdOptions = getValue("FossId")
+                    val mapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
+                            "ssh://my-mapped-repo.example.org\${repoPath}"
+                    fossIdOptions["urlMappingExample"] shouldBe mapping
+                }
+
                 storages shouldNotBeNull {
                     keys shouldContainExactlyInAnyOrder setOf(
                         "local", "http", "clearlyDefined", "postgres", "sw360Configuration"
                     )
+
+                    val localStorage = this["local"]
+                    localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                    localStorage.backend.localFileStorage shouldNotBeNull {
+                        directory shouldBe File("~/.ort/scanner/results")
+                    }
+
                     val httpStorage = this["http"]
                     httpStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
                     httpStorage.backend.httpFileStorage shouldNotBeNull {
@@ -170,11 +193,9 @@ class OrtConfigurationTest : WordSpec({
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
                     }
 
-                    val localStorage = this["local"]
-                    localStorage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
-                    localStorage.backend.localFileStorage shouldNotBeNull {
-                        directory shouldBe File("~/.ort/scanner/results")
-                    }
+                    val cdStorage = this["clearlyDefined"]
+                    cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
+                    cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
 
                     val postgresStorage = this["postgres"]
                     postgresStorage.shouldBeInstanceOf<PostgresStorageConfiguration>()
@@ -189,10 +210,6 @@ class OrtConfigurationTest : WordSpec({
                         sslrootcert shouldBe "/defaultdir/root.crt"
                     }
 
-                    val cdStorage = this["clearlyDefined"]
-                    cdStorage.shouldBeInstanceOf<ClearlyDefinedStorageConfiguration>()
-                    cdStorage.serverUrl shouldBe "https://api.clearlydefined.io"
-
                     val sw360Storage = this["sw360Configuration"]
                     sw360Storage.shouldBeInstanceOf<Sw360StorageConfiguration>()
                     sw360Storage.restUrl shouldBe "https://your-sw360-rest-url"
@@ -202,13 +219,6 @@ class OrtConfigurationTest : WordSpec({
                     sw360Storage.clientId shouldBe "clientId"
                     sw360Storage.clientPassword shouldBe "clientPassword"
                     sw360Storage.token shouldBe "token"
-                }
-
-                options shouldNotBeNull {
-                    val fossIdOptions = getValue("FossId")
-                    val mapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
-                            "ssh://my-mapped-repo.example.org\${repoPath}"
-                    fossIdOptions["urlMappingExample"] shouldBe mapping
                 }
 
                 storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
@@ -255,15 +265,6 @@ class OrtConfigurationTest : WordSpec({
                     password shouldBe "password"
                 }
             }
-
-            with(ortConfig.licenseFilePatterns) {
-                licenseFilenames shouldContainExactly listOf("license*")
-                patentFilenames shouldContainExactly listOf("patents")
-                rootLicenseFilenames shouldContainExactly listOf("readme*")
-            }
-
-            ortConfig.enableRepositoryPackageCurations shouldBe true
-            ortConfig.enableRepositoryPackageConfigurations shouldBe true
         }
 
         "correctly prioritize the sources" {
