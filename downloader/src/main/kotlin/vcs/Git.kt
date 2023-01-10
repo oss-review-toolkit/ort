@@ -218,13 +218,23 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.info { "Falling back to fetch everything including tags." }
 
             git.fetch().setUnshallow(true).setTagOpt(TagOpt.FETCH_TAGS).call()
+        }.recoverCatching {
+            it.showStackTrace()
+
+            logger.info { "Could not fetch everything using JGit: ${it.collectMessages()}" }
+            logger.info { "Falling back to Git CLI." }
+
+            val workingTree = GitWorkingTree(git.repository.workTree, VcsType.GIT)
+            if (workingTree.isShallow()) {
+                workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
+            } else {
+                workingTree.runGit("fetch", "--tags", "origin")
+            }
         }.onFailure {
             it.showStackTrace()
 
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
-        }.mapCatching { fetchResult ->
-            logger.debug { "Successfully fetched ${fetchResult.advertisedRefs}." }
-
+        }.mapCatching {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772 is implemented.
             run("checkout", revision, workingDir = git.repository.workTree)
 
