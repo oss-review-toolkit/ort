@@ -123,16 +123,6 @@ class OrtConfigurationTest : WordSpec({
                         this shouldBe get("Gradle")
                     }
                 }
-
-                sw360Configuration shouldNotBeNull {
-                    restUrl shouldBe "https://your-sw360-rest-url"
-                    authUrl shouldBe "https://your-authentication-url"
-                    username shouldBe "username"
-                    password shouldBe "password"
-                    clientId shouldBe "clientId"
-                    clientPassword shouldBe "clientPassword"
-                    token shouldBe "token"
-                }
             }
 
             with(ortConfig.advisor) {

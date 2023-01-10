@@ -48,12 +48,7 @@ data class AnalyzerConfiguration(
      * Package manager specific configurations. The key needs to match the name of the package manager class, e.g.
      * "NuGet" for the NuGet package manager.
      */
-    val packageManagers: Map<String, PackageManagerConfiguration>? = null,
-
-    /**
-     * Configuration of the SW360 package curation provider.
-     */
-    val sw360Configuration: Sw360StorageConfiguration? = null
+    val packageManagers: Map<String, PackageManagerConfiguration>? = null
 ) {
     /**
      * A copy of [packageManagers] with case-insensitive keys.
@@ -110,8 +105,7 @@ data class AnalyzerConfiguration(
             allowDynamicVersions = other.allowDynamicVersions,
             enabledPackageManagers = other.enabledPackageManagers ?: enabledPackageManagers,
             disabledPackageManagers = other.disabledPackageManagers ?: disabledPackageManagers,
-            packageManagers = mergedPackageManagers,
-            sw360Configuration = other.sw360Configuration ?: sw360Configuration
+            packageManagers = mergedPackageManagers
         )
     }
 }

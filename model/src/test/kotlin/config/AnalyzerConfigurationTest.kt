@@ -50,36 +50,31 @@ class AnalyzerConfigurationTest : WordSpec({
             val self = AnalyzerConfiguration(
                 allowDynamicVersions = false,
                 enabledPackageManagers = listOf("Gradle"),
-                disabledPackageManagers = listOf("NPM"),
-                sw360Configuration = sw360Config1
+                disabledPackageManagers = listOf("NPM")
             )
 
             val other = AnalyzerConfiguration(
                 allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Maven"),
-                disabledPackageManagers = listOf("SBT"),
-                sw360Configuration = sw360Config2
+                disabledPackageManagers = listOf("SBT")
             )
 
             with(self.merge(other)) {
                 allowDynamicVersions shouldBe true
                 enabledPackageManagers should containExactly("Maven")
                 disabledPackageManagers should containExactly("SBT")
-                sw360Configuration shouldBe sw360Config2
             }
         }
 
         "keep values which are null in other" {
             val self = AnalyzerConfiguration(
                 enabledPackageManagers = listOf("Gradle"),
-                disabledPackageManagers = listOf("NPM"),
-                sw360Configuration = sw360Config1
+                disabledPackageManagers = listOf("NPM")
             )
 
             val other = AnalyzerConfiguration(
                 enabledPackageManagers = null,
-                disabledPackageManagers = null,
-                sw360Configuration = null
+                disabledPackageManagers = null
             )
 
             self.merge(other) shouldBe self
@@ -132,17 +127,3 @@ class AnalyzerConfigurationTest : WordSpec({
         }
     }
 })
-
-private val sw360Config1 = Sw360StorageConfiguration(
-    restUrl = "url1",
-    authUrl = "auth1",
-    username = "user1",
-    clientId = "client1"
-)
-
-private val sw360Config2 = Sw360StorageConfiguration(
-    restUrl = "url2",
-    authUrl = "auth2",
-    username = "user2",
-    clientId = "client2"
-)
