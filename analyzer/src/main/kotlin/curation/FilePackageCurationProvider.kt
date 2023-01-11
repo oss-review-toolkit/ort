@@ -41,41 +41,28 @@ class FilePackageCurationProviderConfig(
     val path: String
 )
 
-class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
+open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
     override val name = "File"
 
-    override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
+    override fun create(config: FilePackageCurationProviderConfig) =
+        FilePackageCurationProvider.from(config)
 
     override fun parseConfig(config: Map<String, String>) =
         FilePackageCurationProviderConfig(path = config.getValue("path"))
 }
 
-class DefaultFilePackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
+class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultFile"
 
-    override fun create(config: Unit) =
-        ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME).let { curationsFile ->
-            when {
-                curationsFile.isFile -> FilePackageCurationProvider(curationsFile)
-                else -> PackageCurationProvider.EMPTY
-            }
-        }
-
-    override fun parseConfig(config: Map<String, String>) = Unit
+    override fun parseConfig(config: Map<String, String>) =
+        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME).path)
 }
 
-class DefaultDirPackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
+class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultDir"
 
-    override fun create(config: Unit) =
-        ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME).let { curationsDir ->
-            when {
-                curationsDir.isDirectory -> FilePackageCurationProvider(curationsDir)
-                else -> PackageCurationProvider.EMPTY
-            }
-        }
-
-    override fun parseConfig(config: Map<String, String>) = Unit
+    override fun parseConfig(config: Map<String, String>) =
+        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME).path)
 }
 
 /**
@@ -86,9 +73,11 @@ class FilePackageCurationProvider(
     curationFiles: List<File>
 ) : SimplePackageCurationProvider(readCurationFiles(curationFiles)) {
     constructor(curationFile: File) : this(listOf(curationFile))
-    constructor(config: FilePackageCurationProviderConfig) : this(File(config.path))
 
     companion object : Logging {
+        fun from(config: FilePackageCurationProviderConfig) =
+            with(File(config.path)) { from(file = this, dir = this) }
+
         fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
             val curationFiles = mutableListOf<File>()
             file?.takeIf { it.isFile }?.let { curationFiles += it }
