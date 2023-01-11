@@ -38,7 +38,7 @@ class FilePackageCurationProviderConfig(
     /**
      * The path of the package curation file or directory.
      */
-    val path: String
+    val path: File
 )
 
 open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
@@ -48,21 +48,21 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
         FilePackageCurationProvider.from(config)
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = config.getValue("path"))
+        FilePackageCurationProviderConfig(path = File(config.getValue("path")))
 }
 
 class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultFile"
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME).path)
+        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME))
 }
 
 class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultDir"
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME).path)
+        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME))
 }
 
 /**
@@ -76,7 +76,7 @@ class FilePackageCurationProvider(
 
     companion object : Logging {
         fun from(config: FilePackageCurationProviderConfig) =
-            with(File(config.path)) { from(file = this, dir = this) }
+            with(config.path) { from(file = this, dir = this) }
 
         fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
             val curationFiles = mutableListOf<File>()
