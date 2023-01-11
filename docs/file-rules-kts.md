@@ -20,7 +20,6 @@ option of the _evaluator_:
 cli/build/install/ort/bin/ort evaluate \
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir] \
-  --output-formats YAML \
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml \
   --package-curations-file $ORT_CONFIG_DIR/curations.yml  \
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
