@@ -71,7 +71,7 @@ spec:
       steps:
       - name: "analyze"
         image: ort:latest
-        args: ["analyze", "-i", "/workspace/shared/source", "-o" ,"/workspace/shared/results/analyzer", "--package-curations-file", "/workspace/shared/ort/examples/curations.yml" ]
+        args: ["analyze", "-i", "/workspace/shared/source", "-o" ,"/workspace/shared/results/analyzer"]
         env:
           - name: "ORT_DATA_DIR"
             value: "/workspace/ort-data-dir/data"
