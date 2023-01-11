@@ -28,7 +28,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.Identifier
 
 class FilePackageCurationProviderTest : StringSpec() {
@@ -43,7 +42,7 @@ class FilePackageCurationProviderTest : StringSpec() {
         }
 
         "Provider can read from multiple yaml files" {
-            val provider = FilePackageCurationProvider(FileFormat.findFilesWithKnownExtensions(curationsDir))
+            val provider = FilePackageCurationProvider(curationsDir)
             val idsWithExistingCurations = listOf(
                 Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
                 Identifier("maven", "org.foo", "bar", "0.42")
@@ -57,7 +56,7 @@ class FilePackageCurationProviderTest : StringSpec() {
         }
 
         "Provider can read from a single file and directories" {
-            val provider = FilePackageCurationProvider.from(curationsFile, curationsDir)
+            val provider = FilePackageCurationProvider(curationsFile, curationsDir)
 
             val idsWithExistingCurations = listOf(
                 // File

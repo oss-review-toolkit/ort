@@ -272,7 +272,7 @@ class EvaluatorCommand : OrtCommand(
         }
 
         if (packageCurationsDir != null || packageCurationsFile != null) {
-            val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
+            val curations = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir).packageCurations
             ortResultInput = ortResultInput.replacePackageCurations(curations)
         }
 

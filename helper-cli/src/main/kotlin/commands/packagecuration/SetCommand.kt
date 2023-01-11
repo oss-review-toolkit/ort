@@ -57,7 +57,7 @@ class SetCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        val curations = FilePackageCurationProvider.from(packageCurationsFile, packageCurationsDir).packageCurations
+        val curations = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir).packageCurations
 
         val ortResult = readOrtResult(ortFile).replacePackageCurations(curations)
 
