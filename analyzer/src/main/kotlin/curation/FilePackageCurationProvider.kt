@@ -45,7 +45,7 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
     override val name = "File"
 
     override fun create(config: FilePackageCurationProviderConfig) =
-        FilePackageCurationProvider.from(config)
+        FilePackageCurationProvider(config)
 
     override fun parseConfig(config: Map<String, String>) =
         FilePackageCurationProviderConfig(path = File(config.getValue("path")))
@@ -70,24 +70,17 @@ class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFact
  * specified in [FileFormat].
  */
 class FilePackageCurationProvider(
-    curationFiles: List<File>
-) : SimplePackageCurationProvider(readCurationFiles(curationFiles)) {
-    constructor(curationFile: File) : this(listOf(curationFile))
+    vararg paths: File?
+) : SimplePackageCurationProvider(readCurationFiles(paths.filterNotNull())) {
+    constructor(config: FilePackageCurationProviderConfig) : this(config.path)
 
     companion object : Logging {
-        fun from(config: FilePackageCurationProviderConfig) =
-            with(config.path) { from(file = this, dir = this) }
-
-        fun from(file: File? = null, dir: File? = null): FilePackageCurationProvider {
-            val curationFiles = mutableListOf<File>()
-            file?.takeIf { it.isFile }?.let { curationFiles += it }
-            dir?.takeIf { it.isDirectory }?.let { curationFiles += FileFormat.findFilesWithKnownExtensions(it) }
-
-            return FilePackageCurationProvider(curationFiles)
-        }
-
-        fun readCurationFiles(curationFiles: Collection<File>): List<PackageCuration> {
+        fun readCurationFiles(paths: Collection<File>): List<PackageCuration> {
             val allCurations = mutableListOf<Pair<PackageCuration, File>>()
+
+            val curationFiles = paths.flatMap {
+                if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
+            }
 
             curationFiles.map { curationFile ->
                 val curations = runCatching {
