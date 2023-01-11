@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 import java.nio.charset.Charset
 
 @Suppress("DSL_SCOPE_VIOLATION") // See https://youtrack.jetbrains.com/issue/KTIJ-19369.
@@ -28,7 +26,6 @@ plugins {
 
     // Apply third-party plugins.
     alias(libs.plugins.graal)
-    alias(libs.plugins.shadow)
 }
 
 application {
@@ -62,10 +59,6 @@ graal {
 
     mainClass("org.ossreviewtoolkit.cli.OrtMainKt")
     outputName("ort")
-}
-
-tasks.withType<ShadowJar>().configureEach {
-    isZip64 = true
 }
 
 tasks.named<CreateStartScripts>("startScripts").configure {
