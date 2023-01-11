@@ -247,17 +247,7 @@ needs to be downloaded. The _downloader_ tool could be used for this, but it is 
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
 Note that if _downloader_ is unable to download the source code due to say a missing source code location in the package
-metadata then you can use curations as a workaround.
-
-To use curations, create a [curations.yml](config-file-curations-yml.md)
-and pass it to the `--package-curations-file` option of the _analyzer_:
-
-```
-cli/build/install/ort/bin/ort analyze
-  -i [mime-types-dir]
-  -o [analyzer-output-dir]
-  --package-curations-file $ORT_CONFIG_DIR/curations.yml
-```
+metadata then you can use [curations](config-file-curations-yml.md) to fixup the package's metadata.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
 that explores the source code of a software package could be integrated. The actual scanner does not have to run on the
