@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.utils.common.withoutSuffix
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
  *
- * Note: The file `go.sum` is not a lockfile as go modules already allows for reproducible builds without that file.
+ * Note: The file `go.sum` is not a lockfile as Go modules already allows for reproducible builds without that file.
  * Thus, no logic for handling the [AnalyzerConfiguration.allowDynamicVersions] is needed.
  */
 class GoMod(
@@ -329,8 +329,8 @@ class GoMod(
          *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
          *
          * TODO: Reconsider removing the source artifact URLs in favor of VCS locations. Those could be obtained by
-         * 1. Exposing needed go internals analog to https://github.com/kisielk/gotool/
-         * 2. Provide a simple CLI written in go which uses those internals to obtain the VCS location and revision.
+         * 1. Exposing needed Go internals analog to https://github.com/kisielk/gotool/
+         * 2. Provide a simple CLI written in Go which uses those internals to obtain the VCS location and revision.
          * 3. Make use of that CLI from within this class.
          */
         val goProxy = getGoProxy()
