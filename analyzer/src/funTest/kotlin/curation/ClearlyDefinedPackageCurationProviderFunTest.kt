@@ -35,6 +35,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
         "return an existing curation for the javax.servlet-api Maven package" {
             val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
+
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should haveSize(1)
@@ -44,6 +45,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
         "return an existing curation for the slf4j-log4j12 Maven package" {
             val identifier = Identifier("Maven:org.slf4j:slf4j-log4j12:1.7.30")
+
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should haveSize(1)
@@ -52,6 +54,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
         "return no curation for a non-existing dummy NPM package" {
             val identifier = Identifier("NPM:@scope:name:1.2.3")
+
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should beEmpty()
@@ -63,15 +66,16 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
         "return an existing curation for the platform-express NPM package" {
             val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
+
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should haveSize(1)
-
             curations.values.flatten().first().data.concludedLicense shouldBe "Apache-1.0".toSpdx()
         }
 
         "return no curation for a non-existing dummy Maven package" {
             val identifier = Identifier("Maven:group:name:1.2.3")
+
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should beEmpty()
