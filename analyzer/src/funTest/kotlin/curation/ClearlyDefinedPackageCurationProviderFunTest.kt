@@ -81,4 +81,21 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             curations should beEmpty()
         }
     }
+
+    "Curations" should {
+        "get filtered by score" {
+            val config = ClearlyDefinedPackageCurationProviderConfig(
+                serverUrl = Server.PRODUCTION.apiUrl,
+                minTotalLicenseScore = 80
+            )
+            val provider = ClearlyDefinedPackageCurationProvider(config)
+
+            // Use an id which is known to have non-empty results from an earlier test.
+            val identifier = Identifier("Maven:org.slf4j:slf4j-log4j12:1.7.30")
+
+            val curations = provider.getCurationsFor(listOf(identifier))
+
+            curations should beEmpty()
+        }
+    }
 })

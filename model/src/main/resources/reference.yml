@@ -52,6 +52,7 @@ ort:
     - name: ClearlyDefined
       config:
         serverUrl: 'https://api.clearlydefined.io'
+        minTotalLicenseScore: 80
     - name: SW360
       config:
         restUrl: 'https://your-sw360-rest-url'
