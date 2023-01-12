@@ -9,6 +9,15 @@ on:
       - main
 
 jobs:
+  commit-lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v5
+        with:
+          configFile: .commitlintrc.yml
   copyright-license:
     runs-on: ubuntu-22.04
     env:
