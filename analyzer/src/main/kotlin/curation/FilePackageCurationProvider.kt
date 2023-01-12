@@ -38,7 +38,12 @@ class FilePackageCurationProviderConfig(
     /**
      * The path of the package curation file or directory.
      */
-    val path: File
+    val path: File,
+
+    /**
+     * A flag to denote whether the path is required to exist.
+     */
+    val mustExist: Boolean
 )
 
 open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
@@ -48,21 +53,30 @@ open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<F
         FilePackageCurationProvider(config)
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = File(config.getValue("path")))
+        FilePackageCurationProviderConfig(
+            path = File(config.getValue("path")),
+            mustExist = config["mustExist"]?.toBooleanStrict() ?: true,
+        )
 }
 
 class DefaultFilePackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultFile"
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME))
+        FilePackageCurationProviderConfig(
+            path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_FILENAME),
+            mustExist = false
+        )
 }
 
 class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFactory() {
     override val name = "DefaultDir"
 
     override fun parseConfig(config: Map<String, String>) =
-        FilePackageCurationProviderConfig(path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME))
+        FilePackageCurationProviderConfig(
+            path = ortConfigDirectory.resolve(ORT_PACKAGE_CURATIONS_DIRNAME),
+            mustExist = false
+        )
 }
 
 /**
@@ -72,13 +86,24 @@ class DefaultDirPackageCurationProviderFactory : FilePackageCurationProviderFact
 class FilePackageCurationProvider(
     vararg paths: File?
 ) : SimplePackageCurationProvider(readCurationFiles(paths.filterNotNull())) {
-    constructor(config: FilePackageCurationProviderConfig) : this(config.path)
+    constructor(config: FilePackageCurationProviderConfig) : this(
+        config.path.takeUnless { !it.exists() && !config.mustExist }
+    )
 
     companion object : Logging {
+        /**
+         * Read a list of [PackageCuration]s from existing [paths], which can either point to files or directories. In
+         * the latter case, the directory is searched recursively for deserializable files (according to their
+         * extension), which then are assumed to be curation files.
+         */
         fun readCurationFiles(paths: Collection<File>): List<PackageCuration> {
             val allCurations = mutableListOf<Pair<PackageCuration, File>>()
 
             val curationFiles = paths.flatMap {
+                require(it.exists()) {
+                    "The path '$it' does not exist."
+                }
+
                 if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
             }
 
