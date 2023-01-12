@@ -46,7 +46,7 @@ object Python : CommandLineTool {
 
 private const val OPTION_OPERATING_SYSTEM = "operatingSystem"
 private const val OPTION_OPERATING_SYSTEM_DEFAULT = "linux"
-private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "mac", "windows")
+private val OPERATING_SYSTEMS = listOf(OPTION_OPERATING_SYSTEM_DEFAULT, "macos", "windows")
 
 private const val OPTION_PYTHON_VERSION = "pythonVersion"
 private const val OPTION_PYTHON_VERSION_DEFAULT = "3.10"
@@ -58,7 +58,7 @@ private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", OPTION_P
  * and [setup.py vs. requirements.txt](https://caremad.io/posts/2013/07/setup-vs-requirement/).
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "mac", or
+ * - *operatingSystem*: The name of the operating system to resolve dependencies for. One of "linux", "macos", or
  *   "windows". Defaults to "linux".
  * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.10".
  */
