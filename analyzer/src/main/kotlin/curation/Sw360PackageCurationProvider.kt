@@ -66,7 +66,7 @@ class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360
 /**
  * A [PackageCurationProvider] for curated package metadata from the configured SW360 instance using the REST API.
  */
-class Sw360PackageCurationProvider(configuration: Sw360StorageConfiguration) : PackageCurationProvider {
+class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageCurationProvider {
     companion object {
         val JSON_MAPPER: ObjectMapper = jsonMapper.copy()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -94,7 +94,7 @@ class Sw360PackageCurationProvider(configuration: Sw360StorageConfiguration) : P
         }
     }
 
-    private val connectionFactory = createConnection(configuration)
+    private val connectionFactory = createConnection(config)
     private val releaseClient = connectionFactory.releaseAdapter
 
     override fun getCurationsFor(pkgIds: Collection<Identifier>) =
