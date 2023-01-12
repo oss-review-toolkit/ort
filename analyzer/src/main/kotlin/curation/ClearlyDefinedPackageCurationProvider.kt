@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
+import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageCuration
@@ -55,7 +56,12 @@ class ClearlyDefinedPackageCurationProviderConfig(
     /**
      * The URL of the ClearlyDefined server to use. If null, uses the [production server][Server.PRODUCTION.apiUrl].
      */
-    val serverUrl: String? = null
+    val serverUrl: String,
+
+    /**
+     * The minimum total score for a curation to be accepted. Must lie within 0 to 100.
+     */
+    val minTotalLicenseScore: Int
 )
 
 class ClearlyDefinedPackageCurationProviderFactory :
@@ -63,24 +69,33 @@ class ClearlyDefinedPackageCurationProviderFactory :
     override val name = "ClearlyDefined"
 
     override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
-        ClearlyDefinedPackageCurationProvider(serverUrl = config.serverUrl)
+        ClearlyDefinedPackageCurationProvider(config)
 
     override fun parseConfig(config: Map<String, String>) =
-        ClearlyDefinedPackageCurationProviderConfig(serverUrl = config["serverUrl"])
+        ClearlyDefinedPackageCurationProviderConfig(
+            serverUrl = config["serverUrl"] ?: Server.PRODUCTION.apiUrl,
+            minTotalLicenseScore = config["minTotalLicenseScore"]?.toInt() ?: 0
+        )
 }
 
 /**
  * A provider for curated package metadata from the [ClearlyDefined](https://clearlydefined.io/) service.
  */
 class ClearlyDefinedPackageCurationProvider(
-    serverUrl: String? = null,
+    private val config: ClearlyDefinedPackageCurationProviderConfig,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {
     companion object : Logging
 
-    constructor(server: Server) : this(server.apiUrl)
+    constructor(serverUrl: String, client: OkHttpClient? = null) : this(
+        ClearlyDefinedPackageCurationProviderConfig(serverUrl, minTotalLicenseScore = 0), client
+    )
 
-    private val service by lazy { ClearlyDefinedService.create(serverUrl, client ?: OkHttpClientHelper.buildClient()) }
+    constructor(server: Server = Server.PRODUCTION) : this(server.apiUrl)
+
+    private val service by lazy {
+        ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
+    }
 
     override fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>> {
         val coordinatesToIds = pkgIds.mapNotNull { pkgId ->
@@ -121,9 +136,20 @@ class ClearlyDefinedPackageCurationProvider(
             return emptyMap()
         }
 
+        val filteredCurations = if (config.minTotalLicenseScore > 0) {
+            val definitions = service.getDefinitionsChunked(curations.keys)
+
+            curations.filterKeys { coordinates ->
+                val score = definitions[coordinates]?.licensed?.score?.total
+                score == null || score >= config.minTotalLicenseScore
+            }
+        } else {
+            curations
+        }
+
         val pkgCurations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
 
-        curations.forEach inner@{ (coordinates, curation) ->
+        filteredCurations.forEach inner@{ (coordinates, curation) ->
             val pkgId = coordinatesToIds[coordinates] ?: return@inner
 
             val declaredLicenseParsed = curation.licensed?.declared?.let { declaredLicense ->

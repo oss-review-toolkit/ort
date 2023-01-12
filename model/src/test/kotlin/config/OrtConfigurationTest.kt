@@ -77,7 +77,7 @@ class OrtConfigurationTest : WordSpec({
                 PackageCurationProviderConfiguration(name = "OrtConfig", enabled = true),
                 PackageCurationProviderConfiguration(
                     name = "ClearlyDefined",
-                    config = mapOf("serverUrl" to "https://api.clearlydefined.io")
+                    config = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
                 ),
                 PackageCurationProviderConfiguration(
                     name = "SW360",
