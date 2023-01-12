@@ -77,7 +77,7 @@ data class Hashes(
 data class Described(
     val score: DescribedScore? = null,
     val toolScore: DescribedScore? = null,
-    val facets: Facets? = null,
+    val facets: CurationFacets? = null,
     val sourceLocation: SourceLocation? = null,
     val urls: URLs? = null,
     val projectWebsite: URI? = null,
