@@ -57,6 +57,14 @@ resolutions:
     comment: >-
       This is a duplicate for CVE-2022-22965 reported by Sonatype NexusIQ, as Sonatype reported this issue before a
       CVE ID was officially released.
+  - id: "CVE-2016-7954"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. The CVE is
+      actually assigned to Bundler which is shipped with JRuby. It is about a possibility to inject malicious code for
+      gems hosted on GitHub by deploying packages with same names on RubyGems.org. For the usage in the Reporter, this
+      is completely irrelevant. For the Analyzer, the issue does not affect ORT itself, but applications analyzed by
+      ORT that use Bundler as package manager.
 curations:
   license_findings:
   - path: "README.md"
