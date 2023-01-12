@@ -31,6 +31,10 @@ excludes:
     reason: "DEV_DEPENDENCY_OF"
     comment: >-
       Packages for development only. Not part of released artifacts.
+  - pattern: "dokka.*"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: >-
+      Packages used to build artifacts. Not part of released artifacts.
 resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
