@@ -41,6 +41,18 @@ resolutions:
     reason: "SCANNER_ISSUE"
     comment: >-
       This file contains test data. Contained licenses do not apply to the OSS Review Toolkit.
+  vulnerabilities:
+  - id: "CVE-2022-22965"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is triggered by the org.springframework:spring-beans package which comes as a transitive
+      dependency of the Jira REST client used by the notifier. The vulnerability applies only to Spring MVC or Spring
+      WebFlux applications; so it is ineffective for the current usage scenario.
+  - id: "sonatype-2022-1764"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This is a duplicate for CVE-2022-22965 reported by Sonatype NexusIQ, as Sonatype reported this issue before a
+      CVE ID was officially released.
 curations:
   license_findings:
   - path: "README.md"
