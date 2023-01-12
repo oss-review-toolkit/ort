@@ -46,8 +46,8 @@ use):
   the type of scanner.
 * [_Advisor_](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data 
   services.
-* [_Evaluator_](#evaluator) - evaluates license / copyright findings against customizable policy rules and license
-  classifications.
+* [_Evaluator_](#evaluator) - evaluates custom policy rules along with custom license classifications against the data
+  gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
 * [_Notifier_](./notifier) - sends result notifications via different channels (like
