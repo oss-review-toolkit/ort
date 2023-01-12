@@ -42,9 +42,11 @@ ort:
     - name: File
       config:
         path: '/some-path/curations.yml'
+        mustExist: true
     - name: File
       config:
         path: '/some-path/curations-dir'
+        mustExist: false
     - name: OrtConfig
       enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
     - name: ClearlyDefined
