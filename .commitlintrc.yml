@@ -26,7 +26,7 @@ rules:
       - snake-case
       - upper-case
   subject-case:
-    - 2
+    - 1
     - always
     - - pascal-case
       - sentence-case
