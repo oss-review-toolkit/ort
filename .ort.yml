@@ -72,6 +72,32 @@ resolutions:
       related to the CGI gem. The version of the gem bundled with JRuby is greater than 0.3.1 and is therefore not
       affected. Since ORT does not use Ruby gems to implement server functionality, this vulnerability is ineffective
       anyway.
+  - id: "CVE-2022-40149"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
+      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
+  - id: "CVE-2022-40150"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing out of memory errors for
+      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
+      an issue.
+  - id: "CVE-2022-45685"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks due to Uncontrolled Recursion for
+      specially crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not
+      an issue.
+  - id: "CVE-2022-45693"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the jettison package which is a dependency of the Atlassian Jira client used
+      by the notifier. The component is vulnerable to Denial of Service attacks causing stack overflow for specially
+      crafted parser input. Since it is used here only to parse responses of valid Jira servers, this is not an issue.
   - id: "CVE-2021-28965"
     reason: "INVALID_MATCH_VULNERABILITY"
     comment: >-
