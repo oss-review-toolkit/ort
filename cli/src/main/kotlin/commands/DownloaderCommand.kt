@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -179,6 +180,11 @@ class DownloaderCommand : OrtCommand(
                 "result to limit downloads to. If not specified, all packages are downloaded."
     ).split(",")
 
+    private val skipExcluded by option(
+        "--skip-excluded",
+        help = "Do not download excluded projects or packages. Works only with the '--ort-file' parameter."
+    ).flag()
+
     private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
@@ -205,9 +211,8 @@ class DownloaderCommand : OrtCommand(
         )
 
         val ortResult = readOrtResult(ortFile)
-        val analyzerResult = ortResult.analyzer?.result
 
-        if (analyzerResult == null) {
+        if (ortResult.analyzer?.result == null) {
             logger.warn {
                 "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
                         "not contain an analyzer result. Nothing will be downloaded."
@@ -218,11 +223,11 @@ class DownloaderCommand : OrtCommand(
 
         val packages = mutableListOf<Package>().apply {
             if (PackageType.PROJECT in packageTypes) {
-                addAll(consolidateProjectPackagesByVcs(analyzerResult.projects).keys)
+                addAll(consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded)).keys)
             }
 
             if (PackageType.PACKAGE in packageTypes) {
-                addAll(analyzerResult.packages.map { it.metadata })
+                addAll(ortResult.getPackages(skipExcluded).map { it.metadata })
             }
         }
 
