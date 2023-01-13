@@ -431,7 +431,7 @@ _scanner_ will automatically download the sources of the dependencies via the _d
 We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
 alphabetical order):
 
-* [FossID](https://fossid.com/)
+* FossID
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
 Additionally, the following reference implementations exist (in alphabetical order):
@@ -678,7 +678,7 @@ following formats are supported (reporter names are case-insensitive):
   (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
 * [Excel](https://en.wikipedia.org/wiki/Microsoft_Excel) sheet (`-f Excel`)
-* [FossId](https://fossid.com/open-source-compliance/) report download (HTML, SPDX, and Excel types)
+* FossID report download (HTML, SPDX, and Excel types)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
   (`-f GitLabLicenseModel`)
   * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
