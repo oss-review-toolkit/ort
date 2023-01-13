@@ -65,6 +65,27 @@ resolutions:
       gems hosted on GitHub by deploying packages with same names on RubyGems.org. For the usage in the Reporter, this
       is completely irrelevant. For the Analyzer, the issue does not affect ORT itself, but applications analyzed by
       ORT that use Bundler as package manager.
+  - id: "CVE-2021-41819"
+    reason: "INEFFECTIVE_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the CGI gem. The version of the gem bundled with JRuby is greater than 0.3.1 and is therefore not
+      affected. Since ORT does not use Ruby gems to implement server functionality, this vulnerability is ineffective
+      anyway.
+  - id: "CVE-2021-28965"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the RXML gem in versions prior to 3.2.5. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles version
+      3.2.5 of this gem.
+  - id: "CVE-2021-31799"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the RDoc gem in versions prior to 6.3.0. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
+      version of this gem.
 curations:
   license_findings:
   - path: "README.md"
