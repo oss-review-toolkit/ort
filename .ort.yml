@@ -34,7 +34,7 @@ excludes:
   - pattern: "dokka.*"
     reason: "BUILD_DEPENDENCY_OF"
     comment: >-
-      Packages used to build artifacts. Not part of released artifacts.
+      Packages for the Dokka documentation engine.
 resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
