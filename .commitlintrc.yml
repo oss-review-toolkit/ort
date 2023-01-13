@@ -18,9 +18,13 @@ rules:
     - 75
   scope-case:
     - 2
-    - never
-    - - sentence-case
-      - start-case
+    - always
+    - - camel-case
+      - kebab-case
+      - lower-case
+      - pascal-case
+      - snake-case
+      - upper-case
   subject-case:
     - 2
     - always
