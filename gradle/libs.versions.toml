@@ -20,7 +20,7 @@ cyclonedx = "7.3.1"
 diskLruCache = "2.0.2"
 exposed = "0.41.1"
 flexmark = "0.64.0"
-freemarker = "2.3.31"
+freemarker = "2.3.32"
 # @keep this version which is only being used via get().
 graal = "22.2.0"
 greenmail = "1.6.12"
