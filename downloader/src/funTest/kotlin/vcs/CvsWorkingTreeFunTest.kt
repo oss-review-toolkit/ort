@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.beEmpty
 
 import java.io.File
 
@@ -46,7 +47,7 @@ class CvsWorkingTreeFunTest : StringSpec({
     "Detected CVS version is not empty" {
         val version = cvs.getVersion()
         println("CVS version $version detected.")
-        version shouldNotBe ""
+        version shouldNot beEmpty()
     }
 
     "CVS detects non-working-trees" {
@@ -69,7 +70,7 @@ class CvsWorkingTreeFunTest : StringSpec({
             revision = "449addc0d9e0ee7be48bfaa06f99a6f23cd3bae0",
             path = ""
         )
-        workingTree.getNested() should beEmpty()
+        workingTree.getNested() should beEmptyMap()
         workingTree.getRootPath() shouldBe zipContentDir
         workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
     }
