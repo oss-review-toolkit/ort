@@ -82,9 +82,6 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
     }
 
     override fun getLicenseUrl(info: LicenseInfo): URL? {
-        // Work around https://github.com/nexB/scancode-licensedb/issues/21.
-        if (info.id == "GPL-2.0-with-classpath-exception" || info.id == "wxWindows") return null
-
         val key = spdxIdToScanCodeKeyMap[info.id] ?: return null
         return URL("$url/$key.LICENSE")
     }
