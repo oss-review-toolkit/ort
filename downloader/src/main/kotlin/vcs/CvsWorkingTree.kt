@@ -66,7 +66,7 @@ class CvsWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDi
         }
 
     private fun getFileRevisions(): CvsFileRevisions {
-        val cvsLog = CvsCommand.run(workingDir, "log", "-h")
+        val cvsLog = CvsCommand.run(workingDir, "-n", "log", "-h")
 
         var currentWorkingFile = ""
         return cvsLog.stdout.lines().mapNotNull { line ->
@@ -99,7 +99,7 @@ class CvsWorkingTree(workingDir: File, vcsType: VcsType) : WorkingTree(workingDi
             // Create all working tree directories in order to be able to query the log.
             CvsCommand.run(workingDir, "update", "-d")
 
-            val cvsLog = CvsCommand.run(workingDir, "log", "-h")
+            val cvsLog = CvsCommand.run(workingDir, "-n", "log", "-h")
             var tagsSectionStarted = false
 
             cvsLog.stdout.lines().mapNotNull { line ->
