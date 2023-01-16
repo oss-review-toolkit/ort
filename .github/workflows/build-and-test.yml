@@ -25,7 +25,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Build all classes
       uses: gradle/gradle-build-action@v2
       with:
@@ -40,7 +40,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Build the reporter-web-app
       uses: gradle/gradle-build-action@v2
       with:
@@ -55,7 +55,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Run unit tests
       uses: gradle/gradle-build-action@v2
       with:
@@ -101,7 +101,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Run functional tests
       uses: gradle/gradle-build-action@v2
       with:
@@ -121,7 +121,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Restore Gradle cache entries
       uses: gradle/gradle-build-action@v2
     - name: Validate Batect wrapper scripts

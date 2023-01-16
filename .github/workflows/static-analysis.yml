@@ -29,7 +29,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Check copyright and license information
       uses: gradle/gradle-build-action@v2
       with:
@@ -45,7 +45,7 @@ jobs:
       uses: actions/setup-java@v3
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
     - name: Check for Detekt Issues
       uses: gradle/gradle-build-action@v2
       with:
