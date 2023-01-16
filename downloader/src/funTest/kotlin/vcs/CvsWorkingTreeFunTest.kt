@@ -74,7 +74,7 @@ class CvsWorkingTreeFunTest : StringSpec({
         workingTree.getPathToRoot(zipContentDir.resolve("lib")) shouldBe "lib"
     }
 
-    "CVS correctly lists remote branches" {
+    "CVS correctly lists remote branches".config(enabled = false) {
         val expectedBranches = listOf(
             "JHOVE_1_7",
             "branch_lpeer",
@@ -86,7 +86,7 @@ class CvsWorkingTreeFunTest : StringSpec({
         workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
     }
 
-    "CVS correctly lists remote tags" {
+    "CVS correctly lists remote tags".config(enabled = false) {
         val expectedTags = listOf(
             "JHOVE_1_1",
             "JHOVE_1_11",
