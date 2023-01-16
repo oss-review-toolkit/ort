@@ -22,7 +22,8 @@ package org.ossreviewtoolkit.downloader.vcs
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.beEmpty
 
 import io.mockk.every
 import io.mockk.just
@@ -68,7 +69,7 @@ class GitTest : WordSpec({
         "be able to get the version" {
             val version = git.getVersion()
             println("Git version $version detected.")
-            version shouldNotBe ""
+            version shouldNot beEmpty()
         }
 
         "detect URLs to remote repositories" {

@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.beEmpty
 
 import java.io.File
 
@@ -46,7 +47,7 @@ class MercurialWorkingTreeFunTest : StringSpec({
     "Detected Mercurial version is not empty" {
         val version = hg.getVersion()
         println("Mercurial version $version detected.")
-        version shouldNotBe ""
+        version shouldNot beEmpty()
     }
 
     "Mercurial detects non-working-trees" {
@@ -68,7 +69,7 @@ class MercurialWorkingTreeFunTest : StringSpec({
             revision = "422ca71c35132f1f55d20a13355708aec7669b50",
             path = ""
         )
-        workingTree.getNested() should beEmpty()
+        workingTree.getNested() should beEmptyMap()
         workingTree.getRootPath() shouldBe zipContentDir
         workingTree.getPathToRoot(zipContentDir.resolve("tests")) shouldBe "tests"
     }

@@ -20,10 +20,11 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.shouldNot
+import io.kotest.matchers.string.beEmpty
 
 import java.io.File
 
@@ -47,7 +48,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
     "Detected Subversion version is not empty" {
         val version = svn.getVersion()
         println("Subversion version $version detected.")
-        version shouldNotBe ""
+        version shouldNot beEmpty()
     }
 
     "Subversion detects non-working-trees" {
@@ -69,7 +70,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
             revision = "8207",
             path = ""
         )
-        workingTree.getNested() should beEmpty()
+        workingTree.getNested() should beEmptyMap()
         workingTree.getRootPath() shouldBe zipContentDir
         workingTree.getPathToRoot(zipContentDir.resolve("docutils")) shouldBe "docutils"
     }
