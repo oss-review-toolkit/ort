@@ -71,3 +71,20 @@ fun interface PackageCurationProvider {
     // TODO: Maybe make this a suspend function, then all implementing classes could deal with coroutines more easily.
     fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>>
 }
+
+object PackageCurationsProviders {
+    fun getCurationsFor(
+        providers: Collection<PackageCurationProvider>,
+        pkgIds: Collection<Identifier>
+    ): Map<Identifier, List<PackageCuration>> {
+        val allCurations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
+
+        providers.forEach { provider ->
+            provider.getCurationsFor(pkgIds).forEach { (pkgId, curations) ->
+                allCurations.getOrPut(pkgId) { mutableListOf() } += curations
+            }
+        }
+
+        return allCurations
+    }
+}

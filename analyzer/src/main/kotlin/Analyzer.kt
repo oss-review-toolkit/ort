@@ -112,12 +112,12 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
-        curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY
+        curationProviders: Collection<PackageCurationProvider> = emptyList()
     ): OrtResult {
         val startTime = Instant.now()
 
         // Resolve dependencies per package manager.
-        val analyzerResult = analyzeInParallel(info.managedFiles, curationProvider)
+        val analyzerResult = analyzeInParallel(info.managedFiles, curationProviders)
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
@@ -144,9 +144,9 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
     private fun analyzeInParallel(
         managedFiles: Map<PackageManager, List<File>>,
-        curationProvider: PackageCurationProvider
+        curationProviders: Collection<PackageCurationProvider>
     ): AnalyzerResult {
-        val state = AnalyzerState(curationProvider)
+        val state = AnalyzerState(curationProviders)
 
         val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
 
@@ -220,8 +220,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     }
 }
 
-private class AnalyzerState(curationProvider: PackageCurationProvider) {
-    private val builder = AnalyzerResultBuilder(curationProvider)
+private class AnalyzerState(curationProviders: Collection<PackageCurationProvider>) {
+    private val builder = AnalyzerResultBuilder(curationProviders)
     private val scope = CoroutineScope(Dispatchers.Default)
     private val addMutex = Mutex()
 

@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
-class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
+class AnalyzerResultBuilder(private val curationProviders: Collection<PackageCurationProvider> = emptyList()) {
     companion object : Logging
 
     private val projects = mutableSetOf<Project>()
@@ -98,7 +98,9 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
      * independently of a [ProjectAnalyzerResult].
      */
     fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
-        val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
+        val (curations, duration) = measureTimedValue {
+            PackageCurationsProviders.getCurationsFor(curationProviders, packageSet.map { it.id })
+        }
 
         logger.debug { "Getting package curations took $duration." }
 
