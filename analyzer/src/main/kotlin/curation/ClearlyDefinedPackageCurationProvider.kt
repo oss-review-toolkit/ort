@@ -186,21 +186,17 @@ class ClearlyDefinedPackageCurationProvider(
 private fun SourceLocation?.toArtifactOrVcs(): Any? =
     this?.let { sourceLocation ->
         when (sourceLocation.type) {
-            ComponentType.GIT -> {
-                VcsInfoCurationData(
-                    type = VcsType.GIT,
-                    url = sourceLocation.url,
-                    revision = sourceLocation.revision,
-                    path = sourceLocation.path
-                )
-            }
+            ComponentType.GIT -> VcsInfoCurationData(
+                type = VcsType.GIT,
+                url = sourceLocation.url,
+                revision = sourceLocation.revision,
+                path = sourceLocation.path
+            )
 
-            else -> {
-                RemoteArtifact(
-                    // TODO: Implement provider-specific mapping of coordinates to URLs.
-                    url = sourceLocation.url.orEmpty(),
-                    hash = Hash.NONE
-                )
-            }
+            else -> RemoteArtifact(
+                // TODO: Implement provider-specific mapping of coordinates to URLs.
+                url = sourceLocation.url.orEmpty(),
+                hash = Hash.NONE
+            )
         }
     }
