@@ -128,12 +128,6 @@ val mergeDetektReports by tasks.registering(ReportMergeTask::class) {
 }
 
 allprojects {
-    buildscript {
-        repositories {
-            mavenCentral()
-        }
-    }
-
     repositories {
         mavenCentral()
     }
