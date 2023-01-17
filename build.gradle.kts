@@ -235,7 +235,6 @@ subprojects {
 
                 // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
                 force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
-                force("org.jetbrains.kotlin:kotlin-script-runtime:${rootProject.libs.versions.kotlinPlugin.get()}")
             }
         }
     }
