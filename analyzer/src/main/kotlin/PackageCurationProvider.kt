@@ -55,14 +55,6 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
  * A provider for [PackageCuration]s.
  */
 fun interface PackageCurationProvider {
-    companion object {
-        /**
-         * A provider that does not provide any curations.
-         */
-        @JvmField
-        val EMPTY = PackageCurationProvider { emptyMap() }
-    }
-
     /**
      * Return all available [PackageCuration]s for the provided [pkgIds], associated by the package's [Identifier]. Each
      * list of curations must be non-empty; if no curation is available for a package, the returned map must not contain
