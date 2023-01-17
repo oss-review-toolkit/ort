@@ -63,10 +63,6 @@ Preliminary binary artifacts for ORT are currently available via
 [JitPack](https://jitpack.io/#oss-review-toolkit/ort). Please note that due to limitations with the JitPack build
 environment, the reporter is not able to create the Web App report.
 
-For example, to download the fat JAR artifact for the ORT CLI in version `7aa61bf96b`, use
-
-    curl -o ort.jar https://jitpack.io/com/github/oss-review-toolkit/ort/cli/7aa61bf96b/cli-7aa61bf96b-all.jar
-
 ## From sources
 
 Install the following basic prerequisites:
