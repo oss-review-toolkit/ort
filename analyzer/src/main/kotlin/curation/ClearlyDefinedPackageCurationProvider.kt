@@ -159,7 +159,7 @@ class ClearlyDefinedPackageCurationProvider(
                 runCatching { declaredLicense.toSpdx(SpdxExpression.Strictness.ALLOW_CURRENT) }.getOrNull()
             }
 
-            val sourceLocation = curation.described?.sourceLocation.toArtifactOrVcs()
+            val sourceLocation = curation.described?.sourceLocation?.toArtifactOrVcs()
 
             val data = PackageCurationData(
                 concludedLicense = declaredLicenseParsed,
@@ -183,20 +183,18 @@ class ClearlyDefinedPackageCurationProvider(
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
  */
-private fun SourceLocation?.toArtifactOrVcs(): Any? =
-    this?.let { sourceLocation ->
-        when (sourceLocation.type) {
-            ComponentType.GIT -> VcsInfoCurationData(
-                type = VcsType.GIT,
-                url = sourceLocation.url,
-                revision = sourceLocation.revision,
-                path = sourceLocation.path
-            )
+private fun SourceLocation.toArtifactOrVcs(): Any =
+    when (type) {
+        ComponentType.GIT -> VcsInfoCurationData(
+            type = VcsType.GIT,
+            url = url,
+            revision = revision,
+            path = path
+        )
 
-            else -> RemoteArtifact(
-                // TODO: Implement provider-specific mapping of coordinates to URLs.
-                url = sourceLocation.url.orEmpty(),
-                hash = Hash.NONE
-            )
-        }
+        else -> RemoteArtifact(
+            // TODO: Implement provider-specific mapping of coordinates to URLs.
+            url = url.orEmpty(),
+            hash = Hash.NONE
+        )
     }
