@@ -180,8 +180,6 @@ class AnalyzerCommand : OrtCommand(
         println("The following package managers are enabled:")
         println("\t" + enabledPackageManagers.joinToString())
 
-        println("Analyzing project path:\n\t$inputDir")
-
         val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
 
@@ -204,6 +202,8 @@ class AnalyzerCommand : OrtCommand(
                 }
             }
         }
+
+        println("Analyzing project path:\n\t$inputDir")
 
         val info = analyzer.findManagedFiles(inputDir, enabledPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
