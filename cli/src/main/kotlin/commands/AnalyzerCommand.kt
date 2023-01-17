@@ -205,8 +205,6 @@ class AnalyzerCommand : OrtCommand(
             }
         }
 
-        val curationProvider = CompositePackageCurationProvider(curationProviders)
-
         val info = analyzer.findManagedFiles(inputDir, enabledPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
             println("No definition files found.")
@@ -227,7 +225,7 @@ class AnalyzerCommand : OrtCommand(
             println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
-        val ortResult = analyzer.analyze(info, curationProvider).mergeLabels(labels)
+        val ortResult = analyzer.analyze(info, CompositePackageCurationProvider(curationProviders)).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")
