@@ -183,7 +183,7 @@ class ClearlyDefinedPackageCurationProvider(
 /**
  * Map a ClearlyDefined [SourceLocation] to either a [VcsInfoCurationData] or a [RemoteArtifact].
  */
-fun SourceLocation?.toArtifactOrVcs(): Any? =
+private fun SourceLocation?.toArtifactOrVcs(): Any? =
     this?.let { sourceLocation ->
         when (sourceLocation.type) {
             ComponentType.GIT -> {
