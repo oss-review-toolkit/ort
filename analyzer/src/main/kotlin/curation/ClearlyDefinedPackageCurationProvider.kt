@@ -196,15 +196,9 @@ private fun SourceLocation?.toArtifactOrVcs(): Any? =
             }
 
             else -> {
-                val url = sourceLocation.url ?: run {
-                    when (sourceLocation.provider) {
-                        // TODO: Implement provider-specific mapping of coordinates to URLs.
-                        else -> ""
-                    }
-                }
-
                 RemoteArtifact(
-                    url = url,
+                    // TODO: Implement provider-specific mapping of coordinates to URLs.
+                    url = sourceLocation.url.orEmpty(),
                     hash = Hash.NONE
                 )
             }
