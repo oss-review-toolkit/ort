@@ -72,7 +72,13 @@ dependencies {
     implementation(libs.kotlinxSerialization)
     implementation(libs.semver4j)
     implementation(libs.sw360Client)
+
     implementation(libs.toml4j)
+    constraints {
+        implementation("com.google.code.gson:gson:2.8.9") {
+            because("Earlier versions have vulnerabilities.")
+        }
+    }
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
