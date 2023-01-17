@@ -203,6 +203,9 @@ class AnalyzerCommand : OrtCommand(
             }
         }
 
+        println("The following package curation providers are enabled:")
+        println("\t" + enabledCurationProviders.joinToString { it.first }.ifEmpty { "<None>" })
+
         println("Analyzing project path:\n\t$inputDir")
 
         val info = analyzer.findManagedFiles(inputDir, enabledPackageManagers, repositoryConfiguration)
