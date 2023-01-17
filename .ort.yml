@@ -35,6 +35,10 @@ excludes:
     reason: "BUILD_DEPENDENCY_OF"
     comment: >-
       Packages for the Dokka documentation engine.
+  - pattern: "graphql.*"
+    reason: "BUILD_DEPENDENCY_OF"
+    comment: >-
+      Packages for the generation of GraphQL clients by the GraphQL Kotlin build plugin.
 resolutions:
   issues:
   - message: "ERROR: Timeout after 300 seconds while scanning file 'reporter-web-app/public/index.html'."
