@@ -116,6 +116,13 @@ resolutions:
       related to the RDoc gem in versions prior to 6.3.0. According to
       https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
       version of this gem.
+  - id: "CVE-2021-43809"
+    reason: "INVALID_MATCH_VULNERABILITY"
+    comment: >-
+      This vulnerability is reported for the JRuby dependencies used within the Analyzer and the Reporter. It is
+      related to the Bundler component in versions prior to 2.2.23. According to
+      https://github.com/jruby/jruby/blob/9.4.0.0/lib/pom.rb, the version of JRuby in use already bundles a higher
+      version of this component.
 curations:
   license_findings:
   - path: "README.md"
