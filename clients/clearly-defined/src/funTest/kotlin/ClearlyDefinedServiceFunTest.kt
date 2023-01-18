@@ -21,7 +21,9 @@ package org.ossreviewtoolkit.clients.clearlydefined
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.comparables.shouldBeGreaterThan
+import io.kotest.matchers.maps.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -126,6 +128,26 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             summary.shouldNotBeNull().run {
                 prNumber shouldBeGreaterThan 0
                 url shouldStartWith "https://github.com/clearlydefined/curated-data-dev/pull/"
+            }
+        }
+    }
+
+    "Definitions" should {
+        "contain facets for file entries" {
+            val service = ClearlyDefinedService.create()
+            val coordinates = Coordinates(
+                type = ComponentType.NPM,
+                provider = Provider.NPM_JS,
+                namespace = null,
+                name = "eslint-plugin-tsdoc",
+                revision = "0.2.2"
+            )
+
+            val curations = service.getDefinitions(listOf(coordinates))
+
+            curations shouldHaveSize 1
+            curations[coordinates]?.files?.get(11)?.facets.shouldNotBeNull().run {
+                this shouldContain "tests"
             }
         }
     }
