@@ -100,7 +100,7 @@ class ClearlyDefinedPackageCurationProvider(
     override fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>> {
         val coordinatesToIds = pkgIds.mapNotNull { pkgId ->
             pkgId.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
-                val namespace = pkgId.namespace.takeUnless { it.isEmpty() } ?: "-"
+                val namespace = pkgId.namespace.takeUnless { it.isEmpty() }
                 Coordinates(type, provider, namespace, pkgId.name, pkgId.version) to pkgId
             }
         }.toMap()

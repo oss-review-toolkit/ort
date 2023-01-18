@@ -24,6 +24,7 @@ import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
@@ -96,6 +97,15 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             val curations = provider.getCurationsFor(listOf(identifier))
 
             curations should beEmpty()
+        }
+
+        "be retrieved for packages without a namespace" {
+            val provider = ClearlyDefinedPackageCurationProvider()
+            val identifier = Identifier("NPM::acorn:0.6.0")
+
+            val curations = provider.getCurationsFor(listOf(identifier))
+
+            curations shouldNot beEmpty()
         }
     }
 })
