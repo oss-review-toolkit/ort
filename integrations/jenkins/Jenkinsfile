@@ -222,14 +222,14 @@ pipeline {
 
             steps {
                 sh '''
-                    ORT_OPTIONS="$LOG_LEVEL"
+                ORT_OPTIONS="$LOG_LEVEL"
 
-                    if [ "$STACKTRACE" = "true" ]; then
-                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                    fi
+                if [ "$STACKTRACE" = "true" ]; then
+                    ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                fi
 
-                    /opt/ort/bin/ort $ORT_OPTIONS --version
-                '''.trim()
+                /opt/ort/bin/ort $ORT_OPTIONS --version
+                '''.stripIndent().trim()
             }
         }
 
@@ -250,23 +250,23 @@ pipeline {
             steps {
                 withCredentials(projectVcsCredentials) {
                     sh '''
-                        ORT_OPTIONS="$LOG_LEVEL"
+                    ORT_OPTIONS="$LOG_LEVEL"
 
-                        if [ "$STACKTRACE" = "true" ]; then
-                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                        fi
+                    if [ "$STACKTRACE" = "true" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                    fi
 
-                        if [ -n "$PROJECT_VCS_REVISION" ]; then
-                            VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
-                        fi
+                    if [ -n "$PROJECT_VCS_REVISION" ]; then
+                        VCS_REVISION_OPTION="--vcs-revision $PROJECT_VCS_REVISION"
+                    fi
 
-                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                    echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                        rm -fr "$PROJECT_DIR"
-                        /opt/ort/bin/ort $ORT_OPTIONS download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
+                    rm -fr "$PROJECT_DIR"
+                    /opt/ort/bin/ort $ORT_OPTIONS download --project-url $PROJECT_VCS_URL $VCS_REVISION_OPTION -o "$PROJECT_DIR/source"
 
-                        rm -f $HOME/.netrc
-                    '''.trim()
+                    rm -f $HOME/.netrc
+                    '''.stripIndent().trim()
                 }
             }
         }
@@ -296,23 +296,23 @@ pipeline {
             steps {
                 withCredentials(ortConfigVcsCredentials) {
                     sh '''
-                        ORT_OPTIONS="$LOG_LEVEL"
+                    ORT_OPTIONS="$LOG_LEVEL"
 
-                        if [ "$STACKTRACE" = "true" ]; then
-                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                        fi
+                    if [ "$STACKTRACE" = "true" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                    fi
 
-                        if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
-                            VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
-                        fi
+                    if [ -n "$ORT_CONFIG_VCS_REVISION" ]; then
+                        VCS_REVISION_OPTION="--vcs-revision $ORT_CONFIG_VCS_REVISION"
+                    fi
 
-                        echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                    echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                        rm -fr $ORT_DATA_DIR/config
-                        /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
+                    rm -fr $ORT_DATA_DIR/config
+                    /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
-                        rm -f $HOME/.netrc
-                    '''.trim()
+                    rm -f $HOME/.netrc
+                    '''.stripIndent().trim()
                 }
             }
         }
@@ -334,21 +334,21 @@ pipeline {
             steps {
                 script {
                     def status = sh returnStatus: true, script: '''
-                        ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
+                    ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
 
-                        if [ "$STACKTRACE" = "true" ]; then
-                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                        fi
+                    if [ "$STACKTRACE" = "true" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                    fi
 
-                        if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
-                            USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
-                        fi
+                    if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
+                        USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
+                    fi
 
-                        /opt/ort/bin/set_gradle_proxy.sh
+                    /opt/ort/bin/set_gradle_proxy.sh
 
-                        rm -fr out/results
-                        /opt/ort/bin/ort $ORT_OPTIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
-                    '''.trim()
+                    rm -fr out/results
+                    /opt/ort/bin/ort $ORT_OPTIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
+                    '''.stripIndent().trim()
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
                     else if (status != 0) error('Error executing the analyzer.')
@@ -411,65 +411,65 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                            #!/usr/bin/env bash
+                        #!/usr/bin/env bash
 
-                            ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
+                        ORT_OPTIONS="$LOG_LEVEL -P ort.scanner.skipConcluded=$SKIP_CONCLUDED"
 
-                            if [ "$USE_CLEARLY_DEFINED_SCAN_STORAGE" = "true" ]; then
-                                # Configure the default local file storage explicitly to be able to refer to it.
-                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.localFiles.backend.localFileStorage.directory=$HOME/.ort/scanner/results"
+                        if [ "$USE_CLEARLY_DEFINED_SCAN_STORAGE" = "true" ]; then
+                            # Configure the default local file storage explicitly to be able to refer to it.
+                            ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.localFiles.backend.localFileStorage.directory=$HOME/.ort/scanner/results"
 
-                                # Configure the ClearlyDefined remote storage.
-                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.clearlyDefined.serverUrl=https://api.clearlydefined.io"
+                            # Configure the ClearlyDefined remote storage.
+                            ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storages.clearlyDefined.serverUrl=https://api.clearlydefined.io"
 
-                                # Take both storages into use.
-                                ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storageReaders=localFiles,clearlyDefined \
-                                    -P ort.scanner.storageWriters=localFiles"
-                            fi
+                            # Take both storages into use.
+                            ORT_OPTIONS="$ORT_OPTIONS -P ort.scanner.storageReaders=localFiles,clearlyDefined \
+                                -P ort.scanner.storageWriters=localFiles"
+                        fi
 
-                            if [ "$STACKTRACE" = "true" ]; then
-                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                            fi
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
 
-                            PACKAGE_TYPES=(project package)
+                        PACKAGE_TYPES=(project package)
 
-                            if [ "$PROJECT_SCANNER" = "<NONE>" ]; then
-                                PACKAGE_TYPES=(${PACKAGE_TYPES[@]/project})
-                            else
-                                PROJECT_SCANNERS_OPTION="--project-scanners $PROJECT_SCANNER"
-                            fi
+                        if [ "$PROJECT_SCANNER" = "<NONE>" ]; then
+                            PACKAGE_TYPES=(${PACKAGE_TYPES[@]/project})
+                        else
+                            PROJECT_SCANNERS_OPTION="--project-scanners $PROJECT_SCANNER"
+                        fi
 
-                            if [ "$PACKAGE_SCANNER" = "<NONE>" ]; then
-                                PACKAGE_TYPES=(${PACKAGE_TYPES[@]/package})
-                            else
-                                SCANNERS_OPTION="--scanners $PACKAGE_SCANNER"
-                            fi
+                        if [ "$PACKAGE_SCANNER" = "<NONE>" ]; then
+                            PACKAGE_TYPES=(${PACKAGE_TYPES[@]/package})
+                        else
+                            SCANNERS_OPTION="--scanners $PACKAGE_SCANNER"
+                        fi
 
-                            PACKAGE_TYPES_OPTION=${PACKAGE_TYPES[@]}
-                            if [ -n "$PACKAGE_TYPES_OPTION" ]; then
-                                PACKAGE_TYPES_OPTION=${PACKAGE_TYPES_OPTION// /,}
-                                PACKAGE_TYPES_OPTION="--package-types $PACKAGE_TYPES_OPTION"
+                        PACKAGE_TYPES_OPTION=${PACKAGE_TYPES[@]}
+                        if [ -n "$PACKAGE_TYPES_OPTION" ]; then
+                            PACKAGE_TYPES_OPTION=${PACKAGE_TYPES_OPTION// /,}
+                            PACKAGE_TYPES_OPTION="--package-types $PACKAGE_TYPES_OPTION"
 
-                                echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
+                            echo "default login $LOGIN password $PASSWORD" > $HOME/.netrc
 
-                                /opt/ort/bin/ort $ORT_OPTIONS scan \
-                                    -i out/results/current-result.yml \
-                                    -o out/results/scanner \
-                                    $PACKAGE_TYPES_OPTION \
-                                    $PROJECT_SCANNERS_OPTION \
-                                    $SCANNERS_OPTION
+                            /opt/ort/bin/ort $ORT_OPTIONS scan \
+                                -i out/results/current-result.yml \
+                                -o out/results/scanner \
+                                $PACKAGE_TYPES_OPTION \
+                                $PROJECT_SCANNERS_OPTION \
+                                $SCANNERS_OPTION
 
-                                rm -f $HOME/.netrc
-                            fi
-                        '''.trim()
+                            rm -f $HOME/.netrc
+                        fi
+                        '''.stripIndent().trim()
 
                         switch (status) {
                             case 0:
                                 if (!fileExists('out/results/scanner/scan-result.yml')) {
                                     sh '''
-                                        mkdir -p out/results/scanner
-                                        cp out/results/current-result.yml out/results/scanner/scan-result.yml
-                                    '''.trim()
+                                    mkdir -p out/results/scanner
+                                    cp out/results/current-result.yml out/results/scanner/scan-result.yml
+                                    '''.stripIndent().trim()
 
                                     Utils.markStageSkippedForConditional('Run ORT scanner')
                                 }
@@ -524,21 +524,21 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                            ORT_OPTIONS="$LOG_LEVEL"
+                        ORT_OPTIONS="$LOG_LEVEL"
 
-                            if [ "$STACKTRACE" = "true" ]; then
-                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                            fi
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
 
-                            ADVISOR_OPTIONS="-a OSV"
+                        ADVISOR_OPTIONS="-a OSV"
 
-                            if [ -n "$VULNERABLE_CODE_API_KEY" ]; then
-                                ORT_OPTIONS="$ORT_OPTIONS -P ort.advisor.vulnerableCode.apiKey=$VULNERABLE_CODE_API_KEY"
-                                ADVISOR_OPTIONS="$ADVISOR_OPTIONS,VulnerableCode"
-                            fi
+                        if [ -n "$VULNERABLE_CODE_API_KEY" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS -P ort.advisor.vulnerableCode.apiKey=$VULNERABLE_CODE_API_KEY"
+                            ADVISOR_OPTIONS="$ADVISOR_OPTIONS,VulnerableCode"
+                        fi
 
-                            /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
-                        '''.trim()
+                        /opt/ort/bin/ort $ORT_OPTIONS advise $ADVISOR_OPTIONS -i out/results/current-result.yml -o out/results/advisor
+                        '''.stripIndent().trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Advisor issues found.')
                         else if (status != 0) error('Error executing the advisor.')
@@ -583,14 +583,14 @@ pipeline {
                 withCredentials(projectVcsCredentials) {
                     script {
                         def status = sh returnStatus: true, script: '''
-                            ORT_OPTIONS="$LOG_LEVEL"
+                        ORT_OPTIONS="$LOG_LEVEL"
 
-                            if [ "$STACKTRACE" = "true" ]; then
-                                ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                            fi
+                        if [ "$STACKTRACE" = "true" ]; then
+                            ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                        fi
 
-                            /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl.rules.kts -o out/results/evaluator
-                        '''.trim()
+                        /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl.rules.kts -o out/results/evaluator
+                        '''.stripIndent().trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')
                         else if (status != 0) error('Error executing the evaluator.')
@@ -633,18 +633,18 @@ pipeline {
 
             steps {
                 sh '''
-                    ORT_OPTIONS="$LOG_LEVEL"
+                ORT_OPTIONS="$LOG_LEVEL"
 
-                    if [ "$STACKTRACE" = "true" ]; then
-                        ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
-                    fi
+                if [ "$STACKTRACE" = "true" ]; then
+                    ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
+                fi
 
-                    /opt/ort/bin/ort $ORT_OPTIONS report \
-                        -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp \
-                        -O NoticeTemplate=template.id=default,summary \
-                        -i out/results/current-result.yml \
-                        -o out/results/reporter
-                '''.trim()
+                /opt/ort/bin/ort $ORT_OPTIONS report \
+                    -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp \
+                    -O NoticeTemplate=template.id=default,summary \
+                    -i out/results/current-result.yml \
+                    -o out/results/reporter
+                '''.stripIndent().trim()
             }
 
             post {
