@@ -178,7 +178,7 @@ class AnalyzerCommand : OrtCommand(
         }
 
         println("The following package managers are enabled:")
-        println("\t" + enabledPackageManagers.joinToString())
+        println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
 
         val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
