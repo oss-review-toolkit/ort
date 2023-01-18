@@ -122,7 +122,7 @@ class AdvisorCommand : OrtCommand(
 
         val distinctProviders = providerFactories.distinct()
         println("The following advisors are activated:")
-        println("\t" + distinctProviders.joinToString())
+        println("\t" + distinctProviders.joinToString().ifEmpty { "<None>" })
 
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
