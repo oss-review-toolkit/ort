@@ -311,6 +311,20 @@ pipeline {
                     rm -fr $ORT_DATA_DIR/config
                     /opt/ort/bin/ort $ORT_OPTIONS download --project-url $ORT_CONFIG_VCS_URL $VCS_REVISION_OPTION -o $ORT_DATA_DIR/config
 
+                    if [ -f "$ORT_DATA_DIR/config/config.yml" ]; then
+                        echo "Not creating '$ORT_DATA_DIR/config/config.yml' as it already exists."
+                    else
+                        echo "Creating '$ORT_DATA_DIR/config/config.yml' template for job parameters."
+                        cat >$ORT_DATA_DIR/config/config.yml <<EOF
+                    ort:
+                      packageCurationProviders:
+                        - name: DefaultFile
+                        - name: DefaultDir
+                        - name: ClearlyDefined
+                          enabled: ${USE_CLEARLY_DEFINED_CURATIONS}
+                    EOF
+                    fi
+
                     rm -f $HOME/.netrc
                     '''.stripIndent().trim()
                 }
@@ -340,14 +354,10 @@ pipeline {
                         ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                     fi
 
-                    if [ "$USE_CLEARLY_DEFINED_CURATIONS" = "true" ]; then
-                        USE_CLEARLY_DEFINED_CURATIONS_OPTION="--clearly-defined-curations"
-                    fi
-
                     /opt/ort/bin/set_gradle_proxy.sh
 
                     rm -fr out/results
-                    /opt/ort/bin/ort $ORT_OPTIONS analyze $USE_CLEARLY_DEFINED_CURATIONS_OPTION -i "$PROJECT_DIR/source" -o out/results/analyzer
+                    /opt/ort/bin/ort $ORT_OPTIONS analyze -i "$PROJECT_DIR/source" -o out/results/analyzer
                     '''.stripIndent().trim()
 
                     if (status >= ORT_FAILURE_STATUS_CODE) unstable('Analyzer issues found.')
