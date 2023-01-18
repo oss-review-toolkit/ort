@@ -53,7 +53,7 @@ data class FileEntry(
     val path: File,
     val license: String? = null,
     val attributions: List<String>? = null,
-    val facets: Facets? = null,
+    val facets: List<String>? = null,
     val hashes: Hashes? = null,
     val token: String? = null,
     val natures: Set<Nature>? = null
