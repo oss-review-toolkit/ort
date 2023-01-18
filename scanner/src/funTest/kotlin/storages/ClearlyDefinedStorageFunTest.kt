@@ -121,4 +121,20 @@ class ClearlyDefinedStorageFunTest : StringSpec({
             )
         }
     }
+
+    "Scan results for packages without a namespace should be present" {
+        val id = Identifier("NPM::iobroker.eusec:0.9.9")
+        val results = storage.read(id)
+
+        results.shouldBeSuccess { result ->
+            result.map { it.provenance } shouldContain RepositoryProvenance(
+                vcsInfo = VcsInfo(
+                    type = VcsType.GIT,
+                    url = "https://github.com/bropat/ioBroker.eusec/tree/327b125548c9b806490085a2dacfdfc6e7776803",
+                    revision = "327b125548c9b806490085a2dacfdfc6e7776803"
+                ),
+                resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
+            )
+        }
+    }
 })
