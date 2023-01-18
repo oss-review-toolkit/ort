@@ -152,7 +152,7 @@ class ClearlyDefinedStorage(
             val tools = service.harvestTools(
                 coordinates.type,
                 coordinates.provider,
-                coordinates.namespace.orEmpty(),
+                coordinates.namespace ?: "-",
                 coordinates.name,
                 coordinates.revision.orEmpty()
             )
@@ -192,8 +192,13 @@ class ClearlyDefinedStorage(
      */
     private suspend fun loadScanCodeResults(coordinates: Coordinates, version: String): Result<List<ScanResult>> {
         val toolResponse = service.harvestToolData(
-            coordinates.type, coordinates.provider, coordinates.namespace.orEmpty(), coordinates.name,
-            coordinates.revision.orEmpty(), TOOL_SCAN_CODE, version
+            coordinates.type,
+            coordinates.provider,
+            coordinates.namespace ?: "-",
+            coordinates.name,
+            coordinates.revision.orEmpty(),
+            TOOL_SCAN_CODE,
+            version
         )
 
         return toolResponse.use {

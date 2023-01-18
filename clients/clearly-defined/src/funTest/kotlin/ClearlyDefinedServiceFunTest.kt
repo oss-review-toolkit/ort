@@ -68,7 +68,7 @@ class ClearlyDefinedServiceFunTest : WordSpec({
             val curation = service.getCuration(
                 coordinates.type,
                 coordinates.provider,
-                coordinates.namespace.orEmpty(),
+                coordinates.namespace ?: "-",
                 coordinates.name,
                 coordinates.revision.orEmpty()
             )
