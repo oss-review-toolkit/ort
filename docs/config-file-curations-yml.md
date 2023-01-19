@@ -111,6 +111,6 @@ cli/build/install/ort/bin/ort evaluate
   -o [evaluator-output-dir]
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
-  --package-curations-dir $ORT_CONFIG_DIR/curations.yml
+  --package-curations-dir $ORT_CONFIG_DIR/curations
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
