@@ -9,6 +9,10 @@ rules:
     - 2
     - always
     - 75
+  footer-max-line-length:
+    - 2
+    - always
+    - 120
   footer-leading-blank:
     - 2
     - always
