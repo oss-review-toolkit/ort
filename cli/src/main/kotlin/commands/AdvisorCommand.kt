@@ -127,7 +127,7 @@ class AdvisorCommand : OrtCommand(
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
-        val ortResultOutput = advisor.retrieveFindings(ortResultInput, skipExcluded).mergeLabels(labels)
+        val ortResultOutput = advisor.advise(ortResultInput, skipExcluded).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, "advisor")

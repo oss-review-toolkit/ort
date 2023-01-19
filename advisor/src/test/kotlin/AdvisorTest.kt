@@ -48,7 +48,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(provider))
 
-            advisor.retrieveFindings(OrtResult.EMPTY) should beTheSameInstanceAs(OrtResult.EMPTY)
+            advisor.advise(OrtResult.EMPTY) should beTheSameInstanceAs(OrtResult.EMPTY)
 
             coVerify(exactly = 0) {
                 provider.retrievePackageFindings(any())
@@ -61,7 +61,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(provider))
 
-            val result = advisor.retrieveFindings(originResult)
+            val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
                 results.advisorResults should beEmpty()
@@ -101,7 +101,7 @@ class AdvisorTest : WordSpec({
 
             val advisor = createAdvisor(listOf(provider1, provider2))
 
-            val result = advisor.retrieveFindings(originResult)
+            val result = advisor.advise(originResult)
 
             result.advisor shouldNotBeNull {
                 results.advisorResults shouldBe expectedResults
