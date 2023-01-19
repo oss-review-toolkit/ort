@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.utils.common.NamedPlugin
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -52,8 +53,6 @@ class Advisor(
 
     @JvmOverloads
     fun advise(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
-        val startTime = Instant.now()
-
         if (ortResult.analyzer == null) {
             logger.warn {
                 "Cannot run the advisor as the provided ORT result does not contain an analyzer result. " +
@@ -63,9 +62,16 @@ class Advisor(
             return ortResult
         }
 
+        val packages = ortResult.getPackages(skipExcluded).mapTo(mutableSetOf()) { it.metadata }
+        val advisorRun = advise(packages)
+        return ortResult.copy(advisor = advisorRun)
+    }
+
+    fun advise(packages: Set<Package>): AdvisorRun {
+        val startTime = Instant.now()
+
         val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
-        val packages = ortResult.getPackages(skipExcluded).mapTo(mutableSetOf()) { it.metadata }
         if (packages.isEmpty()) {
             logger.info { "There are no packages to give advice for." }
         } else {
@@ -78,7 +84,7 @@ class Advisor(
 
                         logger.info {
                             "Found ${providerResults.values.flatten().distinct().size} distinct vulnerabilities via " +
-                                "${provider.providerName}. "
+                                    "${provider.providerName}. "
                         }
 
                         providerResults.filter { it.value.isNotEmpty() }.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
@@ -103,7 +109,6 @@ class Advisor(
 
         val endTime = Instant.now()
 
-        val advisorRun = AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
-        return ortResult.copy(advisor = advisorRun)
+        return AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
     }
 }
