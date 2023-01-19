@@ -51,6 +51,10 @@ class Advisor(
         val ALL by lazy { NamedPlugin.getAll<AdviceProviderFactory>() }
     }
 
+    /**
+     * Query the [advice providers][providerFactories] and add the result to the provided [ortResult]. Excluded packages
+     * can optionally be [skipped][skipExcluded].
+     */
     @JvmOverloads
     fun advise(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         if (ortResult.analyzer == null) {
@@ -67,6 +71,9 @@ class Advisor(
         return ortResult.copy(advisor = advisorRun)
     }
 
+    /**
+     * Query the [advice providers][providerFactories] for the provided [packages].
+     */
     fun advise(packages: Set<Package>): AdvisorRun {
         val startTime = Instant.now()
 
