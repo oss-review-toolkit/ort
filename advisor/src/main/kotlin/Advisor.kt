@@ -51,7 +51,7 @@ class Advisor(
     }
 
     @JvmOverloads
-    fun retrieveFindings(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
+    fun advise(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         val startTime = Instant.now()
 
         if (ortResult.analyzer == null) {
