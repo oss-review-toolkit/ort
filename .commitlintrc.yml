@@ -25,14 +25,7 @@ rules:
     - always
     - 75
   scope-case:
-    - 2
-    - always
-    - - camel-case
-      - kebab-case
-      - lower-case
-      - pascal-case
-      - snake-case
-      - upper-case
+    - 0
   subject-case:
     - 1
     - always
