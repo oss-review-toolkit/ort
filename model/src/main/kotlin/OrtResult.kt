@@ -66,6 +66,12 @@ data class OrtResult(
     val evaluator: EvaluatorRun? = null,
 
     /**
+     * A [ResolvedConfiguration] containing data resolved during the analysis which augments the automatically
+     * determined data.
+     */
+    val resolvedConfiguration: ResolvedConfiguration = ResolvedConfiguration(),
+
+    /**
      * User defined labels associated to this result. Labels are not used by ORT itself, but can be used in parts of ORT
      * which are customizable by the user, for example in evaluator rules or in the notice reporter.
      */
