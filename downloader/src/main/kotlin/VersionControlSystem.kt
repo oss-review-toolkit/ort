@@ -210,6 +210,12 @@ abstract class VersionControlSystem {
      */
     fun isAvailable(): Boolean = this !is CommandLineTool || isInPath()
 
+    /**
+     * Test - in a way specific to this [VersionControlSystem] - whether it can be used to download from the provided
+     * [vcsUrl]. This function is called by [isApplicableUrl] if it cannot be determined from parsing the [vcsUrl]
+     * whether it is applicable for this [VersionControlSystem] or not. A concrete implementation can do specific
+     * checks here that may also include network requests.
+     */
     protected abstract fun isApplicableUrlInternal(vcsUrl: String): Boolean
 
     /**
