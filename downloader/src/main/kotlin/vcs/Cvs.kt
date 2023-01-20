@@ -45,7 +45,7 @@ object CvsCommand : CommandLineTool {
         }
 }
 
-class Cvs : VersionControlSystem() {
+class Cvs : VersionControlSystem(CvsCommand) {
     override val type = VcsType.CVS
     override val latestRevisionNames = emptyList<String>()
 

@@ -51,7 +51,7 @@ object MercurialCommand : CommandLineTool {
         }
 }
 
-class Mercurial : VersionControlSystem() {
+class Mercurial : VersionControlSystem(MercurialCommand) {
     companion object : Logging
 
     override val type = VcsType.MERCURIAL
