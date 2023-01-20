@@ -37,6 +37,8 @@ import java.time.Duration
 
 import kotlin.time.toKotlinDuration
 
+import kotlinx.coroutines.runBlocking
+
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -127,7 +129,9 @@ class AdvisorCommand : OrtCommand(
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
         val ortResultInput = readOrtResult(ortFile)
-        val ortResultOutput = advisor.advise(ortResultInput, skipExcluded).mergeLabels(labels)
+        val ortResultOutput = runBlocking {
+            advisor.advise(ortResultInput, skipExcluded).mergeLabels(labels)
+        }
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResultOutput, outputFiles, "advisor")

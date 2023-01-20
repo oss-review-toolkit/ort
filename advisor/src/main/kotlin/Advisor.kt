@@ -21,8 +21,9 @@ package org.ossreviewtoolkit.advisor
 
 import java.time.Instant
 
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -55,8 +56,7 @@ class Advisor(
      * Query the [advice providers][providerFactories] and add the result to the provided [ortResult]. Excluded packages
      * can optionally be [skipped][skipExcluded].
      */
-    @JvmOverloads
-    fun advise(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
+    suspend fun advise(ortResult: OrtResult, skipExcluded: Boolean = false): OrtResult {
         if (ortResult.analyzer == null) {
             logger.warn {
                 "Cannot run the advisor as the provided ORT result does not contain an analyzer result. " +
@@ -74,17 +74,17 @@ class Advisor(
     /**
      * Query the [advice providers][providerFactories] for the provided [packages].
      */
-    fun advise(packages: Set<Package>): AdvisorRun {
-        val startTime = Instant.now()
+    suspend fun advise(packages: Set<Package>): AdvisorRun =
+        withContext(Dispatchers.IO) {
+            val startTime = Instant.now()
 
-        val results = sortedMapOf<Identifier, List<AdvisorResult>>()
+            val results = sortedMapOf<Identifier, List<AdvisorResult>>()
 
-        if (packages.isEmpty()) {
-            logger.info { "There are no packages to give advice for." }
-        } else {
-            val providers = providerFactories.map { it.create(config) }
+            if (packages.isEmpty()) {
+                logger.info { "There are no packages to give advice for." }
+            } else {
+                val providers = providerFactories.map { it.create(config) }
 
-            runBlocking {
                 providers.map { provider ->
                     async {
                         val providerResults = provider.retrievePackageFindings(packages)
@@ -110,12 +110,11 @@ class Advisor(
                     }
                 }
             }
+
+            val advisorRecord = AdvisorRecord(results)
+
+            val endTime = Instant.now()
+
+            AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
         }
-
-        val advisorRecord = AdvisorRecord(results)
-
-        val endTime = Instant.now()
-
-        return AdvisorRun(startTime, endTime, Environment(), config, advisorRecord)
-    }
 }
