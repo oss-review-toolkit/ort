@@ -33,7 +33,7 @@ ort:
 
   licenseFilePatterns:
     licenseFilenames: ['license*']
-    patentFilenames: [patents]
+    patentFilenames: ['patents']
     rootLicenseFilenames: ['readme*']
 
   # Providers are listed from highest to lower priority. Technically, they are applied in reverse order: The provider
