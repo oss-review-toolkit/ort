@@ -38,6 +38,7 @@ private val ABSOLUTE_PATH = File(Os.env["PUB_CACHE"])
 class PubCacheReaderTest : WordSpec({
     val tmpPubCacheDir = createSpecTempDir().also { Os.env["PUB_CACHE"] = it.absolutePath }
     val gitPackageCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF")
+    val gitPackageWithPathCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF/$PACKAGE_NAME")
     val hostedPackageCacheDir = tmpPubCacheDir.resolve("hosted/oss-review-toolkit.org/$PACKAGE_NAME-$PACKAGE_VERSION")
     val localPackagePathAbsolute = ABSOLUTE_PATH
     val localPackagePathRelative = ABSOLUTE_PATH.resolve(RELATIVE_PATH)
@@ -46,18 +47,18 @@ class PubCacheReaderTest : WordSpec({
 
     beforeSpec {
         gitPackageCacheDir.safeMkdirs()
+        gitPackageWithPathCacheDir.safeMkdirs()
         hostedPackageCacheDir.safeMkdirs()
     }
 
     "findProjectRoot" should {
-        "resolve the path of a Git dependency" {
+        "resolve the path of a Git dependency without path" {
             reader.findProjectRoot(
                 jsonMapper.readTree(
                     """
                         {
                             "dependency": "direct main",
                             "description": {
-                                "path": ".",
                                 "ref": "master",
                                 "resolved-ref": "$RESOLVED_REF",
                                 "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
@@ -69,6 +70,27 @@ class PubCacheReaderTest : WordSpec({
                 ),
                 ABSOLUTE_PATH // not used
             ) shouldBe gitPackageCacheDir
+        }
+
+        "resolve the path of a Git dependency with path" {
+            reader.findProjectRoot(
+                jsonMapper.readTree(
+                    """
+                        {
+                            "dependency": "direct main",
+                            "description": {
+                                "path": "$PACKAGE_NAME",
+                                "ref": "master",
+                                "resolved-ref": "$RESOLVED_REF",
+                                "url": "https://github.com/oss-review-toolkit/$PACKAGE_NAME.git"
+                            },
+                            "source": "git",
+                            "version": "9.9.9"
+                        }
+                    """.trimIndent()
+                ),
+                ABSOLUTE_PATH // not used
+            ) shouldBe gitPackageWithPathCacheDir
         }
 
         "resolve the path of a hosted dependency" {

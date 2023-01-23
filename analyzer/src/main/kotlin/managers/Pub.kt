@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -63,6 +64,7 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -487,6 +489,22 @@ class Pub(
                                 }
                                 VcsInfo.EMPTY
                             }
+                        }
+
+                        pkgInfoFromLockFile["source"].textValueOrEmpty() == "git" -> {
+                            val pkgInfoFromYamlFile = readPackageInfoFromCache(pkgInfoFromLockFile, workingDir)
+
+                            rawName = pkgInfoFromYamlFile["name"].textValue() ?: packageName
+                            description = pkgInfoFromYamlFile["description"].textValueOrEmpty().trim()
+                            homepageUrl = pkgInfoFromYamlFile["homepage"].textValueOrEmpty()
+                            authors = parseAuthors(pkgInfoFromYamlFile)
+
+                            vcs = VcsInfo(
+                                type = VcsType.GIT,
+                                url = normalizeVcsUrl(pkgInfoFromLockFile["description"]["url"].textValueOrEmpty()),
+                                revision = pkgInfoFromLockFile["description"]["resolved-ref"].textValueOrEmpty(),
+                                path = pkgInfoFromLockFile["description"]["path"].textValueOrEmpty()
+                            )
                         }
 
                         // For now, we ignore SDKs like the Dart SDK and the Flutter SDK in the analyzer.

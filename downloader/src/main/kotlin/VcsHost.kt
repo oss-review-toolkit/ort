@@ -318,6 +318,7 @@ enum class VcsHost(
         private val SVN_BRANCH_OR_TAG_PATTERN = Regex("(.*svn.*)/(branches|tags)/([^/]+)/?(.*)")
         private val SVN_TRUNK_PATTERN = Regex("(.*svn.*)/(trunk)/?(.*)")
         private val GIT_REVISION_FRAGMENT = Regex("git.+#[a-fA-F0-9]{7,}")
+        private val GIT_PROJECT_NAME = Regex("/([^/]+)\\.git")
 
         /**
          * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
@@ -445,6 +446,16 @@ enum class VcsHost(
                 val vcsInfo = host.toVcsInfoInternal(it)
                 host.toRawDownloadUrlInternal(userOrOrg, project, vcsInfo)
             }.getOrNull()
+        }
+
+        /**
+         * Return the project's name, with generic handling of unknown VCS hosts (those not covered by the enumeration,
+         * e.g. an on-premises Git server).
+         */
+        fun getProject(projectUrl: String): String? {
+            val host = values().find { it.isApplicable(projectUrl) }
+                ?: return GIT_PROJECT_NAME.find(projectUrl)?.groupValues?.getOrNull(1)
+            return projectUrl.toUri { host.getProjectInternal(it) }.getOrNull()
         }
     }
 
