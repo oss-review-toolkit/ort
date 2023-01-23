@@ -204,65 +204,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 val type = match.groups["type"]!!.value
                 val url = match.groups["url"]!!.value
 
-                when {
-                    // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
-                    // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
-                    // here.
-                    type == "cvs" && !url.startsWith(":") -> {
-                        VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
-                    }
-
-                    // Maven does not officially support git-repo as an SCM, see
-                    // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
-                    // "manifest" query parameter for the path to the manifest inside the repository. An earlier
-                    // version of this workaround expected the query string to be only the path to the manifest, for
-                    // backward compatibility convert such URLs to the new syntax.
-                    type == "git-repo" -> {
-                        val manifestPath = url.parseRepoManifestPath()
-                            ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
-                        val urlWithManifest = url.takeIf { manifestPath == null }
-                            ?: "${url.substringBefore('?')}?manifest=$manifestPath"
-
-                        VcsInfo(
-                            type = VcsType.GIT_REPO,
-                            url = urlWithManifest,
-                            revision = tag
-                        )
-                    }
-
-                    type == "svn" -> {
-                        val revision = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
-                        VcsInfo(type = VcsType.SUBVERSION, url = url, revision = revision)
-                    }
-
-                    url.startsWith("//") -> {
-                        // Work around the common mistake to omit the Maven SCM provider.
-                        val fixedUrl = "$type:$url"
-
-                        // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
-                        // special URL paths.
-                        VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
-                            logger.info {
-                                "Fixed up invalid SCM connection '$connection' without a provider to $it."
-                            }
-                        }
-                    }
-
-                    else -> {
-                        val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
-
-                        VcsHost.fromUrl(trimmedUrl)?.let { host ->
-                            host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
-                                // Fixup paths that are specified as part of the URL and contain the project name as
-                                // a prefix.
-                                val projectPrefix = "${host.getProject(trimmedUrl)}-"
-                                vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
-                                    vcsInfo.copy(path = path)
-                                }
-                            }
-                        } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
-                    }
-                }
+                getVcsInfo(type, url, tag)
             } ?: run {
                 USER_HOST_REGEX.matchEntire(connection)?.let { match ->
                     // Some projects omit the provider and use the SCP-like Git URL syntax, for example
@@ -291,6 +233,65 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 }
             }
         }
+
+        private fun getVcsInfo(type: String, url: String, tag: String) =
+            when {
+                // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
+                // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
+                // here.
+                type == "cvs" && !url.startsWith(":") -> {
+                    VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
+                }
+
+                // Maven does not officially support git-repo as an SCM, see
+                // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
+                // "manifest" query parameter for the path to the manifest inside the repository. An earlier
+                // version of this workaround expected the query string to be only the path to the manifest, for
+                // backward compatibility convert such URLs to the new syntax.
+                type == "git-repo" -> {
+                    val manifestPath = url.parseRepoManifestPath()
+                        ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
+                    val urlWithManifest = url.takeIf { manifestPath == null }
+                        ?: "${url.substringBefore('?')}?manifest=$manifestPath"
+
+                    VcsInfo(
+                        type = VcsType.GIT_REPO,
+                        url = urlWithManifest,
+                        revision = tag
+                    )
+                }
+
+                type == "svn" -> {
+                    val revision = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
+                    VcsInfo(type = VcsType.SUBVERSION, url = url, revision = revision)
+                }
+
+                url.startsWith("//") -> {
+                    // Work around the common mistake to omit the Maven SCM provider.
+                    val fixedUrl = "$type:$url"
+
+                    // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
+                    // special URL paths.
+                    VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
+                        logger.info { "Fixed up invalid SCM connection without a provider to $it." }
+                    }
+                }
+
+                else -> {
+                    val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
+
+                    VcsHost.fromUrl(trimmedUrl)?.let { host ->
+                        host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
+                            // Fixup paths that are specified as part of the URL and contain the project name as
+                            // a prefix.
+                            val projectPrefix = "${host.getProject(trimmedUrl)}-"
+                            vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
+                                vcsInfo.copy(path = path)
+                            }
+                        }
+                    } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
+                }
+            }
 
         /**
          * Split the provided [checksum] by whitespace and return a [Hash] for the first element that matches the
