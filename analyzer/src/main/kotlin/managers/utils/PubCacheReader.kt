@@ -93,9 +93,12 @@ internal class PubCacheReader {
             // Packages with source set to "git" and a "resolved-ref" key in description set to a gitHash.
             // These packages do not define a packageName in the packageInfo, but by definition the path resolves to
             // the project name as given from the VcsHost and to the resolvedRef.
-            val projectName = VcsHost.fromUrl(url)?.getProject(url) ?: return null
-
-            "git/$projectName-$resolvedRef"
+            val projectName = VcsHost.getProject(url) ?: return null
+            if (resolvedPath.isNotEmpty()) {
+                "git/$projectName-$resolvedRef/$resolvedPath"
+            } else {
+                "git/$projectName-$resolvedRef"
+            }
         } else {
             logger.error { "Could not find projectRoot of '$packageName'." }
 

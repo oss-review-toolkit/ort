@@ -481,4 +481,38 @@ class VcsHostTest : WordSpec({
             VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
         }
     }
+
+    "Getting the project from a URL" should {
+        "work for an Azure DevOps URL" {
+            VcsHost.getProject("https://dev.azure.com/oss-review-toolkit/kotlin-devs/_git/ort") shouldBe "ort"
+        }
+
+        "work for a GitHub URL" {
+            VcsHost.getProject("https://github.com/oss-review-toolkit/ort") shouldBe "ort"
+        }
+
+        "work for a GitLab URL" {
+            VcsHost.getProject("https://gitlab.com/gitlab-org/gitlab") shouldBe "gitlab"
+        }
+
+        "work for a Bitbucket URL" {
+            VcsHost.getProject("https://bitbucket.org/yevster/spdxtraxample") shouldBe "spdxtraxample"
+        }
+
+        "work for a SourceHut URL to a Git repository" {
+            VcsHost.getProject("https://git.sr.ht/~sircmpwn/sourcehut.org") shouldBe "sourcehut.org"
+        }
+
+        "work for a SourceHut URL to a Mercurial repository" {
+            VcsHost.getProject("https://hg.sr.ht/~sircmpwn/invertbucket") shouldBe "invertbucket"
+        }
+
+        "work for a generic URL to a Git repository" {
+            VcsHost.getProject("ssh://git@gitlab.custom.com:group/project.git") shouldBe "project"
+        }
+
+        "handle an unknown URL" {
+            VcsHost.fromUrl("https://host.tld/path/to/repo") should beNull()
+        }
+    }
 })
