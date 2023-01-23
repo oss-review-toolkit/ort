@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
-    "OpossumReporter" should {
+    "generateReport()" should {
         val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
         val reportStr = generateReport(ortResult).normalizeLineBreaks()
 
