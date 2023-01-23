@@ -112,7 +112,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object : Logging {
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
-        private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<url>.+)")
+        private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<path>.+)")
 
         private val WHITESPACE_REGEX = Regex("\\s")
 
@@ -211,10 +211,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     // "scm:git@github.com:facebook/facebook-android-sdk.git".
                     val user = match.groups["user"]!!.value
                     val host = match.groups["host"]!!.value
-                    val url = match.groups["url"]!!.value
+                    val path = match.groups["path"]!!.value
 
                     if (user == "git" || host.startsWith("git")) {
-                        VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                        VcsInfo(type = VcsType.GIT, url = "https://$host/$path", revision = tag)
                     } else {
                         VcsInfo.EMPTY
                     }
