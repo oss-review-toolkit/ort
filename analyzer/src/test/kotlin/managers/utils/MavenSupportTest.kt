@@ -140,6 +140,36 @@ class MavenSupportTest : WordSpec({
                 path = "boringssl-static"
             )
         }
+
+        "handle GitHub URLs with double 'git:' prefix" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git:git:github.com/MarkusAmshove/Kluent.git"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "github.com/MarkusAmshove/Kluent.git",
+                revision = "",
+                path = ""
+            )
+        }
+
+        "handle GitHub URLs with missing 'git:' provider" {
+            val mavenProject = MavenProject().apply {
+                scm = Scm().apply {
+                    connection = "scm:git@github.com/Yalantis/uCrop.git"
+                }
+            }
+
+            MavenSupport.parseVcsInfo(mavenProject) shouldBe VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/Yalantis/uCrop.git",
+                revision = "",
+                path = ""
+            )
+        }
     }
 
     "parseChecksum()" should {
