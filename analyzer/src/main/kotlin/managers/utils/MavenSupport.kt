@@ -90,6 +90,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.gibibytes
 import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -113,8 +114,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
         private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<path>.+)")
-
-        private val WHITESPACE_REGEX = Regex("\\s")
 
         private val remoteArtifactCache = DiskCache(
             directory = ortDataDirectory.resolve("cache/analyzer/maven/remote-artifacts"),
@@ -299,7 +298,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          * checksum files sometimes contain arbitrary strings before or after the actual checksum.
          */
         internal fun parseChecksum(checksum: String, algorithm: String) =
-            checksum.split(WHITESPACE_REGEX).firstNotNullOfOrNull {
+            checksum.splitOnWhitespace().firstNotNullOfOrNull {
                 runCatching { Hash.create(it, algorithm) }.getOrNull()
             } ?: Hash.NONE
 
