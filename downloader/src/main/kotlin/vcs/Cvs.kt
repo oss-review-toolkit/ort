@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
-import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.WorkingTree
@@ -31,18 +30,14 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 typealias CvsFileRevisions = List<Pair<String, String>>
 
 object CvsCommand : CommandLineTool {
-    private val versionRegex = Pattern.compile("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
+    private val versionRegex = Regex("Concurrent Versions System \\(CVS\\) (?<version>[\\d.]+).+")
 
     override fun command(workingDir: File?) = "cvs"
 
     override fun transformVersion(output: String): String =
-        versionRegex.matcher(output.lineSequence().first()).let {
-            if (it.matches()) {
-                it.group("version")
-            } else {
-                ""
-            }
-        }
+        versionRegex.matchEntire(output.lineSequence().first())?.let { match ->
+            match.groups["version"]!!.value
+        }.orEmpty()
 }
 
 class Cvs : VersionControlSystem(CvsCommand) {
