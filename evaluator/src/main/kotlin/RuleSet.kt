@@ -72,9 +72,7 @@ class RuleSet(
      * [ortResult].
      */
     fun packageRule(name: String, configure: PackageRule.() -> Unit) {
-        val packages = ortResult.analyzer?.result?.let { analyzerResult ->
-            analyzerResult.projects.map { it.toPackage().toCuratedPackage() } + analyzerResult.packages
-        }.orEmpty()
+        val packages = ortResult.getProjects().map { it.toPackage().toCuratedPackage() } + ortResult.getPackages()
 
         packages.forEach { curatedPackage ->
             val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(curatedPackage.metadata.id)
