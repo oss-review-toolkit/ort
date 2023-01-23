@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import java.io.File
-import java.util.regex.Pattern
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -37,18 +36,14 @@ const val MERCURIAL_LARGE_FILES_EXTENSION = "largefiles = "
 const val MERCURIAL_SPARSE_EXTENSION = "sparse = "
 
 object MercurialCommand : CommandLineTool {
-    private val versionRegex = Pattern.compile("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
+    private val versionRegex = Regex("Mercurial .*\\([Vv]ersion (?<version>[\\d.]+)\\)")
 
     override fun command(workingDir: File?) = "hg"
 
     override fun transformVersion(output: String): String =
-        versionRegex.matcher(output.lineSequence().first()).let {
-            if (it.matches()) {
-                it.group("version")
-            } else {
-                ""
-            }
-        }
+        versionRegex.matchEntire(output.lineSequence().first())?.let { match ->
+            match.groups["version"]!!.value
+        }.orEmpty()
 }
 
 class Mercurial : VersionControlSystem(MercurialCommand) {

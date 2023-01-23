@@ -24,7 +24,6 @@ import java.io.IOException
 import java.net.Authenticator
 import java.net.InetSocketAddress
 import java.security.PublicKey
-import java.util.regex.Pattern
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -98,7 +97,7 @@ class Git : VersionControlSystem(), CommandLineTool {
         }
     }
 
-    private val versionRegex = Pattern.compile("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
+    private val versionRegex = Regex("[Gg]it [Vv]ersion (?<version>[\\d.a-z-]+)(\\s.+)?")
 
     override val type = VcsType.GIT
     override val priority = 100
@@ -117,13 +116,9 @@ class Git : VersionControlSystem(), CommandLineTool {
     }
 
     override fun transformVersion(output: String): String =
-        versionRegex.matcher(output.lineSequence().first()).let {
-            if (it.matches()) {
-                it.group("version")
-            } else {
-                ""
-            }
-        }
+        versionRegex.matchEntire(output.lineSequence().first())?.let { match ->
+            match.groups["version"]!!.value
+        }.orEmpty()
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree = GitWorkingTree(
         workingDir = vcsDirectory,
