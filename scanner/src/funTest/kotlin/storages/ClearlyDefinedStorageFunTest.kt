@@ -47,9 +47,9 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 
     "Scan results for ScanCode 3.0.2 should be read correctly" {
         val id = Identifier("Maven:com.vdurmont:semver4j:3.1.0")
-        val result = storage.read(id)
+        val results = storage.read(id)
 
-        result.shouldBeSuccess {
+        results.shouldBeSuccess {
             it shouldContain ScanResult(
                 provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
@@ -92,9 +92,9 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 
     "Scan results for ScanCode 30.1.0 should be read correctly" {
         val id = Identifier("Maven:com.sksamuel.hoplite:hoplite-core:2.1.3")
-        val result = storage.read(id)
+        val results = storage.read(id)
 
-        result.shouldBeSuccess {
+        results.shouldBeSuccess {
             it shouldContain ScanResult(
                 provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
