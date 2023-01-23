@@ -35,7 +35,7 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
         fun create(configurations: List<PackageCurationProviderConfiguration>) =
             // Reverse the list so that curations from providers with higher priority are applied later and can
             // overwrite curations from providers with lower priority.
-            configurations.filter { it.enabled }.map { ALL.getValue(it.name).create(it.config) }.asReversed()
+            configurations.filter { it.enabled }.map { ALL.getValue(it.type).create(it.config) }.asReversed()
     }
 
     override fun create(config: Map<String, String>): PackageCurationProvider = create(parseConfig(config))

@@ -39,23 +39,23 @@ ort:
   # Providers are listed from highest to lower priority. Technically, they are applied in reverse order: The provider
   # with the highest priority is applied last, so it can overwrite any previously applied curations.
   packageCurationProviders:
-    - name: DefaultFile
-    - name: DefaultDir
-    - name: File
+    - type: DefaultFile
+    - type: DefaultDir
+    - type: File
       config:
         path: '/some-path/curations.yml'
         mustExist: true
-    - name: File
+    - type: File
       config:
         path: '/some-path/curations-dir'
         mustExist: false
-    - name: OrtConfig
+    - type: OrtConfig
       enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
-    - name: ClearlyDefined
+    - type: ClearlyDefined
       config:
         serverUrl: 'https://api.clearlydefined.io'
         minTotalLicenseScore: 80
-    - name: SW360
+    - type: SW360
       config:
         restUrl: 'https://your-sw360-rest-url'
         authUrl: 'https://your-authentication-url'
