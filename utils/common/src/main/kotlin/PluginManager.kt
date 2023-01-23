@@ -27,14 +27,14 @@ import java.util.ServiceLoader
 inline fun <reified T : Any> getLoaderFor(): ServiceLoader<T> = ServiceLoader.load(T::class.java)
 
 /**
- * An interface to be implemented by plugins that have a name.
+ * An interface to be implemented by any ORT plugin.
  */
-interface NamedPlugin {
+interface Plugin {
     companion object {
         /**
-         * Return instances for all named plugins of type [T].
+         * Return instances for all ORT plugins of type [T].
          */
-        inline fun <reified T : NamedPlugin> getAll() = getLoaderFor<T>()
+        inline fun <reified T : Plugin> getAll() = getLoaderFor<T>()
             .iterator()
             .asSequence()
             .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
@@ -52,7 +52,7 @@ interface NamedPlugin {
  * An interface to be implemented by plugin factories. Plugin factories are required if a plugin needs configuration
  * on initialization and can therefore not be created directly by the [ServiceLoader].
  */
-interface ConfigurablePluginFactory<out PLUGIN> : NamedPlugin {
+interface ConfigurablePluginFactory<out PLUGIN> : Plugin {
     /**
      * Create a new instance of [PLUGIN] from [config].
      */

@@ -23,7 +23,7 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.Options
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
  * A common interface for use with [ServiceLoader] that all [AbstractAdviceProviderFactory] classes need to
  * implement.
  */
-interface AdviceProviderFactory : NamedPlugin {
+interface AdviceProviderFactory : Plugin {
     /**
      * Create an [AdviceProvider] using the specified [config].
      */

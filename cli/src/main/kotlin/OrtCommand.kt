@@ -21,17 +21,17 @@ package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
  * An interface for [CliktCommand]-based ORT commands that come as named plugins.
  */
-abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name, help = help), NamedPlugin {
+abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name, help = help), Plugin {
     companion object {
         /**
          * All ORT commands available in the classpath, associated by their names.
          */
-        val ALL by lazy { NamedPlugin.getAll<OrtCommand>() }
+        val ALL by lazy { Plugin.getAll<OrtCommand>() }
     }
 
     override val name = commandName

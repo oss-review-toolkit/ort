@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 
 data class PackageCurationProviderConfiguration(
     /**
-     * The [name][NamedPlugin.name] of the package curation provider.
+     * The [name][Plugin.name] of the package curation provider.
      */
     val name: String,
 

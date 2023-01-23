@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -49,7 +49,7 @@ class Advisor(
         /**
          * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { NamedPlugin.getAll<AdviceProviderFactory>() }
+        val ALL by lazy { Plugin.getAll<AdviceProviderFactory>() }
     }
 
     /**

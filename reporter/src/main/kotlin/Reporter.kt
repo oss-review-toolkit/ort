@@ -24,18 +24,18 @@ import java.io.File
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
  * A reporter that creates a human-readable report from a given [OrtResult].
  */
-interface Reporter : NamedPlugin {
+interface Reporter : Plugin {
     companion object {
         /**
          * All [reporters][Reporter] available in the classpath, associated by their names.
          */
-        val ALL by lazy { NamedPlugin.getAll<Reporter>() }
+        val ALL by lazy { Plugin.getAll<Reporter>() }
     }
 
     /**

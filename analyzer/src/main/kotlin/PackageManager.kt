@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
@@ -70,7 +70,7 @@ abstract class PackageManager(
         /**
          * All [package manager factories][PackageManagerFactory] available in the classpath, associated by their names.
          */
-        val ALL by lazy { NamedPlugin.getAll<PackageManagerFactory>() }
+        val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
 
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.

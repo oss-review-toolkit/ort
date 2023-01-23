@@ -26,12 +26,12 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
  * A common interface for use with [ServiceLoader] that all [AbstractPackageManagerFactory] classes need to implement.
  */
-interface PackageManagerFactory : NamedPlugin {
+interface PackageManagerFactory : Plugin {
     /**
      * The glob matchers for all definition files.
      */
