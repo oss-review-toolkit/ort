@@ -52,7 +52,7 @@ interface PackageManagerFactory : Plugin {
  * A generic factory class for a [PackageManager].
  */
 abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val name: String
+    override val type: String
 ) : PackageManagerFactory {
     /**
      * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
@@ -76,5 +76,5 @@ abstract class AbstractPackageManagerFactory<out T : PackageManager>(
      * Return the package manager's name here to allow Clikt to display something meaningful when listing the
      * package managers which are enabled by default via their factories.
      */
-    override fun toString() = name
+    override fun toString() = type
 }

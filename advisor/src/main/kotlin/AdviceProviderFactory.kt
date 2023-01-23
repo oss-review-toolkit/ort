@@ -42,7 +42,7 @@ interface AdviceProviderFactory : Plugin {
  * A generic factory class for an [AdviceProvider].
  */
 abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
-    override val name: String
+    override val type: String
 ) : AdviceProviderFactory {
     abstract override fun create(config: AdvisorConfiguration): T
 
@@ -52,7 +52,7 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
      */
     protected fun <T : Any> AdvisorConfiguration.forProvider(select: AdvisorConfiguration.() -> T?): T =
         requireNotNull(select()) {
-            "No configuration for '$name' found in '${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}'."
+            "No configuration for '$type' found in '${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}'."
         }
 
     /**
@@ -60,11 +60,11 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
      * available.
      */
     protected fun AdvisorConfiguration.providerOptions(): Options =
-        options.orEmpty()[name].orEmpty()
+        options.orEmpty()[type].orEmpty()
 
     /**
      * Return the provider's name here to allow Clikt to display something meaningful when listing the advisors which
      * are enabled by default via their factories.
      */
-    override fun toString() = name
+    override fun toString() = type
 }

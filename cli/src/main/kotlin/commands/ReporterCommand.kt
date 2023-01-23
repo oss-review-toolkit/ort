@@ -272,10 +272,10 @@ class ReporterCommand : OrtCommand(
                 reportFormats.map { reporter ->
                     async {
                         val threadName = Thread.currentThread().name
-                        println("Generating the '${reporter.name}' report in thread '$threadName'...")
+                        println("Generating the '${reporter.type}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
-                            val options = reportOptionsMap[reporter.name].orEmpty()
+                            val options = reportOptionsMap[reporter.type].orEmpty()
                             runCatching { reporter.generateReport(input, outputDir, options) }
                         }
                     }
@@ -286,7 +286,7 @@ class ReporterCommand : OrtCommand(
         var failureCount = 0
 
         reportDurationMap.value.forEach { (reporter, timedValue) ->
-            val name = reporter.name
+            val name = reporter.type
 
             timedValue.value.onSuccess { files ->
                 val fileList = files.joinToString { "'$it'" }

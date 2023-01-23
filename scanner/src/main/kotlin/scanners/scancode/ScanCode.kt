@@ -95,7 +95,7 @@ class ScanCode internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<ScanCode>(SCANNER_NAME) {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanCode(name, scannerConfig)
+            ScanCode(type, scannerConfig)
     }
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }

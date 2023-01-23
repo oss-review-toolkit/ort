@@ -89,9 +89,9 @@ class PackageManagerTest : WordSpec({
             }
 
             // The keys in expected and actual maps of definition files are different instances of package manager
-            // factories. So to compare values use the package manager names as keys instead.
+            // factories. So to compare values use the package manager types as keys instead.
             val managedFilesByName = managedFiles.map { (manager, files) ->
-                manager.name to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+                manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
             }.toMap()
 
             assertSoftly {
@@ -145,9 +145,9 @@ class PackageManagerTest : WordSpec({
             managedFiles.size shouldBe 3
 
             // The keys in expected and actual maps of definition files are different instances of package manager
-            // factories. So to compare values use the package manager names as keys instead.
+            // factories. So to compare values use the package manager types as keys instead.
             val managedFilesByName = managedFiles.map { (manager, files) ->
-                manager.name to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+                manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
             }.toMap()
 
             managedFilesByName["Gradle"] should containExactlyInAnyOrder(

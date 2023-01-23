@@ -124,7 +124,7 @@ class Yarn2(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Yarn2(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Yarn2(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

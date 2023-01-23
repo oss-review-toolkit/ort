@@ -74,7 +74,7 @@ class Cargo(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Cargo(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Cargo(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "cargo"

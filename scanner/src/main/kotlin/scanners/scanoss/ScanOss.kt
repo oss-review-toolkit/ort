@@ -58,7 +58,7 @@ class ScanOss internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            ScanOss(name, scannerConfig)
+            ScanOss(type, scannerConfig)
     }
 
     private val config = ScanOssConfig.create(scannerConfig).also {

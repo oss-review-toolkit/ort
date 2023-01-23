@@ -65,7 +65,7 @@ class Maven(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Maven(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Maven(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private inner class LocalProjectWorkspaceReader : WorkspaceReader {

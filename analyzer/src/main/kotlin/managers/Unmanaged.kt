@@ -58,7 +58,7 @@ class Unmanaged(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Unmanaged(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Unmanaged(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

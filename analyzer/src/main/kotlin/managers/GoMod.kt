@@ -79,7 +79,7 @@ class GoMod(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = GoMod(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = GoMod(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "go"

@@ -50,7 +50,7 @@ class Licensee internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(name, scannerConfig)
+            Licensee(type, scannerConfig)
     }
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }

@@ -64,7 +64,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) = NexusIq(name, config.forProvider { nexusIq })
+        override fun create(config: AdvisorConfiguration) = NexusIq(type, config.forProvider { nexusIq })
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
