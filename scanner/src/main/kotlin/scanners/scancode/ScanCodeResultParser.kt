@@ -27,7 +27,6 @@ import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -61,13 +60,13 @@ internal data class LicenseKeyReplacement(
 private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.lowercase()}-"
 
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
-private val UNKNOWN_ERROR_REGEX = Pattern.compile(
+private val UNKNOWN_ERROR_REGEX = Regex(
     "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
             "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
-    Pattern.DOTALL
+    RegexOption.DOT_MATCHES_ALL
 )
 
-private val TIMEOUT_ERROR_REGEX = Pattern.compile(
+private val TIMEOUT_ERROR_REGEX = Regex(
     "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
@@ -307,16 +306,15 @@ internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
     var onlyTimeoutErrors = true
 
     val mappedIssues = issues.map { fullError ->
-        TIMEOUT_ERROR_REGEX.matcher(fullError.message).let { matcher ->
-            if (matcher.matches() && matcher.group("timeout") == ScanCode.TIMEOUT.toString()) {
-                val file = matcher.group("file")
-                fullError.copy(
-                    message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
-                )
-            } else {
-                onlyTimeoutErrors = false
-                fullError
-            }
+        val match = TIMEOUT_ERROR_REGEX.matchEntire(fullError.message)
+        if (match?.groups?.get("timeout")?.value == ScanCode.TIMEOUT.toString()) {
+            val file = match.groups["file"]!!.value
+            fullError.copy(
+                message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
+            )
+        } else {
+            onlyTimeoutErrors = false
+            fullError
         }
     }
 
@@ -336,21 +334,19 @@ internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
     var onlyMemoryErrors = true
 
     val mappedIssues = issues.map { fullError ->
-        UNKNOWN_ERROR_REGEX.matcher(fullError.message).let { matcher ->
-            if (matcher.matches()) {
-                val file = matcher.group("file")
-                val error = matcher.group("error")
-                if (error == "MemoryError") {
-                    fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
-                } else {
-                    onlyMemoryErrors = false
-                    val message = matcher.group("message").trim()
-                    fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
-                }
+        UNKNOWN_ERROR_REGEX.matchEntire(fullError.message)?.let { match ->
+            val file = match.groups["file"]!!.value
+            val error = match.groups["error"]!!.value
+            if (error == "MemoryError") {
+                fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
             } else {
                 onlyMemoryErrors = false
-                fullError
+                val message = match.groups["message"]!!.value.trim()
+                fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
             }
+        } ?: run {
+            onlyMemoryErrors = false
+            fullError
         }
     }
 
