@@ -232,7 +232,7 @@ class OpossumReporter : Reporter {
                 },
                 "attributionBreakpoints" to attributionBreakpoints,
                 "filesWithChildren" to filesWithChildren,
-                "frequentLicenses" to frequentLicenses.toList().map { it.toJson() },
+                "frequentLicenses" to frequentLicenses.map { it.toJson() },
                 "baseUrlsForSources" to baseUrlsForSources,
                 "externalAttributionSources" to externalAttributionSources
             )
