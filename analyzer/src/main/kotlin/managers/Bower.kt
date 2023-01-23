@@ -221,7 +221,7 @@ class Bower(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Bower(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Bower(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"

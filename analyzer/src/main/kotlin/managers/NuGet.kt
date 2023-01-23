@@ -57,7 +57,7 @@ class NuGet(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = NuGet(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = NuGet(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val directDependenciesOnly = options[OPTION_DIRECT_DEPENDENCIES_ONLY].toBoolean()

@@ -40,7 +40,7 @@ class GitLabLicenseModelReporter : Reporter {
         const val OPTION_SKIP_EXCLUDED = "skip.excluded"
     }
 
-    override val name = "GitLabLicenseModel"
+    override val type = "GitLabLicenseModel"
 
     private val reportFilename = "gl-license-scanning-report.json"
 

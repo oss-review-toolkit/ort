@@ -67,7 +67,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
-    override val name = "StaticHtml"
+    override val type = "StaticHtml"
 
     private val reportFilename = "scan-report.html"
     private val css = javaClass.getResource("/static-html-reporter.css").readText()

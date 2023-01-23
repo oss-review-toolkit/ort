@@ -62,7 +62,7 @@ class Carthage(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Carthage(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Carthage(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {

@@ -93,7 +93,7 @@ class Conan(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Conan(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Conan(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private val conanHome = Os.userHomeDirectory.resolve(".conan")

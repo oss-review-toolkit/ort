@@ -23,7 +23,7 @@ import org.ossreviewtoolkit.utils.common.Plugin
 
 data class PackageCurationProviderConfiguration(
     /**
-     * The [name][Plugin.name] of the package curation provider.
+     * The [name][Plugin.type] of the package curation provider.
      */
     val name: String,
 

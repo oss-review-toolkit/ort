@@ -109,7 +109,7 @@ class Pub(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pub(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     private data class ParsePackagesResult(
@@ -200,7 +200,7 @@ class Pub(
         // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
         // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
         // the path to the Android SDK.
-        val gradle = managedFiles.keys.find { it.managerName == Gradle.Factory().name }
+        val gradle = managedFiles.keys.find { it.managerName == Gradle.Factory().type }
         val mustRunBefore = if (gradle != null && findGradleDefinitionFiles(managedFiles.getValue(this)).isNotEmpty()) {
             setOf(gradle.managerName)
         } else {
@@ -237,7 +237,7 @@ class Pub(
             val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
 
             if (gradleDefinitionFiles.isNotEmpty()) {
-                val gradleName = Gradle.Factory().name
+                val gradleName = Gradle.Factory().type
                 val gradleDependencies = gradleDefinitionFiles.map {
                     PackageManagerDependencyHandler.createPackageManagerDependency(
                         packageManager = gradleName,

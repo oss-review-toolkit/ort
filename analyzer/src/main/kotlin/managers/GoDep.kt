@@ -87,7 +87,7 @@ class GoDep(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = GoDep(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = GoDep(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     override fun command(workingDir: File?) = "dep"

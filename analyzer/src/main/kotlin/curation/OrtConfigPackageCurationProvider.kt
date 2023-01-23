@@ -40,7 +40,7 @@ private const val ORT_CONFIG_REPOSITORY_BRANCH = "main"
 private const val ORT_CONFIG_REPOSITORY_URL = "https://github.com/oss-review-toolkit/ort-config.git"
 
 class OrtConfigPackageCurationProviderFactory : PackageCurationProviderFactory<Unit> {
-    override val name = "OrtConfig"
+    override val type = "OrtConfig"
 
     override fun create(config: Unit) = OrtConfigPackageCurationProvider()
 

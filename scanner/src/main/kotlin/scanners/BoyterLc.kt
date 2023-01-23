@@ -55,7 +55,7 @@ class BoyterLc internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            BoyterLc(name, scannerConfig)
+            BoyterLc(type, scannerConfig)
     }
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }

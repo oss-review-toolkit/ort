@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class Sw360PackageCurationProviderFactory : PackageCurationProviderFactory<Sw360StorageConfiguration> {
-    override val name = "SW360"
+    override val type = "SW360"
 
     override fun create(config: Sw360StorageConfiguration) = Sw360PackageCurationProvider(config)
 

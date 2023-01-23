@@ -34,5 +34,5 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
         val ALL by lazy { Plugin.getAll<OrtCommand>() }
     }
 
-    override val name = commandName
+    override val type = commandName
 }

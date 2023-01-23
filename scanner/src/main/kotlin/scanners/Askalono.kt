@@ -48,7 +48,7 @@ class Askalono internal constructor(
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Askalono(name, scannerConfig)
+            Askalono(type, scannerConfig)
     }
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }

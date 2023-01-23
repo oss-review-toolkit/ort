@@ -56,7 +56,7 @@ class OssIndex(name: String, serverUrl: String? = null) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
         override fun create(config: AdvisorConfiguration) =
             // The OSS Index does not require any configuration.
-            OssIndex(name)
+            OssIndex(type)
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

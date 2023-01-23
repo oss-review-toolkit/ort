@@ -48,7 +48,7 @@ class Pnpm(
             analysisRoot: File,
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
-        ) = Pnpm(name, analysisRoot, analyzerConfig, repoConfig)
+        ) = Pnpm(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
     /**

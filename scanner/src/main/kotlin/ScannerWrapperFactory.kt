@@ -39,7 +39,7 @@ interface ScannerWrapperFactory : Plugin {
  * A generic factory class for a [ScannerWrapper].
  */
 abstract class AbstractScannerWrapperFactory<out T : ScannerWrapper>(
-    override val name: String
+    override val type: String
 ) : ScannerWrapperFactory {
     abstract override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration): T
 
@@ -47,5 +47,5 @@ abstract class AbstractScannerWrapperFactory<out T : ScannerWrapper>(
      * Return the scanner wrapper's name here to allow Clikt to display something meaningful when listing the scanners
      * which are enabled by default via their factories.
      */
-    override fun toString() = name
+    override fun toString() = type
 }

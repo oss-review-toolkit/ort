@@ -66,7 +66,7 @@ class ClearlyDefinedPackageCurationProviderConfig(
 
 class ClearlyDefinedPackageCurationProviderFactory :
     PackageCurationProviderFactory<ClearlyDefinedPackageCurationProviderConfig> {
-    override val name = "ClearlyDefined"
+    override val type = "ClearlyDefined"
 
     override fun create(config: ClearlyDefinedPackageCurationProviderConfig) =
         ClearlyDefinedPackageCurationProvider(config)

@@ -38,14 +38,14 @@ interface Plugin {
             .iterator()
             .asSequence()
             .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
-                it.name
+                it.type
             }
     }
 
     /**
-     * The name of the plugin.
+     * The type of the plugin.
      */
-    val name: String
+    val type: String
 }
 
 /**
