@@ -23,12 +23,12 @@ import java.util.ServiceLoader
 
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.common.NamedPlugin
+import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
  * A common interface for use with [ServiceLoader] that all [ScannerWrapperFactory] classes need to implement.
  */
-interface ScannerWrapperFactory : NamedPlugin {
+interface ScannerWrapperFactory : Plugin {
     /**
      * Create a [ScannerWrapper] using the specified [scannerConfig] and [downloaderConfig].
      */
