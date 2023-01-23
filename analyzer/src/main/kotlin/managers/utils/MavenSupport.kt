@@ -23,7 +23,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 import java.net.URI
-import java.util.regex.Pattern
 
 import kotlin.time.Duration.Companion.hours
 
@@ -112,8 +111,8 @@ private val File?.safePath: String
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object : Logging {
         // See http://maven.apache.org/pom.html#SCM.
-        private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
-        private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<url>.+)")!!
+        private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
+        private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<url>.+)")
 
         private val WHITESPACE_REGEX = Regex("\\s")
 
@@ -201,86 +200,84 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             val tag = scm.tag?.takeIf { it != "HEAD" }.orEmpty()
 
-            return SCM_REGEX.matcher(connection).let { matcher ->
-                if (matcher.matches()) {
-                    val type = matcher.group("type")
-                    val url = matcher.group("url")
+            return SCM_REGEX.matchEntire(connection)?.let { match ->
+                val type = match.groups["type"]!!.value
+                val url = match.groups["url"]!!.value
 
-                    when {
-                        // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
-                        // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
-                        // here.
-                        type == "cvs" && !url.startsWith(":") -> {
-                            VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
-                        }
+                when {
+                    // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by
+                    // the Maven SCM plugin, no double ":" is used in the connection string and we need to fix it up
+                    // here.
+                    type == "cvs" && !url.startsWith(":") -> {
+                        VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
+                    }
 
-                        // Maven does not officially support git-repo as an SCM, see
-                        // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
-                        // "manifest" query parameter for the path to the manifest inside the repository. An earlier
-                        // version of this workaround expected the query string to be only the path to the manifest, for
-                        // backward compatibility convert such URLs to the new syntax.
-                        type == "git-repo" -> {
-                            val manifestPath = url.parseRepoManifestPath()
-                                ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
-                            val urlWithManifest = url.takeIf { manifestPath == null }
-                                ?: "${url.substringBefore('?')}?manifest=$manifestPath"
+                    // Maven does not officially support git-repo as an SCM, see
+                    // http://maven.apache.org/scm/scms-overview.html, so come up with the convention to use the
+                    // "manifest" query parameter for the path to the manifest inside the repository. An earlier
+                    // version of this workaround expected the query string to be only the path to the manifest, for
+                    // backward compatibility convert such URLs to the new syntax.
+                    type == "git-repo" -> {
+                        val manifestPath = url.parseRepoManifestPath()
+                            ?: url.substringAfter('?').takeIf { it.isNotBlank() && it.endsWith(".xml") }
+                        val urlWithManifest = url.takeIf { manifestPath == null }
+                            ?: "${url.substringBefore('?')}?manifest=$manifestPath"
 
-                            VcsInfo(
-                                type = VcsType.GIT_REPO,
-                                url = urlWithManifest,
-                                revision = tag
-                            )
-                        }
+                        VcsInfo(
+                            type = VcsType.GIT_REPO,
+                            url = urlWithManifest,
+                            revision = tag
+                        )
+                    }
 
-                        type == "svn" -> {
-                            val revision = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
-                            VcsInfo(type = VcsType.SUBVERSION, url = url, revision = revision)
-                        }
+                    type == "svn" -> {
+                        val revision = tag.takeIf { it.isEmpty() } ?: "tags/$tag"
+                        VcsInfo(type = VcsType.SUBVERSION, url = url, revision = revision)
+                    }
 
-                        url.startsWith("//") -> {
-                            // Work around the common mistake to omit the Maven SCM provider.
-                            val fixedUrl = "$type:$url"
+                    url.startsWith("//") -> {
+                        // Work around the common mistake to omit the Maven SCM provider.
+                        val fixedUrl = "$type:$url"
 
-                            // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
-                            // special URL paths.
-                            VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
-                                logger.info {
-                                    "Fixed up invalid SCM connection '$connection' without a provider to $it."
-                                }
+                        // Try to detect the Maven SCM provider from the URL only, e.g. by looking at the host or
+                        // special URL paths.
+                        VcsHost.parseUrl(fixedUrl).copy(revision = tag).also {
+                            logger.info {
+                                "Fixed up invalid SCM connection '$connection' without a provider to $it."
                             }
                         }
-
-                        else -> {
-                            val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
-
-                            VcsHost.fromUrl(trimmedUrl)?.let { host ->
-                                host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
-                                    // Fixup paths that are specified as part of the URL and contain the project name as
-                                    // a prefix.
-                                    val projectPrefix = "${host.getProject(trimmedUrl)}-"
-                                    vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
-                                        vcsInfo.copy(path = path)
-                                    }
-                                }
-                            } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
-                        }
                     }
-                } else {
-                    val userHostMatcher = USER_HOST_REGEX.matcher(connection)
 
-                    if (userHostMatcher.matches()) {
-                        // Some projects omit the provider and use the SCP-like Git URL syntax, for example
-                        // "scm:git@github.com:facebook/facebook-android-sdk.git".
-                        val user = userHostMatcher.group("user")
-                        val host = userHostMatcher.group("host")
-                        val url = userHostMatcher.group("url")
+                    else -> {
+                        val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
 
-                        if (user == "git" || host.startsWith("git")) {
-                            VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
-                        } else {
-                            VcsInfo.EMPTY
-                        }
-                    } else if (connection.startsWith("git://") || connection.endsWith(".git")) {
+                        VcsHost.fromUrl(trimmedUrl)?.let { host ->
+                            host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
+                                // Fixup paths that are specified as part of the URL and contain the project name as
+                                // a prefix.
+                                val projectPrefix = "${host.getProject(trimmedUrl)}-"
+                                vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
+                                    vcsInfo.copy(path = path)
+                                }
+                            }
+                        } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
+                    }
+                }
+            } ?: run {
+                USER_HOST_REGEX.matchEntire(connection)?.let { match ->
+                    // Some projects omit the provider and use the SCP-like Git URL syntax, for example
+                    // "scm:git@github.com:facebook/facebook-android-sdk.git".
+                    val user = match.groups["user"]!!.value
+                    val host = match.groups["host"]!!.value
+                    val url = match.groups["url"]!!.value
+
+                    if (user == "git" || host.startsWith("git")) {
+                        VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                    } else {
+                        VcsInfo.EMPTY
+                    }
+                } ?: run {
+                    if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                         // clear cases.
                         logger.info { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
