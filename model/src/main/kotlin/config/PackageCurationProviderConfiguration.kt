@@ -19,13 +19,16 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.sksamuel.hoplite.ConfigAlias
+
 import org.ossreviewtoolkit.utils.common.Plugin
 
 data class PackageCurationProviderConfiguration(
     /**
-     * The [name][Plugin.type] of the package curation provider.
+     * The [type][Plugin.type] of the package curation provider.
      */
-    val name: String,
+    @ConfigAlias("name")
+    val type: String,
 
     /**
      * Whether this curation provider is enabled.

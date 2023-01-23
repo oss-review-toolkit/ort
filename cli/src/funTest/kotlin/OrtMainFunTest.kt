@@ -69,7 +69,7 @@ class OrtMainFunTest : StringSpec() {
                 OrtConfiguration(
                     packageCurationProviders = listOf(
                         PackageCurationProviderConfiguration(
-                            name = "File",
+                            type = "File",
                             config = mapOf("path" to projectDir.resolve("gradle/curations.yml").path)
                         )
                     )
