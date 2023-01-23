@@ -113,7 +113,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object : Logging {
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Pattern.compile("scm:(?<type>[^:@]+):(?<url>.+)")!!
-        private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+):(?<url>.+)")!!
+        private val USER_HOST_REGEX = Pattern.compile("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<url>.+)")!!
 
         private val WHITESPACE_REGEX = Regex("\\s")
 
@@ -251,16 +251,18 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         }
 
                         else -> {
-                            VcsHost.fromUrl(url)?.let { host ->
-                                host.toVcsInfo(url)?.let { vcsInfo ->
+                            val trimmedUrl = if (!url.startsWith("git://")) url.removePrefix("git:") else url
+
+                            VcsHost.fromUrl(trimmedUrl)?.let { host ->
+                                host.toVcsInfo(trimmedUrl)?.let { vcsInfo ->
                                     // Fixup paths that are specified as part of the URL and contain the project name as
                                     // a prefix.
-                                    val projectPrefix = "${host.getProject(url)}-"
+                                    val projectPrefix = "${host.getProject(trimmedUrl)}-"
                                     vcsInfo.path.withoutPrefix(projectPrefix)?.let { path ->
                                         vcsInfo.copy(path = path)
                                     }
                                 }
-                            } ?: VcsInfo(type = VcsType(type), url = url, revision = tag)
+                            } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
                         }
                     }
                 } else {
@@ -269,10 +271,15 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     if (userHostMatcher.matches()) {
                         // Some projects omit the provider and use the SCP-like Git URL syntax, for example
                         // "scm:git@github.com:facebook/facebook-android-sdk.git".
+                        val user = userHostMatcher.group("user")
                         val host = userHostMatcher.group("host")
                         val url = userHostMatcher.group("url")
 
-                        VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                        if (user == "git" || host.startsWith("git")) {
+                            VcsInfo(type = VcsType.GIT, url = "https://$host/$url", revision = tag)
+                        } else {
+                            VcsInfo.EMPTY
+                        }
                     } else if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                         // clear cases.
