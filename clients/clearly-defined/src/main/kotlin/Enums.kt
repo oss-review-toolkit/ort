@@ -54,7 +54,7 @@ enum class ComponentType {
 }
 
 /**
- * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L49-L65.
+ * See https://github.com/clearlydefined/service/blob/98f3f47/schemas/definition-1.0.json#L49-L66.
  */
 @Serializable
 enum class Provider {
@@ -67,6 +67,7 @@ enum class Provider {
     @SerialName("golang") GOLANG,
     @SerialName("mavencentral") MAVEN_CENTRAL,
     @SerialName("mavengoogle") MAVEN_GOOGLE,
+    @SerialName("gradleplugin") GRADLE_PLUGIN,
     @SerialName("nuget") NUGET,
     @SerialName("rubygems") RUBYGEMS,
     @SerialName("pypi") PYPI,
