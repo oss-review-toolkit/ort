@@ -77,14 +77,12 @@ internal fun resolvePath(pieces: List<String>) = pieces.reduce { right, left -> 
 /**
  * A [Reporter] that generates an [OpossumInput].
  *
- * This reporter supports the following options:
+ * This reporter supports the following option:
  * - *scanner.maxDepth*: The depth to which the full file level scanner information is added
- * - *scopes.excluded*: Comma separated list of scopes that are excluded
  */
 class OpossumReporter : Reporter {
     companion object : Logging {
         const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
-        const val OPTION_EXCLUDED_SCOPES = "scopes.excluded"
     }
 
     data class OpossumSignal(
@@ -362,7 +360,6 @@ class OpossumReporter : Reporter {
         fun addProject(
             project: Project,
             ortResult: OrtResult,
-            excludedScopes: Set<String>,
             relRoot: String = "/"
         ) {
             val projectId = project.id
@@ -385,7 +382,7 @@ class OpossumReporter : Reporter {
             addSignal(signalFromProject, sortedSetOf(definitionFilePath))
 
             project.scopes
-                .filterNot { it.name in excludedScopes }
+                .filterNot { ortResult.getExcludes().isScopeExcluded(it.name) }
                 .forEachIndexed { index, scope ->
                     logger.debug { "analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}" }
                     addDependencyScope(scope, ortResult, definitionFilePath)
@@ -511,7 +508,6 @@ class OpossumReporter : Reporter {
 
     fun generateOpossumInput(
         ortResult: OrtResult,
-        excludedScopes: Set<String>,
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
         val opossumInput = OpossumInput()
@@ -528,9 +524,9 @@ class OpossumReporter : Reporter {
         val analyzerResultPackages = analyzerResult.packages
         analyzerResultProjects.forEachIndexed { index, project ->
             logger.debug { "analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}" }
-            opossumInput.addProject(project, ortResult, excludedScopes)
+            opossumInput.addProject(project, ortResult)
         }
-        if (excludedScopes.isEmpty()) {
+        if (ortResult.getExcludes().scopes.isEmpty()) {
             opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
         }
 
@@ -559,8 +555,7 @@ class OpossumReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val maxDepth = options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
-        val excludedScopes = options.getOrDefault(OPTION_EXCLUDED_SCOPES, "devDependencies,test").split(",").toSet()
-        val opossumInput = generateOpossumInput(input.ortResult, excludedScopes, maxDepth)
+        val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
 
         val outputFile = outputDir.resolve("opossum.input.json.gz")
         writeReport(outputFile, opossumInput)
