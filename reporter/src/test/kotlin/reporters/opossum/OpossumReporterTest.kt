@@ -176,8 +176,9 @@ class OpossumReporterTest : WordSpec({
             }
         }
 
-        val opossumInputJson = opossumInput.toJson()
         "create an opossumInput JSON with expected top level entries" {
+            val opossumInputJson = opossumInput.toJson()
+
             opossumInputJson.keys should containExactlyInAnyOrder(
                 "attributionBreakpoints",
                 "baseUrlsForSources",
