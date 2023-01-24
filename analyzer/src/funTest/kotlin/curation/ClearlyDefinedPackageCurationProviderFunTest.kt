@@ -28,6 +28,7 @@ import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
@@ -35,9 +36,9 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         val provider = ClearlyDefinedPackageCurationProvider()
 
         "return an existing curation for the javax.servlet-api Maven package" {
-            val identifier = Identifier("Maven:javax.servlet:javax.servlet-api:3.1.0")
+            val packages = createPackagesFromIds("Maven:javax.servlet:javax.servlet-api:3.1.0")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should haveSize(1)
             curations.values.flatten().first().data.concludedLicense shouldBe
@@ -45,18 +46,18 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         }
 
         "return an existing curation for the slf4j-log4j12 Maven package" {
-            val identifier = Identifier("Maven:org.slf4j:slf4j-log4j12:1.7.30")
+            val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should haveSize(1)
             curations.values.flatten().first().data.vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
         }
 
         "return no curation for a non-existing dummy NPM package" {
-            val identifier = Identifier("NPM:@scope:name:1.2.3")
+            val packages = createPackagesFromIds("NPM:@scope:name:1.2.3")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should beEmpty()
         }
@@ -66,18 +67,18 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
         val provider = ClearlyDefinedPackageCurationProvider(Server.DEVELOPMENT)
 
         "return an existing curation for the platform-express NPM package" {
-            val identifier = Identifier("NPM:@nestjs:platform-express:6.2.3")
+            val packages = createPackagesFromIds("NPM:@nestjs:platform-express:6.2.3")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should haveSize(1)
             curations.values.flatten().first().data.concludedLicense shouldBe "Apache-1.0".toSpdx()
         }
 
         "return no curation for a non-existing dummy Maven package" {
-            val identifier = Identifier("Maven:group:name:1.2.3")
+            val packages = createPackagesFromIds("Maven:group:name:1.2.3")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should beEmpty()
         }
@@ -92,20 +93,23 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
             val provider = ClearlyDefinedPackageCurationProvider(config)
 
             // Use an id which is known to have non-empty results from an earlier test.
-            val identifier = Identifier("Maven:org.slf4j:slf4j-log4j12:1.7.30")
+            val packages = createPackagesFromIds("Maven:org.slf4j:slf4j-log4j12:1.7.30")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations should beEmpty()
         }
 
         "be retrieved for packages without a namespace" {
             val provider = ClearlyDefinedPackageCurationProvider()
-            val identifier = Identifier("NPM::acorn:0.6.0")
+            val packages = createPackagesFromIds("NPM::acorn:0.6.0")
 
-            val curations = provider.getCurationsFor(listOf(identifier))
+            val curations = provider.getCurationsFor(packages)
 
             curations shouldNot beEmpty()
         }
     }
 })
+
+private fun createPackagesFromIds(vararg ids: String) =
+    ids.map { Package.EMPTY.copy(id = Identifier(it)) }

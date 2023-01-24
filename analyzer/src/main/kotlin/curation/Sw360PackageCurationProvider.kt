@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -97,9 +98,9 @@ class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageC
     private val connectionFactory = createConnection(config)
     private val releaseClient = connectionFactory.releaseAdapter
 
-    override fun getCurationsFor(pkgIds: Collection<Identifier>) =
-        pkgIds.mapNotNull { pkgId ->
-            getCurationsFor(pkgId).takeUnless { it.isEmpty() }?.let { pkgId to it }
+    override fun getCurationsFor(packages: Collection<Package>) =
+        packages.mapNotNull { pkg ->
+            getCurationsFor(pkg.id).takeUnless { it.isEmpty() }?.let { pkg.id to it }
         }.toMap()
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {

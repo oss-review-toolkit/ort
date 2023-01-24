@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -60,9 +61,9 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         }
     }
 
-    override fun getCurationsFor(pkgIds: Collection<Identifier>) =
-        pkgIds.mapNotNull { pkgId ->
-            getCurationsFor(pkgId).takeUnless { it.isEmpty() }?.let { pkgId to it }
+    override fun getCurationsFor(packages: Collection<Package>) =
+        packages.mapNotNull { pkg ->
+            getCurationsFor(pkg.id).takeUnless { it.isEmpty() }?.let { pkg.id to it }
         }.toMap()
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {

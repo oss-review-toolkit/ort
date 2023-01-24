@@ -20,15 +20,15 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import org.ossreviewtoolkit.analyzer.PackageCurationProvider
-import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 
 /**
  * A [PackageCurationProvider] that provides the specified [packageCurations].
  */
 open class SimplePackageCurationProvider(val packageCurations: List<PackageCuration>) : PackageCurationProvider {
-    override fun getCurationsFor(pkgIds: Collection<Identifier>) =
-        pkgIds.mapNotNull { pkgId ->
-            packageCurations.filter { it.isApplicable(pkgId) }.takeUnless { it.isEmpty() }?.let { pkgId to it }
+    override fun getCurationsFor(packages: Collection<Package>) =
+        packages.mapNotNull { pkg ->
+            packageCurations.filter { it.isApplicable(pkg.id) }.takeUnless { it.isEmpty() }?.let { pkg.id to it }
         }.toMap()
 }

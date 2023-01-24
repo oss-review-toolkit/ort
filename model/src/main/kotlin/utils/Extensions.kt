@@ -36,12 +36,12 @@ internal fun TextLocation.prependPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
 
 /**
- * Map an [Identifier] to a ClearlyDefined [ComponentType] and [Provider]. Note that an
+ * Map an [Package] to a ClearlyDefined [ComponentType] and [Provider]. Note that an
  * [identifier's type][Identifier.type] in ORT currently implies a default provider. Return null if a mapping is not
  * possible.
  */
-fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
-    when (type) {
+fun Package.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
+    when (id.type) {
         "Bower" -> ComponentType.GIT to Provider.GITHUB
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
         "Composer" -> ComponentType.COMPOSER to Provider.PACKAGIST
@@ -57,24 +57,24 @@ fun Identifier.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>?
     }
 
 /**
- * Map an ORT [Identifier] to ClearlyDefined [Coordinates], or to null if mapping is not possible.
+ * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if mapping is not possible.
  */
-fun Identifier.toClearlyDefinedCoordinates(): Coordinates? =
+fun Package.toClearlyDefinedCoordinates(): Coordinates? =
     toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
         Coordinates(
             type = type,
             provider = provider,
-            namespace = namespace.takeUnless { it.isEmpty() },
-            name = name,
-            revision = version.takeUnless { it.isEmpty() }
+            namespace = id.namespace.takeUnless { it.isEmpty() },
+            name = id.name,
+            revision = id.version.takeUnless { it.isEmpty() }
         )
     }
 
 /**
- * Create a ClearlyDefined [SourceLocation] from an [Identifier]. Prefer a [VcsInfoCurationData], but eventually fall
+ * Create a ClearlyDefined [SourceLocation] from a [Package]. Prefer a [VcsInfoCurationData], but eventually fall
  * back to a [RemoteArtifact], or return null if not enough information is available.
  */
-fun Identifier.toClearlyDefinedSourceLocation(
+fun Package.toClearlyDefinedSourceLocation(
     vcs: VcsInfoCurationData?,
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
@@ -100,10 +100,10 @@ fun Identifier.toClearlyDefinedSourceLocation(
         sourceArtifact != null -> {
             toClearlyDefinedTypeAndProvider()?.let { (_, provider) ->
                 SourceLocation(
-                    name = name,
-                    namespace = namespace.takeUnless { it.isEmpty() },
+                    name = id.name,
+                    namespace = id.namespace.takeUnless { it.isEmpty() },
                     provider = provider,
-                    revision = version,
+                    revision = id.version,
                     type = ComponentType.SOURCE_ARCHIVE,
                     url = sourceArtifact.url
                 )

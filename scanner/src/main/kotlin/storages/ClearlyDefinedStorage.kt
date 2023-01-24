@@ -76,8 +76,8 @@ private fun VcsInfo.toVcsInfoCurationData(): VcsInfoCurationData = VcsInfoCurati
 private fun packageCoordinates(pkg: Package): Coordinates {
     val vcs = pkg.vcs.takeUnless { it.url.isEmpty() }
     val sourceArtifact = pkg.sourceArtifact.takeUnless { it.url.isEmpty() }
-    val sourceLocation = pkg.id.toClearlyDefinedSourceLocation(vcs?.toVcsInfoCurationData(), sourceArtifact)
-    return sourceLocation?.toCoordinates() ?: pkg.id.toClearlyDefinedCoordinates()
+    val sourceLocation = pkg.toClearlyDefinedSourceLocation(vcs?.toVcsInfoCurationData(), sourceArtifact)
+    return sourceLocation?.toCoordinates() ?: pkg.toClearlyDefinedCoordinates()
         ?: throw IllegalArgumentException("Unable to create ClearlyDefined coordinates for $pkg.")
 }
 

@@ -356,12 +356,11 @@ private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
     curationProviders: List<Pair<String, PackageCurationProvider>>
 ): ResolvedConfiguration {
-    val packageIds = analyzerResult.packages.mapTo(mutableSetOf()) { it.id }
     val packageCurations = mutableListOf<PackageCuration>()
 
     curationProviders.forEach { (id, curationProvider) ->
         val (curations, duration) = measureTimedValue {
-            curationProvider.getCurationsFor(packageIds).values.flatten().distinct()
+            curationProvider.getCurationsFor(analyzerResult.packages).values.flatten().distinct()
         }
 
         packageCurations += curations

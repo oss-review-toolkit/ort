@@ -32,6 +32,7 @@ import io.kotest.matchers.should
 import java.time.Duration
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 /**
@@ -68,9 +69,10 @@ class ClearlyDefinedPackageCurationProviderTest : WordSpec({
             }
 
             val provider = ClearlyDefinedPackageCurationProvider("http://localhost:${server.port()}", client)
-            val ids = listOf(Identifier("Maven:some-ns:some-component:1.2.3"))
+            val id = Identifier("Maven:some-ns:some-component:1.2.3")
+            val packages = listOf(Package.EMPTY.copy(id = id))
 
-            provider.getCurationsFor(ids) should beEmpty()
+            provider.getCurationsFor(packages) should beEmpty()
         }
     }
 })

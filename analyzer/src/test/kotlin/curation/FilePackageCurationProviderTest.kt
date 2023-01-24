@@ -21,14 +21,17 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 
 class FilePackageCurationProviderTest : StringSpec() {
     private val curationsDir = File("src/test/assets/package-curations-dir")
@@ -47,11 +50,13 @@ class FilePackageCurationProviderTest : StringSpec() {
                 Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
                 Identifier("maven", "org.foo", "bar", "0.42")
             )
+            val packages = idsWithExistingCurations.map { Package.EMPTY.copy(id = it) }
 
-            idsWithExistingCurations.forEach {
-                val curations = provider.getCurationsFor(listOf(it)).values.flatten()
+            val curations = provider.getCurationsFor(packages)
 
-                curations should haveSize(1)
+            curations.keys shouldContainExactlyInAnyOrder idsWithExistingCurations
+            curations.values.forAll {
+                it should haveSize(1)
             }
         }
 
@@ -65,11 +70,13 @@ class FilePackageCurationProviderTest : StringSpec() {
                 Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
                 Identifier("maven", "org.foo", "bar", "0.42")
             )
+            val packages = idsWithExistingCurations.map { Package.EMPTY.copy(id = it) }
 
-            idsWithExistingCurations.forEach {
-                val curations = provider.getCurationsFor(listOf(it)).values.flatten()
+            val curations = provider.getCurationsFor(packages)
 
-                curations should haveSize(1)
+            curations.keys shouldContainExactlyInAnyOrder idsWithExistingCurations
+            curations.values.forAll {
+                it should haveSize(1)
             }
         }
 
@@ -77,7 +84,8 @@ class FilePackageCurationProviderTest : StringSpec() {
             val provider = FilePackageCurationProvider(curationsFile)
 
             val identifier = Identifier("maven", "org.hamcrest", "hamcrest-core", "1.3")
-            val curations = provider.getCurationsFor(listOf(identifier)).values.flatten()
+            val packages = listOf(Package.EMPTY.copy(id = identifier))
+            val curations = provider.getCurationsFor(packages).values.flatten()
 
             curations should haveSize(4)
             curations.forEach {
@@ -95,9 +103,9 @@ class FilePackageCurationProviderTest : StringSpec() {
             val idMaxVersion = Identifier("npm", "", "ramda", "0.25.0")
             val idOutVersion = Identifier("npm", "", "ramda", "0.26.0")
 
-            val curationsMinVersion = provider.getCurationsFor(listOf(idMinVersion)).values.flatten()
-            val curationsMaxVersion = provider.getCurationsFor(listOf(idMaxVersion)).values.flatten()
-            val curationsOutVersion = provider.getCurationsFor(listOf(idOutVersion)).values.flatten()
+            val curationsMinVersion = provider.getCurationsFor(createPackagesFromIds(idMinVersion)).values.flatten()
+            val curationsMaxVersion = provider.getCurationsFor(createPackagesFromIds(idMaxVersion)).values.flatten()
+            val curationsOutVersion = provider.getCurationsFor(createPackagesFromIds(idOutVersion)).values.flatten()
 
             curationsMinVersion should haveSize(1)
             (provider.packageCurations - curationsMinVersion).forEach {
@@ -129,3 +137,6 @@ class FilePackageCurationProviderTest : StringSpec() {
         }
     }
 }
+
+private fun createPackagesFromIds(vararg ids: Identifier) =
+    ids.map { Package.EMPTY.copy(id = it) }
