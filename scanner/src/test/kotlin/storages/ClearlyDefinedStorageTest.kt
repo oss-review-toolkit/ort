@@ -59,6 +59,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
+import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 
 import org.semver4j.Semver
@@ -365,17 +366,16 @@ class ClearlyDefinedStorageTest : WordSpec({
             storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
 
-        "return an empty result if the coordinates are not supported by ClearlyDefined" {
+        "return a failure if the coordinates are not supported by ClearlyDefined" {
             val id = TEST_IDENTIFIER.copy(type = "unknown")
-
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(id).shouldBeSuccess {
-                it should beEmpty()
-            }
+            val result = storage.read(id)
+
+            result.shouldBeFailure<ScanStorageException>()
         }
 
-        "return an empty result if a harvest tool request returns an unexpected result" {
+        "return a failure if a harvest tool request returns an unexpected result" {
             server.stubFor(
                 get(anyUrl())
                     .willReturn(
@@ -387,9 +387,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeSuccess {
-                it should beEmpty()
-            }
+            result.shouldBeFailure<ScanStorageException>()
         }
 
         "return an empty result if a harvest tool file request returns an unexpected result" {
