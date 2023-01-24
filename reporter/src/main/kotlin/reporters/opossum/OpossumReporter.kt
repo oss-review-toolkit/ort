@@ -296,12 +296,12 @@ class OpossumReporter : Reporter {
             }
         }
 
-        private fun signalFromPkg(pkg: Package, id: Identifier = pkg.id): OpossumSignal {
+        private fun signalFromPkg(pkg: Package): OpossumSignal {
             val source = addExternalAttributionSource("ORT-Package", "ORT-Package", 180)
 
             return OpossumSignal(
                 source,
-                id = id,
+                id = pkg.id,
                 url = pkg.homepageUrl,
                 license = pkg.concludedLicense ?: pkg.declaredLicensesProcessed.spdxExpression,
                 preselected = true
@@ -320,10 +320,11 @@ class OpossumReporter : Reporter {
 
             val dependencyPath =
                 resolvePath(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
-            val dependencyPackage = ortResult.getPackage(dependencyId)?.metadata ?: Package.EMPTY
+            val dependencyPackage = ortResult.getPackage(dependencyId)?.metadata
+                ?: Package.EMPTY.copy(id = dependencyId)
 
             addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
-            addSignal(signalFromPkg(dependencyPackage, dependencyId), sortedSetOf(dependencyPath))
+            addSignal(signalFromPkg(dependencyPackage), sortedSetOf(dependencyPath))
 
             val dependencies = dependency.getDependencies()
 
