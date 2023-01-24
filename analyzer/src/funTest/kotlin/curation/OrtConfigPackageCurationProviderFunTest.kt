@@ -27,13 +27,15 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
     "provider can load curations from the ort-config repository" {
         val azureCore = Identifier("NuGet::Azure.Core:1.22.0")
         val azureCoreAmqp = Identifier("NuGet::Azure.Core.Amqp:1.2.0")
+        val packages = createPackagesFromIds(azureCore, azureCoreAmqp)
 
-        val curations = OrtConfigPackageCurationProvider().getCurationsFor(listOf(azureCore, azureCoreAmqp))
+        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
 
         curations.shouldContainKeys(azureCore, azureCoreAmqp)
         curations.getValue(azureCore) shouldNot beEmpty()
@@ -41,10 +43,13 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
     }
 
     "provider does not fail for packages which have no curations" {
-        val id = Identifier("Some:Bogus:Package:Id")
+        val packages = createPackagesFromIds(Identifier("Some:Bogus:Package:Id"))
 
-        val curations = OrtConfigPackageCurationProvider().getCurationsFor(listOf(id))
+        val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
 
         curations should beEmptyMap()
     }
 })
+
+private fun createPackagesFromIds(vararg ids: Identifier) =
+    ids.map { Package.EMPTY.copy(id = it) }

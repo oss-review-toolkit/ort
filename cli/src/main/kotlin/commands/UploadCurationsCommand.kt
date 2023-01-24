@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
@@ -84,9 +85,8 @@ class UploadCurationsCommand : OrtCommand(
         }.values
 
         val curationsToCoordinates = curations.mapNotNull { curation ->
-            curation.id.toClearlyDefinedCoordinates()?.let { coordinates ->
-                curation to coordinates
-            }
+            val pkg = Package.EMPTY.copy(id = curation.id)
+            pkg.toClearlyDefinedCoordinates()?.let { curation to it }
         }.toMap()
 
         val definitions = service.getDefinitionsChunked(curationsToCoordinates.values)
@@ -146,7 +146,8 @@ class UploadCurationsCommand : OrtCommand(
 }
 
 private fun PackageCuration.toContributionPatch(): ContributionPatch? {
-    val coordinates = id.toClearlyDefinedCoordinates() ?: return null
+    val pkg = Package.EMPTY.copy(id = id)
+    val coordinates = pkg.toClearlyDefinedCoordinates() ?: return null
 
     val info = ContributionInfo(
         // The exact values to use here are unclear; use what is mostly used at
@@ -165,7 +166,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
 
     val described = CurationDescribed(
         projectWebsite = data.homepageUrl?.let { URI(it) },
-        sourceLocation = id.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
+        sourceLocation = pkg.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
     )
 
     val curation = Curation(

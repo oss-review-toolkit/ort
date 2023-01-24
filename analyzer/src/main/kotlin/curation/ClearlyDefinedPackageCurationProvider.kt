@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -97,11 +98,11 @@ class ClearlyDefinedPackageCurationProvider(
         ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
     }
 
-    override fun getCurationsFor(pkgIds: Collection<Identifier>): Map<Identifier, List<PackageCuration>> {
-        val coordinatesToIds = pkgIds.mapNotNull { pkgId ->
-            pkgId.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
-                val namespace = pkgId.namespace.takeUnless { it.isEmpty() }
-                Coordinates(type, provider, namespace, pkgId.name, pkgId.version) to pkgId
+    override fun getCurationsFor(packages: Collection<Package>): Map<Identifier, List<PackageCuration>> {
+        val coordinatesToIds = packages.mapNotNull { pkg ->
+            pkg.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
+                val namespace = pkg.id.namespace.takeUnless { it.isEmpty() }
+                Coordinates(type, provider, namespace, pkg.id.name, pkg.id.version) to pkg.id
             }
         }.toMap()
 
