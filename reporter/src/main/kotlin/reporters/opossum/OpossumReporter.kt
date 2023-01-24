@@ -236,9 +236,7 @@ class OpossumReporter : Reporter {
             )
 
         fun getSignalsForFile(file: String): List<OpossumSignal> =
-            pathToSignal[file]
-                ?.mapNotNull { uuid -> signals.find { it.uuid == uuid } }
-                .orEmpty()
+            pathToSignal[file].orEmpty().mapNotNull { uuid -> signals.find { it.uuid == uuid } }
 
         private fun addAttributionBreakpoint(breakpoint: String) {
             attributionBreakpoints += resolvePath(breakpoint, isDirectory = true)
