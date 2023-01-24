@@ -142,7 +142,7 @@ class RuleSet(
             }
         }
 
-        ortResult.analyzer?.result?.projects?.forEach { project ->
+        ortResult.getProjects().forEach { project ->
             ortResult.dependencyNavigator.scopeNames(project).forEach { scopeName ->
                 val visitedPackages = mutableSetOf<DependencyNode>()
                 ortResult.dependencyNavigator.directDependencies(project, scopeName).forEach { dependency ->
