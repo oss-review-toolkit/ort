@@ -143,7 +143,7 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create a result that contains all packages in its signals" {
-            result.analyzer!!.result.packages.forAll { pkg ->
+            result.getPackages().forAll { pkg ->
                 opossumInput.signals.find { it.id == pkg.metadata.id } shouldNot beNull()
             }
         }
