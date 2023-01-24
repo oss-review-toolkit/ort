@@ -58,7 +58,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
             .resolvePackageManagerDependencies()
     }
 
-    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult): AnalyzerResultBuilder {
+    fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) = apply {
         // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
         //       the same ID exist. We need to decide how to handle that case.
         val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
@@ -89,15 +89,13 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
                 issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
             }
         }
-
-        return this
     }
 
     /**
      * Add the given [packageSet] to this builder. This function can be used for packages that have been obtained
      * independently of a [ProjectAnalyzerResult].
      */
-    fun addPackages(packageSet: Set<Package>): AnalyzerResultBuilder {
+    fun addPackages(packageSet: Set<Package>) = apply {
         val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
 
         logger.debug { "Getting package curations took $duration." }
@@ -111,17 +109,14 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
                 packageCuration.apply(cur)
             }
         }
-
-        return this
     }
 
     /**
      * Add a [DependencyGraph][graph] with all dependencies detected by the [PackageManager] with the given
      * [name][packageManagerName] to the result produced by this builder.
      */
-    fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph): AnalyzerResultBuilder {
+    fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph) = apply {
         dependencyGraphs[packageManagerName] = graph
-        return this
     }
 }
 
