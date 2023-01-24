@@ -533,15 +533,15 @@ class OpossumReporter : Reporter {
             opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
         }
 
-        analyzerResult.issues.entries.forEach { (identifier, issues) ->
+        analyzerResult.issues.entries.forEach { (id, issues) ->
             issues.forEach { issue ->
-                val issueSource = opossumInput.addExternalAttributionSource(
+                val source = opossumInput.addExternalAttributionSource(
                     key = "ORT-Analyzer-Issues",
                     name = "ORT-Analyzer Issues",
                     priority = ISSUE_PRIORITY
                 )
 
-                opossumInput.addIssue(issue, identifier, issueSource)
+                opossumInput.addIssue(issue, id, source)
             }
         }
 
