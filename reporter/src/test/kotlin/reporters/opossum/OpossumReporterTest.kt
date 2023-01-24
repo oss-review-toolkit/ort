@@ -57,10 +57,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -254,17 +250,6 @@ private fun createOrtResult(): OrtResult {
 
     return OrtResult(
         repository = Repository(
-            config = RepositoryConfiguration(
-                excludes = Excludes(
-                    scopes = listOf(
-                        ScopeExclude(
-                            pattern = "test",
-                            reason = ScopeExcludeReason.TEST_DEPENDENCY_OF,
-                            comment = "Packages for testing only."
-                        )
-                    )
-                )
-            ),
             vcs = analyzedVcs,
             vcsProcessed = analyzedVcs
         ),
