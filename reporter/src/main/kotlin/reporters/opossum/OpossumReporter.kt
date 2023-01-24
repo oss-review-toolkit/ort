@@ -454,8 +454,12 @@ class OpossumReporter : Reporter {
                 addSignal(rootSignal, rootsAboveMaxDepth.toSortedSet())
             }
 
-            val issueSource =
-                addExternalAttributionSource("ORT-Scanner-Issue-$scanner", "ORT-Scanner Issue $scanner", 900)
+            val issueSource = addExternalAttributionSource(
+                key = "ORT-Scanner-Issue-$scanner",
+                name = "ORT-Scanner Issue $scanner",
+                priority = 900
+            )
+
             result.summary.issues.forEach { addIssue(it, id, issueSource) }
         }
 
@@ -532,8 +536,12 @@ class OpossumReporter : Reporter {
 
         analyzerResult.issues.entries.forEach { (identifier, issues) ->
             issues.forEach { issue ->
-                val issueSource =
-                    opossumInput.addExternalAttributionSource("ORT-Analyzer-Issues", "ORT-Analyzer Issues", 900)
+                val issueSource = opossumInput.addExternalAttributionSource(
+                    key = "ORT-Analyzer-Issues",
+                    name = "ORT-Analyzer Issues",
+                    priority = 900
+                )
+
                 opossumInput.addIssue(issue, identifier, issueSource)
             }
         }
