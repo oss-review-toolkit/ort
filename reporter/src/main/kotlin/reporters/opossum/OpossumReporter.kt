@@ -55,6 +55,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
 
+private const val ISSUE_PRIORITY = 900
+
 /**
  * A function that resolves, concatenates, and normalizes Unix style paths.
  *
@@ -457,7 +459,7 @@ class OpossumReporter : Reporter {
             val issueSource = addExternalAttributionSource(
                 key = "ORT-Scanner-Issue-$scanner",
                 name = "ORT-Scanner Issue $scanner",
-                priority = 900
+                priority = ISSUE_PRIORITY
             )
 
             result.summary.issues.forEach { addIssue(it, id, issueSource) }
@@ -539,7 +541,7 @@ class OpossumReporter : Reporter {
                 val issueSource = opossumInput.addExternalAttributionSource(
                     key = "ORT-Analyzer-Issues",
                     name = "ORT-Analyzer Issues",
-                    priority = 900
+                    priority = ISSUE_PRIORITY
                 )
 
                 opossumInput.addIssue(issue, identifier, issueSource)
