@@ -311,7 +311,7 @@ class OpossumReporter : Reporter {
 
         private fun addDependency(
             dependency: PackageReference,
-            curatedPackages: Set<CuratedPackage>,
+            ortResult: OrtResult,
             relRoot: String,
             level: Int = 1
         ) {
@@ -320,9 +320,7 @@ class OpossumReporter : Reporter {
             val dependencyPath =
                 resolvePath(listOf(relRoot, dependencyId.namespace, "${dependencyId.name}@${dependencyId.version}"))
 
-            val dependencyPackage = curatedPackages
-                .find { curatedPackage -> curatedPackage.metadata.id == dependencyId }
-                ?.metadata ?: Package.EMPTY
+            val dependencyPackage = ortResult.getPackage(dependencyId)?.metadata ?: Package.EMPTY
 
             addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
 
@@ -331,13 +329,13 @@ class OpossumReporter : Reporter {
             if (dependency.dependencies.isNotEmpty()) {
                 val rootForDependencies = resolvePath(dependencyPath, "dependencies")
                 addAttributionBreakpoint(rootForDependencies)
-                dependency.dependencies.map { addDependency(it, curatedPackages, rootForDependencies, level + 1) }
+                dependency.dependencies.map { addDependency(it, ortResult, rootForDependencies, level + 1) }
             }
         }
 
         private fun addDependencyScope(
             scope: Scope,
-            curatedPackages: Set<CuratedPackage>,
+            ortResult: OrtResult,
             relRoot: String = "/"
         ) {
             val name = scope.name
@@ -347,7 +345,7 @@ class OpossumReporter : Reporter {
             if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
             scope.dependencies.forEachIndexed { index, dependency ->
                 logger.debug { "scope -> dependency ${index + 1} of ${scope.dependencies.size}" }
-                addDependency(dependency, curatedPackages, rootForScope)
+                addDependency(dependency, ortResult, rootForScope)
             }
         }
 
@@ -363,7 +361,7 @@ class OpossumReporter : Reporter {
 
         fun addProject(
             project: Project,
-            curatedPackages: Set<CuratedPackage>,
+            ortResult: OrtResult,
             excludedScopes: Set<String>,
             relRoot: String = "/"
         ) {
@@ -390,7 +388,7 @@ class OpossumReporter : Reporter {
                 .filterNot { it.name in excludedScopes }
                 .forEachIndexed { index, scope ->
                     logger.debug { "analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}" }
-                    addDependencyScope(scope, curatedPackages, definitionFilePath)
+                    addDependencyScope(scope, ortResult, definitionFilePath)
                 }
         }
 
@@ -530,7 +528,7 @@ class OpossumReporter : Reporter {
         val analyzerResultPackages = analyzerResult.packages
         analyzerResultProjects.forEachIndexed { index, project ->
             logger.debug { "analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}" }
-            opossumInput.addProject(project, analyzerResultPackages, excludedScopes)
+            opossumInput.addProject(project, ortResult, excludedScopes)
         }
         if (excludedScopes.isEmpty()) {
             opossumInput.addPackagesThatAreRootless(analyzerResultPackages)
