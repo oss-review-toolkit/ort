@@ -333,22 +333,6 @@ class OpossumReporter : Reporter {
             }
         }
 
-        private fun addDependencyScope(
-            scope: Scope,
-            ortResult: OrtResult,
-            relRoot: String = "/"
-        ) {
-            val name = scope.name
-            logger.debug { "$relRoot - $name - DependencyScope" }
-
-            val rootForScope = resolvePath(relRoot, name)
-            if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
-
-            scope.dependencies.forEach { dependency ->
-                addDependency(dependency, ortResult, rootForScope)
-            }
-        }
-
         private fun getRootForProject(project: Project, relRoot: String): String {
             val vcsPath = resolvePath(relRoot, project.vcs.path)
             val definitionFilePath = resolvePath(relRoot, project.definitionFilePath)
@@ -388,7 +372,15 @@ class OpossumReporter : Reporter {
             project.scopes
                 .filterNot { ortResult.getExcludes().isScopeExcluded(it.name) }
                 .forEach { scope ->
-                    addDependencyScope(scope, ortResult, definitionFilePath)
+                    val name = scope.name
+                    logger.debug { "$definitionFilePath - $name - DependencyScope" }
+
+                    val rootForScope = resolvePath(definitionFilePath, name)
+                    if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
+
+                    scope.dependencies.forEach { dependency ->
+                        addDependency(dependency, ortResult, rootForScope)
+                    }
                 }
         }
 
