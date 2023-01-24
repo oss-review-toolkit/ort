@@ -144,16 +144,16 @@ class OpossumReporter : Reporter {
         }
 
         fun addResource(path: String) {
-            val pathPieces = path.split("/")
-                .filter { it.isNotEmpty() }
+            val pathPieces = path.split("/").filter { it.isNotEmpty() }
+
             addResource(pathPieces)
         }
 
         fun isFile() = tree.isEmpty()
 
         fun isPathAFile(path: String): Boolean {
-            val pathPieces = path.split("/")
-                .filter { it.isNotEmpty() }
+            val pathPieces = path.split("/").filter { it.isNotEmpty() }
+
             return isPathAFile(pathPieces)
         }
 
@@ -401,9 +401,7 @@ class OpossumReporter : Reporter {
 
             val source = addExternalAttributionSource("ORT-Scanner-$scanner", "ORT-Scanner $scanner", 20)
 
-            val rootsBelowMaxDepth = roots
-                .filter { it.value <= maxDepth }
-                .map { it.key }
+            val rootsBelowMaxDepth = roots.filter { it.value <= maxDepth }.map { it.key }
             if (rootsBelowMaxDepth.isNotEmpty()) {
                 val pathsFromFindings = licenseFindings
                     .map { it.location.path }
@@ -432,9 +430,7 @@ class OpossumReporter : Reporter {
                 }
             }
 
-            val rootsAboveMaxDepth = roots
-                .filter { it.value > maxDepth }
-                .map { it.key }
+            val rootsAboveMaxDepth = roots.filter { it.value > maxDepth }.map { it.key }
             if (rootsAboveMaxDepth.isNotEmpty()) {
                 val copyright = copyrightFindings
                     .distinct()
