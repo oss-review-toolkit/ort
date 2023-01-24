@@ -149,6 +149,11 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          */
         private final Map<String, List<Dependency>> dependencies = new HashMap<>()
 
+        /**
+         * All root projects of included builds, mapped by included build name.
+         */
+        private final Map<String, Project> includedBuildsProjects = new HashMap<>()
+
         @Override
         boolean canBuild(String modelName) {
             return modelName == 'DependencyTreeModel'
@@ -165,6 +170,25 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                         'is required.').toString()
                 return new DependencyTreeModelImpl(project.group.toString(), project.name, project.version.toString(),
                         [], [], [error], [])
+            }
+
+            project.gradle.getIncludedBuilds().each {
+                project.logger.quiet("Processing included build '$it.name, $it.projectDir'.")
+                // Since the projects of an included build are not present in the public API, the internal API is used
+                // here with fully qualified name to minimize error when unsupported versions of Gradle are used.
+                def state = (it as org.gradle.internal.composite.IncludedBuildInternal).getTarget()
+                if (state as org.gradle.internal.build.IncludedBuildState) {
+                    state.ensureProjectsConfigured()
+                    def build = state.getMutableModel()
+                    def includedRootProject = build.rootProject.project
+                    String identifier = toIdentifier(
+                            includedRootProject.group.toString(),
+                            includedRootProject.name,
+                            includedRootProject.version.toString()
+                    )
+                    project.logger.quiet("Mapping included build '$it.name' to root project '$identifier'.")
+                    includedBuildsProjects.put(it.name, includedRootProject)
+                }
             }
 
             List<Configuration> configurations = project.configurations.findResults { configuration ->
@@ -343,10 +367,22 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    def dependencyProject = project.rootProject.findProject(id.projectPath)
-                    return new DependencyImpl(groupId: dependencyProject.group.toString(),
-                            artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
-                            dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
+                    if (id.build.isCurrentBuild()) {
+                        def dependencyProject = project.rootProject.findProject(id.projectPath)
+                        return new DependencyImpl(groupId: dependencyProject.group.toString(),
+                                artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
+                                dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
+                    } else {
+                        project.logger.quiet("Project '$id' is not part of current build. Assuming included build.")
+
+                        def includedProject = findRootProjectOfIncludedBuild(project, id)
+                        def dependencyProject = id.projectPath == ":" ? includedProject
+                                : includedProject.findProject(id.projectName)
+
+                        return new DependencyImpl(groupId: dependencyProject.group.toString(),
+                                artifactId: dependencyProject.name, version:dependencyProject.version.toString(),
+                                dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
+                    }
                 } else {
                     return dependencyFromDisplayName(id.displayName, dependencies,
                             "Unknown id type: ${id.getClass().simpleName}", null)
@@ -394,7 +430,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          * @param visited stores the name of already visited dependencies to deal with cycles
          * @return a flag whether the dependency trees are equal
          */
-        private static boolean dependencyTreeEquals(Dependency dependency, DependencyResult dependencyResult,
+        private boolean dependencyTreeEquals(Dependency dependency, DependencyResult dependencyResult,
                                                     Project project, Set<String> visited) {
             def displayName = dependencyResult.requested.displayName
             if (displayName in visited) {
@@ -427,15 +463,32 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
          * @param project the current project
          * @return a unique identifier for this dependency
          */
-        private static String identifierFor(DependencyResult dependencyResult, Project project) {
+        private String identifierFor(DependencyResult dependencyResult, Project project) {
             if (dependencyResult instanceof ResolvedDependencyResult) {
                 ComponentIdentifier id = dependencyResult.selected.id
                 if (id instanceof ModuleComponentIdentifier) {
                     return toIdentifier(id.group, id.module, id.version)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    def dependencyProject = project.rootProject.findProject(id.projectPath)
-                    return toIdentifier(dependencyProject.group.toString(), dependencyProject.name,
-                            dependencyProject.version.toString())
+                    if (id.build.currentBuild) {
+                        def dependencyProject = project.rootProject.findProject(id.projectPath)
+                        return toIdentifier(dependencyProject.group.toString(), dependencyProject.name,
+                                dependencyProject.version.toString())
+                    } else {
+                        project.logger.quiet("Project '$id' is not part of current build. Assuming included build.")
+                        def includedProject = findRootProjectOfIncludedBuild(project, id)
+                        def dependencyProject = id.projectPath == ":" ? includedProject
+                                : includedProject.findProject(id.projectName)
+
+                        // Here 'identifierFromDisplayName' cannot be used because it is in the context of the included
+                        // build.
+                        def identifier = toIdentifier(
+                                dependencyProject.group.toString(),
+                                dependencyProject.name,
+                                dependencyProject.version.toString()
+                        )
+                        project.logger.quiet("Using identifier '$identifier' for included project.")
+                        return identifier
+                    }
                 } else {
                     return identifierFromDisplayName(id.displayName)
                 }
@@ -446,6 +499,32 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             }
 
             return identifierFromDisplayName(dependencyResult.requested.displayName)
+        }
+
+        /**
+         * Find the root project of an included build. The latter is identified by the given Identifier of an included
+         * project.
+         * @param project the original project for which the dependency tree is built. Used only for logging purposes
+         * @param identifier the identifier of an included project
+         * @return the root project of the build of the included project
+         */
+        private Project findRootProjectOfIncludedBuild(Project project, ProjectComponentIdentifier identifier) {
+            // One again the Gradle's internal API is used to access the identity path of the project, which is not
+            // exposed in the 'ProjectComponentIdentifier' interface. This identity path is the path of the project
+            // prefixed by the name of the included build e.g. ':includedBuild:subproject'.
+            def identityPath = (identifier as org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier).identityPath
+            project.logger.quiet("Searching root project for identity path '$identityPath'.")
+            def pathFragments = identityPath.path.split(":")
+            if (pathFragments[0].isEmpty()) {
+                pathFragments = pathFragments.drop(1) // There is always a first ':' so it can be removed.
+            }
+
+            def includedRootProject = includedBuildsProjects[pathFragments[0]]
+            if (includedRootProject == null) {
+                throw new IllegalStateException("No included root project '${pathFragments[0]}' found.")
+            }
+
+            return includedRootProject
         }
 
         /**
