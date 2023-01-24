@@ -57,6 +57,8 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -100,7 +102,7 @@ class OpossumReporterTest : WordSpec({
 
     "generateOpossumInput()" should {
         val result = createOrtResult()
-        val opossumInput = OpossumReporter().generateOpossumInput(result, emptySet())
+        val opossumInput = OpossumReporter().generateOpossumInput(result)
 
         "create input that is somehow valid" {
             opossumInput shouldNotBeNull {
@@ -226,9 +228,8 @@ class OpossumReporterTest : WordSpec({
     }
 
     "generateOpossumInput() with excluded scopes" should {
-        val result = createOrtResult()
-        val opossumInputWithExcludedScopes =
-            OpossumReporter().generateOpossumInput(result, sortedSetOf("devDependencies"))
+        val result = createOrtResult().setScopeExcludes("devDependencies")
+        val opossumInputWithExcludedScopes = OpossumReporter().generateOpossumInput(result)
         val fileListWithExcludedScopes = opossumInputWithExcludedScopes.resources.toFileList()
 
         "exclude scopes" {
@@ -531,4 +532,16 @@ private fun createOrtResult(): OrtResult {
             )
         )
     )
+}
+
+private fun OrtResult.setScopeExcludes(vararg patterns: String): OrtResult {
+    val config = repository.config.copy(
+        excludes = repository.config.excludes.copy(
+            scopes = patterns.map { pattern ->
+                ScopeExclude(pattern, ScopeExcludeReason.DEV_DEPENDENCY_OF)
+            }
+        )
+    )
+
+    return replaceConfig(config)
 }
