@@ -163,8 +163,7 @@ class OpossumReporter : Reporter {
             val head = pathPieces.first()
             val tail = pathPieces.drop(1)
 
-            if (head !in tree) return true
-            return tree.getValue(head).isPathAFile(tail)
+            return head !in tree || tree.getValue(head).isPathAFile(tail)
         }
 
         fun toJson(): Map<*, *> = tree.mapValues { (_, v) -> if (v.isFile()) 1 else v.toJson() }
