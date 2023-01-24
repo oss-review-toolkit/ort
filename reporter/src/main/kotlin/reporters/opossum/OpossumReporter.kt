@@ -38,14 +38,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CuratedPackage
+import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanResult
-import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
@@ -310,7 +309,7 @@ class OpossumReporter : Reporter {
         }
 
         private fun addDependency(
-            dependency: PackageReference,
+            dependency: DependencyNode,
             ortResult: OrtResult,
             relRoot: String,
             level: Int = 1
@@ -326,10 +325,12 @@ class OpossumReporter : Reporter {
             addPackageRoot(dependencyId, dependencyPath, level, dependencyPackage.vcsProcessed)
             addSignal(signalFromPkg(dependencyPackage, dependencyId), sortedSetOf(dependencyPath))
 
-            if (dependency.dependencies.isNotEmpty()) {
+            val dependencies = dependency.getDependencies()
+
+            if (dependencies.isNotEmpty()) {
                 val rootForDependencies = resolvePath(dependencyPath, "dependencies")
                 addAttributionBreakpoint(rootForDependencies)
-                dependency.dependencies.map { addDependency(it, ortResult, rootForDependencies, level + 1) }
+                dependencies.map { addDependency(it, ortResult, rootForDependencies, level + 1) }
             }
         }
 
@@ -369,19 +370,22 @@ class OpossumReporter : Reporter {
 
             addSignal(signalFromProject, sortedSetOf(definitionFilePath))
 
-            project.scopes
-                .filterNot { ortResult.getExcludes().isScopeExcluded(it.name) }
-                .forEach { scope ->
-                    val name = scope.name
-                    logger.debug { "$definitionFilePath - $name - DependencyScope" }
+            val scopeNames = ortResult.dependencyNavigator.scopeNames(project).filterNot {
+                ortResult.getExcludes().isScopeExcluded(it)
+            }
 
-                    val rootForScope = resolvePath(definitionFilePath, name)
-                    if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
+            scopeNames.forEach { scopeName ->
+                logger.debug { "$definitionFilePath - $scopeName - DependencyScope" }
 
-                    scope.dependencies.forEach { dependency ->
-                        addDependency(dependency, ortResult, rootForScope)
-                    }
+                val rootForScope = resolvePath(definitionFilePath, scopeName)
+                val dependencies = ortResult.dependencyNavigator.directDependencies(project, scopeName).toList()
+
+                if (dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
+
+                dependencies.forEach { dependency ->
+                    addDependency(dependency, ortResult, rootForScope)
                 }
+            }
         }
 
         private fun addScannerResult(id: Identifier, result: ScanResult, maxDepth: Int) {
@@ -522,7 +526,7 @@ class OpossumReporter : Reporter {
             opossumInput.frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
         }
 
-        val analyzerResult = ortResult.analyzer?.result?.withResolvedScopes() ?: return opossumInput
+        val analyzerResult = ortResult.analyzer?.result ?: return opossumInput
         val analyzerResultProjects = analyzerResult.projects
         val analyzerResultPackages = analyzerResult.packages
 
@@ -567,3 +571,10 @@ class OpossumReporter : Reporter {
         return listOf(outputFile)
     }
 }
+
+private fun DependencyNode.getDependencies(): List<DependencyNode> =
+    buildList {
+        visitDependencies { dependencyNodes ->
+            this += dependencyNodes.map { it.getStableReference() }
+        }
+    }
