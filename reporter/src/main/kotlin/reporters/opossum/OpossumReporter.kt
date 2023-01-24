@@ -343,8 +343,7 @@ class OpossumReporter : Reporter {
 
             val rootForScope = resolvePath(relRoot, name)
             if (scope.dependencies.isNotEmpty()) addAttributionBreakpoint(rootForScope)
-            scope.dependencies.forEachIndexed { index, dependency ->
-                logger.debug { "scope -> dependency ${index + 1} of ${scope.dependencies.size}" }
+            scope.dependencies.forEach { dependency ->
                 addDependency(dependency, ortResult, rootForScope)
             }
         }
@@ -385,8 +384,7 @@ class OpossumReporter : Reporter {
 
             project.scopes
                 .filterNot { ortResult.getExcludes().isScopeExcluded(it.name) }
-                .forEachIndexed { index, scope ->
-                    logger.debug { "analyzerResultProject -> scope ${index + 1} of ${project.scopes.size}" }
+                .forEach { scope ->
                     addDependencyScope(scope, ortResult, definitionFilePath)
                 }
         }
@@ -528,8 +526,7 @@ class OpossumReporter : Reporter {
         val analyzerResult = ortResult.analyzer?.result?.withResolvedScopes() ?: return opossumInput
         val analyzerResultProjects = analyzerResult.projects
         val analyzerResultPackages = analyzerResult.packages
-        analyzerResultProjects.forEachIndexed { index, project ->
-            logger.debug { "analyzerResultProject ${index + 1} of ${analyzerResultProjects.size}" }
+        analyzerResultProjects.forEach { project ->
             opossumInput.addProject(project, ortResult)
         }
         if (ortResult.getExcludes().scopes.isEmpty()) {
@@ -549,8 +546,7 @@ class OpossumReporter : Reporter {
         }
 
         val scannerResults = ortResult.scanner?.scanResults ?: return OpossumInput()
-        scannerResults.entries.forEachIndexed { index, entry ->
-            logger.debug { "scannerResult ${index + 1} of ${scannerResults.entries.size}" }
+        scannerResults.entries.forEach { entry ->
             opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
         }
 
