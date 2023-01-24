@@ -545,9 +545,8 @@ class OpossumReporter : Reporter {
             }
         }
 
-        val scannerResults = ortResult.scanner?.scanResults ?: return OpossumInput()
-        scannerResults.entries.forEach { entry ->
-            opossumInput.addScannerResults(entry.key, entry.value, maxDepth)
+        ortResult.scanner?.scanResults.orEmpty().forEach { (id, results) ->
+            opossumInput.addScannerResults(id, results, maxDepth)
         }
 
         return opossumInput
