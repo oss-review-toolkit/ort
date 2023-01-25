@@ -123,7 +123,7 @@ val packageDependency = Package.EMPTY.copy(
     declaredLicenses = declaredLicenses
 )
 
-val allPackages = listOf(
+val allPackages = setOf(
     packageExcluded,
     packageDynamicallyLinked,
     packageStaticallyLinked,
@@ -172,7 +172,7 @@ val projectIncluded = Project.EMPTY.copy(
     scopeDependencies = sortedSetOf(scopeIncluded)
 )
 
-val allProjects = listOf(
+val allProjects = setOf(
     projectExcluded,
     projectIncluded
 )
