@@ -104,7 +104,7 @@ val packageWithConcludedAndDeclaredAndDetectedLicense = Package.EMPTY.copy(
     declaredLicensesProcessed = declaredLicensesProcessed
 )
 
-val allPackages = listOf(
+val allPackages = setOf(
     packageWithAuthors,
     packageWithoutLicense,
     packageWithConcludedLicense,
