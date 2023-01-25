@@ -211,10 +211,7 @@ val ortResult = OrtResult(
     analyzer = AnalyzerRun.EMPTY.copy(
         config = AnalyzerConfiguration(allowDynamicVersions = true),
         result = AnalyzerResult(
-            projects = setOf(
-                projectExcluded,
-                projectIncluded
-            ),
+            projects = allProjects,
             packages = allPackages.mapTo(mutableSetOf()) { CuratedPackage(it) }
         )
     ),
