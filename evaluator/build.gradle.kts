@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import de.undercouch.gradle.tasks.download.Download
+
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("DSL_SCOPE_VIOLATION") // See https://youtrack.jetbrains.com/issue/KTIJ-19369.
@@ -25,6 +27,7 @@ plugins {
     `java-library`
 
     // Apply third-party plugins.
+    alias(libs.plugins.download)
     alias(libs.plugins.kotlinSerialization)
 }
 
@@ -51,4 +54,9 @@ tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         freeCompilerArgs = freeCompilerArgs + customCompilerArgs
     }
+}
+
+tasks.register("updateOsadlMatrix", Download::class).configure {
+    src("https://www.osadl.org/fileadmin/checklists/matrixseqexpl.json")
+    dest("src/main/resources/rules/matrixseqexpl.json")
 }
