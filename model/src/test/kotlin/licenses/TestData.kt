@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.model.licenses
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -170,7 +169,7 @@ val ortResult = OrtResult(
     analyzer = AnalyzerRun.EMPTY.copy(
         result = AnalyzerResult(
             projects = setOf(project),
-            packages = allPackages.mapTo(mutableSetOf()) { CuratedPackage(it) }
+            packages = allPackages
         )
     ),
     scanner = ScannerRun.EMPTY.copy(

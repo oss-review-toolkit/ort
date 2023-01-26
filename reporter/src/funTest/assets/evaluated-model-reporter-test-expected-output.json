@@ -559,8 +559,8 @@
     "authors" : [ "Thomas Mueller" ],
     "declared_licenses" : [ 12 ],
     "declared_licenses_processed" : {
-      "spdx_expression" : "EPL-1.0 OR MPL-2.0",
-      "mapped_licenses" : [ 9, 13 ]
+      "spdx_expression" : "MPL-2.0 OR EPL-1.0",
+      "mapped_licenses" : [ 13, 9 ]
     },
     "concluded_license" : "MPL-2.0 OR EPL-1.0",
     "effective_license" : "MPL-2.0",

@@ -33,7 +33,6 @@ import java.io.File
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.AnalyzerResult
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtIssue
@@ -198,7 +197,7 @@ private fun createIssues(index: Int): List<OrtIssue> =
  */
 private fun createAnalyzerResult(vararg projectResults: ProjectAnalyzerResult): AnalyzerResult {
     val projects = projectResults.mapTo(mutableSetOf()) { it.project }
-    val packages = projectResults.flatMap { it.packages }.mapTo(mutableSetOf()) { CuratedPackage(it) }
+    val packages = projectResults.flatMapTo(mutableSetOf()) { it.packages }
 
     return AnalyzerResult(projects, packages)
 }

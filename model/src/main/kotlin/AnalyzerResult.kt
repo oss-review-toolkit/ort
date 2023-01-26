@@ -24,7 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import org.ossreviewtoolkit.model.utils.CuratedPackageSortedSetConverter
+import org.ossreviewtoolkit.model.utils.PackageSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ProjectSortedSetConverter
 
 /**
@@ -41,8 +41,8 @@ data class AnalyzerResult(
     /**
      * The set of identified packages for all projects.
      */
-    @JsonSerialize(converter = CuratedPackageSortedSetConverter::class)
-    val packages: Set<CuratedPackage>,
+    @JsonSerialize(converter = PackageSortedSetConverter::class)
+    val packages: Set<Package>,
 
     /**
      * The lists of [OrtIssue]s that occurred within the analyzed projects themselves. Issues related to project

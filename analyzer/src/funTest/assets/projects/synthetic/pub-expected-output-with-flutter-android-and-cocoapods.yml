@@ -307,1248 +307,1172 @@ projects:
       dependencies:
       - id: "Pub:lints:lints:1.0.1"
 packages:
-- metadata:
-    id: "Maven:androidx.activity:activity:1.0.0"
-    purl: "pkg:maven/androidx.activity/activity@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Provides the base Activity subclass and the relevant hooks to build\
-      \ a composable structure on top."
-    homepage_url: "https://developer.android.com/jetpack/androidx"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.0.0/activity-1.0.0-sources.jar"
-      hash:
-        value: "28eb83e6a29ac3fbb87aa632cfa0e644a313f491"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.annotation:annotation:1.2.0"
-    purl: "pkg:maven/androidx.annotation/annotation@1.2.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs."
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.2.0"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.2.0/annotation-1.2.0-sources.jar"
-      hash:
-        value: "8945212022e5276658ab7864714ced3553ea724a"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.annotation:annotation-experimental:1.1.0"
-    purl: "pkg:maven/androidx.annotation/annotation-experimental@1.1.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Java annotation for use on unstable Android API surfaces. When used\
-      \ in conjunction with the Experimental annotation lint checks, this annotation\
-      \ provides functional parity with Kotlin's Experimental annotation."
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.1.0"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.1.0/annotation-experimental-1.1.0-sources.jar"
-      hash:
-        value: "238eb640abf1ca6c952c7cd2e9423fe7f715713f"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.arch.core:core-common:2.1.0"
-    purl: "pkg:maven/androidx.arch.core/core-common@2.1.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Arch-Common"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.1.0/core-common-2.1.0-sources.jar"
-      hash:
-        value: "80ac2d7c8e6400ce2fbc663cd1a7e1cbef38c4b8"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.arch.core:core-runtime:2.0.0"
-    purl: "pkg:maven/androidx.arch.core/core-runtime@2.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Arch-Runtime"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0-sources.jar"
-      hash:
-        value: "bc41b287c95bc50a3cd27cb1b7cfb301805ba7f1"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.collection:collection:1.1.0"
-    purl: "pkg:maven/androidx.collection/collection@1.1.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Standalone efficient collections."
-    homepage_url: "http://developer.android.com/tools/extras/support-library.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.1.0/collection-1.1.0-sources.jar"
-      hash:
-        value: "bae67b0019fbb38498198fcc2d0282a340b71c5b"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.core:core:1.6.0"
-    purl: "pkg:maven/androidx.core/core@1.6.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs. Compatible on devices running API 14 or later."
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/core#1.6.0"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/core/core/1.6.0/core-1.6.0-sources.jar"
-      hash:
-        value: "7e14a47159a1cd7e5744d0fe465fbc97843d984a"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.customview:customview:1.0.0"
-    purl: "pkg:maven/androidx.customview/customview@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs. Compatible on devices running API 14 or later."
-    homepage_url: "http://developer.android.com/tools/extras/support-library.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/customview/customview/1.0.0/customview-1.0.0-sources.jar"
-      hash:
-        value: "61f6a717d144dff3a6bda413d9abeeb2bca71581"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.fragment:fragment:1.1.0"
-    purl: "pkg:maven/androidx.fragment/fragment@1.1.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs. Compatible on devices running API 14 or later."
-    homepage_url: "https://developer.android.com/jetpack/androidx"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/fragment/fragment/1.1.0/fragment-1.1.0-sources.jar"
-      hash:
-        value: "b9ebb04df2cb0cad4419af3c658690bc82aa5706"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-common:2.2.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-common@2.2.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle-Common"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.2.0/lifecycle-common-2.2.0-sources.jar"
-      hash:
-        value: "d38861c5e1656c5eb1890b1fa149510f38aa5d42"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-common-java8:2.2.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.2.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle-Common for Java 8 Language"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.2.0/lifecycle-common-java8-2.2.0-sources.jar"
-      hash:
-        value: "777ad8a2c39ec412a8c77a3923ceb536946acb29"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-livedata:2.0.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle LiveData"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.0.0/lifecycle-livedata-2.0.0-sources.jar"
-      hash:
-        value: "740ce61935bd789380c01178bd8ce402402ebd2f"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-livedata-core:2.0.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle LiveData Core"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.0.0/lifecycle-livedata-core-2.0.0-sources.jar"
-      hash:
-        value: "c158207594782b42f3a2e08a5a029eb3319e4404"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-runtime:2.2.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.2.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle Runtime"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.2.0/lifecycle-runtime-2.2.0-sources.jar"
-      hash:
-        value: "bac4e407cc35ca0fcd4c3c18d699fa632475b019"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.lifecycle:lifecycle-viewmodel:2.1.0"
-    purl: "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.1.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Lifecycle ViewModel"
-    homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.1.0/lifecycle-viewmodel-2.1.0-sources.jar"
-      hash:
-        value: "bfd86b9887c2343516f82bed91acbab34a45841d"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.loader:loader:1.0.0"
-    purl: "pkg:maven/androidx.loader/loader@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs. Compatible on devices running API 14 or later."
-    homepage_url: "http://developer.android.com/tools/extras/support-library.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/loader/loader/1.0.0/loader-1.0.0-sources.jar"
-      hash:
-        value: "b9ef587f3e46c7fe5b00264989764e43ff45cada"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.savedstate:savedstate:1.0.0"
-    purl: "pkg:maven/androidx.savedstate/savedstate@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Provides the base Activity subclass and the relevant hooks to build\
-      \ a composable structure on top."
-    homepage_url: "https://developer.android.com/jetpack/androidx"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.0.0/savedstate-1.0.0-sources.jar"
-      hash:
-        value: "e6daf87ed227a6f80bb8accb466755a5ee01a652"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.tracing:tracing:1.0.0"
-    purl: "pkg:maven/androidx.tracing/tracing@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Android Tracing"
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/tracing#1.0.0"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.0.0/tracing-1.0.0-sources.jar"
-      hash:
-        value: "aa6dafdce323d80a993c5427cf81d5072f023c8c"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.versionedparcelable:versionedparcelable:1.1.1"
-    purl: "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Provides a stable but relatively compact binary serialization format\
-      \ that can be passed across processes or persisted safely."
-    homepage_url: "http://developer.android.com/tools/extras/support-library.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/versionedparcelable/versionedparcelable/1.1.1/versionedparcelable-1.1.1-sources.jar"
-      hash:
-        value: "d9085927216387af679d18b6f472bc0fc5c7cc81"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.viewpager:viewpager:1.0.0"
-    purl: "pkg:maven/androidx.viewpager/viewpager@1.0.0"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "The Support Library is a static library that you can add to your\
-      \ Android application in order to use APIs that are either not available for\
-      \ older platform versions or utility APIs that aren't a part of the framework\
-      \ APIs. Compatible on devices running API 14 or later."
-    homepage_url: "http://developer.android.com/tools/extras/support-library.html"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/viewpager/viewpager/1.0.0/viewpager-1.0.0-sources.jar"
-      hash:
-        value: "db045f92188b9d247d5f556866f8861ab68528f0"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.window:window:1.0.0-beta04"
-    purl: "pkg:maven/androidx.window/window@1.0.0-beta04"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "WindowManager Jetpack library. Currently only provides additional\
-      \ functionality on foldable devices."
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/window/window/1.0.0-beta04/window-1.0.0-beta04-sources.jar"
-      hash:
-        value: "0c05d535f15eafda40ef406aaa4cb9df2d7f5377"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:androidx.window:window-java:1.0.0-beta04"
-    purl: "pkg:maven/androidx.window/window-java@1.0.0-beta04"
-    authors:
-    - "The Android Open Source Project"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "WindowManager Java Support"
-    homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://dl.google.com/dl/android/maven2/androidx/window/window-java/1.0.0-beta04/window-java-1.0.0-beta04-sources.jar"
-      hash:
-        value: "aebe0d5dd92117437900757652f05fd10dc45382"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://android.googlesource.com/platform/frameworks/support"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:io.flutter:arm64_v8a_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/arm64_v8a_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/armeabi_v7a_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:io.flutter:flutter_embedding_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/flutter_embedding_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/flutter_embedding_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25-sources.jar"
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:io.flutter:x86_64_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: ""
-    homepage_url: ""
-    binary_artifact:
-      url: "https://storage.googleapis.com/download.flutter.io/io/flutter/x86_64_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/x86_64_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains:annotations:13.0"
-    purl: "pkg:maven/org.jetbrains/annotations@13.0"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "A set of annotations used for code inspection support and code documentation."
-    homepage_url: "http://www.jetbrains.org"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar"
-      hash:
-        value: "5991ca87ef1fb5544943d9abc5a9a37583fabe03"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/JetBrains/intellij-community.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/JetBrains/intellij-community.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
-    purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.5.31"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache License, Version 2.0: "Apache-2.0"
-    description: "Kotlin Standard Library for JVM"
-    homepage_url: "https://kotlinlang.org/"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31-sources.jar"
-      hash:
-        value: "70f4e47092d0158a39aafc634ad60b6320c3d6ce"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
-    purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.5.31"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache License, Version 2.0: "Apache-2.0"
-    description: "Kotlin Common Standard Library"
-    homepage_url: "https://kotlinlang.org/"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31-sources.jar"
-      hash:
-        value: "ee22598c6d20e94e0fd08cc696f09f83e41b3935"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
-    purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.5.30"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache License, Version 2.0: "Apache-2.0"
-    description: "Kotlin Standard Library JDK 7 extension"
-    homepage_url: "https://kotlinlang.org/"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30-sources.jar"
-      hash:
-        value: "ccdfdab71f0f3ba104191d8f673d0620e7ed2e46"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
-    purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.5.30"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache License, Version 2.0: "Apache-2.0"
-    description: "Kotlin Standard Library JDK 8 extension"
-    homepage_url: "https://kotlinlang.org/"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.30/kotlin-stdlib-jdk8-1.5.30-sources.jar"
-      hash:
-        value: "171265ccd1f7a4307c3cb8eedd9115e662013190"
-        algorithm: "SHA-1"
-    vcs:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/JetBrains/kotlin.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
-    purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.5.2"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Coroutines support libraries for Kotlin"
-    homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.5.2/kotlinx-coroutines-android-1.5.2-sources.jar"
-      hash:
-        value: "363aa80c0a981d7bcb39bb904145de5b40b862f0"
-        algorithm: "SHA-1"
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/Kotlin/kotlinx.coroutines.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
-    purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.5.2"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Coroutines support libraries for Kotlin"
-    homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2-sources.jar"
-      hash:
-        value: "eec85c0ad7175c570935d37cfe8a749c57991a53"
-        algorithm: "SHA-1"
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/Kotlin/kotlinx.coroutines.git"
-      revision: ""
-      path: ""
-    is_metadata_only: true
-  curations: []
-- metadata:
-    id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
-    purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.5.2"
-    authors:
-    - "JetBrains"
-    declared_licenses:
-    - "The Apache Software License, Version 2.0"
-    declared_licenses_processed:
-      spdx_expression: "Apache-2.0"
-      mapped:
-        The Apache Software License, Version 2.0: "Apache-2.0"
-    description: "Coroutines support libraries for Kotlin"
-    homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.2/kotlinx-coroutines-core-jvm-1.5.2-sources.jar"
-      hash:
-        value: "d4724dfd0c4e340e15bd681a47e786bac9fd77a3"
-        algorithm: "SHA-1"
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/Kotlin/kotlinx.coroutines.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Pub:cupertino_icons:cupertino_icons:1.0.3"
-    purl: "pkg:pub/cupertino_icons/cupertino_icons@1.0.3"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: "Default icons asset for Cupertino widgets based on Apple styled\
-      \ icons"
-    homepage_url: "https://github.com/flutter/packages/tree/master/third_party/packages/cupertino_icons"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: ""
-      url: ""
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/flutter/packages.git"
-      revision: "master"
-      path: "third_party/packages/cupertino_icons"
-  curations: []
-- metadata:
-    id: "Pub:flutter_lints:flutter_lints:1.0.4"
-    purl: "pkg:pub/flutter_lints/flutter_lints@1.0.4"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: "Recommended lints for Flutter apps, packages, and plugins to encourage\
-      \ good coding practices."
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: "Git"
-      url: "https://github.com/flutter/packages.git"
-      revision: "master"
-      path: "packages/flutter_lints"
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/flutter/packages.git"
-      revision: "master"
-      path: "packages/flutter_lints"
-  curations: []
-- metadata:
-    id: "Pub:lints:lints:1.0.1"
-    purl: "pkg:pub/lints/lints@1.0.1"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: "Official Dart lint rules. Defines the 'core' and 'recommended' set\
-      \ of lints suggested by the Dart team."
-    homepage_url: "https://github.com/dart-lang/lints"
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/lints.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/dart-lang/lints.git"
-      revision: ""
-      path: ""
-  curations: []
+- id: "Maven:androidx.activity:activity:1.0.0"
+  purl: "pkg:maven/androidx.activity/activity@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Provides the base Activity subclass and the relevant hooks to build\
+    \ a composable structure on top."
+  homepage_url: "https://developer.android.com/jetpack/androidx"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/activity/activity/1.0.0/activity-1.0.0-sources.jar"
+    hash:
+      value: "28eb83e6a29ac3fbb87aa632cfa0e644a313f491"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.annotation:annotation:1.2.0"
+  purl: "pkg:maven/androidx.annotation/annotation@1.2.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs."
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.2.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation/1.2.0/annotation-1.2.0-sources.jar"
+    hash:
+      value: "8945212022e5276658ab7864714ced3553ea724a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.annotation:annotation-experimental:1.1.0"
+  purl: "pkg:maven/androidx.annotation/annotation-experimental@1.1.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Java annotation for use on unstable Android API surfaces. When used\
+    \ in conjunction with the Experimental annotation lint checks, this annotation\
+    \ provides functional parity with Kotlin's Experimental annotation."
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/annotation#1.1.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/annotation/annotation-experimental/1.1.0/annotation-experimental-1.1.0-sources.jar"
+    hash:
+      value: "238eb640abf1ca6c952c7cd2e9423fe7f715713f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.arch.core:core-common:2.1.0"
+  purl: "pkg:maven/androidx.arch.core/core-common@2.1.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Arch-Common"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-common/2.1.0/core-common-2.1.0-sources.jar"
+    hash:
+      value: "80ac2d7c8e6400ce2fbc663cd1a7e1cbef38c4b8"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.arch.core:core-runtime:2.0.0"
+  purl: "pkg:maven/androidx.arch.core/core-runtime@2.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Arch-Runtime"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/arch/core/core-runtime/2.0.0/core-runtime-2.0.0-sources.jar"
+    hash:
+      value: "bc41b287c95bc50a3cd27cb1b7cfb301805ba7f1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.collection:collection:1.1.0"
+  purl: "pkg:maven/androidx.collection/collection@1.1.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Standalone efficient collections."
+  homepage_url: "http://developer.android.com/tools/extras/support-library.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/collection/collection/1.1.0/collection-1.1.0-sources.jar"
+    hash:
+      value: "bae67b0019fbb38498198fcc2d0282a340b71c5b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.core:core:1.6.0"
+  purl: "pkg:maven/androidx.core/core@1.6.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs. Compatible\
+    \ on devices running API 14 or later."
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/core#1.6.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/core/core/1.6.0/core-1.6.0-sources.jar"
+    hash:
+      value: "7e14a47159a1cd7e5744d0fe465fbc97843d984a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.customview:customview:1.0.0"
+  purl: "pkg:maven/androidx.customview/customview@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs. Compatible\
+    \ on devices running API 14 or later."
+  homepage_url: "http://developer.android.com/tools/extras/support-library.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/customview/customview/1.0.0/customview-1.0.0-sources.jar"
+    hash:
+      value: "61f6a717d144dff3a6bda413d9abeeb2bca71581"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.fragment:fragment:1.1.0"
+  purl: "pkg:maven/androidx.fragment/fragment@1.1.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs. Compatible\
+    \ on devices running API 14 or later."
+  homepage_url: "https://developer.android.com/jetpack/androidx"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/fragment/fragment/1.1.0/fragment-1.1.0-sources.jar"
+    hash:
+      value: "b9ebb04df2cb0cad4419af3c658690bc82aa5706"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-common:2.2.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-common@2.2.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle-Common"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common/2.2.0/lifecycle-common-2.2.0-sources.jar"
+    hash:
+      value: "d38861c5e1656c5eb1890b1fa149510f38aa5d42"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-common-java8:2.2.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-common-java8@2.2.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle-Common for Java 8 Language"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-common-java8/2.2.0/lifecycle-common-java8-2.2.0-sources.jar"
+    hash:
+      value: "777ad8a2c39ec412a8c77a3923ceb536946acb29"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-livedata:2.0.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata@2.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle LiveData"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata/2.0.0/lifecycle-livedata-2.0.0-sources.jar"
+    hash:
+      value: "740ce61935bd789380c01178bd8ce402402ebd2f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-livedata-core:2.0.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-livedata-core@2.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle LiveData Core"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-livedata-core/2.0.0/lifecycle-livedata-core-2.0.0-sources.jar"
+    hash:
+      value: "c158207594782b42f3a2e08a5a029eb3319e4404"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-runtime:2.2.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-runtime@2.2.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle Runtime"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-runtime/2.2.0/lifecycle-runtime-2.2.0-sources.jar"
+    hash:
+      value: "bac4e407cc35ca0fcd4c3c18d699fa632475b019"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.lifecycle:lifecycle-viewmodel:2.1.0"
+  purl: "pkg:maven/androidx.lifecycle/lifecycle-viewmodel@2.1.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Lifecycle ViewModel"
+  homepage_url: "https://developer.android.com/topic/libraries/architecture/index.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/lifecycle/lifecycle-viewmodel/2.1.0/lifecycle-viewmodel-2.1.0-sources.jar"
+    hash:
+      value: "bfd86b9887c2343516f82bed91acbab34a45841d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.loader:loader:1.0.0"
+  purl: "pkg:maven/androidx.loader/loader@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs. Compatible\
+    \ on devices running API 14 or later."
+  homepage_url: "http://developer.android.com/tools/extras/support-library.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/loader/loader/1.0.0/loader-1.0.0-sources.jar"
+    hash:
+      value: "b9ef587f3e46c7fe5b00264989764e43ff45cada"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.savedstate:savedstate:1.0.0"
+  purl: "pkg:maven/androidx.savedstate/savedstate@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Provides the base Activity subclass and the relevant hooks to build\
+    \ a composable structure on top."
+  homepage_url: "https://developer.android.com/jetpack/androidx"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/savedstate/savedstate/1.0.0/savedstate-1.0.0-sources.jar"
+    hash:
+      value: "e6daf87ed227a6f80bb8accb466755a5ee01a652"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.tracing:tracing:1.0.0"
+  purl: "pkg:maven/androidx.tracing/tracing@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Android Tracing"
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/tracing#1.0.0"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/tracing/tracing/1.0.0/tracing-1.0.0-sources.jar"
+    hash:
+      value: "aa6dafdce323d80a993c5427cf81d5072f023c8c"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.versionedparcelable:versionedparcelable:1.1.1"
+  purl: "pkg:maven/androidx.versionedparcelable/versionedparcelable@1.1.1"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Provides a stable but relatively compact binary serialization format\
+    \ that can be passed across processes or persisted safely."
+  homepage_url: "http://developer.android.com/tools/extras/support-library.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/versionedparcelable/versionedparcelable/1.1.1/versionedparcelable-1.1.1-sources.jar"
+    hash:
+      value: "d9085927216387af679d18b6f472bc0fc5c7cc81"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.viewpager:viewpager:1.0.0"
+  purl: "pkg:maven/androidx.viewpager/viewpager@1.0.0"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "The Support Library is a static library that you can add to your Android\
+    \ application in order to use APIs that are either not available for older platform\
+    \ versions or utility APIs that aren't a part of the framework APIs. Compatible\
+    \ on devices running API 14 or later."
+  homepage_url: "http://developer.android.com/tools/extras/support-library.html"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/viewpager/viewpager/1.0.0/viewpager-1.0.0-sources.jar"
+    hash:
+      value: "db045f92188b9d247d5f556866f8861ab68528f0"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.window:window:1.0.0-beta04"
+  purl: "pkg:maven/androidx.window/window@1.0.0-beta04"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "WindowManager Jetpack library. Currently only provides additional\
+    \ functionality on foldable devices."
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/window/window/1.0.0-beta04/window-1.0.0-beta04-sources.jar"
+    hash:
+      value: "0c05d535f15eafda40ef406aaa4cb9df2d7f5377"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:androidx.window:window-java:1.0.0-beta04"
+  purl: "pkg:maven/androidx.window/window-java@1.0.0-beta04"
+  authors:
+  - "The Android Open Source Project"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "WindowManager Java Support"
+  homepage_url: "https://developer.android.com/jetpack/androidx/releases/window#1.0.0-beta04"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://dl.google.com/dl/android/maven2/androidx/window/window-java/1.0.0-beta04/window-java-1.0.0-beta04-sources.jar"
+    hash:
+      value: "aebe0d5dd92117437900757652f05fd10dc45382"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://android.googlesource.com/platform/frameworks/support"
+    revision: ""
+    path: ""
+- id: "Maven:io.flutter:arm64_v8a_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  purl: "pkg:maven/io.flutter/arm64_v8a_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/arm64_v8a_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/arm64_v8a_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:io.flutter:armeabi_v7a_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  purl: "pkg:maven/io.flutter/armeabi_v7a_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/armeabi_v7a_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/armeabi_v7a_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:io.flutter:flutter_embedding_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  purl: "pkg:maven/io.flutter/flutter_embedding_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/flutter_embedding_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/flutter_embedding_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/flutter_embedding_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25-sources.jar"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:io.flutter:x86_64_release:1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  purl: "pkg:maven/io.flutter/x86_64_release@1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: "https://storage.googleapis.com/download.flutter.io/io/flutter/x86_64_release/1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25/x86_64_release-1.0.0-857bd6b74c5eb56151bfafe91e7fa6a82b6fee25.jar"
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains:annotations:13.0"
+  purl: "pkg:maven/org.jetbrains/annotations@13.0"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "A set of annotations used for code inspection support and code documentation."
+  homepage_url: "http://www.jetbrains.org"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar"
+    hash:
+      value: "5991ca87ef1fb5544943d9abc5a9a37583fabe03"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/intellij-community.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/intellij-community.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.5.31"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Standard Library for JVM"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/1.5.31/kotlin-stdlib-1.5.31-sources.jar"
+    hash:
+      value: "70f4e47092d0158a39aafc634ad60b6320c3d6ce"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.5.31"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.5.31"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Common Standard Library"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-common/1.5.31/kotlin-stdlib-common-1.5.31-sources.jar"
+    hash:
+      value: "ee22598c6d20e94e0fd08cc696f09f83e41b3935"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk7@1.5.30"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Standard Library JDK 7 extension"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk7/1.5.30/kotlin-stdlib-jdk7-1.5.30-sources.jar"
+    hash:
+      value: "ccdfdab71f0f3ba104191d8f673d0620e7ed2e46"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.5.30"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-jdk8@1.5.30"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Standard Library JDK 8 extension"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib-jdk8/1.5.30/kotlin-stdlib-jdk8-1.5.30-sources.jar"
+    hash:
+      value: "171265ccd1f7a4307c3cb8eedd9115e662013190"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2"
+  purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-android@1.5.2"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Coroutines support libraries for Kotlin"
+  homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.5.2/kotlinx-coroutines-android-1.5.2-sources.jar"
+    hash:
+      value: "363aa80c0a981d7bcb39bb904145de5b40b862f0"
+      algorithm: "SHA-1"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kotlin/kotlinx.coroutines.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2"
+  purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core@1.5.2"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Coroutines support libraries for Kotlin"
+  homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.5.2/kotlinx-coroutines-core-1.5.2-sources.jar"
+    hash:
+      value: "eec85c0ad7175c570935d37cfe8a749c57991a53"
+      algorithm: "SHA-1"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kotlin/kotlinx.coroutines.git"
+    revision: ""
+    path: ""
+  is_metadata_only: true
+- id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
+  purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.5.2"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Coroutines support libraries for Kotlin"
+  homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.5.2/kotlinx-coroutines-core-jvm-1.5.2-sources.jar"
+    hash:
+      value: "d4724dfd0c4e340e15bd681a47e786bac9fd77a3"
+      algorithm: "SHA-1"
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Kotlin/kotlinx.coroutines.git"
+    revision: ""
+    path: ""
+- id: "Pub:cupertino_icons:cupertino_icons:1.0.3"
+  purl: "pkg:pub/cupertino_icons/cupertino_icons@1.0.3"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Default icons asset for Cupertino widgets based on Apple styled icons"
+  homepage_url: "https://github.com/flutter/packages/tree/master/third_party/packages/cupertino_icons"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/flutter/packages.git"
+    revision: "master"
+    path: "third_party/packages/cupertino_icons"
+- id: "Pub:flutter_lints:flutter_lints:1.0.4"
+  purl: "pkg:pub/flutter_lints/flutter_lints@1.0.4"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Recommended lints for Flutter apps, packages, and plugins to encourage\
+    \ good coding practices."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/flutter/packages.git"
+    revision: "master"
+    path: "packages/flutter_lints"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/flutter/packages.git"
+    revision: "master"
+    path: "packages/flutter_lints"
+- id: "Pub:lints:lints:1.0.1"
+  purl: "pkg:pub/lints/lints@1.0.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Official Dart lint rules. Defines the 'core' and 'recommended' set\
+    \ of lints suggested by the Dart team."
+  homepage_url: "https://github.com/dart-lang/lints"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/lints.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/lints.git"
+    revision: ""
+    path: ""
 has_issues: false

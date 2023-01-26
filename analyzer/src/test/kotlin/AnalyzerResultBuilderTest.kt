@@ -284,9 +284,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     project2
                 )
                 mergedResults.packages shouldBe setOf(
-                    package1.toCuratedPackage(),
-                    package2.toCuratedPackage(),
-                    package3.toCuratedPackage()
+                    package1,
+                    package2,
+                    package3
                 )
                 mergedResults.issues shouldBe mapOf(
                     project1.id to analyzerResult1.issues,

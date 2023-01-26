@@ -49,60 +49,56 @@ projects:
       dependencies:
       - id: "Pub:collection:collection:1.16.0"
 packages:
-- metadata:
-    id: "Pub:collection:collection:1.16.0"
-    purl: "pkg:pub/collection/collection@1.16.0"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: "Collections and utilities functions and classes related to collections."
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/collection.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/dart-lang/collection.git"
-      revision: ""
-      path: ""
-  curations: []
-- metadata:
-    id: "Pub:typed_data:typed_data:1.3.1"
-    purl: "pkg:pub/typed_data/typed_data@1.3.1"
-    declared_licenses: []
-    declared_licenses_processed: {}
-    description: "Utility functions and classes related to the dart:typed_data library."
-    homepage_url: ""
-    binary_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    source_artifact:
-      url: ""
-      hash:
-        value: ""
-        algorithm: ""
-    vcs:
-      type: "Git"
-      url: "https://github.com/dart-lang/typed_data.git"
-      revision: ""
-      path: ""
-    vcs_processed:
-      type: "Git"
-      url: "https://github.com/dart-lang/typed_data.git"
-      revision: ""
-      path: ""
-  curations: []
+- id: "Pub:collection:collection:1.16.0"
+  purl: "pkg:pub/collection/collection@1.16.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Collections and utilities functions and classes related to collections."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/collection.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/collection.git"
+    revision: ""
+    path: ""
+- id: "Pub:typed_data:typed_data:1.3.1"
+  purl: "pkg:pub/typed_data/typed_data@1.3.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: "Utility functions and classes related to the dart:typed_data library."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/dart-lang/typed_data.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dart-lang/typed_data.git"
+    revision: ""
+    path: ""
 has_issues: false
