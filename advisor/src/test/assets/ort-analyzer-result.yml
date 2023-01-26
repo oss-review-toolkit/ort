@@ -2,12 +2,12 @@
 repository:
   vcs:
     type: "Git"
-    url: "https://github.com/tests/test-project"
+    url: "https://github.com/tests/test-project.git"
     revision: "1234567890"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   vcs_processed:
     type: "Git"
-    url: "https://github.com/tests/test-project"
+    url: "https://github.com/tests/test-project.git"
     revision: "1234567890"
     path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
   config:
@@ -61,7 +61,7 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/tests/test-project"
+        url: "https://github.com/tests/test-project.git"
         revision: "1234567890"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
       homepage_url: ""
@@ -77,7 +77,7 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/tests/test-project"
+        url: "https://github.com/tests/test-project.git"
         revision: "1234567890"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
       homepage_url: ""
@@ -184,7 +184,7 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/tests/test-project"
+        url: "https://github.com/tests/test-project.git"
         revision: "1234567890"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
       homepage_url: ""
@@ -276,7 +276,7 @@ analyzer:
         path: ""
       vcs_processed:
         type: "Git"
-        url: "https://github.com/tests/test-project"
+        url: "https://github.com/tests/test-project.git"
         revision: "1234567890"
         path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
       homepage_url: ""
