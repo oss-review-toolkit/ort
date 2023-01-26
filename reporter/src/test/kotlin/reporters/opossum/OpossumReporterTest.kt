@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -333,82 +332,71 @@ private fun createOrtResult(): OrtResult {
                     )
                 ),
                 packages = setOf(
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:first-package-group:first-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
-                            concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
-                            declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
-                            description = "A package with all supported attributes set, with a VCS URL containing a " +
-                                    "user name, and with a scan result containing two copyright finding matched to a " +
-                                    "license finding.",
-                            homepageUrl = "first package's homepage URL",
-                            sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
-                            vcs = VcsInfo(
-                                type = VcsType.GIT,
-                                revision = "master",
-                                url = "ssh://git@github.com/path/first-package-repo.git",
-                                path = "project-path"
-                            )
+                    Package(
+                        id = Identifier("Maven:first-package-group:first-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
+                        concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
+                        declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
+                        description = "A package with all supported attributes set, with a VCS URL containing a user " +
+                                "name, and with a scan result containing two copyright finding matched to a license " +
+                                "finding.",
+                        homepageUrl = "first package's homepage URL",
+                        sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
+                        vcs = VcsInfo(
+                            type = VcsType.GIT,
+                            revision = "master",
+                            url = "ssh://git@github.com/path/first-package-repo.git",
+                            path = "project-path"
                         )
                     ),
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:second-package-group:second-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = emptySet(),
-                            description = "A package with minimal attributes set.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
+                    Package(
+                        id = Identifier("Maven:second-package-group:second-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = emptySet(),
+                        description = "A package with minimal attributes set.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
                     ),
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:third-package-group:third-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = setOf("unmappable license"),
-                            description = "A package with only unmapped declared license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
+                    Package(
+                        id = Identifier("Maven:third-package-group:third-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = setOf("unmappable license"),
+                        description = "A package with only unmapped declared license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
                     ),
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = setOf("unmappable license", "MIT"),
-                            description = "A package with partially mapped declared license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
+                    Package(
+                        id = Identifier("Maven:fourth-package-group:fourth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = setOf("unmappable license", "MIT"),
+                        description = "A package with partially mapped declared license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
                     ),
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
-                            concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
-                            description = "A package used only from the excluded 'test' scope, with non-SPDX license " +
-                                    "IDs in the declared and concluded license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
+                    Package(
+                        id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
+                        concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
+                        description = "A package used only from the excluded 'test' scope, with non-SPDX license IDs " +
+                                "in the declared and concluded license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
+
                     ),
-                    CuratedPackage(
-                        metadata = Package(
-                            id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
-                            binaryArtifact = RemoteArtifact.EMPTY,
-                            declaredLicenses = setOf("LicenseRef-scancode-asmus"),
-                            concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
-                            description = "A package with non-SPDX license IDs in the declared and concluded license.",
-                            homepageUrl = "",
-                            sourceArtifact = RemoteArtifact.EMPTY,
-                            vcs = VcsInfo.EMPTY
-                        )
+                    Package(
+                        id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1"),
+                        binaryArtifact = RemoteArtifact.EMPTY,
+                        declaredLicenses = setOf("LicenseRef-scancode-asmus"),
+                        concludedLicense = "LicenseRef-scancode-srgb".toSpdx(),
+                        description = "A package with non-SPDX license IDs in the declared and concluded license.",
+                        homepageUrl = "",
+                        sourceArtifact = RemoteArtifact.EMPTY,
+                        vcs = VcsInfo.EMPTY
                     )
                 ).plus(
                     setOf(
@@ -418,16 +406,14 @@ private fun createOrtResult(): OrtResult {
                         Identifier("NPM:@something:somepackage-dep-dep:1.2.3"),
                         Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3"),
                     ).map {
-                        CuratedPackage(
-                            metadata = Package(
-                                id = it,
-                                binaryArtifact = RemoteArtifact.EMPTY,
-                                declaredLicenses = setOf("MIT"),
-                                description = "Package of $it",
-                                homepageUrl = "",
-                                sourceArtifact = RemoteArtifact.EMPTY,
-                                vcs = VcsInfo.EMPTY
-                            )
+                        Package(
+                            id = it,
+                            binaryArtifact = RemoteArtifact.EMPTY,
+                            declaredLicenses = setOf("MIT"),
+                            description = "Package of $it",
+                            homepageUrl = "",
+                            sourceArtifact = RemoteArtifact.EMPTY,
+                            vcs = VcsInfo.EMPTY
                         )
                     }
                 ),

@@ -19,13 +19,10 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import kotlin.time.measureTimedValue
-
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.Identifier
@@ -38,16 +35,16 @@ import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
-class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY) {
+class AnalyzerResultBuilder {
     companion object : Logging
 
     private val projects = mutableSetOf<Project>()
-    private val packages = mutableSetOf<CuratedPackage>()
+    private val packages = mutableSetOf<Package>()
     private val issues = mutableMapOf<Identifier, List<OrtIssue>>()
     private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {
-        val duplicates = (projects.map { it.toPackage() } + packages.map { it.metadata }).getDuplicates { it.id }
+        val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
             "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
                     duplicates.values
@@ -96,19 +93,7 @@ class AnalyzerResultBuilder(private val curationProvider: PackageCurationProvide
      * independently of a [ProjectAnalyzerResult].
      */
     fun addPackages(packageSet: Set<Package>) = apply {
-        val (curations, duration) = measureTimedValue { curationProvider.getCurationsFor(packageSet.map { it.id }) }
-
-        logger.debug { "Getting package curations took $duration." }
-
-        packages += packageSet.map { pkg ->
-            curations[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
-                logger.debug {
-                    "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
-                }
-
-                packageCuration.apply(cur)
-            }
-        }
+        packages += packageSet
     }
 
     /**

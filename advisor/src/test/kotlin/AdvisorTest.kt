@@ -33,7 +33,6 @@ import io.mockk.mockk
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -133,7 +132,7 @@ private fun createOrtResultWithPackages(packages: Set<Package>): OrtResult =
         analyzer = AnalyzerRun.EMPTY.copy(
             result = AnalyzerResult(
                 projects = setOf(Project.EMPTY.copy(id = Identifier.EMPTY.copy(name = "test-project"))),
-                packages = packages.mapTo(mutableSetOf()) { CuratedPackage(it) }
+                packages = packages
             )
         )
     )

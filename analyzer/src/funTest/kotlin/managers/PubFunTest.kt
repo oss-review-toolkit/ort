@@ -136,7 +136,7 @@ private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
 
     return AnalyzerResult(
         projects = pubProjects,
-        packages = packages.filterTo(mutableSetOf()) { it.metadata.id in dependencies },
+        packages = packages.filterTo(mutableSetOf()) { it.id in dependencies },
         issues = issues
     )
 }
@@ -158,13 +158,11 @@ private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
  */
 private fun AnalyzerResult.patchPackages(): AnalyzerResult {
     val patchedPackages = packages.mapTo(mutableSetOf()) { pkg ->
-        pkg.takeUnless { it.metadata.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
+        pkg.takeUnless { it.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
-                metadata = pkg.metadata.copy(
-                    binaryArtifact = pkg.metadata.binaryArtifact.copy(
-                        url = "***",
-                        hash = Hash("***", HashAlgorithm.SHA1)
-                    )
+                binaryArtifact = pkg.binaryArtifact.copy(
+                    url = "***",
+                    hash = Hash("***", HashAlgorithm.SHA1)
                 )
             )
     }

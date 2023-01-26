@@ -116,7 +116,7 @@ class OrtResultBuilder {
             analyzer = AnalyzerRun.EMPTY.copy(
                 result = AnalyzerResult(
                     projects = projects,
-                    packages = packages.mapTo(mutableSetOf()) { it.toCuratedPackage() }
+                    packages = packages
                 )
             )
         )

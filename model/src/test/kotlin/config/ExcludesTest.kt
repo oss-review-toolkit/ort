@@ -83,8 +83,8 @@ class ExcludesTest : WordSpec() {
     }
 
     private fun setProjects(vararg projects: Project) {
-        val packages = mutableSetOf<CuratedPackage>()
-        if (id in projects.flatMap { ortResult.dependencyNavigator.projectDependencies(it) }) packages += pkg
+        val packages = mutableSetOf<Package>()
+        if (id in projects.flatMap { ortResult.dependencyNavigator.projectDependencies(it) }) packages += pkg.metadata
         val analyzerResult = ortResult.analyzer!!.result.copy(
             projects = projects.toSet(),
             packages = packages

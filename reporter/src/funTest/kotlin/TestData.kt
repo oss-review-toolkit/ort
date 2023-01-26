@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -148,85 +147,75 @@ val ORT_RESULT = OrtResult(
                 )
             ),
             packages = setOf(
-                CuratedPackage(
-                    metadata = Package(
-                        id = Identifier("NPM:@ort:no-license-file:1.0"),
-                        declaredLicenses = emptySet(),
-                        description = "",
-                        homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact.EMPTY,
-                        vcs = VcsInfo.EMPTY
-                    )
+                Package(
+                    id = Identifier("NPM:@ort:no-license-file:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
                 ),
-                CuratedPackage(
-                    metadata = Package(
-                        id = Identifier("NPM:@ort:license-file:1.0"),
-                        declaredLicenses = emptySet(),
-                        description = "",
-                        homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/license-file-1.0.tgz",
-                            hash = Hash(
-                                value = "0000000000000000000000000000000000000000",
-                                algorithm = HashAlgorithm.SHA1
-                            )
-                        ),
-                        vcs = VcsInfo.EMPTY
-                    )
+                Package(
+                    id = Identifier("NPM:@ort:license-file:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
                 ),
-                CuratedPackage(
-                    metadata = Package(
-                        id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
-                        declaredLicenses = emptySet(),
-                        description = "",
-                        homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
-                            hash = Hash(
-                                value = "0000000000000000000000000000000000000000",
-                                algorithm = HashAlgorithm.SHA1
-                            )
-                        ),
-                        vcs = VcsInfo.EMPTY
-                    )
+                Package(
+                    id = Identifier("NPM:@ort:license-file-and-additional-licenses:1.0"),
+                    declaredLicenses = emptySet(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
                 ),
-                CuratedPackage(
-                    metadata = Package(
-                        id = Identifier("NPM:@ort:concluded-license:1.0"),
-                        declaredLicenses = setOf("BSD-3-Clause"),
-                        concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
-                        description = "",
-                        homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/concluded-license-1.0.tgz",
-                            hash = Hash(
-                                value = "0000000000000000000000000000000000000000",
-                                algorithm = HashAlgorithm.SHA1
-                            )
-                        ),
-                        vcs = VcsInfo.EMPTY
-                    )
+                Package(
+                    id = Identifier("NPM:@ort:concluded-license:1.0"),
+                    declaredLicenses = setOf("BSD-3-Clause"),
+                    concludedLicense = "MIT AND MIT WITH Libtool-exception".toSpdx(),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/concluded-license-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
                 ),
-                CuratedPackage(
-                    metadata = Package(
-                        id = Identifier("NPM:@ort:declared-license:1.0"),
-                        declaredLicenses = setOf("MIT"),
-                        description = "",
-                        homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                        binaryArtifact = RemoteArtifact.EMPTY,
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/declared-license-1.0.tgz",
-                            hash = Hash(
-                                value = "0000000000000000000000000000000000000000",
-                                algorithm = HashAlgorithm.SHA1
-                            )
-                        ),
-                        vcs = VcsInfo.EMPTY
-                    )
+                Package(
+                    id = Identifier("NPM:@ort:declared-license:1.0"),
+                    declaredLicenses = setOf("MIT"),
+                    description = "",
+                    homepageUrl = "https://github.com/oss-review-toolkit/ort",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/declared-license-1.0.tgz",
+                        hash = Hash(
+                            value = "0000000000000000000000000000000000000000",
+                            algorithm = HashAlgorithm.SHA1
+                        )
+                    ),
+                    vcs = VcsInfo.EMPTY
                 )
             )
         )

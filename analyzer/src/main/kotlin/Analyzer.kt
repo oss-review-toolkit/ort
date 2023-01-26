@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.analyzer
 import java.io.File
 import java.time.Instant
 
+import kotlin.time.measureTimedValue
+
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,6 +37,7 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -42,6 +45,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
@@ -117,7 +121,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         val startTime = Instant.now()
 
         // Resolve dependencies per package manager.
-        val analyzerResult = analyzeInParallel(info.managedFiles, curationProvider)
+        val analyzerResult = analyzeInParallel(info.managedFiles)
 
         val workingTree = VersionControlSystem.forDirectory(info.absoluteProjectPath)
         val vcs = workingTree?.getInfo().orEmpty()
@@ -138,15 +142,17 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
+        val resolvedConfiguration = resolvedConfiguration(analyzerResult, curationProvider)
 
-        return OrtResult(repository, run)
+        return OrtResult(
+            repository = repository,
+            analyzer = run,
+            resolvedConfiguration = resolvedConfiguration
+        )
     }
 
-    private fun analyzeInParallel(
-        managedFiles: Map<PackageManager, List<File>>,
-        curationProvider: PackageCurationProvider
-    ): AnalyzerResult {
-        val state = AnalyzerState(curationProvider)
+    private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
+        val state = AnalyzerState()
 
         val packageManagerDependencies = determinePackageManagerDependencies(managedFiles)
 
@@ -220,8 +226,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     }
 }
 
-private class AnalyzerState(curationProvider: PackageCurationProvider) {
-    private val builder = AnalyzerResultBuilder(curationProvider)
+private class AnalyzerState {
+    private val builder = AnalyzerResultBuilder()
     private val scope = CoroutineScope(Dispatchers.Default)
     private val addMutex = Mutex()
 
@@ -328,4 +334,19 @@ private class PackageManagerRunner(
             onResult(result)
         }
     }
+}
+
+private fun resolvedConfiguration(
+    analyzerResult: AnalyzerResult,
+    curationProvider: PackageCurationProvider
+): ResolvedConfiguration {
+    val packageIds = analyzerResult.packages.mapTo(mutableSetOf()) { it.id }
+
+    val (packageCurations, duration) = measureTimedValue {
+        curationProvider.getCurationsFor(packageIds).values.flatten()
+    }
+
+    Analyzer.logger().debug { "Getting package curations took $duration." }
+
+    return ResolvedConfiguration(packageCurations)
 }

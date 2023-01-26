@@ -44,7 +44,6 @@ import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
@@ -623,7 +622,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 id = id,
                 cpe = "cpe:2.3:a:test:${id.name}:${id.version}:-:-:-:-:-:-:-"
             )
-            val analyzerResult = ORT_RESULT.analyzer!!.result.copy(packages = setOf(CuratedPackage(pkg)))
+            val analyzerResult = ORT_RESULT.analyzer!!.result.copy(packages = setOf(pkg))
             val analyzerRun = ORT_RESULT.analyzer!!.copy(result = analyzerResult)
 
             val input = ReporterInput(ORT_RESULT.copy(analyzer = analyzerRun))

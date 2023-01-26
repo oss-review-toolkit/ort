@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -78,7 +80,7 @@ data class OrtResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val labels: Map<String, String> = emptyMap()
 ) {
-    companion object {
+    companion object : Logging {
         /**
          * A constant for an [OrtResult] with an empty repository and all other properties `null`.
          */
@@ -125,7 +127,10 @@ data class OrtResult(
      */
     private val packages: Map<Identifier, PackageEntry> by lazy {
         val projects = getProjects()
-        val packages = getPackages().associateBy { it.metadata.id }
+        val packages = applyPackageCurations(
+            analyzer?.result?.packages.orEmpty(),
+            resolvedConfiguration.packageCurations
+        ).associateBy { it.metadata.id }
 
         val allDependencies = packages.keys.toMutableSet()
         val includedDependencies = mutableSetOf<Identifier>()
@@ -310,19 +315,18 @@ data class OrtResult(
     /**
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
      */
-    fun replacePackageCurations(curations: Collection<PackageCuration>): OrtResult =
-        copy(
-            analyzer = analyzer?.copy(
-                result = analyzer.result.copy(
-                    packages = getPackages().mapTo(mutableSetOf()) { curatedPackage ->
-                        val uncuratedPackage = CuratedPackage(curatedPackage.toUncuratedPackage())
-                        curations
-                            .filter { it.isApplicable(curatedPackage.metadata.id) }
-                            .fold(uncuratedPackage) { current, packageCuration -> packageCuration.apply(current) }
-                    }
-                )
+    fun replacePackageCurations(curations: Collection<PackageCuration>): OrtResult {
+        val packageIds = getPackages().map { it.metadata.id }
+        val applicableCurations = curations.filter { curation ->
+            packageIds.any { curation.isApplicable(it) }
+        }
+
+        return copy(
+            resolvedConfiguration = resolvedConfiguration.copy(
+                packageCurations = applicableCurations
             )
         )
+    }
 
     fun getProject(id: Identifier): Project? = projects[id]?.project
 
@@ -333,8 +337,8 @@ data class OrtResult(
      */
     @JsonIgnore
     fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
-        analyzer?.result?.packages.orEmpty().filterTo(mutableSetOf()) { pkg ->
-            !omitExcluded || !isExcluded(pkg.metadata.id)
+        packages.mapNotNullTo(mutableSetOf()) { (_, entry) ->
+            entry.curatedPackage.takeIf { !omitExcluded || !entry.isExcluded }
         }
 
     /**
@@ -512,4 +516,25 @@ data class OrtResult(
         } else {
             labels[label] == value
         }
+}
+
+private fun applyPackageCurations(packages: Set<Package>, curations: List<PackageCuration>): Set<CuratedPackage> {
+    val curationsForId = packages.associateBy(
+        keySelector = { pkg -> pkg.id },
+        valueTransform = { pkg ->
+            curations.filter { curation ->
+                curation.isApplicable(pkg.id)
+            }
+        }
+    )
+
+    return packages.mapTo(mutableSetOf()) { pkg ->
+        curationsForId[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
+            OrtResult.logger.debug {
+                "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
+            }
+
+            packageCuration.apply(cur)
+        }
+    }
 }

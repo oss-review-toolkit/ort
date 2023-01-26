@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -196,7 +195,7 @@ private fun createAnalyzerResult(packages: Collection<ScannedPackage>) = OrtResu
         config = AnalyzerConfiguration(),
         result = AnalyzerResult(
             projects = emptySet(),
-            packages = packages.mapTo(mutableSetOf()) { CuratedPackage(it.toPackage()) }
+            packages = packages.mapTo(mutableSetOf()) { it.toPackage() }
         )
     )
 )

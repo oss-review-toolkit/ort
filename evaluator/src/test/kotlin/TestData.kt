@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.OrtResult
@@ -212,7 +211,7 @@ val ortResult = OrtResult(
         config = AnalyzerConfiguration(allowDynamicVersions = true),
         result = AnalyzerResult(
             projects = allProjects,
-            packages = allPackages.mapTo(mutableSetOf()) { CuratedPackage(it) }
+            packages = allPackages
         )
     ),
     advisor = AdvisorRun(

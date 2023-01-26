@@ -27,7 +27,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
@@ -130,7 +129,7 @@ private fun createOrtResult(): OrtResult {
                     )
                 ),
                 packages = setOf(
-                    curatedPackage(
+                    createPackage(
                         id = Identifier("Maven:some-group:first-package:0.0.1"),
                         declaredLicenses = setOf(
                             "GPL-2.0-or-later WITH Classpath-exception-2.0 AND MIT",
@@ -139,15 +138,15 @@ private fun createOrtResult(): OrtResult {
                             "LicenseRef-scancode-asmus"
                         )
                     ),
-                    curatedPackage(
+                    createPackage(
                         id = Identifier("PIP::second-package:0.0.2"),
                         declaredLicenses = setOf("BSD-2-Clause AND Apache-2.0")
                     ),
-                    curatedPackage(
+                    createPackage(
                         id = Identifier("PIP::unreferenced-package:0.0.3"),
                         declaredLicenses = setOf("LicenseRef-scancode-public-domain-disclaimer")
                     ),
-                    curatedPackage(
+                    createPackage(
                         id = Identifier("Maven:some-group:excluded-package:0.0.4"),
                         declaredLicenses = setOf("LicenseRef-scancode-josl-1.0")
                     )
@@ -157,15 +156,13 @@ private fun createOrtResult(): OrtResult {
     )
 }
 
-private fun curatedPackage(id: Identifier, declaredLicenses: Set<String>): CuratedPackage =
-    CuratedPackage(
-        metadata = Package(
-            id = id,
-            binaryArtifact = RemoteArtifact.EMPTY,
-            declaredLicenses = declaredLicenses,
-            description = "",
-            homepageUrl = "",
-            sourceArtifact = RemoteArtifact.EMPTY,
-            vcs = VcsInfo.EMPTY
-        )
+private fun createPackage(id: Identifier, declaredLicenses: Set<String>): Package =
+    Package(
+        id = id,
+        binaryArtifact = RemoteArtifact.EMPTY,
+        declaredLicenses = declaredLicenses,
+        description = "",
+        homepageUrl = "",
+        sourceArtifact = RemoteArtifact.EMPTY,
+        vcs = VcsInfo.EMPTY
     )
