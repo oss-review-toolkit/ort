@@ -42,8 +42,8 @@ analyzer:
     ort_version: "HEAD"
     java_version: "11.0.9"
     os: "Linux"
-    processors: "4"
-    max_memory: "8192"
+    processors: 4
+    max_memory: 8192
     variables: {}
     tool_versions: {}
   config:
@@ -173,6 +173,98 @@ analyzer:
             dependencies:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
+      declared_licenses: []
+      declared_licenses_processed: {}
+      vcs:
+        type: ""
+        url: ""
+        revision: ""
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/tests/test-project"
+        revision: "1234567890"
+        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+      homepage_url: ""
+      scopes:
+      - name: "annotationProcessor"
+        dependencies: []
+      - name: "archives"
+        dependencies: []
+      - name: "compile"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "compileClasspath"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "compileOnly"
+        dependencies: []
+      - name: "default"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "runtime"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "runtimeClasspath"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "testAnnotationProcessor"
+        dependencies: []
+      - name: "testCompile"
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "testCompileClasspath"
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "testCompileOnly"
+        dependencies: []
+      - name: "testRuntime"
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+      - name: "testRuntimeClasspath"
+        dependencies:
+        - id: "Maven:junit:junit:4.12"
+          dependencies:
+          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
+        - id: "Maven:org.apache.commons:commons-text:1.1"
+          dependencies:
+          - id: "Maven:org.apache.commons:commons-lang3:3.5"
+        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0"
       definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
@@ -317,100 +409,8 @@ analyzer:
               \ dependency org.apache.commons:commons-text:1.1 because no repositories\
               \ are defined."
             severity: "ERROR"
-    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
-      declared_licenses: []
-      declared_licenses_processed: {}
-      vcs:
-        type: ""
-        url: ""
-        revision: ""
-        path: ""
-      vcs_processed:
-        type: "Git"
-        url: "https://github.com/tests/test-project"
-        revision: "1234567890"
-        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
-      homepage_url: ""
-      scopes:
-      - name: "annotationProcessor"
-        dependencies: []
-      - name: "archives"
-        dependencies: []
-      - name: "compile"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "compileClasspath"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "compileOnly"
-        dependencies: []
-      - name: "default"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "runtime"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "runtimeClasspath"
-        dependencies:
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "testAnnotationProcessor"
-        dependencies: []
-      - name: "testCompile"
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "testCompileClasspath"
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "testCompileOnly"
-        dependencies: []
-      - name: "testRuntime"
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
-      - name: "testRuntimeClasspath"
-        dependencies:
-        - id: "Maven:junit:junit:4.12"
-          dependencies:
-          - id: "Maven:org.hamcrest:hamcrest-core:1.3"
-        - id: "Maven:org.apache.commons:commons-text:1.1"
-          dependencies:
-          - id: "Maven:org.apache.commons:commons-lang3:3.5"
-        - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     packages:
-    - package:
+    - metadata:
         id: "Maven:junit:junit:4.12"
         purl: "pkg:maven/junit/junit@4.12"
         declared_licenses:
@@ -443,7 +443,7 @@ analyzer:
           revision: "r4.12"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.commons:commons-lang3:3.5"
         purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
         declared_licenses:
@@ -477,7 +477,7 @@ analyzer:
           revision: "LANG_3_5"
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.commons:commons-text:1.1"
         purl: "pkg:maven/org.apache.commons/commons-text@1.1"
         declared_licenses:
@@ -510,7 +510,7 @@ analyzer:
           revision: ""
           path: ""
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
         purl: "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
         declared_licenses:
@@ -541,9 +541,9 @@ analyzer:
           url: "https://gitbox.apache.org/repos/asf/struts.git"
           revision: "STRUTS_2_5_14_1"
           path: ""
-        is_meta_data_only: true
+        is_metadata_only: true
       curations: []
-    - package:
+    - metadata:
         id: "Maven:org.hamcrest:hamcrest-core:1.3"
         purl: "pkg:maven/org.hamcrest/hamcrest-core@1.3"
         declared_licenses:

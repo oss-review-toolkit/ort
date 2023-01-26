@@ -20,9 +20,9 @@ licenses:
 - _id: 0
   id: "GPL-3.0-only WITH GCC-exception-3.1 AND CC-BY-NC-3.0"
 - _id: 1
-  id: "GPL-3.0-only WITH GCC-exception-3.1"
-- _id: 2
   id: "CC-BY-NC-3.0"
+- _id: 2
+  id: "GPL-3.0-only WITH GCC-exception-3.1"
 - _id: 3
   id: "Apache-2.0"
 - _id: 4
@@ -309,7 +309,7 @@ packages:
   declared_licenses:
   - 0
   declared_licenses_processed:
-    spdx_expression: "GPL-3.0-only WITH GCC-exception-3.1 AND CC-BY-NC-3.0"
+    spdx_expression: "CC-BY-NC-3.0 AND GPL-3.0-only WITH GCC-exception-3.1"
     mapped_licenses:
     - 1
     - 2
@@ -499,10 +499,10 @@ packages:
   declared_licenses:
   - 12
   declared_licenses_processed:
-    spdx_expression: "MPL-2.0 OR EPL-1.0"
+    spdx_expression: "EPL-1.0 OR MPL-2.0"
     mapped_licenses:
-    - 13
     - 9
+    - 13
   concluded_license: "MPL-2.0 OR EPL-1.0"
   effective_license: "MPL-2.0"
   description: "H2 Database Engine"
