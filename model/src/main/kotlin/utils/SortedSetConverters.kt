@@ -25,13 +25,8 @@ import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-
-class CuratedPackageSortedSetConverter : StdConverter<Set<CuratedPackage>, SortedSet<CuratedPackage>>() {
-    override fun convert(value: Set<CuratedPackage>) = value.toSortedSet(compareBy { it.metadata.id })
-}
 
 class PackageSortedSetConverter : StdConverter<Set<Package>, SortedSet<Package>>() {
     override fun convert(value: Set<Package>) = value.toSortedSet(compareBy { it.id })
