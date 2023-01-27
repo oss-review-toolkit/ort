@@ -214,10 +214,9 @@ class OrtMainFunTest : StringSpec() {
                 "-o", outputDir.path
             )
 
-            val analyzerResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
-            val resolvedResult = analyzerResult.withResolvedScopes()
+            val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
 
-            patchActualResult(resolvedResult, patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Passing mutually exclusive evaluator options fails" {
