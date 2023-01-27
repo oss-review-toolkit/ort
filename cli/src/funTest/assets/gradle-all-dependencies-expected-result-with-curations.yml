@@ -50,6 +50,7 @@ analyzer:
     allow_dynamic_versions: false
     enabled_package_managers:
     - "Gradle"
+    skip_excluded: false
   result:
     projects:
     - id: "Gradle::Gradle-Example:"

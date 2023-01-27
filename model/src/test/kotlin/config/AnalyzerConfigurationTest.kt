@@ -56,13 +56,15 @@ class AnalyzerConfigurationTest : WordSpec({
             val other = AnalyzerConfiguration(
                 allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Maven"),
-                disabledPackageManagers = listOf("SBT")
+                disabledPackageManagers = listOf("SBT"),
+                skipExcluded = true
             )
 
             with(self.merge(other)) {
                 allowDynamicVersions shouldBe true
                 enabledPackageManagers should containExactly("Maven")
                 disabledPackageManagers should containExactly("SBT")
+                skipExcluded shouldBe true
             }
         }
 

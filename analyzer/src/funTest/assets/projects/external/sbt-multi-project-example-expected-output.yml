@@ -24,6 +24,7 @@ analyzer:
     tool_versions: {}
   config:
     allow_dynamic_versions: false
+    skip_excluded: false
   result:
     projects:
     - id: "SBT:com.pbassiner:common_2.12:0.1.0-SNAPSHOT"

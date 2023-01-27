@@ -24,6 +24,7 @@ analyzer:
     tool_versions: {}
   config:
     allow_dynamic_versions: false
+    skip_excluded: false
   result:
     projects:
     - id: "PNPM::pnpm-workspaces:1.0.1"

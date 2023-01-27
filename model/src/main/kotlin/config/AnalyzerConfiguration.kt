@@ -48,7 +48,12 @@ data class AnalyzerConfiguration(
      * Package manager specific configurations. The key needs to match the name of the package manager class, e.g.
      * "NuGet" for the NuGet package manager.
      */
-    val packageManagers: Map<String, PackageManagerConfiguration>? = null
+    val packageManagers: Map<String, PackageManagerConfiguration>? = null,
+
+    /**
+     * A flag to control whether excluded scopes and paths should be skipped during the analysis.
+     */
+    val skipExcluded: Boolean = false
 ) {
     /**
      * A copy of [packageManagers] with case-insensitive keys.
@@ -105,7 +110,8 @@ data class AnalyzerConfiguration(
             allowDynamicVersions = other.allowDynamicVersions,
             enabledPackageManagers = other.enabledPackageManagers ?: enabledPackageManagers,
             disabledPackageManagers = other.disabledPackageManagers ?: disabledPackageManagers,
-            packageManagers = mergedPackageManagers
+            packageManagers = mergedPackageManagers,
+            skipExcluded = other.skipExcluded
         )
     }
 }
