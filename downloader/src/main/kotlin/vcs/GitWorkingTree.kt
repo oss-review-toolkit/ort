@@ -124,7 +124,12 @@ open class GitWorkingTree(
                     }
                 }
 
-                remote?.urIs?.firstOrNull()?.toString().orEmpty()
+                val firstRemote = remote?.urIs?.firstOrNull()
+                when {
+                    firstRemote == null -> ""
+                    firstRemote.isRemote -> firstRemote.toString()
+                    else -> File(firstRemote.path).invariantSeparatorsPath
+                }
             }.getOrElse {
                 throw IOException("Unable to get the remote URL.", it)
             }
