@@ -355,7 +355,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val result = mutableListOf<EvaluatedOrtIssue>()
 
         input.ortResult.analyzer?.result?.issues?.get(id)?.let { analyzerIssues ->
-            result += addIssues(analyzerIssues, EvaluatedOrtIssueType.ANALYZER, pkg, null, null)
+            result += addIssues(analyzerIssues, EvaluatedIssueType.ANALYZER, pkg, null, null)
         }
 
         return result
@@ -390,7 +390,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             addVulnerability(pkg, vulnerability)
         }
 
-        addIssues(result.summary.issues, EvaluatedOrtIssueType.ADVISOR, pkg, null, null)
+        addIssues(result.summary.issues, EvaluatedIssueType.ADVISOR, pkg, null, null)
     }
 
     private fun addVulnerability(pkg: EvaluatedPackage, vulnerability: Vulnerability) {
@@ -435,7 +435,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
         issues += addIssues(
             result.summary.issues,
-            EvaluatedOrtIssueType.SCANNER,
+            EvaluatedIssueType.SCANNER,
             pkg,
             actualScanResult,
             null
@@ -487,7 +487,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
             if (this.issues.isNotEmpty()) {
                 paths += packagePath
-                issues += addIssues(this.issues, EvaluatedOrtIssueType.ANALYZER, dependency, null, packagePath)
+                issues += addIssues(this.issues, EvaluatedIssueType.ANALYZER, dependency, null, packagePath)
             }
 
             visitedNodes += getInternalId() to createDependencyNode(dependency, linkage, issues)
@@ -585,7 +585,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
 
     private fun addIssues(
         issues: List<Issue>,
-        type: EvaluatedOrtIssueType,
+        type: EvaluatedIssueType,
         pkg: EvaluatedPackage,
         scanResult: EvaluatedScanResult?,
         path: EvaluatedPackagePath?
