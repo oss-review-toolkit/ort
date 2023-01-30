@@ -185,7 +185,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         logger.debug { "Found ${gitHubIssues.size} issues for package '${pkg.original.id.toCoordinates()}'." }
 
         val defects = if (ortIssues.isEmpty()) {
-            issuesForRelease(pkg, gitHubIssues.applyLabelFilters(), releases, ortIssues).also {
+            createIssuesForReleases(pkg, gitHubIssues.applyLabelFilters(), releases, ortIssues).also {
                 logger.debug { "Found ${it.size} defects for package '${pkg.original.id.toCoordinates()}'." }
             }
         } else {
@@ -207,7 +207,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      * Filter the list of [gitHubIssues] for defects affecting the version of the given [package][pkg]. Use [releases]
      * for the version match. Add an entry to [issues] if the release for the package cannot be determined.
      */
-    private fun issuesForRelease(
+    private fun createIssuesForReleases(
         pkg: GitHubPackage,
         gitHubIssues: List<GitHubIssue>,
         releases: List<Release>,
