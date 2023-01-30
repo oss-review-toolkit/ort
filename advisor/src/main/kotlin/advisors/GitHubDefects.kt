@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.clients.github.DateTime
 import org.ossreviewtoolkit.clients.github.GitHubService
 import org.ossreviewtoolkit.clients.github.Paging
 import org.ossreviewtoolkit.clients.github.QueryResult
-import org.ossreviewtoolkit.clients.github.issuesquery.Issue
+import org.ossreviewtoolkit.clients.github.issuesquery.Issue as GitHubIssue
 import org.ossreviewtoolkit.clients.github.labels
 import org.ossreviewtoolkit.clients.github.releasesquery.Release
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -209,7 +209,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
      */
     private fun issuesForRelease(
         pkg: GitHubPackage,
-        issues: List<Issue>,
+        issues: List<GitHubIssue>,
         releases: List<Release>,
         ortIssues: MutableList<OrtIssue>
     ): List<Defect> {
@@ -229,7 +229,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     /**
      * Return a filtered list of [Issue]s according to the label filters defined in the configuration.
      */
-    private fun List<Issue>.applyLabelFilters(): List<Issue> = filter { issue ->
+    private fun List<GitHubIssue>.applyLabelFilters(): List<GitHubIssue> = filter { issue ->
         val labels = issue.labels()
         labelFilters.find { it.matches(labels) }?.including ?: false
     }
@@ -301,7 +301,7 @@ private val REGEX_FILTER_WILDCARDS = "(?<=[*])|(?=[*])".toRegex()
 /**
  * Convert this [Issue] to a [Defect], using [releases] to determine the fix release.
  */
-private fun Issue.toDefect(releases: List<Release>): Defect =
+private fun GitHubIssue.toDefect(releases: List<Release>): Defect =
     Defect(
         id = url.substringAfterLast('/'),
         url = URI(url),
@@ -319,7 +319,7 @@ private fun Issue.toDefect(releases: List<Release>): Defect =
  * Return a flag whether this issue was closed after the given [time]. This is used to compare the time when an issue
  * was closed with a release date to find the issues affecting a release.
  */
-private fun Issue.closedAfter(time: Instant): Boolean =
+private fun GitHubIssue.closedAfter(time: Instant): Boolean =
     !closed || closedAt == null || Instant.parse(closedAt).isAfter(time)
 
 /**
