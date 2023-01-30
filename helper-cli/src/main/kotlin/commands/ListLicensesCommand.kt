@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.helper.utils.createProvider
 import org.ossreviewtoolkit.helper.utils.fetchScannedSources
 import org.ossreviewtoolkit.helper.utils.getLicenseFindingsById
-import org.ossreviewtoolkit.helper.utils.getPackageOrProject
 import org.ossreviewtoolkit.helper.utils.getViolatedRulesByLicense
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceConfig
