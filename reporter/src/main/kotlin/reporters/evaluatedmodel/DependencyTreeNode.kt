@@ -42,7 +42,7 @@ data class DependencyTreeNode(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopeExcludes: List<ScopeExclude> = emptyList(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<EvaluatedOrtIssue> = emptyList(),
+    val issues: List<EvaluatedIssue> = emptyList(),
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val children: List<DependencyTreeNode>
 )

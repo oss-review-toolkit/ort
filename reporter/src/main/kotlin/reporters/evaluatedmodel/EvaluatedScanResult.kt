@@ -39,5 +39,5 @@ data class EvaluatedScanResult(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageVerificationCode: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<EvaluatedOrtIssue>
+    val issues: List<EvaluatedIssue>
 )

@@ -81,5 +81,5 @@ data class EvaluatedPackage(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopeExcludes: List<ScopeExclude>,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<EvaluatedOrtIssue>
+    val issues: List<EvaluatedIssue>
 )

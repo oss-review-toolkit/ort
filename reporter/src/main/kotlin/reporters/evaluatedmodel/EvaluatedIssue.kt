@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.IssueResolution
 /**
  * The evaluated form of a [Issue] used by the [EvaluatedModel].
  */
-data class EvaluatedOrtIssue(
+data class EvaluatedIssue(
     val timestamp: Instant,
     val type: EvaluatedIssueType,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
