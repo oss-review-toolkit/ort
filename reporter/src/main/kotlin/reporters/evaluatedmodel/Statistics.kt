@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 import java.util.SortedMap
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -48,7 +48,7 @@ data class Statistics(
     val repositoryConfiguration: RepositoryConfigurationStatistics,
 
     /**
-     * The number of [OrtIssue]s by severity which are not resolved and not excluded.
+     * The number of [Issue]s by severity which are not resolved and not excluded.
      */
     val openIssues: IssueStatistics,
 

@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Vulnerability
@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 
 /**
- * A provider of previously added resolutions for [OrtIssue]s and [RuleViolation]s.
+ * A provider of previously added resolutions for [Issue]s and [RuleViolation]s.
  */
 class DefaultResolutionProvider : ResolutionProvider {
     companion object {
@@ -50,7 +50,7 @@ class DefaultResolutionProvider : ResolutionProvider {
      */
     fun add(other: Resolutions) = apply { resolutions = resolutions.merge(other) }
 
-    override fun getIssueResolutionsFor(issue: OrtIssue) = resolutions.issues.filter { it.matches(issue) }
+    override fun getIssueResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
 
     override fun getRuleViolationResolutionsFor(violation: RuleViolation) =
         resolutions.ruleViolations.filter { it.matches(violation) }

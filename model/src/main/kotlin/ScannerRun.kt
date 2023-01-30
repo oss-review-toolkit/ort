@@ -78,10 +78,10 @@ data class ScannerRun(
     }
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<Issue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
         scanResults.forEach { (id, results) ->
             results.forEach { result ->
@@ -95,7 +95,7 @@ data class ScannerRun(
     }
 
     /**
-     * True if any of the [scanResults] contain [OrtIssue]s.
+     * True if any of the [scanResults] contain [Issue]s.
      */
     val hasIssues by lazy { collectIssues().isNotEmpty() }
 }

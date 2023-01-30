@@ -48,7 +48,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
@@ -148,7 +148,7 @@ class Yarn2(
     private val allProjects = mutableMapOf<Identifier, Project>()
 
     // The issues that have been found when resolving the dependencies.
-    private val issues = mutableListOf<OrtIssue>()
+    private val issues = mutableListOf<Issue>()
 
     override fun command(workingDir: File?): String {
         if (workingDir == null) return ""
@@ -718,7 +718,7 @@ class Yarn2(
         override fun linkageFor(dependency: YarnModuleInfo): PackageLinkage =
             if (dependency.pkg == null) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-        override fun createPackage(dependency: YarnModuleInfo, issues: MutableList<OrtIssue>): Package? = dependency.pkg
+        override fun createPackage(dependency: YarnModuleInfo, issues: MutableList<Issue>): Package? = dependency.pkg
     }
 
     /**

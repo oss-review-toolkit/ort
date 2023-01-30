@@ -29,7 +29,7 @@ import org.eclipse.aether.artifact.DefaultArtifact
 import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Severity
@@ -67,7 +67,7 @@ class GradleDependencyHandler(
 
     override fun dependenciesFor(dependency: Dependency): Collection<Dependency> = dependency.dependencies
 
-    override fun issuesForDependency(dependency: Dependency): Collection<OrtIssue> =
+    override fun issuesForDependency(dependency: Dependency): Collection<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
@@ -89,7 +89,7 @@ class GradleDependencyHandler(
     override fun linkageFor(dependency: Dependency): PackageLinkage =
         if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: Dependency, issues: MutableList<OrtIssue>): Package? {
+    override fun createPackage(dependency: Dependency, issues: MutableList<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency()) return null
 

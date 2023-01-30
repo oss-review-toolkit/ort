@@ -169,7 +169,7 @@ class DependencyGraphTest : WordSpec({
                 id("org.apache.commons", "commons-lang3", "3.10"),
                 id("org.apache.commons", "commons-collections4", "4.4")
             )
-            val issue = OrtIssue(source = "analyzer", message = "Could not analyze :-(")
+            val issue = Issue(source = "analyzer", message = "Could not analyze :-(")
             val refLang = DependencyReference(0, linkage = PackageLinkage.PROJECT_DYNAMIC)
             val refCol = DependencyReference(1, issues = listOf(issue), dependencies = sortedSetOf(refLang))
             val trees = sortedSetOf(refCol)

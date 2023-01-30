@@ -187,7 +187,7 @@ data class Package(
     fun toReference(
         linkage: PackageLinkage? = null,
         dependencies: SortedSet<PackageReference>? = null,
-        issues: List<OrtIssue>? = null
+        issues: List<Issue>? = null
     ): PackageReference {
         var ref = PackageReference(id)
 

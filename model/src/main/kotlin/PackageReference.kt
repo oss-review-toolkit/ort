@@ -59,9 +59,9 @@ data class PackageReference(
     val dependencies: SortedSet<PackageReference> = sortedSetOf(),
 
     /**
-     * A list of [OrtIssue]s that occurred handling this [PackageReference].
+     * A list of [Issue]s that occurred handling this [PackageReference].
      */
-    override val issues: List<OrtIssue> = emptyList()
+    override val issues: List<Issue> = emptyList()
 ) : Comparable<PackageReference>, DependencyNode {
     /**
      * Return the set of [Identifier]s the package referred by this [PackageReference] transitively depends on,

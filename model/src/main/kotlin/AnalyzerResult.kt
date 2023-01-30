@@ -45,14 +45,14 @@ data class AnalyzerResult(
     val packages: Set<Package>,
 
     /**
-     * The lists of [OrtIssue]s that occurred within the analyzed projects themselves. Issues related to project
+     * The lists of [Issue]s that occurred within the analyzed projects themselves. Issues related to project
      * dependencies are contained in the dependencies of the project's scopes.
      * This property is not serialized if the map is empty to reduce the size of the result file. If there are no issues
      * at all, [AnalyzerResult.hasIssues] already contains that information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonPropertyOrder(alphabetic = true)
-    val issues: Map<Identifier, List<OrtIssue>> = emptyMap(),
+    val issues: Map<Identifier, List<Issue>> = emptyMap(),
 
     /**
      * A map with [DependencyGraph]s keyed by the name of the package manager that created this graph. Package
@@ -76,9 +76,9 @@ data class AnalyzerResult(
     }
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+    fun collectIssues(): Map<Identifier, Set<Issue>> {
         val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
 
         // Collecting issues from projects is necessary only if they use the dependency tree format; otherwise, the

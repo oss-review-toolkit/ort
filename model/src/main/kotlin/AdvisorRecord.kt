@@ -67,8 +67,8 @@ data class AdvisorRecord(
         }
     }
 
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<Issue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
         advisorResults.forEach { (id, results) ->
             results.forEach { result ->
@@ -82,7 +82,7 @@ data class AdvisorRecord(
     }
 
     /**
-     * True if any of the [advisorResults] contain [OrtIssue]s.
+     * True if any of the [advisorResults] contain [Issue]s.
      */
     val hasIssues by lazy { collectIssues().isNotEmpty() }
 

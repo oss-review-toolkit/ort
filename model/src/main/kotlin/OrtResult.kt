@@ -186,9 +186,9 @@ data class OrtResult(
     }
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
+    fun collectIssues(): Map<Identifier, Set<Issue>> {
         val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
         val scannerIssues = scanner?.collectIssues().orEmpty()
         val advisorIssues = advisor?.results?.collectIssues().orEmpty()

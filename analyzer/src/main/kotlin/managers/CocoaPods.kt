@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
@@ -134,7 +134,7 @@ class CocoaPods(
 
         val scopes = sortedSetOf<Scope>()
         val packages = mutableSetOf<Package>()
-        val issues = mutableListOf<OrtIssue>()
+        val issues = mutableListOf<Issue>()
 
         if (lockfile.isFile) {
             val dependencies = getPackageReferences(lockfile)

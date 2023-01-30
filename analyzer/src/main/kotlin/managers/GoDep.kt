@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
@@ -118,7 +118,7 @@ class GoDep(
             val revision = project.getValue("revision")
             val version = project.getValue("version")
 
-            val issues = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<Issue>()
 
             val vcsProcessed = try {
                 resolveVcsInfo(name, revision, gopath)

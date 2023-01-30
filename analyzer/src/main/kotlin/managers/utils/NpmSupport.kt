@@ -366,7 +366,7 @@ fun parseNpmLicenses(json: JsonNode): Set<String> {
             declaredLicense == "UNLICENSED" -> SpdxConstants.NONE
 
             // NPM allows declaring non-SPDX licenses only by referencing a license file. Avoid reporting an
-            // [OrtIssue] by mapping this to a valid license identifier.
+            // [Issue] by mapping this to a valid license identifier.
             declaredLicense.startsWith("SEE LICENSE IN ") -> SpdxConstants.NOASSERTION
 
             else -> declaredLicense.takeUnless { it.isBlank() }

@@ -19,11 +19,11 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 /**
- * Defines the resolution of an [OrtIssue]. This can be used to silence false positives, or issues that have been
+ * Defines the resolution of an [Issue]. This can be used to silence false positives, or issues that have been
  * identified as not being relevant.
  */
 data class IssueResolution(
@@ -48,5 +48,5 @@ data class IssueResolution(
     /**
      * True if [message] matches the message of [issue].
      */
-    fun matches(issue: OrtIssue) = regex.matches(issue.message.collapseWhitespace())
+    fun matches(issue: Issue) = regex.matches(issue.message.collapseWhitespace())
 }

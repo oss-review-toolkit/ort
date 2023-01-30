@@ -46,7 +46,7 @@ class AdvisorRecordTest : WordSpec({
             val record = advisorRecordOf(
                 queryId to listOf(
                     createResult(
-                        issues = listOf(OrtIssue(source = "Advisor", message = "Failure"))
+                        issues = listOf(Issue(source = "Advisor", message = "Failure"))
                     )
                 )
             )
@@ -67,9 +67,9 @@ class AdvisorRecordTest : WordSpec({
         }
 
         "return a map with all issues in the record" {
-            val issue1 = OrtIssue(source = "Advisor", message = "Failure1")
-            val issue2 = OrtIssue(source = "Advisor", message = "Failure2")
-            val issue3 = OrtIssue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
+            val issue1 = Issue(source = "Advisor", message = "Failure1")
+            val issue2 = Issue(source = "Advisor", message = "Failure2")
+            val issue3 = Issue(source = "Advisor", message = "Warning", severity = Severity.WARNING)
             val record = advisorRecordOf(
                 langId to listOf(createResult(issues = listOf(issue3))),
                 queryId to listOf(createResult(issues = listOf(issue1, issue2)))
@@ -233,7 +233,7 @@ class AdvisorRecordTest : WordSpec({
         "provide a predefined filter for results with issues" {
             val result1 = createResult(
                 advisorIndex = 1,
-                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.HINT))
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.HINT))
             )
             val result2 = createResult(advisorIndex = 2)
 
@@ -251,11 +251,11 @@ class AdvisorRecordTest : WordSpec({
         "provide a predefined filter for results with issues that have a minimum severity" {
             val result1 = createResult(
                 advisorIndex = 1,
-                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.ERROR))
             )
             val result2 = createResult(
                 advisorIndex = 2,
-                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.WARNING)),
                 capability = AdvisorCapability.DEFECTS
             )
 
@@ -273,11 +273,11 @@ class AdvisorRecordTest : WordSpec({
         "provide a predefined filter for results with issues for a given advisor capability" {
             val result1 = createResult(
                 advisorIndex = 1,
-                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.ERROR))
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.ERROR))
             )
             val result2 = createResult(
                 advisorIndex = 2,
-                issues = listOf(OrtIssue(source = "test", message = "test message", severity = Severity.WARNING)),
+                issues = listOf(Issue(source = "test", message = "test message", severity = Severity.WARNING)),
                 capability = AdvisorCapability.DEFECTS
             )
 
@@ -340,7 +340,7 @@ private fun createDefect(id: String): Defect =
  */
 private fun createResult(
     advisorIndex: Int = 1,
-    issues: List<OrtIssue> = emptyList(),
+    issues: List<Issue> = emptyList(),
     vulnerabilities: List<Vulnerability> = emptyList(),
     defects: List<Defect> = emptyList(),
     capability: AdvisorCapability = AdvisorCapability.VULNERABILITIES

@@ -35,8 +35,8 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -108,8 +108,8 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
         issues = mutableListOf(
-            OrtIssue(source = "source-1", message = "error-1"),
-            OrtIssue(source = "source-2", message = "error-2")
+            Issue(source = "source-1", message = "error-1"),
+            Issue(source = "source-2", message = "error-2")
         )
     )
 

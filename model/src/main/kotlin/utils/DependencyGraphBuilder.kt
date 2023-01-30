@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.DependencyReference
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.RootDependencyIndex
@@ -276,7 +276,7 @@ class DependencyGraphBuilder<D>(
      * to the data managed by this instance, resolve the package, and update the [issues] if necessary. Return the
      * numeric index for this dependency.
      */
-    private fun updateDependencyMappingAndPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>): Int {
+    private fun updateDependencyMappingAndPackages(id: Identifier, dependency: D, issues: MutableList<Issue>): Int {
         val dependencyIndex = dependencyIndexMapping[id]
         if (dependencyIndex != null) return dependencyIndex
 
@@ -345,7 +345,7 @@ class DependencyGraphBuilder<D>(
         index: Int,
         scopeName: String,
         dependency: D,
-        issues: List<OrtIssue>,
+        issues: List<Issue>,
         transitive: Boolean,
         processed: Set<D>
     ): DependencyReference? {
@@ -368,7 +368,7 @@ class DependencyGraphBuilder<D>(
         index: RootDependencyIndex,
         scopeName: String,
         dependency: D,
-        issues: List<OrtIssue>,
+        issues: List<Issue>,
         transitive: Boolean,
         processed: Set<D>
     ): DependencyReference? {
@@ -408,7 +408,7 @@ class DependencyGraphBuilder<D>(
      * available, nothing has to be done. Otherwise, create a new one and add it to the set managed by this object. If
      * this fails, record a corresponding message in [issues].
      */
-    private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<OrtIssue>) {
+    private fun updateResolvedPackages(id: Identifier, dependency: D, issues: MutableList<Issue>) {
         resolvedPackages.compute(id) { _, pkg -> pkg ?: dependencyHandler.createPackage(dependency, issues) }
     }
 

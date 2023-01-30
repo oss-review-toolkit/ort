@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-val issues: Map<Identifier, Set<OrtIssue>> = ortResult.collectIssues()
+val issues: Map<Identifier, Set<Issue>> = ortResult.collectIssues()
 
 if (issues.isNotEmpty()) {
     mailClient.sendMail(

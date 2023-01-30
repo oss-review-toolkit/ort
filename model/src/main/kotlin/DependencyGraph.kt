@@ -222,12 +222,12 @@ data class DependencyGraph(
         }
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<OrtIssue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+    fun collectIssues(): Map<Identifier, Set<Issue>> {
+        val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
-        fun addIssues(pkg: Int, issues: Collection<OrtIssue>) {
+        fun addIssues(pkg: Int, issues: Collection<Issue>) {
             if (issues.isNotEmpty()) {
                 collectedIssues.getOrPut(packages[pkg]) { mutableSetOf() } += issues
             }
@@ -324,9 +324,9 @@ class DependencyReference(
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
-     * A list of [OrtIssue]s that occurred handling this dependency.
+     * A list of [Issue]s that occurred handling this dependency.
      */
-    val issues: List<OrtIssue> = emptyList()
+    val issues: List<Issue> = emptyList()
 ) : Comparable<DependencyReference> {
     /**
      * Define an order on [DependencyReference] instances. Instances are ordered by their indices and fragment indices.
@@ -369,9 +369,9 @@ data class DependencyGraphNode(
     val linkage: PackageLinkage = PackageLinkage.DYNAMIC,
 
     /**
-     * A list of [OrtIssue]s that occurred handling this dependency.
+     * A list of [Issue]s that occurred handling this dependency.
      */
-    val issues: List<OrtIssue> = emptyList()
+    val issues: List<Issue> = emptyList()
 )
 
 /**

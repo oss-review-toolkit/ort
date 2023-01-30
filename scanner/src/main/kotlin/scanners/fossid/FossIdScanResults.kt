@@ -24,8 +24,8 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredF
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -53,7 +53,7 @@ internal data class FindingsContainer(
  */
 internal fun <T : Summarizable> List<T>.mapSummary(
     ignoredFiles: Map<String, IgnoredFile>,
-    issues: MutableList<OrtIssue>,
+    issues: MutableList<Issue>,
     detectedLicenseMapping: Map<String, String>
 ): FindingsContainer {
     val licenseFindings = mutableListOf<LicenseFinding>()

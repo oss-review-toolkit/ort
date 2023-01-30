@@ -44,7 +44,7 @@ import io.kotest.matchers.types.beTheSameInstanceAs
 import java.io.File
 import java.net.URI
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.encodeHex
@@ -179,7 +179,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
             "return a package from the root document" {
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId("SPDXRef-Package-xyz", issues) shouldNotBeNull {
                     name shouldBe "xyz"
                     versionInfo shouldBe "0.1.0"
@@ -199,7 +199,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootFile, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(pkgId, issues) shouldBe externalPackage
 
                 issues should beEmpty()
@@ -209,7 +209,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
                 val identifier = "unknownPackageId"
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), BASE_DOCUMENT_FILE, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
@@ -226,7 +226,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
@@ -244,7 +244,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
@@ -265,7 +265,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
 
                 with(issues.single()) {
@@ -296,7 +296,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
 
                 issues should beEmpty()
@@ -321,7 +321,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) shouldBe externalPackage
 
                 with(issues.single()) {
@@ -349,7 +349,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), rootDoc, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.getSpdxPackageForId(identifier, issues) should beNull()
 
                 with(issues.single()) {
@@ -487,7 +487,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
 
                 val resolvedDoc = SpdxResolvedDocument.load(SpdxDocumentCache(), doc1, MANAGER_NAME)
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
                 resolvedDoc.relationships.forEach { relation ->
                     resolvedDoc.getSpdxPackageForId(relation.spdxElementId, issues) shouldNotBeNull {
                         spdxId shouldBe relation.spdxElementId.substringAfter(':')

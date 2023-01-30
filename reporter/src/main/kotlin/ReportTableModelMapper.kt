@@ -21,8 +21,8 @@ package org.ossreviewtoolkit.reporter
 
 import org.ossreviewtoolkit.model.DependencyNavigator
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RuleViolation
@@ -68,13 +68,13 @@ private fun Project.getScopesForDependencies(
 }
 
 /**
- * A mapper which converts an [OrtIssue] to a [ReportTableModel] view model.
+ * A mapper which converts an [Issue] to a [ReportTableModel] view model.
  */
 class ReportTableModelMapper(
     private val resolutionProvider: ResolutionProvider,
     private val howToFixTextProvider: HowToFixTextProvider
 ) {
-    private fun OrtIssue.toResolvableIssue(): ResolvableIssue {
+    private fun Issue.toResolvableIssue(): ResolvableIssue {
         val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
             source = this@toResolvableIssue.source,

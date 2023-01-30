@@ -24,8 +24,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
@@ -118,7 +118,7 @@ class BoyterLc internal constructor(
             licenseFindings = licenseFindings,
             copyrightFindings = sortedSetOf(),
             issues = listOf(
-                OrtIssue(
+                Issue(
                     source = name,
                     message = "This scanner is not capable of detecting copyright statements.",
                     severity = Severity.HINT

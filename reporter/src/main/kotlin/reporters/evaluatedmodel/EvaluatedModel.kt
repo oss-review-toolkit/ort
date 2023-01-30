@@ -31,7 +31,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 
 import java.io.Writer
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.RuleViolation
@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  * information contained in the [ReporterInput] is applied to the [OrtResult]:
  *
  * * [PathExclude]s and [ScopeExclude]s from the [RepositoryConfiguration] are applied.
- * * [IssueResolution]s from the [ReporterInput.resolutionProvider] are matched against all [OrtIssue]s contained in the
+ * * [IssueResolution]s from the [ReporterInput.resolutionProvider] are matched against all [Issue]s contained in the
  *   result.
  * * [RuleViolationResolution]s from the [ReporterInput.resolutionProvider] are matched against all [RuleViolation]s.
  *
@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  * * [LicenseFindingCuration]s are not yet applied to the model.
  *
  * The model also contains useful containers to easily access some content of the [OrtResult], for example a list of
- * all [OrtIssue]s in their [evaluated form][EvaluatedOrtIssue] which contains back-references to its source.
+ * all [Issue]s in their [evaluated form][EvaluatedOrtIssue] which contains back-references to its source.
  *
  * The model can be serialized to with the helper functions [toJson] and [toYaml]. It uses a special [JsonMapper] that
  * de-duplicates objects in the result. For this it uses Jackson's [JsonIdentityInfo] to automatically generate [Int]

@@ -23,7 +23,7 @@ import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -584,7 +584,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addIssues(
-        issues: List<OrtIssue>,
+        issues: List<Issue>,
         type: EvaluatedOrtIssueType,
         pkg: EvaluatedPackage,
         scanResult: EvaluatedScanResult?,
@@ -612,7 +612,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         return evaluatedIssues
     }
 
-    private fun addResolutions(issue: OrtIssue): List<IssueResolution> {
+    private fun addResolutions(issue: Issue): List<IssueResolution> {
         val matchingResolutions = input.resolutionProvider.getIssueResolutionsFor(issue)
 
         return issueResolutions.addIfRequired(matchingResolutions)

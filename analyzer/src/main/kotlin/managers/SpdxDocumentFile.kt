@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
@@ -337,7 +337,7 @@ class SpdxDocumentFile(
         packages: MutableSet<Package>
     ): SortedSet<PackageReference> =
         getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
-            val issues = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<Issue>()
             getPackageManagerDependency(target, doc) ?: doc.getSpdxPackageForId(target, issues)?.let { dependency ->
                 packages += dependency.toPackage(doc.getDefinitionFile(target), doc)
 
@@ -392,7 +392,7 @@ class SpdxDocumentFile(
         dependsOnCase: (String) -> PackageReference? = { null }
     ): SortedSet<PackageReference> =
         doc.relationships.mapNotNullTo(sortedSetOf()) { (source, relation, target, _) ->
-            val issues = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<Issue>()
 
             val isDependsOnRelation = relation == SpdxRelationship.Type.DEPENDS_ON || hasDefaultScopeLinkage(
                 source, target, relation, doc.relationships

@@ -46,5 +46,5 @@ data class ProjectAnalyzerResult(
      * even if this class is not serialized as part of an [OrtResult].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<OrtIssue> = emptyList()
+    val issues: List<Issue> = emptyList()
 )

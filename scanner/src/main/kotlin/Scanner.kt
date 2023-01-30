@@ -36,8 +36,8 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
@@ -183,7 +183,7 @@ class Scanner(
                 }.onFailure {
                     controller.addProvenanceResolutionIssue(
                         pkg.id,
-                        OrtIssue(
+                        Issue(
                             source = TOOL_NAME,
                             severity = Severity.ERROR,
                             message = "Could not resolve provenance for package '${pkg.id.toCoordinates()}': " +
@@ -216,7 +216,7 @@ class Scanner(
                     controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
                         controller.addProvenanceResolutionIssue(
                             id,
-                            OrtIssue(
+                            Issue(
                                 source = TOOL_NAME,
                                 severity = Severity.ERROR,
                                 message = "Could not resolve nested provenance for package " +
@@ -603,7 +603,7 @@ class Scanner(
                 }.onFailure {
                     controller.addIssue(
                         pkg.id,
-                        OrtIssue(
+                        Issue(
                             source = "Downloader",
                             message = "Could not create file archive for " +
                                     "'${pkg.id.toCoordinates()}': ${it.collectMessages()}",

@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.reporter
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
@@ -53,7 +53,7 @@ data class ReporterInput(
     val packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
 
     /**
-     * A [ResolutionProvider], can be used to check which [OrtIssue]s and [RuleViolation]s are resolved.
+     * A [ResolutionProvider], can be used to check which [Issue]s and [RuleViolation]s are resolved.
      */
     val resolutionProvider: ResolutionProvider = DefaultResolutionProvider(),
 
@@ -85,7 +85,7 @@ data class ReporterInput(
     val licenseClassifications: LicenseClassifications = LicenseClassifications(),
 
     /**
-     * A [HowToFixTextProvider], can be used to integrate how to fix texts for [OrtIssue]s into reports.
+     * A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports.
      */
     val howToFixTextProvider: HowToFixTextProvider = HowToFixTextProvider.NONE
 )

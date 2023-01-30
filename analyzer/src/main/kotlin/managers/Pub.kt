@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.EMPTY_JSON_NODE
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
@@ -114,7 +114,7 @@ class Pub(
 
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
-        val issues: List<OrtIssue>
+        val issues: List<Issue>
     )
 
     private val reader = PubCacheReader()
@@ -220,7 +220,7 @@ class Pub(
 
         val packages = mutableMapOf<Identifier, Package>()
         val scopes = sortedSetOf<Scope>()
-        val issues = mutableListOf<OrtIssue>()
+        val issues = mutableListOf<Issue>()
         val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
         if (hasDependencies) {
@@ -461,7 +461,7 @@ class Pub(
         logger.info { "Parsing installed Pub packages..." }
 
         val packages = mutableMapOf<Identifier, Package>()
-        val issues = mutableListOf<OrtIssue>()
+        val issues = mutableListOf<Issue>()
 
         // Flag if the project is a flutter project.
         var containsFlutter = false

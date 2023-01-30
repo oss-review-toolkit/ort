@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.cli.utils
 
 import com.github.ajalt.clikt.core.ProgramResult
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 
@@ -40,8 +40,8 @@ internal sealed class SeverityStats(
 
     companion object {
         fun createFromIssues(
-            resolvedIssues: Collection<OrtIssue>,
-            unresolvedIssues: Collection<OrtIssue>
+            resolvedIssues: Collection<Issue>,
+            unresolvedIssues: Collection<Issue>
         ) =
             IssueSeverityStats(
                 resolvedCounts = resolvedIssues.groupingBy { it.severity }.eachCount(),

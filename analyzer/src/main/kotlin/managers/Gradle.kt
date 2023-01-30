@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.analyzer.managers.utils.identifier
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
@@ -266,7 +266,7 @@ class Gradle(
                     scopeNames = graphBuilder.scopesFor(projectId)
                 )
 
-                val issues = mutableListOf<OrtIssue>()
+                val issues = mutableListOf<Issue>()
 
                 dependencyTreeModel.errors.mapTo(issues) {
                     createAndLogIssue(source = managerName, message = it, severity = Severity.ERROR)

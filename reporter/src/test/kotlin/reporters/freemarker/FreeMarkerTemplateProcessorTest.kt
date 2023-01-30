@@ -46,9 +46,9 @@ import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Defect
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -238,7 +238,7 @@ private fun advisorRun(results: SortedMap<Identifier, List<AdvisorResult>>): Adv
  */
 private fun advisorResult(
     details: AdvisorDetails = ADVISOR_DETAILS,
-    issues: List<OrtIssue> = emptyList(),
+    issues: List<Issue> = emptyList(),
     vulnerabilities: List<Vulnerability> = emptyList(),
     defects: List<Defect> = emptyList()
 ): AdvisorResult =
@@ -434,7 +434,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
         }
 
         "return true if there are issues for an advisor with the provided capability" {
-            val issue = OrtIssue(source = ADVISOR_DETAILS.name, message = "An error occurred")
+            val issue = Issue(source = ADVISOR_DETAILS.name, message = "An error occurred")
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))
@@ -451,7 +451,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult1 = advisorResult(vulnerabilities = listOf(vulnerability))
 
             val details2 = AdvisorDetails("anotherAdvisor", enumSetOf(AdvisorCapability.DEFECTS))
-            val issue = OrtIssue(source = details2.name, message = "Error when loading defects")
+            val issue = Issue(source = details2.name, message = "Error when loading defects")
             val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
 
             val advisorRun = advisorRun(
@@ -467,7 +467,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
         "ignore issues with a lower severity" {
             val issue =
-                OrtIssue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
+                Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))
@@ -482,7 +482,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
     "advisorResultsWithIssues" should {
         "return the correct results" {
-            val issue = OrtIssue(source = ADVISOR_DETAILS.name, message = "An error occurred")
+            val issue = Issue(source = ADVISOR_DETAILS.name, message = "An error occurred")
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRun(
@@ -504,7 +504,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
         "ignore advisor results with other capabilities" {
             val details2 = AdvisorDetails("anotherAdvisor", enumSetOf(AdvisorCapability.DEFECTS))
-            val issue = OrtIssue(source = details2.name, message = "Error when loading defects")
+            val issue = Issue(source = details2.name, message = "Error when loading defects")
 
             val vulnerability = mockk<Vulnerability>()
             val advisorResult1 = advisorResult(vulnerabilities = listOf(vulnerability), issues = listOf(issue))
@@ -526,7 +526,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
 
         "ignore issues with a lower severity" {
             val issue =
-                OrtIssue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
+                Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRun(sortedMapOf(idSubProject to listOf(advisorResult)))

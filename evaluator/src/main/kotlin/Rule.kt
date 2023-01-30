@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.evaluator
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseSource
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
@@ -118,7 +118,7 @@ abstract class Rule(
         }
 
     /**
-     * Return a string to be used as [source][OrtIssue.source] for issues generated in [hint], [warning], and [error].
+     * Return a string to be used as [source][Issue.source] for issues generated in [hint], [warning], and [error].
      */
     abstract fun issueSource(): String
 

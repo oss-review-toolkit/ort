@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.scanner
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -55,16 +55,16 @@ class ScanController(
     val config: ScannerConfiguration
 ) {
     /**
-     * A map of package [Identifier]s to a list of [OrtIssue]s that occurred during provenance resolution for the
+     * A map of package [Identifier]s to a list of [Issue]s that occurred during provenance resolution for the
      * respective package.
      */
-    private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+    private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<Issue>>()
 
     /**
-     * A map of [Identifier]s associated with a list of [OrtIssue]s that occurred during a scan besides the issues
+     * A map of [Identifier]s associated with a list of [Issue]s that occurred during a scan besides the issues
      * created by the scanners themselves as part of the [ScanSummary].
      */
-    private val issues = mutableMapOf<Identifier, MutableList<OrtIssue>>()
+    private val issues = mutableMapOf<Identifier, MutableList<Issue>>()
 
     /**
      * A map of [KnownProvenance]s to their resolved [NestedProvenance]s.
@@ -88,11 +88,11 @@ class ScanController(
      */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
-    fun addProvenanceResolutionIssue(id: Identifier, issue: OrtIssue) {
+    fun addProvenanceResolutionIssue(id: Identifier, issue: Issue) {
         provenanceResolutionIssues.getOrPut(id) { mutableListOf() } += issue
     }
 
-    fun addIssue(id: Identifier, issue: OrtIssue) {
+    fun addIssue(id: Identifier, issue: Issue) {
         issues.getOrPut(id) { mutableListOf() } += issue
     }
 
@@ -287,7 +287,7 @@ class ScanController(
 
     private fun buildNestedProvenanceScanResult(
         root: KnownProvenance,
-        issues: List<OrtIssue>
+        issues: List<Issue>
     ): NestedProvenanceScanResult? {
         val nestedProvenance = nestedProvenances[root] ?: return null
 
