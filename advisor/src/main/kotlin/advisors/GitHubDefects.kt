@@ -205,17 +205,17 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
 
     /**
      * Filter the list of [gitHubIssues] for defects affecting the version of the given [package][pkg]. Use [releases]
-     * for the version match. Add an entry to [ortIssues] if the release for the package cannot be determined.
+     * for the version match. Add an entry to [issues] if the release for the package cannot be determined.
      */
     private fun issuesForRelease(
         pkg: GitHubPackage,
         gitHubIssues: List<GitHubIssue>,
         releases: List<Release>,
-        ortIssues: MutableList<Issue>
+        issues: MutableList<Issue>
     ): List<Defect> {
         val releaseDate = findReleaseFor(pkg.original, releases)?.publishedAt?.let(Instant::parse)
             ?: Instant.now().also {
-                ortIssues += createAndLogIssue(
+                issues += createAndLogIssue(
                     providerName,
                     "Could not determine release date for package '${pkg.original.id.toCoordinates()}'.",
                     Severity.HINT
