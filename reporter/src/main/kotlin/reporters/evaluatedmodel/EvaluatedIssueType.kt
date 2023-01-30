@@ -22,6 +22,6 @@ package org.ossreviewtoolkit.reporter.reporters.evaluatedmodel
 /**
  * The possible types of an [EvaluatedOrtIssue].
  */
-enum class EvaluatedOrtIssueType {
+enum class EvaluatedIssueType {
     ADVISOR, ANALYZER, SCANNER
 }

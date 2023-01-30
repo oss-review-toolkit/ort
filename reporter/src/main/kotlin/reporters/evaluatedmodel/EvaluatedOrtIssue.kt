@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.config.IssueResolution
  */
 data class EvaluatedOrtIssue(
     val timestamp: Instant,
-    val type: EvaluatedOrtIssueType,
+    val type: EvaluatedIssueType,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val source: String,
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
