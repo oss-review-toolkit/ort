@@ -596,7 +596,7 @@ open class Npm(
             "old lockfile "
         )
 
-        fun mapLinesToOrtIssues(prefix: String, severity: Severity) {
+        fun mapLinesToIssues(prefix: String, severity: Severity) {
             val issueLines = lines.dropWhile { !it.startsWith(prefix) }
                 .takeWhile { it.startsWith(prefix) }.mapNotNull { line ->
                     line.removePrefix(prefix).let {
@@ -613,8 +613,8 @@ open class Npm(
             }
         }
 
-        mapLinesToOrtIssues("npm WARN ", Severity.WARNING)
-        mapLinesToOrtIssues("npm ERR! ", Severity.ERROR)
+        mapLinesToIssues("npm WARN ", Severity.WARNING)
+        mapLinesToIssues("npm ERR! ", Severity.ERROR)
 
         return issues
     }
