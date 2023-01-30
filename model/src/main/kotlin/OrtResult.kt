@@ -518,7 +518,10 @@ data class OrtResult(
         }
 }
 
-private fun applyPackageCurations(packages: Set<Package>, curations: List<PackageCuration>): Set<CuratedPackage> {
+private fun applyPackageCurations(
+    packages: Collection<Package>,
+    curations: List<PackageCuration>
+): Set<CuratedPackage> {
     val curationsForId = packages.associateBy(
         keySelector = { pkg -> pkg.id },
         valueTransform = { pkg ->
