@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import java.io.File
-import java.net.URI
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -102,12 +101,10 @@ class Unmanaged(
 
             else -> {
                 // For all non-GitRepo VCSes derive the name from the VCS URL.
-                val fileUrl = File(vcsInfo.url).takeIf { it.exists() } ?: File(URI(vcsInfo.url))
-
                 Identifier(
                     type = managerName,
                     namespace = "",
-                    name = fileUrl.name.removeSuffix(".git"),
+                    name = vcsInfo.url.split('/').last().removeSuffix(".git"),
                     version = vcsInfo.revision
                 )
             }
