@@ -32,7 +32,10 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -105,6 +108,24 @@ class GradleFunTest : StringSpec() {
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
+        }
+
+        "Scopes are correctly excluded from the dependency graph" {
+            val definitionFile = projectDir.resolve("app/build.gradle")
+            val expectedResult = patchExpectedResult(
+                projectDir.resolveSibling("gradle-expected-output-scopes-excludes.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val scopeExclude = ScopeExclude("test.*", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val repoConfig = RepositoryConfiguration(excludes = Excludes(scopes = listOf(scopeExclude)))
+
+            val result = createGradle(analyzerConfig, repoConfig)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
+
+            result.toYaml() shouldBe expectedResult
         }
 
         // Disabled because despite following the example at [1] Gradle says there is "No service of type
@@ -199,6 +220,8 @@ class GradleFunTest : StringSpec() {
             .requireSuccess()
     }
 
-    private fun createGradle() =
-        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+    private fun createGradle(
+        analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+        repoConfig: RepositoryConfiguration = RepositoryConfiguration()
+    ) = Gradle("Gradle", USER_DIR, analyzerConfig, repoConfig)
 }
