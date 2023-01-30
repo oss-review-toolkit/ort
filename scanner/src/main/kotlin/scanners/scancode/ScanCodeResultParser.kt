@@ -29,8 +29,8 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.TextLocation
@@ -281,14 +281,14 @@ private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
 }
 
 /**
- * Get the list of [OrtIssue]s for scanned files.
+ * Get the list of [Issue]s for scanned files.
  */
-private fun getIssues(result: JsonNode): List<OrtIssue> {
+private fun getIssues(result: JsonNode): List<Issue> {
     val input = getInputPath(result)
     return result["files"]?.flatMap { file ->
         val path = file["path"].textValue().removePrefix(input)
         file["scan_errors"].map {
-            OrtIssue(
+            Issue(
                 source = ScanCode.SCANNER_NAME,
                 message = "${it.textValue()} (File: $path)"
             )
@@ -300,7 +300,7 @@ private fun getIssues(result: JsonNode): List<OrtIssue> {
  * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
  * otherwise.
  */
-internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
+internal fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
     if (issues.isEmpty()) return false
 
     var onlyTimeoutErrors = true
@@ -328,7 +328,7 @@ internal fun mapTimeoutErrors(issues: MutableList<OrtIssue>): Boolean {
  * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred, return false
  * otherwise.
  */
-internal fun mapUnknownIssues(issues: MutableList<OrtIssue>): Boolean {
+internal fun mapUnknownIssues(issues: MutableList<Issue>): Boolean {
     if (issues.isEmpty()) return false
 
     var onlyMemoryErrors = true

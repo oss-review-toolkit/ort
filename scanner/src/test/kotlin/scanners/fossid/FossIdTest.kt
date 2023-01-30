@@ -78,8 +78,8 @@ import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescripti
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScanResult
@@ -330,7 +330,7 @@ class FossIdTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
-                OrtIssue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
+                Issue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
             }
 
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues

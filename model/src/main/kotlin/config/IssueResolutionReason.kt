@@ -19,10 +19,10 @@
 
 package org.ossreviewtoolkit.model.config
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 
 /**
- * Possible reasons for resolving an [OrtIssue] using a [IssueResolution].
+ * Possible reasons for resolving an [Issue] using a [IssueResolution].
  */
 enum class IssueResolutionReason {
     /**

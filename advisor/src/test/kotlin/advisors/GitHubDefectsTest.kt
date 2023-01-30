@@ -130,7 +130,7 @@ class GitHubDefectsTest : WordSpec({
             )
         }
 
-        "create an OrtIssue for a package if the release cannot be matched" {
+        "create an Issue for a package if the release cannot be matched" {
             val pkg = createPackage()
             val issues = listOf(createIssue(index = 1, closedTime = time(2, 2)))
 

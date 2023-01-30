@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
@@ -80,7 +80,7 @@ class PackageManagerDependencyHandler(
 
     private val navigator = DependencyGraphNavigator(analyzerResult.dependencyGraphs)
 
-    override fun createPackage(dependency: ResolvableDependencyNode, issues: MutableList<OrtIssue>): Package? =
+    override fun createPackage(dependency: ResolvableDependencyNode, issues: MutableList<Issue>): Package? =
         analyzerResult.packages.find { it.id == dependency.id }
 
     override fun dependenciesFor(dependency: ResolvableDependencyNode): Collection<ResolvableDependencyNode> =
@@ -94,7 +94,7 @@ class PackageManagerDependencyHandler(
 
     override fun identifierFor(dependency: ResolvableDependencyNode): Identifier = dependency.id
 
-    override fun issuesForDependency(dependency: ResolvableDependencyNode): Collection<OrtIssue> = dependency.issues
+    override fun issuesForDependency(dependency: ResolvableDependencyNode): Collection<Issue> = dependency.issues
 
     override fun linkageFor(dependency: ResolvableDependencyNode): PackageLinkage = dependency.linkage
 
@@ -164,7 +164,7 @@ sealed class ResolvableDependencyNode : DependencyNode
 class ProjectScopeDependencyNode(
     override val id: Identifier,
     override val linkage: PackageLinkage,
-    override val issues: List<OrtIssue>,
+    override val issues: List<Issue>,
     private val dependencies: Sequence<DependencyNode>
 ) : ResolvableDependencyNode() {
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies)

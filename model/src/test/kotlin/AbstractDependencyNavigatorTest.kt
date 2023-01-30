@@ -352,14 +352,14 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
                     issues should containExactlyEntries(
                         Identifier("Maven:org.scala-lang.modules:scala-java8-compat_2.12:0.8.0") to setOf(
-                            OrtIssue(
+                            Issue(
                                 Instant.EPOCH,
                                 "Gradle",
                                 "Test issue 1"
                             )
                         ),
                         Identifier("Maven:org.scalactic:scalactic_2.12:3.0.4") to setOf(
-                            OrtIssue(
+                            Issue(
                                 Instant.EPOCH,
                                 "Gradle",
                                 "Test issue 2"

@@ -26,7 +26,7 @@ import org.eclipse.aether.graph.DependencyNode
 
 import org.ossreviewtoolkit.analyzer.managers.Maven
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -90,7 +90,7 @@ class MavenDependencyHandler(
      * Create a [Package] representing a [dependency] if possible, recording any [issues]. Inter-project
      * dependencies are skipped.
      */
-    override fun createPackage(dependency: DependencyNode, issues: MutableList<OrtIssue>): Package? {
+    override fun createPackage(dependency: DependencyNode, issues: MutableList<Issue>): Package? {
         if (isLocalProject(dependency)) return null
 
         return runCatching {

@@ -60,11 +60,11 @@ interface DependencyNavigator {
             values.flatMapTo(mutableSetOf()) { it }
 
         /**
-         * Return a map with all [OrtIssue]s found in the dependency graph spawned by [dependencies] grouped by their
+         * Return a map with all [Issue]s found in the dependency graph spawned by [dependencies] grouped by their
          * [Identifier]s.
          */
-        fun collectIssues(dependencies: Sequence<DependencyNode>): Map<Identifier, Set<OrtIssue>> {
-            val collectedIssues = mutableMapOf<Identifier, MutableSet<OrtIssue>>()
+        fun collectIssues(dependencies: Sequence<DependencyNode>): Map<Identifier, Set<Issue>> {
+            val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
             fun addIssues(nodes: Sequence<DependencyNode>) {
                 nodes.forEach { node ->
@@ -171,9 +171,9 @@ interface DependencyNavigator {
         getTreeDepthRecursive(directDependencies(project, scopeName))
 
     /**
-     * Return a map of all de-duplicated [OrtIssue]s associated by [Identifier] for the given [project].
+     * Return a map of all de-duplicated [Issue]s associated by [Identifier] for the given [project].
      */
-    fun projectIssues(project: Project): Map<Identifier, Set<OrtIssue>> =
+    fun projectIssues(project: Project): Map<Identifier, Set<Issue>> =
         collectIssues(scopeNames(project).asSequence().flatMap { directDependencies(project, it) })
 
     /**

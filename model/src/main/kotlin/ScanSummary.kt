@@ -72,7 +72,7 @@ data class ScanSummary(
      * information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<OrtIssue> = emptyList()
+    val issues: List<Issue> = emptyList()
 ) {
     companion object {
         /**

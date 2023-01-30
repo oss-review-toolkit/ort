@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
-import org.ossreviewtoolkit.model.OrtIssue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -207,7 +207,7 @@ class OpossumReporterTest : WordSpec({
                     "https://github.com/path/first-package-repo/tree/master/project-path/{path}"
         }
 
-        "create ortIssues containing all issues" {
+        "create issues containing all issues" {
             val issuesFromFirstPackage =
                 opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1")
                     .filter { it.comment?.contains(Regex("Source-.*Message-")) == true }
@@ -419,17 +419,17 @@ private fun createOrtResult(): OrtResult {
                 ),
                 issues = mapOf(
                     Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
-                        OrtIssue(
+                        Issue(
                             source = "Source-1",
                             message = "Message-1"
                         ),
-                        OrtIssue(
+                        Issue(
                             source = "Source-2",
                             message = "Message-2"
                         )
                     ),
                     Identifier("unknown-identifier") to listOf(
-                        OrtIssue(
+                        Issue(
                             source = "Source-3",
                             message = "Message-3"
                         )
@@ -504,11 +504,11 @@ private fun createOrtResult(): OrtResult {
                                 )
                             ),
                             issues = listOf(
-                                OrtIssue(
+                                Issue(
                                     source = "Source-4",
                                     message = "Message-4"
                                 ),
-                                OrtIssue(
+                                Issue(
                                     source = "Source-5",
                                     message = "Message-5"
                                 )

@@ -1,7 +1,7 @@
 object : HowToFixTextProvider {
-    fun OrtIssue.matchesMessage(pattern: String): Boolean = pattern.toRegex().matches(message)
+    fun Issue.matchesMessage(pattern: String): Boolean = pattern.toRegex().matches(message)
 
-    override fun getHowToFixText(issue: OrtIssue): String? {
+    override fun getHowToFixText(issue: Issue): String? {
         // How-to-fix instruction Markdown for scan timeout errors.
         if (issue.matchesMessage("ERROR: Timeout after .* seconds while scanning file.*")) {
             return """

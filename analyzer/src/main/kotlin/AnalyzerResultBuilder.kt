@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphNavigator
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -40,7 +40,7 @@ class AnalyzerResultBuilder {
 
     private val projects = mutableSetOf<Project>()
     private val packages = mutableSetOf<Package>()
-    private val issues = mutableMapOf<Identifier, List<OrtIssue>>()
+    private val issues = mutableMapOf<Identifier, List<Issue>>()
     private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
     fun build(): AnalyzerResult {

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 /**
  * An issue that occurred while executing ORT.
  */
-data class OrtIssue(
+data class Issue(
     /**
      * The timestamp of the issue.
      */
@@ -68,15 +68,15 @@ class NormalizeLineBreaksSerializer : StdSerializer<String>(String::class.java) 
 }
 
 /**
- * Create an [OrtIssue] and log the message. The log level is aligned with the [severity].
+ * Create an [Issue] and log the message. The log level is aligned with the [severity].
  */
 inline fun <reified T : Logging> T.createAndLogIssue(
     source: String,
     message: String,
     severity: Severity? = null
-): OrtIssue {
-    val issue = severity?.let { OrtIssue(source = source, message = message, severity = it) }
-        ?: OrtIssue(source = source, message = message)
+): Issue {
+    val issue = severity?.let { Issue(source = source, message = message, severity = it) }
+        ?: Issue(source = source, message = message)
     logger.log(issue.severity.toLog4jLevel()) { message }
     return issue
 }

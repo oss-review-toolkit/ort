@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
@@ -468,7 +468,7 @@ class OpossumReporter : Reporter {
             results.forEach { addScannerResult(id, it, maxDepth) }
         }
 
-        fun addIssue(issue: OrtIssue, id: Identifier, source: String) {
+        fun addIssue(issue: Issue, id: Identifier, source: String) {
             val roots = packageToRoot[id]
 
             val paths = if (roots.isNullOrEmpty()) {

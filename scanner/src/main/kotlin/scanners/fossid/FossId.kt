@@ -55,7 +55,7 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -204,7 +204,7 @@ class FossId internal constructor(
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val (result, duration) = measureTimedValue {
-            fun createSingleIssueResult(issue: OrtIssue, provenance: Provenance): ScanResult {
+            fun createSingleIssueResult(issue: Issue, provenance: Provenance): ScanResult {
                 val time = Instant.now()
                 val summary = ScanSummary(time, time, "", sortedSetOf(), sortedSetOf(), listOf(issue))
                 return ScanResult(provenance, details, summary)
@@ -691,7 +691,7 @@ class FossId internal constructor(
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
         val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
-            OrtIssue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
+            Issue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
         }
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }

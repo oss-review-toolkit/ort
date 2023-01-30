@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -581,14 +581,14 @@ open class Npm(
     /**
      * Install dependencies using the given package manager command.
      */
-    private fun installDependencies(workingDir: File): List<OrtIssue> {
+    private fun installDependencies(workingDir: File): List<Issue> {
         requireLockfile(workingDir) { hasLockFile(workingDir) }
 
         // Install all NPM dependencies to enable NPM to list dependencies.
         val process = runInstall(workingDir)
 
         val lines = process.stderr.lines()
-        val issues = mutableListOf<OrtIssue>()
+        val issues = mutableListOf<Issue>()
         val commonSecondaryPrefixes = listOf(
             "JSON.parse ",
             "deprecated ",
@@ -605,7 +605,7 @@ open class Npm(
                 }
 
             if (issueLines.isNotEmpty()) {
-                issues += OrtIssue(
+                issues += Issue(
                     source = managerName,
                     message = issueLines.joinToString("\n"),
                     severity = severity

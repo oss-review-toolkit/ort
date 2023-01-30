@@ -50,7 +50,7 @@ import org.eclipse.aether.repository.RemoteRepository
 
 import org.ossreviewtoolkit.analyzer.managers.Gradle
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -310,7 +310,7 @@ class GradleDependencyHandlerTest : WordSpec({
             val maven = mockk<MavenSupport>()
             val exception = ProjectBuildingException("project", "Could not build.", IOException("Download exception"))
             val dep = createDependency("org.apache.commons", "commons-lang3", "3.11")
-            val issues = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<Issue>()
 
             every { maven.parsePackage(any(), any(), any()) } throws exception
             val handler = GradleDependencyHandler(NAME, maven)

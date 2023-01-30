@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager.Companion.processPackageVcs
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
@@ -125,8 +125,8 @@ class NuGetSupport(
     private fun getAllPackageData(
         directDependencies: Collection<Identifier>,
         registrationsBaseUrls: Collection<String>,
-    ): Pair<Map<Identifier, AllPackageData>, Set<OrtIssue>> {
-        val issues = mutableSetOf<OrtIssue>()
+    ): Pair<Map<Identifier, AllPackageData>, Set<Issue>> {
+        val issues = mutableSetOf<Issue>()
         val result = mutableMapOf<Identifier, AllPackageData>()
         val queue = LinkedList(directDependencies)
 

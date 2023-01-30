@@ -45,7 +45,7 @@ interface DependencyNode {
     val linkage: PackageLinkage
 
     /** A list with issues that occurred while resolving this dependency. */
-    val issues: List<OrtIssue>
+    val issues: List<Issue>
 
     /**
      * Visit the direct dependencies of this [DependencyNode] by calling the specified [block] with a sequence of all

@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
@@ -200,7 +200,7 @@ class Bundler(
         requireLockfile(workingDir) { workingDir.resolve(BUNDLER_LOCKFILE_NAME).isFile }
 
         val scopes = mutableSetOf<Scope>()
-        val issues = mutableListOf<OrtIssue>()
+        val issues = mutableListOf<Issue>()
 
         val gemSpecs = resolveGemsMetadata(workingDir)
 
@@ -236,7 +236,7 @@ class Bundler(
 
     private fun parseScope(
         workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-        scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<OrtIssue>
+        scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<Issue>
     ) {
         logger.debug {
             "Parsing scope '$groupName' with top-level dependencies $dependencyList for project " +
@@ -254,7 +254,7 @@ class Bundler(
 
     private fun parseDependency(
         workingDir: File, projectId: Identifier, gemName: String, gemSpecs: MutableMap<String, GemSpec>,
-        scopeDependencies: MutableSet<PackageReference>, issues: MutableList<OrtIssue>
+        scopeDependencies: MutableSet<PackageReference>, issues: MutableList<Issue>
     ) {
         logger.debug { "Parsing dependency '$gemName'." }
 

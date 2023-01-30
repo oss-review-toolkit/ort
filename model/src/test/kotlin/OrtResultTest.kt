@@ -168,8 +168,8 @@ class OrtResultTest : WordSpec({
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to
                                     listOf(
-                                        OrtIssue(message = "Issue message to resolve", source = ""),
-                                        OrtIssue(message = "Non-resolved issue", source = "")
+                                        Issue(message = "Issue message to resolve", source = ""),
+                                        Issue(message = "Non-resolved issue", source = "")
                                     )
                         )
                     )
@@ -193,12 +193,12 @@ class OrtResultTest : WordSpec({
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:example:1.0") to
                                     listOf(
-                                        OrtIssue(
+                                        Issue(
                                             message = "Issue with severity 'warning'",
                                             source = "",
                                             severity = Severity.WARNING
                                         ),
-                                        OrtIssue(
+                                        Issue(
                                             message = "Issue with severity 'hint'.",
                                             source = "",
                                             severity = Severity.HINT
@@ -243,9 +243,9 @@ class OrtResultTest : WordSpec({
                         packages = emptySet(),
                         issues = mapOf(
                             Identifier("Maven:org.oss-review-toolkit:excluded:1.0") to
-                                    listOf(OrtIssue(message = "Excluded issue", source = "")),
+                                    listOf(Issue(message = "Excluded issue", source = "")),
                             Identifier("Maven:org.oss-review-toolkit:included:1.0") to
-                                    listOf(OrtIssue(message = "Included issue", source = ""))
+                                    listOf(Issue(message = "Included issue", source = ""))
                         )
                     )
                 )

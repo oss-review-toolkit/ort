@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorResultFilter
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -323,7 +323,7 @@ class FreemarkerTemplateProcessor(
         fun isLicensePresent(license: ResolvedLicense): Boolean = SpdxConstants.isPresent(license.license.toString())
 
         /**
-         * Return `true` if there are any unresolved and non-excluded [OrtIssue]s whose severity is equal to or greater
+         * Return `true` if there are any unresolved and non-excluded [Issue]s whose severity is equal to or greater
          * than the [threshold], or `false` otherwise.
          */
         @JvmOverloads

@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.PackageReference
@@ -112,9 +112,9 @@ object DependencyGraphConverter {
 
         override fun linkageFor(dependency: PackageReference): PackageLinkage = dependency.linkage
 
-        override fun createPackage(dependency: PackageReference, issues: MutableList<OrtIssue>): Package? = null
+        override fun createPackage(dependency: PackageReference, issues: MutableList<Issue>): Package? = null
 
-        override fun issuesForDependency(dependency: PackageReference): Collection<OrtIssue> =
+        override fun issuesForDependency(dependency: PackageReference): Collection<Issue> =
             dependency.issues
     }
 }

@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Severity
@@ -196,7 +196,7 @@ class ExamplesFunTest : StringSpec() {
         "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
             val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
             val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
-            val issue = OrtIssue(
+            val issue = Issue(
                 message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",
                 source = "ScanCode",
                 severity = Severity.ERROR,
@@ -220,7 +220,7 @@ private fun createOrtResultWithIssue() =
             result = AnalyzerResult.EMPTY.copy(
                 issues = mapOf(
                     Identifier("Maven:org.oss-review-toolkit:example:1.0") to listOf(
-                        OrtIssue(source = "", message = "issue")
+                        Issue(source = "", message = "issue")
                     )
                 )
             )

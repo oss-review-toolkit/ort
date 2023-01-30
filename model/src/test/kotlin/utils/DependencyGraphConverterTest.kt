@@ -35,7 +35,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNode
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -113,7 +113,7 @@ class DependencyGraphConverterTest : WordSpec({
             val convertedResult = DependencyGraphConverter.convert(result)
 
             val graph = convertedResult.dependencyGraphs.getValue("Maven")
-            val issues = mutableListOf<OrtIssue>()
+            val issues = mutableListOf<Issue>()
 
             fun collectIssues(node: DependencyGraphNode) {
                 issues += node.issues
@@ -187,9 +187,9 @@ private fun createDependencies(managerName: String, startIndex: Int, count: Int)
 /**
  * Create a list with issues for a test dependency based on its [index].
  */
-private fun createIssues(index: Int): List<OrtIssue> =
-    emptyList<OrtIssue>().takeIf { index % 2 == 0 } ?: listOf(
-        OrtIssue(source = "test", message = "Test issue $index.")
+private fun createIssues(index: Int): List<Issue> =
+    emptyList<Issue>().takeIf { index % 2 == 0 } ?: listOf(
+        Issue(source = "test", message = "Test issue $index.")
     )
 
 /**

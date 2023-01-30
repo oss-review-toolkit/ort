@@ -25,7 +25,7 @@ import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.utils.DependencyHandler
@@ -80,7 +80,7 @@ class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleIn
 
     override fun linkageFor(dependency: NpmModuleInfo): PackageLinkage = PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<OrtIssue>): Package =
+    override fun createPackage(dependency: NpmModuleInfo, issues: MutableList<Issue>): Package =
         runBlocking {
             npm.parsePackage(dependency.workingDir, dependency.packageFile).second
         }

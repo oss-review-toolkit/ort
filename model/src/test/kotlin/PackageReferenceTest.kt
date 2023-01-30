@@ -72,7 +72,7 @@ class PackageReferenceTest : WordSpec() {
                     val name = "${it.id.name}_suffix"
                     it.copy(
                         id = it.id.copy(name = name),
-                        issues = listOf(OrtIssue(source = "test", message = "issue $name"))
+                        issues = listOf(Issue(source = "test", message = "issue $name"))
                     )
                 }
 

@@ -43,5 +43,5 @@ data class AdvisorSummary(
      * issues at all, [AdvisorRecord.hasIssues] already contains that information.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val issues: List<OrtIssue> = emptyList()
+    val issues: List<Issue> = emptyList()
 )

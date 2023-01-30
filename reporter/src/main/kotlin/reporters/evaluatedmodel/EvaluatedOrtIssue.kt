@@ -24,12 +24,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
 
 /**
- * The evaluated form of a [OrtIssue] used by the [EvaluatedModel].
+ * The evaluated form of a [Issue] used by the [EvaluatedModel].
  */
 data class EvaluatedOrtIssue(
     val timestamp: Instant,

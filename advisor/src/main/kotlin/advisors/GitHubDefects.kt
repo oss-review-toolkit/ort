@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Defect
-import org.ossreviewtoolkit.model.OrtIssue
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
@@ -156,7 +156,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         logger.info { "Finding defects for package '${pkg.original.id.toCoordinates()}'." }
 
         val startTime = Instant.now()
-        val ortIssues = mutableListOf<OrtIssue>()
+        val ortIssues = mutableListOf<Issue>()
 
         fun <T> handleError(result: Result<List<T>>, itemType: String): List<T> =
             result.onFailure { exception ->
@@ -211,7 +211,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
         pkg: GitHubPackage,
         gitHubIssues: List<GitHubIssue>,
         releases: List<Release>,
-        ortIssues: MutableList<OrtIssue>
+        ortIssues: MutableList<Issue>
     ): List<Defect> {
         val releaseDate = findReleaseFor(pkg.original, releases)?.publishedAt?.let(Instant::parse)
             ?: Instant.now().also {

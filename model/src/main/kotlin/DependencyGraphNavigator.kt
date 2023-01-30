@@ -147,7 +147,7 @@ private class DependencyRefCursor(
     override val linkage: PackageLinkage
         get() = current.linkage
 
-    override val issues: List<OrtIssue>
+    override val issues: List<Issue>
         get() = current.issues
 
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T =
