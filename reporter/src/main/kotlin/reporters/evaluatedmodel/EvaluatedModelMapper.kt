@@ -60,7 +60,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     private val copyrights = mutableListOf<CopyrightStatement>()
     private val licenses = mutableListOf<LicenseId>()
     private val scopes = mutableMapOf<String, EvaluatedScope>()
-    private val issues = mutableListOf<EvaluatedOrtIssue>()
+    private val issues = mutableListOf<EvaluatedIssue>()
     private val issueResolutions = mutableListOf<IssueResolution>()
     private val pathExcludes = mutableListOf<PathExclude>()
     private val scopeExcludes = mutableListOf<ScopeExclude>()
@@ -236,7 +236,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val detectedLicenses = mutableSetOf<LicenseId>()
         val detectedExcludedLicenses = mutableSetOf<LicenseId>()
         val findings = mutableListOf<EvaluatedFinding>()
-        val issues = mutableListOf<EvaluatedOrtIssue>()
+        val issues = mutableListOf<EvaluatedIssue>()
 
         val applicablePathExcludes = input.ortResult.getExcludes().findPathExcludes(project, input.ortResult)
         val evaluatedPathExcludes = pathExcludes.addIfRequired(applicablePathExcludes)
@@ -293,7 +293,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         val detectedLicenses = mutableSetOf<LicenseId>()
         val detectedExcludedLicenses = mutableSetOf<LicenseId>()
         val findings = mutableListOf<EvaluatedFinding>()
-        val issues = mutableListOf<EvaluatedOrtIssue>()
+        val issues = mutableListOf<EvaluatedIssue>()
 
         val excludeInfo = packageExcludeInfo.getValue(pkg.id)
 
@@ -351,8 +351,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         detectedExcludedLicenses += detectedLicenses - includedDetectedLicenses
     }
 
-    private fun addAnalyzerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedOrtIssue> {
-        val result = mutableListOf<EvaluatedOrtIssue>()
+    private fun addAnalyzerIssues(id: Identifier, pkg: EvaluatedPackage): List<EvaluatedIssue> {
+        val result = mutableListOf<EvaluatedIssue>()
 
         input.ortResult.analyzer?.result?.issues?.get(id)?.let { analyzerIssues ->
             result += addIssues(analyzerIssues, EvaluatedIssueType.ANALYZER, pkg, null, null)
@@ -420,7 +420,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         findings: MutableList<EvaluatedFinding>,
         pkg: EvaluatedPackage
     ): EvaluatedScanResult {
-        val issues = mutableListOf<EvaluatedOrtIssue>()
+        val issues = mutableListOf<EvaluatedIssue>()
 
         val evaluatedScanResult = EvaluatedScanResult(
             provenance = result.provenance,
@@ -456,7 +456,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         fun createDependencyNode(
             dependency: EvaluatedPackage,
             linkage: PackageLinkage,
-            issues: List<EvaluatedOrtIssue>,
+            issues: List<EvaluatedIssue>,
             children: List<DependencyTreeNode> = emptyList()
         ) =
             DependencyTreeNode(
@@ -474,7 +474,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             path: List<EvaluatedPackage>
         ): DependencyTreeNode {
             val dependency = packages.getOrPut(id) { createEmptyPackage(id) }
-            val issues = mutableListOf<EvaluatedOrtIssue>()
+            val issues = mutableListOf<EvaluatedIssue>()
             val packagePath = EvaluatedPackagePath(
                 pkg = dependency,
                 project = pkg,
@@ -589,11 +589,11 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         pkg: EvaluatedPackage,
         scanResult: EvaluatedScanResult?,
         path: EvaluatedPackagePath?
-    ): List<EvaluatedOrtIssue> {
+    ): List<EvaluatedIssue> {
         val evaluatedIssues = issues.map { issue ->
             val resolutions = addResolutions(issue)
 
-            EvaluatedOrtIssue(
+            EvaluatedIssue(
                 timestamp = issue.timestamp,
                 type = type,
                 source = issue.source,

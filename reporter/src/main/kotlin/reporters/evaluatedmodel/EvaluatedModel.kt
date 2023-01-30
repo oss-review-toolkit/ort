@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  * * [LicenseFindingCuration]s are not yet applied to the model.
  *
  * The model also contains useful containers to easily access some content of the [OrtResult], for example a list of
- * all [Issue]s in their [evaluated form][EvaluatedOrtIssue] which contains back-references to its source.
+ * all [Issue]s in their [evaluated form][EvaluatedIssue] which contains back-references to its source.
  *
  * The model can be serialized to with the helper functions [toJson] and [toYaml]. It uses a special [JsonMapper] that
  * de-duplicates objects in the result. For this it uses Jackson's [JsonIdentityInfo] to automatically generate [Int]
@@ -86,8 +86,8 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  * * When modifying the model make sure that the objects are serialized at the right place. By default, Jackson
  *   serializes an Object with [ObjectIdInfo] the first time the serializer sees the object. If this is not desired
  *   because the object shall be serialized as the generated ID, the [JsonIdentityReference] annotation can be used to
- *   enforce this. For example, the list of [EvaluatedOrtIssue]s is serialized before the list of [EvaluatedPackage]s.
- *   Therefore [EvaluatedOrtIssue.pkg] is annotated with [JsonIdentityReference].
+ *   enforce this. For example, the list of [EvaluatedIssue]s is serialized before the list of [EvaluatedPackage]s.
+ *   Therefore [EvaluatedIssue.pkg] is annotated with [JsonIdentityReference].
  */
 data class EvaluatedModel(
     val pathExcludes: List<PathExclude>,
@@ -96,7 +96,7 @@ data class EvaluatedModel(
     val licenses: List<LicenseId>,
     val scopes: List<EvaluatedScope>,
     val issueResolutions: List<IssueResolution>,
-    val issues: List<EvaluatedOrtIssue>,
+    val issues: List<EvaluatedIssue>,
     val scanResults: List<EvaluatedScanResult>,
     val packages: List<EvaluatedPackage>,
     val paths: List<EvaluatedPackagePath>,
@@ -123,7 +123,7 @@ data class EvaluatedModel(
     companion object {
         private val INT_ID_TYPES = listOf(
             CopyrightStatement::class.java,
-            EvaluatedOrtIssue::class.java,
+            EvaluatedIssue::class.java,
             EvaluatedPackage::class.java,
             EvaluatedPackagePath::class.java,
             EvaluatedRuleViolation::class.java,
