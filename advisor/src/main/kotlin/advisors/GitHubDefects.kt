@@ -177,15 +177,15 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
 
         logger.debug { "Found ${releases.size} releases for package '${pkg.original.id.toCoordinates()}'." }
 
-        val issues = handleError(
+        val gitHubIssues = handleError(
             fetchAll(maxDefects) { service.repositoryIssues(pkg.repoOwner, pkg.repoName, it) },
             "issues"
         )
 
-        logger.debug { "Found ${issues.size} issues for package '${pkg.original.id.toCoordinates()}'." }
+        logger.debug { "Found ${gitHubIssues.size} issues for package '${pkg.original.id.toCoordinates()}'." }
 
         val defects = if (ortIssues.isEmpty()) {
-            issuesForRelease(pkg, issues.applyLabelFilters(), releases, ortIssues).also {
+            issuesForRelease(pkg, gitHubIssues.applyLabelFilters(), releases, ortIssues).also {
                 logger.debug { "Found ${it.size} defects for package '${pkg.original.id.toCoordinates()}'." }
             }
         } else {
@@ -204,12 +204,12 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     }
 
     /**
-     * Filter the list of [issues] for defects affecting the version of the given [package][pkg]. Use [releases] for
-     * the version match. Add an entry to [ortIssues] if the release for the package cannot be determined.
+     * Filter the list of [gitHubIssues] for defects affecting the version of the given [package][pkg]. Use [releases]
+     * for the version match. Add an entry to [ortIssues] if the release for the package cannot be determined.
      */
     private fun issuesForRelease(
         pkg: GitHubPackage,
-        issues: List<GitHubIssue>,
+        gitHubIssues: List<GitHubIssue>,
         releases: List<Release>,
         ortIssues: MutableList<OrtIssue>
     ): List<Defect> {
@@ -223,7 +223,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
             }
 
         logger.debug { "Assuming release date $releaseDate for package '${pkg.original.id.toCoordinates()}'." }
-        return issues.filter { it.closedAfter(releaseDate) }.map { it.toDefect(releases) }
+        return gitHubIssues.filter { it.closedAfter(releaseDate) }.map { it.toDefect(releases) }
     }
 
     /**
