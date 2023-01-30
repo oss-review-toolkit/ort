@@ -194,7 +194,7 @@ class UploadResultToSw360Command : OrtCommand(
         ortResult.getProjects(omitExcluded = true).associateWith { project ->
             // Upload the uncurated packages because SW360 also is a package curation provider.
             ortResult.dependencyNavigator.projectDependencies(project)
-                .mapNotNull { ortResult.getUncuratedPackageById(it) }
+                .mapNotNull { ortResult.getUncuratedPackageOrProject(it) }
         }
 
     private fun createReleaseName(pkgId: Identifier) =
