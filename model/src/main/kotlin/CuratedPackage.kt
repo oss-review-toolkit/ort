@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonIgnore
 
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -33,7 +32,6 @@ data class CuratedPackage(
     /**
      * The curated package after applying the [curations].
      */
-    @JsonAlias("package")
     val metadata: Package,
 
     /**
