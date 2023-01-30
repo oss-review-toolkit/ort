@@ -231,12 +231,6 @@ internal fun OrtResult.getViolatedRulesByLicense(
         .mapValues { (_, ruleViolations) -> ruleViolations.map { it.rule } }
 
 /**
- * Return the Package with the given [id] denoting either a [Project] or a [Package].
- */
-internal fun OrtResult.getPackageOrProject(id: Identifier): Package? =
-    getProject(id)?.toPackage() ?: getPackage(id)?.metadata
-
-/**
  * Return the [Provenance] of the first scan result matching the given [id] or null if there is no match.
  */
 internal fun OrtResult.getProvenance(id: Identifier): Provenance? = getScanResultsForId(id).firstOrNull()?.provenance

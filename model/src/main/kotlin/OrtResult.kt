@@ -338,6 +338,12 @@ data class OrtResult(
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     /**
+     * Return the Package with the given [id] denoting either a [Project] or a [Package].
+     */
+    fun getPackageOrProject(id: Identifier): Package? =
+        getProject(id)?.toPackage() ?: getPackage(id)?.metadata
+
+    /**
      * Return all [Package]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
      */
     @JsonIgnore
