@@ -341,7 +341,7 @@ data class OrtResult(
      * Return the Package with the given [id] denoting either a [Project] or a [Package].
      */
     fun getPackageOrProject(id: Identifier): CuratedPackage? =
-        getProject(id)?.toPackage()?.toCuratedPackage() ?: getPackage(id)
+        getPackage(id) ?: getProject(id)?.toPackage()?.toCuratedPackage()
 
     /**
      * Return all [Package]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
