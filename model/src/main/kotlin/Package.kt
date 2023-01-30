@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
@@ -124,7 +123,6 @@ data class Package(
      * Indicates whether the package is just metadata, like e.g. Maven BOM artifacts which only define constraints
      * for dependency versions.
      */
-    @JsonAlias("is_meta_data_only")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     val isMetadataOnly: Boolean = false,
 
