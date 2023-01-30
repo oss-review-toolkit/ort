@@ -199,7 +199,7 @@ class OrtMainFunTest : StringSpec() {
 
         "Analyzer creates correct output" {
             val expectedResult = patchExpectedResult(
-                projectDir.resolve("gradle-all-dependencies-expected-result-with-curations.yml"),
+                getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml"),
                 url = vcsUrl,
                 revision = vcsRevision,
                 urlProcessed = normalizeVcsUrl(vcsUrl)
@@ -255,3 +255,5 @@ class OrtMainFunTest : StringSpec() {
             }
         }.lineSequence()
 }
+
+private fun getAssetFile(path: String) = File("src/funTest/assets", path)
