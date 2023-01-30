@@ -118,7 +118,11 @@ data class OrtResult(
         )
     }
 
-    private data class PackageEntry(val curatedPackage: CuratedPackage?, val isExcluded: Boolean)
+    private data class PackageEntry(
+        val pkg: Package?,
+        val curatedPackage: CuratedPackage?,
+        val isExcluded: Boolean
+    )
 
     /**
      * A map of packages and their excluded state. Calculating this map once brings massive performance improvements
@@ -127,8 +131,9 @@ data class OrtResult(
      */
     private val packages: Map<Identifier, PackageEntry> by lazy {
         val projects = getProjects()
-        val packages = applyPackageCurations(
-            analyzer?.result?.packages.orEmpty(),
+        val packages = analyzer?.result?.packages.orEmpty().associateBy { it.id }
+        val curatedPackages = applyPackageCurations(
+            packages.values,
             resolvedConfiguration.packageCurations
         ).associateBy { it.metadata.id }
 
@@ -148,7 +153,8 @@ data class OrtResult(
 
         allDependencies.associateWithTo(mutableMapOf()) { id ->
             PackageEntry(
-                curatedPackage = packages[id],
+                pkg = packages[id],
+                curatedPackage = curatedPackages[id],
                 isExcluded = id !in includedDependencies
             )
         }
@@ -230,8 +236,7 @@ data class OrtResult(
     }
 
     fun getUncuratedPackageById(id: Identifier): Package? =
-        getPackage(id)?.toUncuratedPackage()
-            ?: getProject(id)?.toPackage()
+        packages[id]?.pkg ?: getProject(id)?.toPackage()
 
     /**
      * Return the path of the definition file of the [project], relative to the analyzer root. If the project was

@@ -52,7 +52,7 @@ open class PackageRule(
     private val licenseRules = mutableListOf<LicenseRule>()
 
     @Suppress("UNUSED") // This is intended to be used by rule implementations.
-    val uncuratedPkg by lazy { pkg.toUncuratedPackage() }
+    val uncuratedPkg by lazy { ruleSet.ortResult.getUncuratedPackageById(pkg.metadata.id) }
 
     override val description = "Evaluating rule '$name' for package '${pkg.metadata.id.toCoordinates()}'."
 
