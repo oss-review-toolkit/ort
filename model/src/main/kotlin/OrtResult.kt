@@ -235,7 +235,7 @@ data class OrtResult(
         return vendorPackages
     }
 
-    fun getUncuratedPackageById(id: Identifier): Package? =
+    fun getUncuratedPackageOrProject(id: Identifier): Package? =
         packages[id]?.pkg ?: getProject(id)?.toPackage()
 
     /**
