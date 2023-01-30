@@ -246,14 +246,16 @@ class Gradle(
                     version = dependencyTreeModel.version
                 )
 
-                dependencyTreeModel.configurations.forEach { configuration ->
-                    configuration.dependencies.forEach { dependency ->
-                        graphBuilder.addDependency(
-                            DependencyGraph.qualifyScope(projectId, configuration.name),
-                            dependency
-                        )
+                dependencyTreeModel.configurations
+                    .filterNot { excludes.isScopeExcluded(it.name) }
+                    .forEach { configuration ->
+                        configuration.dependencies.forEach { dependency ->
+                            graphBuilder.addDependency(
+                                DependencyGraph.qualifyScope(projectId, configuration.name),
+                                dependency
+                            )
+                        }
                     }
-                }
 
                 val project = Project(
                     id = projectId,
