@@ -63,10 +63,7 @@ class OrtResultTest : WordSpec({
 
     "collectProjectsAndPackages" should {
         "be able to get all ids except for ones for sub-projects" {
-            val ortResult = readOrtResult(
-                "../analyzer/src/funTest/assets/projects/synthetic/gradle-all-dependencies-expected-result.yml"
-            )
-
+            val ortResult = readOrtResult("src/test/assets/gradle-all-dependencies-expected-result.yml")
             val ids = ortResult.collectProjectsAndPackages()
             val idsWithoutSubProjects = ortResult.collectProjectsAndPackages(includeSubProjects = false)
             val actualIds = ids - idsWithoutSubProjects
