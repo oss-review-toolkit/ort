@@ -102,7 +102,7 @@ internal fun List<ScopeExclude>.minimize(projectScopes: List<String>): List<Scop
 internal fun OrtResult.fetchScannedSources(id: Identifier): File {
     val tempDir = createTempDirectory(Paths.get("."), ORTH_NAME).toFile()
 
-    val pkg = getPackageOrProject(id)!!.let {
+    val pkg = getPackageOrProject(id)!!.metadata.let {
         if (getProvenance(id) is ArtifactProvenance) {
             it.copy(vcs = VcsInfo.EMPTY, vcsProcessed = VcsInfo.EMPTY)
         } else {
