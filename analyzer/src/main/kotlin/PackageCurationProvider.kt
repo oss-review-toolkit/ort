@@ -38,7 +38,7 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
          * the returned providers are ordered lowest-priority first, which is the order in which the corresponding
          * curations must be applied.
          */
-        fun create(configurations: List<PackageCurationProviderConfiguration>) =
+        fun create(configurations: List<PackageCurationProviderConfiguration>): List<PackageCurationProvider> =
             configurations.filter { it.enabled }.map { ALL.getValue(it.type).create(it.config) }.asReversed()
     }
 
