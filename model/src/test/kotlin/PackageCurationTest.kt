@@ -428,6 +428,17 @@ class PackageCurationTest : WordSpec({
             }
         }
 
+        "not attempt to assert version ranges" {
+            assertSoftly {
+                packageCurationForVersion("2.0").isApplicable(identifierForVersion("2.0.1")) shouldBe false
+                packageCurationForVersion("2.0.0").isApplicable(identifierForVersion("2.0.0.1")) shouldBe false
+            }
+        }
+
+        "not apply for invalid version ranges" {
+            packageCurationForVersion("[2.0.0, 2.1.0]").isApplicable(identifierForVersion("2.0.0")) shouldBe false
+        }
+
         "comply to the Ivy version matchers specifications" {
             assertSoftly {
                 packageCurationForVersion("[1.0.0,2.0.0]").isApplicable(identifierForVersion("1.0.0")) shouldBe true
