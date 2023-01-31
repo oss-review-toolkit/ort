@@ -142,7 +142,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
-        val resolvedConfiguration = resolvedConfiguration(analyzerResult, curationProvider)
+        val resolvedConfiguration = resolveConfiguration(analyzerResult, curationProvider)
 
         return OrtResult(
             repository = repository,
@@ -336,7 +336,7 @@ private class PackageManagerRunner(
     }
 }
 
-private fun resolvedConfiguration(
+private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
     curationProvider: PackageCurationProvider
 ): ResolvedConfiguration {
