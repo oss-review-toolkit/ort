@@ -32,9 +32,13 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
 
+        /**
+         * Return a new provider instance for each [enabled][PackageCurationProviderConfiguration.enabled] provider
+         * configuration in [configurations]. The given [configurations] must be ordered highest-priority first while
+         * the returned providers are ordered lowest-priority first, which is the order in which the corresponding
+         * curations must be applied.
+         */
         fun create(configurations: List<PackageCurationProviderConfiguration>) =
-            // Reverse the list so that curations from providers with higher priority are applied later and can
-            // overwrite curations from providers with lower priority.
             configurations.filter { it.enabled }.map { ALL.getValue(it.type).create(it.config) }.asReversed()
     }
 
