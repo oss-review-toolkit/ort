@@ -68,10 +68,12 @@ class OrtConfigurationTest : WordSpec({
                 PackageCurationProviderConfiguration(type = "DefaultDir"),
                 PackageCurationProviderConfiguration(
                     type = "File",
+                    id = "some-curations-file",
                     config = mapOf("path" to "/some-path/curations.yml", "mustExist" to "true")
                 ),
                 PackageCurationProviderConfiguration(
                     type = "File",
+                    id = "some-curations-dir",
                     config = mapOf("path" to "/some-path/curations-dir", "mustExist" to "false")
                 ),
                 PackageCurationProviderConfiguration(type = "OrtConfig", enabled = true),

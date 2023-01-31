@@ -86,8 +86,8 @@ data class OrtConfiguration(
      * package from providers that appear later in the list.
      */
     val packageCurationProviders: List<PackageCurationProviderConfiguration> = listOf(
-        PackageCurationProviderConfiguration("DefaultDir"),
-        PackageCurationProviderConfiguration("DefaultFile")
+        PackageCurationProviderConfiguration(type = "DefaultDir"),
+        PackageCurationProviderConfiguration(type = "DefaultFile")
     ),
 
     /**

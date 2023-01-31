@@ -31,6 +31,11 @@ data class PackageCurationProviderConfiguration(
     val type: String,
 
     /**
+     * A unique identifier for the package curation provider.
+     */
+    val id: String = type,
+
+    /**
      * Whether this curation provider is enabled.
      */
     val enabled: Boolean = true,

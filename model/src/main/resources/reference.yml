@@ -42,10 +42,12 @@ ort:
     - type: DefaultFile
     - type: DefaultDir
     - type: File
+      id: some-curations-file
       config:
         path: '/some-path/curations.yml'
         mustExist: true
     - type: File
+      id: some-curations-dir
       config:
         path: '/some-path/curations-dir'
         mustExist: false
