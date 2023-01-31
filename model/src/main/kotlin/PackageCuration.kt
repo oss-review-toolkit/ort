@@ -25,7 +25,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
+import org.semver4j.RangesListFactory
 import org.semver4j.Semver
+
+/**
+ * A list of Strings that are used to identify a version string as a version range in the [PackageCuration]'s version.
+ */
+private val versionRangeIndicators = listOf(",", "~", "*", "+", ">", "<", "=", " - ", "^", ".x", "||")
 
 /**
  * Return true if this string equals the [other] string, or if either string is blank.
@@ -64,7 +70,24 @@ data class PackageCuration(
      */
     private fun isApplicableIvyVersion(pkgId: Identifier) =
         runCatching {
-            Semver.coerce(pkgId.version).satisfies(id.version)
+            if (Semver.isValid(id.version)) {
+                // If the curation is for a valid semver, do not coerce the package version, as it also has to be valid.
+                return id.version == pkgId.version
+            }
+
+            if (id.version.isVersionRange()) {
+                // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
+                // https://github.com/semver4j/semver4j/issues/132.
+                val range = RangesListFactory.create(id.version)
+                require(range.get().size > 0) {
+                    "'${id.version}' is not a valid version range."
+                }
+
+                return Semver.coerce(pkgId.version).satisfies(range)
+            }
+
+            // `id.version` is invalid, but also not a version range. Therefore, coerce valid versions.
+            Semver.coerce(pkgId.version).satisfies(Semver.coerce(id.version).version)
         }.onFailure {
             logger.warn {
                 "Failed to check if package curation version '${id.version}' is applicable to package version " +
@@ -73,6 +96,8 @@ data class PackageCuration(
 
             it.showStackTrace()
         }.getOrDefault(false)
+
+    private fun String.isVersionRange() = versionRangeIndicators.any { contains(it, ignoreCase = true) }
 
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId]. The
