@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
-import org.ossreviewtoolkit.analyzer.curation.CompositePackageCurationProvider
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -225,7 +224,7 @@ class AnalyzerCommand : OrtCommand(
             println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
-        val ortResult = analyzer.analyze(info, CompositePackageCurationProvider(curationProviders)).mergeLabels(labels)
+        val ortResult = analyzer.analyze(info, curationProviders).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")

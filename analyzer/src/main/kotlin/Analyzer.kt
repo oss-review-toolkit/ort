@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.analyzer
 import java.io.File
 import java.time.Instant
 
-import kotlin.time.measureTimedValue
+import kotlin.time.measureTime
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -116,7 +117,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
-        curationProvider: PackageCurationProvider = PackageCurationProvider.EMPTY
+        curationProviders: List<PackageCurationProvider> = emptyList()
     ): OrtResult {
         val startTime = Instant.now()
 
@@ -142,7 +143,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
-        val resolvedConfiguration = resolveConfiguration(analyzerResult, curationProvider)
+        val resolvedConfiguration = resolveConfiguration(analyzerResult, curationProviders)
 
         return OrtResult(
             repository = repository,
@@ -338,12 +339,15 @@ private class PackageManagerRunner(
 
 private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
-    curationProvider: PackageCurationProvider
+    curationProviders: List<PackageCurationProvider>
 ): ResolvedConfiguration {
     val packageIds = analyzerResult.packages.mapTo(mutableSetOf()) { it.id }
+    val packageCurations = mutableListOf<PackageCuration>()
 
-    val (packageCurations, duration) = measureTimedValue {
-        curationProvider.getCurationsFor(packageIds).values.flatten()
+    val duration = measureTime {
+        curationProviders.forEach { curationProvider ->
+            packageCurations += curationProvider.getCurationsFor(packageIds).values.flatten()
+        }
     }
 
     Analyzer.logger().debug { "Getting package curations took $duration." }
