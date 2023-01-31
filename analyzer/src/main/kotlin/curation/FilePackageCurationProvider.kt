@@ -111,7 +111,7 @@ class FilePackageCurationProvider(
                 val curations = runCatching {
                     curationFile.readValue<List<PackageCuration>>()
                 }.getOrElse {
-                    throw IOException("Failed parsing package curation from '${curationFile.absolutePath}'.", it)
+                    throw IOException("Failed parsing package curation(s) from '${curationFile.absolutePath}'.", it)
                 }
 
                 curations.mapTo(allCurations) { it to curationFile }
