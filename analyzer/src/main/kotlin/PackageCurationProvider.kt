@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * The extension point for [PackageCurationProvider]s.
@@ -31,15 +32,37 @@ import org.ossreviewtoolkit.utils.common.Plugin
 interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
+        const val ORT_YML_PROVIDER_ID = "ort-yml"
 
         /**
-         * Return a new provider instance for each [enabled][PackageCurationProviderConfiguration.enabled] provider
-         * configuration in [configurations]. The given [configurations] must be ordered highest-priority first while
-         * the returned providers are ordered lowest-priority first, which is the order in which the corresponding
-         * curations must be applied.
+         * Return a new (identifier, provider instance) tuple for each
+         * [enabled][PackageCurationProviderConfiguration.enabled] provider configuration in [configurations]. The given
+         * [configurations] must be ordered highest-priority first while the returned providers are ordered
+         * lowest-priority first, which is the order in which the corresponding curations must be applied.
          */
-        fun create(configurations: List<PackageCurationProviderConfiguration>): List<PackageCurationProvider> =
-            configurations.filter { it.enabled }.map { ALL.getValue(it.type).create(it.config) }.asReversed()
+        fun create(
+            configurations: List<PackageCurationProviderConfiguration>
+        ): List<Pair<String, PackageCurationProvider>> =
+            configurations.filter {
+                it.enabled
+            }.map {
+                it.id to ALL.getValue(it.type).create(it.config)
+            }.asReversed().apply {
+                require(none { (id, _) -> id.isBlank() }) {
+                    "The configuration contains a package curations provider with a blank ID which is not allowed."
+                }
+
+                val duplicateIds = getDuplicates { (id, _) -> id }.keys
+                require(duplicateIds.isEmpty()) {
+                    "Found multiple package curation providers for the IDs ${duplicateIds.joinToString()}, which is " +
+                            "not allowed. Please configure a unique ID for each package curation provider."
+                }
+
+                require(none { (id, _) -> id == ORT_YML_PROVIDER_ID }) {
+                    "Found package curation provider which uses '$ORT_YML_PROVIDER_ID' as id which is reserved and " +
+                            "not allowed."
+                }
+            }
     }
 
     override fun create(config: Map<String, String>): PackageCurationProvider = create(parseConfig(config))

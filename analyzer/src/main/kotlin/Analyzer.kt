@@ -117,7 +117,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
-        curationProviders: List<PackageCurationProvider> = emptyList()
+        curationProviders: List<Pair<String, PackageCurationProvider>> = emptyList()
     ): OrtResult {
         val startTime = Instant.now()
 
@@ -339,13 +339,13 @@ private class PackageManagerRunner(
 
 private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
-    curationProviders: List<PackageCurationProvider>
+    curationProviders: List<Pair<String, PackageCurationProvider>>
 ): ResolvedConfiguration {
     val packageIds = analyzerResult.packages.mapTo(mutableSetOf()) { it.id }
     val packageCurations = mutableListOf<PackageCuration>()
 
     val duration = measureTime {
-        curationProviders.forEach { curationProvider ->
+        curationProviders.forEach { (_, curationProvider) ->
             packageCurations += curationProvider.getCurationsFor(packageIds).values.flatten()
         }
     }
