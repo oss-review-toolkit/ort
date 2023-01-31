@@ -597,11 +597,12 @@ open class Npm(
         )
 
         fun mapLinesToOrtIssues(prefix: String, severity: Severity) {
-            val issueLines = lines.takeWhile { it.startsWith(prefix) }.mapNotNull { line ->
-                line.removePrefix(prefix).let {
-                    commonSecondaryPrefixes.fold(it) { remainder, prefix -> remainder.removePrefix(prefix) }
-                }.takeUnless { it.isBlank() }
-            }
+            val issueLines = lines.dropWhile { !it.startsWith(prefix) }
+                .takeWhile { it.startsWith(prefix) }.mapNotNull { line ->
+                    line.removePrefix(prefix).let {
+                        commonSecondaryPrefixes.fold(it) { remainder, prefix -> remainder.removePrefix(prefix) }
+                    }.takeUnless { it.isBlank() }
+                }
 
             if (issueLines.isNotEmpty()) {
                 issues += OrtIssue(
