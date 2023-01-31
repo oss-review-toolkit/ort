@@ -105,7 +105,7 @@ class FilePackageCurationProvider(
                 }
 
                 if (it.isDirectory) FileFormat.findFilesWithKnownExtensions(it) else listOf(it)
-            }
+            }.filterNot { it.length() == 0L }
 
             curationFiles.map { curationFile ->
                 val curations = runCatching {
