@@ -29,7 +29,10 @@ import java.io.File
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -52,6 +55,33 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output.yml"),
+                    custom = mapOf(
+                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
+                    ),
+                    definitionFilePath = "$vcsPath/package.json",
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision,
+                    path = vcsPath
+                )
+
+                patchActualResult(result.toYaml()) shouldBe expectedResult
+            }
+
+            "exclude scopes if configured" {
+                val workingDir = projectsDir.resolve("shrinkwrap")
+                val definitionFile = workingDir.resolve("package.json")
+
+                val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+                val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+                val excludes = Excludes(scopes = listOf(scopeExclude))
+                val repoConfig = RepositoryConfiguration(excludes = excludes)
+
+                val result = createNpm(analyzerConfig = analyzerConfig, repoConfig = repoConfig)
+                    .resolveSingleProject(definitionFile, resolveScopes = true)
+                val vcsPath = vcsDir.getPathToRoot(workingDir)
+                val expectedResult = patchExpectedResult(
+                    projectsDir.resolveSibling("npm-expected-output-scope-excludes.yml"),
                     custom = mapOf(
                         "npm-project" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
@@ -112,7 +142,8 @@ class NpmFunTest : WordSpec() {
                 val workingDir = createTestTempDir()
                 val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
-                val result = createNpm(allowDynamicVersions = true).resolveSingleProject(definitionFile)
+                val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = true)
+                val result = createNpm(analyzerConfig = analyzerConfig).resolveSingleProject(definitionFile)
 
                 result.issues shouldHaveSize 1
                 with(result.issues.first()) {
@@ -149,6 +180,9 @@ class NpmFunTest : WordSpec() {
         }
     }
 
-    private fun createNpm(allowDynamicVersions: Boolean = false) =
-        Npm("NPM", USER_DIR, AnalyzerConfiguration(allowDynamicVersions), RepositoryConfiguration())
+    private fun createNpm(
+        analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+        repoConfig: RepositoryConfiguration = RepositoryConfiguration()
+    ) =
+        Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
 }

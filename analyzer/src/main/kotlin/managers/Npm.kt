@@ -413,6 +413,8 @@ open class Npm(
         scopes: Set<String>,
         targetScope: String
     ): String? {
+        if (excludes.isScopeExcluded(targetScope)) return null
+
         val qualifiedScopeName = DependencyGraph.qualifyScope(project, targetScope)
         val moduleDependencies = getModuleDependencies(workingDir, scopes)
 
