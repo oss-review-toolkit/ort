@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.yamlMapper
@@ -174,7 +175,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             }
         }
 
-        return state.buildResult()
+        val excludes = managedFiles.keys.firstOrNull()?.excludes ?: Excludes.EMPTY
+        return state.buildResult(excludes)
     }
 
     private fun determinePackageManagerDependencies(
@@ -264,7 +266,7 @@ private class AnalyzerState {
         }
     }
 
-    fun buildResult() = builder.build()
+    fun buildResult(excludes: Excludes) = builder.build(excludes)
 }
 
 /**
