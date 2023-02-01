@@ -338,55 +338,55 @@ class Yarn2(
                 mapping += it.value
             }
         }
-        graphBuilder.addPackages(allPackages.values)
 
-        allDependencies.forEach { (dependencyType, allScopedDependencies) ->
-            allProjects.values.forEach { project ->
-                val qualifiedScopeName = DependencyGraph.qualifyScope(project.id, dependencyType.type)
-                val dependencies = allScopedDependencies[project.id]
-                val dependenciesInfo = dependencies?.mapNotNull { dependency ->
-                    if ("Yarn2" in dependency.type) {
-                        val projectAsDependency = allProjects.entries.find { entry ->
-                            entry.key.type == "Yarn2" && entry.key.name == dependency.name &&
-                                    entry.key.namespace == dependency.namespace
-                        }
+        allDependencies.filterNot { excludes.isScopeExcluded(it.key.type) }
+            .forEach { (dependencyType, allScopedDependencies) ->
+                allProjects.values.forEach { project ->
+                    val qualifiedScopeName = DependencyGraph.qualifyScope(project.id, dependencyType.type)
+                    val dependencies = allScopedDependencies[project.id]
+                    val dependenciesInfo = dependencies?.mapNotNull { dependency ->
+                        if ("Yarn2" in dependency.type) {
+                            val projectAsDependency = allProjects.entries.find { entry ->
+                                entry.key.type == "Yarn2" && entry.key.name == dependency.name &&
+                                        entry.key.namespace == dependency.namespace
+                            }
 
-                        if (projectAsDependency == null) {
-                            logger.warn { "Could not find project for dependency '$dependency.'" }
-                            null
+                            if (projectAsDependency == null) {
+                                logger.warn { "Could not find project for dependency '$dependency.'" }
+                                null
+                            } else {
+                                val projectAsDependencyPkg = projectAsDependency.value.toPackage()
+                                YarnModuleInfo(
+                                    projectAsDependency.key,
+                                    null,
+                                    projectAsDependencyPkg.collectDependencies(allScopedDependencies)
+                                )
+                            }
                         } else {
-                            val projectAsDependencyPkg = projectAsDependency.value.toPackage()
-                            YarnModuleInfo(
-                                projectAsDependency.key,
-                                null,
-                                projectAsDependencyPkg.collectDependencies(allScopedDependencies)
-                            )
+                            val packageDependency = allPackages[dependency]
+                            if (packageDependency == null) {
+                                logger.warn { "Could not find package for dependency $dependency." }
+                                null
+                            } else {
+                                // As small hack here: Because the detection of dependencies per scope is limited (due
+                                // to the fact it relies on package.json parsing and only the project ones are
+                                // available), the dependencies of a package are always searched in the 'Dependencies'
+                                // scope, instead of the scope of this package.
+                                val dependenciesInDependenciesScope = allDependencies[YarnDependencyType.DEPENDENCIES]!!
+                                YarnModuleInfo(
+                                    packageDependency.id,
+                                    packageDependency,
+                                    packageDependency.collectDependencies(dependenciesInDependenciesScope)
+                                )
+                            }
                         }
-                    } else {
-                        val packageDependency = allPackages[dependency]
-                        if (packageDependency == null) {
-                            logger.warn { "Could not find package for dependency $dependency." }
-                            null
-                        } else {
-                            // As small hack here: Because the detection of dependencies per scope is limited (due to
-                            // the fact it relies on package.json parsing and only the project ones are available), the
-                            // dependencies of a package are always searched in the 'Dependencies' scope, instead of
-                            // the scope of this package.
-                            val dependenciesInDependenciesScope = allDependencies[YarnDependencyType.DEPENDENCIES]!!
-                            YarnModuleInfo(
-                                packageDependency.id,
-                                packageDependency,
-                                packageDependency.collectDependencies(dependenciesInDependenciesScope)
-                            )
-                        }
+                    }?.toSet().orEmpty()
+
+                    dependenciesInfo.forEach {
+                        graphBuilder.addDependency(qualifiedScopeName, it)
                     }
-                }?.toSet().orEmpty()
-
-                dependenciesInfo.forEach {
-                    graphBuilder.addDependency(qualifiedScopeName, it)
                 }
             }
-        }
         return allProjects
     }
 
