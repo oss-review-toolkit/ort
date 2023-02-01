@@ -21,8 +21,11 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.assertions.fail
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainOnly
+import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -42,6 +45,9 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -80,6 +86,20 @@ class DependencyGraphConverterTest : WordSpec({
 
             convertedResult.withResolvedScopes() shouldBe result
             convertedResult.packages should beTheSameInstanceAs(result.packages)
+        }
+
+        "exclude scopes" {
+            val project = createProject("Maven", index = 1)
+
+            val result = createAnalyzerResult(project.createResult())
+
+            val scopeExclude = ScopeExclude("test", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val excludes = Excludes(scopes = listOf(scopeExclude))
+
+            val convertedResult = DependencyGraphConverter.convert(result, excludes)
+
+            convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
+            convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
         }
 
         "convert a result with a partial dependency graph" {
