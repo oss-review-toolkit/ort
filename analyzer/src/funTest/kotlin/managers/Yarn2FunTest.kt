@@ -26,7 +26,10 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -39,6 +42,20 @@ class Yarn2FunTest : WordSpec({
             val result = resolveDependencies(projectDir)
 
             val expectedResult = getExpectedResult(projectDir, "yarn2-expected-output.yml")
+            result shouldBe expectedResult
+        }
+
+        "exclude scopes if configured" {
+            val projectDir = File("src/funTest/assets/projects/synthetic/yarn2").absoluteFile
+
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val excludes = Excludes(scopes = listOf(scopeExclude))
+            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
+
+            val result = resolveDependencies(projectDir, analyzerConfig, repositoryConfig)
+
+            val expectedResult = getExpectedResult(projectDir, "yarn2-expected-output-scope-excludes.yml")
             result shouldBe expectedResult
         }
 
@@ -73,9 +90,14 @@ private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: Stri
     )
 }
 
-private fun resolveDependencies(projectDir: File): String {
+private fun resolveDependencies(
+    projectDir: File,
+    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+    repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
+): String {
     val definitionFile = projectDir.resolve("package.json")
-    val result = createYarn2().resolveSingleProject(definitionFile, resolveScopes = true)
+    val result = createYarn2(analyzerConfig, repositoryConfig)
+        .resolveSingleProject(definitionFile, resolveScopes = true)
     return result.toYaml()
 }
 
@@ -86,5 +108,8 @@ private fun resolveMultipleDependencies(projectDir: File): String {
     return result.withResolvedScopes().toYaml()
 }
 
-private fun createYarn2() =
-    Yarn2("Yarn2", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createYarn2(
+    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+    repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
+) =
+    Yarn2("Yarn2", USER_DIR, analyzerConfig, repositoryConfig)
