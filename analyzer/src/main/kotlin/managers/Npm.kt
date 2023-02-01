@@ -597,8 +597,10 @@ open class Npm(
         )
 
         fun mapLinesToIssues(prefix: String, severity: Severity) {
-            val issueLines = lines.dropWhile { !it.startsWith(prefix) }
-                .takeWhile { it.startsWith(prefix) }.mapNotNull { line ->
+            val issueLines = lines
+                .dropWhile { !it.startsWith(prefix) }
+                .takeWhile { it.startsWith(prefix) }
+                .mapNotNull { line ->
                     line.removePrefix(prefix).let {
                         commonSecondaryPrefixes.fold(it) { remainder, prefix -> remainder.removePrefix(prefix) }
                     }.takeUnless { it.isBlank() }
