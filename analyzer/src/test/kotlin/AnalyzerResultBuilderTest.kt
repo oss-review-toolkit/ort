@@ -23,10 +23,12 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.maps.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -45,6 +47,9 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RootDependencyIndex
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -301,6 +306,20 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .build()
 
                 mergedResults.dependencyGraphs.keys should containExactlyInAnyOrder("type-1", "type-2")
+            }
+
+            "apply scope excludes" {
+                val scopeExclude = ScopeExclude("scope-2", ScopeExcludeReason.BUILD_DEPENDENCY_OF)
+                val excludes = Excludes(scopes = listOf(scopeExclude))
+
+                val mergedResults = AnalyzerResultBuilder()
+                    .addResult(analyzerResult1)
+                    .addResult(analyzerResult2)
+                    .build(excludes)
+
+                mergedResults.projects.forAll { project ->
+                    project.scopeNames.orEmpty() shouldNotContain "scope-2"
+                }
             }
 
             "throw if a result contains a project and a package with the same ID" {
