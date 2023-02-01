@@ -29,7 +29,10 @@ import java.io.File
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
@@ -90,6 +93,24 @@ class MavenFunTest : StringSpec() {
             result.toYaml() shouldBe expectedResult
         }
 
+        "Scopes can be excluded" {
+            val pomFile = projectDir.resolve("lib/pom.xml")
+            val expectedResult = patchExpectedResult(
+                projectDir.resolveSibling("maven-expected-output-scope-excludes.yml"),
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision
+            )
+
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val scopeExclude = ScopeExclude("test.*", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val repoConfig = RepositoryConfiguration(excludes = Excludes(scopes = listOf(scopeExclude)))
+
+            val result = createMaven(analyzerConfig, repoConfig)
+                .resolveSingleProject(pomFile, resolveScopes = true)
+
+            result.toYaml() shouldBe expectedResult
+        }
+
         "Parent POM from Maven central can be resolved" {
             // Delete the parent POM from the local repository to make sure it has to be resolved from Maven central.
             Os.userHomeDirectory
@@ -124,6 +145,9 @@ class MavenFunTest : StringSpec() {
         }
     }
 
-    private fun createMaven() =
-        Maven("Maven", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+    private fun createMaven(
+        analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+        repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
+    ) =
+        Maven("Maven", USER_DIR, analyzerConfig, repositoryConfig)
 }
