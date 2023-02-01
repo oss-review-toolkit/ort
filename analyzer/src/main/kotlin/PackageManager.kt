@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -199,12 +200,27 @@ abstract class PackageManager(
             val vcsFromWorkingTree = VersionControlSystem.getPathInfo(projectDir).normalize()
             return vcsFromWorkingTree.merge(processPackageVcs(vcsFromProject, *fallbackUrls))
         }
+
+        /**
+         * Return an [Excludes] instance to be applied during analysis based on the given [repositoryConfiguration].
+         * If this [AnalyzerConfiguration] has the [AnalyzerConfiguration.skipExcludes] flag set to true, the
+         * excludes configured in [repositoryConfiguration] are actually applied. Otherwise, return an empty [Excludes]
+         * object. This means that all dependencies are collected, and excludes are applied later on the report level.
+         */
+        internal fun AnalyzerConfiguration.excludes(repositoryConfiguration: RepositoryConfiguration): Excludes =
+            repositoryConfiguration.excludes.takeIf { skipExcluded } ?: Excludes.EMPTY
     }
 
     /**
      * The [Options] from the [PackageManagerConfiguration] for this [package manager][managerName].
      */
     protected val options: Options = analyzerConfig.getPackageManagerConfiguration(managerName)?.options.orEmpty()
+
+    /**
+     * The [Excludes] to take into account during analysis. The [Excludes] from the [RepositoryConfiguration] are
+     * taken into account only if this is enabled in the [AnalyzerConfiguration].
+     */
+    val excludes by lazy { analyzerConfig.excludes(repoConfig) }
 
     /**
      * Optional mapping of found [definitionFiles] before dependency resolution.
