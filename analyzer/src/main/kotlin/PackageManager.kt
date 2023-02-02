@@ -27,6 +27,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
+import kotlin.io.path.pathString
 import kotlin.time.measureTime
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -93,25 +94,38 @@ abstract class PackageManager(
 
         /**
          * Recursively search the [directory] for files managed by any of the [packageManagers]. The search is performed
-         * depth-first so that root project files are found before any subproject files for a specific manager.
+         * depth-first so that root project files are found before any subproject files for a specific manager. Path
+         * excludes defined by the given [excludes] are taken into account; the corresponding directories are skipped.
          */
         fun findManagedFiles(
             directory: File,
-            packageManagers: Collection<PackageManagerFactory> = ALL.values
+            packageManagers: Collection<PackageManagerFactory> = ALL.values,
+            excludes: Excludes = Excludes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {
                 "The provided path is not a directory: ${directory.absolutePath}"
             }
 
+            logger.debug { "Searching for managed files using the following excludes: $excludes" }
+
             val result = mutableMapOf<PackageManagerFactory, MutableList<File>>()
+            val rootPath = directory.toPath()
 
             Files.walkFileTree(
-                directory.toPath(),
+                rootPath,
                 object : SimpleFileVisitor<Path>() {
                     override fun preVisitDirectory(dir: Path, attributes: BasicFileAttributes): FileVisitResult {
                         if (IGNORED_DIRECTORY_MATCHERS.any { it.matches(dir) }) {
                             logger.info {
                                 "Not analyzing directory '$dir' as it is hard-coded to be ignored."
+                            }
+
+                            return FileVisitResult.SKIP_SUBTREE
+                        }
+
+                        if (excludes.isPathExcluded(rootPath, dir)) {
+                            logger.info {
+                                "Not analyzing directory '$dir' as it is excluded."
                             }
 
                             return FileVisitResult.SKIP_SUBTREE
@@ -126,7 +140,9 @@ abstract class PackageManager(
                             return FileVisitResult.SKIP_SUBTREE
                         }
 
-                        val filesInDir = dirAsFile.walk().maxDepth(1).filter { it.isFile }.toList()
+                        val filesInDir = dirAsFile.walk().maxDepth(1).filter {
+                            it.isFile && !excludes.isPathExcluded(rootPath, it.toPath())
+                        }.toList()
 
                         packageManagers.distinct().forEach { manager ->
                             // Create a list of lists of matching files per glob.
@@ -209,6 +225,13 @@ abstract class PackageManager(
          */
         internal fun AnalyzerConfiguration.excludes(repositoryConfiguration: RepositoryConfiguration): Excludes =
             repositoryConfiguration.excludes.takeIf { skipExcluded } ?: Excludes.EMPTY
+
+        /**
+         * Check whether the given [path] interpreted relatively against [root] is matched by a path exclude in this
+         * [Excludes] object.
+         */
+        private fun Excludes.isPathExcluded(root: Path, path: Path): Boolean =
+            isPathExcluded(root.relativize(path).pathString)
     }
 
     /**

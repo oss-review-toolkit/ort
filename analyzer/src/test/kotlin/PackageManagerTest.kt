@@ -29,10 +29,16 @@ import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.managers.*
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
+import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class PackageManagerTest : WordSpec({
     val definitionFiles = listOf(
@@ -71,11 +77,7 @@ class PackageManagerTest : WordSpec({
     val projectDir = createSpecTempDir()
 
     beforeSpec {
-        definitionFiles.forEach { file ->
-            projectDir.resolve(file).also { dir ->
-                dir.parentFile.mkdirs()
-            }.writeText("Dummy text to avoid the file to be empty, as empty files are skipped.")
-        }
+        definitionFiles.writeFiles(projectDir)
     }
 
     "findManagedFiles" should {
@@ -88,11 +90,7 @@ class PackageManagerTest : WordSpec({
                 it is Unmanaged.Factory
             }
 
-            // The keys in expected and actual maps of definition files are different instances of package manager
-            // factories. So to compare values use the package manager types as keys instead.
-            val managedFilesByName = managedFiles.map { (manager, files) ->
-                manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
-            }.toMap()
+            val managedFilesByName = managedFiles.groupByName(projectDir)
 
             assertSoftly {
                 managedFilesByName["Bower"] should containExactly("bower/bower.json")
@@ -144,11 +142,7 @@ class PackageManagerTest : WordSpec({
 
             managedFiles.size shouldBe 3
 
-            // The keys in expected and actual maps of definition files are different instances of package manager
-            // factories. So to compare values use the package manager types as keys instead.
-            val managedFilesByName = managedFiles.map { (manager, files) ->
-                manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
-            }.toMap()
+            val managedFilesByName = managedFiles.groupByName(projectDir)
 
             managedFilesByName["Gradle"] should containExactlyInAnyOrder(
                 "gradle-groovy/build.gradle",
@@ -165,6 +159,38 @@ class PackageManagerTest : WordSpec({
             val managedFiles = PackageManager.findManagedFiles(projectDir, emptySet())
 
             managedFiles should beEmpty()
+        }
+
+        "take path excludes into account" {
+            val tempDir = "test/"
+            val definitionFilesWithExcludes = definitionFiles +
+                    listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
+            val rootDir = createTestTempDir()
+            definitionFilesWithExcludes.writeFiles(rootDir)
+
+            val pathExclude = PathExclude("$tempDir**", PathExcludeReason.TEST_OF)
+            val excludes = Excludes(paths = listOf(pathExclude))
+
+            val managedFilesByName = PackageManager.findManagedFiles(rootDir, excludes = excludes).groupByName(rootDir)
+
+            managedFilesByName["Gradle"] should containExactlyInAnyOrder(
+                "gradle-groovy/build.gradle",
+                "gradle-kotlin/build.gradle.kts"
+            )
+            managedFilesByName["Maven"] should containExactly("maven/pom.xml")
+            managedFilesByName["SBT"] should containExactly("sbt/build.sbt")
+        }
+
+        "handle specific excluded definition files" {
+            val pathExclude = PathExclude("gradle-groovy/build.gradle", PathExcludeReason.OTHER)
+            val excludes = Excludes(paths = listOf(pathExclude))
+
+            val managedFiles = PackageManager.findManagedFiles(projectDir, excludes = excludes)
+            val managedFilesByName = managedFiles.groupByName(projectDir)
+
+            managedFilesByName["Gradle"] should containExactly(
+                "gradle-kotlin/build.gradle.kts"
+            )
         }
 
         "fail if the provided file is not a directory" {
@@ -221,3 +247,24 @@ class PackageManagerTest : WordSpec({
         }
     }
 })
+
+/**
+ * Transform this map with definition files grouped by package manager factories, so that the results of specific
+ * package managers can be easily accessed. The keys in expected and actual maps of definition files are different
+ * instances of package manager factories. So to compare values use the package manager types as keys instead.
+ */
+private fun ManagedProjectFiles.groupByName(projectDir: File) =
+    map { (manager, files) ->
+        manager.type to files.map { it.relativeTo(projectDir).invariantSeparatorsPath }
+    }.toMap()
+
+/**
+ * Create files with a dummy content in the given [directory] for all the path names in this collection.
+ */
+private fun Collection<String>.writeFiles(directory: File) {
+    forEach { file ->
+        directory.resolve(file).also { dir ->
+            dir.parentFile.mkdirs()
+        }.writeText("Dummy text to avoid the file to be empty, as empty files are skipped.")
+    }
+}
