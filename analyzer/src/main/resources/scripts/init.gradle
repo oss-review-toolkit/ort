@@ -175,9 +175,10 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
             project.gradle.getIncludedBuilds().each {
                 project.logger.quiet("Processing included build '$it.name, $it.projectDir'.")
                 // Since the projects of an included build are not present in the public API, the internal API is used
-                // here with fully qualified name to minimize error when unsupported versions of Gradle are used.
-                def state = (it as org.gradle.internal.composite.IncludedBuildInternal).getTarget()
-                if (state as org.gradle.internal.build.IncludedBuildState) {
+                // here. To prevent error with projects having a version of Gradle < 7.2.0, use reflection to make the
+                // call.
+                if (it.respondsTo("getTarget")) {
+                    def state = it.getTarget()
                     state.ensureProjectsConfigured()
                     def build = state.getMutableModel()
                     def includedRootProject = build.rootProject.project
@@ -188,6 +189,9 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     )
                     project.logger.quiet("Mapping included build '$it.name' to root project '$identifier'.")
                     includedBuildsProjects.put(it.name, includedRootProject)
+                } else {
+                    project.logger.warn("Cannot invoke 'getTarget' to fetch composite build information. " +
+                            "This function requires Gradle >= 7.2.0.")
                 }
             }
 
@@ -367,7 +371,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     return new DependencyImpl(id.group, id.module, id.version, classifier, extension, dependencies,
                             error, warning, pomFile, null)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    if (id.build.isCurrentBuild()) {
+                    if (id.build.isCurrentBuild() || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
                         return new DependencyImpl(groupId: dependencyProject.group.toString(),
                                 artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
@@ -469,7 +473,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                 if (id instanceof ModuleComponentIdentifier) {
                     return toIdentifier(id.group, id.module, id.version)
                 } else if (id instanceof ProjectComponentIdentifier) {
-                    if (id.build.currentBuild) {
+                    if (id.build.currentBuild || !project.gradle.gradleVersion.isAtLeastVersion(7, 2)) {
                         def dependencyProject = project.rootProject.findProject(id.projectPath)
                         return toIdentifier(dependencyProject.group.toString(), dependencyProject.name,
                                 dependencyProject.version.toString())
