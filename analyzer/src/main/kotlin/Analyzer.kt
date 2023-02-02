@@ -39,6 +39,7 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.logging.log4j.kotlin.logger
 
+import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -89,7 +90,11 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
             // debugging purposes.
             mutableMapOf(distinctPackageManagers.first() to listOf(absoluteProjectPath))
         } else {
-            PackageManager.findManagedFiles(absoluteProjectPath, distinctPackageManagers).toMutableMap()
+            PackageManager.findManagedFiles(
+                absoluteProjectPath,
+                distinctPackageManagers,
+                config.excludes(repositoryConfiguration)
+            ).toMutableMap()
         }
 
         // Associate mapped files by the package manager that manages them.
