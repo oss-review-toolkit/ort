@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class PackageManagerTest : WordSpec({
-    val definitonFiles = listOf(
+    val definitionFiles = listOf(
         "bower/bower.json",
         "bundler/Gemfile",
         "cargo/Cargo.toml",
@@ -71,7 +71,7 @@ class PackageManagerTest : WordSpec({
     val projectDir = createSpecTempDir()
 
     beforeSpec {
-        definitonFiles.forEach { file ->
+        definitionFiles.forEach { file ->
             projectDir.resolve(file).also { dir ->
                 dir.parentFile.mkdirs()
             }.writeText("Dummy text to avoid the file to be empty, as empty files are skipped.")
