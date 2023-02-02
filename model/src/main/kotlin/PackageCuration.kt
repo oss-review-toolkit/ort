@@ -70,10 +70,7 @@ data class PackageCuration(
      */
     private fun isApplicableIvyVersion(pkgId: Identifier) =
         runCatching {
-            if (Semver.isValid(id.version)) {
-                // If the curation is for a valid semver, do not coerce the package version, as it also has to be valid.
-                return id.version == pkgId.version
-            }
+            if (id.version == pkgId.version) return true
 
             if (id.version.isVersionRange()) {
                 // `Semver.satisfies(String)` requires a valid version range to work as expected, see:
@@ -86,8 +83,7 @@ data class PackageCuration(
                 return Semver.coerce(pkgId.version).satisfies(range)
             }
 
-            // `id.version` is invalid, but also not a version range. Therefore, coerce valid versions.
-            Semver.coerce(pkgId.version).satisfies(Semver.coerce(id.version).version)
+            return false
         }.onFailure {
             logger.warn {
                 "Failed to check if package curation version '${id.version}' is applicable to package version " +
