@@ -197,8 +197,8 @@ class AnalyzerCommand : OrtCommand(
                 add(ORT_YML_PROVIDER_ID to SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
                 logger.warn {
-                    "Existing package curations from '$ORT_REPO_CONFIG_FILENAME' are not applied because the feature " +
-                            "is disabled."
+                    "Existing package curations from '${repositoryConfigurationFile.absolutePath}' are not applied " +
+                            "because the feature is disabled."
                 }
             }
         }
