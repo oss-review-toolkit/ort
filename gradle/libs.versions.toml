@@ -1,7 +1,7 @@
 [versions]
 detektPlugin = "1.22.0"
 dokkaPlugin = "1.7.20"
-downloadPlugin = "5.3.0"
+downloadPlugin = "5.3.1"
 graalPlugin = "0.12.0"
 graphQlPlugin = "6.3.5"
 ideaExtPlugin = "1.1.7"
