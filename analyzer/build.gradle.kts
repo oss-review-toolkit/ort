@@ -51,9 +51,9 @@ repositories {
 }
 
 dependencies {
-    api(project(":clients:clearly-defined"))
     api(project(":model"))
 
+    implementation(project(":clients:clearly-defined"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
