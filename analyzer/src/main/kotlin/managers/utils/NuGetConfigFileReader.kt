@@ -20,12 +20,11 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 import java.util.SortedMap
-
-import javax.xml.bind.annotation.XmlRootElement
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -35,7 +34,7 @@ import org.apache.logging.log4j.kotlin.Logging
  */
 object NuGetConfigFileReader : Logging {
     @JsonIgnoreProperties(ignoreUnknown = true)
-    @XmlRootElement(name = "configuration")
+    @JacksonXmlRootElement(localName = "configuration")
     private data class NuGetConfig(
         val packageSources: List<SortedMap<String, String>>
     )
