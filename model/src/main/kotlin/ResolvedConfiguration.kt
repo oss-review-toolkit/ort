@@ -19,7 +19,12 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+import com.fasterxml.jackson.databind.util.StdConverter
+
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * A container which holds all resolved data which augments ORT's automatically obtained data, like
@@ -28,10 +33,71 @@ import com.fasterxml.jackson.annotation.JsonInclude
  * TODO: Add further data.
  */
 data class ResolvedConfiguration(
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = PackageCurationsFilter::class)
+    val packageCurations: PackageCurations = PackageCurations(),
+) {
     /**
-     * All package curations applicable to the packages contained in the enclosing [OrtResult] ordered
-     * highest-priority-first.
+     * Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest-priority-first order.
      */
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val packageCurations: List<PackageCuration> = emptyList()
-)
+    @JsonIgnore
+    fun getAllPackageCurations(): List<PackageCuration> =
+        packageCurations.providers.flatMap { id ->
+            packageCurations.data[id].orEmpty()
+        }
+}
+
+@JsonSerialize(converter = PackageCurationsConverter::class)
+data class PackageCurations(
+    /**
+     * All enabled providers ordered highest-priority-first.
+     */
+    val providers: List<String> = emptyList(),
+
+    /**
+     * All package curations applicable to the packages contained in the enclosing [OrtResult].
+     */
+    val data: Map<String, List<PackageCuration>> = emptyMap()
+) {
+    @JsonIgnore
+    fun isEmpty(): Boolean =
+        providers.isEmpty() && data.isEmpty()
+
+    init {
+        val duplicateProviders = providers.getDuplicates()
+        require(duplicateProviders.isEmpty()) {
+            "The list 'providers' contains the following duplicates, which is not allowed: " +
+                    "${duplicateProviders.joinToStringSingleQuoted()}."
+        }
+
+        val invalidProviderReferences = data.keys.filter { it !in providers }
+        require(invalidProviderReferences.isEmpty()) {
+            "The following keys in 'data' reference a non-existing provider, which is not allowed: " +
+                    "${invalidProviderReferences.joinToStringSingleQuoted()}."
+        }
+    }
+}
+
+@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
+private class PackageCurationsFilter {
+    override fun equals(other: Any?): Boolean =
+        other is PackageCurations && other.isEmpty()
+}
+
+/**
+ * Sorts the keys of [PackageCurations.data] alphabetically and the values of [PackageCurations.data] by
+ * their [id][PackageCuration.id]. Drops entries for provider without curations and removes duplicate curations for
+ * each provider.
+ */
+private class PackageCurationsConverter : StdConverter<PackageCurations, PackageCurations>() {
+    override fun convert(value: PackageCurations): PackageCurations {
+        val sortedData = value.data.filter { (_, curations) ->
+            curations.isNotEmpty()
+        }.mapValues { (_, curations) ->
+            curations.distinct().sortedBy { curation -> curation.id }
+        }.toList().sortedBy { (provider, _) -> provider }.toMap()
+
+        return value.copy(data = sortedData)
+    }
+}
+
+private fun Collection<Any>.joinToStringSingleQuoted() = joinToString(prefix = "'", separator = "','", postfix = "'")

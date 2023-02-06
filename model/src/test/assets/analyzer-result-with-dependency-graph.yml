@@ -177,15 +177,19 @@ advisor: null
 evaluator: null
 resolved_configuration:
   package_curations:
-  - id: "Maven:junit:junit:4.12"
-    curations:
-      comment: "ScanCode claims to find some NOASSERTION and Apache-2.0 in the FAQ\
-        \ and the pom.xml, both are false-positives."
-      concluded_license: "EPL-1.0"
-      vcs:
-        type: "Git"
-        url: "https://github.com/junit-team/junit4.git"
-        revision: "r4.12"
+    providers:
+    - "DefaultDir"
+    data:
+      DefaultDir:
+      - id: "Maven:junit:junit:4.12"
+        curations:
+          comment: "ScanCode claims to find some NOASSERTION and Apache-2.0 in the FAQ\
+            \ and the pom.xml, both are false-positives."
+          concluded_license: "EPL-1.0"
+          vcs:
+            type: "Git"
+            url: "https://github.com/junit-team/junit4.git"
+            revision: "r4.12"
 labels:
   applicationCategory: "BT05 Client application"
   projectName: "Semver4jNewDependencyGraphShared"

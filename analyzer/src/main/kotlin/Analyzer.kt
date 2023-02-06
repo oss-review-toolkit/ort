@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.PackageCurations
 import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -356,17 +357,22 @@ private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
     curationProviders: List<Pair<String, PackageCurationProvider>>
 ): ResolvedConfiguration {
-    val packageCurations = mutableListOf<PackageCuration>()
+    val packageCurations = mutableMapOf<String, List<PackageCuration>>()
 
     curationProviders.forEach { (id, curationProvider) ->
         val (curations, duration) = measureTimedValue {
             curationProvider.getCurationsFor(analyzerResult.packages).values.flatten().distinct()
         }
 
-        packageCurations += curations
+        packageCurations[id] = curations
 
         Analyzer.logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
     }
 
-    return ResolvedConfiguration(packageCurations)
+    return ResolvedConfiguration(
+        packageCurations = PackageCurations(
+            providers = curationProviders.map { (id, _) -> id },
+            data = packageCurations
+        )
+    )
 }

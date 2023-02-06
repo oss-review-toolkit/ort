@@ -1310,4 +1310,8 @@ analyzer:
 scanner: null
 advisor: null
 evaluator: null
-resolved_configuration: {}
+resolved_configuration:
+  package_curations:
+    providers:
+    - "DefaultDir"
+    data: {}

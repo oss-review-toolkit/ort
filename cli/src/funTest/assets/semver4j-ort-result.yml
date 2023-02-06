@@ -345,4 +345,8 @@ advisor:
             severity: "5.5"
     has_issues: false
 evaluator: null
-resolved_configuration: {}
+resolved_configuration:
+  package_curations:
+    providers:
+    - "DefaultDir"
+    data: {}

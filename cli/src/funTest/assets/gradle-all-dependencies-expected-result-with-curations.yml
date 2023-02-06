@@ -462,11 +462,15 @@ advisor: null
 evaluator: null
 resolved_configuration:
   package_curations:
-  - id: "Maven:org.hamcrest::"
-    curations:
-      comment: "Use the actual homepage instead of the GitHub page."
-      homepage_url: "http://hamcrest.org/JavaHamcrest/"
-  - id: "Maven:org.hamcrest:hamcrest-core:"
-    curations:
-      comment: "Fix description."
-      description: "Curated description."
+    providers:
+    - "File"
+    data:
+      File:
+      - id: "Maven:org.hamcrest::"
+        curations:
+          comment: "Use the actual homepage instead of the GitHub page."
+          homepage_url: "http://hamcrest.org/JavaHamcrest/"
+      - id: "Maven:org.hamcrest:hamcrest-core:"
+        curations:
+          comment: "Fix description."
+          description: "Curated description."

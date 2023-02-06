@@ -134,7 +134,7 @@ data class OrtResult(
         val packages = analyzer?.result?.packages.orEmpty().associateBy { it.id }
         val curatedPackages = applyPackageCurations(
             packages.values,
-            resolvedConfiguration.packageCurations
+            resolvedConfiguration.getAllPackageCurations()
         ).associateBy { it.metadata.id }
 
         val allDependencies = packages.keys.toMutableSet()
@@ -326,9 +326,16 @@ data class OrtResult(
             packageIds.any { curation.isApplicable(it) }
         }
 
+        // TODO: Implement replacing curations for a particular provider ID, without losing the curations from the
+        //       repository configuration if applicable.
+        val providerId = "Replaced"
+
         return copy(
             resolvedConfiguration = resolvedConfiguration.copy(
-                packageCurations = applicableCurations
+                packageCurations = PackageCurations(
+                    providers = listOf(providerId),
+                    data = mapOf(providerId to applicableCurations)
+                )
             )
         )
     }
