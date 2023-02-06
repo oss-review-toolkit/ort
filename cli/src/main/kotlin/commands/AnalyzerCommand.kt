@@ -188,7 +188,7 @@ class AnalyzerCommand : OrtCommand(
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
-        val curationProviders = buildList {
+        val enabledCurationProviders = buildList {
             addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
 
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
@@ -225,7 +225,7 @@ class AnalyzerCommand : OrtCommand(
             println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
         }
 
-        val ortResult = analyzer.analyze(info, curationProviders).mergeLabels(labels)
+        val ortResult = analyzer.analyze(info, enabledCurationProviders).mergeLabels(labels)
 
         outputDir.safeMkdirs()
         writeOrtResult(ortResult, outputFiles, "analyzer")
@@ -246,7 +246,7 @@ class AnalyzerCommand : OrtCommand(
         )
 
         val curationCount = packages.sumOf { it.curations.size }
-        println("Applied $curationCount curation(s) from ${curationProviders.size} provider(s).")
+        println("Applied $curationCount curation(s) from ${enabledCurationProviders.size} provider(s).")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
         val (resolvedIssues, unresolvedIssues) = analyzerRun.result.collectIssues().flatMap { it.value }
