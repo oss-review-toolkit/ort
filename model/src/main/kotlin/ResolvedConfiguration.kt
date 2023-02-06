@@ -19,7 +19,10 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
+
+import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
  * A container which holds all resolved data which augments ORT's automatically obtained data, like
@@ -29,9 +32,47 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class ResolvedConfiguration(
     /**
-     * All package curations applicable to the packages contained in the enclosing [OrtResult] ordered
-     * highest-priority-first.
+     * The curations for all enabled providers ordered highest-priority-first. The list contains exactly one entry for
+     * each enabled provider.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val packageCurations: List<PackageCuration> = emptyList()
-)
+    val packageCurations: List<PackageCurationsEntry> = emptyList(),
+) {
+    init {
+        val duplicateProviderIds = packageCurations.getDuplicates().map { it.provider.id }
+        require(duplicateProviderIds.isEmpty()) {
+            "The list 'providers' contains the following duplicates, which is not allowed: " +
+                    "${duplicateProviderIds.joinToStringSingleQuoted()}."
+        }
+    }
+
+    /**
+     * Return all [PackageCuration]s contained in this [ResolvedConfiguration] in highest-priority-first order.
+     */
+    @JsonIgnore
+    fun getAllPackageCurations(): List<PackageCuration> = packageCurations.flatMap { it.curations }
+}
+
+data class PackageCurationsEntry(
+    /**
+     * All enabled providers ordered highest-priority-first.
+     */
+    val provider: Provider,
+
+    /**
+     * All package curations applicable to the packages contained in the enclosing [OrtResult] in the order as they
+     * were provided by the package curation provider.
+     */
+    val curations: Set<PackageCuration> = emptySet()
+) {
+    data class Provider(
+        /**
+         * The identifier of the provider.
+         */
+        val id: String
+
+        // TODO: Add the attributes `type` and `config` from the provider configuration.
+    )
+}
+
+private fun Collection<Any>.joinToStringSingleQuoted() = joinToString(prefix = "'", separator = "','", postfix = "'")

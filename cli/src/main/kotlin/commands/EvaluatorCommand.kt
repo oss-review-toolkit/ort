@@ -273,7 +273,7 @@ class EvaluatorCommand : OrtCommand(
 
         if (packageCurationsDir != null || packageCurationsFile != null) {
             val provider = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir)
-            ortResultInput = ortResultInput.replacePackageCurations(provider)
+            ortResultInput = ortResultInput.replacePackageCurations(provider, providerId = "EvaluatorCommandOption")
         }
 
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
