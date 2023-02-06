@@ -242,6 +242,7 @@ subprojects {
     tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
             "-opt-in=kotlin.contracts.ExperimentalContracts",
+            "-opt-in=kotlin.io.path.ExperimentalPathApi",
             "-opt-in=kotlin.time.ExperimentalTime"
         )
 

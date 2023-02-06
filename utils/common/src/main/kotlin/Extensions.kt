@@ -27,13 +27,8 @@ import com.fasterxml.jackson.databind.util.ClassUtil
 import java.io.File
 import java.io.IOException
 import java.net.URI
-import java.nio.file.CopyOption
-import java.nio.file.FileVisitResult
 import java.nio.file.Files
 import java.nio.file.LinkOption
-import java.nio.file.Path
-import java.nio.file.SimpleFileVisitor
-import java.nio.file.StandardCopyOption
 import java.nio.file.attribute.BasicFileAttributes
 import java.util.EnumSet
 import java.util.Locale
@@ -87,43 +82,6 @@ fun File.isSymbolicLink(): Boolean =
  * resolve symbolic links on Windows.
  */
 fun File.realFile(): File = toPath().toRealPath().toFile()
-
-/**
- * Copy files recursively without following symbolic links (Unix) or junctions (Windows).
- */
-fun File.safeCopyRecursively(target: File, overwrite: Boolean = false) {
-    if (!exists()) return
-
-    val sourcePath = absoluteFile.toPath()
-    val targetPath = target.absoluteFile.toPath()
-
-    val copyOptions = buildList<CopyOption> {
-        add(LinkOption.NOFOLLOW_LINKS)
-        if (overwrite) add(StandardCopyOption.REPLACE_EXISTING)
-    }.toTypedArray()
-
-    Files.walkFileTree(
-        sourcePath,
-        object : SimpleFileVisitor<Path>() {
-            override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-                // Note that although FileVisitOption.FOLLOW_LINKS is not set, this would still follow junctions on
-                // Windows, so do a better check here.
-                if (dir.toFile().isSymbolicLink()) return FileVisitResult.SKIP_SUBTREE
-
-                targetPath.resolve(sourcePath.relativize(dir)).toFile().safeMkdirs()
-
-                return FileVisitResult.CONTINUE
-            }
-
-            override fun visitFile(file: Path, attrs: BasicFileAttributes): FileVisitResult {
-                val targetFile = targetPath.resolve(sourcePath.relativize(file))
-                Files.copy(file, targetFile, *copyOptions)
-
-                return FileVisitResult.CONTINUE
-            }
-        }
-    )
-}
 
 /**
  * Delete files recursively without following symbolic links (Unix) or junctions (Windows). If [force] is `true`, files
