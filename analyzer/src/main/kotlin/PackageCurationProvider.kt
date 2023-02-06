@@ -59,8 +59,8 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
                 }
 
                 require(none { (id, _) -> id == REPOSITORY_CONFIGURATION_PROVIDER_ID }) {
-                    "Found package curation provider which uses '$REPOSITORY_CONFIGURATION_PROVIDER_ID' as id which " +
-                             "is reserved and not allowed."
+                    "Found a package curation provider which uses '$REPOSITORY_CONFIGURATION_PROVIDER_ID' as its id " +
+                            "which is reserved and not allowed."
                 }
             }
     }
