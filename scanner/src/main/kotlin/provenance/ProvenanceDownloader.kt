@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.scanner.provenance
 
 import java.io.File
 
+import kotlin.io.path.copyToRecursively
+
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.downloader.DownloadException
@@ -31,7 +33,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.scanner.utils.WorkingTreeCache
-import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
@@ -89,7 +90,7 @@ class DefaultProvenanceDownloader(
 
             // We need to make a copy of the working tree, because it could be used by another coroutine after this
             // call has finished.
-            root.safeCopyRecursively(downloadDir, overwrite = true)
+            root.toPath().copyToRecursively(downloadDir.toPath(), followLinks = false, overwrite = true)
         }
     }
 }

@@ -25,6 +25,9 @@ import java.io.File
 import java.io.IOException
 import java.net.URI
 
+import kotlin.io.path.copyToRecursively
+import kotlin.io.path.createDirectories
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -50,7 +53,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.realFile
-import org.ossreviewtoolkit.utils.common.safeCopyRecursively
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.toUri
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -213,7 +215,10 @@ class GoDep(
 
         logger.debug { "Copying $projectDir to temporary directory $destination" }
 
-        projectDir.safeCopyRecursively(destination)
+        projectDir.toPath().copyToRecursively(
+            destination.toPath().apply { parent?.createDirectories() },
+            followLinks = false
+        )
 
         val dotGit = File(destination, ".git")
         if (dotGit.isFile) {
