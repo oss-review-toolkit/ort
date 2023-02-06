@@ -592,19 +592,18 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             if (artifactDownload.exception == null) {
                 logger.debug { "Found '$artifact' in '${info.repository}'." }
 
-                val checksums = info.layout.getChecksums(artifact, false, info.location)
-                logger.debug { "Checksums: $checksums" }
+                val checksumLocations = info.layout.getChecksumLocations(artifact, false, info.location)
 
                 // TODO: Could store multiple checksums in model instead of only the first.
-                val checksum = checksums.first()
+                val checksumLocation = checksumLocations.first()
 
                 val transporter = transporterProvider.newTransporter(repositorySystemSession, info.repository)
 
                 val hash = runCatching {
-                    val task = GetTask(checksum.location)
+                    val task = GetTask(checksumLocation.location)
                     transporter.get(task)
 
-                    parseChecksum(task.dataString, checksum.algorithm)
+                    parseChecksum(task.dataString, checksumLocation.checksumAlgorithmFactory.name)
                 }.getOrElse {
                     it.showStackTrace()
 
