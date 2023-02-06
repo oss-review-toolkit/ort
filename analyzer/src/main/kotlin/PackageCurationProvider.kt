@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
-        const val ORT_YML_PROVIDER_ID = "ort-yml"
+        const val ORT_YML_PROVIDER_ID = "OrtYml"
 
         /**
          * Return a new (identifier, provider instance) tuple for each
