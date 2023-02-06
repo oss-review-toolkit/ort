@@ -40,7 +40,7 @@ import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
-import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory.Companion.ORT_YML_PROVIDER_ID
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.curation.SimplePackageCurationProvider
@@ -194,7 +194,7 @@ class AnalyzerCommand : OrtCommand(
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
             if (ortConfig.enableRepositoryPackageCurations) {
-                add(ORT_YML_PROVIDER_ID to SimplePackageCurationProvider(repositoryPackageCurations))
+                add(REPOSITORY_CONFIGURATION_PROVIDER_ID to SimplePackageCurationProvider(repositoryPackageCurations))
             } else if (repositoryPackageCurations.isNotEmpty()) {
                 logger.warn {
                     "Existing package curations from '${repositoryConfigurationFile.absolutePath}' are not applied " +
