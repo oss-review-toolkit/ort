@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.analyzer
 import java.io.File
 import java.time.Instant
 
-import kotlin.time.measureTime
+import kotlin.time.measureTimedValue
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -344,13 +344,15 @@ private fun resolveConfiguration(
     val packageIds = analyzerResult.packages.mapTo(mutableSetOf()) { it.id }
     val packageCurations = mutableListOf<PackageCuration>()
 
-    val duration = measureTime {
-        curationProviders.forEach { (_, curationProvider) ->
-            packageCurations += curationProvider.getCurationsFor(packageIds).values.flatten()
+    curationProviders.forEach { (id, curationProvider) ->
+        val (curations, duration) = measureTimedValue {
+            curationProvider.getCurationsFor(packageIds).values.flatten()
         }
-    }
 
-    Analyzer.logger().debug { "Getting package curations took $duration." }
+        packageCurations += curations
+
+        Analyzer.logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
+    }
 
     return ResolvedConfiguration(packageCurations)
 }
