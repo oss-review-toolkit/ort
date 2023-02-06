@@ -59,7 +59,7 @@ class SetCommand : CliktCommand(
     override fun run() {
         val provider = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir)
 
-        val ortResult = readOrtResult(ortFile).replacePackageCurations(provider)
+        val ortResult = readOrtResult(ortFile).replacePackageCurations(provider, providerId = "SetCommandOption")
 
         writeOrtResult(ortResult, ortFile)
     }

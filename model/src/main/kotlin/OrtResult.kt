@@ -135,7 +135,7 @@ data class OrtResult(
         val packages = analyzer?.result?.packages.orEmpty().associateBy { it.id }
         val curatedPackages = applyPackageCurations(
             packages.values,
-            resolvedConfiguration.packageCurations
+            resolvedConfiguration.getAllPackageCurations()
         ).associateBy { it.metadata.id }
 
         val allDependencies = packages.keys.toMutableSet()
@@ -333,17 +333,25 @@ data class OrtResult(
     fun replaceConfig(config: RepositoryConfiguration): OrtResult = copy(repository = repository.copy(config = config))
 
     /**
-     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider].
+     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider]
+     * associated with the given [providerId].
      */
-    fun replacePackageCurations(provider: PackageCurationProvider): OrtResult {
+    fun replacePackageCurations(provider: PackageCurationProvider, providerId: String): OrtResult {
         val packages = getUncuratedPackages()
-        val applicableCurations = provider.getCurationsFor(packages).filter { curation ->
+        val applicableCurations = provider.getCurationsFor(packages).filterTo(mutableSetOf()) { curation ->
             packages.any { curation.isApplicable(it.id) }
         }
 
+        // TODO: Implement replacing curations for a particular provider ID, without losing the curations from the
+        //       repository configuration if applicable.
         return copy(
             resolvedConfiguration = resolvedConfiguration.copy(
-                packageCurations = applicableCurations
+                packageCurations = listOf(
+                    PackageCurationsEntry(
+                        provider = PackageCurationsEntry.Provider(providerId),
+                        curations = applicableCurations
+                    )
+                )
             )
         )
     }
