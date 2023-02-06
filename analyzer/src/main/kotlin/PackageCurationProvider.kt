@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
-        const val ORT_YML_PROVIDER_ID = "OrtYml"
+        const val REPOSITORY_CONFIGURATION_PROVIDER_ID = "RepositoryConfiguration"
 
         /**
          * Return a new (identifier, provider instance) tuple for each
@@ -58,9 +58,9 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
                             "not allowed. Please configure a unique ID for each package curation provider."
                 }
 
-                require(none { (id, _) -> id == ORT_YML_PROVIDER_ID }) {
-                    "Found package curation provider which uses '$ORT_YML_PROVIDER_ID' as id which is reserved and " +
-                            "not allowed."
+                require(none { (id, _) -> id == REPOSITORY_CONFIGURATION_PROVIDER_ID }) {
+                    "Found package curation provider which uses '$REPOSITORY_CONFIGURATION_PROVIDER_ID' as id which " +
+                             "is reserved and not allowed."
                 }
             }
     }
