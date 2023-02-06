@@ -40,6 +40,15 @@ data class Excludes(
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val scopes: List<ScopeExclude> = emptyList()
 ) {
+    companion object {
+        /**
+         * A constant for an [Excludes] instance that does not contain any excludes. Using this instance therefore
+         * does not exclude any elements.
+         */
+        @JvmField
+        val EMPTY = Excludes()
+    }
+
     /**
      * Return the [PathExclude]s matching the provided [path].
      */

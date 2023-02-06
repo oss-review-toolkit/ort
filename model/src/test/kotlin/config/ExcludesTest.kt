@@ -491,5 +491,12 @@ class ExcludesTest : WordSpec() {
                 excludes.isScopeExcluded(scope1.name) shouldBe false
             }
         }
+
+        "EMPTY" should {
+            "not contain any exclusions" {
+                Excludes.EMPTY.paths should beEmpty()
+                Excludes.EMPTY.scopes should beEmpty()
+            }
+        }
     }
 }
