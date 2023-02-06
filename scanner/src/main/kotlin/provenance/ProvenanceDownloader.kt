@@ -79,15 +79,17 @@ class DefaultProvenanceDownloader(
         workingTreeCache.use(provenance.vcsInfo) { vcs, workingTree ->
             vcs.updateWorkingTree(workingTree, provenance.resolvedRevision, recursive = false)
 
+            val root = workingTree.getRootPath()
+
             // Make sure that all nested repositories are removed. Even though we do not clone recursively above, nested
             // repositories could exist if the same working tree was previously cloned recursively.
             workingTree.getNested().forEach { (path, _) ->
-                workingTree.getRootPath().resolve(path).safeDeleteRecursively(force = true)
+                root.resolve(path).safeDeleteRecursively(force = true)
             }
 
             // We need to make a copy of the working tree, because it could be used by another coroutine after this
             // call has finished.
-            workingTree.getRootPath().safeCopyRecursively(downloadDir, overwrite = true)
+            root.safeCopyRecursively(downloadDir, overwrite = true)
         }
     }
 }
