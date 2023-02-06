@@ -35,7 +35,6 @@ dependencies {
     implementation(libs.bundles.hoplite)
     implementation(libs.hikari)
     implementation(libs.jacksonDatatypeJsr310)
-    implementation(libs.jacksonModuleJaxbAnnotations)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.postgres)
     implementation(libs.semver4j)

@@ -65,7 +65,6 @@ dependencies {
     // container automatically. They are required on the classpath for Maven dependency resolution to work.
     implementation(libs.bundles.mavenResolver)
 
-    implementation(libs.jacksonModuleJaxbAnnotations)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.jruby)
     implementation(libs.kotlinxCoroutines)
