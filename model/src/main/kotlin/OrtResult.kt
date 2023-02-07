@@ -529,6 +529,11 @@ data class OrtResult(
         }
 }
 
+/**
+ * Return a set containing exactly one [CuratedPackage] for each given [Package], derived from applying all
+ * given [curations] to the packages they apply to. The given [curations] must be ordered highest-priority-first, which
+ * is the inverse order of their application.
+ */
 private fun applyPackageCurations(
     packages: Collection<Package>,
     curations: List<PackageCuration>
@@ -543,7 +548,7 @@ private fun applyPackageCurations(
     )
 
     return packages.mapTo(mutableSetOf()) { pkg ->
-        curationsForId[pkg.id].orEmpty().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
+        curationsForId[pkg.id].orEmpty().asReversed().fold(pkg.toCuratedPackage()) { cur, packageCuration ->
             OrtResult.logger.debug {
                 "Applying curation '$packageCuration' to package '${pkg.id.toCoordinates()}'."
             }

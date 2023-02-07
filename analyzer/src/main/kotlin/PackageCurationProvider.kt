@@ -36,9 +36,8 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
 
         /**
          * Return a new (identifier, provider instance) tuple for each
-         * [enabled][PackageCurationProviderConfiguration.enabled] provider configuration in [configurations]. The given
-         * [configurations] must be ordered highest-priority first while the returned providers are ordered
-         * lowest-priority first, which is the order in which the corresponding curations must be applied.
+         * [enabled][PackageCurationProviderConfiguration.enabled] provider configuration in [configurations] ordered
+         * highest-priority first. The given [configurations] must be ordered highest-priority first as well.
          */
         fun create(
             configurations: List<PackageCurationProviderConfiguration>
@@ -47,7 +46,7 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
                 it.enabled
             }.map {
                 it.id to ALL.getValue(it.type).create(it.config)
-            }.asReversed().apply {
+            }.apply {
                 require(none { (id, _) -> id.isBlank() }) {
                     "The configuration contains a package curations provider with a blank ID which is not allowed."
                 }

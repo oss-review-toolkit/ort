@@ -120,6 +120,10 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         return ManagedFileInfo(absoluteProjectPath, managedFiles, repositoryConfiguration)
     }
 
+    /**
+     * Return the result of analyzing the given [managed file][info]. The given [curationProviders] must be ordered
+     * highest-priority-first.
+     */
     @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
@@ -344,6 +348,10 @@ private class PackageManagerRunner(
     }
 }
 
+/**
+ * Return the resolved configuration for the given [analyzerResult]. The [curationProviders] must be ordered
+ * highest-priority-first.
+ */
 private fun resolveConfiguration(
     analyzerResult: AnalyzerResult,
     curationProviders: List<Pair<String, PackageCurationProvider>>
