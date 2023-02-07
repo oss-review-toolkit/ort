@@ -189,8 +189,6 @@ class AnalyzerCommand : OrtCommand(
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
         val enabledCurationProviders = buildList {
-            addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
-
             val repositoryPackageCurations = repositoryConfiguration.curations.packages
 
             if (ortConfig.enableRepositoryPackageCurations) {
@@ -201,6 +199,8 @@ class AnalyzerCommand : OrtCommand(
                             "because the feature is disabled."
                 }
             }
+
+            addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
         }
 
         println("The following package curation providers are enabled:")

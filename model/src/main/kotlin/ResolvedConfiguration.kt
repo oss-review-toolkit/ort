@@ -29,7 +29,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
  */
 data class ResolvedConfiguration(
     /**
-     * All package curations applicable to the packages contained in the enclosing [OrtResult].
+     * All package curations applicable to the packages contained in the enclosing [OrtResult] ordered
+     * highest-priority-first.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val packageCurations: List<PackageCuration> = emptyList()
