@@ -26,6 +26,9 @@
         },
         "sw360Configuration": {
             "$ref": "#/definitions/Sw360Configuration"
+        },
+        "skipExcluded": {
+            "type": "boolean"
         }
     },
     "definitions": {
