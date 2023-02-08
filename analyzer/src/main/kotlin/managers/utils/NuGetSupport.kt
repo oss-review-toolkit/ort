@@ -283,7 +283,7 @@ class NuGetSupport(
     }
 
     private fun getProject(definitionFile: File, workingDir: File, scopes: SortedSet<Scope>): Project {
-        val spec = resolveLocalSpec(definitionFile)?.let { NuGetSupport.XML_MAPPER.readValue<PackageSpec>(it) }
+        val spec = resolveLocalSpec(definitionFile)?.let { XML_MAPPER.readValue<PackageSpec>(it) }
 
         return Project(
             id = Identifier(
