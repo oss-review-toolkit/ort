@@ -27,18 +27,33 @@ Exclusions apply to paths (files/directories) or scopes. Examples of currently s
 
 ### Excludes Basics
 
-ORT's philosophy is to analyze and scan everything it can find to build a complete picture of a repository and its
-dependencies.
+ORT's default philosophy is to analyze and scan everything it can find to build a complete picture of a repository and
+its dependencies.
 
 However, the users may not be interested in the results for components that are not included in their released
 artifacts, for example build files, documentation, examples or test code. To support such use cases, ORT provides a
 mechanism to mark files, directories or scopes included in the repository as excluded.
 
-Note that the excluded parts are analyzed and scanned, but are treated differently in the reports ORT generates:
+Note that by default the excluded parts are analyzed and scanned, but are treated differently in the reports ORT
+generates:
 
 * The issue summary does not show issues in the excluded parts.
 * The excluded parts are grayed out.
 * The reason for the exclusion is shown next to the result.
+
+This is a rather safe option, since the reports still display elements marked as excluded and thus allow the user to
+verify the correctness of the declared exclusions. If it is clear that the excluded projects or scopes are irrelevant 
+from a compliance point of view, ORT can be configured to skip them completely during the analysis phase. The affected
+elements are then not processed any further and do not occur in generated reports. Especially for larger projects with
+many excluded elements, this can significantly reduce resource usage and analysis time. To enable this mode, add the
+following declaration to the `.ort.yml` file:
+
+```yaml
+analyzer:
+  skip_excluded: true
+excludes:
+  ...
+```
 
 To be able to show why a part is excluded, each exclude must include an explanation. The explanation consists of:
 
