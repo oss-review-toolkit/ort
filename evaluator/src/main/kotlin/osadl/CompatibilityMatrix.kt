@@ -64,7 +64,7 @@ object CompatibilityMatrix : Logging {
     /**
      * The release date and time of the matrix data.
      */
-    val releaseDateAndTime by lazy {
+    val releaseDateAndTime: ZonedDateTime by lazy {
         val strftimePlaceholderRegex = Regex("(%[a-zA-Z%])|([^%]+)")
 
         // Convert a strftime / Python style format string to a JVM format string.
