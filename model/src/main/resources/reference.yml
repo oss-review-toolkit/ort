@@ -80,6 +80,9 @@ ort:
     # `enabledPackageManagers`.
     disabledPackageManagers: [Maven, NPM]
 
+    # A flag to control whether excluded scopes and paths should be skipped during the analysis.
+    skipExcluded: true
+
     packageManagers:
       Gradle:
         # A list of package manager names that this package manager must run after. For example, this can be used if

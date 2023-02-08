@@ -100,6 +100,7 @@ class OrtConfigurationTest : WordSpec({
 
             with(ortConfig.analyzer) {
                 allowDynamicVersions shouldBe true
+                skipExcluded shouldBe true
 
                 enabledPackageManagers shouldContainExactlyInAnyOrder listOf("DotNet", "Gradle")
                 disabledPackageManagers shouldContainExactlyInAnyOrder listOf("Maven", "NPM")
