@@ -39,6 +39,7 @@ import java.time.Duration
 
 import kotlin.time.toKotlinDuration
 
+import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.analyzer.curation.FilePackageCurationProvider
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
@@ -172,6 +173,13 @@ class EvaluatorCommand : OrtCommand(
         .convert { it.absoluteFile.normalize() }
         .configurationGroup()
 
+    private val resolvePackageCurationProviderIds by option(
+        "--resolve-package-curation-provider-ids",
+        help = "The comma-separated list of package curation provider for which the package curations shall be " +
+                "re-resolved. All given providers must be configured and exist in the resolved configuration of the " +
+                "given ORT file"
+    ).split(",")
+
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides the repository configuration " +
@@ -274,6 +282,30 @@ class EvaluatorCommand : OrtCommand(
         if (packageCurationsDir != null || packageCurationsFile != null) {
             val curations = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir).packageCurations
             ortResultInput = ortResultInput.replacePackageCurations(curations)
+        }
+
+        resolvePackageCurationProviderIds?.filter { it.isNotBlank() }?.let { providerIds ->
+            val enabledProviders = PackageCurationProviderFactory.create(ortConfig.packageCurationProviders).toMap()
+            val packages = ortResultInput.analyzer?.result?.packages.orEmpty()
+            val curationsForProvider = ortResultInput.resolvedConfiguration.packageCurations.data.toMutableMap()
+
+            providerIds.forEach { providerId ->
+                require(providerId in ortResultInput.resolvedConfiguration.packageCurations.providers) {
+                    "The package curation provider with id '$providerId' is not present in the given ORT file."
+                }
+
+                curationsForProvider[providerId] = checkNotNull(enabledProviders[providerId]) {
+                    "The package curation provider with id '$providerId' is not configured."
+                }.getCurationsFor(packages).values.flatten().distinct()
+            }
+
+            val resolvedConfiguration = ortResultInput.resolvedConfiguration.copy(
+                packageCurations = ortResultInput.resolvedConfiguration.packageCurations.copy(
+                    data = curationsForProvider
+                )
+            )
+
+            ortResultInput = ortResultInput.copy(resolvedConfiguration = resolvedConfiguration)
         }
 
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
