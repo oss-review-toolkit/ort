@@ -219,7 +219,7 @@ abstract class PackageManager(
 
         /**
          * Return an [Excludes] instance to be applied during analysis based on the given [repositoryConfiguration].
-         * If this [AnalyzerConfiguration] has the [AnalyzerConfiguration.skipExcludes] flag set to true, the
+         * If this [AnalyzerConfiguration] has the [AnalyzerConfiguration.skipExcluded] flag set to true, the
          * excludes configured in [repositoryConfiguration] are actually applied. Otherwise, return an empty [Excludes]
          * object. This means that all dependencies are collected, and excludes are applied later on the report level.
          */
