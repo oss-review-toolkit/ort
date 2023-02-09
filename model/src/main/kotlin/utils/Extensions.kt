@@ -51,8 +51,8 @@ fun Package.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
         "NuGet" -> ComponentType.NUGET to Provider.NUGET
-        "PyPI" -> ComponentType.PYPI to Provider.PYPI
         "Pub" -> ComponentType.GIT to Provider.GITHUB
+        "PyPI" -> ComponentType.PYPI to Provider.PYPI
         else -> null
     }
 
