@@ -46,9 +46,10 @@ tasks.withType<KotlinCompile>().configureEach {
 dependencies {
     antlr(libs.antlr)
 
+    api(libs.jacksonDatabind)
+
     implementation(project(":utils:common-utils"))
 
-    implementation(libs.jacksonDatabind)
     implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
