@@ -360,7 +360,7 @@ private fun resolveConfiguration(
 
     curationProviders.forEach { (id, curationProvider) ->
         val (curations, duration) = measureTimedValue {
-            curationProvider.getCurationsFor(analyzerResult.packages).values.flatten().distinct()
+            curationProvider.getCurationsFor(analyzerResult.packages).distinct()
         }
 
         packageCurations += curations

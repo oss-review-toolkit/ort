@@ -98,10 +98,8 @@ class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageC
     private val connectionFactory = createConnection(config)
     private val releaseClient = connectionFactory.releaseAdapter
 
-    override fun getCurationsFor(packages: Collection<Package>): Map<Identifier, List<PackageCuration>> =
-        packages.mapNotNull { pkg ->
-            getCurationsFor(pkg.id).takeUnless { it.isEmpty() }?.let { pkg.id to it }
-        }.toMap()
+    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> =
+        packages.flatMap { pkg -> getCurationsFor(pkg.id) }
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val name = "${pkgId.namespace}/${pkgId.name}"

@@ -26,7 +26,7 @@ import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.maps.beEmpty
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 
 import java.time.Duration

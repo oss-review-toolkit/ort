@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.maps.beEmpty as beEmptyMap
-import io.kotest.matchers.maps.shouldContainKeys
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 
@@ -37,9 +35,8 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
 
         val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
 
-        curations.shouldContainKeys(azureCore, azureCoreAmqp)
-        curations.getValue(azureCore) shouldNot beEmpty()
-        curations.getValue(azureCoreAmqp) shouldNot beEmpty()
+        curations.filter { it.isApplicable(azureCore) } shouldNot beEmpty()
+        curations.filter { it.isApplicable(azureCoreAmqp) } shouldNot beEmpty()
     }
 
     "provider does not fail for packages which have no curations" {
@@ -47,7 +44,7 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
 
         val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
 
-        curations should beEmptyMap()
+        curations should beEmpty()
     }
 })
 
