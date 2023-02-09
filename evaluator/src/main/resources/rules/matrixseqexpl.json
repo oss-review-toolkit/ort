@@ -1,6 +1,6 @@
 {
 "timeformat": "%Y-%m-%dT%H:%M:%S%z",
-"timestamp": "2022-11-29T09:22:00+00:00",
+"timestamp": "2023-01-09T15:58:00+00:00",
 "licenses": [
   { "name": "0BSD", "compatibilities": [
     { "name": "0BSD", "compatibility": "Same", "explanation": "n.a."},
@@ -2372,7 +2372,7 @@
     { "name": "CPL-1.0", "compatibility": "Same", "explanation": "n.a."},
     { "name": "curl", "compatibility": "Yes", "explanation": "Compatibility of the curl license with the CPL-1.0 license is explicitly stated in the CPL-1.0 license checklist."},
     { "name": "EFL-2.0", "compatibility": "Yes", "explanation": "Compatibility of the EFL-2.0 license with the CPL-1.0 license is explicitly stated in the CPL-1.0 license checklist."},
-    { "name": "EPL-1.0", "compatibility": "Yes", "explanation": "Compatibility of the EPL-1.0 license with the CPL-1.0 license is explicitly stated in the CPL-1.0 license checklist."},
+    { "name": "EPL-1.0", "compatibility": "No", "explanation": "Software under a copyleft license such as the EPL-1.0 license normally cannot be redistributed under another copyleft license such as the CPL-1.0 license, except if it were explicitly permitted in the licenses."},
     { "name": "EPL-2.0", "compatibility": "No", "explanation": "Software under a copyleft license such as the EPL-2.0 license normally cannot be redistributed under another copyleft license such as the CPL-1.0 license, except if it were explicitly permitted in the licenses."},
     { "name": "EUPL-1.1", "compatibility": "No", "explanation": "Software under a copyleft license such as the EUPL-1.1 license normally cannot be redistributed under another copyleft license such as the CPL-1.0 license, except if it were explicitly permitted in the licenses."},
     { "name": "EUPL-1.2", "compatibility": "No", "explanation": "Software under a copyleft license such as the EUPL-1.2 license normally cannot be redistributed under another copyleft license such as the CPL-1.0 license, except if it were explicitly permitted in the licenses."},
@@ -2639,7 +2639,7 @@
     { "name": "CC0-1.0", "compatibility": "Yes", "explanation": "Compatibility of the CC0-1.0 license with the EPL-1.0 license is explicitly stated in the EPL-1.0 license checklist."},
     { "name": "CDDL-1.0", "compatibility": "No", "explanation": "Software under a copyleft license such as the CDDL-1.0 license normally cannot be redistributed under another copyleft license such as the EPL-1.0 license, except if it were explicitly permitted in the licenses."},
     { "name": "CDDL-1.1", "compatibility": "No", "explanation": "Software under a copyleft license such as the CDDL-1.1 license normally cannot be redistributed under another copyleft license such as the EPL-1.0 license, except if it were explicitly permitted in the licenses."},
-    { "name": "CPL-1.0", "compatibility": "Yes", "explanation": "Compatibility of the CPL-1.0 license with the EPL-1.0 license is explicitly stated in the EPL-1.0 license checklist."},
+    { "name": "CPL-1.0", "compatibility": "Yes", "explanation": "Compatibility of the CPL-1.0 license with the EPL-1.0 license is explicitly stated in the EPL-1.0 license checklist. Interpretation: When IBM, the original license steward of the CPL-1.0, passed the stewardship to the Eclipse Foundation, the new version of the CPL-1.0 was renamed EPL-1.0. Thus, historically, EPL-1.0 is the successor license to CPL-1.0, and it is generally accepted that the right to release new versions of the license, under which software can be relicensed by contributors, is transferred to the Eclipse Foundation (for further information see https://eclipse-foundation.blog/2009/04/16/one-small-step-towards-reducing-license-proliferation/)."},
     { "name": "curl", "compatibility": "Yes", "explanation": "Compatibility of the curl license with the EPL-1.0 license is explicitly stated in the EPL-1.0 license checklist."},
     { "name": "EFL-2.0", "compatibility": "Yes", "explanation": "Compatibility of the EFL-2.0 license with the EPL-1.0 license is explicitly stated in the EPL-1.0 license checklist."},
     { "name": "EPL-1.0", "compatibility": "Same", "explanation": "n.a."},
@@ -2729,7 +2729,7 @@
     { "name": "CC0-1.0", "compatibility": "Yes", "explanation": "Compatibility of the CC0-1.0 license with the EPL-2.0 license is explicitly stated in the EPL-2.0 license checklist."},
     { "name": "CDDL-1.0", "compatibility": "No", "explanation": "Software under a copyleft license such as the CDDL-1.0 license normally cannot be redistributed under another copyleft license such as the EPL-2.0 license, except if it were explicitly permitted in the licenses."},
     { "name": "CDDL-1.1", "compatibility": "No", "explanation": "Software under a copyleft license such as the CDDL-1.1 license normally cannot be redistributed under another copyleft license such as the EPL-2.0 license, except if it were explicitly permitted in the licenses."},
-    { "name": "CPL-1.0", "compatibility": "No", "explanation": "Software under a copyleft license such as the CPL-1.0 license normally cannot be redistributed under another copyleft license such as the EPL-2.0 license, except if it were explicitly permitted in the licenses."},
+    { "name": "CPL-1.0", "compatibility": "Yes", "explanation": "Compatibility of the CPL-1.0 license with the EPL-2.0 license is explicitly stated in the EPL-2.0 license checklist. Interpretation: When IBM, the original license steward of the CPL-1.0, passed the stewardship to the Eclipse Foundation, the new version of the CPL-1.0 was renamed EPL-1.0. Thus, historically, EPL-1.0 is the successor license to CPL-1.0, and it is generally accepted that the right to release new versions of the license, under which software can be relicensed by contributors, is transferred to the Eclipse Foundation (for further information see https://eclipse-foundation.blog/2009/04/16/one-small-step-towards-reducing-license-proliferation/)."},
     { "name": "curl", "compatibility": "Yes", "explanation": "Compatibility of the curl license with the EPL-2.0 license is explicitly stated in the EPL-2.0 license checklist."},
     { "name": "EFL-2.0", "compatibility": "Yes", "explanation": "Compatibility of the EFL-2.0 license with the EPL-2.0 license is explicitly stated in the EPL-2.0 license checklist."},
     { "name": "EPL-1.0", "compatibility": "Yes", "explanation": "Compatibility of the EPL-1.0 license with the EPL-2.0 license is explicitly stated in the EPL-2.0 license checklist."},
