@@ -117,6 +117,12 @@ class EvaluatorCommand : OrtCommand(
         help = "The name of a script resource on the classpath that contains rules."
     )
 
+    private val osadlMatrixFile by option(
+        "--osadl-matrix-file",
+        help = "An OSADL license compatibility matrix file in JSON format. Overrides the built-in resource, and is " +
+                "only applicable when also specifing '--rules-resource /rules/osadl.rules.kts' to use the actual rules."
+    )
+
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing copyright statements which are marked as garbage."
