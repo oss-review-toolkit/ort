@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.model.Hash
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -98,7 +97,7 @@ class ClearlyDefinedPackageCurationProvider(
         ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
     }
 
-    override fun getCurationsFor(packages: Collection<Package>): Map<Identifier, List<PackageCuration>> {
+    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> {
         val coordinatesToIds = packages.mapNotNull { pkg ->
             pkg.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
                 val namespace = pkg.id.namespace.takeUnless { it.isEmpty() }
@@ -134,7 +133,7 @@ class ClearlyDefinedPackageCurationProvider(
                 }
             }
         }.getOrElse {
-            return emptyMap()
+            return emptyList()
         }
 
         val filteredCurations = if (config.minTotalLicenseScore > 0) {
@@ -148,7 +147,7 @@ class ClearlyDefinedPackageCurationProvider(
             curations
         }
 
-        val pkgCurations = mutableMapOf<Identifier, MutableList<PackageCuration>>()
+        val pkgCurations = mutableListOf<PackageCuration>()
 
         filteredCurations.forEach inner@{ (coordinates, curation) ->
             val pkgId = coordinatesToIds[coordinates] ?: return@inner
@@ -170,14 +169,14 @@ class ClearlyDefinedPackageCurationProvider(
             )
 
             if (data != PackageCurationData()) {
-                pkgCurations.getOrPut(pkgId) { mutableListOf() } += PackageCuration(
+                pkgCurations += PackageCuration(
                     id = pkgId,
                     data = data.copy(comment = "Provided by ClearlyDefined.")
                 )
             }
         }
 
-        return pkgCurations.mapValues { (_, curations) -> curations.distinct() }
+        return pkgCurations.distinct()
     }
 }
 

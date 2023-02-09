@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
@@ -83,10 +82,8 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
  */
 fun interface PackageCurationProvider {
     /**
-     * Return all available [PackageCuration]s for the provided [packages], associated by the package's [Identifier].
-     * Each list of curations must be non-empty; if no curation is available for a package, the returned map must not
-     * contain a key for that package's identifier at all.
+     * Return all available [PackageCuration]s which are applicable to any of the given [packages].
      */
     // TODO: Maybe make this a suspend function, then all implementing classes could deal with coroutines more easily.
-    fun getCurationsFor(packages: Collection<Package>): Map<Identifier, List<PackageCuration>>
+    fun getCurationsFor(packages: Collection<Package>): List<PackageCuration>
 }

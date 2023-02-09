@@ -20,10 +20,9 @@
 package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.maps.beEmpty
-import io.kotest.matchers.maps.haveSize
+import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -40,8 +39,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = provider.getCurationsFor(packages)
 
-            curations should haveSize(1)
-            curations.values.flatten().first().data.concludedLicense shouldBe
+            curations.map { it.data.concludedLicense } shouldHaveSingleElement
                     "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
         }
 
@@ -50,8 +48,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = provider.getCurationsFor(packages)
 
-            curations should haveSize(1)
-            curations.values.flatten().first().data.vcs?.revision shouldBe "0b97c416e42a184ff9728877b461c616187c58f7"
+            curations.map { it.data.vcs?.revision } shouldHaveSingleElement "0b97c416e42a184ff9728877b461c616187c58f7"
         }
 
         "return no curation for a non-existing dummy NPM package" {
@@ -71,8 +68,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
 
             val curations = provider.getCurationsFor(packages)
 
-            curations should haveSize(1)
-            curations.values.flatten().first().data.concludedLicense shouldBe "Apache-1.0".toSpdx()
+            curations.map { it.data.concludedLicense } shouldHaveSingleElement "Apache-1.0".toSpdx()
         }
 
         "return no curation for a non-existing dummy Maven package" {

@@ -72,7 +72,7 @@ class FilePackageCurationProviderTest : StringSpec() {
 
             val identifier = Identifier("maven", "org.hamcrest", "hamcrest-core", "1.3")
             val packages = listOf(Package.EMPTY.copy(id = identifier))
-            val curations = provider.getCurationsFor(packages).values.flatten()
+            val curations = provider.getCurationsFor(packages)
 
             curations should haveSize(4)
             curations.forEach {
@@ -90,9 +90,9 @@ class FilePackageCurationProviderTest : StringSpec() {
             val idMaxVersion = Identifier("npm", "", "ramda", "0.25.0")
             val idOutVersion = Identifier("npm", "", "ramda", "0.26.0")
 
-            val curationsMinVersion = provider.getCurationsFor(createPackagesFromIds(idMinVersion)).values.flatten()
-            val curationsMaxVersion = provider.getCurationsFor(createPackagesFromIds(idMaxVersion)).values.flatten()
-            val curationsOutVersion = provider.getCurationsFor(createPackagesFromIds(idOutVersion)).values.flatten()
+            val curationsMinVersion = provider.getCurationsFor(createPackagesFromIds(idMinVersion))
+            val curationsMaxVersion = provider.getCurationsFor(createPackagesFromIds(idMaxVersion))
+            val curationsOutVersion = provider.getCurationsFor(createPackagesFromIds(idOutVersion))
 
             curationsMinVersion should haveSize(1)
             (provider.packageCurations - curationsMinVersion).forEach {
