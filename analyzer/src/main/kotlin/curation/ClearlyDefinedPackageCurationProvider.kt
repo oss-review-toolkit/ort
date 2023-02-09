@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.clients.clearlydefined.getCurationsChunked
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -43,7 +44,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
-import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
+import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
@@ -98,12 +99,16 @@ class ClearlyDefinedPackageCurationProvider(
     }
 
     override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {
-        val coordinatesToIds = packages.mapNotNull { pkg ->
-            pkg.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
-                val namespace = pkg.id.namespace.takeUnless { it.isEmpty() }
-                Coordinates(type, provider, namespace, pkg.id.name, pkg.id.version) to pkg.id
+        val coordinatesToIds = mutableMapOf<Coordinates, Identifier>()
+
+        packages.forEach { pkg ->
+            val coordinates = pkg.toClearlyDefinedCoordinates()
+            if (coordinates != null) {
+                coordinatesToIds[coordinates] = pkg.id
+            } else {
+                logger.warn { "Unable to create ClearlyDefined coordinates for $pkg." }
             }
-        }.toMap()
+        }
 
         val curations = runCatching {
             service.getCurationsChunked(coordinatesToIds.keys)

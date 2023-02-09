@@ -27,8 +27,10 @@ import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.utils.common.percentEncode
 
@@ -36,39 +38,55 @@ internal fun TextLocation.prependPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
 
 /**
- * Map an [Package] to a ClearlyDefined [ComponentType] and [Provider]. Note that an
- * [identifier's type][Identifier.type] in ORT currently implies a default provider. Return null if a mapping is not
- * possible.
+ * Map the [type][Identifier.type] of a [package identifier][Package.id] to a ClearlyDefined [ComponentType], or return
+ * null if a mapping is not possible.
  */
-fun Package.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
+fun Package.toClearlyDefinedType(): ComponentType? =
     when (id.type) {
-        "Bower" -> ComponentType.GIT to Provider.GITHUB
-        "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
-        "Composer" -> ComponentType.COMPOSER to Provider.PACKAGIST
-        "Crate" -> ComponentType.CRATE to Provider.CRATES_IO
-        "Gem" -> ComponentType.GEM to Provider.RUBYGEMS
-        "Go" -> ComponentType.GO to Provider.GOLANG
-        "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
-        "NPM" -> ComponentType.NPM to Provider.NPM_JS
-        "NuGet" -> ComponentType.NUGET to Provider.NUGET
-        "Pub" -> ComponentType.GIT to Provider.GITHUB
-        "PyPI" -> ComponentType.PYPI to Provider.PYPI
+        "Bower" -> ComponentType.GIT
+        "CocoaPods" -> ComponentType.POD
+        "Composer" -> ComponentType.COMPOSER
+        "Crate" -> ComponentType.CRATE
+        "Gem" -> ComponentType.GEM
+        "Go" -> ComponentType.GO
+        "Maven" -> ComponentType.MAVEN
+        "NPM" -> ComponentType.NPM
+        "NuGet" -> ComponentType.NUGET
+        "Pub" -> ComponentType.GIT
+        "PyPI" -> ComponentType.PYPI
         else -> null
     }
 
 /**
- * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if mapping is not possible.
+ * Determine the ClearlyDefined [Provider] based on a [Package]'s location as defined by the [RemoteArtifact] URLs or
+ * the [VcsInfo] URL. Return null if a mapping is not possible.
  */
-fun Package.toClearlyDefinedCoordinates(): Coordinates? =
-    toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
-        Coordinates(
-            type = type,
-            provider = provider,
-            namespace = id.namespace.takeUnless { it.isEmpty() },
-            name = id.name,
-            revision = id.version.takeUnless { it.isEmpty() }
-        )
+fun Package.toClearlyDefinedProvider(): Provider? =
+    sequenceOf(
+        binaryArtifact.url,
+        sourceArtifact.url,
+        vcsProcessed.url
+    ).firstNotNullOfOrNull { url ->
+        PackageProvider.get(url)?.let { provider ->
+            Provider.values().find { it.name == provider.name }
+        }
     }
+
+/**
+ * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if a mapping is not possible.
+ */
+fun Package.toClearlyDefinedCoordinates(): Coordinates? {
+    val type = toClearlyDefinedType() ?: return null
+    val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null
+
+    return Coordinates(
+        type = type,
+        provider = provider,
+        namespace = id.namespace.takeUnless { it.isEmpty() },
+        name = id.name,
+        revision = id.version.takeUnless { it.isEmpty() }
+    )
+}
 
 /**
  * Create a ClearlyDefined [SourceLocation] from a [Package]. Prefer a [VcsInfoCurationData], but eventually fall
@@ -78,19 +96,21 @@ fun Package.toClearlyDefinedSourceLocation(
     vcs: VcsInfoCurationData?,
     sourceArtifact: RemoteArtifact?
 ): SourceLocation? {
+    val type = toClearlyDefinedType() ?: return null
+    val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null
+
     val vcsUrl = vcs?.url
     val vcsRevision = vcs?.revision
     val matchGroups = vcsUrl?.let { REG_GIT_URL.matchEntire(it)?.groupValues }
 
     return when {
-        // GitHub is the only VCS provider supported by ClearlyDefined for now.
         // TODO: Find out how to handle VCS curations without a revision.
         vcsUrl != null && matchGroups != null && vcsRevision != null -> {
             SourceLocation(
                 name = matchGroups[2],
                 namespace = matchGroups[1],
                 path = vcs.path,
-                provider = Provider.GITHUB,
+                provider = provider,
                 revision = vcsRevision,
                 type = ComponentType.GIT,
                 url = vcsUrl
@@ -98,16 +118,14 @@ fun Package.toClearlyDefinedSourceLocation(
         }
 
         sourceArtifact != null -> {
-            toClearlyDefinedTypeAndProvider()?.let { (_, provider) ->
-                SourceLocation(
-                    name = id.name,
-                    namespace = id.namespace.takeUnless { it.isEmpty() },
-                    provider = provider,
-                    revision = id.version,
-                    type = ComponentType.SOURCE_ARCHIVE,
-                    url = sourceArtifact.url
-                )
-            }
+            SourceLocation(
+                name = id.name,
+                namespace = id.namespace.takeUnless { it.isEmpty() },
+                provider = provider,
+                revision = id.version,
+                type = ComponentType.SOURCE_ARCHIVE,
+                url = sourceArtifact.url
+            )
         }
 
         else -> null
