@@ -31,7 +31,6 @@ dependencies {
 
     implementation(libs.commonsCompress)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.xz)
 
     testImplementation(libs.mockk)
 }
