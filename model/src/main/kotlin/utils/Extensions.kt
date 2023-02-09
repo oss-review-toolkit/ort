@@ -46,11 +46,11 @@ fun Package.toClearlyDefinedTypeAndProvider(): Pair<ComponentType, Provider>? =
         "CocoaPods" -> ComponentType.POD to Provider.COCOAPODS
         "Composer" -> ComponentType.COMPOSER to Provider.PACKAGIST
         "Crate" -> ComponentType.CRATE to Provider.CRATES_IO
-        "DotNet", "NuGet" -> ComponentType.NUGET to Provider.NUGET
         "Gem" -> ComponentType.GEM to Provider.RUBYGEMS
         "Go" -> ComponentType.GO to Provider.GOLANG
         "Maven" -> ComponentType.MAVEN to Provider.MAVEN_CENTRAL
         "NPM" -> ComponentType.NPM to Provider.NPM_JS
+        "NuGet" -> ComponentType.NUGET to Provider.NUGET
         "PyPI" -> ComponentType.PYPI to Provider.PYPI
         "Pub" -> ComponentType.GIT to Provider.GITHUB
         else -> null
