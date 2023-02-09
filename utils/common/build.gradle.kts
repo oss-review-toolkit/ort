@@ -31,4 +31,6 @@ dependencies {
     implementation(libs.commonsCompress)
     implementation(libs.diskLruCache)
     implementation(libs.springCore)
+
+    runtimeOnly(libs.xz)
 }
