@@ -28,7 +28,6 @@ dependencies {
     api(libs.log4jApiKotlin)
     api(libs.semver4j)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jsr223")
     implementation(libs.diskLruCache)
     implementation(libs.springCore)
 
