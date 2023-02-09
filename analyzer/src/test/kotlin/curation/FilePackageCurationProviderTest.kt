@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.analyzer.curation
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -46,38 +46,25 @@ class FilePackageCurationProviderTest : StringSpec() {
 
         "Provider can read from multiple yaml files" {
             val provider = FilePackageCurationProvider(curationsDir)
-            val idsWithExistingCurations = listOf(
-                Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
-                Identifier("maven", "org.foo", "bar", "0.42")
-            )
-            val packages = idsWithExistingCurations.map { Package.EMPTY.copy(id = it) }
+            val expectedCurationIds = listOf(
+                "Maven:org.foo::",
+                "Maven:org.ossreviewtoolkit::"
+            ).map { Identifier(it) }
 
-            val curations = provider.getCurationsFor(packages)
-
-            curations.keys shouldContainExactlyInAnyOrder idsWithExistingCurations
-            curations.values.forAll {
-                it should haveSize(1)
-            }
+            provider.packageCurations.map { it.id } shouldContainExactlyInAnyOrder expectedCurationIds
         }
 
         "Provider can read from a single file and directories" {
             val provider = FilePackageCurationProvider(curationsFile, curationsDir)
-
-            val idsWithExistingCurations = listOf(
+            val expectedCurationIds = listOf(
                 // File
-                Identifier("npm", "", "ramda", "0.21.0"),
+                "NPM::ramda:[0.21.0,0.25.0]",
                 // Directory
-                Identifier("maven", "org.ossreviewtoolkit", "example", "1.0"),
-                Identifier("maven", "org.foo", "bar", "0.42")
-            )
-            val packages = idsWithExistingCurations.map { Package.EMPTY.copy(id = it) }
+                "Maven:org.foo::",
+                "Maven:org.ossreviewtoolkit::"
+            ).map { Identifier(it) }
 
-            val curations = provider.getCurationsFor(packages)
-
-            curations.keys shouldContainExactlyInAnyOrder idsWithExistingCurations
-            curations.values.forAll {
-                it should haveSize(1)
-            }
+            provider.packageCurations.map { it.id } shouldContainAll expectedCurationIds
         }
 
         "Provider returns only matching curations for a fixed version" {
