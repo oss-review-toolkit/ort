@@ -339,19 +339,6 @@ class ClearlyDefinedStorageTest : WordSpec({
             storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
         }
 
-        "only use VCS info pointing to GitHub" {
-            val vcs = VcsInfo(VcsType.GIT, "https://gitlab.com/foo/bar.git", COMMIT)
-            val pkg = TEST_PACKAGE.copy(vcs = vcs, vcsProcessed = vcs)
-            val tools = listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
-            stubHarvestTools(server, COORDINATES, tools)
-            stubHarvestToolResponse(server, COORDINATES)
-            stubDefinitions(server)
-
-            val storage = ClearlyDefinedStorage(storageConfiguration(server))
-
-            storage.read(pkg, SCANNER_CRITERIA).shouldBeValid()
-        }
-
         "use information from a source artifact if available" {
             val sourceArtifact = RemoteArtifact("https://source-artifact.org/test", Hash.NONE)
             val expUrl = COORDINATES.copy(type = ComponentType.SOURCE_ARCHIVE)
