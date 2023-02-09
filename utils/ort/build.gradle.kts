@@ -24,10 +24,9 @@ plugins {
 
 dependencies {
     api(project(":utils:common-utils"))
+    api(project(":utils:spdx-utils"))
 
     api(libs.okhttp)
-
-    implementation(project(":utils:spdx-utils"))
 
     implementation(libs.commonsCompress)
     implementation(libs.kotlinxCoroutines)
