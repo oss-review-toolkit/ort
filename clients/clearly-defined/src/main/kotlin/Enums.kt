@@ -28,20 +28,20 @@ import kotlinx.serialization.json.jsonPrimitive
  * See https://github.com/clearlydefined/service/blob/48f2c97/schemas/definition-1.0.json#L32-L48.
  */
 @Serializable
-enum class ComponentType {
-    @SerialName("npm") NPM,
-    @SerialName("crate") CRATE,
-    @SerialName("git") GIT,
-    @SerialName("maven") MAVEN,
-    @SerialName("composer") COMPOSER,
-    @SerialName("nuget") NUGET,
-    @SerialName("gem") GEM,
-    @SerialName("go") GO,
-    @SerialName("pod") POD,
-    @SerialName("pypi") PYPI,
+enum class ComponentType(val defaultProvider: Provider? = null) {
+    @SerialName("npm") NPM(Provider.NPM_JS),
+    @SerialName("crate") CRATE(Provider.CRATES_IO),
+    @SerialName("git") GIT(Provider.GITHUB),
+    @SerialName("maven") MAVEN(Provider.MAVEN_CENTRAL),
+    @SerialName("composer") COMPOSER(Provider.PACKAGIST),
+    @SerialName("nuget") NUGET(Provider.NUGET),
+    @SerialName("gem") GEM(Provider.RUBYGEMS),
+    @SerialName("go") GO(Provider.GOLANG),
+    @SerialName("pod") POD(Provider.COCOAPODS),
+    @SerialName("pypi") PYPI(Provider.PYPI),
     @SerialName("sourcearchive") SOURCE_ARCHIVE,
-    @SerialName("deb") DEBIAN,
-    @SerialName("debsrc") DEBIAN_SOURCES;
+    @SerialName("deb") DEBIAN(Provider.DEBIAN),
+    @SerialName("debsrc") DEBIAN_SOURCES(Provider.DEBIAN);
 
     companion object {
         @JvmStatic
