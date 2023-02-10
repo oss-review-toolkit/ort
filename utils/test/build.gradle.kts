@@ -24,10 +24,11 @@ plugins {
 
 dependencies {
     api(project(":model"))
-    api(project(":utils:ort-utils"))
 
     api(libs.kotestAssertionsCore)
     api(libs.kotestFrameworkApi)
+
+    implementation(project(":utils:ort-utils"))
 
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotestExtensionsJunitXml)
