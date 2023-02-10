@@ -328,7 +328,7 @@ class ClearlyDefinedStorageTest : WordSpec({
                 "https://github.com/$NAMESPACE/$NAME.git",
                 COMMIT
             )
-            val pkg = TEST_PACKAGE.copy(vcs = vcsGit)
+            val pkg = TEST_PACKAGE.copy(vcs = vcsGit, vcsProcessed = vcsGit)
             val tools = listOf(toolUrl(gitUrl, "scancode", SCANCODE_VERSION))
             stubHarvestTools(server, gitUrl, tools)
             stubHarvestToolResponse(server, gitUrl)
@@ -341,7 +341,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
         "only use VCS info pointing to GitHub" {
             val vcs = VcsInfo(VcsType.GIT, "https://gitlab.com/foo/bar.git", COMMIT)
-            val pkg = TEST_PACKAGE.copy(vcs = vcs)
+            val pkg = TEST_PACKAGE.copy(vcs = vcs, vcsProcessed = vcs)
             val tools = listOf(toolUrl(COORDINATES, "scancode", SCANCODE_VERSION))
             stubHarvestTools(server, COORDINATES, tools)
             stubHarvestToolResponse(server, COORDINATES)
