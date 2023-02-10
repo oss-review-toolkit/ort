@@ -85,5 +85,5 @@ fun interface PackageCurationProvider {
      * Return all available [PackageCuration]s which are applicable to any of the given [packages].
      */
     // TODO: Maybe make this a suspend function, then all implementing classes could deal with coroutines more easily.
-    fun getCurationsFor(packages: Collection<Package>): List<PackageCuration>
+    fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration>
 }

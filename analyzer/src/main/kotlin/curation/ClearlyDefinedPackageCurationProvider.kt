@@ -97,7 +97,7 @@ class ClearlyDefinedPackageCurationProvider(
         ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
     }
 
-    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> {
+    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> {
         val coordinatesToIds = packages.mapNotNull { pkg ->
             pkg.toClearlyDefinedTypeAndProvider()?.let { (type, provider) ->
                 val namespace = pkg.id.namespace.takeUnless { it.isEmpty() }
@@ -133,7 +133,7 @@ class ClearlyDefinedPackageCurationProvider(
                 }
             }
         }.getOrElse {
-            return emptyList()
+            return emptySet()
         }
 
         val filteredCurations = if (config.minTotalLicenseScore > 0) {
@@ -147,7 +147,7 @@ class ClearlyDefinedPackageCurationProvider(
             curations
         }
 
-        val pkgCurations = mutableListOf<PackageCuration>()
+        val pkgCurations = mutableSetOf<PackageCuration>()
 
         filteredCurations.forEach inner@{ (coordinates, curation) ->
             val pkgId = coordinatesToIds[coordinates] ?: return@inner
@@ -176,7 +176,7 @@ class ClearlyDefinedPackageCurationProvider(
             }
         }
 
-        return pkgCurations.distinct()
+        return pkgCurations
     }
 }
 
