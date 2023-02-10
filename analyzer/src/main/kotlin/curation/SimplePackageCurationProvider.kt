@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.analyzer.curation
 
-import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
+import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 
 /**
  * A [PackageCurationProvider] that provides the specified [packageCurations].

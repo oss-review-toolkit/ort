@@ -24,7 +24,6 @@ import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.Identifier
@@ -33,6 +32,7 @@ import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.encodeOr
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory

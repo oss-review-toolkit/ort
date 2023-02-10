@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.analyzer
 
 import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
+import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.common.getDuplicates
