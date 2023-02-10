@@ -112,12 +112,20 @@ interface VulnerableCodeService {
      */
     @Serializable
     data class Vulnerability(
-        /** A URL with information about the vulnerability. */
+        /** The VulnerableCode-specific identifier for this vulnerability. */
         @SerialName("vulnerability_id")
         val vulnerabilityId: String,
 
         /** A list with [VulnerabilityReference]s pointing to sources of information about this vulnerability. */
-        val references: List<VulnerabilityReference>
+        val references: List<VulnerabilityReference>,
+
+        /**
+         * A list with strings representing alias identifiers for this vulnerability as they are used by other
+         * databases. VulnerableCode here returns plain strings without further context information; therefore, it is
+         * currently only possible to determine the source of a specific identifier from its structure, e.g. if it has
+         * a well-known prefix like CVE or GHSA.
+         */
+        val aliases: List<String> = emptyList()
     )
 
     /**
