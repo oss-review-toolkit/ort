@@ -27,7 +27,6 @@ import okhttp3.OkHttpClient
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.analyzer.PackageCurationProvider
 import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
@@ -43,6 +42,7 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedTypeAndProvider
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
