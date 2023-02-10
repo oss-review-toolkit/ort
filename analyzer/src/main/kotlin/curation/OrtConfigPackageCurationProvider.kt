@@ -61,8 +61,8 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
         }
     }
 
-    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> =
-        packages.flatMap { pkg -> getCurationsFor(pkg.id) }
+    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
+        packages.flatMapTo(mutableSetOf()) { pkg -> getCurationsFor(pkg.id) }
 
     private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
         val file = curationsDir.resolve("curations").resolve(pkgId.toCurationPath())

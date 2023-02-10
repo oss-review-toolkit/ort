@@ -98,17 +98,17 @@ class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageC
     private val connectionFactory = createConnection(config)
     private val releaseClient = connectionFactory.releaseAdapter
 
-    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> =
-        packages.flatMap { pkg -> getCurationsFor(pkg.id) }
+    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
+        packages.flatMapTo(mutableSetOf()) { pkg -> getCurationsFor(pkg.id) }
 
-    private fun getCurationsFor(pkgId: Identifier): List<PackageCuration> {
+    private fun getCurationsFor(pkgId: Identifier): Set<PackageCuration> {
         val name = "${pkgId.namespace}/${pkgId.name}"
 
         return releaseClient.getSparseReleaseByNameAndVersion(name, pkgId.version)
             .flatMap { releaseClient.enrichSparseRelease(it) }
             .filter { it.sw360ClearingState == SW360ClearingState.APPROVED }
             .map { sw360Release ->
-                listOf(
+                setOf(
                     PackageCuration(
                         id = pkgId,
                         data = PackageCurationData(
@@ -124,7 +124,7 @@ class Sw360PackageCurationProvider(config: Sw360StorageConfiguration) : PackageC
                     )
                 )
             }
-            .orElse(emptyList())
+            .orElse(emptySet())
     }
 
     private fun getAttachmentAsRemoteArtifact(release: SW360Release, type: SW360AttachmentType): RemoteArtifact? =

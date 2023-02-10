@@ -27,8 +27,8 @@ import org.ossreviewtoolkit.model.PackageCuration
  * A [PackageCurationProvider] that provides the specified [packageCurations].
  */
 open class SimplePackageCurationProvider(val packageCurations: List<PackageCuration>) : PackageCurationProvider {
-    override fun getCurationsFor(packages: Collection<Package>): List<PackageCuration> =
-        packageCurations.filter { curation ->
+    override fun getCurationsFor(packages: Collection<Package>): Set<PackageCuration> =
+        packageCurations.filterTo(mutableSetOf()) { curation ->
             packages.any { pkg -> curation.isApplicable(pkg.id) }
         }
 }
