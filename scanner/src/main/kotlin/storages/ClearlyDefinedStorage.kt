@@ -27,7 +27,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
-import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
+import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -57,11 +57,6 @@ import retrofit2.HttpException
 
 /** The name used by ClearlyDefined for the ScanCode tool. */
 private const val TOOL_SCAN_CODE = "scancode"
-
-/**
- * Convert a [SourceLocation] to a [Coordinates] object.
- */
-private fun SourceLocation.toCoordinates(): Coordinates = Coordinates(type, provider, namespace, name, revision)
 
 /**
  * Convert a [VcsInfo] to a [VcsInfoCurationData] object.
