@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
+import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
@@ -318,12 +319,12 @@ data class OrtResult(
     fun replaceConfig(config: RepositoryConfiguration): OrtResult = copy(repository = repository.copy(config = config))
 
     /**
-     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the given [curations].
+     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider].
      */
-    fun replacePackageCurations(curations: Collection<PackageCuration>): OrtResult {
-        val packageIds = getPackages().map { it.metadata.id }
-        val applicableCurations = curations.filter { curation ->
-            packageIds.any { curation.isApplicable(it) }
+    fun replacePackageCurations(provider: PackageCurationProvider): OrtResult {
+        val packages = analyzer?.result?.packages.orEmpty()
+        val applicableCurations = provider.getCurationsFor(packages).filter { curation ->
+            packages.any { curation.isApplicable(it.id) }
         }
 
         return copy(
