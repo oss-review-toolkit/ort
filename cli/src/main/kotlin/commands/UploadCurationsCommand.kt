@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.clients.clearlydefined.HarvestStatus
 import org.ossreviewtoolkit.clients.clearlydefined.Patch
 import org.ossreviewtoolkit.clients.clearlydefined.callBlocking
 import org.ossreviewtoolkit.clients.clearlydefined.getDefinitionsChunked
+import org.ossreviewtoolkit.clients.clearlydefined.toCoordinates
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationData
@@ -146,8 +147,13 @@ class UploadCurationsCommand : OrtCommand(
 }
 
 private fun PackageCuration.toContributionPatch(): ContributionPatch? {
+    // In ORT's own PackageCuration format, the Package that the PackageCurationData should apply to is solely
+    // identified by the Identifier. That is, there is no PackageProvider information available in PackageCuration for
+    // ClearlyDefined to use. So simply construct an empty Package and rely on the default Provider per ComponentType.
     val pkg = Package.EMPTY.copy(id = id)
-    val coordinates = pkg.toClearlyDefinedCoordinates() ?: return null
+
+    val sourceLocation = pkg.toClearlyDefinedSourceLocation() ?: return null
+    val coordinates = sourceLocation.toCoordinates()
 
     val info = ContributionInfo(
         // The exact values to use here are unclear; use what is mostly used at
@@ -166,7 +172,7 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
 
     val described = CurationDescribed(
         projectWebsite = data.homepageUrl?.let { URI(it) },
-        sourceLocation = pkg.toClearlyDefinedSourceLocation(data.vcs, data.sourceArtifact)
+        sourceLocation = sourceLocation
     )
 
     val curation = Curation(
