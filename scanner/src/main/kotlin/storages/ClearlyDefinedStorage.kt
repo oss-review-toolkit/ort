@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
@@ -57,24 +56,6 @@ import retrofit2.HttpException
 
 /** The name used by ClearlyDefined for the ScanCode tool. */
 private const val TOOL_SCAN_CODE = "scancode"
-
-/**
- * Convert a [VcsInfo] to a [VcsInfoCurationData] object.
- */
-private fun VcsInfo.toVcsInfoCurationData(): VcsInfoCurationData = VcsInfoCurationData(type, url, revision, path)
-
-/**
- * Generate the coordinates for ClearlyDefined based on the [package][pkg]'s [Package.vcs] [Package.sourceArtifact]
- * properties. If information about a Git repository in GitHub is available, this is used. Otherwise, the coordinates
- * are derived from the identifier. Throws [IllegalArgumentException] if generating coordinates is not possible.
- */
-private fun packageCoordinates(pkg: Package): Coordinates {
-    val vcs = pkg.vcs.takeUnless { it.url.isEmpty() }
-    val sourceArtifact = pkg.sourceArtifact.takeUnless { it.url.isEmpty() }
-    val sourceLocation = pkg.toClearlyDefinedSourceLocation(vcs?.toVcsInfoCurationData(), sourceArtifact)
-    return sourceLocation?.toCoordinates() ?: pkg.toClearlyDefinedCoordinates()
-        ?: throw IllegalArgumentException("Unable to create ClearlyDefined coordinates for $pkg.")
-}
 
 /**
  * Given a list of [tools], return the version of ScanCode that was used to scan the package with the given
@@ -116,11 +97,12 @@ class ClearlyDefinedStorage(
      * coordinates may not necessarily be equivalent to the identifier, as we try to lookup source code results if a
      * GitHub repository is known.
      */
-    private suspend fun readFromClearlyDefined(pkg: Package): Result<List<ScanResult>> =
-        runCatching {
-            val coordinates = packageCoordinates(pkg)
+    private suspend fun readFromClearlyDefined(pkg: Package): Result<List<ScanResult>> {
+        val coordinates = pkg.toClearlyDefinedSourceLocation()?.toCoordinates() ?: pkg.toClearlyDefinedCoordinates()
+            ?: return Result.failure(ScanStorageException("Unable to create ClearlyDefined coordinates for $pkg."))
 
-            logger.info { "Looking up results for '${pkg.id.toCoordinates()}' with $coordinates." }
+        return runCatching {
+            logger.debug { "Looking up ClearlyDefined scan results for $coordinates." }
 
             val tools = service.harvestTools(
                 coordinates.type,
@@ -130,9 +112,14 @@ class ClearlyDefinedStorage(
                 coordinates.revision.orEmpty()
             )
 
-            findScanCodeVersion(tools, coordinates)?.let { version ->
+            val version = findScanCodeVersion(tools, coordinates)
+            if (version != null) {
                 loadScanCodeResults(coordinates, version)
-            }.orEmpty()
+            } else {
+                logger.debug { "$coordinates was not scanned with any version of ScanCode." }
+
+                emptyList()
+            }
         }.recoverCatching { e ->
             e.showStackTrace()
 
@@ -149,6 +136,7 @@ class ClearlyDefinedStorage(
 
             throw ScanStorageException(message)
         }
+    }
 
     /**
      * Load the ScanCode results file for the package with the given [coordinates] from ClearlyDefined.

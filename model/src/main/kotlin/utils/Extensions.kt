@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsInfoCurationData
 import org.ossreviewtoolkit.utils.common.percentEncode
 
 internal fun TextLocation.prependPath(prefix: String): String =
@@ -89,41 +88,37 @@ fun Package.toClearlyDefinedCoordinates(): Coordinates? {
 }
 
 /**
- * Create a ClearlyDefined [SourceLocation] from a [Package]. Prefer a [VcsInfoCurationData], but eventually fall
- * back to a [RemoteArtifact], or return null if not enough information is available.
+ * Create a ClearlyDefined [SourceLocation] from a [Package]. Prefer [VcsInfo], but eventually fall back to the
+ * [RemoteArtifact] for the source code, or return null if not enough information is available.
  */
-fun Package.toClearlyDefinedSourceLocation(
-    vcs: VcsInfoCurationData?,
-    sourceArtifact: RemoteArtifact?
-): SourceLocation? {
-    val type = toClearlyDefinedType() ?: return null
-    val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null
-
-    val vcsUrl = vcs?.url
-    val vcsRevision = vcs?.revision
-    val matchGroups = vcsUrl?.let { REG_GIT_URL.matchEntire(it)?.groupValues }
+fun Package.toClearlyDefinedSourceLocation(): SourceLocation? {
+    val coordinates = toClearlyDefinedCoordinates() ?: return null
 
     return when {
         // TODO: Find out how to handle VCS curations without a revision.
-        vcsUrl != null && matchGroups != null && vcsRevision != null -> {
+        vcsProcessed != VcsInfo.EMPTY -> {
             SourceLocation(
-                name = matchGroups[2],
-                namespace = matchGroups[1],
-                path = vcs.path,
-                provider = provider,
-                revision = vcsRevision,
                 type = ComponentType.GIT,
-                url = vcsUrl
+                provider = coordinates.provider,
+                namespace = coordinates.namespace,
+                name = coordinates.name,
+
+                revision = vcsProcessed.revision,
+
+                path = vcsProcessed.path,
+                url = vcsProcessed.url
             )
         }
 
-        sourceArtifact != null -> {
+        sourceArtifact != RemoteArtifact.EMPTY -> {
             SourceLocation(
-                name = id.name,
-                namespace = id.namespace.takeUnless { it.isEmpty() },
-                provider = provider,
-                revision = id.version,
                 type = ComponentType.SOURCE_ARCHIVE,
+                provider = coordinates.provider,
+                namespace = coordinates.namespace,
+                name = coordinates.name,
+
+                revision = id.version,
+
                 url = sourceArtifact.url
             )
         }
@@ -131,9 +126,6 @@ fun Package.toClearlyDefinedSourceLocation(
         else -> null
     }
 }
-
-/** Regular expression to match VCS URLs supported by ClearlyDefined. */
-private val REG_GIT_URL = Regex(".+://github.com/(.+)/(.+).git")
 
 /**
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
