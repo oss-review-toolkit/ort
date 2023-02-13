@@ -24,7 +24,7 @@
 #      url: "http://example.com/repo.git"
 #      revision: "1234abc"
 #      path: "subdirectory"
-#    is_meta_data_only: true # Whether the package is metadata only.
+#    is_metadata_only: true # Whether the package is metadata only.
 #    is_modified: true # Whether the package is modified compared to the original source.
 
 - id: "Maven:asm:asm" # No version means the curation will be applied to all versions of the package.
@@ -57,7 +57,7 @@
 - id: "Maven:org.jetbrains.kotlin:kotlin-bom"
   curations:
     comment: "The package is a Maven BOM file and thus is metadata only."
-    is_meta_data_only: true
+    is_metadata_only: true
 
 - id: "PyPI::pyramid-workflow:1.0.0"
   curations:

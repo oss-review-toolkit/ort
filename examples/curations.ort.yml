@@ -19,7 +19,7 @@ curations:
         revision: "main"
       authors:
       - "Name of the author"
-      is_meta_data_only: false
+      is_metadata_only: false
       concluded_license: "BSD-2-Clause"
       declared_license_mapping:
         The BSD License: "BSD-2-Clause"
