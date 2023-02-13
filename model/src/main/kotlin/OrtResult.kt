@@ -348,8 +348,14 @@ data class OrtResult(
         )
     }
 
+    /**
+     * Return the [Project] denoted by the given [id].
+     */
     fun getProject(id: Identifier): Project? = projects[id]?.project
 
+    /**
+     * Return the [CuratedPackage] denoted by the given [id].
+     */
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     /**
