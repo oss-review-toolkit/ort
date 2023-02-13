@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.annotation.JsonAlias
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.zip
@@ -88,7 +87,6 @@ data class PackageCurationData(
     /**
      * Whether the package is metadata only.
      */
-    @JsonAlias("is_meta_data_only")
     val isMetadataOnly: Boolean? = null,
 
     /**
