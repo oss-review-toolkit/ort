@@ -314,8 +314,6 @@ subprojects {
             exceptionFormat = TestExceptionFormat.FULL
             showStandardStreams = false
         }
-
-        useJUnitPlatform()
     }
 
     tasks.named<JacocoReport>("jacocoTestReport").configure {
