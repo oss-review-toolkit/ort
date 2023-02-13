@@ -75,7 +75,7 @@
           "vcs": {
             "$ref": "#/definitions/vcsMatcher"
           },
-          "is_meta_data_only": {
+          "is_metadata_only": {
             "type": "boolean"
           },
           "is_modified": {
