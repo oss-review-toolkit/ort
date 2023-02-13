@@ -24,6 +24,7 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainOnly
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.nulls.beNull
@@ -100,6 +101,27 @@ class DependencyGraphConverterTest : WordSpec({
 
             convertedResult.projects.single().scopeNames shouldContainOnly listOf("main")
             convertedResult.packages.forAll { it.id.version.drop(2).toInt() shouldBeLessThan 110 }
+        }
+
+        "correctly exclude scopes if there are projects using a dependency graph" {
+            val resultFile = File("../model/src/test/assets/analyzer-result-with-dependency-graph.yml")
+            val ortResult = resultFile.readValue<OrtResult>()
+            val graphAnalyzerResult = ortResult.analyzer?.result!!
+
+            val project = createProject("Go", index = 1)
+            val projectAnalyzerResult = project.createResult()
+
+            val analyzerResult = graphAnalyzerResult.copy(
+                projects = graphAnalyzerResult.projects + project,
+                packages = graphAnalyzerResult.packages + projectAnalyzerResult.packages
+            )
+            val scopeExclude = ScopeExclude("main", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val excludes = Excludes(scopes = listOf(scopeExclude))
+
+            val convertedResult = DependencyGraphConverter.convert(analyzerResult, excludes)
+
+            val allPackagesTypes = convertedResult.packages.mapTo(mutableSetOf()) { it.id.type }
+            allPackagesTypes shouldContainExactlyInAnyOrder listOf("Maven", "Go")
         }
 
         "convert a result with a partial dependency graph" {
