@@ -25,6 +25,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AnalyzerResult
+import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.PackageCurationsEntry
 import org.ossreviewtoolkit.model.ResolvedConfiguration
@@ -37,16 +38,28 @@ object ConfigurationResolver : Logging {
     fun resolveConfiguration(
         analyzerResult: AnalyzerResult,
         curationProviders: List<Pair<String, PackageCurationProvider>>
-    ): ResolvedConfiguration {
+    ): ResolvedConfiguration =
+        ResolvedConfiguration(
+            packageCurations = resolvePackageCurations(analyzerResult.packages, curationProviders)
+        )
+
+    /**
+     * Return the resolved [PackageCurations] for the given [packages]. The [curationProviders] must be ordered
+     * highest-priority-first.
+     */
+    fun resolvePackageCurations(
+        packages: Collection<Package>,
+        curationProviders: List<Pair<String, PackageCurationProvider>>
+    ): List<PackageCurationsEntry> {
         val packageCurations = mutableMapOf<String, Set<PackageCuration>>()
 
         curationProviders.forEach { (id, curationProvider) ->
             val (curations, duration) = measureTimedValue {
-                curationProvider.getCurationsFor(analyzerResult.packages)
+                curationProvider.getCurationsFor(packages)
             }
 
             val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
-                analyzerResult.packages.any { pkg -> curation.isApplicable(pkg.id) }
+                packages.any { pkg -> curation.isApplicable(pkg.id) }
             }.let { it.first.toSet() to it.second.toSet() }
 
             if (nonApplicableCurations.isNotEmpty()) {
@@ -61,13 +74,11 @@ object ConfigurationResolver : Logging {
             logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
         }
 
-        return ResolvedConfiguration(
-            packageCurations = packageCurations.map { (providerId, curations) ->
-                PackageCurationsEntry(
-                    provider = PackageCurationsEntry.Provider(providerId),
-                    curations = curations
-                )
-            }
-        )
+        return packageCurations.map { (providerId, curations) ->
+            PackageCurationsEntry(
+                provider = PackageCurationsEntry.Provider(providerId),
+                curations = curations
+            )
+        }
     }
 }
