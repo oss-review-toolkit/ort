@@ -103,7 +103,7 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
      * Convert this vulnerability from the VulnerableCode data model to a [Vulnerability].
      */
     private fun VulnerableCodeService.Vulnerability.toModel(): Vulnerability =
-        Vulnerability(id = vulnerabilityId, references = references.flatMap { it.toModel() })
+        Vulnerability(id = preferredCommonId(), references = references.flatMap { it.toModel() })
 
     /**
      * Convert this reference from the VulnerableCode data model to a list of [VulnerabilityReference] objects.
@@ -115,5 +115,19 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
         val sourceUri = URI(url)
         if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
         return scores.map { VulnerabilityReference(sourceUri, it.scoringSystem, it.value) }
+    }
+
+    /**
+     * Return a meaningful identifier for this vulnerability that can be used in reports. Obtain this identifier from
+     * the defined aliases if there are any. The data model of VulnerableCode supports multiple aliases while ORT's
+     * [Vulnerability] has just one identifier. To resolve this discrepancy, prefer CVEs over other identifiers. If
+     * there are no aliases referencing CVEs, use an arbitrary alias, assuming that every alias is preferable over
+     * the provider-specific ID of VulnerableCode. Only if no aliases are defined, use the latter as fallback. Note
+     * that it should still be possible via the references to find mentions of aliases that have been dropped.
+     */
+    private fun VulnerableCodeService.Vulnerability.preferredCommonId(): String {
+        if (aliases.isEmpty()) return vulnerabilityId
+
+        return aliases.firstOrNull { it.startsWith("cve", ignoreCase = true) } ?: aliases.first()
     }
 }
