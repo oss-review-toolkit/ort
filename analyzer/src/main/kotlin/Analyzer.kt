@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer
 import java.io.File
 import java.time.Instant
 
-import kotlin.time.measureTimedValue
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,7 +35,6 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.Logging
-import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
 import org.ossreviewtoolkit.analyzer.managers.Unmanaged
@@ -45,14 +42,12 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.PackageCurationsEntry
 import org.ossreviewtoolkit.model.Repository
-import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.utils.ConfigurationResolver
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -155,7 +150,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
-        val resolvedConfiguration = resolveConfiguration(analyzerResult, curationProviders)
+        val resolvedConfiguration = ConfigurationResolver.resolveConfiguration(analyzerResult, curationProviders)
 
         return OrtResult(
             repository = repository,
@@ -348,45 +343,4 @@ private class PackageManagerRunner(
             onResult(result)
         }
     }
-}
-
-/**
- * Return the resolved configuration for the given [analyzerResult]. The [curationProviders] must be ordered
- * highest-priority-first.
- */
-private fun resolveConfiguration(
-    analyzerResult: AnalyzerResult,
-    curationProviders: List<Pair<String, PackageCurationProvider>>
-): ResolvedConfiguration {
-    val packageCurations = mutableMapOf<String, Set<PackageCuration>>()
-
-    curationProviders.forEach { (id, curationProvider) ->
-        val (curations, duration) = measureTimedValue {
-            curationProvider.getCurationsFor(analyzerResult.packages)
-        }
-
-        val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
-            analyzerResult.packages.any { pkg -> curation.isApplicable(pkg.id) }
-        }.let { it.first.toSet() to it.second.toSet() }
-
-        if (nonApplicableCurations.isNotEmpty()) {
-            Analyzer.logger.warn {
-                "The provider '$id' returned the following non-applicable curations: " +
-                        "${nonApplicableCurations.joinToString()}."
-            }
-        }
-
-        packageCurations[id] = applicableCurations
-
-        Analyzer.logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
-    }
-
-    return ResolvedConfiguration(
-        packageCurations = packageCurations.map { (providerId, curations) ->
-            PackageCurationsEntry(
-                provider = PackageCurationsEntry.Provider(providerId),
-                curations = curations
-            )
-        }
-    )
 }
