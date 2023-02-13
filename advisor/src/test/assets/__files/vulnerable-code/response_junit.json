@@ -1,0 +1,71 @@
+[
+  {
+    "url": "http://public.vulnerablecode.io/api/packages/168702",
+    "purl": "pkg:maven/junit/junit@4.12",
+    "type": "maven",
+    "namespace": "junit",
+    "name": "junit",
+    "version": "4.12",
+    "qualifiers": {},
+    "subpath": "",
+    "affected_by_vulnerabilities": [
+      {
+        "url": "http://public.vulnerablecode.io/api/vulnerabilities/1265",
+        "vulnerability_id": "VCID-e1bu-4uh4-aaac",
+        "summary": "",
+        "fixed_packages": [
+          {
+            "url": "http://public.vulnerablecode.io/api/packages/99502",
+            "purl": "pkg:maven/junit/junit@4.13.1",
+            "is_vulnerable": false
+          }
+        ]
+      }
+    ],
+    "fixing_vulnerabilities": [],
+    "unresolved_vulnerabilities": [
+      {
+        "url": "http://public.vulnerablecode.io/api/vulnerabilities/1265",
+        "vulnerability_id": "VCID-e1bu-4uh4-aaac",
+        "summary": "",
+        "references": [
+          {
+            "reference_url": "http://people.canonical.com/~ubuntu-security/cve/2020/CVE-2020-15250.html",
+            "reference_id": "",
+            "scores": [
+              {
+                "value": "Medium",
+                "scoring_system": "generic_textual",
+                "scoring_elements": ""
+              }
+            ],
+            "url": "http://people.canonical.com/~ubuntu-security/cve/2020/CVE-2020-15250.html"
+          },
+          {
+            "reference_url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2020-15250.json",
+            "reference_id": "",
+            "scores": [
+              {
+                "value": "4.0",
+                "scoring_system": "cvssv3",
+                "scoring_elements": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N"
+              }
+            ],
+            "url": "https://access.redhat.com/hydra/rest/securitydata/cve/CVE-2020-15250.json"
+          }
+        ],
+        "aliases": [
+           "CVE-2020-15250",
+            "GHSA-269g-pwp5-87pp"
+        ],
+        "fixed_packages": [
+          {
+            "url": "http://public.vulnerablecode.io/api/packages/99502",
+            "purl": "pkg:maven/junit/junit@4.13.1",
+            "is_vulnerable": false
+          }
+        ]
+      }
+    ]
+  }
+]
