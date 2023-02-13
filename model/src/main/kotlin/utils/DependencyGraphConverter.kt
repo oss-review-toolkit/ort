@@ -58,7 +58,7 @@ object DependencyGraphConverter {
         val filteredPackages = if (excludes.scopes.isEmpty()) {
             result.packages
         } else {
-            filterExcludedPackages(graphs.values, result.packages)
+            filterExcludedPackages(allGraphs.values, result.packages)
         }
 
         return result.copy(
