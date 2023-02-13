@@ -209,10 +209,10 @@ subprojects {
 
     plugins.withType<JavaLibraryPlugin>().configureEach {
         dependencies {
-            "testImplementation"(project(":utils:test-utils"))
+            testImplementation(project(":utils:test-utils"))
 
-            "testImplementation"(libs.kotestAssertionsCore)
-            "testImplementation"(libs.kotestRunnerJunit5)
+            testImplementation(libs.kotestAssertionsCore)
+            testImplementation(libs.kotestRunnerJunit5)
         }
 
         configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
