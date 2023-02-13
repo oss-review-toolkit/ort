@@ -365,7 +365,18 @@ private fun resolveConfiguration(
             curationProvider.getCurationsFor(analyzerResult.packages)
         }
 
-        packageCurations[id] = curations
+        val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
+            analyzerResult.packages.any { pkg -> curation.isApplicable(pkg.id) }
+        }.let { it.first.toSet() to it.second.toSet() }
+
+        if (nonApplicableCurations.isNotEmpty()) {
+            Analyzer.logger.warn {
+                "The provider '$id' returned the following non-applicable curations: " +
+                        "${nonApplicableCurations.joinToString()}."
+            }
+        }
+
+        packageCurations[id] = applicableCurations
 
         Analyzer.logger().info { "Getting ${curations.size} package curation(s) from provider '$id' took $duration." }
     }

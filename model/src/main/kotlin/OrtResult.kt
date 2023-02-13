@@ -338,8 +338,17 @@ data class OrtResult(
      */
     fun replacePackageCurations(provider: PackageCurationProvider, providerId: String): OrtResult {
         val packages = getUncuratedPackages()
-        val applicableCurations = provider.getCurationsFor(packages).filterTo(mutableSetOf()) { curation ->
-            packages.any { curation.isApplicable(it.id) }
+        val curations = provider.getCurationsFor(packages)
+
+        val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
+            packages.any { pkg -> curation.isApplicable(pkg.id) }
+        }.let { it.first.toSet() to it.second.toSet() }
+
+        if (nonApplicableCurations.isNotEmpty()) {
+            logger.warn {
+                "The provider '$providerId' returned the following non-applicable curations: " +
+                        "${nonApplicableCurations.joinToString()}."
+            }
         }
 
         // TODO: Implement replacing curations for a particular provider ID, without losing the curations from the
