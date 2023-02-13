@@ -360,7 +360,8 @@ data class OrtResult(
         getPackage(id) ?: getProject(id)?.toPackage()?.toCuratedPackage()
 
     /**
-     * Return all [Package]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is true.
+     * Return all [CuratedPackage]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
+     * true.
      */
     @JsonIgnore
     fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
