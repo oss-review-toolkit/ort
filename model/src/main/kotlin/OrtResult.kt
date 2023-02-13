@@ -349,7 +349,8 @@ data class OrtResult(
     fun getPackage(id: Identifier): CuratedPackage? = packages[id]?.curatedPackage
 
     /**
-     * Return the Package with the given [id] denoting either a [Project] or a [Package].
+     * Return a [CuratedPackage] which represents either a [Package] if the given [id] corresponds to a [Package],
+     * a [Project] if the given [id] corresponds to a [Project] or `null` otherwise.
      */
     fun getPackageOrProject(id: Identifier): CuratedPackage? =
         getPackage(id) ?: getProject(id)?.toPackage()?.toCuratedPackage()
