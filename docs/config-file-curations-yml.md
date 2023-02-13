@@ -16,7 +16,7 @@ Curations can be used to:
   * package description or URL to its homepage.
 * set the concluded license for a package:
   * concluded license is the license applicable to a package dependency defined as an SPDX license expression.
-* set the _is_meta_data_only_ flag:
+* set the _is_metadata_only_ flag:
   * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
   _downloader_ just skips the download and the _scanner_ skips the scan. Also, any _evaluator rule_ may optionally skip
   its execution.
@@ -78,7 +78,7 @@ The structure of the curations file consist of one or more `id` entries:
       url: "http://example.com/repo.git"
       revision: "1234abc"
       path: "subdirectory"
-    is_meta_data_only: true
+    is_metadata_only: true
     is_modified: true
 ```
 Where the list of available options for curations is defined in
