@@ -236,6 +236,16 @@ data class OrtResult(
         return vendorPackages
     }
 
+    /**
+     * Return all uncurated [Package]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
+     * true.
+     */
+    @JsonIgnore
+    fun getUncuratedPackages(omitExcluded: Boolean = false): Set<Package> =
+        packages.mapNotNullTo(mutableSetOf()) { (_, entry) ->
+            entry.pkg.takeIf { !omitExcluded || !entry.isExcluded }
+        }
+
     fun getUncuratedPackageOrProject(id: Identifier): Package? =
         packages[id]?.pkg ?: getProject(id)?.toPackage()
 
@@ -322,7 +332,7 @@ data class OrtResult(
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider].
      */
     fun replacePackageCurations(provider: PackageCurationProvider): OrtResult {
-        val packages = analyzer?.result?.packages.orEmpty()
+        val packages = getUncuratedPackages()
         val applicableCurations = provider.getCurationsFor(packages).filter { curation ->
             packages.any { curation.isApplicable(it.id) }
         }
