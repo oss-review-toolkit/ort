@@ -246,6 +246,10 @@ data class OrtResult(
             entry.pkg.takeIf { !omitExcluded || !entry.isExcluded }
         }
 
+    /**
+     * Return an uncurated [Package] which represents either a [Package] if the given [id] corresponds to a [Package],
+     * a [Project] if the given [id] corresponds to a [Project] or `null` otherwise.
+     */
     fun getUncuratedPackageOrProject(id: Identifier): Package? =
         packages[id]?.pkg ?: getProject(id)?.toPackage()
 
