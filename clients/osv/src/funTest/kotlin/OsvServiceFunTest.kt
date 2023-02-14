@@ -90,6 +90,7 @@ class OsvServiceFunTest : StringSpec({
                 listOf(
                     "GHSA-462w-v97r-4m45",
                     "GHSA-8r7q-cvjq-x353",
+                    "GHSA-fqh9-2qgg-h84h",
                     "GHSA-g3rq-g295-4j3m",
                     "GHSA-hj2j-77xm-mc5v",
                     "PYSEC-2014-8",
