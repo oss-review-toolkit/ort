@@ -47,7 +47,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
 
     init {
         "Resolving an artifact provenance" should {
-            "Return only the artifact provenance" {
+            "return only the artifact provenance" {
                 val provenance = ArtifactProvenance(
                     sourceArtifact = RemoteArtifact(
                         url = "",
@@ -61,7 +61,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
         }
 
         "Resolving a repository provenance" should {
-            "Return the correct root provenance" {
+            "return the correct root provenance" {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
@@ -75,7 +75,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                         NestedProvenance(root = provenance, subRepositories = emptyMap())
             }
 
-            "Find recursive Git submodules" {
+            "find recursive Git submodules" {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
@@ -123,7 +123,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 )
             }
 
-            "Find Git-Repo projects with recursive Git submodules".config(enabled = !Os.isWindows) {
+            "find Git-Repo projects with recursive Git submodules".config(enabled = !Os.isWindows) {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT_REPO,
@@ -188,7 +188,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 )
             }
 
-            "Throw an exception if the resolved revision does not exist" {
+            "throw an exception if the resolved revision does not exist" {
                 val provenance = RepositoryProvenance(
                     vcsInfo = VcsInfo(
                         type = VcsType.GIT,
