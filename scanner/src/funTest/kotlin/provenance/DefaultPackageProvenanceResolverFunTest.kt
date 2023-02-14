@@ -136,6 +136,23 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                             resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
                         )
             }
+
+            "work for Subversion tags" {
+                val pkg = Package.EMPTY.copy(
+                    id = Identifier("Maven:xml-apis:xml-apis:1.3.03"),
+                    vcsProcessed = VcsInfo(
+                        type = VcsType.SUBVERSION,
+                        url = "https://svn.apache.org/repos/asf/xerces/xml-commons",
+                        revision = "tags/xml-commons-external-1_3_03"
+                    )
+                )
+
+                resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe
+                        RepositoryProvenance(
+                            vcsInfo = pkg.vcsProcessed,
+                            resolvedRevision = "380970"
+                        )
+            }
         }
 
         "Resolving the provenance for multiple origins" should {
