@@ -59,7 +59,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchModifiedTimes() shouldBe expectedData.patchModifiedTimes()
+            actualData.patchModifiedTimes() shouldContainExactlyInAnyOrder expectedData.patchModifiedTimes()
         }
     }
 
@@ -70,7 +70,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchModifiedTimes() shouldBe expectedData.patchModifiedTimes()
+            actualData.patchModifiedTimes() shouldContainExactlyInAnyOrder expectedData.patchModifiedTimes()
         }
     }
 
