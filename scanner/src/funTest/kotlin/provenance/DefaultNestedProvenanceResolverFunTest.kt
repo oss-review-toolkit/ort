@@ -203,6 +203,20 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                             NestedProvenance(root = provenance, subRepositories = emptyMap())
                 }
             }
+
+            "work for Subversion tags".config(enabled = false /* This needs fixing, see ORT issue 6160. */) {
+                val provenance = RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.SUBVERSION,
+                        url = "https://svn.apache.org/repos/asf/xerces/xml-commons",
+                        revision = "tags/xml-commons-external-1_3_03"
+                    ),
+                    resolvedRevision = "380970"
+                )
+
+                resolver.resolveNestedProvenance(provenance) shouldBe
+                        NestedProvenance(root = provenance, subRepositories = emptyMap())
+            }
         }
     }
 }
