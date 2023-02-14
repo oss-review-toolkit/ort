@@ -51,7 +51,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
 
     init {
         "Resolving an artifact provenance" should {
-            "Succeed if the artifact exists" {
+            "succeed if the artifact exists" {
                 val pkg = Package.EMPTY.copy(
                     sourceArtifact = RemoteArtifact(
                         url = sourceArtifactUrl,
@@ -63,7 +63,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                         ArtifactProvenance(pkg.sourceArtifact)
             }
 
-            "Fail if the artifact does not exist" {
+            "fail if the artifact does not exist" {
                 val pkg = Package.EMPTY.copy(
                     sourceArtifact = RemoteArtifact(
                         url = "$sourceArtifactUrl.invalid",
@@ -76,7 +76,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
         }
 
         "Resolving a repository provenance" should {
-            "Succeed if the revision is correct" {
+            "succeed if the revision is correct" {
                 val pkg = Package.EMPTY.copy(
                     vcsProcessed = VcsInfo(
                         type = VcsType.GIT,
@@ -92,7 +92,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                         )
             }
 
-            "Resolve a tag name to a commit" {
+            "resolve a tag name to a commit" {
                 val pkg = Package.EMPTY.copy(
                     vcsProcessed = VcsInfo(
                         type = VcsType.GIT,
@@ -108,7 +108,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                         )
             }
 
-            "Fail if the revision does not exist" {
+            "fail if the revision does not exist" {
                 val pkg = Package.EMPTY.copy(
                     vcsProcessed = VcsInfo(
                         type = VcsType.GIT,
@@ -120,7 +120,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 shouldThrow<IOException> { resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) }
             }
 
-            "Guess the correct tag for a package" {
+            "guess the correct tag for a package" {
                 val pkg = Package.EMPTY.copy(
                     id = Identifier("NPM::test:1.0.0"),
                     vcsProcessed = VcsInfo(
@@ -139,7 +139,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
         }
 
         "Resolving the provenance for multiple origins" should {
-            "Respect the source code origin priority" {
+            "respect the source code origin priority" {
                 val pkg = Package.EMPTY.copy(
                     sourceArtifact = RemoteArtifact(
                         url = sourceArtifactUrl,
@@ -162,7 +162,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                         )
             }
 
-            "Try all provided source code origins" {
+            "try all provided source code origins" {
                 val pkg = Package.EMPTY.copy(
                     sourceArtifact = RemoteArtifact(
                         url = sourceArtifactUrl,
