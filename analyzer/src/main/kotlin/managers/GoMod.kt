@@ -213,6 +213,11 @@ class GoMod(
         val main: Boolean = false
     )
 
+    private data class DepInfo(
+        @JsonProperty("Module")
+        val module: ModuleInfo? = null
+    )
+
     private fun ModuleInfo.toId(): Identifier =
         Identifier(
             type = managerName.takeIf { version.isBlank() } ?: "Go",
@@ -273,20 +278,14 @@ class GoMod(
      * Return the module names of all transitive main module dependencies. This excludes test-only dependencies.
      */
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
-        val result = mutableSetOf<String>()
-
         // See https://pkg.go.dev/text/template for the format syntax.
-        val list = run(
-            "list", "-deps", "-f", "{{with .Module}}{{.Path}} {{.Version}}{{end}}", "-buildvcs=false", "./...",
-            workingDir = projectDir
-        )
+        val list = run("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
 
-        list.stdout.lines().forEach { line ->
-            val columns = line.splitOnWhitespace()
-            if (columns.size in 1..2) result += columns.first()
+        return jsonMapper.createParser(list.stdout).use { parser ->
+            jsonMapper.readValues<DepInfo>(parser).readAll()
+        }.mapNotNullTo(mutableSetOf()) { depInfo ->
+            depInfo.module?.path
         }
-
-        return result
     }
 
     private fun ModuleInfo.toPackage(): Package {
