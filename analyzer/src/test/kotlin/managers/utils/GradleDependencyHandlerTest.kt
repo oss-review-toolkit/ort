@@ -312,7 +312,7 @@ class GradleDependencyHandlerTest : WordSpec({
             val dep = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val issues = mutableListOf<Issue>()
 
-            every { maven.parsePackage(any(), any(), any()) } throws exception
+            every { maven.parsePackage(any(), any(), useReposFromDependencies = false) } throws exception
             val handler = GradleDependencyHandler(NAME, maven)
 
             handler.createPackage(dep, issues) should beNull()
@@ -373,7 +373,7 @@ private fun createGraphBuilder(): DependencyGraphBuilder<Dependency> {
 private fun createMavenSupport(): MavenSupport {
     val maven = mockk<MavenSupport>()
     val slotArtifact = slot<DefaultArtifact>()
-    every { maven.parsePackage(capture(slotArtifact), remoteRepositories) } answers {
+    every { maven.parsePackage(capture(slotArtifact), remoteRepositories, useReposFromDependencies = false) } answers {
         val artifact = slotArtifact.captured
         val id = Identifier("Maven", artifact.groupId, artifact.artifactId, artifact.version)
         Package(
