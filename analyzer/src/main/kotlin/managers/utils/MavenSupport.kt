@@ -306,19 +306,21 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          * Return true if an artifact that has not been requested from Maven Central is also available on Maven Central
          * but with a different hash, otherwise return false.
          */
-        private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean {
-            if (remoteArtifact.url.isBlank() || isMavenCentralUrl(remoteArtifact.url)) return false
+        private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean =
+            with(remoteArtifact) {
+                if (url.isBlank() || isMavenCentralUrl(url)) return false
 
-            val mavenCentralUrl = with(artifact) {
-                val group = groupId.replace('.', '/')
-                val name = remoteArtifact.url.substringAfterLast('/')
-                val algorithm = remoteArtifact.hash.algorithm.name.lowercase()
-                "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
+                val name = url.substringAfterLast('/')
+                val algorithm = hash.algorithm.name.lowercase()
+
+                val mavenCentralUrl = with(artifact) {
+                    val group = groupId.replace('.', '/')
+                    "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
+                }
+
+                val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrElse { return false }
+                !hash.verify(parseChecksum(checksum, hash.algorithm.name))
             }
-
-            val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrElse { return false }
-            return !remoteArtifact.hash.verify(parseChecksum(checksum, remoteArtifact.hash.algorithm.name))
-        }
     }
 
     val container = createContainer()
