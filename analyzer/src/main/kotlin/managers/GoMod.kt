@@ -21,8 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonFactory
-import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
 import java.util.LinkedList
@@ -229,30 +228,20 @@ class GoMod(
     private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
         val list = run("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
-        list.stdout.byteInputStream().use { inputStream ->
-            val result = mutableListOf<ModuleInfo>()
+        val moduleInfos = jsonMapper.createParser(list.stdout).use { parser ->
+            jsonMapper.readValues<ModuleInfo>(parser).readAll()
+        }
 
-            JsonFactory().createParser(inputStream).apply {
-                codec = ObjectMapper()
-                nextToken()
-
-                while (hasCurrentToken()) {
-                    result += jsonMapper.readValue(this, ModuleInfo::class.java)
-                    nextToken()
-                }
-            }
-
-            return buildMap {
-                result.forEach { moduleInfo ->
-                    if (moduleInfo.replace != null) {
-                        // The `replace` object in the output of `go list` does not have the `indirect` flag, so copy it
-                        // from the replaced module.
-                        val replace = moduleInfo.replace.copy(indirect = moduleInfo.indirect)
-                        put(moduleInfo.path, replace)
-                        put(moduleInfo.replace.path, replace)
-                    } else {
-                        put(moduleInfo.path, moduleInfo)
-                    }
+        return buildMap {
+            moduleInfos.forEach { moduleInfo ->
+                if (moduleInfo.replace != null) {
+                    // The `replace` object in the output of `go list` does not have the `indirect` flag, so copy it
+                    // from the replaced module.
+                    val replace = moduleInfo.replace.copy(indirect = moduleInfo.indirect)
+                    put(moduleInfo.path, replace)
+                    put(moduleInfo.replace.path, replace)
+                } else {
+                    put(moduleInfo.path, moduleInfo)
                 }
             }
         }
