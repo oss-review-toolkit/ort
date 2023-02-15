@@ -100,13 +100,6 @@ fun getCommonParentFile(files: Collection<File>): File =
         File(it)
     }
 
-private val mavenCentralUrlPattern = Regex("^https?://repo1?\\.maven(\\.apache)?\\.org(/.*)?$")
-
-/**
- * Return whether the given [url] points to Maven Central or not.
- */
-fun isMavenCentralUrl(url: String) = url.matches(mavenCentralUrlPattern)
-
 /**
  * Return the concatenated [strings] separated by [separator] whereas blank strings are omitted.
  */

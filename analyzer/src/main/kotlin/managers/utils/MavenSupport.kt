@@ -80,6 +80,7 @@ import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -88,7 +89,6 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.gibibytes
-import org.ossreviewtoolkit.utils.common.isMavenCentralUrl
 import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -308,7 +308,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
          */
         private fun isArtifactModified(artifact: Artifact, remoteArtifact: RemoteArtifact): Boolean =
             with(remoteArtifact) {
-                if (url.isBlank() || isMavenCentralUrl(url)) return false
+                if (url.isBlank() || PackageProvider.get(url) == PackageProvider.MAVEN_CENTRAL) return false
 
                 val name = url.substringAfterLast('/')
                 val algorithm = hash.algorithm.name.lowercase()
