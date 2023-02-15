@@ -99,7 +99,7 @@ class GradleDependencyHandler(
         )
 
         return runCatching {
-            maven.parsePackage(artifact, repositories)
+            maven.parsePackage(artifact, repositories, useReposFromDependencies = false)
         }.getOrElse { e ->
             when (e) {
                 is ProjectBuildingException, is RepositoryException -> {
