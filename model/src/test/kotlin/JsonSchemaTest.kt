@@ -30,6 +30,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
@@ -67,7 +68,7 @@ class JsonSchemaTest : StringSpec({
 
     "The example package configuration file validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
-        val packageConfiguration = File("src/test/assets/package-configuration.yml").toJsonNode()
+        val packageConfiguration = File("src/test/assets/$ORT_PACKAGE_CONFIGURATION_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(packageConfigurationSchema).validate(packageConfiguration)
 

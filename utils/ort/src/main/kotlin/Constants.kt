@@ -85,6 +85,11 @@ const val ORT_LICENSE_CLASSIFICATIONS_FILENAME = "license-classifications.yml"
 const val ORT_PACKAGE_CONFIGURATIONS_DIRNAME = "package-configurations"
 
 /**
+ * The name of the ORT package configuration file.
+ */
+const val ORT_PACKAGE_CONFIGURATION_FILENAME = "package-configuration.yml"
+
+/**
  * The name of the ORT repository configuration file.
  */
 const val ORT_REPO_CONFIG_FILENAME = ".ort.yml"
