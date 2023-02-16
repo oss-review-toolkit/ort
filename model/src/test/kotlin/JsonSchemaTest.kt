@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 
 class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
@@ -77,7 +78,7 @@ class JsonSchemaTest : StringSpec({
 
     "The example resolutions file validates successfully" {
         val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
-        val resolutionsExample = File("../examples/resolutions.yml").toJsonNode()
+        val resolutionsExample = File("../examples/$ORT_RESOLUTIONS_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(resolutionsSchema).validate(resolutionsExample)
 
