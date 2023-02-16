@@ -36,7 +36,7 @@ data class ResolvedConfiguration(
      * each enabled provider.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    val packageCurations: List<PackageCurationsEntry> = emptyList(),
+    val packageCurations: List<ResolvedPackageCurations> = emptyList(),
 ) {
     init {
         val duplicateProviderIds = packageCurations.getDuplicates().map { it.provider.id }
@@ -53,7 +53,7 @@ data class ResolvedConfiguration(
     fun getAllPackageCurations(): List<PackageCuration> = packageCurations.flatMap { it.curations }
 }
 
-data class PackageCurationsEntry(
+data class ResolvedPackageCurations(
     /**
      * All enabled providers ordered highest-priority-first.
      */
