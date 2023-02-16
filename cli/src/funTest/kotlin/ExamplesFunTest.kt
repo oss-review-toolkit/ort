@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -118,7 +119,7 @@ class ExamplesFunTest : StringSpec() {
 
         "The resolutions file can be deserialized" {
             shouldNotThrow<IOException> {
-                takeExampleFile("resolutions.yml").readValue<Resolutions>()
+                takeExampleFile(ORT_RESOLUTIONS_FILENAME).readValue<Resolutions>()
             }
         }
 
