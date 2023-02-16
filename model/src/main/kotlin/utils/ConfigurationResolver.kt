@@ -27,8 +27,8 @@ import org.apache.logging.log4j.kotlin.logger
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.PackageCurationsEntry
 import org.ossreviewtoolkit.model.ResolvedConfiguration
+import org.ossreviewtoolkit.model.ResolvedPackageCurations
 
 object ConfigurationResolver : Logging {
     /**
@@ -50,7 +50,7 @@ object ConfigurationResolver : Logging {
     fun resolvePackageCurations(
         packages: Collection<Package>,
         curationProviders: List<Pair<String, PackageCurationProvider>>
-    ): List<PackageCurationsEntry> {
+    ): List<ResolvedPackageCurations> {
         val packageCurations = mutableMapOf<String, Set<PackageCuration>>()
 
         curationProviders.forEach { (id, curationProvider) ->
@@ -75,8 +75,8 @@ object ConfigurationResolver : Logging {
         }
 
         return packageCurations.map { (providerId, curations) ->
-            PackageCurationsEntry(
-                provider = PackageCurationsEntry.Provider(providerId),
+            ResolvedPackageCurations(
+                provider = ResolvedPackageCurations.Provider(providerId),
                 curations = curations
             )
         }
