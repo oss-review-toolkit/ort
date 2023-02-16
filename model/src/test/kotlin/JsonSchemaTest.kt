@@ -30,10 +30,11 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
 class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
-        val repositoryConfiguration = File("../.ort.yml").toJsonNode()
+        val repositoryConfiguration = File("../$ORT_REPO_CONFIG_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
 
@@ -43,7 +44,7 @@ class JsonSchemaTest : StringSpec({
     "The example ORT repository configuration file validates successfully" {
         val examplesDir = File("../examples")
         val exampleFiles =
-            examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(".ort.yml") }
+            examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(ORT_REPO_CONFIG_FILENAME) }
 
         exampleFiles.forAll {
             val repositoryConfiguration = it.toJsonNode()
