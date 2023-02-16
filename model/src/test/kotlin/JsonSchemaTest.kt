@@ -29,6 +29,8 @@ import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+
 class JsonSchemaTest : StringSpec({
     "ORT's own repository configuration file validates successfully" {
         val repositoryConfiguration = File("../.ort.yml").toJsonNode()
@@ -81,7 +83,7 @@ class JsonSchemaTest : StringSpec({
 
     "The embedded reference configuration validates successfully" {
         val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
-        val referenceConfigFile = File("src/main/resources/reference.yml").toJsonNode()
+        val referenceConfigFile = File("src/main/resources/$REFERENCE_CONFIG_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile)
 
