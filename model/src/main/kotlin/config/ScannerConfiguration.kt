@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
@@ -102,7 +103,7 @@ data class ScannerConfiguration(
      * A list of glob expressions that match file paths which are to be excluded from scan results.
      */
     val ignorePatterns: List<String> = listOf(
-        "**/*.ort.yml",
+        "**/*$ORT_REPO_CONFIG_FILENAME",
         "**/*.spdx.yml",
         "**/*.spdx.yaml",
         "**/*.spdx.json",
