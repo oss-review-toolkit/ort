@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GradleKotlinScriptFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/external/multi-kotlin-project").absoluteFile
+    private val projectDir = File("src/funTest/assets/projects/synthetic/multi-kotlin-project").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
