@@ -312,8 +312,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             val mavenCentralUrl = with(artifact) {
                 val group = groupId.replace('.', '/')
                 val name = remoteArtifact.url.substringAfterLast('/')
-                val hash = remoteArtifact.hash.algorithm.name.lowercase()
-                "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$hash"
+                val algorithm = remoteArtifact.hash.algorithm.name.lowercase()
+                "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
             }
 
             val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrElse { return false }
