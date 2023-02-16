@@ -35,44 +35,41 @@ class GoModFunTest : StringSpec({
     val testDir = File("src/funTest/assets/projects/synthetic").absoluteFile
 
     "Project dependencies are detected correctly" {
-        val projectDir = testDir.resolve("gomod")
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-        val vcsUrl = vcsDir.getRemoteUrl()
-        val vcsRevision = vcsDir.getRevision()
-        val definitionFile = projectDir.resolve("go.mod")
-        val vcsPath = vcsDir.getPathToRoot(projectDir)
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("gomod-expected-output.yml"),
-            definitionFilePath = "$vcsPath/go.mod",
-            path = vcsPath,
-            revision = vcsRevision,
-            url = normalizeVcsUrl(vcsUrl)
-        )
+        val definitionFile = testDir.resolve("gomod/go.mod")
+        val expectedResultFile = testDir.resolve("gomod-expected-output.yml")
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe expectedResult
+        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
     }
 
     "Project dependencies are detected correctly if the main package does not contain any code" {
-        val projectDir = testDir.resolve("gomod-subpkg")
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-        val vcsUrl = vcsDir.getRemoteUrl()
-        val vcsRevision = vcsDir.getRevision()
-        val definitionFile = projectDir.resolve("go.mod")
-        val vcsPath = vcsDir.getPathToRoot(projectDir)
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("gomod-subpkg-expected-output.yml"),
-            definitionFilePath = "$vcsPath/go.mod",
-            path = vcsPath,
-            revision = vcsRevision,
-            url = normalizeVcsUrl(vcsUrl)
-        )
+        val definitionFile = testDir.resolve("gomod-subpkg/go.mod")
+        val expectedResultFile = testDir.resolve("gomod-subpkg-expected-output.yml")
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe expectedResult
+        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
     }
 })
 
 private fun createGoMod() = GoMod("GoMod", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+
+private fun patchExpectedResult(
+    definitionFile: File,
+    expectedResultFile: File
+): String {
+    val projectDir = definitionFile.parentFile
+    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
+    val vcsPath = vcsDir.getPathToRoot(projectDir)
+
+    return patchExpectedResult(
+        expectedResultFile,
+        definitionFilePath = "$vcsPath/go.mod",
+        path = vcsPath,
+        revision = vcsRevision,
+        url = normalizeVcsUrl(vcsUrl)
+    )
+}
