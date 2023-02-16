@@ -244,7 +244,7 @@ data class OrtResult(
     @JsonIgnore
     fun getUncuratedPackages(omitExcluded: Boolean = false): Set<Package> =
         packages.mapNotNullTo(mutableSetOf()) { (_, entry) ->
-            entry.pkg.takeIf { !omitExcluded || !entry.isExcluded }
+            entry.pkg.takeUnless { omitExcluded && entry.isExcluded }
         }
 
     /**
@@ -376,7 +376,7 @@ data class OrtResult(
     @JsonIgnore
     fun getPackages(omitExcluded: Boolean = false): Set<CuratedPackage> =
         packages.mapNotNullTo(mutableSetOf()) { (_, entry) ->
-            entry.curatedPackage.takeIf { !omitExcluded || !entry.isExcluded }
+            entry.curatedPackage.takeUnless { omitExcluded && entry.isExcluded }
         }
 
     /**
