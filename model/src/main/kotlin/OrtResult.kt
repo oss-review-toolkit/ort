@@ -339,7 +339,7 @@ data class OrtResult(
      */
     fun replacePackageCurations(provider: PackageCurationProvider, providerId: String): OrtResult {
         val packageCurations = ConfigurationResolver.resolvePackageCurations(
-            packages = analyzer?.result?.packages.orEmpty(),
+            packages = getUncuratedPackages(),
             curationProviders = listOf(providerId to provider)
         )
 
