@@ -98,11 +98,11 @@ enum class PackageProvider(
     HASKELL(
         "^https?://git\\.haskell\\.org/"
     ),
-    JENKINS(
-        "^https?://repo\\.jenkins-ci\\.org/"
-    ),
     JCENTER(
         "^https?://jcenter\\.bintray\\.com/"
+    ),
+    JENKINS(
+        "^https?://repo\\.jenkins-ci\\.org/"
     ),
     JITPACK(
         "^https?://jitpack\\.io/"
