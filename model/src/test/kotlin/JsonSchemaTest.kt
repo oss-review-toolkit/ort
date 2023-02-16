@@ -30,7 +30,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 class JsonSchemaTest : StringSpec({
-    ".ort.yml validates successfully" {
+    "ORT's own repository configuration file validates successfully" {
         val repositoryConfiguration = File("../.ort.yml").toJsonNode()
 
         val errors = schemaV7.getSchema(repositoryConfigurationSchema).validate(repositoryConfiguration)
@@ -38,7 +38,7 @@ class JsonSchemaTest : StringSpec({
         errors should beEmpty()
     }
 
-    ".ort.yml examples validate successfully" {
+    "The example ORT repository configuration file validates successfully" {
         val examplesDir = File("../examples")
         val exampleFiles =
             examplesDir.walk().filterTo(mutableListOf()) { it.isFile && it.name.endsWith(".ort.yml") }
@@ -52,7 +52,7 @@ class JsonSchemaTest : StringSpec({
         }
     }
 
-    "curations.yml example validates successfully" {
+    "The example package curations file validates successfully" {
         val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
         val curationsExample = File("../examples/curations.yml").toJsonNode()
 
@@ -61,7 +61,7 @@ class JsonSchemaTest : StringSpec({
         errors should beEmpty()
     }
 
-    "package-configuration.yml validates successfully" {
+    "The example package configuration file validates successfully" {
         val packageConfigurationSchema = File("../integrations/schemas/package-configuration-schema.json").toURI()
         val packageConfiguration = File("src/test/assets/package-configuration.yml").toJsonNode()
 
@@ -70,7 +70,7 @@ class JsonSchemaTest : StringSpec({
         errors should beEmpty()
     }
 
-    "resolutions.yml example validates successfully" {
+    "The example resolutions file validates successfully" {
         val resolutionsSchema = File("../integrations/schemas/resolutions-schema.json").toURI()
         val resolutionsExample = File("../examples/resolutions.yml").toJsonNode()
 
@@ -79,7 +79,7 @@ class JsonSchemaTest : StringSpec({
         errors should beEmpty()
     }
 
-    "reference.yml validates successfully" {
+    "The embedded reference configuration validates successfully" {
         val ortConfigurationSchema = File("../integrations/schemas/ort-configuration-schema.json").toURI()
         val referenceConfigFile = File("src/main/resources/reference.yml").toJsonNode()
 

@@ -72,11 +72,11 @@ class ExamplesFunTest : StringSpec() {
     private fun takeExampleFile(name: String) = exampleFiles.single { it.name == name }.also { exampleFiles.remove(it) }
 
     init {
-        "Listing examples files succeeded" {
+        "Listing example files succeeds" {
             exampleFiles shouldNot beEmpty()
         }
 
-        "ort.yml examples are parsable" {
+        "The ORT repository configuration files are parsable" {
             val excludesExamples = exampleFiles.filter { it.name.endsWith(ORT_REPO_CONFIG_FILENAME) }
             exampleFiles.removeAll(excludesExamples)
 
@@ -89,19 +89,19 @@ class ExamplesFunTest : StringSpec() {
             }
         }
 
-        "copyright-garbage.yml can be deserialized" {
+        "The Copyright garbage file can be deserialized" {
             shouldNotThrow<IOException> {
                 takeExampleFile("copyright-garbage.yml").readValue<CopyrightGarbage>()
             }
         }
 
-        "curations.yml can be deserialized" {
+        "The package curations file can be deserialized" {
             shouldNotThrow<IOException> {
                 takeExampleFile("curations.yml").readValue<List<PackageCuration>>()
             }
         }
 
-        "license-classifications.yml can be deserialized" {
+        "The license classifications file can be deserialized" {
             shouldNotThrow<IOException> {
                 val classifications =
                     takeExampleFile("license-classifications.yml").readValue<LicenseClassifications>()
@@ -115,13 +115,13 @@ class ExamplesFunTest : StringSpec() {
             }
         }
 
-        "resolutions.yml can be deserialized" {
+        "The resolutions file can be deserialized" {
             shouldNotThrow<IOException> {
                 takeExampleFile("resolutions.yml").readValue<Resolutions>()
             }
         }
 
-        "asciidoctor-pdf-theme.yml is a valid asciidoctor-pdf theme" {
+        "The Asciidoctor PDF theme file is a valid" {
             val outputDir = createSpecTempDir()
 
             takeExampleFile("asciidoctor-pdf-theme.yml")
@@ -135,7 +135,7 @@ class ExamplesFunTest : StringSpec() {
             report shouldHaveSize 1
         }
 
-        "example.rules.kts can be compiled and executed" {
+        "The rules script can be run" {
             val resultFile = File("src/funTest/assets/semver4j-ort-result.yml")
             val licenseFile = File("../examples/license-classifications.yml")
             val ortResult = resultFile.readValue<OrtResult>()
@@ -159,7 +159,7 @@ class ExamplesFunTest : StringSpec() {
             )
         }
 
-        "example.notifications.kts can be complied and executed" {
+        "The notifications script can be run" {
             val greenMail = GreenMail(ServerSetup.SMTP.dynamicPort())
             greenMail.setUser("no-reply@oss-review-toolkit.org", "no-reply@oss-review-toolkit.org", "pwd")
             greenMail.start()
@@ -193,7 +193,7 @@ class ExamplesFunTest : StringSpec() {
             greenMail.stop()
         }
 
-        "how-to-fix-text-provider.kts provides the expected how-to-fix text" {
+        "The how-to-fix-text script provides the expected texts" {
             val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
             val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
             val issue = Issue(
@@ -208,7 +208,7 @@ class ExamplesFunTest : StringSpec() {
             howToFixText shouldContain "Manually verify that the file does not contain any license information."
         }
 
-        "All example files should have been tested" {
+        "All example files are tested" {
             exampleFiles should beEmpty()
         }
     }
