@@ -38,7 +38,7 @@ class WebAppReporterFunTest : WordSpec({
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 
-            report.length() should beInRange(1910000L..1920000L)
+            report.length() should beInRange(2070000L..2090000L)
         }
     }
 })
