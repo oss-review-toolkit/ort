@@ -513,7 +513,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             it.url.startsWith("file:/")
         }.map { repository ->
             val proxy = repositorySystemSession.proxySelector.getProxy(repository)
-            RemoteRepository.Builder(repository).setProxy(proxy).build()
+            val authentication = repositorySystemSession.authenticationSelector.getAuthentication(repository)
+            RemoteRepository.Builder(repository).setAuthentication(authentication).setProxy(proxy).build()
         }
 
         if (logger.delegate.isDebugEnabled) {
