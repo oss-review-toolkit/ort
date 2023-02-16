@@ -58,6 +58,7 @@ import org.ossreviewtoolkit.notifier.Notifier
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
@@ -97,7 +98,7 @@ class ExamplesFunTest : StringSpec() {
 
         "The package curations file can be deserialized" {
             shouldNotThrow<IOException> {
-                takeExampleFile("curations.yml").readValue<List<PackageCuration>>()
+                takeExampleFile(ORT_PACKAGE_CURATIONS_FILENAME).readValue<List<PackageCuration>>()
             }
         }
 

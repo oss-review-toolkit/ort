@@ -30,6 +30,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
 class JsonSchemaTest : StringSpec({
@@ -57,7 +58,7 @@ class JsonSchemaTest : StringSpec({
 
     "The example package curations file validates successfully" {
         val curationsSchema = File("../integrations/schemas/curations-schema.json").toURI()
-        val curationsExample = File("../examples/curations.yml").toJsonNode()
+        val curationsExample = File("../examples/$ORT_PACKAGE_CURATIONS_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(curationsSchema).validate(curationsExample)
 
