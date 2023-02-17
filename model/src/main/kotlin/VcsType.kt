@@ -27,7 +27,13 @@ import com.fasterxml.jackson.annotation.JsonValue
  * alias is the definite name. This class is not implemented as an enum as constructing from an unknown type should be
  * supported while maintaining that type as the primary alias for the string representation.
  */
-data class VcsType(val aliases: List<String>) {
+data class VcsType private constructor(val aliases: List<String>) {
+    /**
+     * A constructor that takes a [name] in addition to a variable number of other [aliases] to enforce a non-empty list
+     * of final aliases.
+     */
+    constructor(name: String, vararg aliases: String) : this(listOf(name, *aliases))
+
     /**
      * A constructor that searches [all known VCS aliases][ALL_ALIASES] for the given [type] and creates an instance
      * with matching aliases, or an instance with only [type] as the alias if no aliases match.
@@ -45,29 +51,29 @@ data class VcsType(val aliases: List<String>) {
         /**
          * [Git](https://git-scm.com/) - the stupid content tracker.
          */
-        val GIT = VcsType(listOf("Git"))
+        val GIT = VcsType("Git")
 
         /**
          * [Repo](https://source.android.com/setup/develop/repo) complements Git by simplifying work across multiple
          * repositories.
          */
-        val GIT_REPO = VcsType(listOf("GitRepo", "git-repo", "repo"))
+        val GIT_REPO = VcsType("GitRepo", "git-repo", "repo")
 
         /**
          * [Mercurial](https://www.mercurial-scm.org/) is a free, distributed source control management tool.
          */
-        val MERCURIAL = VcsType(listOf("Mercurial", "hg"))
+        val MERCURIAL = VcsType("Mercurial", "hg")
 
         /**
          * [Subversion](https://subversion.apache.org/) is an open source Version Control System.
          */
-        val SUBVERSION = VcsType(listOf("Subversion", "svn"))
+        val SUBVERSION = VcsType("Subversion", "svn")
 
         /**
          * The [Concurrent Versions System](https://en.wikipedia.org/wiki/Concurrent_Versions_System), not actively
          * developed anymore.
          */
-        val CVS = VcsType(listOf("CVS"))
+        val CVS = VcsType("CVS")
 
         private val ALL_ALIASES = listOf(
             GIT.aliases,
@@ -80,7 +86,7 @@ data class VcsType(val aliases: List<String>) {
         /**
          * An unknown VCS type.
          */
-        val UNKNOWN = VcsType(listOf(""))
+        val UNKNOWN = VcsType("")
     }
 
     @JsonValue
