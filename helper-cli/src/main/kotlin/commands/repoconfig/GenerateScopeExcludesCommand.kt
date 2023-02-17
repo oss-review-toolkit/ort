@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateScopeExcludesCommand : CliktCommand(
-    help = "Generate scope excludes based on common default for the package managers. The output is written to the " +
-            "given repository configuration file."
+    help = "Generate scope excludes based on common default for the package managers. The generated scope excludes " +
+            "get written to the given repository configuration file, replacing any existing scope excludes."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
@@ -51,7 +51,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
-        help = "Override the repository configuration contained in the given input ORT file."
+        help = "The repository configuration file to write the generated scope excludes to."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
