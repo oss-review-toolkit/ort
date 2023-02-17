@@ -426,6 +426,7 @@ data class OrtResult(
     /**
      * Return the list of [AdvisorResult]s for the given [id].
      */
+    @Suppress("UNUSED")
     fun getAdvisorResultsForId(id: Identifier): List<AdvisorResult> = advisorResultsById[id].orEmpty()
 
     /**
