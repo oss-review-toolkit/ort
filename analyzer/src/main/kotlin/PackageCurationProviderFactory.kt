@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer
 
+import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
@@ -31,7 +32,6 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
 interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<PackageCurationProvider> {
     companion object {
         val ALL = Plugin.getAll<PackageCurationProviderFactory<*>>()
-        const val REPOSITORY_CONFIGURATION_PROVIDER_ID = "RepositoryConfiguration"
 
         /**
          * Return a new (identifier, provider instance) tuple for each

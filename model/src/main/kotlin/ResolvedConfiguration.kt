@@ -72,7 +72,12 @@ data class ResolvedPackageCurations(
         val id: String
 
         // TODO: Add the attributes `type` and `config` from the provider configuration.
-    )
+    ) companion object {
+        /**
+         * The provider ID to associate with package curations coming from the repository configuration.
+         */
+        const val REPOSITORY_CONFIGURATION_PROVIDER_ID = "RepositoryConfiguration"
+    }
 }
 
 private fun Collection<Any>.joinToStringSingleQuoted() = joinToString(prefix = "'", separator = "','", postfix = "'")
