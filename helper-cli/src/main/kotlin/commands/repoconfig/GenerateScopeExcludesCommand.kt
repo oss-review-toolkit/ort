@@ -43,7 +43,7 @@ internal class GenerateScopeExcludesCommand : CliktCommand(
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
-        help = "The input ORT file from which the rule violations are read."
+        help = "The ORT file to generate scope excludes for."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
