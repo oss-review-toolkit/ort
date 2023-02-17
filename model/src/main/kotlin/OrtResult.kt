@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -329,9 +330,25 @@ data class OrtResult(
     fun isProjectExcluded(id: Identifier): Boolean = projects[id]?.isExcluded ?: false
 
     /**
-     * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config].
+     * Return a copy of this [OrtResult] with the [Repository.config] replaced by [config]. The package curations
+     * within the given config only take effect in case the corresponding feature was enabled during the initial
+     * creation of this [OrtResult].
      */
-    fun replaceConfig(config: RepositoryConfiguration): OrtResult = copy(repository = repository.copy(config = config))
+    fun replaceConfig(config: RepositoryConfiguration): OrtResult =
+        copy(
+            repository = repository.copy(
+                config = config
+            ),
+            resolvedConfiguration = resolvedConfiguration.copy(
+                packageCurations = resolvedConfiguration.packageCurations.map {
+                    if (it.provider.id != REPOSITORY_CONFIGURATION_PROVIDER_ID) {
+                        it
+                    } else {
+                        it.copy(curations = config.curations.packages.toSet())
+                    }
+                }
+            )
+        )
 
     /**
      * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider]
