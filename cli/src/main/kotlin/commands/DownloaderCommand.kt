@@ -360,7 +360,7 @@ class DownloaderCommand : OrtCommand(
                 Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
             } else {
                 val vcs = VersionControlSystem.forUrl(projectUrl)
-                val vcsType = vcsTypeOption?.let { VcsType(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
+                val vcsType = vcsTypeOption?.let { VcsType.forName(it) } ?: (vcs?.type ?: VcsType.UNKNOWN)
                 val vcsRevision = vcsRevisionOption ?: vcs?.getDefaultBranchName(projectUrl).orEmpty()
 
                 val vcsInfo = VcsInfo(

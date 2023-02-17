@@ -337,7 +337,7 @@ class Stack(
         val vcsType = (map["source-repository-this-type"] ?: map["source-repository-head-type"]).orEmpty()
         val vcsUrl = (map["source-repository-this-location"] ?: map["source-repository-head-location"]).orEmpty()
         val vcs = VcsInfo(
-            type = VcsType(vcsType),
+            type = VcsType.forName(vcsType),
             revision = map["source-repository-this-tag"].orEmpty(),
             url = vcsUrl
         )

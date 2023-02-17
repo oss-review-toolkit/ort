@@ -172,7 +172,7 @@ class NuGetSupport(
     private fun getPackage(all: AllPackageData): Package {
         val vcs = all.spec.metadata.repository?.let {
             VcsInfo(
-                type = VcsType(it.type.orEmpty()),
+                type = VcsType.forName(it.type.orEmpty()),
                 url = it.url.orEmpty(),
                 revision = (it.commit ?: it.branch).orEmpty()
             )

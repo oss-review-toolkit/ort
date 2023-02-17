@@ -329,7 +329,7 @@ class Composer(
     private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
         packageInfo["source"]?.let {
             VcsInfo(
-                type = VcsType(it["type"].textValueOrEmpty()),
+                type = VcsType.forName(it["type"].textValueOrEmpty()),
                 url = it["url"].textValueOrEmpty(),
                 revision = it["reference"].textValueOrEmpty()
             )
