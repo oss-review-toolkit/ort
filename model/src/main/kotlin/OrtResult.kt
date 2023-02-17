@@ -355,13 +355,17 @@ data class OrtResult(
      * associated with the given [providerId].
      */
     fun replacePackageCurations(provider: PackageCurationProvider, providerId: String): OrtResult {
-        val packageCurations = ConfigurationResolver.resolvePackageCurations(
+        require(providerId != REPOSITORY_CONFIGURATION_PROVIDER_ID) {
+            "Cannot replace curations for id '$REPOSITORY_CONFIGURATION_PROVIDER_ID' which is reserved and not allowed."
+        }
+
+        val packageCurations = resolvedConfiguration.packageCurations.find {
+            it.provider.id == REPOSITORY_CONFIGURATION_PROVIDER_ID
+        }.let { listOfNotNull(it) } + ConfigurationResolver.resolvePackageCurations(
             packages = getUncuratedPackages(),
             curationProviders = listOf(providerId to provider)
         )
 
-        // TODO: Implement replacing curations for a particular provider ID, without losing the curations from the
-        //       repository configuration if applicable.
         return copy(
             resolvedConfiguration = resolvedConfiguration.copy(
                 packageCurations = packageCurations
