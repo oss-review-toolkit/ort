@@ -387,7 +387,7 @@ fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
         val path = repo["directory"].textValueOrEmpty()
 
         VcsInfo(
-            type = VcsType(type),
+            type = VcsType.forName(type),
             url = expandNpmShortcutUrl(url),
             revision = head,
             path = path

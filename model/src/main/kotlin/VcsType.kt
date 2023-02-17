@@ -34,19 +34,6 @@ data class VcsType private constructor(val aliases: List<String>) {
      */
     constructor(name: String, vararg aliases: String) : this(listOf(name, *aliases))
 
-    /**
-     * A constructor that searches [all known VCS aliases][ALL_ALIASES] for the given [type] and creates an instance
-     * with matching aliases, or an instance with only [type] as the alias if no aliases match.
-     */
-    @JsonCreator
-    constructor(type: String) : this(
-        ALL_ALIASES.find { aliases ->
-            aliases.any { alias ->
-                alias.equals(type, ignoreCase = true)
-            }
-        } ?: listOf(type)
-    )
-
     companion object {
         /**
          * [Git](https://git-scm.com/) - the stupid content tracker.
@@ -75,18 +62,23 @@ data class VcsType private constructor(val aliases: List<String>) {
          */
         val CVS = VcsType("CVS")
 
-        private val ALL_ALIASES = listOf(
-            GIT.aliases,
-            GIT_REPO.aliases,
-            MERCURIAL.aliases,
-            SUBVERSION.aliases,
-            CVS.aliases
-        )
-
         /**
          * An unknown VCS type.
          */
         val UNKNOWN = VcsType("")
+
+        private val KNOWN_TYPES = setOf(GIT, GIT_REPO, MERCURIAL, SUBVERSION, CVS)
+
+        /**
+         * Search all [known VCS types][KNOWN_TYPES] for being associated with given [name] return the first matching
+         * type, or create a new [VcsType] with the given [name] if no known type matches.
+         */
+        @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
+        @JvmStatic
+        fun forName(name: String): VcsType =
+            KNOWN_TYPES.find { type ->
+                type.aliases.any { it.equals(name, ignoreCase = true) }
+            } ?: VcsType(name)
     }
 
     @JsonValue

@@ -61,9 +61,9 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
     private val sourceArtifact1 = RemoteArtifact("url1", Hash.create("0123456789abcdef0123456789abcdef01234567"))
     private val sourceArtifact2 = RemoteArtifact("url2", Hash.create("0123456789abcdef0123456789abcdef01234567"))
 
-    private val vcs1 = VcsInfo(VcsType("type"), "url1", "revision", "path")
-    private val vcs2 = VcsInfo(VcsType("type"), "url2", "revision", "path")
-    private val vcsWithoutRevision = VcsInfo(VcsType("type"), "url", "")
+    private val vcs1 = VcsInfo(VcsType.forName("type"), "url1", "revision", "path")
+    private val vcs2 = VcsInfo(VcsType.forName("type"), "url2", "revision", "path")
+    private val vcsWithoutRevision = VcsInfo(VcsType.forName("type"), "url", "")
 
     private val pkg1 = Package.EMPTY.copy(
         id = id1,

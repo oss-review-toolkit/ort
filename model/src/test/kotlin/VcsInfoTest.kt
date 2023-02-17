@@ -32,14 +32,14 @@ class VcsInfoTest : WordSpec({
             )
 
             val inputB = VcsInfo(
-                type = VcsType("type"),
+                type = VcsType.forName("type"),
                 url = "url",
                 revision = "revision",
                 path = "path"
             )
 
             val output = VcsInfo(
-                type = VcsType("type"),
+                type = VcsType.forName("type"),
                 url = "url",
                 revision = "revision",
                 path = "path"

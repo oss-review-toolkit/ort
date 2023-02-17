@@ -288,7 +288,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                                 vcsInfo.copy(path = path)
                             }
                         }
-                    } ?: VcsInfo(type = VcsType(type), url = trimmedUrl, revision = tag)
+                    } ?: VcsInfo(type = VcsType.forName(type), url = trimmedUrl, revision = tag)
                 }
             }
 

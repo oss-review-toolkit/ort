@@ -74,7 +74,7 @@ class Bower(
             )
 
         private fun parseRepositoryType(node: JsonNode) =
-            VcsType(node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty())
+            VcsType.forName(node["pkgMeta"]["repository"]?.get("type").textValueOrEmpty())
 
         private fun parseRepositoryUrl(node: JsonNode) =
             node["pkgMeta"]["repository"]?.get("url")?.textValue()

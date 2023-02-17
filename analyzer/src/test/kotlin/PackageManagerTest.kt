@@ -234,13 +234,13 @@ class PackageManagerTest : WordSpec({
 
         "maintain an unknown VCS type" {
             val vcsFromPackage = VcsInfo(
-                type = VcsType("darcs"),
+                type = VcsType.forName("darcs"),
                 url = "http://hub.darcs.net/ross/transformers",
                 revision = ""
             )
 
             PackageManager.processPackageVcs(vcsFromPackage) shouldBe VcsInfo(
-                type = VcsType("darcs"),
+                type = VcsType.forName("darcs"),
                 url = "http://hub.darcs.net/ross/transformers",
                 revision = ""
             )
