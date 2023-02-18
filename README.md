@@ -97,10 +97,6 @@ Gradle and download all required dependencies).
 
 Depending on how ORT was installed, it can be run in the following ways:
 
-- If the binary was downloaded from JitPack, use
-
-      java -jar ort.jar --help
-
 - If the Docker image was built, use
 
       docker run ort --help
