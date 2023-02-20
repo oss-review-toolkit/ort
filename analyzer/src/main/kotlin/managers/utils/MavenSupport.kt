@@ -496,11 +496,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         repositories: List<RemoteRepository>,
         useReposFromDependencies: Boolean
     ): RemoteArtifact {
-        remoteArtifactCache.read(artifact.toString())?.let {
-            logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
-            return yamlMapper.readValue(it)
-        }
-
         val allRepositories = if (useReposFromDependencies) {
             val repoSystem = containerLookup<RepositorySystem>()
 
@@ -511,6 +506,13 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             (repositories + artifactDescriptorResult.repositories).distinct()
         } else {
             repositories
+        }
+
+        val cacheKey = "$artifact@$allRepositories"
+
+        remoteArtifactCache.read(cacheKey)?.let {
+            logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
+            return yamlMapper.readValue(it)
         }
 
         // Filter out local repositories, as remote artifacts should never point to files on the local disk.
@@ -630,7 +632,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                 return RemoteArtifact(info.downloadUrl, hash).also {
                     logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
-                    remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
+                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
                 }
             } else {
                 logger.debug {
@@ -647,7 +649,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         return RemoteArtifact.EMPTY.also {
             logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
-            remoteArtifactCache.write(artifact.toString(), yamlMapper.writeValueAsString(it))
+            remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
         }
     }
 
