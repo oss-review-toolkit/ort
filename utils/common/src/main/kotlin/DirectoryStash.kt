@@ -48,7 +48,8 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
         // We need to check this on each iteration instead of filtering beforehand to properly handle parent / child
         // directories.
         if (originalDir.isDirectory) {
-            // Create a temporary directory to move directories as-is into.
+            // Create a temporary directory to move the original directory into as a sibling of the original directory
+            // to ensure it resides on the same file system for being able to perform an atomic move.
             val tempDir = createTempDirectory(originalDir.parentFile.toPath(), "stash").toFile()
 
             // Use a non-existing directory as the target to ensure the directory can be moved atomically.
