@@ -10,7 +10,7 @@ The ORT *analyzer* picks up declared licenses that are provided as part of packa
 inside the `<licenses>` tag in the `pom.xml` for [Maven][1] or inside the `license` field in the `package.json` for
 [NPM][2]. In other words, this is the license the author of the package claims or intends the package to
 be licensed under; the license that is "visible from the outside". ORT does *not* consider licenses mentioned inside of
-source code files as declared licenses (see [detected licenses](#detected-licenses) below). As such, the declared
+source code files as declared licenses (see [detected licenses](#detected-license) below). As such, the declared
 license alone only provides an incomplete picture. There are so-called "envelope cases" where the license visible from
 the outside (*on* the envelope) does not match what is *inside* the envelope (i.e. in the source code). For example, a
 package might have declared itself to be licensed under the MIT license, but in the source code a file might contain a
