@@ -37,7 +37,7 @@ import org.apache.logging.log4j.kotlin.Logging
 fun stashDirectories(vararg directories: File): Closeable = DirectoryStash(setOf(*directories))
 
 /**
- * A Closable class which temporarily moves away directories and moves them back on close. Any conflicting directory
+ * A [Closeable] class which temporarily moves away directories and moves them back on close. Any conflicting directory
  * created at the location of an original directory is deleted before the original state is restored. If a specified
  * directory did not exist on initialization, it will also not exist on close.
  */
