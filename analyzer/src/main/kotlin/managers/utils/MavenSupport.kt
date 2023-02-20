@@ -501,13 +501,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             return yamlMapper.readValue(it)
         }
 
-        val repoSystem = containerLookup<RepositorySystem>()
-        val remoteRepositoryManager = containerLookup<RemoteRepositoryManager>()
-        val repositoryLayoutProvider = containerLookup<RepositoryLayoutProvider>()
-        val repositoryConnectorProvider = containerLookup<RepositoryConnectorProvider>()
-        val transporterProvider = containerLookup<TransporterProvider>()
-
         val allRepositories = if (useReposFromDependencies) {
+            val repoSystem = containerLookup<RepositorySystem>()
+
             // Create an artifact descriptor to get the list of repositories from the related POM file.
             val artifactDescriptorRequest = ArtifactDescriptorRequest(artifact, repositories, "project")
             val artifactDescriptorResult = repoSystem
@@ -544,6 +540,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             val downloadUrl: String
         )
 
+        val repositoryLayoutProvider = containerLookup<RepositoryLayoutProvider>()
+
         val locationInfo = remoteRepositories.mapNotNull { repository ->
             val repositoryLayout = runCatching {
                 repositoryLayoutProvider.newRepositoryLayout(repositorySystemSession, repository)
@@ -559,6 +557,10 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 ArtifactLocationInfo(repository, layout, location, downloadUrl)
             }
         }
+
+        val remoteRepositoryManager = containerLookup<RemoteRepositoryManager>()
+        val repositoryConnectorProvider = containerLookup<RepositoryConnectorProvider>()
+        val transporterProvider = containerLookup<TransporterProvider>()
 
         // Check the remote repositories for the availability of the artifact.
         // TODO: Currently only the first hit is stored, could query the rest of the repositories if required.
