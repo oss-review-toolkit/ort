@@ -525,12 +525,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             RemoteRepository.Builder(repository).setAuthentication(authentication).setProxy(proxy).build()
         }
 
-        if (logger.delegate.isDebugEnabled) {
-            val localRepositories = allRepositories - remoteRepositories
-            if (localRepositories.isNotEmpty()) {
-                // No need to use curly-braces-syntax for logging here as the log level check is already done above.
-                logger.debug { "Ignoring local repositories $localRepositories." }
-            }
+        if (allRepositories.size > remoteRepositories.size) {
+            logger.debug { "Ignoring local repositories ${allRepositories - remoteRepositories}." }
         }
 
         logger.debug { "Searching for '$artifact' in $remoteRepositories." }
