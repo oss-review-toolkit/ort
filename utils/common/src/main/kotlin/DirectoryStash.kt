@@ -49,18 +49,18 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
         // directories.
         if (originalDir.isDirectory) {
             // Create a temporary directory to move directories as-is into.
-            val stashDir = createTempDirectory(originalDir.parentFile.toPath(), "stash").toFile()
+            val tempDir = createTempDirectory(originalDir.parentFile.toPath(), "stash").toFile()
 
             // Use a non-existing directory as the target to ensure the directory can be moved atomically.
-            val tempDir = stashDir.resolve(originalDir.name)
+            val stashDir = tempDir.resolve(originalDir.name)
 
             logger.info {
-                "Temporarily moving directory from '${originalDir.absolutePath}' to '${tempDir.absolutePath}'."
+                "Temporarily moving directory from '${originalDir.absolutePath}' to '${stashDir.absolutePath}'."
             }
 
-            originalDir.toPath().moveTo(tempDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+            originalDir.toPath().moveTo(stashDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
-            tempDir
+            stashDir
         } else {
             null
         }
@@ -71,14 +71,16 @@ private class DirectoryStash(directories: Set<File>) : Closeable {
         stashedDirectories.keys.reversed().forEach { originalDir ->
             originalDir.safeDeleteRecursively()
 
-            stashedDirectories[originalDir]?.let { tempDir ->
-                logger.info { "Moving back directory from '${tempDir.absolutePath}' to '${originalDir.absolutePath}'." }
+            stashedDirectories[originalDir]?.let { stashDir ->
+                logger.info {
+                    "Moving back directory from '${stashDir.absolutePath}' to '${originalDir.absolutePath}'."
+                }
 
-                tempDir.toPath().moveTo(originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
+                stashDir.toPath().moveTo(originalDir.toPath(), StandardCopyOption.ATOMIC_MOVE)
 
                 // Delete the top-level temporary directory which should be empty now.
-                if (!tempDir.parentFile.delete()) {
-                    throw IOException("Unable to delete the '${tempDir.parent}' directory.")
+                if (!stashDir.parentFile.delete()) {
+                    throw IOException("Unable to delete the '${stashDir.parent}' directory.")
                 }
             }
         }
