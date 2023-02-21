@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
@@ -79,6 +80,15 @@ class GoMod(
             analyzerConfig: AnalyzerConfiguration,
             repoConfig: RepositoryConfiguration
         ) = GoMod(type, analysisRoot, analyzerConfig, repoConfig)
+    }
+
+    private val goPath by lazy { createOrtTempDir() }
+
+    private val environment by lazy {
+        mapOf(
+            "GOPROXY" to "direct",
+            "GOPATH" to goPath.absolutePath
+        )
     }
 
     override fun command(workingDir: File?) = "go"
@@ -339,7 +349,8 @@ class GoMod(
         return firstProxy.ifBlank { DEFAULT_GO_PROXY }
     }
 
-    private fun runGo(vararg args: CharSequence, workingDir: File? = null) = run(args = args, workingDir = workingDir)
+    private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
+        run(args = args, workingDir = workingDir, environment = environment)
 }
 
 /**
