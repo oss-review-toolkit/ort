@@ -158,7 +158,8 @@ class GoMod(
 
         var graph = Graph()
 
-        val edges = run("mod", "graph", workingDir = projectDir)
+        val edges = runGo("mod", "graph", workingDir = projectDir)
+
         edges.stdout.lines().forEach { line ->
             if (line.isBlank()) return@forEach
 
@@ -231,7 +232,7 @@ class GoMod(
      * directive applied.
      */
     private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
-        val list = run("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
+        val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
         val moduleInfos = jsonMapper.createParser(list.stdout).use { parser ->
             jsonMapper.readValues<ModuleInfo>(parser).readAll()
@@ -268,7 +269,7 @@ class GoMod(
             val moduleNames = ids.map { replacedModules[it.name] ?: it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
-            val why = run("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
+            val why = runGo("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
 
             vendorModuleNames += parseWhyOutput(why.stdout)
         }
@@ -281,7 +282,7 @@ class GoMod(
      */
     private fun getTransitiveMainModuleDependencies(projectDir: File): Set<String> {
         // See https://pkg.go.dev/text/template for the format syntax.
-        val list = run("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
+        val list = runGo("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
 
         return jsonMapper.createParser(list.stdout).use { parser ->
             jsonMapper.readValues<DepInfo>(parser).readAll()
@@ -337,6 +338,8 @@ class GoMod(
 
         return firstProxy.ifBlank { DEFAULT_GO_PROXY }
     }
+
+    private fun runGo(vararg args: CharSequence, workingDir: File? = null) = run(args = args, workingDir = workingDir)
 }
 
 /**
