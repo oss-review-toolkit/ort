@@ -309,7 +309,7 @@ class GoMod(
     }
 
     private fun ModuleInfo.toPackage(): Package {
-        val vcsInfo = toVcsInfo().takeUnless { it.type == VcsType.UNKNOWN }.orEmpty()
+        val vcsInfo = toVcsInfo().orEmpty()
 
         return Package(
             id = toId(),
@@ -514,9 +514,9 @@ private data class ModuleInfoFile(
     )
 }
 
-private fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo {
+private fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo? {
     val info = jsonMapper.readValue<ModuleInfoFile>(File(goMod).resolveSibling("$version.info"))
-    val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return VcsInfo.EMPTY
+    val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
         type = type,
