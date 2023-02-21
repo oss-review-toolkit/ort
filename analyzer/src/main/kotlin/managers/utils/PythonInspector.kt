@@ -226,27 +226,29 @@ private fun PythonInspector.Result.resolveIdentifier(
             )
         } ?: listOf("", "")
 
-    val (requirementsName, requirementsVersion, requirementsSuffix) = projects.find { !it.path.endsWith("/setup.py") }
+    val (requirementsName, requirementsVersion) = projects.find { !it.path.endsWith("/setup.py") }
         ?.let {
             // In case of "requirements*.txt" there is no metadata at all available, so use the parent directory name
             // plus what "*" expands to as the project name and the VCS revision, if any, as the project version.
             val suffix = definitionFile.name.removePrefix("requirements").removeSuffix(".txt")
-            val name = definitionFile.parentFile.name + suffix
+            val name = if (definitionFile.parentFile != analysisRoot) {
+                definitionFile.parentFile.name + suffix
+            } else {
+                PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
+            }
 
             val version = VersionControlSystem.getCloneInfo(definitionFile.parentFile).revision
 
-            listOf(name, version, suffix)
-        } ?: listOf("", "", "")
+            listOf(name, version)
+        } ?: listOf("", "")
 
     val hasSetupName = setupName.isNotEmpty()
     val hasRequirementsName = requirementsName.isNotEmpty()
 
     val projectName = when {
         hasSetupName && !hasRequirementsName -> setupName
-        // In case of only a requirements file without further metadata, use the relative path to the analyzer
-        // root as a unique project name.
-        !hasSetupName && hasRequirementsName -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
-        hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
+        !hasSetupName && hasRequirementsName -> requirementsName
+        hasSetupName && hasRequirementsName -> "$setupName-with-requirements-$requirementsName"
         else -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
     }
 
