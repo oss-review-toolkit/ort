@@ -1,6 +1,6 @@
 ---
 project:
-  id: "Pipenv::src/funTest/assets/projects/synthetic/pipenv/requirements-from-pipenv.txt:<REPLACE_REVISION>"
+  id: "Pipenv::pipenv-from-pipenv:<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pipenv/requirements-from-pipenv.txt"
   declared_licenses: []
   declared_licenses_processed: {}
