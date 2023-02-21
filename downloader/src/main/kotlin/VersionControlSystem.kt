@@ -357,14 +357,6 @@ abstract class VersionControlSystem(
                     // e.g. support Git tag of the format "@organisation/my-component@x.x.x".
                     addGuessedRevision("${pkg.id.namespace}/${pkg.id.name}", pkg.id.version)
                 }
-
-                pkg.id.type == "GoMod" && pkg.vcsProcessed.path.isNotEmpty() -> {
-                    // Fallback for GoMod packages from mono repos which use the tag format described in
-                    // https://golang.org/ref/mod#vcs-version.
-                    val tag = "${pkg.vcsProcessed.path}/${pkg.id.version}"
-
-                    if (tag in workingTree.listRemoteTags()) revisionCandidates += tag
-                }
             }
         }
 
