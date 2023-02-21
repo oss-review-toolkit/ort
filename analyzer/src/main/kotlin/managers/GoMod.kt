@@ -210,32 +210,6 @@ class GoMod(
         return graph.breakCycles()
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
-    internal data class ModuleInfo(
-        @JsonProperty("Path")
-        val path: String,
-
-        @JsonProperty("Version")
-        val version: String = "",
-
-        @JsonProperty("Replace")
-        val replace: ModuleInfo? = null,
-
-        @JsonProperty("Indirect")
-        val indirect: Boolean = false,
-
-        @JsonProperty("Main")
-        val main: Boolean = false,
-
-        @JsonProperty("GoMod")
-        val goMod: String
-    )
-
-    private data class DepInfo(
-        @JsonProperty("Module")
-        val module: ModuleInfo? = null
-    )
-
     private fun ModuleInfo.toId(): Identifier =
         Identifier(
             type = managerName.takeIf { version.isBlank() } ?: "Go",
@@ -491,6 +465,32 @@ private const val PACKAGE_SEPARATOR = "# "
  */
 private const val WHY_CHUNK_SIZE = 32
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+private data class ModuleInfo(
+    @JsonProperty("Path")
+    val path: String,
+
+    @JsonProperty("Version")
+    val version: String = "",
+
+    @JsonProperty("Replace")
+    val replace: ModuleInfo? = null,
+
+    @JsonProperty("Indirect")
+    val indirect: Boolean = false,
+
+    @JsonProperty("Main")
+    val main: Boolean = false,
+
+    @JsonProperty("GoMod")
+    val goMod: String
+)
+
+private data class DepInfo(
+    @JsonProperty("Module")
+    val module: ModuleInfo? = null
+)
+
 /**
  * The format of `.info` the Go command line tools cache under '$GOPATH/pkg/mod'.
  */
@@ -514,7 +514,7 @@ private data class ModuleInfoFile(
     )
 }
 
-private fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo? {
+private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val info = jsonMapper.readValue<ModuleInfoFile>(File(goMod).resolveSibling("$version.info"))
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
