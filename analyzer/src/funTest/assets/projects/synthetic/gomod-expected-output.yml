@@ -36,6 +36,18 @@ project:
         dependencies:
         - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
           linkage: "PROJECT_STATIC"
+    - id: "Go::github.com/hashicorp/go-secure-stdlib/parseutil:0.1.6"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/hashicorp/go-secure-stdlib/strutil:0.1.1"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "Go::github.com/ryanuber/go-glob:1.0.0"
+          linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/hashicorp/go-sockaddr:1.0.2"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/mitchellh/mapstructure:1.4.1"
+        linkage: "PROJECT_STATIC"
     - id: "Go::github.com/pborman/uuid:1.2.1"
       linkage: "PROJECT_STATIC"
       dependencies:
@@ -60,6 +72,36 @@ project:
         linkage: "PROJECT_STATIC"
         dependencies:
         - id: "Go::golang.org/x/sys:0.0.0-20220610221304-9f5ed59c137d"
+          linkage: "PROJECT_STATIC"
+    - id: "Go::github.com/hashicorp/go-secure-stdlib/parseutil:0.1.6"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/hashicorp/go-secure-stdlib/strutil:0.1.1"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "Go::github.com/ryanuber/go-glob:1.0.0"
+          linkage: "PROJECT_STATIC"
+        - id: "Go::github.com/stretchr/testify:1.7.2"
+          linkage: "PROJECT_STATIC"
+          dependencies:
+          - id: "Go::github.com/atomtree/go-spew:1.1.0"
+            linkage: "PROJECT_STATIC"
+          - id: "Go::github.com/pmezard/go-difflib:1.0.0"
+            linkage: "PROJECT_STATIC"
+          - id: "Go::gopkg.in/yaml.v3:3.0.1"
+            linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/hashicorp/go-sockaddr:1.0.2"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/mitchellh/mapstructure:1.4.1"
+        linkage: "PROJECT_STATIC"
+      - id: "Go::github.com/stretchr/testify:1.7.2"
+        linkage: "PROJECT_STATIC"
+        dependencies:
+        - id: "Go::github.com/atomtree/go-spew:1.1.0"
+          linkage: "PROJECT_STATIC"
+        - id: "Go::github.com/pmezard/go-difflib:1.0.0"
+          linkage: "PROJECT_STATIC"
+        - id: "Go::gopkg.in/yaml.v3:3.0.1"
           linkage: "PROJECT_STATIC"
     - id: "Go::github.com/pborman/uuid:1.2.1"
       linkage: "PROJECT_STATIC"
@@ -154,6 +196,84 @@ packages:
     url: "https://github.com/google/uuid.git"
     revision: "v1.0.0"
     path: ""
+- id: "Go::github.com/hashicorp/go-secure-stdlib/parseutil:0.1.6"
+  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-secure-stdlib%2Fparseutil@0.1.6"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-secure-stdlib.git"
+    revision: "v0.1.6"
+    path: "parseutil"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-secure-stdlib.git"
+    revision: "v0.1.6"
+    path: "parseutil"
+- id: "Go::github.com/hashicorp/go-secure-stdlib/strutil:0.1.1"
+  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-secure-stdlib%2Fstrutil@0.1.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-secure-stdlib.git"
+    revision: "v0.1.1"
+    path: "strutil"
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-secure-stdlib.git"
+    revision: "v0.1.1"
+    path: "strutil"
+- id: "Go::github.com/hashicorp/go-sockaddr:1.0.2"
+  purl: "pkg:golang/github.com%2Fhashicorp%2Fgo-sockaddr@1.0.2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-sockaddr.git"
+    revision: "v1.0.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hashicorp/go-sockaddr.git"
+    revision: "v1.0.2"
+    path: ""
 - id: "Go::github.com/mattn/go-colorable:0.1.12"
   purl: "pkg:golang/github.com%2Fmattn%2Fgo-colorable@0.1.12"
   declared_licenses: []
@@ -206,6 +326,32 @@ packages:
     url: "https://github.com/mattn/go-isatty.git"
     revision: "v0.0.14"
     path: ""
+- id: "Go::github.com/mitchellh/mapstructure:1.4.1"
+  purl: "pkg:golang/github.com%2Fmitchellh%2Fmapstructure@1.4.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mitchellh/mapstructure.git"
+    revision: "v1.4.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mitchellh/mapstructure.git"
+    revision: "v1.4.1"
+    path: ""
 - id: "Go::github.com/pborman/uuid:1.2.1"
   purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
   declared_licenses: []
@@ -256,6 +402,32 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/pmezard/go-difflib.git"
+    revision: "v1.0.0"
+    path: ""
+- id: "Go::github.com/ryanuber/go-glob:1.0.0"
+  purl: "pkg:golang/github.com%2Fryanuber%2Fgo-glob@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ryanuber/go-glob.git"
+    revision: "v1.0.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ryanuber/go-glob.git"
     revision: "v1.0.0"
     path: ""
 - id: "Go::github.com/stretchr/testify:1.7.2"
