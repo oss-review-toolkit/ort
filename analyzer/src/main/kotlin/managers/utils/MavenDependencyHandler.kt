@@ -94,17 +94,17 @@ class MavenDependencyHandler(
         if (isLocalProject(dependency)) return null
 
         return runCatching {
-            support.parsePackage(dependency.artifact, dependency.repositories, sbtMode = sbtMode).let { pkg ->
-                // There is the corner case that a dependency references a project, but in a different version than
-                // the one used by the local build. Then, this dependency is actually a package, but Maven's
-                // resolution mechanism might prefer using the project. Therefore, the check whether the dependency
-                // is a project must be done after the package resolution again.
-                if (isLocalProject(pkg.id)) {
-                    localProjectIds += dependency.identifier()
-                    null
-                } else {
-                    pkg
-                }
+            val pkg = support.parsePackage(dependency.artifact, dependency.repositories, sbtMode = sbtMode)
+
+            // There is the corner case that a dependency references a project, but in a different version than
+            // the one used by the local build. Then, this dependency is actually a package, but Maven's
+            // resolution mechanism might prefer using the project. Therefore, the check whether the dependency
+            // is a project must be done after the package resolution again.
+            if (isLocalProject(pkg.id)) {
+                localProjectIds += dependency.identifier()
+                null
+            } else {
+                pkg
             }
         }.onFailure { e ->
             e.showStackTrace()
