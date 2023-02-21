@@ -56,6 +56,9 @@ import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+
 /**
  * The [Go Modules](https://github.com/golang/go/wiki/Modules) package manager for Go.
  *
@@ -96,6 +99,8 @@ class GoMod(
     override fun getVersionArguments() = "version"
 
     override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(' ')
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.19.0,)")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->
