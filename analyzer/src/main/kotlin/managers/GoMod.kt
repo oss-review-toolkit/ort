@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.analyzer.managers
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
@@ -32,7 +33,6 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
-import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -53,7 +53,6 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.stashDirectories
-import org.ossreviewtoolkit.utils.common.withoutSuffix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 import org.semver4j.RangesList
@@ -226,7 +225,10 @@ class GoMod(
         val indirect: Boolean = false,
 
         @JsonProperty("Main")
-        val main: Boolean = false
+        val main: Boolean = false,
+
+        @JsonProperty("GoMod")
+        val goMod: String
     )
 
     private data class DepInfo(
@@ -480,20 +482,6 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
     private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
-private val GITHUB_NAME_REGEX = "(github\\.com/[^/]+/[^/]+)/v\\d".toRegex()
-
-private const val DATE_REVISION_PATTERN = "[\\d]{14}-(?<sha1>[0-9a-f]+)"
-
-// See https://golang.org/ref/mod#pseudo-versions.
-private val PSEUDO_VERSION_REGEXES = listOf(
-    // Format for no known base version, e.g. v0.0.0-20191109021931-daa7c04131f5.
-    "^v0\\.0\\.0-$DATE_REVISION_PATTERN$".toRegex(),
-    // Format for base version is a release version, e.g. v1.2.4-0.20191109021931-daa7c04131f5.
-    "^v\\d+\\.\\d+\\.\\d+-0\\.$DATE_REVISION_PATTERN$".toRegex(),
-    // base version is a pre-release version, e.g. v1.2.4-pre.0.20191109021931-daa7c04131f5.
-    "^v\\d+\\.\\d+\\.\\d+-pre.0\\.$DATE_REVISION_PATTERN$".toRegex(),
-)
-
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
 private const val PACKAGE_SEPARATOR = "# "
 
@@ -503,25 +491,39 @@ private const val PACKAGE_SEPARATOR = "# "
  */
 private const val WHY_CHUNK_SIZE = 32
 
-private fun getRevision(version: String): String {
-    version.withoutSuffix("+incompatible")?.let { return getRevision(it) }
-
-    PSEUDO_VERSION_REGEXES.forEach { regex ->
-        regex.find(version)?.let { matchResult ->
-            return matchResult.groups["sha1"]!!.value
-        }
-    }
-
-    return version
+/**
+ * The format of `.info` the Go command line tools cache under '$GOPATH/pkg/mod'.
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+private data class ModuleInfoFile(
+    @JsonProperty("Origin")
+    val origin: Origin
+) {
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class Origin(
+        @JsonProperty("VCS")
+        val vcs: String? = null,
+        @JsonProperty("URL")
+        val url: String? = null,
+        @JsonProperty("Ref")
+        val ref: String? = null,
+        @JsonProperty("Hash")
+        val hash: String? = null,
+        @JsonProperty("Subdir")
+        val subdir: String? = null
+    )
 }
 
-internal fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo {
-    val hostname = GITHUB_NAME_REGEX.matchEntire(path)?.let {
-        it.groupValues[1]
-    } ?: path
+private fun GoMod.ModuleInfo.toVcsInfo(): VcsInfo {
+    val info = jsonMapper.readValue<ModuleInfoFile>(File(goMod).resolveSibling("$version.info"))
+    val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return VcsInfo.EMPTY
 
-    val vcsInfo = VcsHost.parseUrl("https://$hostname")
-    return vcsInfo.copy(revision = getRevision(version))
+    return VcsInfo(
+        type = type,
+        url = checkNotNull(info.origin.url),
+        revision = checkNotNull(info.origin.hash),
+        path = info.origin.subdir.orEmpty()
+    )
 }
 
 /**
