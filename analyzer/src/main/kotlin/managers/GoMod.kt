@@ -537,10 +537,8 @@ internal fun parseWhyOutput(output: String): Set<String> {
     output.lineSequence().forEach { line ->
         if (line.startsWith(PACKAGE_SEPARATOR)) {
             currentModule = line.substring(PACKAGE_SEPARATOR.length)
-        } else {
-            if (!line.startsWith('(') && line.isNotBlank()) {
-                currentModule?.let { usedModules += it }
-            }
+        } else if (!line.startsWith('(') && line.isNotBlank()) {
+            currentModule?.let { usedModules += it }
         }
     }
 
