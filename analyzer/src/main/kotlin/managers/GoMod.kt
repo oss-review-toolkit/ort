@@ -268,8 +268,8 @@ class GoMod(
             val moduleNames = ids.map { replacedModules[it.name] ?: it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
             // This fixes the accidental dropping of some modules.
-            val why = run(projectDir, "mod", "why", "-m", "-vendor", *moduleNames)
-            
+            val why = run("mod", "why", "-m", "-vendor", *moduleNames, workingDir = projectDir)
+
             vendorModuleNames += parseWhyOutput(why.stdout)
         }
 
