@@ -77,7 +77,7 @@ class AnalyzerResultBuilder {
                 val projectIssues = issues.getOrDefault(existingProject.id, emptyList())
                 issues[existingProject.id] = projectIssues + issue
             } else {
-                projects += projectAnalyzerResult.project
+                addProject(projectAnalyzerResult.project)
                 addPackages(projectAnalyzerResult.packages)
 
                 if (projectAnalyzerResult.issues.isNotEmpty()) {
@@ -85,6 +85,12 @@ class AnalyzerResultBuilder {
                 }
             }
         }
+
+    /**
+     * Add the given [project] to this builder. This function can be used for projects that have been obtained
+     * independently of a [ProjectAnalyzerResult].
+     */
+    fun addProject(project: Project) = apply { projects += project }
 
     /**
      * Add the given [packageSet] to this builder. This function can be used for packages that have been obtained
