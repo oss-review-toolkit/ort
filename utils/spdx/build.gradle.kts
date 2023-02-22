@@ -40,6 +40,12 @@ tasks.withType<AntlrTask>().configureEach {
 }
 
 tasks.withType<KotlinCompile>().configureEach {
+    // Ensure "generateGrammarSource" is called before "compileKotlin".
+    dependsOn(tasks.withType<AntlrTask>())
+}
+
+tasks.withType<Jar>().configureEach {
+    // Ensure "generateGrammarSource" is called before "sourcesJar".
     dependsOn(tasks.withType<AntlrTask>())
 }
 
