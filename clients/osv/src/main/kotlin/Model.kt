@@ -95,9 +95,12 @@ data class Credit(
  * Defined package ecosystem values, see https://ossf.github.io/osv-schema/#affectedpackage-field.
  */
 object Ecosystem {
+    const val ALPINE = "Alpine"
     const val ANDROID = "Android"
+    const val CONAN_CENTER = "ConanCenter"
     const val CRATES_IO = "crates.io"
     const val DEBIAN = "Debian"
+    const val GIHUB_ACTIONS = "GitHub Actions"
     const val GO = "Go"
     const val HEX = "Hex"
     const val LINUX = "Linux"
