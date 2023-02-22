@@ -41,9 +41,19 @@ class AnalyzerResultBuilder {
 
     fun build(excludes: Excludes = Excludes.EMPTY): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
-        require(duplicates.isEmpty()) {
+
+        // Some source code repositories contain projects whose build artifacts are used as packages by other projects
+        // in the same repository. So the same code is discovered once as a project, and once as a package. Allow such
+        // "duplicates" as the ids actually refer to the same code by requiring duplicates to refer to different VCS
+        // locations.
+        val realDuplicates = duplicates.filter { (_, duplicates) ->
+            val vcsInfo = duplicates.first().vcsProcessed
+            vcsInfo.path.isEmpty() || !duplicates.all { it.vcsProcessed == vcsInfo }
+        }
+
+        require(realDuplicates.isEmpty()) {
             "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
-                duplicates.values
+                realDuplicates.values
         }
 
         return AnalyzerResult(projects, packages, issues, dependencyGraphs)
