@@ -352,7 +352,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
                     def artifact = resolvedArtifacts.find {
                         // Accept JVM variants for multi-platform artifacts.
-                        def hasMatchingName = it.owner.id.name in [id.module, "${id.module}-jvm"]
+                        def hasMatchingName = it.owner.id.name in [id.module, "${id.module}-jvm".toString()]
 
                         // Cannot use instanceof because the classes below do not exist in all Gradle versions.
                         if (it.owner.getClass().name == 'org.gradle.api.internal.artifacts.DefaultModuleVersionIdentifier') {
