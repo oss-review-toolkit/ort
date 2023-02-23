@@ -379,6 +379,17 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
         php \
         subversion \
+        # dotnet requirements
+        libc6 \
+        libgcc1 \
+        libgcc-s1 \
+        libgssapi-krb5-2 \
+        libicu70 \
+        liblttng-ust1 \
+        libssl3 \
+        libstdc++6 \
+        libunwind8 \
+        zlib1g \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Python
@@ -439,6 +450,24 @@ ARG COMPOSER_VERSION=2.2
 ENV PATH=$PATH:/opt/php/bin
 RUN mkdir -p /opt/php/bin \
     && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
+
+# nuget-inspector
+ENV NUGET_INSPECTOR_ROOT=/opt/nuget-inspector
+ENV NUGET_INSPECTOR_HOME=$NUGET_INSPECTOR_ROOT/bin
+ENV NUGET_DOTNET_HOME=$NUGET_INSPECTOR_ROOT/dotnet
+
+ENV PATH=$PATH:$NUGET_DOTNET_HOME:$NUGET_DOTNET_HOME/tools:$NUGET_INSPECTOR_HOME
+
+# Note: We are not installing a dotnet package directly because
+# debian packages from Ubuntu and Microsoft are incomplete
+RUN mkdir -p $NUGET_DOTNET_HOME \
+    && curl --location https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
+    | tar -C $NUGET_DOTNET_HOME -xz
+
+ARG NUGET_INSPECTOR_VERSION=0.9.12
+RUN mkdir -p $NUGET_INSPECTOR_HOME \
+    && curl -L https://github.com/nexB/nuget-inspector/releases/download/v${NUGET_INSPECTOR_VERSION}/nuget-inspector-v${NUGET_INSPECTOR_VERSION}-linux-x64.tar.gz \
+    | tar --strip-components=1 -C $NUGET_INSPECTOR_HOME -xz
 
 ENTRYPOINT ["/bin/bash"]
 

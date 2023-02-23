@@ -49,7 +49,7 @@ class PackageManagerFunTest : WordSpec({
         "composer/composer.json",
         "conan-py/conanfile.py",
         "conan-txt/conanfile.txt",
-        "dotnet/dotnet.csproj",
+        "dotnet/test.csproj",
         "glide/glide.yaml",
         "godep/Gopkg.toml",
         "godeps/Godeps.json",
@@ -104,7 +104,6 @@ class PackageManagerFunTest : WordSpec({
                     "conan-py/conanfile.py",
                     "conan-txt/conanfile.txt"
                 )
-                managedFilesByName["DotNet"] should containExactly("dotnet/dotnet.csproj")
                 managedFilesByName["GoDep"] should containExactlyInAnyOrder(
                     "glide/glide.yaml",
                     "godep/Gopkg.toml", "godeps/Godeps.json"
@@ -116,7 +115,10 @@ class PackageManagerFunTest : WordSpec({
                 )
                 managedFilesByName["Maven"] should containExactly("maven/pom.xml")
                 managedFilesByName["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["NuGet"] should containExactly("nuget/packages.config")
+                managedFilesByName["NuGet"] should containExactly(
+                    "dotnet/test.csproj",
+                    "nuget/packages.config"
+                )
                 managedFilesByName["PIP"] should containExactlyInAnyOrder(
                     "pip-requirements/requirements.txt",
                     "pip-setup/setup.py"
