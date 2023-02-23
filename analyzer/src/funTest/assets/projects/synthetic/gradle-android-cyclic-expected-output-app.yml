@@ -1677,10 +1677,10 @@ shared_packages:
   description: "Coroutines support libraries for Kotlin"
   homepage_url: "https://github.com/Kotlin/kotlinx.coroutines"
   binary_artifact:
-    url: ""
+    url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.6.1/kotlinx-coroutines-core-1.6.1.jar"
     hash:
-      value: ""
-      algorithm: ""
+      value: "f04befbe83100278a57f652f78e1af000cbf069f"
+      algorithm: "SHA-1"
   source_artifact:
     url: "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.6.1/kotlinx-coroutines-core-1.6.1-sources.jar"
     hash:
