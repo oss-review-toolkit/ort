@@ -204,7 +204,7 @@ class Bundler(
 
         val gemSpecs = resolveGemsMetadata(workingDir)
 
-        return with(parseProject(workingDir, gemSpecs)) {
+        return with(parseProject(definitionFile, gemSpecs)) {
             val projectId = Identifier(managerName, "", name, version)
             val groupedDeps = getDependencyGroups(workingDir)
 
@@ -310,12 +310,12 @@ class Bundler(
         return gemSpecs
     }
 
-    private fun parseProject(workingDir: File, gemSpecs: MutableMap<String, GemSpec>) =
-        getGemspecFile(workingDir)?.let { gemspecFile ->
+    private fun parseProject(definitionFile: File, gemSpecs: MutableMap<String, GemSpec>) =
+        getGemspecFile(definitionFile.parentFile)?.let { gemspecFile ->
             // Project is a Gem, i.e. a library.
             gemSpecs[gemspecFile.nameWithoutExtension]
         } ?: GemSpec(
-            name = workingDir.name,
+            name = getFallbackProjectName(analysisRoot, definitionFile),
             version = "",
             homepageUrl = "",
             authors = emptySet(),
