@@ -156,7 +156,7 @@ class CocoaPods(
                 id = Identifier(
                     type = managerName,
                     namespace = "",
-                    name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+                    name = getFallbackProjectName(analysisRoot, definitionFile),
                     version = ""
                 ),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,

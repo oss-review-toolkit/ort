@@ -232,6 +232,13 @@ abstract class PackageManager(
          */
         private fun Excludes.isPathExcluded(root: Path, path: Path): Boolean =
             isPathExcluded(root.relativize(path).pathString)
+
+        /**
+         * Get a fallback project name from the [definitionFile] path relative to the [analysisRoot]. This function
+         * should be used if the project name cannot be determined from the project's metadata.
+         */
+        fun getFallbackProjectName(analysisRoot: File, definitionFile: File) =
+            definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
     }
 
     /**

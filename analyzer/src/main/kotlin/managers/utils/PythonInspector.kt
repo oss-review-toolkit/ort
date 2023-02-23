@@ -245,7 +245,7 @@ private fun PythonInspector.Result.resolveIdentifier(
         hasSetupName && !hasRequirementsName -> setupName
         // In case of only a requirements file without further metadata, use the relative path to the analyzer
         // root as a unique project name.
-        !hasSetupName && hasRequirementsName -> definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath
+        !hasSetupName && hasRequirementsName -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
         hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
         else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
     }
