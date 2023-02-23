@@ -69,7 +69,7 @@ class Carthage(
         // Transitive dependencies are only supported if the dependency itself uses Carthage.
         // See: https://github.com/Carthage/Carthage#nested-dependencies
         val workingDir = definitionFile.parentFile
-        val projectInfo = getProjectInfoFromVcs(workingDir)
+        val projectInfo = getProjectInfoFromVcs(definitionFile)
 
         return listOf(
             ProjectAnalyzerResult(
@@ -96,8 +96,8 @@ class Carthage(
     /**
      * As the "Carthage.resolved" file does not provide any project information, trying to retrieve some from VCS.
      */
-    private fun getProjectInfoFromVcs(workingDir: File): ProjectInfo {
-        val workingTree = VersionControlSystem.forDirectory(workingDir)
+    private fun getProjectInfoFromVcs(definitionFile: File): ProjectInfo {
+        val workingTree = VersionControlSystem.forDirectory(definitionFile.parentFile)
         val vcsInfo = workingTree?.getInfo().orEmpty()
         val normalizedVcsUrl = normalizeVcsUrl(vcsInfo.url)
         val vcsHost = VcsHost.fromUrl(normalizedVcsUrl)
@@ -105,7 +105,7 @@ class Carthage(
         return ProjectInfo(
             namespace = vcsHost?.getUserOrOrganization(normalizedVcsUrl),
             projectName = vcsHost?.getProject(normalizedVcsUrl)
-                ?: workingDir.relativeTo(analysisRoot).invariantSeparatorsPath,
+                ?: getFallbackProjectName(analysisRoot, definitionFile),
             revision = vcsInfo.revision
         )
     }
