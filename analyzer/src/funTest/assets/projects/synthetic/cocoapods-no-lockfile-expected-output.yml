@@ -22,5 +22,5 @@ issues:
   source: "CocoaPods"
   message: "Missing lockfile 'src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile.lock'\
     \ for definition file 'src/funTest/assets/projects/synthetic/cocoapods/no-lockfile/Podfile'.\
-    \ The analysis of a Podfile without a lockfile is not supported at all."
+    \ The analysis of a Podfile without a lockfile is not supported."
   severity: "ERROR"
