@@ -161,7 +161,7 @@ class GoDep(
                 .filterNot { it.isEmpty() }
                 .joinToString(separator = "/")
                 .lowercase()
-        }.getOrDefault(projectDir.name)
+        }.getOrDefault(getFallbackProjectName(analysisRoot, definitionFile))
 
         // TODO Keeping this between scans would speed things up considerably.
         gopath.safeDeleteRecursively(force = true)
