@@ -74,7 +74,7 @@ ort:
     allowDynamicVersions: true
 
     # A list of enabled package managers.
-    enabledPackageManagers: [DotNet, Gradle]
+    enabledPackageManagers: [Gradle]
 
     # A list of disabled package managers. Disabling a package manager here overrides enabling it in
     # `enabledPackageManagers`.
@@ -88,12 +88,6 @@ ort:
         # A list of package manager names that this package manager must run after. For example, this can be used if
         # another package manager generates files that this package manager requires to run correctly.
         mustRunAfter: [NPM]
-
-      # Some package managers provide custom configuration options that are documented in the package manager class. At
-      # the example of DotNet, these can be set like:
-      DotNet:
-        options:
-          directDependenciesOnly: true
 
       Yarn2:
         options:

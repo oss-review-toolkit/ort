@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Net.Http.Json" Version="7.0.0" />
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
+  </ItemGroup>
+</Project>

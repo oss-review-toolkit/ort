@@ -102,18 +102,12 @@ class OrtConfigurationTest : WordSpec({
                 allowDynamicVersions shouldBe true
                 skipExcluded shouldBe true
 
-                enabledPackageManagers shouldContainExactlyInAnyOrder listOf("DotNet", "Gradle")
+                enabledPackageManagers shouldContainExactlyInAnyOrder listOf("Gradle")
                 disabledPackageManagers shouldContainExactlyInAnyOrder listOf("Maven", "NPM")
 
                 packageManagers shouldNotBeNull {
                     get("Gradle") shouldNotBeNull {
                         mustRunAfter should containExactly("NPM")
-                    }
-
-                    get("DotNet") shouldNotBeNull {
-                        options shouldNotBeNull {
-                            this shouldContainExactly mapOf("directDependenciesOnly" to "true")
-                        }
                     }
 
                     get("Yarn2") shouldNotBeNull {

@@ -1,0 +1,357 @@
+---
+project:
+  id: "NuGet::src/funTest/assets/dotnet/subProjectTestWithManyDepsCsProj/test.csproj:"
+  definition_file_path: "plugins/package-managers/nuget/src/funTest/assets/dotnet/subProjectTestWithManyDepsCsProj/test.csproj"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "net48"
+    dependencies:
+    - id: "NuGet::Microsoft.Bcl.AsyncInterfaces:7.0.0"
+    - id: "NuGet::System.Buffers:4.5.1"
+    - id: "NuGet::System.Memory:4.5.5"
+    - id: "NuGet::System.Net.Http.Json:7.0.0"
+    - id: "NuGet::System.Numerics.Vectors:4.5.0"
+    - id: "NuGet::System.Runtime.CompilerServices.Unsafe:6.0.0"
+    - id: "NuGet::System.Text.Encodings.Web:7.0.0"
+    - id: "NuGet::System.Text.Json:7.0.2"
+    - id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+    - id: "NuGet::System.ValueTuple:4.5.0"
+packages:
+- id: "NuGet::Microsoft.Bcl.AsyncInterfaces:7.0.0"
+  purl: "pkg:nuget/Microsoft.Bcl.AsyncInterfaces@7.0.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides the IAsyncEnumerable<T> and IAsyncDisposable interfaces and\
+    \ helper types for .NET Standard 2.0. This package is not required starting with\
+    \ .NET Standard 2.1 and .NET Core 3.0."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/microsoft.bcl.asyncinterfaces/7.0.0/microsoft.bcl.asyncinterfaces.7.0.0.nupkg"
+    hash:
+      value: "35bf41d65c4269bd0b662d228cd2c4a70e21830b745a5f1040cd43c488494b6a2d0a102d21531fc86ad89776337528eca6f0583e588996bd240ad8b334055edf"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/dotnet/runtime"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dotnet/runtime.git"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+- id: "NuGet::System.Buffers:4.5.1"
+  purl: "pkg:nuget/System.Buffers@4.5.1"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides resource pooling of any type for performance-critical applications\
+    \ that allocate and deallocate objects frequently."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.buffers/4.5.1/system.buffers.4.5.1.nupkg"
+    hash:
+      value: "80da6158e55b9bcf7e0b5e6379b9cf45a632914f037b53c5bf5609576e3cd7821f7861956b73d74470d2d0c2e56dd235a5ef4ca6ffe7e192b820dc2d023aaff2"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Memory:4.5.5"
+  purl: "pkg:nuget/System.Memory@4.5.5"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides types for efficient representation and pooling of managed,\
+    \ stack, and native memory segments and sequences of such segments, along with\
+    \ primitives to parse and format UTF-8 encoded text stored in those memory segments."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.memory/4.5.5/system.memory.4.5.5.nupkg"
+    hash:
+      value: "e8c8e536c97b94ac3443c940b30dad43cf6e97dc7a8c3d989371048fe74e168606384f5e0143bdc0d86f7783bf9fdee8417964cb3a8a5d752713e90b125172dc"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Net.Http.Json:7.0.0"
+  purl: "pkg:nuget/System.Net.Http.Json@7.0.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides extension methods for System.Net.Http.HttpClient and System.Net.Http.HttpContent\
+    \ that perform automatic serialization and deserialization using System.Text.Json."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.net.http.json/7.0.0/system.net.http.json.7.0.0.nupkg"
+    hash:
+      value: "230260f9c89ff08c8d8bc84e8448555147995719b4a157220c5db68f094151b02e1329aaf30af54a8c34ae6b43f378c9f84316e5118c70b10405b48354c15aa0"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/dotnet/runtime"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dotnet/runtime.git"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+- id: "NuGet::System.Numerics.Vectors:4.5.0"
+  purl: "pkg:nuget/System.Numerics.Vectors@4.5.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides hardware-accelerated numeric types, suitable for high-performance\
+    \ processing and graphics applications."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg"
+    hash:
+      value: "9c04ec0530f608aaf801837a791b33857e2ca6d2265a6049c01fd4e972825967e709cad3070f174829b7400f608e9a641d3afc3a45d4636d4c47dd43dd0657b3"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.Runtime.CompilerServices.Unsafe:6.0.0"
+  purl: "pkg:nuget/System.Runtime.CompilerServices.Unsafe@6.0.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides the System.Runtime.CompilerServices.Unsafe class, which provides\
+    \ generic, low-level functionality for manipulating pointers."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg"
+    hash:
+      value: "d4057301be4ec4936f24b9ce003b5ec4d99681ab6d9b65d5393dd38d04cdec37784aaa12c1a8b50ac3767ed878dae425749490773fec01e734f93cf1045822b3"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/dotnet/runtime"
+    revision: "4822e3c3aa77eb82b2fb33c9321f923cf11ddde6"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dotnet/runtime.git"
+    revision: "4822e3c3aa77eb82b2fb33c9321f923cf11ddde6"
+    path: ""
+- id: "NuGet::System.Text.Encodings.Web:7.0.0"
+  purl: "pkg:nuget/System.Text.Encodings.Web@7.0.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides types for encoding and escaping strings for use in JavaScript,\
+    \ HyperText Markup Language (HTML), and uniform resource locators (URL)."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/7.0.0/system.text.encodings.web.7.0.0.nupkg"
+    hash:
+      value: "d164c15df021a99d18ed0c39b6b7c0290b7f948d8f09bf07140b47bae6403f1cb9a822c1504aabd7a6094367ad9fcf8ced1ea186b0662a51815ebbb37a3b0434"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/dotnet/runtime"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dotnet/runtime.git"
+    revision: "d099f075e45d2aa6007a22b71b45a08758559f80"
+    path: ""
+- id: "NuGet::System.Text.Json:7.0.2"
+  purl: "pkg:nuget/System.Text.Json@7.0.2"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides high-performance and low-allocating types that serialize\
+    \ objects to JavaScript Object Notation (JSON) text and deserialize JSON text\
+    \ to objects, with UTF-8 support built-in. Also provides types to read and write\
+    \ JSON text encoded as UTF-8, and to create an in-memory document object model\
+    \ (DOM), that is read-only, for random access of the JSON elements within a structured\
+    \ view of the data."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.text.json/7.0.2/system.text.json.7.0.2.nupkg"
+    hash:
+      value: "20ab3a9e729cb3e019f624986b5489341aca89700b31f86f1a7945485b073c715d60b804fc6ea27c628a30d6d46015d1d1efa0b75fb8842f620d0a95f749c648"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: "git+https://github.com/dotnet/runtime"
+    revision: "0a2bda10e81d901396c3cff95533529e3a93ad47"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/dotnet/runtime.git"
+    revision: "0a2bda10e81d901396c3cff95533529e3a93ad47"
+    path: ""
+- id: "NuGet::System.Threading.Tasks.Extensions:4.5.4"
+  purl: "pkg:nuget/System.Threading.Tasks.Extensions@4.5.4"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides additional types that simplify the work of writing concurrent\
+    \ and asynchronous code."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.threading.tasks.extensions/4.5.4/system.threading.tasks.extensions.4.5.4.nupkg"
+    hash:
+      value: "68052086e77d3c7198737a3da163d67740b7c44f93250c39659b3bf21b6547a9abf64cbf40481f5c78f24361af3aaf47d52d188b371554a0928a7f7665c1fc14"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "NuGet::System.ValueTuple:4.5.0"
+  purl: "pkg:nuget/System.ValueTuple@4.5.0"
+  authors:
+  - "Microsoft"
+  declared_licenses:
+  - "https://github.com/dotnet/corefx/blob/master/LICENSE.TXT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      https://github.com/dotnet/corefx/blob/master/LICENSE.TXT: "MIT"
+  description: "Provides the System.ValueTuple structs, which implement the underlying\
+    \ types for tuples in C# and Visual Basic."
+  homepage_url: "https://dot.net/"
+  binary_artifact:
+    url: "https://api.nuget.org/v3-flatcontainer/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg"
+    hash:
+      value: "fa00ebb5045d12c51274f64411c551981beceb1266a8606a4731063109b95ea1f15939197bf3d2ba899db61e593dc39bfce876908bba34286823525093ae3d8e"
+      algorithm: "SHA-512"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
