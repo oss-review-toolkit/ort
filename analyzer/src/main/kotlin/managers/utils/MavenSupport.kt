@@ -631,10 +631,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
                 }
             } else {
-                logger.debug {
-                    "Could not find '$artifact' in '${info.repository}': " +
-                            artifactDownload.exception.collectMessages()
-                }
+                logger.debug { artifactDownload.exception.collectMessages() }
             }
         }
 
