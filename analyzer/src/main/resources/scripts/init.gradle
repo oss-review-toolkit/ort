@@ -206,7 +206,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                     } catch (ResolveException e) {
                         project.logger.info("Artifacts for configuration '${configuration.name}' could not be " +
                                 "resolved, therefore no information about artifact classifiers and extensions is " +
-                                "available: ${e.message}")
+                                "available: ${collectCauses(e)}")
                     }
 
                     List<Dependency> dependencies = result.getRoot().getDependencies().findResults {
