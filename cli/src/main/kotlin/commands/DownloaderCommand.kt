@@ -37,6 +37,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
 
+import kotlin.time.measureTime
+
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.OrtCommand
@@ -190,10 +192,14 @@ class DownloaderCommand : OrtCommand(
     override fun run() {
         val failureMessages = mutableListOf<String>()
 
-        when (input) {
-            is FileType -> downloadFromOrtResult((input as FileType).file, failureMessages)
-            is StringType -> downloadFromProjectUrl((input as StringType).string, failureMessages)
+        val duration = measureTime {
+            when (input) {
+                is FileType -> downloadFromOrtResult((input as FileType).file, failureMessages)
+                is StringType -> downloadFromProjectUrl((input as StringType).string, failureMessages)
+            }
         }
+
+        println("The download took $duration.")
 
         if (failureMessages.isNotEmpty()) {
             logger.error {
