@@ -289,7 +289,7 @@ class NuGetSupport(
             id = Identifier(
                 type = managerName,
                 namespace = "",
-                name = spec?.metadata?.id ?: definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
+                name = spec?.metadata?.id ?: PackageManager.getFallbackProjectName(analysisRoot, definitionFile),
                 version = spec?.metadata?.version.orEmpty()
             ),
             definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
