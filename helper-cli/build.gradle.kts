@@ -27,6 +27,10 @@ plugins {
 
 application {
     applicationName = "orth"
+    applicationDefaultJvmArgs = listOf(
+        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
+        "--add-opens", "java.base/java.io=ALL-UNNAMED"
+    )
     mainClass.set("org.ossreviewtoolkit.helper.HelperMainKt")
 }
 
