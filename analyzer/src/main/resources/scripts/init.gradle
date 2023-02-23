@@ -384,7 +384,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
                                 : includedProject.findProject(id.projectName)
 
                         return new DependencyImpl(groupId: dependencyProject.group.toString(),
-                                artifactId: dependencyProject.name, version:dependencyProject.version.toString(),
+                                artifactId: dependencyProject.name, version: dependencyProject.version.toString(),
                                 dependencies: dependencies, localPath: dependencyProject.projectDir.absolutePath)
                     }
                 } else {
