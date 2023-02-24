@@ -1,5 +1,3 @@
-@import '~antd/dist/antd.css';
-
 body {
     background: #fafafa;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -15,6 +13,11 @@ th {
     padding-right: 10px;
 }
 
+b,
+strong {
+    font-weight: bolder;
+}
+
 /* === Ant Design customizations === */
 
 /*
@@ -26,39 +29,41 @@ https://ant.design/docs/react/customize-theme
 .ant-tabs,
 .ant-tag,
 .ant-table,
-.ant-tree {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+.ant-tree,
+.ant-timeline,
+.ant-timeline-item-content {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 /* Reduce margin around <Ant Col> to allow content to be displayed */
 .ant-col-offset-1 {
-    margin-left: 2.66666667%;
+    margin-left: 2.66666667% !important;
 }
 
 .ant-col-22 {
-    width: 94.16666667%;
+    width: 94.16666667% !important;
 }
 
 .ant-table-small > .ant-table-content > .ant-table-body {
-    margin: 0px;
+    margin: 0px !important;
 }
 
 tr.ant-table-expanded-row, tr.ant-table-expanded-row,
 tr.ant-table-expanded-row, tr.ant-table-expanded-row:hover {
-    background: #fff;
+    background: #fff !important;
 }
 
 .ant-steps-dot .ant-steps-item-content {
-    width: auto;
+    width: auto !important;
 }
 
 /* Styling specific for last item in SummaryView Timeline */
 .ant-timeline-item-last {
-    padding-bottom: 1em;
+    padding-bottom: 1em !important;
 }
 
 .ant-timeline-item-last > .ant-timeline-item-content {
-    min-height: 1em;
+    min-height: 1em !important;
 }
 
 /* === Styling for shared ORT elements === */
