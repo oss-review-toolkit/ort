@@ -47,6 +47,7 @@ import org.ossreviewtoolkit.utils.common.redirectStdout
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -256,5 +257,3 @@ class OrtMainFunTest : StringSpec() {
             }
         }.lineSequence()
 }
-
-private fun getAssetFile(path: String) = File("src/funTest/assets", path)

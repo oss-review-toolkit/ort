@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PubFunTest : WordSpec() {
@@ -147,8 +148,6 @@ private fun analyze(workingDir: File): AnalyzerResult {
 
     return checkNotNull(analyzerRun).result.withResolvedScopes()
 }
-
-private fun getAssetFile(path: String) = File("src/funTest/assets", path)
 
 private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
     Pub("Pub", USER_DIR, config, RepositoryConfiguration())
