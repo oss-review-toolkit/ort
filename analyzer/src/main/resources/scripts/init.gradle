@@ -156,7 +156,7 @@ class AbstractDependencyTreePlugin<T> implements Plugin<T> {
 
         @Override
         boolean canBuild(String modelName) {
-            return modelName == 'DependencyTreeModel'
+            return modelName == DependencyTreeModel.name
         }
 
         @Override
