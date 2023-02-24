@@ -105,7 +105,7 @@ private enum class LicenseClassificationProvider(val url: String) : Logging {
             )
         }
     },
-    LDBCOLLECTOR("https://github.com/maxhbr/LDBcollector/raw/generated/ort/license-classifications.yml") {
+    LDB_COLLECTOR("https://github.com/maxhbr/LDBcollector/raw/generated/ort/license-classifications.yml") {
         override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URL(url))
     };
 
