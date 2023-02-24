@@ -163,7 +163,9 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         )
     }
 
-    // TODO: Handle C++ projects and / or requesting vulnerabilities by commit-ish.
+    // TODO: Support querying vulnerabilities by Git commit hash as described at https://osv.dev/docs/#section/OSV-API.
+    //       That would allow to generally support e.g. C / C++ projects that do not use a dedicated package manager
+    //       like Conan.
 
     return null
 }
