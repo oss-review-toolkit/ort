@@ -179,7 +179,7 @@ allprojects {
 subprojects {
     version = rootProject.version
 
-    if (name == "reporter-web-app") return@subprojects
+    if (name in listOf("reporter-web-app", "package-curation-providers")) return@subprojects
 
     // Apply core plugins.
     apply(plugin = "jacoco")

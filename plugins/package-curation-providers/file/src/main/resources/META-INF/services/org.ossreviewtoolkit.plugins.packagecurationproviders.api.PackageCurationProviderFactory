@@ -1,0 +1,3 @@
+org.ossreviewtoolkit.plugins.packagecurationproviders.file.DefaultDirPackageCurationProviderFactory
+org.ossreviewtoolkit.plugins.packagecurationproviders.file.DefaultFilePackageCurationProviderFactory
+org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProviderFactory
