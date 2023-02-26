@@ -31,12 +31,20 @@
 
 # Introduction
 
-The OSS Review Toolkit (ORT) aims to assist with the tasks that commonly need to be performed in the context of license
-compliance checks, especially for (but not limited to) Free and Open Source Software dependencies.
+The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your
+(open source) software dependencies in a strategic, safe and efficient manner.
 
-It does so by orchestrating a _highly customizable_ pipeline of tools that _abstract away_ the underlying services.
-These tools are implemented as libraries (for programmatic use) and exposed via a command line interface (for scripted
-use):
+You can use it to:
+
+- Generate CycloneDX, SPDX SBOMs, or custom FOSS attribution documentation for your software project
+- Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource
+and engineering standards checks for your software project and its dependencies
+- Create a source code archive for your software project and its dependencies to comply with certain licenses or have
+your own copy as nothing on the internet is forever
+- Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
+
+ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI
+integrations. It consists of the following tools which can be combined into a _highly customizable_ pipeline:
 
 * [_Analyzer_](#analyzer) - determines the dependencies of projects and their metadata, abstracting which package
   managers or build systems are actually being used.
