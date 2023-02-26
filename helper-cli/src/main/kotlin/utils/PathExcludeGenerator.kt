@@ -187,7 +187,6 @@ private val PATH_EXCLUDES_REASON_FOR_DIR_NAME = listOf(
 
 /** Case-sensitive glob patterns matched against filenames. */
 private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
-    ORT_REPO_CONFIG_FILENAME to BUILD_TOOL_OF,
     "*.bazel" to BUILD_TOOL_OF,
     "*.cmake" to BUILD_TOOL_OF,
     "*.cmakein" to BUILD_TOOL_OF,
@@ -204,6 +203,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "*_test.go" to TEST_OF,
     "*coverage*.sh" to BUILD_TOOL_OF,
     ".editorconfig" to PathExcludeReason.OTHER,
+    ORT_REPO_CONFIG_FILENAME to BUILD_TOOL_OF,
     ".travis.yml" to BUILD_TOOL_OF,
     "BUILD" to BUILD_TOOL_OF, // Bazel
     "Build.PL" to BUILD_TOOL_OF,
