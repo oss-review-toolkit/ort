@@ -27,7 +27,7 @@ import java.nio.file.Path
 import java.nio.file.SimpleFileVisitor
 import java.nio.file.attribute.BasicFileAttributes
 
-import kotlin.io.path.pathString
+import kotlin.io.path.invariantSeparatorsPathString
 import kotlin.time.measureTime
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -231,7 +231,7 @@ abstract class PackageManager(
          * [Excludes] object.
          */
         private fun Excludes.isPathExcluded(root: Path, path: Path): Boolean =
-            isPathExcluded(root.relativize(path).pathString)
+            isPathExcluded(root.relativize(path).invariantSeparatorsPathString)
 
         /**
          * Get a fallback project name from the [definitionFile] path relative to the [analysisRoot]. This function
