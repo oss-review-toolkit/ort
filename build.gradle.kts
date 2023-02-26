@@ -191,6 +191,11 @@ subprojects {
 
     testing {
         suites {
+            @Suppress("UnusedPrivateMember")
+            val test by getting(JvmTestSuite::class) {
+                useJUnitJupiter()
+            }
+
             register<JvmTestSuite>("funTest") {
                 sources {
                     kotlin {
