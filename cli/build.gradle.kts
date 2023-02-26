@@ -144,6 +144,8 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
+    implementation(platform(project(":plugins:package-curation-providers")))
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)

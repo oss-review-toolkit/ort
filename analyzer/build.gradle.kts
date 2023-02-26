@@ -38,22 +38,11 @@ repositories {
             includeGroup("org.gradle")
         }
     }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
-        }
-
-        filter {
-            includeGroup("org.eclipse.sw360")
-        }
-    }
 }
 
 dependencies {
     api(project(":model"))
 
-    implementation(project(":clients:clearly-defined-client"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
@@ -70,7 +59,6 @@ dependencies {
     implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxSerialization)
     implementation(libs.semver4j)
-    implementation(libs.sw360Client)
 
     implementation(libs.toml4j)
     constraints {

@@ -17,18 +17,18 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.curation
+package org.ossreviewtoolkit.plugins.packagecurationproviders.file
 
 import java.io.File
 import java.io.IOException
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.PackageCurationProvider
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME

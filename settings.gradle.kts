@@ -38,6 +38,12 @@ include(":examples:notifications")
 include(":helper-cli")
 include(":model")
 include(":notifier")
+include(":plugins:package-curation-providers")
+include(":plugins:package-curation-providers:api")
+include(":plugins:package-curation-providers:clearly-defined")
+include(":plugins:package-curation-providers:file")
+include(":plugins:package-curation-providers:ort-config")
+include(":plugins:package-curation-providers:sw360")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
@@ -55,6 +61,12 @@ project(":clients:oss-index").name = "oss-index-client"
 project(":clients:osv").name = "osv-client"
 project(":clients:scanoss").name = "scanoss-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
+
+project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
+project(":plugins:package-curation-providers:clearly-defined").name = "clearly-defined-package-curation-provider"
+project(":plugins:package-curation-providers:file").name = "file-package-curation-provider"
+project(":plugins:package-curation-providers:ort-config").name = "ort-config-package-curation-provider"
+project(":plugins:package-curation-providers:sw360").name = "sw360-package-curation-provider"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"

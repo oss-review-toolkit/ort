@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer
+package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration

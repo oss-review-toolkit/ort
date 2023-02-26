@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.curation
+package org.ossreviewtoolkit.plugins.packagecurationproviders.sw360
 
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,7 +32,6 @@ import org.eclipse.sw360.clients.rest.resource.releases.SW360Release
 import org.eclipse.sw360.http.HttpClientFactoryImpl
 import org.eclipse.sw360.http.config.HttpClientConfig
 
-import org.ossreviewtoolkit.analyzer.PackageCurationProviderFactory
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -44,6 +43,7 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.PackageCurationProviderFactory
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
