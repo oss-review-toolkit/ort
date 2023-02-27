@@ -53,7 +53,6 @@ class NoticeTemplateReporterFunTest : WordSpec({
         "generate the correct license notes with archived license files" {
             val expectedText =
                 File("src/funTest/assets/notice-template-reporter-expected-results-with-license-files").readText()
-
             val archiveDir = File("src/funTest/assets/archive")
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
