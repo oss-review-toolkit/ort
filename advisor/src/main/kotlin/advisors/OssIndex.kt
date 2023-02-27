@@ -71,7 +71,7 @@ class OssIndex(name: String, serverUrl: String? = null) : AdviceProvider(name) {
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
         val startTime = Instant.now()
 
-        val purls = packages.map { it.purl }
+        val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
 
         return try {
             val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
