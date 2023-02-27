@@ -28,6 +28,9 @@ plugins {
 
 dependencies {
     compileOnly(libs.detektApi)
+
+    testImplementation(libs.detektApi)
+    testImplementation(libs.detektTest)
 }
 
 tasks.named<Jar>("jar").configure {
