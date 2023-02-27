@@ -87,7 +87,7 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
         packages: List<Package>,
         startTime: Instant
     ): Map<Package, List<AdvisorResult>> {
-        val packageMap = packages.associateBy { it.purl }
+        val packageMap = packages.filter { it.purl.isNotEmpty() }.associateBy { it.purl }
         val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
 
         return packageVulnerabilities.filter { it.unresolvedVulnerabilities.isNotEmpty() }.mapNotNull { pv ->
