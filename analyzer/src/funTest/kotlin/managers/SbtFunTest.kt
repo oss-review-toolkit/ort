@@ -33,9 +33,10 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
-        val projectName = "sbt-multi-project-example"
-        val projectDir = getAssetFile("projects/external/$projectName").absoluteFile
-        val expectedResult = patchExpectedResult(projectDir.resolveSibling("$projectName-expected-output.yml"))
+        val projectDir = getAssetFile("projects/external/sbt-multi-project-example").absoluteFile
+        val expectedResult = patchExpectedResult(
+            projectDir.resolveSibling("sbt-multi-project-example-expected-output.yml")
+        )
 
         // Clean any previously generated POM files / target directories.
         Git().run(projectDir, "clean", "-fd")
@@ -48,13 +49,12 @@ class SbtFunTest : StringSpec({
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
-        val projectName = "sbt-http4s-template"
-        val projectDir = getAssetFile("projects/synthetic/$projectName").absoluteFile
+        val projectDir = getAssetFile("projects/synthetic/sbt-http4s-template").absoluteFile
         val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsRevision = vcsDir.getRevision()
         val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("$projectName-expected-output.yml"),
+            projectDir.resolveSibling("sbt-http4s-template-expected-output.yml"),
             url = vcsUrl,
             revision = vcsRevision,
             urlProcessed = normalizeVcsUrl(vcsUrl)
