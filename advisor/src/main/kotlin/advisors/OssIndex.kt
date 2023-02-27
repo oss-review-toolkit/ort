@@ -78,7 +78,9 @@ class OssIndex(name: String, serverUrl: String? = null) : AdviceProvider(name) {
 
             val chunks = purls.chunked(BULK_REQUEST_SIZE)
             chunks.forEachIndexed { index, chunkOfPurls ->
-                logger.debug { "Getting report for ${chunkOfPurls.size} components (chunk $index of ${chunks.size})." }
+                logger.debug {
+                    "Getting report for ${chunkOfPurls.size} components (chunk ${index + 1} of ${chunks.size})."
+                }
 
                 val requestResults = getComponentReport(service, chunkOfPurls).associateBy {
                     it.coordinates
