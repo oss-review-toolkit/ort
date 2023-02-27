@@ -26,7 +26,6 @@ import java.net.URI
 
 import kotlin.time.Duration.Companion.hours
 
-import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.artifact.repository.LegacyLocalRepositoryManager
 import org.apache.maven.bridge.MavenRepositorySystem
@@ -111,6 +110,14 @@ private val File?.safePath: String
 
 class MavenSupport(private val workspaceReader: WorkspaceReader) {
     companion object : Logging {
+        private val PACKAGING_TYPES = setOf(
+            // Core packaging types, see https://maven.apache.org/pom.html#packaging.
+            "pom", "jar", "maven-plugin", "ejb", "war", "ear", "rar",
+            // Custom packaging types, see "resources/META-INF/plexus/components.xml".
+            "aar", "apk", "bundle", "dll", "dylib", "eclipse-plugin", "gwt-app", "gwt-lib", "hk2-jar", "hpi",
+            "jenkins-module", "orbit", "so", "zip"
+        )
+
         // See http://maven.apache.org/pom.html#SCM.
         private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
         private val USER_HOST_REGEX = Regex("scm:(?<user>[^:@]+)@(?<host>[^:]+)[:/](?<path>.+)")
@@ -635,14 +642,20 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             }
         }
 
-        val level = if (artifact.classifier == "sources") Level.DEBUG else Level.WARN
-        logger.log(level) {
-            "Could not find artifact $artifact in any of ${locationInfo.map { it.downloadUrl }.distinct()}."
-        }
+        return RemoteArtifact.EMPTY.also { remoteArtifact ->
+            val downloadUrls = locationInfo.map { it.downloadUrl }.distinct()
 
-        return RemoteArtifact.EMPTY.also {
-            logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
-            remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+            // While for dependencies that have e.g. no sources artifact published it is completely valid to have an
+            // empty remote artifact and to cache that result, for cases where none of the tried URLs ends with an
+            // extension for a known packaging type probably some bug is the root cause for the artifact not being
+            // found, and thus such results should not be cached, but retried.
+            if (downloadUrls.any { url -> PACKAGING_TYPES.any { url.endsWith(".$it") } }) {
+                logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
+
+                remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(remoteArtifact))
+            } else {
+                logger.warn { "Could not find artifact $artifact in any of $downloadUrls." }
+            }
         }
     }
 
