@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -67,7 +68,7 @@ class GitRepoFunTest : StringSpec({
 
         val actualResult = ortResult.withResolvedScopes().toYaml()
         val expectedResult = patchExpectedResult(
-            File("src/funTest/assets/projects/external/git-repo-expected-output.yml"),
+            getAssetFile("projects/external/git-repo-expected-output.yml"),
             revision = REPO_REV,
             path = outputDir.invariantSeparatorsPath
         )

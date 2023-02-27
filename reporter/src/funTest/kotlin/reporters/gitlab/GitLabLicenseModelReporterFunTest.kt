@@ -23,8 +23,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.Identifier
@@ -44,6 +42,7 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class GitLabLicenseModelReporterFunTest : WordSpec({
     "GitLabLicenseModelReporter" should {
@@ -65,7 +64,7 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
     }
 })
 
-private fun expectedOutput(assetName: String): String = File("src/funTest/assets/$assetName").readText()
+private fun expectedOutput(assetName: String): String = getAssetAsString("$assetName")
 
 private fun TestConfiguration.generateReport(ortResult: OrtResult, skipExcluded: Boolean): String =
     GitLabLicenseModelReporter().generateReport(

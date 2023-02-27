@@ -22,12 +22,11 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class StackFunTest : StringSpec({
     "Dependencies should be resolved correctly for quickcheck-state-machine" {
@@ -46,7 +45,7 @@ class StackFunTest : StringSpec({
     }
 })
 
-private val projectsDir = File("src/funTest/assets/projects").absoluteFile
+private val projectsDir = getAssetFile("projects").absoluteFile
 
 private fun createStack() =
     Stack("Stack", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

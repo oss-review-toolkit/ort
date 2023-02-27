@@ -22,16 +22,15 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class ManPageTemplateReporterFunTest : StringSpec({
     "ManPage report is created from default template" {
-        val expectedText = File("src/funTest/assets/manpage-template-reporter-expected-result.1").readText()
+        val expectedText = getAssetAsString("manpage-template-reporter-expected-result.1")
 
         val reportContent =
             ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()

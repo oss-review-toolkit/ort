@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
@@ -31,16 +29,17 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class ConanFunTest : StringSpec() {
-    private val projectsDirTxt = File("src/funTest/assets/projects/synthetic/conan-txt").absoluteFile
+    private val projectsDirTxt = getAssetFile("projects/synthetic/conan-txt").absoluteFile
     private val vcsDirTxt = VersionControlSystem.forDirectory(projectsDirTxt)!!
     private val vcsRevisionTxt = vcsDirTxt.getRevision()
     private val vcsUrlTxt = vcsDirTxt.getRemoteUrl()
 
-    private val projectsDirPy = File("src/funTest/assets/projects/synthetic/conan-py").absoluteFile
+    private val projectsDirPy = getAssetFile("projects/synthetic/conan-py").absoluteFile
     private val vcsDirPy = VersionControlSystem.forDirectory(projectsDirPy)!!
     private val vcsRevisionPy = vcsDirPy.getRevision()
     private val vcsUrlPy = vcsDirPy.getRemoteUrl()

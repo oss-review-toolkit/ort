@@ -23,8 +23,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
@@ -39,11 +37,13 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class NoticeTemplateReporterFunTest : WordSpec({
     "The default template" should {
         "generate the correct license notes" {
-            val expectedText = File("src/funTest/assets/notice-template-reporter-expected-results").readText()
+            val expectedText = getAssetAsString("notice-template-reporter-expected-results")
 
             val report = generateReport(ORT_RESULT)
 
@@ -51,9 +51,8 @@ class NoticeTemplateReporterFunTest : WordSpec({
         }
 
         "generate the correct license notes with archived license files" {
-            val expectedText =
-                File("src/funTest/assets/notice-template-reporter-expected-results-with-license-files").readText()
-            val archiveDir = File("src/funTest/assets/archive")
+            val expectedText = getAssetAsString("notice-template-reporter-expected-results-with-license-files")
+            val archiveDir = getAssetFile("archive")
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
                     archive = FileArchiverConfiguration(
@@ -75,7 +74,7 @@ class NoticeTemplateReporterFunTest : WordSpec({
 
     "The summary template" should {
         "generate the correct license notes" {
-            val expectedText = File("src/funTest/assets/notice-template-reporter-expected-results-summary").readText()
+            val expectedText = getAssetAsString("notice-template-reporter-expected-results-summary")
 
             val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "summary"))
 

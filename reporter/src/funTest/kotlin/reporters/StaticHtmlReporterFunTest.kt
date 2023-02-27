@@ -23,8 +23,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import javax.xml.transform.TransformerFactory
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -33,6 +31,7 @@ import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -59,7 +58,7 @@ class StaticHtmlReporterFunTest : WordSpec({
             val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
             val expectedReport = patchExpectedResult(
-                File("src/funTest/assets/static-html-reporter-test-expected-output.html"),
+                getAssetFile("static-html-reporter-test-expected-output.html"),
                 mapOf("<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION)
             )
 

@@ -22,16 +22,15 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
-        val expectedText = File("src/funTest/assets/docbook-template-reporter-expected-result.xml").readText()
+        val expectedText = getAssetAsString("docbook-template-reporter-expected-result.xml")
 
         val reportContent =
             DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
