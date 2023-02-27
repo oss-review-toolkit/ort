@@ -34,10 +34,11 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class BundlerFunTest : WordSpec() {
-    private val projectsDir = File("src/funTest/assets/projects/synthetic/bundler").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic/bundler").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()

@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class YarnFunTest : WordSpec() {
@@ -58,7 +59,7 @@ class YarnFunTest : WordSpec() {
     init {
         "yarn" should {
             "resolve dependencies correctly" {
-                val projectDir = File("src/funTest/assets/projects/synthetic/yarn").absoluteFile
+                val projectDir = getAssetFile("projects/synthetic/yarn").absoluteFile
 
                 val result = resolveDependencies(projectDir)
 
@@ -69,7 +70,7 @@ class YarnFunTest : WordSpec() {
             "resolve workspace dependencies correctly" {
                 // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
                 // dependencies get assigned to a scope.
-                val projectDir = File("src/funTest/assets/projects/synthetic/yarn-workspaces").absoluteFile
+                val projectDir = getAssetFile("projects/synthetic/yarn-workspaces").absoluteFile
 
                 val result = resolveDependencies(projectDir)
 

@@ -24,8 +24,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.OPTION_DIRECT_DEPENDENCIES_ONLY
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -34,11 +32,12 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NuGetFunTest : StringSpec({
-    val projectDir = File("src/funTest/assets/projects/synthetic/nuget").absoluteFile
+    val projectDir = getAssetFile("projects/synthetic/nuget").absoluteFile
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

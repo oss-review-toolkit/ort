@@ -32,9 +32,10 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-private val SYNTHETIC_PROJECTS_DIR = File("src/funTest/assets/projects/synthetic")
+private val SYNTHETIC_PROJECTS_DIR = getAssetFile("projects/synthetic")
 
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {

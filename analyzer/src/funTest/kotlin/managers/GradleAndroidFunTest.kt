@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -31,10 +29,11 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GradleAndroidFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/gradle-android").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/gradle-android").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -80,7 +79,7 @@ class GradleAndroidFunTest : StringSpec() {
         }
 
         "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
-            val cyclicProjectDir = File("src/funTest/assets/projects/synthetic/gradle-android-cyclic").absoluteFile
+            val cyclicProjectDir = getAssetFile("projects/synthetic/gradle-android-cyclic").absoluteFile
             val definitionFile = cyclicProjectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("gradle-android-cyclic-expected-output-app.yml"),

@@ -29,8 +29,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
@@ -43,6 +41,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -262,7 +261,7 @@ class SpdxDocumentFileFunTest : WordSpec({
     }
 })
 
-private val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
+private val projectDir = getAssetFile("projects/synthetic/spdx").absoluteFile
 private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
 private val vcsUrl = vcsDir.getRemoteUrl()
 private val vcsRevision = vcsDir.getRevision()

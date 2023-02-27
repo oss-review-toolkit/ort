@@ -30,13 +30,14 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PnpmFunTest : WordSpec({
     "Pnpm" should {
         "resolve dependencies correctly in a simple project" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/pnpm").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/pnpm").absoluteFile
 
             val result = resolveDependencies(projectDir)
             val expectedResult = getExpectedResult(projectDir, "pnpm-expected-output.yml")
@@ -45,7 +46,7 @@ class PnpmFunTest : WordSpec({
         }
 
         "resolve dependencies correctly in a workspaces project" {
-            val rootProjectDir = File("src/funTest/assets/projects/synthetic/pnpm-workspaces").absoluteFile
+            val rootProjectDir = getAssetFile("projects/synthetic/pnpm-workspaces").absoluteFile
 
             val ortResult = Analyzer(AnalyzerConfiguration()).run {
                 analyze(findManagedFiles(rootProjectDir, setOf(Pnpm.Factory())))

@@ -67,6 +67,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SpdxDocumentReporterFunTest : WordSpec({
@@ -77,7 +78,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 .builder(JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7))
                 .objectMapper(FileFormat.JSON.mapper)
                 .build()
-                .getSchema(File("src/funTest/assets/spdx-schema.json").toURI())
+                .getSchema(getAssetFile("spdx-schema.json").toURI())
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
             val errors = schema.validate(jsonMapper.readTree(jsonSpdxDocument))

@@ -22,18 +22,17 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class BabelFunTest : WordSpec({
-    val projectDir = File("src/funTest/assets/projects/synthetic/npm-babel").absoluteFile
+    val projectDir = getAssetFile("projects/synthetic/npm-babel").absoluteFile
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

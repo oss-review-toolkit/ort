@@ -32,12 +32,13 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class Yarn2FunTest : WordSpec({
     "Yarn 2" should {
         "resolve dependencies correctly" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/yarn2").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2").absoluteFile
 
             val result = resolveDependencies(projectDir)
 
@@ -46,7 +47,7 @@ class Yarn2FunTest : WordSpec({
         }
 
         "exclude scopes if configured" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/yarn2").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2").absoluteFile
 
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
@@ -60,7 +61,7 @@ class Yarn2FunTest : WordSpec({
         }
 
         "resolve workspace dependencies correctly" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/yarn2-workspaces").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces").absoluteFile
 
             val result = resolveMultipleDependencies(projectDir)
 

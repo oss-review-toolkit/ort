@@ -33,13 +33,14 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class GitWorkingTreeFunTest : StringSpec({
     val git = Git()
     val zipContentDir = createSpecTempDir()
 
     beforeSpec {
-        val zipFile = File("src/funTest/assets/pipdeptree-2018-01-03-git.zip")
+        val zipFile = getAssetFile("pipdeptree-2018-01-03-git.zip")
         println("Extracting '$zipFile' to '$zipContentDir'...")
         zipFile.unpack(zipContentDir)
     }

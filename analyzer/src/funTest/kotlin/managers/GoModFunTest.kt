@@ -29,10 +29,11 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GoModFunTest : StringSpec({
-    val testDir = File("src/funTest/assets/projects/synthetic").absoluteFile
+    val testDir = getAssetFile("projects/synthetic").absoluteFile
 
     "Project dependencies are detected correctly" {
         val definitionFile = testDir.resolve("gomod/go.mod")

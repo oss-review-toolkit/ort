@@ -22,20 +22,19 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
         val projectName = "sbt-multi-project-example"
-        val projectDir = File("src/funTest/assets/projects/external/$projectName").absoluteFile
+        val projectDir = getAssetFile("projects/external/$projectName").absoluteFile
         val expectedResult = patchExpectedResult(projectDir.resolveSibling("$projectName-expected-output.yml"))
 
         // Clean any previously generated POM files / target directories.
@@ -50,7 +49,7 @@ class SbtFunTest : StringSpec({
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
         val projectName = "sbt-http4s-template"
-        val projectDir = File("src/funTest/assets/projects/synthetic/$projectName").absoluteFile
+        val projectDir = getAssetFile("projects/synthetic/$projectName").absoluteFile
         val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsRevision = vcsDir.getRevision()

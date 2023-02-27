@@ -24,7 +24,6 @@ import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 
-import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.advisor.advisors.Osv
@@ -33,6 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class OsvFunTest : StringSpec({
     "retrievePackageFindings() returns vulnerabilities for the supported ecosystems" {
@@ -60,7 +60,7 @@ class OsvFunTest : StringSpec({
     }
 
     "retrievePackageFindings() returns the expected result for the given package(s)" {
-        val expectedResult = File("src/funTest/assets/retrieve-package-findings-expected-result.json")
+        val expectedResult = getAssetFile("retrieve-package-findings-expected-result.json")
             .readValue<Map<Identifier, List<AdvisorResult>>>()
         val osv = createOsv()
         // The following packages have been chosen because they have only one vulnerability with the oldest possible

@@ -26,20 +26,19 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.string.beEmpty
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class SubversionWorkingTreeFunTest : StringSpec({
     val svn = Subversion()
     val zipContentDir = createSpecTempDir()
 
     beforeSpec {
-        val zipFile = File("src/funTest/assets/docutils-2018-01-03-svn-trunk.zip")
+        val zipFile = getAssetFile("docutils-2018-01-03-svn-trunk.zip")
         print("Extracting '$zipFile' to '$zipContentDir'... ")
         zipFile.unpack(zipContentDir)
         println("done.")

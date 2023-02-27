@@ -23,12 +23,11 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
-import java.io.File
-
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class PythonInspectorFunTest : StringSpec({
-    val projectsDir = File("src/funTest/assets/projects").absoluteFile
+    val projectsDir = getAssetFile("projects").absoluteFile
 
     "python-inspector output can be deserialized" {
         val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")

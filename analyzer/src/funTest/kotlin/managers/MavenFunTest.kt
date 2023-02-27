@@ -25,8 +25,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
@@ -37,11 +35,12 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class MavenFunTest : StringSpec() {
-    private val projectDir = File("src/funTest/assets/projects/synthetic/maven").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/maven").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -117,7 +116,7 @@ class MavenFunTest : StringSpec() {
                 .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                 .safeDeleteRecursively(force = true)
 
-            val projectDir = File("src/funTest/assets/projects/synthetic/maven-parent").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/maven-parent").absoluteFile
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("maven-parent-expected-output-root.yml"),
@@ -131,7 +130,7 @@ class MavenFunTest : StringSpec() {
         }
 
         "Maven Wagon extensions can be loaded" {
-            val projectDir = File("src/funTest/assets/projects/synthetic/maven-wagon").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/maven-wagon").absoluteFile
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("maven-wagon-expected-output.yml"),
