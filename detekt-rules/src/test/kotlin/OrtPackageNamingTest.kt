@@ -81,6 +81,28 @@ class OrtPackageNamingTest : WordSpec({
             findings should beEmpty()
         }
 
+        "succeed for package in third-level module" {
+            val file = createFile(
+                dir = "plugins/package-curation-providers/file/src/main/kotlin",
+                content = "package org.ossreviewtoolkit.plugins.packagecurationproviders.file"
+            )
+
+            val findings = rule.lint(file.toPath())
+
+            findings should beEmpty()
+        }
+
+        "succeed for sub-package in third-level module" {
+            val file = createFile(
+                dir = "plugins/package-curation-providers/file/src/main/kotlin/utils",
+                content = "package org.ossreviewtoolkit.plugins.packagecurationproviders.file.utils"
+            )
+
+            val findings = rule.lint(file.toPath())
+
+            findings should beEmpty()
+        }
+
         "ignore a dash in the module name" {
             val file = createFile(
                 dir = "clients/clearly-defined/src/main/kotlin",

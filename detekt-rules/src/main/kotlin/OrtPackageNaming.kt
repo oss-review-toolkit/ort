@@ -58,7 +58,11 @@ class OrtPackageNaming(config: Config) : Rule(config) {
 
         val (pathPrefix, pathSuffix) = path.split(pathPattern, 2).map { File(it) }
         val projectDir = pathPrefix.name
-        val projectGroup = pathPrefix.parent?.let { ".$it" }.orEmpty()
+        val projectGroup = pathPrefix.parent
+            ?.let { ".$it" }
+            ?.replace("/", ".")
+            ?.replace("-", "")
+            .orEmpty()
 
         // Maintain a hard-coded mapping of exceptions to the general package naming rules.
         val projectName = when (projectDir) {
