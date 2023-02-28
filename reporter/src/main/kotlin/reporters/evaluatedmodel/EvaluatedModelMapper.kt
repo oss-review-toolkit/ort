@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
 /**
@@ -137,11 +138,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ruleViolations = ruleViolations,
             vulnerabilitiesResolutions = vulnerabilitiesResolutions,
             vulnerabilities = vulnerabilities,
-            statistics = StatisticsCalculator.getStatistics(
-                input.ortResult,
-                input.resolutionProvider,
-                input.licenseInfoResolver
-            ),
+            statistics = with(input) { getStatistics(ortResult, resolutionProvider, licenseInfoResolver) },
             repository = input.ortResult.repository,
             severeIssueThreshold = input.ortConfig.severeIssueThreshold,
             severeRuleViolationThreshold = input.ortConfig.severeRuleViolationThreshold,
