@@ -190,18 +190,6 @@ class FreemarkerTemplateProcessor(
     }
 
     /**
-     * Return a map with wrapper beans for the enum classes that are relevant for templates.These enums can then be
-     * referenced directly by templates.
-     * See https://freemarker.apache.org/docs/pgui_misc_beanwrapper.html#jdk_15_enums.
-     */
-    private fun enumModel(): Map<String, Any> {
-        val beansWrapper = BeansWrapperBuilder(Configuration.VERSION_2_3_30).build()
-        val enumModels = beansWrapper.enumModels
-
-        return ENUM_CLASSES.associate { it.simpleName to enumModels.get(it.name) }
-    }
-
-    /**
      * License information for a single package or project.
      */
     class PackageModel(
@@ -427,6 +415,18 @@ private val ENUM_CLASSES = listOf(
     AdvisorCapability::class.java,
     Severity::class.java
 )
+
+/**
+ * Return a map with wrapper beans for the enum classes that are relevant for templates.These enums can then be
+ * referenced directly by templates.
+ * See https://freemarker.apache.org/docs/pgui_misc_beanwrapper.html#jdk_15_enums.
+ */
+private fun enumModel(): Map<String, Any> {
+    val beansWrapper = BeansWrapperBuilder(Configuration.VERSION_2_3_30).build()
+    val enumModels = beansWrapper.enumModels
+
+    return ENUM_CLASSES.associate { it.simpleName to enumModels.get(it.name) }
+}
 
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
     require(isNotEmpty()) { "Cannot merge an empty list." }
