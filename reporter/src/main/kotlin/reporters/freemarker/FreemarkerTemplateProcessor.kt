@@ -129,25 +129,7 @@ class FreemarkerTemplateProcessor(
         options: Map<String, String>,
         projectsAsPackages: Set<Identifier>
     ): List<File> {
-        val projects = input.ortResult.getProjects().sortedBy { it.id }.map { project ->
-            PackageModel(project.id, input)
-        }
-
-        val packages = input.ortResult.getPackages().sortedBy { it.metadata.id }.map { pkg ->
-            PackageModel(pkg.metadata.id, input)
-        }
-
-        // Keep this in sync with "resources/templates/freemarker_implicit.ftl".
-        val dataModel = mapOf(
-            "projects" to projects,
-            "packages" to packages,
-            "ortResult" to input.ortResult,
-            "licenseTextProvider" to input.licenseTextProvider,
-            "LicenseView" to LicenseView,
-            "helper" to TemplateHelper(input),
-            "projectsAsPackages" to projectsAsPackages,
-            "vulnerabilityReference" to VulnerabilityReference
-        ) + enumModel()
+        val dataModel = createDataModel(input, projectsAsPackages)
 
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
         val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
@@ -421,6 +403,28 @@ private fun enumModel(): Map<String, Any> {
         AdvisorCapability::class.java,
         Severity::class.java
     ).associate { it.simpleName to enumModels.get(it.name) }
+}
+
+private fun createDataModel(input: ReporterInput, projectsAsPackages: Set<Identifier>): Map<String, Any> {
+    val projects = input.ortResult.getProjects().sortedBy { it.id }.map { project ->
+        FreemarkerTemplateProcessor.PackageModel(project.id, input)
+    }
+
+    val packages = input.ortResult.getPackages().sortedBy { it.metadata.id }.map { pkg ->
+        FreemarkerTemplateProcessor.PackageModel(pkg.metadata.id, input)
+    }
+
+    // Keep this in sync with "resources/templates/freemarker_implicit.ftl".
+    return mapOf(
+        "projects" to projects,
+        "packages" to packages,
+        "ortResult" to input.ortResult,
+        "licenseTextProvider" to input.licenseTextProvider,
+        "LicenseView" to LicenseView,
+        "helper" to FreemarkerTemplateProcessor.TemplateHelper(input),
+        "projectsAsPackages" to projectsAsPackages,
+        "vulnerabilityReference" to VulnerabilityReference
+    ) + enumModel()
 }
 
 private fun List<ResolvedLicense>.merge(): ResolvedLicense {
