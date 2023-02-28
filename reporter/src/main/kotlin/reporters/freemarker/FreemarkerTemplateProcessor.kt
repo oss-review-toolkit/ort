@@ -111,12 +111,9 @@ class FreemarkerTemplateProcessor(
             }
         }
 
-        return processTemplatesInternal(
-            input = input.deduplicateProjectScanResults(projectsAsPackages),
-            outputDir = outputDir,
-            options = options,
-            projectsAsPackages = projectsAsPackages
-        )
+        val dataModel = createDataModel(input.deduplicateProjectScanResults(projectsAsPackages), projectsAsPackages)
+
+        return processTemplatesInternal(dataModel, outputDir, options)
     }
 
     /**
@@ -124,13 +121,10 @@ class FreemarkerTemplateProcessor(
      * generated files.
      */
     private fun processTemplatesInternal(
-        input: ReporterInput,
+        dataModel: Map<String, Any>,
         outputDir: File,
-        options: Map<String, String>,
-        projectsAsPackages: Set<Identifier>
+        options: Map<String, String>
     ): List<File> {
-        val dataModel = createDataModel(input, projectsAsPackages)
-
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
         val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
 
