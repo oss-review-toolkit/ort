@@ -74,13 +74,13 @@ private fun findScanCodeVersion(tools: List<String>, coordinates: Coordinates): 
  */
 class ClearlyDefinedStorage(
     /** The configuration for this storage implementation. */
-    val configuration: ClearlyDefinedStorageConfiguration
+    config: ClearlyDefinedStorageConfiguration
 ) : ScanResultsStorage() {
     companion object : Logging
 
     /** The service for interacting with ClearlyDefined. */
     private val service by lazy {
-        ClearlyDefinedService.create(configuration.serverUrl, OkHttpClientHelper.buildClient())
+        ClearlyDefinedService.create(config.serverUrl, OkHttpClientHelper.buildClient())
     }
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> =
