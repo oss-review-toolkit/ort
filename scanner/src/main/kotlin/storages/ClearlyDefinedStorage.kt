@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.scanner.storages
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
+import okhttp3.OkHttpClient
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
@@ -74,13 +76,18 @@ private fun findScanCodeVersion(tools: List<String>, coordinates: Coordinates): 
  */
 class ClearlyDefinedStorage(
     /** The configuration for this storage implementation. */
-    config: ClearlyDefinedStorageConfiguration
+    config: ClearlyDefinedStorageConfiguration,
+    client: OkHttpClient? = null
 ) : ScanResultsStorage() {
     companion object : Logging
 
+    constructor(serverUrl: String, client: OkHttpClient? = null) : this(
+        ClearlyDefinedStorageConfiguration(serverUrl), client
+    )
+
     /** The service for interacting with ClearlyDefined. */
     private val service by lazy {
-        ClearlyDefinedService.create(config.serverUrl, OkHttpClientHelper.buildClient())
+        ClearlyDefinedService.create(config.serverUrl, client ?: OkHttpClientHelper.buildClient())
     }
 
     override fun readInternal(id: Identifier): Result<List<ScanResult>> =
