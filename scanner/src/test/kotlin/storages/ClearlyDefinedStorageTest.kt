@@ -42,6 +42,7 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.net.ServerSocket
+import java.time.Duration
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -61,6 +62,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
 import org.semver4j.Semver
 
@@ -223,6 +225,20 @@ class ClearlyDefinedStorageTest : WordSpec({
     }
 
     "ClearlyDefinedStorage" should {
+        "handle a SocketTimeoutException" {
+            server.stubFor(
+                get(anyUrl())
+                    .willReturn(aResponse().withFixedDelay(2000))
+            )
+            val client = OkHttpClientHelper.buildClient {
+                readTimeout(Duration.ofSeconds(1))
+            }
+
+            val storage = ClearlyDefinedStorage("http://localhost:${server.port()}", client)
+
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeFailure<ScanStorageException>()
+        }
+
         "load existing scan results for a package from ClearlyDefined" {
             stubHarvestTools(
                 server, COORDINATES,
