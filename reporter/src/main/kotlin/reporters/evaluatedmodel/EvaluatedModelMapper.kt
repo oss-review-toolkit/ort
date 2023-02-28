@@ -137,7 +137,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ruleViolations = ruleViolations,
             vulnerabilitiesResolutions = vulnerabilitiesResolutions,
             vulnerabilities = vulnerabilities,
-            statistics = StatisticsCalculator().getStatistics(
+            statistics = StatisticsCalculator.getStatistics(
                 input.ortResult,
                 input.resolutionProvider,
                 input.licenseInfoResolver
