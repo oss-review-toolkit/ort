@@ -70,12 +70,29 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 class FreemarkerTemplateProcessor(
     private val filePrefix: String,
     private val fileExtension: String,
-    private val templatesResourceDirectory: String
+    templatesResourceDirectory: String
 ) {
     companion object : Logging {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
         const val OPTION_PROJECT_TYPES_AS_PACKAGES = "project-types-as-packages"
+    }
+
+    private val freemarkerConfig: Configuration by lazy {
+        Configuration(Configuration.VERSION_2_3_30).apply {
+            defaultEncoding = "UTF-8"
+            fallbackOnNullLoopVariable = false
+            logTemplateExceptions = true
+            tagSyntax = Configuration.SQUARE_BRACKET_TAG_SYNTAX
+            templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
+            templateLoader = ClassTemplateLoader(
+                this@FreemarkerTemplateProcessor.javaClass.classLoader,
+                "templates/$templatesResourceDirectory"
+            )
+            wrapUncheckedExceptions = true
+
+            setSharedVariable("statics", (objectWrapper as DefaultObjectWrapper).staticModels)
+        }
     }
 
     /**
@@ -131,21 +148,6 @@ class FreemarkerTemplateProcessor(
             "projectsAsPackages" to projectsAsPackages,
             "vulnerabilityReference" to VulnerabilityReference
         ) + enumModel()
-
-        val freemarkerConfig = Configuration(Configuration.VERSION_2_3_30).apply {
-            defaultEncoding = "UTF-8"
-            fallbackOnNullLoopVariable = false
-            logTemplateExceptions = true
-            tagSyntax = Configuration.SQUARE_BRACKET_TAG_SYNTAX
-            templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
-            templateLoader = ClassTemplateLoader(
-                this@FreemarkerTemplateProcessor.javaClass.classLoader,
-                "templates/$templatesResourceDirectory"
-            )
-            wrapUncheckedExceptions = true
-
-            setSharedVariable("statics", (objectWrapper as DefaultObjectWrapper).staticModels)
-        }
 
         val templatePaths = options[OPTION_TEMPLATE_PATH]?.split(',').orEmpty()
         val templateIds = options[OPTION_TEMPLATE_ID]?.split(',').orEmpty()
