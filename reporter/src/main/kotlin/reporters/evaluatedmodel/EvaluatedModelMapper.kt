@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.StatisticsCalculator.getStatistics
+import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 
 /**
