@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.ResolutionProvider
+import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 
 /**
  * A bundle of input to be used by [Reporter] implementations.
@@ -88,4 +89,10 @@ data class ReporterInput(
      * A [HowToFixTextProvider], can be used to integrate how to fix texts for [Issue]s into reports.
      */
     val howToFixTextProvider: HowToFixTextProvider = HowToFixTextProvider.NONE
-)
+) {
+    /**
+     * Statistics for [ortResult].
+     */
+    @Suppress("UNUSED") // This can be used from templates.
+    val statistics: Statistics by lazy { getStatistics(ortResult, resolutionProvider, licenseInfoResolver) }
+}
