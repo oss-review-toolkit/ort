@@ -87,7 +87,7 @@ class Conan(
     }
 
     class Factory : AbstractPackageManagerFactory<Conan>("Conan") {
-        override val globsForDefinitionFiles = listOf("conanfile.txt", "conanfile.py")
+        override val globsForDefinitionFiles = listOf("conanfile*.txt", "conanfile*.py")
 
         override fun create(
             analysisRoot: File,
