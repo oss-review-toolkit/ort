@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.reporter.Statistics
 import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 
 /**
