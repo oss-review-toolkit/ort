@@ -683,8 +683,8 @@ following formats are supported (reporter names are case-insensitive):
   (`-f GitLabLicenseModel`)
   * There is a [tutorial video](https://youtu.be/dNmH_kYJ34g) by @xlgmokha
 * [NOTICE](https://infra.apache.org/licensing-howto.html) file in two variants
-  * List license texts and copyrights by package (`-f NoticeTemplate`)
-  * Summarize all license texts and copyrights (`-f NoticeTemplate -O NoticeTemplate=template.id=NOTICE_SUMMARY`)
+  * List license texts and copyrights by package (`-f PlainTextTemplate`)
+  * Summarize all license texts and copyrights (`-f PlainTextTemplate -O PlainTextTemplate=template.id=NOTICE_SUMMARY`)
   * Customizable with [Apache Freemarker](https://freemarker.apache.org/) templates
 * Opossum input that can be visualized and edited in the [OpossumUI](https://github.com/opossum-tool/opossumUI)
   (`-f Opossum`)
