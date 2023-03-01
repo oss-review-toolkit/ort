@@ -390,7 +390,10 @@ subprojects {
     configure<PublishingExtension> {
         publications {
             create<MavenPublication>(name) {
-                groupId = "org.ossreviewtoolkit"
+                fun getGroupId(parent: Project?): String =
+                    if (parent == null) "" else "${getGroupId(parent.parent)}.${parent.name.replace("-", "")}"
+
+                groupId = "org${getGroupId(parent)}"
 
                 from(components["java"])
                 artifact(tasks["sourcesJar"])
