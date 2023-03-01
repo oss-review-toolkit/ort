@@ -651,7 +651,7 @@ pipeline {
 
                 /opt/ort/bin/ort $ORT_OPTIONS report \
                     -f CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp \
-                    -O NoticeTemplate=template.id=default,summary \
+                    -O NoticeTemplate=template.id=NOTICE_DEFAULT,NOTICE_SUMMARY \
                     -i out/results/current-result.yml \
                     -o out/results/reporter
                 '''.stripIndent().trim()

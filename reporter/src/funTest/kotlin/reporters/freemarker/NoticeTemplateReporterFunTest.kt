@@ -76,7 +76,7 @@ class NoticeTemplateReporterFunTest : WordSpec({
         "generate the correct license notes" {
             val expectedText = getAssetAsString("notice-template-reporter-expected-results-summary")
 
-            val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "summary"))
+            val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "NOTICE_SUMMARY"))
 
             report shouldBe expectedText
         }
