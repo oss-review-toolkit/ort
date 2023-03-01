@@ -41,9 +41,9 @@ import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class PlainTextTemplateReporterFunTest : WordSpec({
-    "The default template" should {
+    "The notice default template" should {
         "generate the correct license notes" {
-            val expectedText = getAssetAsString("notice-template-reporter-expected-results")
+            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results")
 
             val report = generateReport(ORT_RESULT)
 
@@ -51,7 +51,7 @@ class PlainTextTemplateReporterFunTest : WordSpec({
         }
 
         "generate the correct license notes with archived license files" {
-            val expectedText = getAssetAsString("notice-template-reporter-expected-results-with-license-files")
+            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results-with-license-files")
             val archiveDir = getAssetFile("archive")
             val config = OrtConfiguration(
                 scanner = ScannerConfiguration(
@@ -72,9 +72,9 @@ class PlainTextTemplateReporterFunTest : WordSpec({
         }
     }
 
-    "The summary template" should {
+    "The notice summary template" should {
         "generate the correct license notes" {
-            val expectedText = getAssetAsString("notice-template-reporter-expected-results-summary")
+            val expectedText = getAssetAsString("plain-text-template-reporter-expected-results-summary")
 
             val report = generateReport(ORT_RESULT, options = mapOf("template.id" to "NOTICE_SUMMARY"))
 
