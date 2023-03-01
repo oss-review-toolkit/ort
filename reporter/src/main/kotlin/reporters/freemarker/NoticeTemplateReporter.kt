@@ -26,13 +26,13 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
  * A [Reporter] that creates notice files using [Apache Freemarker][1] templates. For each template provided using the
- * options described below a separate output file is created. If no options are provided the "default" template
+ * options described below a separate output file is created. If no options are provided the "NOTICE_DEFAULT" template
  * is used. The name of the template id or template path (without extension) is used for the generated file, so be
  * careful to not use two different templates with the same name.
  *
  * This reporter supports the following options:
- * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, only the "default"
- *                  and "summary" templates are available.
+ * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, only the "NOTICE_DEFAULT"
+ *                  and "NOTICE_SUMMARY" templates are available.
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
  * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
  *
@@ -40,20 +40,14 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  */
 class NoticeTemplateReporter : Reporter {
     companion object {
-        private const val NOTICE_FILE_PREFIX = "NOTICE_"
-        private const val NOTICE_FILE_EXTENSION = ""
         private const val NOTICE_TEMPLATE_DIRECTORY = "notice"
 
-        private const val DEFAULT_TEMPLATE_ID = "default"
+        private const val DEFAULT_TEMPLATE_ID = "NOTICE_DEFAULT"
     }
 
     override val type = "NoticeTemplate"
 
-    private val templateProcessor = FreemarkerTemplateProcessor(
-        NOTICE_TEMPLATE_DIRECTORY,
-        NOTICE_FILE_PREFIX,
-        NOTICE_FILE_EXTENSION
-    )
+    private val templateProcessor = FreemarkerTemplateProcessor(NOTICE_TEMPLATE_DIRECTORY)
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val templateOptions = options.toMutableMap()
