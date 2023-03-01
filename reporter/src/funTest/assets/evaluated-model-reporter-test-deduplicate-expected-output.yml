@@ -881,10 +881,12 @@ statistics:
     errors: 2
     warnings: 0
     hints: 0
+    severe: 2
   open_rule_violations:
     errors: 1
     warnings: 1
     hints: 0
+    severe: 2
   open_vulnerabilities: 1
   dependency_tree:
     included_projects: 1

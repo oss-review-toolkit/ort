@@ -138,7 +138,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             ruleViolations = ruleViolations,
             vulnerabilitiesResolutions = vulnerabilitiesResolutions,
             vulnerabilities = vulnerabilities,
-            statistics = with(input) { getStatistics(ortResult, resolutionProvider, licenseInfoResolver) },
+            statistics = with(input) { getStatistics(ortResult, resolutionProvider, licenseInfoResolver, ortConfig) },
             repository = input.ortResult.repository,
             severeIssueThreshold = input.ortConfig.severeIssueThreshold,
             severeRuleViolationThreshold = input.ortConfig.severeRuleViolationThreshold,

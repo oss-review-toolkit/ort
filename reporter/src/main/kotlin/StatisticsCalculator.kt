@@ -24,6 +24,7 @@ import java.util.SortedMap
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.IssueResolution
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
@@ -40,11 +41,12 @@ internal object StatisticsCalculator {
     fun getStatistics(
         ortResult: OrtResult,
         resolutionProvider: ResolutionProvider,
-        licenseInfoResolver: LicenseInfoResolver
+        licenseInfoResolver: LicenseInfoResolver,
+        ortConfig: OrtConfiguration
     ) = Statistics(
         repositoryConfiguration = getRepositoryConfigurationStatistics(ortResult),
-        openIssues = getOpenIssues(ortResult, resolutionProvider),
-        openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider),
+        openIssues = getOpenIssues(ortResult, resolutionProvider, ortConfig),
+        openRuleViolations = getOpenRuleViolations(ortResult, resolutionProvider, ortConfig),
         openVulnerabilities = getOpenVulnerabilities(ortResult, resolutionProvider),
         dependencyTree = DependencyTreeStatistics(
             includedProjects = ortResult.getProjects().count { !ortResult.isExcluded(it.id) },
@@ -59,23 +61,33 @@ internal object StatisticsCalculator {
         licenses = getLicenseStatistics(ortResult, licenseInfoResolver)
     )
 
-    private fun getOpenRuleViolations(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
+    private fun getOpenRuleViolations(
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        ortConfig: OrtConfiguration
+    ): IssueStatistics {
         val openRuleViolations = ortResult.getRuleViolations().filterNot { resolutionProvider.isResolved(it) }
 
         return IssueStatistics(
             errors = openRuleViolations.count { it.severity == Severity.ERROR },
             warnings = openRuleViolations.count { it.severity == Severity.WARNING },
-            hints = openRuleViolations.count { it.severity == Severity.HINT }
+            hints = openRuleViolations.count { it.severity == Severity.HINT },
+            severe = openRuleViolations.count { it.severity >= ortConfig.severeRuleViolationThreshold }
         )
     }
 
-    private fun getOpenIssues(ortResult: OrtResult, resolutionProvider: ResolutionProvider): IssueStatistics {
+    private fun getOpenIssues(
+        ortResult: OrtResult,
+        resolutionProvider: ResolutionProvider,
+        ortConfig: OrtConfiguration
+    ): IssueStatistics {
         val openIssues = ortResult.getOpenIssues(Severity.HINT).filterNot { resolutionProvider.isResolved(it) }
 
         return IssueStatistics(
             errors = openIssues.count { it.severity == Severity.ERROR },
             warnings = openIssues.count { it.severity == Severity.WARNING },
-            hints = openIssues.count { it.severity == Severity.HINT }
+            hints = openIssues.count { it.severity == Severity.HINT },
+            severe = openIssues.count { it.severity >= ortConfig.severeIssueThreshold }
         )
     }
 
