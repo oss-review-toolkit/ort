@@ -53,9 +53,9 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
     }
 
     private val templateProcessor = FreemarkerTemplateProcessor(
+        ASCII_DOC_TEMPLATE_DIRECTORY,
         ASCII_DOC_FILE_PREFIX,
-        ASCII_DOC_FILE_EXTENSION,
-        ASCII_DOC_TEMPLATE_DIRECTORY
+        ASCII_DOC_FILE_EXTENSION
     )
 
     private val asciidoctor by lazy { Asciidoctor.Factory.create() }

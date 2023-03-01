@@ -50,9 +50,9 @@ class NoticeTemplateReporter : Reporter {
     override val type = "NoticeTemplate"
 
     private val templateProcessor = FreemarkerTemplateProcessor(
+        NOTICE_TEMPLATE_DIRECTORY,
         NOTICE_FILE_PREFIX,
-        NOTICE_FILE_EXTENSION,
-        NOTICE_TEMPLATE_DIRECTORY
+        NOTICE_FILE_EXTENSION
     )
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {

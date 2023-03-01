@@ -68,9 +68,9 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
  * [1]: https://freemarker.apache.org
  */
 class FreemarkerTemplateProcessor(
-    private val filePrefix: String,
-    private val fileExtension: String,
-    templatesResourceDirectory: String
+    templatesResourceDirectory: String,
+    private val filePrefix: String = "",
+    private val fileExtension: String = ""
 ) {
     companion object : Logging {
         const val OPTION_TEMPLATE_ID = "template.id"
