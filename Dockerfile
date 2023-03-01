@@ -394,7 +394,6 @@ COPY --from=ruby --chown=$USER:$USER ${RBENV_ROOT} ${RBENV_ROOT}
 # NodeJS
 ARG NODEJS_VERSION=18.12.1
 ENV NVM_DIR=/opt/nvm
-ENV NODE_PATH $NVM_DIR/v$NODEJS_VERSION/lib/node_modules
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
 COPY --from=node --chown=$USER:$USER ${NVM_DIR} ${NVM_DIR}
 
