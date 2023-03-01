@@ -74,6 +74,7 @@ complete -c ort -n "__fish_seen_subcommand_from download" -l archive -d 'Archive
 complete -c ort -n "__fish_seen_subcommand_from download" -l archive-all -d 'Archive all the downloaded source code as a single ZIP file to the output directory. Is ignored if \'--project-url\' is also specified.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l package-types -r -fa "PACKAGE PROJECT" -d 'A comma-separated list of the package types from the ORT file\'s analyzer result to limit downloads to.'
 complete -c ort -n "__fish_seen_subcommand_from download" -l package-ids -r -d 'A comma-separated list of regular expressions for matching package ids from the ORT file\'s analyzer result to limit downloads to. If not specified, all packages are downloaded.'
+complete -c ort -n "__fish_seen_subcommand_from download" -l skip-excluded -d 'Do not download excluded projects or packages. Works only with the \'--ort-file\' parameter.'
 complete -c ort -n "__fish_seen_subcommand_from download" -s h -l help -d 'Show this message and exit'
 
 
@@ -116,7 +117,7 @@ complete -c ort -f -n __fish_use_subcommand -a report -d 'Present Analyzer, Scan
 ## Options for report
 complete -c ort -n "__fish_seen_subcommand_from report" -l ort-file -s i -r -F -d 'The ORT result file to use.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l output-dir -s o -r -F -d 'The output directory to store the generated reports in.'
-complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'The comma-separated reports to generate, any of [AdocTemplate, CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, Excel, FossId, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, NoticeTemplate, Opossum, PdfTemplate, SpdxDocument, StaticHtml, WebApp, XHtmlTemplate].'
+complete -c ort -n "__fish_seen_subcommand_from report" -l report-formats -s f -r -d 'The comma-separated reports to generate, any of [AdocTemplate, CtrlXAutomation, CycloneDx, DocBookTemplate, EvaluatedModel, Excel, FossId, GitLabLicenseModel, HtmlTemplate, ManPageTemplate, Opossum, PdfTemplate, PlainTextTemplate, SpdxDocument, StaticHtml, WebApp, XHtmlTemplate].'
 complete -c ort -n "__fish_seen_subcommand_from report" -l copyright-garbage-file -r -F -d 'A file containing copyright statements which are marked as garbage.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l custom-license-texts-dir -r -F -d 'A directory which maps custom license IDs to license texts. It should contain one text file per license with the license ID as the filename. A custom license text is used only if its ID has a \'LicenseRef-\' prefix and if the respective license text is not known by ORT.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l how-to-fix-text-provider-script -r -F -d 'The path to a Kotlin script which returns an instance of a \'HowToFixTextProvider\'. That provider injects how-to-fix texts in Markdown format for ORT issues.'
@@ -125,7 +126,7 @@ complete -c ort -n "__fish_seen_subcommand_from report" -l package-configuration
 complete -c ort -n "__fish_seen_subcommand_from report" -l package-configuration-file -r -F -d 'A file containing a list of package configurations. Must not be used together with \'--package-configuration-dir\'.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l repository-configuration-file -r -F -d 'A file containing the repository configuration. If set, overrides the repository configuration contained in the ORT result input file.'
 complete -c ort -n "__fish_seen_subcommand_from report" -l resolutions-file -r -F -d 'A file containing issue and rule violation resolutions.'
-complete -c ort -n "__fish_seen_subcommand_from report" -l report-option -s O -r -d 'Specify a report-format-specific option. The key is the (case-insensitive) name of the report format, and the value is an arbitrary key-value pair. For example: -O NoticeTemplate=template.id=summary'
+complete -c ort -n "__fish_seen_subcommand_from report" -l report-option -s O -r -d 'Specify a report-format-specific option. The key is the (case-insensitive) name of the report format, and the value is an arbitrary key-value pair. For example: -O PlainTextTemplate=template.id=NOTICE_SUMMARY'
 complete -c ort -n "__fish_seen_subcommand_from report" -s h -l help -d 'Show this message and exit'
 
 

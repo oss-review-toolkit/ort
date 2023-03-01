@@ -562,6 +562,11 @@ _ort_download() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--package-ids' || in_param=''
           continue
           ;;
+        --skip-excluded)
+          __skip_opt_eq
+          in_param=''
+          continue
+          ;;
         -h|--help)
           __skip_opt_eq
           in_param=''
@@ -579,7 +584,7 @@ _ort_download() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --project-url --project-name --vcs-type --vcs-revision --vcs-path --license-classifications-file --output-dir -o --archive --archive-all --package-types --package-ids -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --project-url --project-name --vcs-type --vcs-revision --vcs-path --license-classifications-file --output-dir -o --archive --archive-all --package-types --package-ids --skip-excluded -h --help' -- "${word}"))
     return
   fi
 
@@ -616,6 +621,8 @@ _ort_download() {
       COMPREPLY=($(compgen -W 'PACKAGE PROJECT' -- "${word}"))
       ;;
     --package-ids)
+      ;;
+    --skip-excluded)
       ;;
     --help)
       ;;
