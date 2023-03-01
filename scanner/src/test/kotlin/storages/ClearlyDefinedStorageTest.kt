@@ -228,10 +228,10 @@ class ClearlyDefinedStorageTest : WordSpec({
         "handle a SocketTimeoutException" {
             server.stubFor(
                 get(anyUrl())
-                    .willReturn(aResponse().withFixedDelay(2000))
+                    .willReturn(aResponse().withFixedDelay(100))
             )
             val client = OkHttpClientHelper.buildClient {
-                readTimeout(Duration.ofSeconds(1))
+                readTimeout(Duration.ofMillis(1))
             }
 
             val storage = ClearlyDefinedStorage("http://localhost:${server.port()}", client)
