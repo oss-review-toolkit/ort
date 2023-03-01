@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
-class NoticeTemplateReporterFunTest : WordSpec({
+class PlainTextTemplateReporterFunTest : WordSpec({
     "The default template" should {
         "generate the correct license notes" {
             val expectedText = getAssetAsString("notice-template-reporter-expected-results")
@@ -98,7 +98,7 @@ private fun TestConfiguration.generateReport(
 
     val outputDir = createTestTempDir()
 
-    return NoticeTemplateReporter().generateReport(input, outputDir, options).single().readText()
+    return PlainTextTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }
 
 private fun createLicenseClassifications(): LicenseClassifications {

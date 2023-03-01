@@ -188,7 +188,7 @@ class ReporterCommand : OrtCommand(
         "--report-option", "-O",
         help = "Specify a report-format-specific option. The key is the (case-insensitive) name of the report " +
                 "format, and the value is an arbitrary key-value pair. For example: " +
-                "-O NoticeTemplate=template.id=NOTICE_SUMMARY"
+                "-O PlainTextTemplate=template.id=NOTICE_SUMMARY"
     ).splitPair().convert { (format, option) ->
         require(format in Reporter.ALL.keys) {
             "Report formats must be one or more of ${Reporter.ALL.keys}."

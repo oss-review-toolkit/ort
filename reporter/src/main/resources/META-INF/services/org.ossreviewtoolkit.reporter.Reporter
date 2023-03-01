@@ -5,7 +5,7 @@ org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 org.ossreviewtoolkit.reporter.reporters.ctrlx.CtrlXAutomationReporter
 org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.fossid.FossIdReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.NoticeTemplateReporter
+org.ossreviewtoolkit.reporter.reporters.freemarker.PlainTextTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.AdocTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.DocBookTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.HtmlTemplateReporter
