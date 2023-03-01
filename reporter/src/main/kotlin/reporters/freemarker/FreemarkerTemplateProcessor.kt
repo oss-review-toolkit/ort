@@ -417,6 +417,7 @@ private fun createDataModel(input: ReporterInput, projectsAsPackages: Set<Identi
         "LicenseView" to LicenseView,
         "helper" to FreemarkerTemplateProcessor.TemplateHelper(input),
         "projectsAsPackages" to projectsAsPackages,
+        "statistics" to input.statistics,
         "vulnerabilityReference" to VulnerabilityReference
     ) + enumModel()
 }
