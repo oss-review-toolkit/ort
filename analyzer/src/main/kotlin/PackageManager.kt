@@ -224,7 +224,7 @@ abstract class PackageManager(
          * object. This means that all dependencies are collected, and excludes are applied later on the report level.
          */
         internal fun AnalyzerConfiguration.excludes(repositoryConfiguration: RepositoryConfiguration): Excludes =
-            repositoryConfiguration.excludes.takeIf { skipExcluded } ?: Excludes.EMPTY
+            repositoryConfiguration.excludes.takeIf { skipExcluded == true } ?: Excludes.EMPTY
 
         /**
          * Check whether the given [path] interpreted relatively against [root] is matched by a path exclude in this

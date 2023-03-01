@@ -51,9 +51,10 @@ data class AnalyzerConfiguration(
     val packageManagers: Map<String, PackageManagerConfiguration>? = null,
 
     /**
-     * A flag to control whether excluded scopes and paths should be skipped during the analysis.
+     * A flag to control whether excluded scopes and paths should be skipped during the analysis. If set to false or
+     * null, excluded scopes and paths are also analyzed. Defaults to null.
      */
-    val skipExcluded: Boolean = false
+    val skipExcluded: Boolean? = null
 ) {
     /**
      * A copy of [packageManagers] with case-insensitive keys.

@@ -50,7 +50,8 @@ class AnalyzerConfigurationTest : WordSpec({
             val self = AnalyzerConfiguration(
                 allowDynamicVersions = false,
                 enabledPackageManagers = listOf("Gradle"),
-                disabledPackageManagers = listOf("NPM")
+                disabledPackageManagers = listOf("NPM"),
+                skipExcluded = false
             )
 
             val other = AnalyzerConfiguration(
@@ -72,13 +73,15 @@ class AnalyzerConfigurationTest : WordSpec({
             val self = AnalyzerConfiguration(
                 allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Gradle"),
-                disabledPackageManagers = listOf("NPM")
+                disabledPackageManagers = listOf("NPM"),
+                skipExcluded = true
             )
 
             val other = AnalyzerConfiguration(
                 allowDynamicVersions = null,
                 enabledPackageManagers = null,
-                disabledPackageManagers = null
+                disabledPackageManagers = null,
+                skipExcluded = null
             )
 
             self.merge(other) shouldBe self
