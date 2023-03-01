@@ -90,7 +90,12 @@ data class IssueStatistics(
     /**
      * The number of issues with [Severity.HINT] as severity.
      */
-    val hints: Int
+    val hints: Int,
+
+    /**
+     * The number of severe issues with regard to the configured threshold.
+     */
+    val severe: Int
 )
 
 /**
