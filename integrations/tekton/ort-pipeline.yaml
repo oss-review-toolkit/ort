@@ -94,7 +94,7 @@ spec:
             cpu: 4
       - name: "reports"
         image: ort:latest
-        args: ["report", "-f", "CycloneDX,NoticeTemplate,SpdxDocument,StaticHTML,WebApp", "-O", "NoticeTemplate=template.id=NOTICE_DEFAULT,NOTICE_SUMMARY", "-i", "/workspace/shared/results/evaluator/evaluation-result.yml", "-o", "/workspace/shared/results/report"]
+        args: ["report", "-f", "CycloneDX,PlainTextTemplate,SpdxDocument,StaticHTML,WebApp", "-O", "PlainTextTemplate=template.id=NOTICE_DEFAULT,NOTICE_SUMMARY", "-i", "/workspace/shared/results/evaluator/evaluation-result.yml", "-o", "/workspace/shared/results/report"]
         env:
           - name: "ORT_DATA_DIR"
             value: "/workspace/ort-data-dir/data"

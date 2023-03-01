@@ -25,10 +25,10 @@ import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 
 /**
- * A [Reporter] that creates notice files using [Apache Freemarker][1] templates. For each template provided using the
- * options described below a separate output file is created. If no options are provided the "NOTICE_DEFAULT" template
- * is used. The name of the template id or template path (without extension) is used for the generated file, so be
- * careful to not use two different templates with the same name.
+ * A [Reporter] that creates plain text files using [Apache Freemarker][1] templates. For each template provided using
+ * the options described below a separate output file is created. If no options are provided the "NOTICE_DEFAULT"
+ * template is used. The name of the template id or template path (without extension) is used for the generated file, so
+ * be careful to not use two different templates with the same name.
  *
  * This reporter supports the following options:
  * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, only the "NOTICE_DEFAULT"
@@ -38,16 +38,16 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  *
  * [1]: https://freemarker.apache.org
  */
-class NoticeTemplateReporter : Reporter {
+class PlainTextTemplateReporter : Reporter {
     companion object {
-        private const val NOTICE_TEMPLATE_DIRECTORY = "notice"
+        private const val TEMPLATE_DIRECTORY = "plain-text"
 
         private const val DEFAULT_TEMPLATE_ID = "NOTICE_DEFAULT"
     }
 
-    override val type = "NoticeTemplate"
+    override val type = "PlainTextTemplate"
 
-    private val templateProcessor = FreemarkerTemplateProcessor(NOTICE_TEMPLATE_DIRECTORY)
+    private val templateProcessor = FreemarkerTemplateProcessor(TEMPLATE_DIRECTORY)
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val templateOptions = options.toMutableMap()
