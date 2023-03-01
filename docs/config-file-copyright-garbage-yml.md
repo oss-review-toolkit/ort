@@ -18,6 +18,6 @@ To use the `copyright-garbage.yml` file put it to `$ORT_CONFIG_DIR/copyright-gar
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
-  --report-formats NoticeTemplate,StaticHtml,WebApp
+  --report-formats PlainTextTemplate,StaticHtml,WebApp
   --copyright-garbage-file $ORT_CONFIG_DIR/copyright-garbage.yml
 ```
