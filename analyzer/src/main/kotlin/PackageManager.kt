@@ -359,7 +359,7 @@ abstract class PackageManager(
     abstract fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult>
 
     protected fun requireLockfile(workingDir: File, condition: () -> Boolean) {
-        require(analyzerConfig.allowDynamicVersions || condition()) {
+        require(analyzerConfig.allowDynamicVersions == true || condition()) {
             val relativePathString = workingDir.relativeTo(analysisRoot).invariantSeparatorsPath
                 .takeUnless { it.isEmpty() } ?: "."
 

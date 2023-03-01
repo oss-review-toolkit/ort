@@ -27,10 +27,10 @@ data class AnalyzerConfiguration(
      * Enable the analysis of projects that use version ranges to declare their dependencies. If set to true,
      * dependencies of exactly the same project might change with another scan done at a later time if any of the
      * (transitive) dependencies are declared using version ranges and a new version of such a dependency was
-     * published in the meantime. If set to false, analysis of projects that use version ranges will fail. Defaults to
-     * false.
+     * published in the meantime. If set to false or null, analysis of projects that use version ranges will fail.
+     * Defaults to null.
      */
-    val allowDynamicVersions: Boolean = false,
+    val allowDynamicVersions: Boolean? = null,
 
     /**
      * A list of the case-insensitive names of package managers that are enabled. Disabling a package manager in
@@ -107,7 +107,7 @@ data class AnalyzerConfiguration(
         }
 
         return AnalyzerConfiguration(
-            allowDynamicVersions = other.allowDynamicVersions,
+            allowDynamicVersions = other.allowDynamicVersions ?: allowDynamicVersions,
             enabledPackageManagers = other.enabledPackageManagers ?: enabledPackageManagers,
             disabledPackageManagers = other.disabledPackageManagers ?: disabledPackageManagers,
             packageManagers = mergedPackageManagers,

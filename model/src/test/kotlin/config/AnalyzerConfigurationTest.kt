@@ -70,11 +70,13 @@ class AnalyzerConfigurationTest : WordSpec({
 
         "keep values which are null in other" {
             val self = AnalyzerConfiguration(
+                allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Gradle"),
                 disabledPackageManagers = listOf("NPM")
             )
 
             val other = AnalyzerConfiguration(
+                allowDynamicVersions = null,
                 enabledPackageManagers = null,
                 disabledPackageManagers = null
             )
