@@ -19,7 +19,11 @@
 
 package org.ossreviewtoolkit.reporter
 
+import java.time.Duration
+import java.time.Instant
 import java.util.SortedMap
+
+import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Severity
@@ -58,7 +62,8 @@ internal object StatisticsCalculator {
             includedScopes = getIncludedScopes(ortResult).toSortedSet(),
             excludedScopes = getExcludedScopes(ortResult).toSortedSet()
         ),
-        licenses = getLicenseStatistics(ortResult, licenseInfoResolver)
+        licenses = getLicenseStatistics(ortResult, licenseInfoResolver),
+        executionDurationInSeconds = getExecutionDurationInSeconds(ortResult)
     )
 
     private fun getOpenRuleViolations(
@@ -142,6 +147,16 @@ internal object StatisticsCalculator {
         )
     }
 
+    private fun getExecutionDurationInSeconds(ortResult: OrtResult): Long =
+        with(ortResult) {
+            listOfNotNull(
+                analyzer?.let { secondsBetween(it.startTime, it.endTime) },
+                scanner?.let { secondsBetween(it.startTime, it.endTime) },
+                advisor?.let { secondsBetween(it.startTime, it.endTime) },
+                evaluator?.let { secondsBetween(it.startTime, it.endTime) },
+            ).sum()
+        }
+
     private fun getRepositoryConfigurationStatistics(ortResult: OrtResult): RepositoryConfigurationStatistics {
         val config = ortResult.repository.config
 
@@ -158,3 +173,6 @@ internal object StatisticsCalculator {
         )
     }
 }
+
+private fun secondsBetween(startInclusive: Instant, endInclusive: Instant) =
+    Duration.between(startInclusive, endInclusive).toKotlinDuration().inWholeSeconds
