@@ -162,8 +162,6 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             // are listed, it is assumed that the user can select any of them, not that they must accept all."
             DeclaredLicenseProcessor.process(licenses, operator = SpdxOperator.OR)
 
-        fun parseVcsInfo(mavenProject: MavenProject) = parseScm(getOriginalScm(mavenProject))
-
         /**
          * When asking Maven for the SCM connection or the SCM URL of a POM that does not itself define these values,
          * Maven returns the values of the first parent POM (if any) that defines one and appends the artifactIds of all
@@ -200,7 +198,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             return scm
         }
 
-        private fun parseScm(scm: Scm?): VcsInfo {
+        fun parseVcsInfo(project: MavenProject): VcsInfo {
+            val scm = getOriginalScm(project)
             val connection = scm?.connection
             if (connection.isNullOrEmpty()) return VcsInfo.EMPTY
 
@@ -228,11 +227,17 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     if (connection.startsWith("git://") || connection.endsWith(".git")) {
                         // It is a common mistake to omit the "scm:[provider]:" prefix. Add fall-backs for nevertheless
                         // clear cases.
-                        logger.info { "Maven SCM connection URL '$connection' lacks the required 'scm' prefix." }
+                        logger.info {
+                            "Maven SCM connection '$connection' of project ${project.artifact} lacks the required " +
+                                    "'scm' prefix."
+                        }
 
                         VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
                     } else {
-                        logger.info { "Ignoring Maven SCM connection URL '$connection' of unexpected format." }
+                        logger.info {
+                            "Ignoring Maven SCM connection '$connection' of project ${project.artifact} due to an " +
+                                    "unexpected format."
+                        }
 
                         VcsInfo.EMPTY
                     }
