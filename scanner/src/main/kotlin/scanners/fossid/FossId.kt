@@ -112,6 +112,9 @@ class FossId internal constructor(
         @JvmStatic
         internal val SERVER_URL_KEY = "serverurl"
 
+        @JvmStatic
+        internal val PROJECT_REVISION_LABEL = "projectVcsRevision"
+
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -265,7 +268,7 @@ class FossId internal constructor(
                     checkNotNull(scans)
 
                     val (scanCode, scanId) = if (config.deltaScans) {
-                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName)
+                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context)
                     } else {
                         checkAndCreateScan(scans, url, revision, projectCode, projectName)
                     }
@@ -410,8 +413,17 @@ class FossId internal constructor(
         url: String,
         revision: String,
         projectCode: String,
-        projectName: String
+        projectName: String,
+        context: ScanContext
     ): Pair<String, String> {
+        val projectRevision = context.labels[PROJECT_REVISION_LABEL]
+
+        if (projectRevision == null) {
+            logger.warn { "No project revision has been given." }
+        } else {
+            logger.info { "Project revision is '$projectRevision'." }
+        }
+
         val urlWithoutCredentials = url.replaceCredentialsInUri()
         if (urlWithoutCredentials != url) {
             logger.warn {
@@ -436,7 +448,7 @@ class FossId internal constructor(
 
         val newUrl = urlProvider.getUrl(urlWithoutCredentials)
 
-        val scanId = createScan(projectCode, scanCode, newUrl, revision)
+        val scanId = createScan(projectCode, scanCode, newUrl, revision, projectRevision.orEmpty())
 
         logger.info { "Initiating the download..." }
         service.downloadFromGit(config.user, config.apiKey, scanCode)
@@ -513,12 +525,20 @@ class FossId internal constructor(
         projectCode: String,
         scanCode: String,
         url: String,
-        revision: String
+        revision: String,
+        reference: String = ""
     ): String {
         logger.info { "Creating scan '$scanCode'..." }
 
-        val response = service.createScan(config.user, config.apiKey, projectCode, scanCode, url, revision)
-            .checkResponse("create scan")
+        val response = service.createScan(
+            config.user,
+            config.apiKey,
+            projectCode,
+            scanCode,
+            url,
+            revision,
+            reference
+        ).checkResponse("create scan")
 
         val scanId = response.data?.get("scan_id")
 
