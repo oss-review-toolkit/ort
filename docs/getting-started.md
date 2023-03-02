@@ -333,7 +333,7 @@ cli/build/install/ort/bin/ort report
   -o [reporter-output-dir]
 Created 'StaticHtml' report: [reporter-output-dir]/scan-report.html
 Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
-Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_default
+Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 ```
 
 If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-dir]/scan-result.yml`
