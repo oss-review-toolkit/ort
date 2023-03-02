@@ -235,6 +235,9 @@ subprojects {
                 // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
                 force(rootProject.libs.okhttp)
 
+                // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
+                force(rootProject.libs.jruby)
+
                 // Ensure all Log4j API versions match our version.
                 force(rootProject.libs.log4jApi)
 
