@@ -1010,7 +1010,8 @@
         "LicenseRef-test-Apache-2.0-single-line" : 1,
         "MIT" : 2
       }
-    }
+    },
+    "execution_duration_in_seconds" : 3125
   },
   "repository" : {
     "vcs" : {

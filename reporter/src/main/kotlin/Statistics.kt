@@ -70,7 +70,12 @@ data class Statistics(
     /**
      * Statistics of used licenses.
      */
-    val licenses: LicenseStatistics
+    val licenses: LicenseStatistics,
+
+    /**
+     * The sum of the execution time of all stages in seconds.
+     */
+    val executionDurationInSeconds: Long
 )
 
 /**
