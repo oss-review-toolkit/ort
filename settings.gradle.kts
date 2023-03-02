@@ -47,6 +47,15 @@ include(":utils:scripting")
 include(":utils:spdx")
 include(":utils:test")
 
+project(":clients:clearly-defined").name = "clearly-defined-client"
+project(":clients:fossid-webapp").name = "fossid-webapp-client"
+project(":clients:github-graphql").name = "github-graphql-client"
+project(":clients:nexus-iq").name = "nexus-iq-client"
+project(":clients:oss-index").name = "oss-index-client"
+project(":clients:osv").name = "osv-client"
+project(":clients:scanoss").name = "scanoss-client"
+project(":clients:vulnerable-code").name = "vulnerable-code-client"
+
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"
 project(":utils:scripting").name = "scripting-utils"

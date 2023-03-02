@@ -23,7 +23,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":clients:clearly-defined"))
+    api(project(":clients:clearly-defined-client"))
     api(project(":utils:ort-utils"))
     api(project(":utils:spdx-utils"))
 
