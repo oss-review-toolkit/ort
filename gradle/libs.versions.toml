@@ -29,7 +29,7 @@ hoplite = "2.7.1"
 jackson = "2.14.2"
 jgit = "6.4.0.202211300538-r"
 jiraRestClient = "5.2.4"
-jruby = "9.4.0.0"
+jruby = "9.4.1.0"
 jslt = "0.1.14"
 jsonSchemaValidator = "1.0.77"
 kotest = "5.5.5"
@@ -105,7 +105,7 @@ jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 jgitSshApacheAgent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
 jiraRestClientApp = { module = "com.atlassian.jira:jira-rest-java-client-app", version.ref = "jiraRestClient" }
-jruby = { module = "org.jruby:jruby-complete", version.ref = "jruby" }
+jruby = { module = "org.jruby:jruby", version.ref = "jruby" }
 jslt = { module = "com.schibsted.spt.data:jslt", version.ref = "jslt" }
 jsonSchemaValidator = { module = "com.networknt:json-schema-validator", version.ref = "jsonSchemaValidator" }
 kotestAssertionsCore = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
