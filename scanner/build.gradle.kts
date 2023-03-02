@@ -44,9 +44,9 @@ repositories {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":clients:clearly-defined"))
-    implementation(project(":clients:fossid-webapp"))
-    implementation(project(":clients:scanoss"))
+    implementation(project(":clients:clearly-defined-client"))
+    implementation(project(":clients:fossid-webapp-client"))
+    implementation(project(":clients:scanoss-client"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
 

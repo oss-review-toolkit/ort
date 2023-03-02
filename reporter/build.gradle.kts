@@ -54,7 +54,7 @@ repositories {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":clients:fossid-webapp"))
+    implementation(project(":clients:fossid-webapp-client"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:scripting-utils"))

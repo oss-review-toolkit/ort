@@ -25,11 +25,11 @@ plugins {
 dependencies {
     api(project(":model"))
 
-    implementation(project(":clients:nexus-iq"))
-    implementation(project(":clients:oss-index"))
-    implementation(project(":clients:osv"))
-    implementation(project(":clients:vulnerable-code"))
-    implementation(project(":clients:github-graphql"))
+    implementation(project(":clients:nexus-iq-client"))
+    implementation(project(":clients:oss-index-client"))
+    implementation(project(":clients:osv-client"))
+    implementation(project(":clients:vulnerable-code-client"))
+    implementation(project(":clients:github-graphql-client"))
 
     implementation(libs.cvssCalculator)
     implementation(libs.kotlinxCoroutines)
