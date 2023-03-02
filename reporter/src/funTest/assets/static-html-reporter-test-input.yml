@@ -45,7 +45,7 @@ repository:
           choice: "MPL-2.0"
 analyzer:
   start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
+  end_time: "1970-01-01T00:35:05Z"
   environment:
     ort_version: "72463cc"
     java_version: "1.8.0_181"
@@ -339,8 +339,8 @@ analyzer:
         path: ""
     has_issues: false
 scanner:
-  start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
+  start_time: "1970-01-01T00:40:00Z"
+  end_time: "1970-01-01T00:48:00Z"
   environment:
     ort_version: "72463cc"
     java_version: "1.8.0_181"
@@ -568,8 +568,8 @@ scanner:
     num_hits: 0
   has_issues: true
 advisor:
-  start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
+  start_time: "1970-01-01T01:01:00Z"
+  end_time: "1970-01-01T01:08:00Z"
   environment:
     ort_version: "72463cc"
     java_version: "1.8.0_181"
@@ -610,8 +610,8 @@ advisor:
             severity: "ERROR"
     has_issues: true
 evaluator:
-  start_time: "1970-01-01T00:00:00Z"
-  end_time: "1970-01-01T00:00:00Z"
+  start_time: "1970-01-01T01:09:00Z"
+  end_time: "1970-01-01T01:11:00Z"
   violations:
   - rule: "rule 1"
     pkg: "Ant:junit:junit:4.12"
