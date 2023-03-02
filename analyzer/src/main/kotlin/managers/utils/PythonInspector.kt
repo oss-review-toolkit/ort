@@ -247,7 +247,7 @@ private fun PythonInspector.Result.resolveIdentifier(
         // root as a unique project name.
         !hasSetupName && hasRequirementsName -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
         hasSetupName && hasRequirementsName -> "$setupName-requirements$requirementsSuffix"
-        else -> throw IllegalArgumentException("Unable to determine a project name for '$definitionFile'.")
+        else -> PackageManager.getFallbackProjectName(analysisRoot, definitionFile)
     }
 
     val projectVersion = setupVersion.takeIf { it.isNotEmpty() } ?: requirementsVersion
