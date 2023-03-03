@@ -60,7 +60,7 @@ class OrtPackageNaming(config: Config) : Rule(config) {
         val projectDir = pathPrefix.name
         val projectGroup = pathPrefix.parent
             ?.let { ".$it" }
-            ?.replace("/", ".")
+            ?.replace(forwardOrBackwardSlashPattern, ".")
             ?.replace("-", "")
             .orEmpty()
 
