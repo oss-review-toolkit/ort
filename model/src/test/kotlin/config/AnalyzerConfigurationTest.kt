@@ -53,7 +53,7 @@ class AnalyzerConfigurationTest : WordSpec({
                 disabledPackageManagers = listOf("NPM")
             )
 
-            val other = AnalyzerConfiguration(
+            val other = RepositoryAnalyzerConfiguration(
                 allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Maven"),
                 disabledPackageManagers = listOf("SBT"),
@@ -70,13 +70,17 @@ class AnalyzerConfigurationTest : WordSpec({
 
         "keep values which are null in other" {
             val self = AnalyzerConfiguration(
+                allowDynamicVersions = true,
                 enabledPackageManagers = listOf("Gradle"),
-                disabledPackageManagers = listOf("NPM")
+                disabledPackageManagers = listOf("NPM"),
+                skipExcluded = true
             )
 
-            val other = AnalyzerConfiguration(
+            val other = RepositoryAnalyzerConfiguration(
+                allowDynamicVersions = null,
                 enabledPackageManagers = null,
-                disabledPackageManagers = null
+                disabledPackageManagers = null,
+                skipExcluded = null
             )
 
             self.merge(other) shouldBe self
@@ -92,7 +96,7 @@ class AnalyzerConfigurationTest : WordSpec({
                 )
             )
 
-            val other = AnalyzerConfiguration(
+            val other = RepositoryAnalyzerConfiguration(
                 packageManagers = mapOf(
                     "gradle" to PackageManagerConfiguration(
                         mustRunAfter = listOf("NPM"),
