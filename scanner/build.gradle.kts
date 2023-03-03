@@ -70,7 +70,7 @@ tasks.withType<KotlinCompile>().configureEach {
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )
 
-    if ("test" in name.toLowerCase()) {
+    if ("test" in name.lowercase()) {
         kotlinOptions {
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         }
