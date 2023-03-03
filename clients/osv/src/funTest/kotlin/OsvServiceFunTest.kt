@@ -47,9 +47,9 @@ private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = Vulnerabilitie
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
 )
 
-private fun Vulnerability.patchModifiedTime() = copy(modified = Instant.EPOCH)
+private fun Vulnerability.patchIgnorableFields() = copy(modified = Instant.EPOCH)
 
-private fun List<Vulnerability>.patchModifiedTimes() = map { it.patchModifiedTime() }
+private fun List<Vulnerability>.patchIgnorableFields() = map { it.patchIgnorableFields() }
 
 class OsvServiceFunTest : StringSpec({
     "getVulnerabilitiesForPackage() returns the expected vulnerability when queried by commit" {
@@ -59,7 +59,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchModifiedTimes() shouldContainExactlyInAnyOrder expectedData.patchModifiedTimes()
+            actualData.patchIgnorableFields() shouldContainExactlyInAnyOrder expectedData.patchIgnorableFields()
         }
     }
 
@@ -70,7 +70,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<List<Vulnerability>>(expectedResult)
-            actualData.patchModifiedTimes() shouldContainExactlyInAnyOrder expectedData.patchModifiedTimes()
+            actualData.patchIgnorableFields() shouldContainExactlyInAnyOrder expectedData.patchIgnorableFields()
         }
     }
 
@@ -110,7 +110,7 @@ class OsvServiceFunTest : StringSpec({
 
         result.shouldBeSuccess { actualData ->
             val expectedData = OsvApiClient.JSON.decodeFromString<Vulnerability>(expectedResult)
-            actualData.patchModifiedTime() shouldBe expectedData.patchModifiedTime()
+            actualData.patchIgnorableFields() shouldBe expectedData.patchIgnorableFields()
         }
     }
 
