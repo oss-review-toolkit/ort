@@ -134,7 +134,7 @@ fun getLicenseHeader(year: Int = 2017) =
     """.trimMargin()
 
 fun licenseToEnumEntry(info: LicenseInfo): String {
-    var enumEntry = info.id.toUpperCase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
+    var enumEntry = info.id.uppercase().replace(Regex("[-.]"), "_").replace("+", "PLUS")
     if (enumEntry.first().isDigit()) {
         enumEntry = "_$enumEntry"
     }
@@ -330,7 +330,7 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
         providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
-    src(licenseUrlMap.keys.sortedBy { it.toString().toLowerCase() })
+    src(licenseUrlMap.keys.sortedBy { it.toString().lowercase() })
     dest("src/main/resources/$licensesResourcePath")
     eachFile { name = licenseUrlMap[sourceURL] }
 
@@ -363,7 +363,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
         providers.mapNotNull { it.getLicenseUrl(info) }.first() to info.id
     }
 
-    src(licenseExceptionUrlMap.keys.sortedBy { it.toString().toLowerCase() })
+    src(licenseExceptionUrlMap.keys.sortedBy { it.toString().lowercase() })
     dest("src/main/resources/$exceptionsResourcePath")
     eachFile { name = licenseExceptionUrlMap[sourceURL] }
 
