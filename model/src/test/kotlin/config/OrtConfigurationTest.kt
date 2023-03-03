@@ -64,24 +64,24 @@ class OrtConfigurationTest : WordSpec({
             }
 
             ortConfig.packageCurationProviders should containExactly(
-                PackageCurationProviderConfiguration(type = "DefaultFile"),
-                PackageCurationProviderConfiguration(type = "DefaultDir"),
-                PackageCurationProviderConfiguration(
+                PluginConfiguration(type = "DefaultFile"),
+                PluginConfiguration(type = "DefaultDir"),
+                PluginConfiguration(
                     type = "File",
                     id = "SomeCurationsFile",
                     config = mapOf("path" to "/some-path/curations.yml", "mustExist" to "true")
                 ),
-                PackageCurationProviderConfiguration(
+                PluginConfiguration(
                     type = "File",
                     id = "SomeCurationsDir",
                     config = mapOf("path" to "/some-path/curations-dir", "mustExist" to "false")
                 ),
-                PackageCurationProviderConfiguration(type = "OrtConfig", enabled = true),
-                PackageCurationProviderConfiguration(
+                PluginConfiguration(type = "OrtConfig", enabled = true),
+                PluginConfiguration(
                     type = "ClearlyDefined",
                     config = mapOf("serverUrl" to "https://api.clearlydefined.io", "minTotalLicenseScore" to "80")
                 ),
-                PackageCurationProviderConfiguration(
+                PluginConfiguration(
                     type = "SW360",
                     config = mapOf(
                         "restUrl" to "https://your-sw360-rest-url",
