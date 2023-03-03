@@ -25,6 +25,7 @@ import io.kotest.matchers.shouldBe
 import java.time.Instant
 
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.JsonObject
 
 import org.ossreviewtoolkit.clients.osv.OsvApiClient
 import org.ossreviewtoolkit.clients.osv.OsvService
@@ -47,7 +48,15 @@ private val VULNERABILITY_FOR_PACKAGE_BY_INVALID_COMMIT_REQUEST = Vulnerabilitie
     commit = "6879efc2c1596d11a6a6ad296f80063b558d5e0c"
 )
 
-private fun Vulnerability.patchIgnorableFields() = copy(modified = Instant.EPOCH)
+private fun Vulnerability.patchIgnorableFields() = copy(
+    modified = Instant.EPOCH,
+    databaseSpecific = emptyJsonObject.takeIf { databaseSpecific != null },
+    affected = affected.mapTo(mutableSetOf()) { affected ->
+        affected.copy(ecosystemSpecific = emptyJsonObject.takeIf { affected.ecosystemSpecific != null })
+    }
+)
+
+private val emptyJsonObject = JsonObject(emptyMap())
 
 private fun List<Vulnerability>.patchIgnorableFields() = map { it.patchIgnorableFields() }
 
