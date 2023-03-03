@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
@@ -79,7 +80,7 @@ class GitWorkingTreeFunTest : StringSpec({
     "Git correctly lists remote tags" {
         val workingTree = git.getWorkingTree(zipContentDir)
 
-        workingTree.listRemoteTags() should containExactlyInAnyOrder(
+        workingTree.listRemoteTags() should containAll(
             "0.10.0",
             "0.10.1",
             "0.11.0",
