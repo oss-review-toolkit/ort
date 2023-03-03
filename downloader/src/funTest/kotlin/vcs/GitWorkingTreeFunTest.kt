@@ -80,34 +80,7 @@ class GitWorkingTreeFunTest : StringSpec({
     "Git correctly lists remote tags" {
         val workingTree = git.getWorkingTree(zipContentDir)
 
-        workingTree.listRemoteTags() should containAll(
-            "0.10.0",
-            "0.10.1",
-            "0.11.0",
-            "0.12.0",
-            "0.12.1",
-            "0.13.0",
-            "0.13.1",
-            "0.13.2",
-            "0.5.0",
-            "0.6.0",
-            "0.7.0",
-            "0.8.0",
-            "0.9.0",
-            "1.0.0",
-            "2.0.0",
-            "2.0.0b1",
-            "2.1.0",
-            "2.2.0",
-            "2.2.1",
-            "2.3.0",
-            "2.3.1",
-            "2.3.2",
-            "2.3.3",
-            "2.4.0",
-            "2.5.0",
-            "2.5.1"
-        )
+        workingTree.listRemoteTags() should containAll(expectedRemoteTags)
     }
 
     "Git correctly lists submodules" {
@@ -123,3 +96,32 @@ class GitWorkingTreeFunTest : StringSpec({
         workingTree.getNested() shouldBe expectedSubmodules
     }
 })
+
+private val expectedRemoteTags = listOf(
+    "0.10.0",
+    "0.10.1",
+    "0.11.0",
+    "0.12.0",
+    "0.12.1",
+    "0.13.0",
+    "0.13.1",
+    "0.13.2",
+    "0.5.0",
+    "0.6.0",
+    "0.7.0",
+    "0.8.0",
+    "0.9.0",
+    "1.0.0",
+    "2.0.0",
+    "2.0.0b1",
+    "2.1.0",
+    "2.2.0",
+    "2.2.1",
+    "2.3.0",
+    "2.3.1",
+    "2.3.2",
+    "2.3.3",
+    "2.4.0",
+    "2.5.0",
+    "2.5.1"
+)
