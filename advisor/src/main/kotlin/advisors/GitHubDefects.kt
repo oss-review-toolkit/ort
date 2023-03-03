@@ -112,7 +112,7 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     private val service by lazy {
         GitHubService.create(
             token = gitHubConfiguration.token.orEmpty(),
-            url = gitHubConfiguration.endpointUrl?.let { URI(it) } ?: GitHubService.ENDPOINT,
+            url = gitHubConfiguration.endpointUrl ?: GitHubService.ENDPOINT,
             client = HttpClient(OkHttp)
         )
     }
