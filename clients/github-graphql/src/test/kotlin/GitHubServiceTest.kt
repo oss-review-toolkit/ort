@@ -45,7 +45,6 @@ import io.ktor.client.plugins.ClientRequestException
 import java.io.File
 import java.net.ConnectException
 import java.net.ServerSocket
-import java.net.URI
 import java.util.regex.Pattern
 
 import kotlinx.coroutines.Dispatchers
@@ -91,7 +90,7 @@ class GitHubServiceTest : WordSpec({
             val port = withContext(Dispatchers.IO) { ServerSocket(0).use { it.localPort } }
             val serverUrl = "http://localhost:$port"
 
-            val service = GitHubService.create(TOKEN, URI(serverUrl))
+            val service = GitHubService.create(TOKEN, serverUrl)
 
             val issuesResult = service.repositoryIssues(REPO_OWNER, REPO_NAME)
 
@@ -238,7 +237,7 @@ private const val PAGE_SIZE = 32
  * Create a [GitHubService] instance that is configured to access the given mock [server].
  */
 private fun createService(server: WireMockServer): GitHubService =
-    GitHubService.create(TOKEN, URI("http://localhost:${server.port()}$ENDPOINT"))
+    GitHubService.create(TOKEN, "http://localhost:${server.port()}$ENDPOINT")
 
 /**
  * Prepare this mock server to answer a GraphQL read from [queryFileName] containing variables matched by

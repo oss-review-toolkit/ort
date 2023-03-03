@@ -305,14 +305,14 @@ class GitHubDefectsTest : WordSpec({
 
     "the GitHubService instance" should {
         "use the configured endpoint URI" {
-            val endpointUri = URI("https://www.example.org/alternative/endpoint")
-            createGitHubServiceMock(endpointUri).configureResults(emptyList(), emptyList())
+            val url = "https://www.example.org/alternative/endpoint"
+            createGitHubServiceMock(url).configureResults(emptyList(), emptyList())
 
-            val advisor = createAdvisor(url = endpointUri.toString())
+            val advisor = createAdvisor(url = url)
             advisor.retrievePackageFindings(setOf(createPackage()))
 
             verify {
-                GitHubService.create(GITHUB_TOKEN, endpointUri, any())
+                GitHubService.create(GITHUB_TOKEN, url, any())
             }
         }
     }
@@ -416,7 +416,7 @@ private val PACKAGE_ID =
  * Create a mock for the [GitHubService] and prepare the static factory method to return this mock, expecting the
  * provided [url].
  */
-private fun createGitHubServiceMock(url: URI = GitHubService.ENDPOINT): GitHubService {
+private fun createGitHubServiceMock(url: String = GitHubService.ENDPOINT): GitHubService {
     val service = mockk<GitHubService>()
 
     mockkObject(GitHubService)
