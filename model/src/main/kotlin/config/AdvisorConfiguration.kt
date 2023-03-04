@@ -29,6 +29,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class AdvisorConfiguration(
     val gitHubDefects: GitHubDefectsConfiguration? = null,
     val nexusIq: NexusIqConfiguration? = null,
+    val ossIndex: OssIndexConfiguration? = null,
     val osv: OsvConfiguration? = null,
     val vulnerableCode: VulnerableCodeConfiguration? = null,
 
@@ -124,6 +125,17 @@ data class NexusIqConfiguration(
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     val password: String?
+)
+
+/**
+ * The configuration for the OSS Index provider.
+ */
+data class OssIndexConfiguration(
+    /**
+     * The base URL of the OSS Index REST API. If undefined, default base URL for the REST API of the public OSS Index
+     * service.
+     */
+    val serverUrl: String?
 )
 
 /**
