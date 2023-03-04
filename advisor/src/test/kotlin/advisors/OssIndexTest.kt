@@ -46,6 +46,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
+import org.ossreviewtoolkit.model.config.OssIndexConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -72,7 +73,7 @@ class OssIndexTest : WordSpec({
     "OssIndex" should {
         "return vulnerability information" {
             server.stubComponentsRequest("response_components.json")
-            val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
+            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
                 Package.EMPTY.copy(id = it, purl = it.toPurl())
             }
@@ -120,7 +121,7 @@ class OssIndexTest : WordSpec({
                         aResponse().withStatus(500)
                     )
             )
-            val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
+            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
             val packages = COMPONENTS_REQUEST_IDS.mapTo(mutableSetOf()) {
                 Package.EMPTY.copy(id = it, purl = it.toPurl())
             }
@@ -144,7 +145,7 @@ class OssIndexTest : WordSpec({
         }
 
         "provide correct details" {
-            val ossIndex = OssIndex(ADVISOR_NAME, "http://localhost:${server.port()}")
+            val ossIndex = OssIndex(ADVISOR_NAME, OssIndexConfiguration("http://localhost:${server.port()}"))
 
             ossIndex.details shouldBe AdvisorDetails(ADVISOR_NAME, enumSetOf(AdvisorCapability.VULNERABILITIES))
         }

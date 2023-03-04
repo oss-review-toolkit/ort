@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.OssIndexConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
@@ -50,20 +51,18 @@ private const val BULK_REQUEST_SIZE = 128
 /**
  * A wrapper for Sonatype's [OSS Index](https://ossindex.sonatype.org/) security vulnerability data.
  */
-class OssIndex(name: String, serverUrl: String? = null) : AdviceProvider(name) {
+class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
-        override fun create(config: AdvisorConfiguration) =
-            // The OSS Index does not require any configuration.
-            OssIndex(type)
+        override fun create(config: AdvisorConfiguration) = OssIndex(type, config.forProvider { ossIndex })
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service by lazy {
         OssIndexService.create(
-            url = serverUrl,
+            url = config.serverUrl,
             client = OkHttpClientHelper.buildClient()
         )
     }
