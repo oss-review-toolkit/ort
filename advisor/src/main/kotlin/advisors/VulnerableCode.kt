@@ -48,7 +48,7 @@ private const val BULK_REQUEST_SIZE = 100
  * An [AdviceProvider] implementation that obtains security vulnerability information from a
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
-class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeConfiguration) : AdviceProvider(name) {
+class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
         override fun create(config: AdvisorConfiguration) = VulnerableCode(type, config.forProvider { vulnerableCode })
     }
@@ -61,7 +61,7 @@ class VulnerableCode(name: String, vulnerableCodeConfiguration: VulnerableCodeCo
 
     private val service by lazy {
         VulnerableCodeService.create(
-            vulnerableCodeConfiguration.serverUrl, vulnerableCodeConfiguration.apiKey, OkHttpClientHelper.buildClient()
+            config.serverUrl, config.apiKey, OkHttpClientHelper.buildClient()
         )
     }
 
