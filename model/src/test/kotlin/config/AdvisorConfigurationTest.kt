@@ -31,6 +31,33 @@ import java.io.File
 import org.ossreviewtoolkit.model.yamlMapper
 
 class AdvisorConfigurationTest : WordSpec({
+    "Generic advisor options" should {
+        "not be serialized as they might contain sensitive information" {
+            rereadAdvisorConfig(loadAdvisorConfig()).options.shouldBeNull()
+        }
+    }
+
+    "GitHubDefectsConfiguration" should {
+        "support a serialization round-trip via an ObjectMapper" {
+            val originalConfig = loadAdvisorConfig()
+            val rereadConfig = rereadAdvisorConfig(originalConfig)
+
+            val expectedGHConfig = originalConfig.gitHubDefects.shouldNotBeNull()
+            val actualGHConfig = rereadConfig.gitHubDefects.shouldNotBeNull()
+
+            actualGHConfig.endpointUrl shouldBe expectedGHConfig.endpointUrl
+            actualGHConfig.labelFilter shouldBe expectedGHConfig.labelFilter
+            actualGHConfig.maxNumberOfIssuesPerRepository shouldBe expectedGHConfig.maxNumberOfIssuesPerRepository
+            actualGHConfig.parallelRequests shouldBe expectedGHConfig.parallelRequests
+        }
+
+        "not serialize credentials" {
+            val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).gitHubDefects.shouldNotBeNull()
+
+            rereadConfig.token.shouldBeNull()
+        }
+    }
+
     "NexusIqConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
             val originalConfig = loadAdvisorConfig()
@@ -65,33 +92,6 @@ class AdvisorConfigurationTest : WordSpec({
             val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).vulnerableCode.shouldNotBeNull()
 
             rereadConfig.apiKey.shouldBeNull()
-        }
-    }
-
-    "GitHubDefectsConfiguration" should {
-        "support a serialization round-trip via an ObjectMapper" {
-            val originalConfig = loadAdvisorConfig()
-            val rereadConfig = rereadAdvisorConfig(originalConfig)
-
-            val expectedGHConfig = originalConfig.gitHubDefects.shouldNotBeNull()
-            val actualGHConfig = rereadConfig.gitHubDefects.shouldNotBeNull()
-
-            actualGHConfig.endpointUrl shouldBe expectedGHConfig.endpointUrl
-            actualGHConfig.labelFilter shouldBe expectedGHConfig.labelFilter
-            actualGHConfig.maxNumberOfIssuesPerRepository shouldBe expectedGHConfig.maxNumberOfIssuesPerRepository
-            actualGHConfig.parallelRequests shouldBe expectedGHConfig.parallelRequests
-        }
-
-        "not serialize credentials" {
-            val rereadConfig = rereadAdvisorConfig(loadAdvisorConfig()).gitHubDefects.shouldNotBeNull()
-
-            rereadConfig.token.shouldBeNull()
-        }
-    }
-
-    "generic advisor options" should {
-        "not be serialized as they might contain sensitive information" {
-            rereadAdvisorConfig(loadAdvisorConfig()).options.shouldBeNull()
         }
     }
 })
