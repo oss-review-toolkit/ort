@@ -60,7 +60,7 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
 /**
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
-class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : AdviceProvider(name) {
+class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
@@ -71,9 +71,9 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
 
     private val service by lazy {
         NexusIqService.create(
-            nexusIqConfig.serverUrl,
-            nexusIqConfig.username,
-            nexusIqConfig.password,
+            config.serverUrl,
+            config.username,
+            config.password,
             OkHttpClientHelper.buildClient {
                 readTimeout(READ_TIMEOUT)
             }
@@ -131,7 +131,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
     private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
         val references = mutableListOf<VulnerabilityReference>()
 
-        val browseUrl = URI("${nexusIqConfig.browseUrl}/assets/index.html#/vulnerabilities/$reference")
+        val browseUrl = URI("${config.browseUrl}/assets/index.html#/vulnerabilities/$reference")
         val nexusIqReference = VulnerabilityReference(browseUrl, scoringSystem(), severity.toString())
 
         references += nexusIqReference
@@ -149,7 +149,7 @@ class NexusIq(name: String, private val nexusIqConfig: NexusIqConfiguration) : A
         components: List<NexusIqService.Component>
     ): NexusIqService.ComponentDetailsWrapper =
         try {
-            logger.debug { "Querying component details from ${nexusIqConfig.serverUrl}." }
+            logger.debug { "Querying component details from ${config.serverUrl}." }
             service.getComponentDetails(NexusIqService.ComponentsWrapper(components))
         } catch (e: HttpException) {
             throw IOException(e)

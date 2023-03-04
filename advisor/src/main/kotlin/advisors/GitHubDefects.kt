@@ -80,7 +80,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * For these reasons, this advisor is more a reference implementation for ORT's defects model and not necessarily
  * suitable for production usage.
  */
-class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguration) : AdviceProvider(name) {
+class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdviceProvider(name) {
     companion object : Logging {
         /**
          * The default number of parallel requests executed by this advisor implementation. This value is used if the
@@ -100,19 +100,19 @@ class GitHubDefects(name: String, gitHubConfiguration: GitHubDefectsConfiguratio
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.DEFECTS))
 
     /** The filters to be applied to issue labels. */
-    private val labelFilters = gitHubConfiguration.labelFilter.toLabelFilters()
+    private val labelFilters = config.labelFilter.toLabelFilters()
 
     /** The maximum number of defects to retrieve. */
-    private val maxDefects = gitHubConfiguration.maxNumberOfIssuesPerRepository ?: Int.MAX_VALUE
+    private val maxDefects = config.maxNumberOfIssuesPerRepository ?: Int.MAX_VALUE
 
     /** The number of requests to be processed in parallel. */
-    private val parallelRequests = gitHubConfiguration.parallelRequests ?: DEFAULT_PARALLEL_REQUESTS
+    private val parallelRequests = config.parallelRequests ?: DEFAULT_PARALLEL_REQUESTS
 
     /** The service for accessing the GitHub GraphQL API. */
     private val service by lazy {
         GitHubService.create(
-            token = gitHubConfiguration.token.orEmpty(),
-            url = gitHubConfiguration.endpointUrl ?: GitHubService.ENDPOINT,
+            token = config.token.orEmpty(),
+            url = config.endpointUrl ?: GitHubService.ENDPOINT,
             client = HttpClient(OkHttp)
         )
     }
