@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.advisor.advisors.Osv
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.OsvConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
@@ -86,7 +86,7 @@ private fun identifierToPackage(id: String): Package =
     Package.EMPTY.copy(id = Identifier(id))
 
 private fun createOsv(): Osv =
-    Osv("OSV", AdvisorConfiguration())
+    Osv("OSV", OsvConfiguration(serverUrl = null))
 
 private fun Map<Identifier, List<AdvisorResult>>.patchTimes(): Map<Identifier, List<AdvisorResult>> =
     mapValues { (_, advisorResults) ->

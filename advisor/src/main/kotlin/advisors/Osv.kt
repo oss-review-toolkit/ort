@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
+import org.ossreviewtoolkit.model.config.OsvConfiguration
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.toUri
@@ -51,19 +52,19 @@ import us.springett.cvss.Cvss
 /**
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
  */
-class Osv(name: String, advisorConfiguration: AdvisorConfiguration) : AdviceProvider(name) {
+class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
         override fun create(config: AdvisorConfiguration) =
             // OSV does not require any dedicated configuration to be present.
-            Osv(type, config)
+            Osv(type, config.forProvider { osv })
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
 
     private val service = OsvService(
-        serverUrl = advisorConfiguration.osv?.serverUrl,
+        serverUrl = config.serverUrl,
         httpClient = OkHttpClientHelper.buildClient()
     )
 
