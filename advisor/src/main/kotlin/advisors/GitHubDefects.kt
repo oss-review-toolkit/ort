@@ -81,18 +81,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * suitable for production usage.
  */
 class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdviceProvider(name) {
-    companion object : Logging {
-        /**
-         * The default list of label to filter that typically indicate that an issue is not a defect.
-         */
-        val DEFAULT_LABEL_FILTER = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*")
-
-        /**
-         * The default number of parallel requests executed by this advisor implementation. This value is used if the
-         * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.
-         */
-        const val DEFAULT_PARALLEL_REQUESTS = 4
-    }
+    companion object : Logging
 
     class Factory : AdviceProviderFactory {
         override val type = "GitHubDefects"
@@ -105,10 +94,12 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
 
         private fun parseSpecificConfig(config: Map<String, String>) = GitHubDefectsConfiguration(
             token = config["token"].orEmpty(),
-            endpointUrl = config["endpointUrl"] ?: GitHubService.ENDPOINT,
-            labelFilter = config["labelFilter"]?.split(',')?.map { it.trim() } ?: DEFAULT_LABEL_FILTER,
+            endpointUrl = config["endpointUrl"] ?: GitHubDefectsConfiguration.DEFAULT_ENDPOINT,
+            labelFilter = config["labelFilter"]?.split(',')?.map { it.trim() }
+                ?: GitHubDefectsConfiguration.DEFAULT_LABEL_FILTER,
             maxNumberOfIssuesPerRepository = config["maxNumberOfIssuesPerRepository"]?.toIntOrNull() ?: Int.MAX_VALUE,
-            parallelRequests = config["parallelRequests"]?.toIntOrNull() ?: DEFAULT_PARALLEL_REQUESTS,
+            parallelRequests = config["parallelRequests"]?.toIntOrNull()
+                ?: GitHubDefectsConfiguration.DEFAULT_PARALLEL_REQUESTS,
         )
     }
 

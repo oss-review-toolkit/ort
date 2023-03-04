@@ -416,7 +416,7 @@ private val PACKAGE_ID =
  * Create a mock for the [GitHubService] and prepare the static factory method to return this mock, expecting the
  * provided [url].
  */
-private fun createGitHubServiceMock(url: String = GitHubService.ENDPOINT): GitHubService {
+private fun createGitHubServiceMock(url: String = GitHubDefectsConfiguration.DEFAULT_ENDPOINT): GitHubService {
     val service = mockk<GitHubService>()
 
     mockkObject(GitHubService)
@@ -436,10 +436,9 @@ private fun createAdvisor(
 ): GitHubDefects {
     val githubConfig = GitHubDefectsConfiguration(
         token = GITHUB_TOKEN,
-        endpointUrl = url ?: GitHubService.ENDPOINT,
-        labelFilter = labelFilter ?: GitHubDefects.DEFAULT_LABEL_FILTER,
-        maxNumberOfIssuesPerRepository = maxDefectsCount ?: Int.MAX_VALUE,
-        parallelRequests = GitHubDefects.DEFAULT_PARALLEL_REQUESTS
+        endpointUrl = url ?: GitHubDefectsConfiguration.DEFAULT_ENDPOINT,
+        labelFilter = labelFilter ?: GitHubDefectsConfiguration.DEFAULT_LABEL_FILTER,
+        maxNumberOfIssuesPerRepository = maxDefectsCount ?: Int.MAX_VALUE
     )
 
     val advisorConfig = AdvisorConfiguration(gitHubDefects = githubConfig)

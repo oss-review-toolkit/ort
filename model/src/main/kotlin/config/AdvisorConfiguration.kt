@@ -57,7 +57,7 @@ data class GitHubDefectsConfiguration(
      * official GitHub GraphQL API.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val endpointUrl: String,
+    val endpointUrl: String = DEFAULT_ENDPOINT,
 
     /**
      * A list with labels to be used for filtering GitHub issues. With GitHub's data model for issues, it is not
@@ -80,14 +80,14 @@ data class GitHubDefectsConfiguration(
      * (see https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#about-default-labels)
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val labelFilter: List<String>,
+    val labelFilter: List<String> = DEFAULT_LABEL_FILTER,
 
     /**
      * The maximum number of defects that are retrieved from a single repository. If a repository contains more
      * issues, only this number is returned (the newest ones). Popular libraries hosted on GitHub can really have a
      * large number of issues; therefore, it makes sense to restrict the result set produced by this advisor.
      */
-    val maxNumberOfIssuesPerRepository: Int,
+    val maxNumberOfIssuesPerRepository: Int = Int.MAX_VALUE,
 
     /**
      * Determines the number of requests to the GitHub GraphQL API that are executed in parallel. Rather than querying
@@ -95,8 +95,26 @@ data class GitHubDefectsConfiguration(
      * execution times for this advisor implementation. If unspecified, a default value for parallel executions as
      * defined in the _GitHubDefects_ class is used.
      */
-    val parallelRequests: Int
-)
+    val parallelRequests: Int = DEFAULT_PARALLEL_REQUESTS
+) {
+    companion object {
+        /**
+         * The default endpoint URL for accessing the GitHub GraphQL API.
+         */
+        const val DEFAULT_ENDPOINT = "https://api.github.com/graphql"
+
+        /**
+         * The default list of label to filter that typically indicate that an issue is not a defect.
+         */
+        val DEFAULT_LABEL_FILTER = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*")
+
+        /**
+         * The default number of parallel requests executed by this advisor implementation. This value is used if the
+         * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.
+         */
+        const val DEFAULT_PARALLEL_REQUESTS = 4
+    }
+}
 
 /**
  * The configuration for Nexus IQ as a security vulnerability provider.
@@ -111,7 +129,7 @@ data class NexusIqConfiguration(
      * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val browseUrl: String,
+    val browseUrl: String = serverUrl,
 
     /**
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
