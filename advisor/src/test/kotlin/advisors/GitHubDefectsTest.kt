@@ -434,9 +434,14 @@ private fun createAdvisor(
     labelFilter: List<String>? = null,
     maxDefectsCount: Int? = null
 ): GitHubDefects {
-    val githubConfig = GitHubDefectsConfiguration(token = GITHUB_TOKEN, endpointUrl = url)
-        .run { labelFilter?.let { copy(labelFilter = it) } ?: this }
-        .run { maxDefectsCount?.let { copy(maxNumberOfIssuesPerRepository = it) } ?: this }
+    val githubConfig = GitHubDefectsConfiguration(
+        token = GITHUB_TOKEN,
+        endpointUrl = url ?: GitHubService.ENDPOINT,
+        labelFilter = labelFilter ?: GitHubDefects.DEFAULT_LABEL_FILTER,
+        maxNumberOfIssuesPerRepository = maxDefectsCount ?: Int.MAX_VALUE,
+        parallelRequests = GitHubDefects.DEFAULT_PARALLEL_REQUESTS
+    )
+
     val advisorConfig = AdvisorConfiguration(gitHubDefects = githubConfig)
 
     val factory = GitHubDefects.Factory()

@@ -19,52 +19,27 @@
 
 package org.ossreviewtoolkit.advisor
 
-import java.util.ServiceLoader
-
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.model.config.Options
+import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
-import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
-import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 /**
- * A common interface for use with [ServiceLoader] that all [AbstractAdviceProviderFactory] classes need to
- * implement.
+ * The extension point for [AdviceProvider]s.
  */
-interface AdviceProviderFactory : Plugin {
+interface AdviceProviderFactory : ConfigurablePluginFactory<AdviceProvider> {
+    companion object {
+        val ALL = Plugin.getAll<AdviceProviderFactory>()
+    }
+
+    override fun create(config: Map<String, String>): AdviceProvider = create(parseConfig(config))
+
     /**
-     * Create an [AdviceProvider] using the specified [config].
+     * Create a new [AdviceProvider] with [config].
      */
     fun create(config: AdvisorConfiguration): AdviceProvider
-}
-
-/**
- * A generic factory class for an [AdviceProvider].
- */
-abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
-    override val type: String
-) : AdviceProviderFactory {
-    abstract override fun create(config: AdvisorConfiguration): T
 
     /**
-     * For providers that require configuration, return the typed configuration dedicated to provider [T] or throw if it
-     * does not exist.
+     * Parse the [config] map into an object.
      */
-    protected fun <T : Any> AdvisorConfiguration.forProvider(select: AdvisorConfiguration.() -> T?): T =
-        requireNotNull(select()) {
-            "No configuration for '$type' found in '${ortConfigDirectory.resolve(ORT_CONFIG_FILENAME)}'."
-        }
-
-    /**
-     * Return a map with options for the [AdviceProvider] managed by this factory or an empty map if no options are
-     * available.
-     */
-    protected fun AdvisorConfiguration.providerOptions(): Options =
-        options.orEmpty()[type].orEmpty()
-
-    /**
-     * Return the provider's name here to allow Clikt to display something meaningful when listing the advisors which
-     * are enabled by default via their factories.
-     */
-    override fun toString() = type
+    fun parseConfig(config: Map<String, String>): AdvisorConfiguration
 }

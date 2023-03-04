@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
-import org.ossreviewtoolkit.utils.common.Plugin
 import org.ossreviewtoolkit.utils.ort.Environment
 
 /**
@@ -45,12 +44,7 @@ class Advisor(
     private val providerFactories: List<AdviceProviderFactory>,
     private val config: AdvisorConfiguration
 ) {
-    companion object : Logging {
-        /**
-         * All [advice provider factories][AdviceProviderFactory] available in the classpath, associated by their names.
-         */
-        val ALL by lazy { Plugin.getAll<AdviceProviderFactory>() }
-    }
+    companion object : Logging
 
     /**
      * Query the [advice providers][providerFactories] and add the result to the provided [ortResult]. Excluded packages

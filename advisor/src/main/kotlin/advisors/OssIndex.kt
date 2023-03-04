@@ -25,8 +25,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -54,8 +54,18 @@ private const val BULK_REQUEST_SIZE = 128
 class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
-    class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
-        override fun create(config: AdvisorConfiguration) = OssIndex(type, config.forProvider { ossIndex })
+    class Factory : AdviceProviderFactory {
+        override val type = "OssIndex"
+
+        override fun create(config: AdvisorConfiguration) =
+            OssIndex(type, config.ossIndex ?: parseSpecificConfig(emptyMap()))
+
+        override fun parseConfig(config: Map<String, String>) =
+            AdvisorConfiguration(ossIndex = parseSpecificConfig(config))
+
+        private fun parseSpecificConfig(config: Map<String, String>) = OssIndexConfiguration(
+            serverUrl = config["serverUrl"]
+        )
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

@@ -22,8 +22,8 @@ package org.ossreviewtoolkit.advisor.advisors
 import java.net.URI
 import java.time.Instant
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService
 import org.ossreviewtoolkit.clients.vulnerablecode.VulnerableCodeService.PackagesWrapper
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -49,8 +49,19 @@ private const val BULK_REQUEST_SIZE = 100
  * [VulnerableCode][https://github.com/nexB/vulnerablecode] instance.
  */
 class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : AdviceProvider(name) {
-    class Factory : AbstractAdviceProviderFactory<VulnerableCode>("VulnerableCode") {
-        override fun create(config: AdvisorConfiguration) = VulnerableCode(type, config.forProvider { vulnerableCode })
+    class Factory : AdviceProviderFactory {
+        override val type = "VulnerableCode"
+
+        override fun create(config: AdvisorConfiguration) =
+            VulnerableCode(type, config.vulnerableCode ?: parseSpecificConfig(emptyMap()))
+
+        override fun parseConfig(config: Map<String, String>) =
+            AdvisorConfiguration(vulnerableCode = parseSpecificConfig(config))
+
+        private fun parseSpecificConfig(config: Map<String, String>) = VulnerableCodeConfiguration(
+            serverUrl = config["serverUrl"],
+            apiKey = config["apiKey"]
+        )
     }
 
     /**

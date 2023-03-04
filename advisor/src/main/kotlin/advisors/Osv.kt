@@ -26,8 +26,8 @@ import kotlinx.serialization.json.contentOrNull
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.osv.Ecosystem
 import org.ossreviewtoolkit.clients.osv.OsvService
 import org.ossreviewtoolkit.clients.osv.Severity
@@ -55,10 +55,18 @@ import us.springett.cvss.Cvss
 class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
-    class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
+    class Factory : AdviceProviderFactory {
+        override val type = "OSV"
+
         override fun create(config: AdvisorConfiguration) =
-            // OSV does not require any dedicated configuration to be present.
-            Osv(type, config.forProvider { osv })
+            Osv(type, config.osv ?: parseSpecificConfig(emptyMap()))
+
+        override fun parseConfig(config: Map<String, String>) =
+            AdvisorConfiguration(osv = parseSpecificConfig(config))
+
+        private fun parseSpecificConfig(config: Map<String, String>) = OsvConfiguration(
+            serverUrl = config["serverUrl"]
+        )
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

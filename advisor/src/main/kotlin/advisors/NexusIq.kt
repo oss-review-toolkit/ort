@@ -26,8 +26,8 @@ import java.time.Instant
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
@@ -63,8 +63,21 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
 class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
     companion object : Logging
 
-    class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
-        override fun create(config: AdvisorConfiguration) = NexusIq(type, config.forProvider { nexusIq })
+    class Factory : AdviceProviderFactory {
+        override val type = "NexusIQ"
+
+        override fun create(config: AdvisorConfiguration) =
+            NexusIq(type, config.nexusIq ?: parseSpecificConfig(emptyMap()))
+
+        override fun parseConfig(config: Map<String, String>) =
+            AdvisorConfiguration(nexusIq = parseSpecificConfig(config))
+
+        private fun parseSpecificConfig(config: Map<String, String>) = NexusIqConfiguration(
+            serverUrl = config.getValue("serverUrl"),
+            browseUrl = config["browseUrl"] ?: config.getValue("serverUrl"),
+            username = config["username"],
+            password = config["password"]
+        )
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

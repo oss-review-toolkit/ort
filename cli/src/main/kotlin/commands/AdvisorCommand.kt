@@ -39,6 +39,7 @@ import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.runBlocking
 
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.SeverityStats
@@ -98,9 +99,10 @@ class AdvisorCommand : OrtCommand(
 
     private val providerFactories by option(
         "--advisors", "-a",
-        help = "The comma-separated advisors to use, any of ${Advisor.ALL.keys}."
+        help = "The comma-separated advisors to use, any of ${AdviceProviderFactory.ALL.keys}."
     ).convert { name ->
-        Advisor.ALL[name] ?: throw BadParameterValue("Advisor '$name' is not one of ${Advisor.ALL.keys}.")
+        AdviceProviderFactory.ALL[name]
+            ?: throw BadParameterValue("Advisor '$name' is not one of ${AdviceProviderFactory.ALL.keys}.")
     }.split(",").required()
 
     private val skipExcluded by option(

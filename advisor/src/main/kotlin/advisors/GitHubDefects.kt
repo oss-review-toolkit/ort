@@ -33,8 +33,8 @@ import kotlinx.coroutines.withContext
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
+import org.ossreviewtoolkit.advisor.AdviceProviderFactory
 import org.ossreviewtoolkit.clients.github.DateTime
 import org.ossreviewtoolkit.clients.github.GitHubService
 import org.ossreviewtoolkit.clients.github.Paging
@@ -83,14 +83,33 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdviceProvider(name) {
     companion object : Logging {
         /**
+         * The default list of label to filter that typically indicate that an issue is not a defect.
+         */
+        val DEFAULT_LABEL_FILTER = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*")
+
+        /**
          * The default number of parallel requests executed by this advisor implementation. This value is used if the
          * corresponding property in the configuration is unspecified. It is chosen rather arbitrarily.
          */
         const val DEFAULT_PARALLEL_REQUESTS = 4
     }
 
-    class Factory : AbstractAdviceProviderFactory<GitHubDefects>("GitHubDefects") {
-        override fun create(config: AdvisorConfiguration) = GitHubDefects(type, config.forProvider { gitHubDefects })
+    class Factory : AdviceProviderFactory {
+        override val type = "GitHubDefects"
+
+        override fun create(config: AdvisorConfiguration) =
+            GitHubDefects(type, config.gitHubDefects ?: parseSpecificConfig(emptyMap()))
+
+        override fun parseConfig(config: Map<String, String>) =
+            AdvisorConfiguration(gitHubDefects = parseSpecificConfig(config))
+
+        private fun parseSpecificConfig(config: Map<String, String>) = GitHubDefectsConfiguration(
+            token = config["token"].orEmpty(),
+            endpointUrl = config["endpointUrl"] ?: GitHubService.ENDPOINT,
+            labelFilter = config["labelFilter"]?.split(',')?.map { it.trim() } ?: DEFAULT_LABEL_FILTER,
+            maxNumberOfIssuesPerRepository = config["maxNumberOfIssuesPerRepository"]?.toIntOrNull() ?: Int.MAX_VALUE,
+            parallelRequests = config["parallelRequests"]?.toIntOrNull() ?: DEFAULT_PARALLEL_REQUESTS,
+        )
     }
 
     /**
@@ -103,16 +122,16 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
     private val labelFilters = config.labelFilter.toLabelFilters()
 
     /** The maximum number of defects to retrieve. */
-    private val maxDefects = config.maxNumberOfIssuesPerRepository ?: Int.MAX_VALUE
+    private val maxDefects = config.maxNumberOfIssuesPerRepository
 
     /** The number of requests to be processed in parallel. */
-    private val parallelRequests = config.parallelRequests ?: DEFAULT_PARALLEL_REQUESTS
+    private val parallelRequests = config.parallelRequests
 
     /** The service for accessing the GitHub GraphQL API. */
     private val service by lazy {
         GitHubService.create(
-            token = config.token.orEmpty(),
-            url = config.endpointUrl ?: GitHubService.ENDPOINT,
+            token = config.token,
+            url = config.endpointUrl,
             client = HttpClient(OkHttp)
         )
     }

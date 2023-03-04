@@ -50,14 +50,14 @@ data class GitHubDefectsConfiguration(
      * The access token to authenticate against the GitHub GraphQL endpoint.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val token: String?,
+    val token: String,
 
     /**
      * The URL of the GraphQL endpoint to be accessed by the service. If undefined, default is the endpoint of the
      * official GitHub GraphQL API.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val endpointUrl: String? = null,
+    val endpointUrl: String,
 
     /**
      * A list with labels to be used for filtering GitHub issues. With GitHub's data model for issues, it is not
@@ -80,14 +80,14 @@ data class GitHubDefectsConfiguration(
      * (see https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels#about-default-labels)
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val labelFilter: List<String> = listOf("!duplicate", "!enhancement", "!invalid", "!question", "*"),
+    val labelFilter: List<String>,
 
     /**
      * The maximum number of defects that are retrieved from a single repository. If a repository contains more
      * issues, only this number is returned (the newest ones). Popular libraries hosted on GitHub can really have a
      * large number of issues; therefore, it makes sense to restrict the result set produced by this advisor.
      */
-    val maxNumberOfIssuesPerRepository: Int? = null,
+    val maxNumberOfIssuesPerRepository: Int,
 
     /**
      * Determines the number of requests to the GitHub GraphQL API that are executed in parallel. Rather than querying
@@ -95,7 +95,7 @@ data class GitHubDefectsConfiguration(
      * execution times for this advisor implementation. If unspecified, a default value for parallel executions as
      * defined in the _GitHubDefects_ class is used.
      */
-    val parallelRequests: Int? = null
+    val parallelRequests: Int
 )
 
 /**
@@ -111,7 +111,7 @@ data class NexusIqConfiguration(
      * A URL to use as a base for browsing vulnerability details. Defaults to the server URL.
      */
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    val browseUrl: String = serverUrl,
+    val browseUrl: String,
 
     /**
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
