@@ -29,17 +29,7 @@ import org.ossreviewtoolkit.model.config.SendMailConfiguration
 /**
  * Notification module that provides a configured email client.
  */
-class MailNotifier(config: SendMailConfiguration) {
-    private val client: HtmlEmail = HtmlEmail()
-
-    init {
-        client.hostName = config.hostName
-        client.setSmtpPort(config.port)
-        client.setAuthenticator(DefaultAuthenticator(config.username, config.password))
-        client.isSSLOnConnect = config.useSsl
-        client.setFrom(config.fromAddress)
-    }
-
+class MailNotifier(private val config: SendMailConfiguration) {
     /**
      * Send an HTML email with the given [subject], [message] and [charset] encoding to all the [receivers]. If
      * [htmlEmail] is set to false, the mail is still sent as HTML, but the [message] is interpreted as plain-text.
@@ -52,13 +42,21 @@ class MailNotifier(config: SendMailConfiguration) {
         charset: Charset = Charsets.UTF_8,
         vararg receivers: String
     ) {
-        client.subject = subject
-        client.setMsg(message)
-        client.setCharset(charset.name())
-        client.addTo(*receivers)
+        val email = HtmlEmail().apply {
+            hostName = config.hostName
+            setSmtpPort(config.port)
+            setAuthenticator(DefaultAuthenticator(config.username, config.password))
+            isSSLOnConnect = config.useSsl
+            setFrom(config.fromAddress)
 
-        if (htmlEmail) client.setHtmlMsg(message) else client.setTextMsg(message)
+            setSubject(subject)
+            setMsg(message)
+            setCharset(charset.name())
+            addTo(*receivers)
+        }
 
-        client.send()
+        if (htmlEmail) email.setHtmlMsg(message) else email.setTextMsg(message)
+
+        email.send()
     }
 }
