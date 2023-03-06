@@ -40,6 +40,10 @@ class MailNotifier(config: SendMailConfiguration) {
         client.setFrom(config.fromAddress)
     }
 
+    /**
+     * Send an HTML email with the given [subject], [message] and [charset] encoding to all the [receivers]. If
+     * [htmlEmail] is set to false, the mail is still sent as HTML, but the [message] is interpreted as plain-text.
+     */
     @Suppress("UNUSED") // This is intended to be used by notification script implementations.
     fun sendMail(
         subject: String,
