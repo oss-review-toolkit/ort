@@ -72,6 +72,8 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+private const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
+
 private const val GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
@@ -98,6 +100,7 @@ private val flutterAbsolutePath = flutterHome.resolve("bin")
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [GRADLE_VERSION].
+ * - *pubDependenciesOnly*: Only scan Pub dependencies and skip native ones for Android (Gradle) and iOS (CocoaPods).
  */
 @Suppress("TooManyFunctions")
 class Pub(
@@ -128,12 +131,19 @@ class Pub(
     private val reader = PubCacheReader()
     private val gradleDefinitionFilesForPubDefinitionFiles = mutableMapOf<File, Set<File>>()
 
+    private val pubDependenciesOnly = options[OPTION_PUB_DEPENDENCIES_ONLY].toBoolean()
+
     override fun transformVersion(output: String) = output.removePrefix("Dart SDK version: ").substringBefore(' ')
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        if (gradleFactory != null) {
+        if (pubDependenciesOnly) {
+            logger.info {
+                "Only analyzing Pub dependencies, skipping additional package managers for Flutter packages " +
+                    "(Gradle for Android, CocoaPods for iOS dependencies)."
+            }
+        } else if (gradleFactory != null) {
             gradleDefinitionFilesForPubDefinitionFiles.clear()
             gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
 
@@ -209,6 +219,10 @@ class Pub(
     override fun findPackageManagerDependencies(
         managedFiles: Map<PackageManager, List<File>>
     ): PackageManagerDependencyResult {
+        if (pubDependenciesOnly) {
+            return PackageManagerDependencyResult(mustRunBefore = emptySet(), mustRunAfter = emptySet())
+        }
+
         // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
         // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
         // the path to the Android SDK.
@@ -246,28 +260,32 @@ class Pub(
 
             val parsePackagesResult = parseInstalledPackages(lockFile, labels, workingDir)
 
-            val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
+            if (!pubDependenciesOnly) {
+                if (gradleFactory != null) {
+                    val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles
+                        .getValue(definitionFile)
+                        .toList()
 
-            if (gradleFactory != null) {
-                if (gradleDefinitionFiles.isNotEmpty()) {
-                    val gradleDependencies = gradleDefinitionFiles.map {
-                        PackageManagerDependencyHandler.createPackageManagerDependency(
-                            packageManager = gradleFactory.type,
-                            definitionFile = VersionControlSystem.getPathInfo(it).path,
-                            scope = "releaseCompileClasspath",
-                            linkage = PackageLinkage.PROJECT_STATIC
-                        )
-                    }.toSortedSet()
+                    if (gradleDefinitionFiles.isNotEmpty()) {
+                        val gradleDependencies = gradleDefinitionFiles.map {
+                            PackageManagerDependencyHandler.createPackageManagerDependency(
+                                packageManager = gradleFactory.type,
+                                definitionFile = VersionControlSystem.getPathInfo(it).path,
+                                scope = "releaseCompileClasspath",
+                                linkage = PackageLinkage.PROJECT_STATIC
+                            )
+                        }.toSortedSet()
 
-                    scopes += Scope("android", gradleDependencies)
+                        scopes += Scope("android", gradleDependencies)
+                    }
+                } else {
+                    createAndLogIssue(
+                        source = managerName,
+                        message = "The Gradle package manager plugin was not found in the runtime classpath of " +
+                                "ORT. Gradle project analysis will be disabled.",
+                        severity = Severity.WARNING
+                    )
                 }
-            } else {
-                createAndLogIssue(
-                    source = managerName,
-                    message = "The Gradle package manager plugin was not found in the runtime classpath of ORT. " +
-                            "Gradle project analysis will be disabled.",
-                    severity = Severity.WARNING
-                )
             }
 
             packages += parsePackagesResult.packages
@@ -358,7 +376,7 @@ class Pub(
                 // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods
                 // dependencies for each pub dependency manually, as the analyzer will only scan the
                 // projectRoot, but not the packages in the ".pub-cache" directory.
-                if (containsFlutter) {
+                if (containsFlutter && !pubDependenciesOnly) {
                     scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { resultAndroid ->
                         packageReferences += packageInfo.toReference(
                             dependencies = resultAndroid.project.scopes
@@ -604,7 +622,7 @@ class Pub(
         // If the project contains Flutter, we need to trigger the analyzer for Gradle and CocoaPods dependencies for
         // each Pub dependency manually, as the analyzer will only analyze the projectRoot, but not the packages in
         // the ".pub-cache" directory.
-        if (containsFlutter) {
+        if (containsFlutter && !pubDependenciesOnly) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
                 // As this package contains flutter, trigger Gradle manually for it.
                 scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
