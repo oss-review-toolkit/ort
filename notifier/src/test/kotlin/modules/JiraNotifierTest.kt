@@ -45,7 +45,7 @@ import io.mockk.verify
 import java.net.URI
 
 class JiraNotifierTest : WordSpec({
-    "createIssue" should {
+    "createIssue()" should {
         "succeed for valid input" {
             val project = createProject()
             val basicIssue = BasicIssue(URI(""), "$PROJECT_KEY-1", 1L)
@@ -203,7 +203,7 @@ class JiraNotifierTest : WordSpec({
         }
     }
 
-    "changeAssignee" should {
+    "changeAssignee()" should {
         "succeed for valid input" {
             val restClient = createRestClient {
                 every { issueClient.updateIssue(any(), any()) } returns createVoidPromise()
@@ -229,7 +229,7 @@ class JiraNotifierTest : WordSpec({
         }
     }
 
-    "changeState" should {
+    "changeState()" should {
         "succeed for valid input" {
             val state = "Bug"
             val issue = createIssue(id = 1, summary = "Ticket summary")
