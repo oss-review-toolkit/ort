@@ -27,12 +27,11 @@ import io.kotest.matchers.sequences.shouldContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
-
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
+import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -41,7 +40,7 @@ class OpossumReporterFunTest : WordSpec({
         val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
         val reportStr = generateReport(ortResult).normalizeLineBreaks()
 
-        "create JSON.GZ output containing an expected string" {
+        "create '.opossum' output containing an 'input.json' with expected string" {
             reportStr shouldContain "fileCreationDate"
         }
 
@@ -67,10 +66,8 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     )
 
     val outputDir = createTestTempDir()
+    val outputFile = OpossumReporter().generateReport(input, outputDir, emptyMap()).single()
+    outputFile.unpackZip(outputDir)
 
-    val outputFile = OpossumReporter().generateReport(input, outputDir, emptyMap()).single().inputStream()
-
-    return GzipCompressorInputStream(outputFile)
-        .bufferedReader()
-        .use { it.readText() }
+    return outputDir.resolve("input.json").readText()
 }
