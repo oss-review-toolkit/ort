@@ -23,17 +23,13 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include
 import com.fasterxml.jackson.databind.json.JsonMapper
 
 import java.io.File
-import java.io.FileOutputStream
 import java.time.LocalDateTime
 import java.util.SortedMap
 import java.util.SortedSet
 import java.util.UUID
-import java.util.zip.Deflater
 
 import kotlin.math.min
 
-import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream
-import org.apache.commons.compress.compressors.gzip.GzipParameters
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -50,6 +46,8 @@ import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.common.packZip
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.getLicenseText
@@ -501,17 +499,10 @@ class OpossumReporter : Reporter {
     override val type = "Opossum"
 
     private fun writeReport(outputFile: File, opossumInput: OpossumInput) {
-        FileOutputStream(outputFile, /* append = */ false).use { outputStream ->
-            val gzipParameters = GzipParameters().apply {
-                compressionLevel = Deflater.BEST_COMPRESSION
-            }
-
-            GzipCompressorOutputStream(outputStream, gzipParameters).bufferedWriter().use { gzipWriter ->
-                JsonMapper()
-                    .setSerializationInclusion(Include.NON_NULL)
-                    .writeValue(gzipWriter, opossumInput.toJson())
-            }
-        }
+        val jsonFile = createOrtTempDir().resolve("input.json")
+        JsonMapper().setSerializationInclusion(Include.NON_NULL).writeValue(jsonFile, opossumInput.toJson())
+        jsonFile.packZip(outputFile)
+        jsonFile.delete()
     }
 
     fun generateOpossumInput(
@@ -561,7 +552,7 @@ class OpossumReporter : Reporter {
     ): List<File> {
         val maxDepth = options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
         val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
-        val outputFile = outputDir.resolve("opossum.input.json.gz")
+        val outputFile = outputDir.resolve("report.opossum")
 
         writeReport(outputFile, opossumInput)
 
