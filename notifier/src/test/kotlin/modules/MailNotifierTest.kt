@@ -72,12 +72,10 @@ class MailNotifierTest : WordSpec({
                 headerLines shouldContain "From: no-reply@oss-review-toolkit.org"
                 headerLines shouldContain "To: no-reply@oss-review-toolkit.org"
                 headerLines shouldContain "Subject: ORT notifier subject"
+                headerLines shouldContain "Content-Type: text/plain; charset=UTF-8"
 
                 val bodyLines = GreenMailUtil.getBody(this).lines()
-                bodyLines shouldContain "Content-Type: text/plain; charset=UTF-8"
                 bodyLines shouldContain "<strong>ORT notifier message</strong>"
-                bodyLines shouldContain "Content-Type: text/html; charset=UTF-8"
-                bodyLines shouldContain "<html><body><pre><strong>ORT notifier message</strong></pre></body></html>"
             }
         }
 

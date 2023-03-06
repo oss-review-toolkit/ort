@@ -19,10 +19,19 @@
 
 package org.ossreviewtoolkit.notifier.modules
 
-import java.nio.charset.Charset
+import jakarta.mail.Authenticator
+import jakarta.mail.Message
+import jakarta.mail.MessagingException
+import jakarta.mail.PasswordAuthentication
+import jakarta.mail.Session
+import jakarta.mail.Transport
+import jakarta.mail.internet.InternetAddress
+import jakarta.mail.internet.MimeBodyPart
+import jakarta.mail.internet.MimeMessage
+import jakarta.mail.internet.MimeMultipart
 
-import org.apache.commons.mail.DefaultAuthenticator
-import org.apache.commons.mail.HtmlEmail
+import java.nio.charset.Charset
+import java.util.Properties
 
 import org.ossreviewtoolkit.model.config.SendMailConfiguration
 
@@ -30,9 +39,24 @@ import org.ossreviewtoolkit.model.config.SendMailConfiguration
  * Notification module that provides a configured email client.
  */
 class MailNotifier(private val config: SendMailConfiguration) {
+    private val props = Properties().apply {
+        put("mail.smtp.host", config.hostName)
+        put("mail.smtp.port", config.port.toString())
+        put("mail.smtp.starttls.enable", config.useSsl)
+        put("mail.smtp.auth", "true")
+    }
+
+    private val session = Session.getInstance(
+        props,
+        object : Authenticator() {
+            override fun getPasswordAuthentication() = PasswordAuthentication(config.username, config.password)
+        }
+    )
+
     /**
-     * Send an HTML email with the given [subject], [message] and [charset] encoding to all the [receivers]. If
-     * [htmlEmail] is set to false, the mail is still sent as HTML, but the [message] is interpreted as plain-text.
+     * Send an email with the given [subject], [message] and [charset] encoding to all the [receivers]. If [htmlEmail]
+     * is set to false, a single-part plain-text email is sent. Otherwise, a multi-part HTML email with an additional
+     * plain-text part as a fallback is sent. Throws a [MessagingException] if the email could not be sent.
      */
     @Suppress("UNUSED") // This is intended to be used by notification script implementations.
     fun sendMail(
@@ -42,21 +66,26 @@ class MailNotifier(private val config: SendMailConfiguration) {
         charset: Charset = Charsets.UTF_8,
         vararg receivers: String
     ) {
-        val email = HtmlEmail().apply {
-            hostName = config.hostName
-            setSmtpPort(config.port)
-            setAuthenticator(DefaultAuthenticator(config.username, config.password))
-            isSSLOnConnect = config.useSsl
-            setFrom(config.fromAddress)
-
+        val email = MimeMessage(session).apply {
+            setFrom(InternetAddress(config.fromAddress))
+            setRecipients(Message.RecipientType.TO, receivers.joinToString())
             setSubject(subject)
-            setMsg(message)
-            setCharset(charset.name())
-            addTo(*receivers)
+
+            if (htmlEmail) {
+                val htmlBody = MimeBodyPart().apply {
+                    setText(message, charset.name(), "html")
+                }
+
+                val textBody = MimeBodyPart().apply {
+                    setText(message, charset.name(), "plain")
+                }
+
+                setContent(MimeMultipart(htmlBody, textBody))
+            } else {
+                setText(message, charset.name())
+            }
         }
 
-        if (htmlEmail) email.setHtmlMsg(message) else email.setTextMsg(message)
-
-        email.send()
+        Transport.send(email)
     }
 }
