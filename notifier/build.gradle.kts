@@ -49,5 +49,6 @@ dependencies {
         exclude("org.slf4j", "slf4j-log4j12")
     }
 
+    testImplementation(libs.greenmail)
     testImplementation(libs.mockk)
 }
