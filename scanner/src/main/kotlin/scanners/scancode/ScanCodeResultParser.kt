@@ -33,7 +33,9 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -41,6 +43,8 @@ import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 import org.semver4j.Semver
+
+const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 2
 
 internal val SCANCODE_TIMESTAMP_FORMATTER: DateTimeFormatter =
     DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
@@ -101,6 +105,22 @@ internal fun generateSummary(
 ): ScanSummary {
     val header = result["headers"].single()
 
+    val issues = mutableListOf<Issue>()
+    val outputFormatVersion = header["output_format_version"]?.textValue()?.let { Semver(it) }
+    if (outputFormatVersion != null) {
+        val maxSupportedVersion = Semver.coerce(MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION.toString())
+        val diff = outputFormatVersion.diff(maxSupportedVersion)
+
+        if (outputFormatVersion > maxSupportedVersion && diff == Semver.VersionDiff.MAJOR) {
+            issues += ScanCode.createAndLogIssue(
+                source = ScanCode.SCANNER_NAME,
+                message = "The output format version $outputFormatVersion exceeds the supported major version " +
+                        "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
+                severity = Severity.WARNING
+            )
+        }
+    }
+
     val startTimestamp = header["start_timestamp"].textValue()
     val endTimestamp = header["end_timestamp"].textValue()
 
@@ -113,7 +133,7 @@ internal fun generateSummary(
         packageVerificationCode = verificationCode,
         licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions).toSortedSet(),
         copyrightFindings = getCopyrightFindings(result).toSortedSet(),
-        issues = getIssues(result)
+        issues = issues + getIssues(result)
     )
 }
 

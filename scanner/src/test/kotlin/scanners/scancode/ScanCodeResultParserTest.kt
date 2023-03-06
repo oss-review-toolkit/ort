@@ -28,16 +28,21 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldBeIn
+import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.file.beRelative
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import java.io.File
+import java.time.Instant
 
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
@@ -208,6 +213,48 @@ class ScanCodeResultParserTest : FreeSpec({
                         location = TextLocation("Downloads/wasi-0.10.2+wasi-snapshot-preview1/LICENSE-MIT", 1, 23),
                         score = 100.0f
                     )
+                )
+            }
+        }
+
+        "for output format 3.0.0 should" - {
+            "create an issue about an unsupported version" {
+                val headers = """
+                    {
+                      "headers": [
+                        {
+                          "tool_name": "scancode-toolkit",
+                          "tool_version": "some future version",
+                          "options": {
+                            "input": [
+                              "."
+                            ],
+                            "--copyright": true,
+                            "--info": true,
+                            "--json-pp": "scancode.json",
+                            "--license": true,
+                            "--processes": "3",
+                            "--strip-root": true,
+                            "--timeout": "300.0"
+                          },
+                          "start_timestamp": "2022-12-12T065635.691832",
+                          "end_timestamp": "2022-12-12T065637.770792",
+                          "output_format_version": "3.0.0"
+                        }
+                      ]
+                    }
+                """.trimIndent()
+
+                val result = jsonMapper.readTree(headers)
+
+                val summary = generateSummary(SpdxConstants.NONE, result)
+
+                summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldHaveSingleElement Issue(
+                    timestamp = Instant.EPOCH,
+                    source = ScanCode.SCANNER_NAME,
+                    message = "The output format version 3.0.0 exceeds the supported major version " +
+                            "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
+                    severity = Severity.WARNING
                 )
             }
         }
