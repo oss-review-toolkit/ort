@@ -14,7 +14,6 @@ asciidoctorj = "2.5.7"
 asciidoctorjPdf = "2.3.4"
 clikt = "3.5.2"
 commonsCompress = "1.22"
-commonsEmail = "1.5"
 cvssCalculator = "1.4.1"
 cyclonedx = "7.3.2"
 diskLruCache = "2.0.2"
@@ -27,6 +26,7 @@ greenmail = "2.0.0"
 hikari = "5.0.1"
 hoplite = "2.7.2"
 jackson = "2.14.2"
+jakartaMail = "2.0.1"
 jgit = "6.4.0.202211300538-r"
 jiraRestClient = "5.2.4"
 jruby = "9.4.1.0"
@@ -79,7 +79,6 @@ asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciido
 asciidoctorjPdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
-commonsEmail = { module = "org.apache.commons:commons-email", version.ref = "commonsEmail" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }
 cyclonedx = { module = "org.cyclonedx:cyclonedx-core-java", version.ref = "cyclonedx" }
 detektApi = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detektPlugin" }
@@ -101,6 +100,7 @@ jacksonDataformatXml = { module = "com.fasterxml.jackson.dataformat:jackson-data
 jacksonDataformatYaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jacksonDatatypeJsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
 jacksonModuleKotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin", version.ref = "jackson" }
+jakartaMail = { module = "com.sun.mail:jakarta.mail", version.ref = "jakartaMail" }
 jgit = { module = "org.eclipse.jgit:org.eclipse.jgit", version.ref = "jgit" }
 jgitSshApacheAgent = { module = "org.eclipse.jgit:org.eclipse.jgit.ssh.apache.agent", version.ref = "jgit" }
 jiraRestClientApi = { module = "com.atlassian.jira:jira-rest-java-client-api", version.ref = "jiraRestClient" }
