@@ -55,7 +55,8 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
     companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<OssIndex>("OssIndex") {
-        override fun create(config: AdvisorConfiguration) = OssIndex(type, config.forProvider { ossIndex })
+        override fun create(config: AdvisorConfiguration) =
+            OssIndex(type, config.forProvider { ossIndex ?: OssIndexConfiguration() })
     }
 
     override val details = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))

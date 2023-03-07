@@ -58,7 +58,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
         override fun create(config: AdvisorConfiguration) =
             // OSV does not require any dedicated configuration to be present.
-            Osv(type, config.forProvider { osv })
+            Osv(type, config.forProvider { osv ?: OsvConfiguration() })
     }
 
     override val details: AdvisorDetails = AdvisorDetails(providerName, enumSetOf(AdvisorCapability.VULNERABILITIES))
