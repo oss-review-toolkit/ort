@@ -394,7 +394,13 @@ class Pub(
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION."
             }
 
-            Gradle("Gradle", androidDir, analyzerConfig, repoConfig, GRADLE_VERSION)
+            val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
+                "Gradle",
+                "gradleVersion",
+                GRADLE_VERSION
+            )
+
+            Gradle("Gradle", androidDir, gradleAnalyzerConfig, repoConfig)
                 .resolveDependencies(listOf(definitionFile), labels).run {
                     projectResults.getValue(definitionFile).map { result ->
                         val project = result.project.withResolvedScopes(dependencyGraph)
