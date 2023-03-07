@@ -1,0 +1,614 @@
+---
+project:
+  id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:core:1.0"
+  definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project/core/build.gradle.kts"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project/core"
+  homepage_url: ""
+  scopes:
+  - name: "compileClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "implementationDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "kotlinCompilerClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.7.20"
+      dependencies:
+      - id: "Maven:net.java.dev.jna:jna:5.6.0"
+      - id: "Maven:org.jetbrains.intellij.deps:trove4j:1.0.20200330"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-daemon-embeddable:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "kotlinCompilerPluginClasspathMain"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+              dependencies:
+              - id: "Maven:org.jetbrains:annotations:13.0"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "kotlinCompilerPluginClasspathTest"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+              dependencies:
+              - id: "Maven:org.jetbrains:annotations:13.0"
+              - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "kotlinKlibCommonizerClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.7.20"
+        dependencies:
+        - id: "Maven:net.java.dev.jna:jna:5.6.0"
+        - id: "Maven:org.jetbrains.intellij.deps:trove4j:1.0.20200330"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-daemon-embeddable:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+            dependencies:
+            - id: "Maven:org.jetbrains:annotations:13.0"
+            - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+          dependencies:
+          - id: "Maven:org.jetbrains:annotations:13.0"
+          - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+        dependencies:
+        - id: "Maven:org.jetbrains:annotations:13.0"
+        - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "runtimeClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "testCompileClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "testImplementationDependenciesMetadata"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  - name: "testRuntimeClasspath"
+    dependencies:
+    - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+      dependencies:
+      - id: "Maven:org.jetbrains:annotations:13.0"
+      - id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+packages:
+- id: "Maven:net.java.dev.jna:jna:5.6.0"
+  purl: "pkg:maven/net.java.dev.jna/jna@5.6.0"
+  authors:
+  - "Matthias Bläsing"
+  - "Timothy Wall"
+  declared_licenses:
+  - "Apache License v2.0"
+  - "LGPL, version 2.1"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0 OR LGPL-2.1-only"
+    mapped:
+      Apache License v2.0: "Apache-2.0"
+      LGPL, version 2.1: "LGPL-2.1-only"
+  description: "Java Native Access"
+  homepage_url: "https://github.com/java-native-access/jna"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/net/java/dev/jna/jna/5.6.0/jna-5.6.0.jar"
+    hash:
+      value: "330f2244e9030119ab3030fc3fededc86713d9cc"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/net/java/dev/jna/jna/5.6.0/jna-5.6.0-sources.jar"
+    hash:
+      value: "754dbdc797e1decd2cb1f1a26104e2460c414768"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/java-native-access/jna"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/java-native-access/jna.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains:annotations:13.0"
+  purl: "pkg:maven/org.jetbrains/annotations@13.0"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "A set of annotations used for code inspection support and code documentation."
+  homepage_url: "http://www.jetbrains.org"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0.jar"
+    hash:
+      value: "919f0dfe192fb4e063e7dacadee7f8bb9a2672a9"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/annotations/13.0/annotations-13.0-sources.jar"
+    hash:
+      value: "5991ca87ef1fb5544943d9abc5a9a37583fabe03"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/intellij-community.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/intellij-community.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.intellij.deps:trove4j:1.0.20200330"
+  purl: "pkg:maven/org.jetbrains.intellij.deps/trove4j@1.0.20200330"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "GNU LESSER GENERAL PUBLIC LICENSE 2.1"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.1-only"
+    mapped:
+      GNU LESSER GENERAL PUBLIC LICENSE 2.1: "LGPL-2.1-only"
+  description: "Fork of trove4j library used in IntelliJ Platform."
+  homepage_url: "https://github.com/JetBrains/intellij-deps-trove4j"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/intellij/deps/trove4j/1.0.20200330/trove4j-1.0.20200330.jar"
+    hash:
+      value: "3afb14d5f9ceb459d724e907a21145e8ff394f02"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/intellij/deps/trove4j/1.0.20200330/trove4j-1.0.20200330-sources.jar"
+    hash:
+      value: "5fc2da70caaebed24734161c6c33648a15396917"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "git://github.com/JetBrains/intellij-deps-trove4j.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/intellij-deps-trove4j.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-compiler-embeddable:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-compiler-embeddable@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Compiler (embeddable)"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.7.20/kotlin-compiler-embeddable-1.7.20.jar"
+    hash:
+      value: "8db18559a581dd2c36ddfd5046af145650f5b126"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-compiler-embeddable/1.7.20/kotlin-compiler-embeddable-1.7.20-sources.jar"
+    hash:
+      value: "f5c5882a804210d420dfc79620946ac9c7758503"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-daemon-embeddable:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-daemon-embeddable@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Daemon (for using with embeddable compiler)"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-daemon-embeddable/1.7.20/kotlin-daemon-embeddable-1.7.20.jar"
+    hash:
+      value: "1e24355adad8d529d75d5b19eab55484057431ba"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-daemon-embeddable/1.7.20/kotlin-daemon-embeddable-1.7.20-sources.jar"
+    hash:
+      value: "ff4d7412cc8b4757b24f7b06cbddc47579bc8ddb"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-klib-commonizer-embeddable:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-klib-commonizer-embeddable@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin KLIB Library Commonizer (for using with embeddable compiler)"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/1.7.20/kotlin-klib-commonizer-embeddable-1.7.20.jar"
+    hash:
+      value: "aacfcd32be9b403a37e8435a4b08edfba241ea59"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-klib-commonizer-embeddable/1.7.20/kotlin-klib-commonizer-embeddable-1.7.20-sources.jar"
+    hash:
+      value: "5b8f86fea035328fc9e8c660773037a3401ce25f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-reflect:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-reflect@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Full Reflection Library"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-reflect/1.7.20/kotlin-reflect-1.7.20.jar"
+    hash:
+      value: "12b2501e33bb6373e8e347c86d85481863629381"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-reflect/1.7.20/kotlin-reflect-1.7.20-sources.jar"
+    hash:
+      value: "855e2c1a097a0a845d382eed1136e2f650d4a7ea"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-script-runtime@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Script Runtime"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-script-runtime/1.7.20/kotlin-script-runtime-1.7.20.jar"
+    hash:
+      value: "0bcd1cc6f865e632550357fcc59f5ffd532615a8"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-script-runtime/1.7.20/kotlin-script-runtime-1.7.20-sources.jar"
+    hash:
+      value: "abc7ecfd92ea677825899180807736acdfbb89b6"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-scripting-common:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-scripting-common@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Scripting Common"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-common/1.7.20/kotlin-scripting-common-1.7.20.jar"
+    hash:
+      value: "88ed4f0a92a48e12d2d4596f26967400e390648c"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-common/1.7.20/kotlin-scripting-common-1.7.20-sources.jar"
+    hash:
+      value: "9a3d8c1f7657df2adf3fc58a32a82a6ef5b535c1"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-scripting-compiler-embeddable@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Scripting Compiler Plugin for embeddable compiler"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/1.7.20/kotlin-scripting-compiler-embeddable-1.7.20.jar"
+    hash:
+      value: "a7f1cf58156c0e066411f4f7fd26cb8c63e11aca"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-compiler-embeddable/1.7.20/kotlin-scripting-compiler-embeddable-1.7.20-sources.jar"
+    hash:
+      value: "cf914e97219efe1f1db1964a30c16190c9b4ac6f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-scripting-compiler-impl-embeddable@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Compiler Infrastructure for Scripting for embeddable compiler"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/1.7.20/kotlin-scripting-compiler-impl-embeddable-1.7.20.jar"
+    hash:
+      value: "9a40e21c6710aca281217963ef137c7df945e1bc"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-compiler-impl-embeddable/1.7.20/kotlin-scripting-compiler-impl-embeddable-1.7.20-sources.jar"
+    hash:
+      value: "691afe60d8554ac40e881a374bcf2feb17a9e779"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-scripting-jvm:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-scripting-jvm@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Scripting Jvm"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-jvm/1.7.20/kotlin-scripting-jvm-1.7.20.jar"
+    hash:
+      value: "c79de17329ea8f7c7d200063145d5694ca3f6786"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-scripting-jvm/1.7.20/kotlin-scripting-jvm-1.7.20-sources.jar"
+    hash:
+      value: "644b7c49cea4581e4a1d1bcb4b50a86640055c17"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Standard Library for JVM"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.7.20/kotlin-stdlib-1.7.20.jar"
+    hash:
+      value: "726594ea9ba2beb2ee113647fefa9a10f9fabe52"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib/1.7.20/kotlin-stdlib-1.7.20-sources.jar"
+    hash:
+      value: "e31859676e9dfc3dda0d830fdf759eaf237bd86d"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.jetbrains.kotlin:kotlin-stdlib-common:1.7.20"
+  purl: "pkg:maven/org.jetbrains.kotlin/kotlin-stdlib-common@1.7.20"
+  authors:
+  - "JetBrains"
+  declared_licenses:
+  - "The Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache License, Version 2.0: "Apache-2.0"
+  description: "Kotlin Common Standard Library"
+  homepage_url: "https://kotlinlang.org/"
+  binary_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.20/kotlin-stdlib-common-1.7.20.jar"
+    hash:
+      value: "e15351bdaf9fa06f009be5da7a202e4184f00ae3"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://jcenter.bintray.com/org/jetbrains/kotlin/kotlin-stdlib-common/1.7.20/kotlin-stdlib-common-1.7.20-sources.jar"
+    hash:
+      value: "0bbe07d9cf0399e1ec51de98f86c22da6aee0d5b"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/JetBrains/kotlin.git"
+    revision: ""
+    path: ""

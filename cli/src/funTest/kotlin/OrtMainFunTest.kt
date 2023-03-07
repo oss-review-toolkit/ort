@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.utils.test.shouldNotBeNull
  * A test for the main entry point of the application.
  */
 class OrtMainFunTest : StringSpec() {
-    private val projectDir = File("../analyzer/src/funTest/assets/projects/synthetic")
+    private val projectDir = File("../plugins/package-managers/gradle/src/funTest/assets/projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

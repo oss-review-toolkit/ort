@@ -1,0 +1,19 @@
+---
+project:
+  id: "Gradle:org.gradle.kotlin.dsl.samples.multiproject:multi-kotlin-project:1.0"
+  definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project/build.gradle.kts"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/multi-kotlin-project"
+  homepage_url: ""
+  scopes: []
+packages: []
