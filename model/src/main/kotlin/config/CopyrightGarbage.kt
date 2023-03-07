@@ -27,6 +27,11 @@ data class CopyrightGarbage(
      * A set of literal strings that identify garbage Copyright findings.
      */
     val items: Set<String> = emptySet()
-)
+) {
+    /**
+     * Return whether the [statement] is garbage.
+     */
+    operator fun contains(statement: String): Boolean = statement in items
+}
 
 fun CopyrightGarbage?.orEmpty(): CopyrightGarbage = this ?: CopyrightGarbage()
