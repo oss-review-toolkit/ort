@@ -109,9 +109,8 @@ internal fun generateSummary(
     val outputFormatVersion = header["output_format_version"]?.textValue()?.let { Semver(it) }
     if (outputFormatVersion != null) {
         val maxSupportedVersion = Semver.coerce(MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION.toString())
-        val diff = outputFormatVersion.diff(maxSupportedVersion)
 
-        if (outputFormatVersion > maxSupportedVersion && diff == Semver.VersionDiff.MAJOR) {
+        if (outputFormatVersion > maxSupportedVersion && !outputFormatVersion.isApiCompatible(maxSupportedVersion)) {
             issues += ScanCode.createAndLogIssue(
                 source = ScanCode.SCANNER_NAME,
                 message = "The output format version $outputFormatVersion exceeds the supported major version " +
