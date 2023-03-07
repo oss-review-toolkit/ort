@@ -76,6 +76,8 @@ import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescription
 import org.ossreviewtoolkit.clients.fossid.runScan
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
@@ -104,12 +106,15 @@ class FossIdTest : WordSpec({
         // Here a static function of the companion object is mocked therefore `mockkobject` needs to be used.
         // See https://lifesaver.codes/answer/cannot-mockkstatic-for-kotlin-companion-object-static-method-136
         mockkObject(FossIdRestService)
+        mockkObject(VersionControlSystem)
 
         every { FossIdRestService.create(any()) } returns createServiceMock()
+        every { VersionControlSystem.forUrl(any()) } returns createVersionControlSystemMock()
     }
 
     afterTest {
         unmockkObject(FossIdRestService)
+        unmockkObject(VersionControlSystem)
     }
 
     "version()" should {
@@ -165,7 +170,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
 
@@ -195,7 +200,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDeleteScan(scanCode)
 
             coEvery { service.downloadFromGit(USER, API_KEY, scanCode) } returns
@@ -228,7 +233,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
 
@@ -259,7 +264,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2, ignoredRange = 2..3)
 
@@ -289,7 +294,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2)
 
@@ -321,7 +326,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, pendingRange = 4..5)
 
@@ -347,7 +352,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode, status = 0, error = "Project does not exist")
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
             coEvery { service.createProject(USER, API_KEY, projectCode, projectCode) } returns
@@ -372,7 +377,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
             coEvery {
@@ -414,7 +419,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode)
 
@@ -462,7 +467,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.SCANNING, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .expectDeleteScan(scanCode)
                 .mockFiles(scanCode)
@@ -507,7 +512,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.SCANNING, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
 
             val fossId = createFossId(config)
@@ -553,10 +558,13 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -565,6 +573,150 @@ class FossIdTest : WordSpec({
                     scanCode,
                     mapOf(
                         *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan for a branch (no fallback)" {
+            val branchName = "aTestBranch"
+
+            val projectCode = projectCode(PROJECT)
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode, comment = branchName)
+
+            val originCode2 = "originalScanCode2"
+            val scan2 = createScan(vcsInfo.url, vcsInfo.revision, scanId = 2, scanCode = originCode2)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan, scan2))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, emptyList())
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan for a branch (fallback to default branch)" {
+            val branchName = "aTestBranch"
+
+            val projectCode = projectCode(PROJECT)
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode, comment = "branch A")
+
+            val originCode2 = "originalScanCode2"
+            val scan2 = createScan(vcsInfo.url, vcsInfo.revision, scanId = 2, scanCode = originCode2)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan, scan2))
+                .expectCheckScanStatus(originCode2, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode2, emptyList())
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode2),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+            }
+        }
+
+        "create a delta scan for a branch (fallback to latest scan)" {
+            val branchName = "aTestBranch"
+
+            val projectCode = projectCode(PROJECT)
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode, comment = "branch A")
+
+            val originCode2 = "originalScanCode2"
+            val scan2 = createScan(vcsInfo.url, vcsInfo.revision, originCode2, scanId = 2, comment = "branch B")
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan, scan2))
+                .expectCheckScanStatus(originCode2, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, branchName)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode2, emptyList())
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to branchName)
+            )
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, branchName)
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode2),
                         "auto_identification_detect_declaration" to "0",
                         "auto_identification_detect_copyright" to "0"
                     )
@@ -594,10 +746,13 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            fossId.scan(createPackage(createIdentifier(index = 1), vcsInfo))
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
 
             coVerify {
-                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
                 service.downloadFromGit(USER, API_KEY, scanCode)
                 service.checkDownloadStatus(USER, API_KEY, scanCode)
                 service.runScan(
@@ -632,7 +787,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, emptyList())
                 .expectCheckScanStatus(scanCode, ScanStatus.NEW, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
             coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
@@ -686,7 +841,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode1)
                 .expectListScans(projectCode1, emptyList())
                 .expectCheckScanStatus(scanCode1, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode1, scanCode1, vcsInfo1)
+                .expectCreateScan(projectCode1, scanCode1, vcsInfo1, "")
                 .expectDownload(scanCode1)
                 .mockFiles(scanCode1, markedRange = 1..2)
 
@@ -697,7 +852,7 @@ class FossIdTest : WordSpec({
             service.expectProjectRequest(projectCode3)
                 .expectListScans(projectCode3, emptyList())
                 .expectCheckScanStatus(scanCode3, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode3, scanCode3, vcsInfo3)
+                .expectCreateScan(projectCode3, scanCode3, vcsInfo3, "")
                 .expectDownload(scanCode3)
                 .mockFiles(scanCode3, markedRange = 1..2)
 
@@ -756,7 +911,7 @@ class FossIdTest : WordSpec({
                 .expectListScans(projectCode, scans)
                 .expectCheckScanStatus(recentScan.code!!, ScanStatus.FINISHED)
                 .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .expectListIgnoreRules(recentScan.code!!, emptyList())
                 .mockFiles(scanCode)
@@ -796,7 +951,7 @@ class FossIdTest : WordSpec({
                 .expectProjectRequest(projectCode)
                 .expectListScans(projectCode, listOf(scan))
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
-                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
                 .mockFiles(scanCode, identifiedRange = 1..2, markedRange = 1..2)
 
@@ -885,7 +1040,7 @@ private fun createNamingProviderMock(): FossIdNamingProvider {
         projectCode(firstArg())
     }
 
-    every { provider.createScanCode(any(), any()) } answers {
+    every { provider.createScanCode(any(), any(), any()) } answers {
         scanCode(firstArg(), secondArg(), index = counter.incrementAndGet())
     }
 
@@ -902,6 +1057,18 @@ private fun createServiceMock(): FossIdServiceWithVersion {
     coEvery { service.version } returns FOSSID_VERSION
 
     return service
+}
+
+/**
+ * Create a mock for the [VersionControlSystem]. The mock is prepared to always return 'master' for the default branch
+ * name.
+ */
+private fun createVersionControlSystemMock(): VersionControlSystem {
+    val vcs = mockk<Git>()
+
+    coEvery { vcs.getDefaultBranchName(any()) } returns "master"
+
+    return vcs
 }
 
 /**
@@ -928,13 +1095,20 @@ private fun createScanDescription(state: ScanStatus): UnversionedScanDescription
 /**
  * Create a mock [Scan] with the given properties.
  */
-private fun createScan(url: String, revision: String, scanCode: String, scanId: Int = SCAN_ID): Scan {
+private fun createScan(
+    url: String,
+    revision: String,
+    scanCode: String,
+    scanId: Int = SCAN_ID,
+    comment: String = "master"
+): Scan {
     val scan = mockk<Scan>()
     every { scan.gitRepoUrl } returns url
     every { scan.gitBranch } returns revision
     every { scan.code } returns scanCode
     every { scan.id } returns scanId
     every { scan.isArchived } returns null
+    every { scan.comment } returns comment
     return scan
 }
 
@@ -1146,10 +1320,11 @@ private fun FossIdServiceWithVersion.expectDownload(scanCode: String): FossIdSer
 private fun FossIdServiceWithVersion.expectCreateScan(
     projectCode: String,
     scanCode: String,
-    vcsInfo: VcsInfo
+    vcsInfo: VcsInfo,
+    comment: String = "master"
 ): FossIdServiceWithVersion {
     coEvery {
-        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision)
+        createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, comment)
     } returns MapResponseBody(status = 1, data = mapOf("scan_id" to SCAN_ID.toString()))
     return this
 }
@@ -1199,5 +1374,5 @@ private fun FossIdServiceWithVersion.mockFiles(
 /**
  * Trigger a FossID scan of the given [package][pkg].
  */
-private fun FossId.scan(pkg: Package): ScanResult =
-    scanPackage(pkg, ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE))
+private fun FossId.scan(pkg: Package, labels: Map<String, String> = emptyMap()): ScanResult =
+scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE))
