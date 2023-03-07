@@ -118,6 +118,8 @@ class Pub(
         ) = Pub(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val gradleFactory = ALL["Gradle"]
+
     private data class ParsePackagesResult(
         val packages: Map<Identifier, Package>,
         val issues: List<Issue>
@@ -131,18 +133,22 @@ class Pub(
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.10,)")
 
     override fun beforeResolution(definitionFiles: List<File>) {
-        gradleDefinitionFilesForPubDefinitionFiles.clear()
-        gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
+        if (gradleFactory != null) {
+            gradleDefinitionFilesForPubDefinitionFiles.clear()
+            gradleDefinitionFilesForPubDefinitionFiles += findGradleDefinitionFiles(definitionFiles)
 
-        logger.info { "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)." }
+            logger.info {
+                "Found ${gradleDefinitionFilesForPubDefinitionFiles.values.flatten().size} Gradle project(s)."
+            }
 
-        gradleDefinitionFilesForPubDefinitionFiles.forEach { (flutterDefinitionFile, gradleDefinitionFiles) ->
-            if (gradleDefinitionFiles.isEmpty()) return@forEach
+            gradleDefinitionFilesForPubDefinitionFiles.forEach { (flutterDefinitionFile, gradleDefinitionFiles) ->
+                if (gradleDefinitionFiles.isEmpty()) return@forEach
 
-            logger.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
+                logger.info { "- ${flutterDefinitionFile.relativeTo(analysisRoot)}" }
 
-            gradleDefinitionFiles.forEach { gradleDefinitionFile ->
-                logger.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
+                gradleDefinitionFiles.forEach { gradleDefinitionFile ->
+                    logger.info { "  - ${gradleDefinitionFile.relativeTo(analysisRoot)}" }
+                }
             }
         }
 
@@ -179,7 +185,7 @@ class Pub(
     private fun findGradleDefinitionFiles(pubDefinitionFiles: Collection<File>): Map<File, Set<File>> {
         val result = mutableMapOf<File, MutableSet<File>>()
 
-        val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOf(Gradle.Factory())).values.flatten()
+        val gradleDefinitionFiles = findManagedFiles(analysisRoot, setOfNotNull(gradleFactory)).values.flatten()
 
         val pubDefinitionFilesWithFlutterSdkSorted = pubDefinitionFiles.filter {
             containsFlutterSdk(it.parentFile)
@@ -206,7 +212,7 @@ class Pub(
         // If there are any Gradle definition files which seem to be associated to a Pub Flutter project, it is likely
         // that Pub needs to run before Gradle, because Pub generates the required local.properties file which contains
         // the path to the Android SDK.
-        val gradle = managedFiles.keys.find { it.managerName == Gradle.Factory().type }
+        val gradle = managedFiles.keys.find { it.managerName == gradleFactory?.type }
         val mustRunBefore = if (gradle != null && findGradleDefinitionFiles(managedFiles.getValue(this)).isNotEmpty()) {
             setOf(gradle.managerName)
         } else {
@@ -242,18 +248,26 @@ class Pub(
 
             val gradleDefinitionFiles = gradleDefinitionFilesForPubDefinitionFiles.getValue(definitionFile).toList()
 
-            if (gradleDefinitionFiles.isNotEmpty()) {
-                val gradleName = Gradle.Factory().type
-                val gradleDependencies = gradleDefinitionFiles.map {
-                    PackageManagerDependencyHandler.createPackageManagerDependency(
-                        packageManager = gradleName,
-                        definitionFile = VersionControlSystem.getPathInfo(it).path,
-                        scope = "releaseCompileClasspath",
-                        linkage = PackageLinkage.PROJECT_STATIC
-                    )
-                }.toSortedSet()
+            if (gradleFactory != null) {
+                if (gradleDefinitionFiles.isNotEmpty()) {
+                    val gradleDependencies = gradleDefinitionFiles.map {
+                        PackageManagerDependencyHandler.createPackageManagerDependency(
+                            packageManager = gradleFactory.type,
+                            definitionFile = VersionControlSystem.getPathInfo(it).path,
+                            scope = "releaseCompileClasspath",
+                            linkage = PackageLinkage.PROJECT_STATIC
+                        )
+                    }.toSortedSet()
 
-                scopes += Scope("android", gradleDependencies)
+                    scopes += Scope("android", gradleDependencies)
+                }
+            } else {
+                createAndLogIssue(
+                    source = managerName,
+                    message = "The Gradle package manager plugin was not found in the runtime classpath of ORT. " +
+                            "Gradle project analysis will be disabled.",
+                    severity = Severity.WARNING
+                )
             }
 
             packages += parsePackagesResult.packages
@@ -391,7 +405,7 @@ class Pub(
         val definitionFile = androidDir.resolve("build.gradle")
 
         // Check for build.gradle failed, no Gradle scan required.
-        if (!definitionFile.isFile) return emptyList()
+        if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
             val pubGradleVersion = options["gradleVersion"] ?: GRADLE_VERSION
@@ -406,13 +420,13 @@ class Pub(
                 pubGradleVersion
             )
 
-            Gradle("Gradle", androidDir, gradleAnalyzerConfig, repoConfig)
-                .resolveDependencies(listOf(definitionFile), labels).run {
-                    projectResults.getValue(definitionFile).map { result ->
-                        val project = result.project.withResolvedScopes(dependencyGraph)
-                        result.copy(project = project, packages = sharedPackages)
-                    }
+            val gradle = gradleFactory.create(androidDir, gradleAnalyzerConfig, repoConfig)
+            gradle.resolveDependencies(listOf(definitionFile), labels).run {
+                projectResults.getValue(definitionFile).map { result ->
+                    val project = result.project.withResolvedScopes(dependencyGraph)
+                    result.copy(project = project, packages = sharedPackages)
                 }
+            }
         }
     }
 
