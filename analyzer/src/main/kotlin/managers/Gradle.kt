@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
@@ -70,13 +71,16 @@ private const val JAVA_MAX_HEAP_SIZE_VALUE = "8g"
 
 /**
  * The [Gradle](https://gradle.org/) package manager for Java.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *gradleVersion*: The version of Gradle to use when analyzing projects. Defaults to the version defined in the
+ *   Gradle wrapper properties.
  */
 class Gradle(
     name: String,
     analysisRoot: File,
     analyzerConfig: AnalyzerConfiguration,
-    repoConfig: RepositoryConfiguration,
-    private val gradleVersion: String? = null
+    repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
     companion object : Logging
 
@@ -169,6 +173,7 @@ class Gradle(
 
         val gradleConnector = GradleConnector.newConnector()
 
+        val gradleVersion = options["gradleVersion"]
         if (gradleVersion != null) {
             gradleConnector.useGradleVersion(gradleVersion)
         }
