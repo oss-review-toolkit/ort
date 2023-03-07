@@ -1,13 +1,9 @@
 ---
 project:
-  id: "PIP::Example-App-with-requirements-pip:2.4.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip/requirements.txt"
-  declared_licenses:
-  - "MIT License"
-  declared_licenses_processed:
-    spdx_expression: "MIT"
-    mapped:
-      MIT License: "MIT"
+  id: "PIP::python-inspector:<REPLACE_REVISION>"
+  definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/python-inspector/requirements.txt"
+  declared_licenses: []
+  declared_licenses_processed: {}
   vcs:
     type: ""
     url: ""
@@ -18,7 +14,7 @@ project:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: "https://example.org/app"
+  homepage_url: ""
   scopes:
   - name: "install"
     dependencies:

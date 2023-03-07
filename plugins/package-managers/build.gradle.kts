@@ -28,7 +28,7 @@ javaPlatform {
 }
 
 dependencies {
-    // TODO: Add plugin projects as API dependencies here.
+    api(project(":plugins:package-managers:python-package-manager"))
 }
 
 configure<PublishingExtension> {

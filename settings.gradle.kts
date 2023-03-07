@@ -45,6 +45,7 @@ include(":plugins:package-curation-providers:file")
 include(":plugins:package-curation-providers:ort-config")
 include(":plugins:package-curation-providers:sw360")
 include(":plugins:package-managers")
+include(":plugins:package-managers:python")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
@@ -68,6 +69,8 @@ project(":plugins:package-curation-providers:clearly-defined").name = "clearly-d
 project(":plugins:package-curation-providers:file").name = "file-package-curation-provider"
 project(":plugins:package-curation-providers:ort-config").name = "ort-config-package-curation-provider"
 project(":plugins:package-curation-providers:sw360").name = "sw360-package-curation-provider"
+
+project(":plugins:package-managers:python").name = "python-package-manager"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"

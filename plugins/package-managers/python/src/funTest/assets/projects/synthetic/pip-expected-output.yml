@@ -1,9 +1,13 @@
 ---
 project:
-  id: "Pipenv::pipenv-from-pipenv:<REPLACE_REVISION>"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pipenv/requirements-from-pipenv.txt"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  id: "PIP::Example-App-with-requirements-pip:2.4.0"
+  definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/pip/requirements.txt"
+  declared_licenses:
+  - "MIT License"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+    mapped:
+      MIT License: "MIT"
   vcs:
     type: ""
     url: ""
@@ -14,7 +18,7 @@ project:
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
-  homepage_url: ""
+  homepage_url: "https://example.org/app"
   scopes:
   - name: "install"
     dependencies:
@@ -22,7 +26,7 @@ project:
       dependencies:
       - id: "PyPI::click:6.7"
       - id: "PyPI::itsdangerous:0.24"
-      - id: "PyPI::jinja2:2.10.1"
+      - id: "PyPI::jinja2:2.11.3"
         dependencies:
         - id: "PyPI::markupsafe:1.0"
       - id: "PyPI::werkzeug:0.15.3"
@@ -124,30 +128,28 @@ packages:
     url: "https://github.com/mitsuhiko/itsdangerous.git"
     revision: ""
     path: ""
-- id: "PyPI::jinja2:2.10.1"
-  purl: "pkg:pypi/jinja2@2.10.1"
+- id: "PyPI::jinja2:2.11.3"
+  purl: "pkg:pypi/jinja2@2.11.3"
   authors:
   - "Armin Ronacher <armin.ronacher@active-4.com>"
   declared_licenses:
-  - "BSD"
   - "BSD License"
+  - "BSD-3-Clause"
   declared_licenses_processed:
     spdx_expression: "BSD-3-Clause"
     mapped:
-      BSD: "BSD-3-Clause"
       BSD License: "BSD-3-Clause"
-  description: "A small but fast and easy to use stand-alone template engine written\
-    \ in pure python."
-  homepage_url: "http://jinja.pocoo.org/"
+  description: "A very fast and expressive template engine."
+  homepage_url: "https://palletsprojects.com/p/jinja/"
   binary_artifact:
-    url: "https://files.pythonhosted.org/packages/1d/e7/fd8b501e7a6dfe492a433deb7b9d833d39ca74916fa8bc63dd1a4947a671/Jinja2-2.10.1-py2.py3-none-any.whl"
+    url: "https://files.pythonhosted.org/packages/7e/c2/1eece8c95ddbc9b1aeb64f5783a9e07a286de42191b7204d67b7496ddf35/Jinja2-2.11.3-py2.py3-none-any.whl"
     hash:
-      value: "14dd6caf1527abb21f08f86c784eac40853ba93edb79552aa1e4b8aef1b61c7b"
+      value: "03e47ad063331dd6a3f04a43eddca8a966a26ba0c5b7207a9a9e4e08f1b29419"
       algorithm: "SHA-256"
   source_artifact:
-    url: "https://files.pythonhosted.org/packages/93/ea/d884a06f8c7f9b7afbc8138b762e80479fb17aedbbe2b06515a12de9378d/Jinja2-2.10.1.tar.gz"
+    url: "https://files.pythonhosted.org/packages/4f/e7/65300e6b32e69768ded990494809106f87da1d436418d5f1367ed3966fd7/Jinja2-2.11.3.tar.gz"
     hash:
-      value: "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013"
+      value: "a6d58433de0ae800347cab1fa3043cebbabe8baa9d29e668f1c768cb87a333c6"
       algorithm: "SHA-256"
   vcs:
     type: ""
@@ -155,8 +157,8 @@ packages:
     revision: ""
     path: ""
   vcs_processed:
-    type: ""
-    url: ""
+    type: "Git"
+    url: "https://github.com/pallets/jinja.git"
     revision: ""
     path: ""
 - id: "PyPI::markupsafe:1.0"
