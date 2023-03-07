@@ -130,3 +130,5 @@ items:
 - "VuSS vaa (c) Ac"
 - "Xz eaaeuyATNRU (c) Ijr"
 - "Y2oex (c) A1"
+patterns:
+- "^\\(c\\) https?://stackoverflow\\.com/questions/.+$"

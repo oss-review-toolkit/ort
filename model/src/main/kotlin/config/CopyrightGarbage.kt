@@ -26,12 +26,20 @@ data class CopyrightGarbage(
     /**
      * A set of literal strings that identify garbage Copyright findings.
      */
-    val items: Set<String> = emptySet()
+    val items: Set<String> = emptySet(),
+
+    /**
+     * A set of [Regex] patterns that identify garbage Copyright findings.
+     */
+    val patterns: Set<String> = emptySet()
 ) {
+    private val regexes by lazy { patterns.map { it.toRegex() } }
+
     /**
      * Return whether the [statement] is garbage.
      */
-    operator fun contains(statement: String): Boolean = statement in items
+    operator fun contains(statement: String): Boolean =
+        statement in items || regexes.any { it.matches(statement) }
 }
 
 fun CopyrightGarbage?.orEmpty(): CopyrightGarbage = this ?: CopyrightGarbage()
