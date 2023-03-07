@@ -112,11 +112,7 @@ class NpmFunTest : WordSpec() {
                     path = vcsPath
                 )
 
-                patchActualResult(
-                    result.toYaml(),
-                    // Deal with wrapping depending on the lockfile name length.
-                    custom = mapOf("so\\\n    \\ supplemental metadata" to "\\\n    so supplemental metadata")
-                ) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe expectedResult
             }
 
             "show an error if no lockfile is present" {
@@ -170,11 +166,7 @@ class NpmFunTest : WordSpec() {
                     path = vcsPath
                 )
 
-                patchActualResult(
-                    result.toYaml(),
-                    // Deal with wrapping depending on the lockfile name length.
-                    custom = mapOf("so\\\n    \\ supplemental metadata" to "\\\n    so supplemental metadata")
-                ) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe expectedResult
             }
         }
     }

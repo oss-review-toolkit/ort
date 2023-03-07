@@ -7770,11 +7770,22 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "urix@0.1.0: Please see https://github.com/lydell/urix#deprecated\nresolve-url@0.2.1:\
-    \ https://github.com/lydell/resolve-url#deprecated\nchokidar@1.7.0: Chokidar 2\
-    \ will break on node v14+. Upgrade to chokidar 3 with 15x less dependencies.\n\
-    core-js@2.6.12: core-js@<3.3 is no longer maintained and not recommended for usage\
-    \ due to the number of issues. Because of the V8 engine whims, feature detection\
-    \ in old core-js versions could cause a slowdown up to 100x even if nothing is\
-    \ polyfilled. Please, upgrade your dependencies to the actual version of core-js."
+  message: "deprecated chokidar@1.7.0: Chokidar 2 will break on node v14+. Upgrade\
+    \ to chokidar 3 with 15x less dependencies."
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated core-js@2.6.12: core-js@<3.3 is no longer maintained and not\
+    \ recommended for usage due to the number of issues. Because of the V8 engine\
+    \ whims, feature detection in old core-js versions could cause a slowdown up to\
+    \ 100x even if nothing is polyfilled. Please, upgrade your dependencies to the\
+    \ actual version of core-js."
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated"
   severity: "WARNING"

@@ -5151,13 +5151,33 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "The package-lock.json file was created with an old version of npm,\nso\
-    \ supplemental metadata must be fetched from the registry.\nThis is a one-time\
-    \ fix-up, please be patient...\ngulp-header@1.8.12: Removed event-stream from\
-    \ gulp-header\nurix@0.1.0: Please see https://github.com/lydell/urix#deprecated\n\
-    resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated\nsource-map-resolve@0.5.3:\
-    \ See https://github.com/lydell/source-map-resolve#deprecated\nsource-map-url@0.4.0:\
-    \ See https://github.com/lydell/source-map-url#deprecated\nmkdirp@0.5.1: Legacy\
-    \ versions of mkdirp are no longer supported. Please update to mkdirp 1.x. (Note\
-    \ that the API surface has changed to use Promises in 1.x.)"
+  message: "The package-lock.json file was created with an old version of npm, so\
+    \ supplemental metadata must be fetched from the registry. This is a one-time\
+    \ fix-up, please be patient..."
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated gulp-header@1.8.12: Removed event-stream from gulp-header"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated urix@0.1.0: Please see https://github.com/lydell/urix#deprecated"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated resolve-url@0.2.1: https://github.com/lydell/resolve-url#deprecated"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated source-map-resolve@0.5.3: See https://github.com/lydell/source-map-resolve#deprecated"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated source-map-url@0.4.0: See https://github.com/lydell/source-map-url#deprecated"
+  severity: "WARNING"
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "NPM"
+  message: "deprecated mkdirp@0.5.1: Legacy versions of mkdirp are no longer supported.\
+    \ Please update to mkdirp 1.x. (Note that the API surface has changed to use Promises\
+    \ in 1.x.)"
   severity: "WARNING"

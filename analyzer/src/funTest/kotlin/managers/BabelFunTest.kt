@@ -61,12 +61,6 @@ class BabelFunTest : WordSpec({
 
 private fun createNPM() = Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
 
-private fun ProjectAnalyzerResult.withInvariantIssues() = copy(
-    issues = issues.map {
-        it.copy(
-            timestamp = Instant.EPOCH,
-            // Account for different NPM versions to return issues in different order.
-            message = it.message.lines().sorted().joinToString("\n")
-        )
-    }
-)
+private fun ProjectAnalyzerResult.withInvariantIssues() =
+    // Account for different NPM versions to return issues in different order.
+    copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })

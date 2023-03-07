@@ -78,6 +78,7 @@ import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -591,27 +592,61 @@ open class Npm(
 
         val lines = process.stderr.lines()
         val issues = mutableListOf<Issue>()
-        val commonSecondaryPrefixes = listOf(
-            "JSON.parse ",
-            "deprecated ",
-            "enoent ",
-            "old lockfile "
-        )
 
         fun mapLinesToIssues(prefix: String, severity: Severity) {
-            val issueLines = lines
-                .dropWhile { !it.startsWith(prefix) }
-                .takeWhile { it.startsWith(prefix) }
-                .mapNotNull { line ->
-                    line.removePrefix(prefix).let {
-                        commonSecondaryPrefixes.fold(it) { remainder, prefix -> remainder.removePrefix(prefix) }
-                    }.takeUnless { it.isBlank() }
+            val ignorablePrefixes = setOf("code ", "errno ", "path ", "syscall ")
+            val singleLinePrefixes = setOf("deprecated ")
+            val minSecondaryPrefixLength = 5
+
+            val issueLines = lines.mapNotNull { line ->
+                line.withoutPrefix(prefix)?.takeUnless { ignorablePrefixes.any { prefix -> it.startsWith(prefix) } }
+            }
+
+            var commonPrefix: String
+            var previousPrefix = ""
+
+            val collapsedLines = issueLines.fold(mutableListOf<String>()) { messages, line ->
+                if (messages.isEmpty()) {
+                    // The first line is always added including the prefix. The prefix will be removed later.
+                    messages += line
+                } else {
+                    // Find the longest common prefix that ends with space.
+                    commonPrefix = line.commonPrefixWith(messages.last())
+                    if (!commonPrefix.endsWith(' ')) {
+                        // Deal with prefixes being used on their own as separators.
+                        commonPrefix = if ("$commonPrefix " == previousPrefix) {
+                            "$commonPrefix "
+                        } else {
+                            commonPrefix.dropLastWhile { it != ' ' }
+                        }
+                    }
+
+                    if (commonPrefix !in singleLinePrefixes && commonPrefix.length >= minSecondaryPrefixLength) {
+                        // Do not drop the whole prefix but keep the space when concatenating lines.
+                        messages[messages.size - 1] += line.drop(commonPrefix.length - 1).trimEnd()
+                        previousPrefix = commonPrefix
+                    } else {
+                        // Remove the prefix from previously added message start.
+                        messages[messages.size - 1] = messages.last().removePrefix(previousPrefix).trimStart()
+                        messages += line
+                    }
                 }
 
-            if (issueLines.isNotEmpty()) {
+                messages
+            }
+
+            if (collapsedLines.isNotEmpty()) {
+                // Remove the prefix from the last added message start.
+                collapsedLines[collapsedLines.size - 1] = collapsedLines.last().removePrefix(previousPrefix).trimStart()
+            }
+
+            collapsedLines.forEach { line ->
+                // Skip any footer as a whole.
+                if (line == "A complete log of this run can be found in:") return
+
                 issues += Issue(
                     source = managerName,
-                    message = issueLines.joinToString("\n"),
+                    message = line,
                     severity = severity
                 )
             }
