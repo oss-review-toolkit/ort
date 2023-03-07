@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.model.config
 
 import java.util.SortedSet
 
-data class CopyrightGarbage(val items: SortedSet<String> = sortedSetOf()) {
-    constructor(vararg items: String) : this(items.toSortedSet())
-}
+data class CopyrightGarbage(val items: SortedSet<String> = sortedSetOf())
 
 fun CopyrightGarbage?.orEmpty(): CopyrightGarbage = this ?: CopyrightGarbage()
