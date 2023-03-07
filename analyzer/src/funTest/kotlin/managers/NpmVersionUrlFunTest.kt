@@ -36,34 +36,32 @@ import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
-class NpmVersionUrlFunTest : WordSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/npm-version-urls").absoluteFile
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
+class NpmVersionUrlFunTest : WordSpec({
+    val projectDir = getAssetFile("projects/synthetic/npm-version-urls").absoluteFile
+    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
 
-    init {
-        "NPM" should {
-            "resolve dependencies with URLs as versions correctly" {
-                val definitionFile = projectDir.resolve("package.json")
+    "NPM" should {
+        "resolve dependencies with URLs as versions correctly" {
+            val definitionFile = projectDir.resolve("package.json")
 
-                val config = AnalyzerConfiguration(allowDynamicVersions = true)
-                val result = createNpm(config).resolveSingleProject(definitionFile, resolveScopes = true)
-                val vcsPath = vcsDir.getPathToRoot(projectDir)
-                val expectedResultYaml = patchExpectedResult(
-                    projectDir.resolveSibling("npm-version-urls-expected-output.yml"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
-                val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
+            val config = AnalyzerConfiguration(allowDynamicVersions = true)
+            val result = createNpm(config).resolveSingleProject(definitionFile, resolveScopes = true)
+            val vcsPath = vcsDir.getPathToRoot(projectDir)
+            val expectedResultYaml = patchExpectedResult(
+                projectDir.resolveSibling("npm-version-urls-expected-output.yml"),
+                definitionFilePath = "$vcsPath/package.json",
+                url = normalizeVcsUrl(vcsUrl),
+                revision = vcsRevision,
+                path = vcsPath
+            )
+            val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
 
-                result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
-            }
+            result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
-}
+})
 
 private fun createNpm(config: AnalyzerConfiguration) = Npm("NPM", USER_DIR, config, RepositoryConfiguration())
 
