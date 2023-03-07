@@ -1,7 +1,7 @@
 ---
 project:
   id: "Poetry::poetry-from-poetry:<REPLACE_REVISION>"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/poetry/requirements-from-poetry.txt"
+  definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/poetry/requirements-from-poetry.txt"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
