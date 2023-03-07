@@ -353,19 +353,39 @@ class FossId internal constructor(
         }
 
     /**
-     * Filter this list of [Scan]s for the repository defined by [url] and an optional [revision] and sort it by
-     * scan ID, so that the most recent scan comes first and the oldest scan comes last.
+     * Filter this list of [Scan]s for the repository defined by [url] and Git [reference<]. If no scan is found with
+     * these criteria, search for scans of the default branch [defaultBranch]. If still no scan is found, all scans for
+     * this repository are taken, filtered by an optional [revision].
+     * Scans returned are sorted by scan ID, so that the most recent scan comes first and the oldest scan comes last.
      */
     private fun List<Scan>.recentScansForRepository(
         url: String,
-        revision: String? = null
-    ): List<Scan> = filter {
-        val isArchived = it.isArchived ?: false
-        // The scans in the server contain the url with the credentials, so we have to remove it for the
-        // comparison. If we don't, the scans won't be matched if the password changes!
-        val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
-        !isArchived && urlWithoutCredentials == url && (revision == null || it.gitBranch == revision)
-    }.sortedByDescending { scan -> scan.id }
+        revision: String? = null,
+        projectRevision: String? = null,
+        defaultBranch: String? = null,
+    ): List<Scan> {
+        val scans = filter {
+            val isArchived = it.isArchived ?: false
+            // The scans in the server contain the url with the credentials, so we have to remove it for the
+            // comparison. If we don't, the scans won't be matched if the password changes!
+            val urlWithoutCredentials = it.gitRepoUrl?.replaceCredentialsInUri()
+            !isArchived && urlWithoutCredentials == url
+        }.sortedByDescending { it.id }
+
+        return scans.filter { scan -> projectRevision == scan.comment }.ifEmpty {
+            logger.warn {
+                "No recent scan found for project revision $projectRevision. Falling back to default branch scans."
+            }
+
+            scans.filter { scan ->
+                defaultBranch?.let { scan.comment == defaultBranch } ?: false
+            }.ifEmpty {
+                logger.warn { "No recent default branch scan found. Falling back to old behavior." }
+
+                scans.filter { revision == null || it.gitBranch == revision }
+            }
+        }
+    }
 
     /**
      * Call FossID service, initiate a scan and return scan data: Scan Code and Scan Id
@@ -377,7 +397,7 @@ class FossId internal constructor(
         projectCode: String,
         projectName: String
     ): Pair<String, String> {
-        val existingScan = scans.recentScansForRepository(url, revision).findLatestPendingOrFinishedScan()
+        val existingScan = scans.recentScansForRepository(url, revision = revision).findLatestPendingOrFinishedScan()
 
         val scanCodeAndId = if (existingScan == null) {
             logger.info { "No scan found for $url and revision $revision. Creating scan..." }
@@ -444,7 +464,11 @@ class FossId internal constructor(
         }
 
         // we ignore the revision because we want to do a delta scan
-        val recentScans = scans.recentScansForRepository(urlWithoutCredentials)
+        val recentScans = scans.recentScansForRepository(
+            urlWithoutCredentials,
+            projectRevision = projectRevision,
+            defaultBranch = defaultBranch
+        )
 
         logger.info { "Found ${recentScans.size} scans." }
 
@@ -454,7 +478,10 @@ class FossId internal constructor(
             logger.info { "No scan found for $urlWithoutCredentials and revision $revision. Creating origin scan..." }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN, branchLabel)
         } else {
-            logger.info { "Scan found for $urlWithoutCredentials and revision $revision. Creating delta scan..." }
+            logger.info { "Scan '${existingScan.code}' found for $urlWithoutCredentials and revision $revision." }
+            logger.info {
+                "Existing scan has for reference(s): ${existingScan.comment.orEmpty()}. Creating delta scan..."
+            }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, branchLabel)
         }
 
@@ -511,6 +538,8 @@ class FossId internal constructor(
     /**
      * Make sure that only the configured number of delta scans exists for the current package. Based on the list of
      * [existingScans], delete older scans until the maximum number of delta scans is reached.
+     * Please note that in the case of delta scans, the [existingScans] are filtered by Git references or, in a case of
+     * a fallback, filtered to be only default branch scans. Therefore, the delta scan limit is enforced per branch.
      */
     private suspend fun enforceDeltaScanLimit(existingScans: List<Scan>) {
         logger.info { "Will retain up to ${config.deltaScanLimit} delta scans." }
