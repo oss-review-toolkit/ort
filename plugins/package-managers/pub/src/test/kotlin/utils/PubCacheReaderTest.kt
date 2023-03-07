@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe

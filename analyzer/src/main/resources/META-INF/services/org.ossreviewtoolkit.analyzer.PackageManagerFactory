@@ -12,7 +12,6 @@ org.ossreviewtoolkit.analyzer.managers.Maven$Factory
 org.ossreviewtoolkit.analyzer.managers.Npm$Factory
 org.ossreviewtoolkit.analyzer.managers.NuGet$Factory
 org.ossreviewtoolkit.analyzer.managers.Pnpm$Factory
-org.ossreviewtoolkit.analyzer.managers.Pub$Factory
 org.ossreviewtoolkit.analyzer.managers.Sbt$Factory
 org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile$Factory
 org.ossreviewtoolkit.analyzer.managers.Stack$Factory

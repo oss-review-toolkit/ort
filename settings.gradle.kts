@@ -46,6 +46,7 @@ include(":plugins:package-curation-providers:ort-config")
 include(":plugins:package-curation-providers:sw360")
 include(":plugins:package-managers")
 include(":plugins:package-managers:gradle")
+include(":plugins:package-managers:pub")
 include(":plugins:package-managers:python")
 include(":reporter")
 include(":reporter-web-app")
@@ -72,6 +73,7 @@ project(":plugins:package-curation-providers:ort-config").name = "ort-config-pac
 project(":plugins:package-curation-providers:sw360").name = "sw360-package-curation-provider"
 
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
+project(":plugins:package-managers:pub").name = "pub-package-manager"
 project(":plugins:package-managers:python").name = "python-package-manager"
 
 project(":utils:common").name = "common-utils"

@@ -23,18 +23,6 @@ plugins {
     `java-test-fixtures`
 }
 
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
-        }
-
-        filter {
-            includeGroup("org.gradle")
-        }
-    }
-}
-
 dependencies {
     api(project(":model"))
 
@@ -59,8 +47,6 @@ dependencies {
             because("Earlier versions have vulnerabilities.")
         }
     }
-
-    funTestImplementation(project(":plugins:package-managers:gradle-package-manager"))
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)

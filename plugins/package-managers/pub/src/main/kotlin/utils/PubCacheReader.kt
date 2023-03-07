@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
 
 import com.fasterxml.jackson.databind.JsonNode
 
@@ -25,8 +25,8 @@ import java.io.File
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.analyzer.managers.flutterHome
 import org.ossreviewtoolkit.downloader.VcsHost
+import org.ossreviewtoolkit.plugins.packagemanagers.pub.flutterHome
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
