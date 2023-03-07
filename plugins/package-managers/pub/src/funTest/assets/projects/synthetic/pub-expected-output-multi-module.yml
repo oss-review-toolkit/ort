@@ -1,7 +1,7 @@
 ---
 projects:
 - id: "Pub:multimodule:multimodule:1.0.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/multi-module/pubspec.yaml"
+  definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/pubspec.yaml"
   authors:
   - "The ORT Project Authors"
   declared_licenses: []
@@ -26,7 +26,7 @@ projects:
         dependencies:
         - id: "Pub:collection:collection:1.16.0"
 - id: "Pub:subproject:subproject:1.0.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pub/multi-module/subproject/pubspec.yaml"
+  definition_file_path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/multi-module/subproject/pubspec.yaml"
   authors:
   - "The ORT Project Authors"
   declared_licenses: []

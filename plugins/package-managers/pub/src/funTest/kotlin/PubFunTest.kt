@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.pub
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
@@ -28,6 +28,7 @@ import io.kotest.matchers.string.haveSubstring
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
@@ -41,7 +42,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PubFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic/pub").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic").absoluteFile
     private val projectsDirExternal = getAssetFile("projects/external").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -119,7 +120,7 @@ class PubFunTest : WordSpec() {
         val expectedResultDir = if (workingDir.startsWith(projectsDirExternal)) {
             projectsDirExternal
         } else {
-            projectsDir.parentFile
+            projectsDir
         }
 
         return patchExpectedResult(
