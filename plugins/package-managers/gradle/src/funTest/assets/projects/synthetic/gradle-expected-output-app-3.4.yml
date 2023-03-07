@@ -1,0 +1,151 @@
+---
+project:
+  id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
+  definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/app"
+  homepage_url: ""
+  scopes:
+  - name: "compile"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "default"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "runtime"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "testCompile"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  - name: "testRuntime"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:org.apache.commons:commons-text:1.1"
+        dependencies:
+        - id: "Maven:org.apache.commons:commons-lang3:3.5"
+      - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+packages:
+- id: "Maven:org.apache.commons:commons-lang3:3.5"
+  purl: "pkg:maven/org.apache.commons/commons-lang3@3.5"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Apache Commons Lang, a package of Java utility classes for the\n \
+    \ classes that are in java.lang's hierarchy, or are considered to be so\n  standard\
+    \ as to justify existence in java.lang."
+  homepage_url: "http://commons.apache.org/proper/commons-lang/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5.jar"
+    hash:
+      value: "6c6c702c89bfff3cd9e80b04d668c5e190d588c6"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+    hash:
+      value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+    revision: "LANG_3_5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-lang.git"
+    revision: "LANG_3_5"
+    path: ""
+- id: "Maven:org.apache.commons:commons-text:1.1"
+  purl: "pkg:maven/org.apache.commons/commons-text@1.1"
+  declared_licenses:
+  - "Apache License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Apache Commons Text is a library focused on algorithms working on\
+    \ strings."
+  homepage_url: "http://commons.apache.org/proper/commons-text/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1.jar"
+    hash:
+      value: "c336bf600f44b88af356c8a85eef4af822b06a4d"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+    hash:
+      value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git-wip-us.apache.org/repos/asf/commons-text.git"
+    revision: ""
+    path: ""
+- id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
+  purl: "pkg:maven/org.apache.struts/struts2-assembly@2.5.14.1"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Apache Struts 2"
+  homepage_url: "http://struts.apache.org/struts2-assembly/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/org/apache/struts/struts2-assembly/2.5.14.1/struts2-assembly-2.5.14.1-min-lib.zip"
+    hash:
+      value: "8e75a38e3b8ceb01e007c5899d8d29e7a075cb7d"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://gitbox.apache.org/repos/asf/struts.git"
+    revision: "STRUTS_2_5_14_1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://gitbox.apache.org/repos/asf/struts.git"
+    revision: "STRUTS_2_5_14_1"
+    path: ""

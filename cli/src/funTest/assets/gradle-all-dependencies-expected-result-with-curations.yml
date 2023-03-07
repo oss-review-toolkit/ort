@@ -4,16 +4,16 @@ repository:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
   config:
     excludes:
       paths:
-      - pattern: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
+      - pattern: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
         reason: "OPTIONAL_COMPONENT_OF"
         comment: "Project not delivered."
       scopes:
@@ -54,7 +54,7 @@ analyzer:
   result:
     projects:
     - id: "Gradle::Gradle-Example:"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/build.gradle"
+      definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -66,11 +66,11 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/gradle"
+        path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle"
       homepage_url: ""
       scopes: []
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
+      definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/app/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -82,7 +82,7 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/app"
+        path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/app"
       homepage_url: ""
       scopes:
       - name: "compileClasspath"
@@ -112,7 +112,7 @@ analyzer:
             - id: "Maven:org.apache.commons:commons-lang3:3.5"
           - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
+      definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -124,7 +124,7 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib"
+        path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib"
       homepage_url: ""
       scopes:
       - name: "compileClasspath"
@@ -158,7 +158,7 @@ analyzer:
           - id: "Maven:org.apache.commons:commons-lang3:3.5"
         - id: "Maven:org.apache.struts:struts2-assembly:2.5.14.1"
     - id: "Gradle:org.ossreviewtoolkit.gradle.example:lib-without-repo:1.0.0"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
+      definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib-without-repo/build.gradle"
       declared_licenses: []
       declared_licenses_processed: {}
       vcs:
@@ -170,7 +170,7 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
+        path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/lib-without-repo"
       homepage_url: ""
       scopes:
       - name: "compileClasspath"

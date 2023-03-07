@@ -1,0 +1,71 @@
+---
+project:
+  id: "Gradle:org.ossreviewtoolkit.gradle.composite.example:my.project1:1.0.0"
+  definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-composite/project1/build.gradle.kts"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL>"
+    revision: "<REPLACE_REVISION>"
+    path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-composite/project1"
+  homepage_url: ""
+  scopes:
+  - name: "compileClasspath"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+      linkage: "PROJECT_DYNAMIC"
+  - name: "runtimeClasspath"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:log4j:log4j:1.2.17"
+  - name: "testCompileClasspath"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+      linkage: "PROJECT_DYNAMIC"
+  - name: "testRuntimeClasspath"
+    dependencies:
+    - id: "Gradle:org.ossreviewtoolkit.gradle.composite.example3:sub:3.0.0"
+      linkage: "PROJECT_DYNAMIC"
+      dependencies:
+      - id: "Maven:log4j:log4j:1.2.17"
+packages:
+- id: "Maven:log4j:log4j:1.2.17"
+  purl: "pkg:maven/log4j/log4j@1.2.17"
+  authors:
+  - "Apache Software Foundation"
+  declared_licenses:
+  - "The Apache Software License, Version 2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+    mapped:
+      The Apache Software License, Version 2.0: "Apache-2.0"
+  description: "Apache Log4j 1.2"
+  homepage_url: "http://logging.apache.org/log4j/1.2/"
+  binary_artifact:
+    url: "https://repo.maven.apache.org/maven2/log4j/log4j/1.2.17/log4j-1.2.17.jar"
+    hash:
+      value: "5af35056b4d257e4b64b9e8069c0746e8b08629f"
+      algorithm: "SHA-1"
+  source_artifact:
+    url: "https://repo.maven.apache.org/maven2/log4j/log4j/1.2.17/log4j-1.2.17-sources.jar"
+    hash:
+      value: "677abe279b68c5e7490d6d50c6951376238d7d3e"
+      algorithm: "SHA-1"
+  vcs:
+    type: "Subversion"
+    url: "http://svn.apache.org/repos/asf/logging/log4j/tags/v1_2_17_rc3"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Subversion"
+    url: "http://svn.apache.org/repos/asf/logging/log4j"
+    revision: "tags/v1_2_17_rc3"
+    path: ""

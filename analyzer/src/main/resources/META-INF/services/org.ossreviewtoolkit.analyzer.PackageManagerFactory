@@ -8,7 +8,6 @@ org.ossreviewtoolkit.analyzer.managers.Conan$Factory
 org.ossreviewtoolkit.analyzer.managers.DotNet$Factory
 org.ossreviewtoolkit.analyzer.managers.GoDep$Factory
 org.ossreviewtoolkit.analyzer.managers.GoMod$Factory
-org.ossreviewtoolkit.analyzer.managers.Gradle$Factory
 org.ossreviewtoolkit.analyzer.managers.Maven$Factory
 org.ossreviewtoolkit.analyzer.managers.Npm$Factory
 org.ossreviewtoolkit.analyzer.managers.NuGet$Factory

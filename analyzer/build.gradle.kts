@@ -42,7 +42,6 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
     implementation(libs.bundles.maven)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
@@ -60,6 +59,8 @@ dependencies {
             because("Earlier versions have vulnerabilities.")
         }
     }
+
+    funTestImplementation(project(":plugins:package-managers:gradle-package-manager"))
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
