@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import java.util.SortedSet
-
 /**
  * A class that defines which Copyright statements are to be considered as garbage instead of real findings.
  */
@@ -28,7 +26,7 @@ data class CopyrightGarbage(
     /**
      * A set of literal strings that identify garbage Copyright findings.
      */
-    val items: SortedSet<String> = sortedSetOf()
+    val items: Set<String> = emptySet()
 )
 
 fun CopyrightGarbage?.orEmpty(): CopyrightGarbage = this ?: CopyrightGarbage()
