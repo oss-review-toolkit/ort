@@ -344,7 +344,7 @@ fun File.packZip(
         }.filter {
             Files.isRegularFile(it.toPath(), LinkOption.NOFOLLOW_LINKS) && fileFilter(it) && it != targetFile
         }.forEach { file ->
-            val packPath = prefix + file.toRelativeString(this)
+            val packPath = prefix + file.toRelativeString(takeUnless { it.isFile } ?: parentFile)
             val entry = ZipArchiveEntry(file, packPath)
             output.putArchiveEntry(entry)
             file.inputStream().use { input -> input.copyTo(output) }

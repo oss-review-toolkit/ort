@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.utils.common
 
+import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
@@ -418,6 +419,18 @@ class ArchiveUtilsTest : WordSpec() {
         }
 
         "packZip" should {
+            "be able to zip a single file" {
+                val file = createTestTempFile().apply { writeText("Hello World!") }
+
+                val zipFile = file.packZip(outputDir.resolve("archive.zip"))
+
+                zipFile shouldBe aFile()
+                shouldNotThrow<IOException> {
+                    zipFile.unpackZip(outputDir)
+                    outputDir.resolve(file.name).readText() shouldBe "Hello World!"
+                }
+            }
+
             "not follow symbolic links".config(enabled = Os.isLinux) {
                 val inputDir = createTestTempDir()
                 val parentDir = inputDir.resolve("parent").safeMkdirs()
