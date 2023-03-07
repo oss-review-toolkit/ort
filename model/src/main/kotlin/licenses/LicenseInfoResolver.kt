@@ -169,7 +169,7 @@ class LicenseInfoResolver(
     ): DetectedLicenseInfo {
         val filteredFindings = findings.map { finding ->
             val (copyrightGarbage, copyrightFindings) = finding.copyrights.partition { copyrightFinding ->
-                copyrightFinding.statement in copyrightGarbage.items
+                copyrightFinding.statement in copyrightGarbage
             }
             copyrightGarbageFindings[finding.provenance] = copyrightGarbage.toSet()
             finding.copy(copyrights = copyrightFindings.toSet())
