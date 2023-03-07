@@ -50,7 +50,7 @@ data class GitHubDefectsConfiguration(
      * The access token to authenticate against the GitHub GraphQL endpoint.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val token: String?,
+    val token: String? = null,
 
     /**
      * The URL of the GraphQL endpoint to be accessed by the service. If undefined, default is the endpoint of the
@@ -117,14 +117,14 @@ data class NexusIqConfiguration(
      * The username to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
-    val username: String?,
+    val username: String? = null,
 
     /**
      * The password to use for authentication. If not both [username] and [password] are provided, authentication is
      * disabled.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val password: String?
+    val password: String? = null
 )
 
 /**
@@ -135,7 +135,7 @@ data class OssIndexConfiguration(
      * The base URL of the OSS Index REST API. If undefined, default base URL for the REST API of the public OSS Index
      * service.
      */
-    val serverUrl: String?
+    val serverUrl: String? = null
 )
 
 /**
@@ -145,7 +145,7 @@ data class OsvConfiguration(
     /**
      * The base URL of the OSV REST API. If undefined, default is the production endpoint of the official OSV.dev API.
      */
-    val serverUrl: String?
+    val serverUrl: String? = null
 )
 
 /**
@@ -155,11 +155,11 @@ data class VulnerableCodeConfiguration(
     /**
      * The base URL of the VulnerableCode REST API. By default, the public VulnerableCode instance is used.
      */
-    val serverUrl: String?,
+    val serverUrl: String? = null,
 
     /**
      * The optional API key to use.
      */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    val apiKey: String?
+    val apiKey: String? = null
 )
