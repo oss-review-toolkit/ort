@@ -17,16 +17,10 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-@Suppress("DSL_SCOPE_VIOLATION") // See https://youtrack.jetbrains.com/issue/KTIJ-19369.
 plugins {
     // Apply core plugins.
     `java-library`
     `java-test-fixtures`
-
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
 }
 
 repositories {
@@ -58,7 +52,6 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.jruby)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.kotlinxSerialization)
     implementation(libs.semver4j)
 
     implementation(libs.toml4j)
@@ -75,14 +68,4 @@ dependencies {
 
     testFixturesImplementation(libs.kotestAssertionsCore)
     testFixturesImplementation(libs.kotestRunnerJunit5)
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-    }
 }

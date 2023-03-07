@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.haveSize

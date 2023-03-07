@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import java.io.File
 
@@ -25,13 +25,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.managers.utils.PythonInspector
-import org.ossreviewtoolkit.analyzer.managers.utils.toOrtPackages
-import org.ossreviewtoolkit.analyzer.managers.utils.toOrtProject
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.PythonInspector
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtPackages
+import org.ossreviewtoolkit.plugins.packagemanagers.python.utils.toOrtProject
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages

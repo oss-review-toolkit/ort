@@ -1,0 +1,3 @@
+org.ossreviewtoolkit.plugins.packagemanagers.python.Pip$Factory
+org.ossreviewtoolkit.plugins.packagemanagers.python.Pipenv$Factory
+org.ossreviewtoolkit.plugins.packagemanagers.python.Poetry$Factory

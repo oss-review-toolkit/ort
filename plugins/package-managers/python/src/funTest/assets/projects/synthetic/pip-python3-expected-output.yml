@@ -1,7 +1,7 @@
 ---
 project:
   id: "PIP::pip-python3:<REPLACE_REVISION>"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pip-python3/requirements.txt"
+  definition_file_path: "plugins/package-managers/python/src/funTest/assets/projects/synthetic/pip-python3/requirements.txt"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
