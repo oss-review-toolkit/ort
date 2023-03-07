@@ -148,7 +148,7 @@ class Conan(
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
-            val lockfileName = analyzerConfig.packageManagers?.get(managerName)?.options?.get("lockfileName")
+            val lockfileName = options["lockfileName"]
             requireLockfile(workingDir) { lockfileName?.let { hasLockFile(workingDir.resolve(it).path) } ?: false }
 
             val jsonFile = createOrtTempDir().resolve("info.json")
