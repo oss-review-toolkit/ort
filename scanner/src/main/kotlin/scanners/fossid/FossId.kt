@@ -55,6 +55,7 @@ import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Provenance
@@ -418,6 +419,17 @@ class FossId internal constructor(
     ): Pair<String, String> {
         val projectRevision = context.labels[PROJECT_REVISION_LABEL]
 
+        val vcs = requireNotNull(VersionControlSystem.forUrl(url))
+
+        val defaultBranch = vcs.getDefaultBranchName(url)
+        logger.info {
+            if (defaultBranch != null) "Default branch is '$defaultBranch'." else "There is no default remote branch."
+        }
+
+        // If a scan for the default branch is created, put the default branch name in the scan code (the
+        // FossIdNamingProvider must also have a scan pattern that makes use of it).
+        val branchLabel = projectRevision.takeIf { defaultBranch == projectRevision }.orEmpty()
+
         if (projectRevision == null) {
             logger.warn { "No project revision has been given." }
         } else {
@@ -440,10 +452,10 @@ class FossId internal constructor(
 
         val scanCode = if (existingScan == null) {
             logger.info { "No scan found for $urlWithoutCredentials and revision $revision. Creating origin scan..." }
-            namingProvider.createScanCode(projectName, DeltaTag.ORIGIN)
+            namingProvider.createScanCode(projectName, DeltaTag.ORIGIN, branchLabel)
         } else {
             logger.info { "Scan found for $urlWithoutCredentials and revision $revision. Creating delta scan..." }
-            namingProvider.createScanCode(projectName, DeltaTag.DELTA)
+            namingProvider.createScanCode(projectName, DeltaTag.DELTA, branchLabel)
         }
 
         val newUrl = urlProvider.getUrl(urlWithoutCredentials)
