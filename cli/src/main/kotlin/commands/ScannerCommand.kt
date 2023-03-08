@@ -230,7 +230,7 @@ class ScannerCommand : OrtCommand(
 
             val ortResult = readOrtResult(input)
             return runBlocking {
-                scanner.scan(ortResult, skipExcluded)
+                scanner.scan(ortResult, skipExcluded, labels)
             }
         } finally {
             runBlocking { workingTreeCache.shutdown() }

@@ -83,7 +83,7 @@ class Scanner(
 
     private val archiver = scannerConfig.archive.createFileArchiver()
 
-    suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean): OrtResult {
+    suspend fun scan(ortResult: OrtResult, skipExcluded: Boolean, labels: Map<String, String>): OrtResult {
         val startTime = Instant.now()
 
         val projectScannerWrappers = scannerWrappers[PackageType.PROJECT].orEmpty()
@@ -94,7 +94,7 @@ class Scanner(
 
             logger.info { "Scanning ${packages.size} project(s) with ${projectScannerWrappers.size} scanner(s)." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PROJECT))
+            scan(packages, ScanContext(ortResult.labels + labels, PackageType.PROJECT))
         } else {
             logger.info { "Skipping project scan as no project scanner is configured." }
 
