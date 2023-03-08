@@ -31,5 +31,6 @@ data class License(
     val isOsiApproved: Int?,
     val isSpdxStandard: Int?,
 
-    val name: String?
+    val name: String?,
+    val text: String? = null
 )
