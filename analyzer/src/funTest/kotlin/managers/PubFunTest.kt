@@ -141,6 +141,7 @@ private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
         issues = issues
     )
 }
+
 private fun analyze(workingDir: File): AnalyzerResult {
     val analyzer = Analyzer(AnalyzerConfiguration())
     val managedFiles = analyzer.findManagedFiles(workingDir)
