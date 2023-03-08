@@ -224,10 +224,13 @@ class GoMod(
      */
     private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
         val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
+        logger.info { "go list command finished." }
 
         val moduleInfos = jsonMapper.createParser(list.stdout).use { parser ->
+            logger.info { "Processing module information." }
             jsonMapper.readValues<ModuleInfo>(parser).readAll()
         }
+        logger.info { "Got ${moduleInfos.size} ModuleInfo objects." }
 
         return buildMap {
             moduleInfos.forEach { moduleInfo ->
@@ -483,7 +486,7 @@ private data class ModuleInfo(
     val main: Boolean = false,
 
     @JsonProperty("GoMod")
-    val goMod: String
+    val goMod: String? = null
 )
 
 private data class DepInfo(
@@ -515,7 +518,8 @@ private data class ModuleInfoFile(
 }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
-    val info = jsonMapper.readValue<ModuleInfoFile>(File(goMod).resolveSibling("$version.info"))
+    val info = goMod?.let { jsonMapper.readValue<ModuleInfoFile>(File(it).resolveSibling("$version.info")) }
+        ?: return null
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
