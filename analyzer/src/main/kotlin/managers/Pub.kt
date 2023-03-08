@@ -51,6 +51,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.yamlMapper
@@ -94,6 +95,9 @@ private val flutterAbsolutePath = flutterHome.resolve("bin")
  * This implementation is using the Pub version that is distributed with Flutter. If Flutter is not installed on the
  * system it is automatically downloaded and installed in the `~/.ort/tools` directory. The version of Flutter that is
  * automatically installed can be configured by setting the `FLUTTER_VERSION` environment variable.
+ *
+ * This package manager supports the following [options][PackageManagerConfiguration.options]:
+ * - *gradleVersion*: The version of Gradle to use when analyzing Gradle projects. Defaults to [GRADLE_VERSION].
  */
 @Suppress("TooManyFunctions")
 class Pub(
@@ -390,14 +394,16 @@ class Pub(
         if (!definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
+            val pubGradleVersion = options["gradleVersion"] ?: GRADLE_VERSION
+
             logger.info {
-                "Analyzing Android dependencies for package '$packageName' using Gradle version $GRADLE_VERSION."
+                "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
             }
 
             val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
                 "Gradle",
                 "gradleVersion",
-                GRADLE_VERSION
+                pubGradleVersion
             )
 
             Gradle("Gradle", androidDir, gradleAnalyzerConfig, repoConfig)
