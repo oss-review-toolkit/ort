@@ -80,7 +80,7 @@ class ScannerIntegrationFunTest : StringSpec() {
                 )
             )
 
-            val ortResult = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false)
+            val ortResult = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
             val result = yamlMapper.writeValueAsString(ortResult)
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
