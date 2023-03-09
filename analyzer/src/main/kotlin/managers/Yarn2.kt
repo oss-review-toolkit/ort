@@ -85,9 +85,9 @@ private enum class YarnDependencyType(val type: String) {
  * The [Yarn 2+](https://next.yarnpkg.com/) package manager for JavaScript.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
- * - *disableRegistryCertificateVerification*: If true, the 'yarn npm info' commands called by this package manager
- * won't verify the server certificate of the HTTPS connection to the NPM registry. This allows to replace the latter by
- * a local one, e.g. for intercepting the requests or replaying them.
+ * - *disableRegistryCertificateVerification*: If true, the `yarn npm info` commands called by this package manager will
+ *   not verify the server certificate of the HTTPS connection to the NPM registry. This allows to replace the latter by
+ *   a local one, e.g. for intercepting the requests or replaying them.
  */
 class Yarn2(
     name: String,
