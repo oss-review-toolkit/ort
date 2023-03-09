@@ -63,18 +63,16 @@ class NpmVersionUrlFunTest : WordSpec() {
             }
         }
     }
-
-    private fun createNpm(config: AnalyzerConfiguration) =
-        Npm("NPM", USER_DIR, config, RepositoryConfiguration())
-
-    private fun ProjectAnalyzerResult.withInvariantIssues() =
-        copy(
-            issues = issues.map {
-                it.copy(
-                    timestamp = Instant.EPOCH,
-                    // Account for different NPM versions to return issues in different order.
-                    message = it.message.lines().sorted().joinToString("\n")
-                )
-            }
-        )
 }
+
+private fun createNpm(config: AnalyzerConfiguration) = Npm("NPM", USER_DIR, config, RepositoryConfiguration())
+
+private fun ProjectAnalyzerResult.withInvariantIssues() = copy(
+    issues = issues.map {
+        it.copy(
+            timestamp = Instant.EPOCH,
+            // Account for different NPM versions to return issues in different order.
+            message = it.message.lines().sorted().joinToString("\n")
+        )
+    }
+)
