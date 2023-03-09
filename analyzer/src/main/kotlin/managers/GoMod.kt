@@ -170,7 +170,8 @@ class GoMod(
                 moduleInfo(moduleName).toId()
             }
 
-        var graph = Graph()
+        val mainModuleId = moduleInfoForModuleName.values.single { it.main }.toId()
+        var graph = Graph(mutableMapOf(mainModuleId to emptySet()))
 
         val edges = runGo("mod", "graph", workingDir = projectDir)
 
