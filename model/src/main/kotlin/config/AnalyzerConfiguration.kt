@@ -114,4 +114,19 @@ data class AnalyzerConfiguration(
             skipExcluded = other.skipExcluded ?: skipExcluded
         )
     }
+
+    /**
+     * Return a copy of this [AnalyzerConfiguration] "patched" with [name]-specific options to contain the given [key]
+     * and [value] pair, overriding any existing entry.
+     */
+    fun withPackageManagerOption(name: String, key: String, value: String): AnalyzerConfiguration {
+        val managers = packageManagers.orEmpty().toMutableMap()
+        val configuration = managers[name] ?: PackageManagerConfiguration()
+        val options = configuration.options.orEmpty().toMutableMap()
+
+        options[key] = value
+        managers[name] = configuration.copy(options = options)
+
+        return copy(packageManagers = managers)
+    }
 }
