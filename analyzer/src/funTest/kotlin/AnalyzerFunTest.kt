@@ -24,7 +24,6 @@ import io.kotest.matchers.concurrent.shouldCompleteWithin
 
 import java.util.concurrent.TimeUnit
 
-import org.ossreviewtoolkit.analyzer.managers.Gradle
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -41,7 +40,8 @@ class AnalyzerFunTest : WordSpec({
             val repoConfig = RepositoryConfiguration()
 
             val analyzer = Analyzer(analyzerConfig)
-            val gradle = Gradle("Gradle", inputDir, analyzerConfig, repoConfig)
+            val gradleFactory = PackageManager.ALL.getValue("Gradle")
+            val gradle = gradleFactory.create(inputDir, analyzerConfig, repoConfig)
             val info = Analyzer.ManagedFileInfo(
                 inputDir,
                 mapOf(gradle to listOf(gradleDefinitionFile)),
