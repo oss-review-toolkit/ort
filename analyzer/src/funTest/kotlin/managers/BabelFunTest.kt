@@ -19,16 +19,21 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class BabelFunTest : WordSpec({
@@ -40,17 +45,28 @@ class BabelFunTest : WordSpec({
     "Babel dependencies" should {
         "be correctly analyzed" {
             val definitionFile = projectDir.resolve("package.json")
-            val expectedResult = patchExpectedResult(
+            val expectedResultYaml = patchExpectedResult(
                 projectDir.resolveSibling("npm-babel-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
+            val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
 
             val actualResult = createNPM().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(actualResult.toYaml()) shouldBe expectedResult
+            actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
 })
 
 private fun createNPM() = Npm("NPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+
+private fun ProjectAnalyzerResult.withInvariantIssues() = copy(
+    issues = issues.map {
+        it.copy(
+            timestamp = Instant.EPOCH,
+            // Account for different NPM versions to return issues in different order.
+            message = it.message.lines().sorted().joinToString("\n")
+        )
+    }
+)
