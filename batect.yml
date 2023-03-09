@@ -90,3 +90,12 @@ tasks:
       container: run
       command: "'./gradlew funTest jacocoFunTestReport -p analyzer $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
       entrypoint: /bin/bash --login -c
+  funTestPackageManagers:
+    description: >-
+      A task to execute ORT's functional tests for the analyzer in the runtime container.
+    prerequisites:
+      - buildFunTest
+    run:
+      container: run
+      command: "'./gradlew funTest jacocoFunTestReport -p plugins/package-managers $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
+      entrypoint: /bin/bash --login -c

@@ -145,6 +145,7 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(platform(project(":plugins:package-curation-providers")))
+    implementation(platform(project(":plugins:package-managers")))
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.bundles.exposed)
