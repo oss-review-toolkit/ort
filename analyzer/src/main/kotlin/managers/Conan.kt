@@ -61,6 +61,11 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
 /**
+ * The name of the option to specify the name of the lockfile.
+ */
+private const val OPTION_LOCKFILE_NAME = "lockfileName"
+
+/**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
@@ -148,7 +153,7 @@ class Conan(
             configureRemoteAuthentication(conanConfig)
 
             // TODO: Support lockfiles which are located in a different directory than the definition file.
-            val lockfileName = options["lockfileName"]
+            val lockfileName = options[OPTION_LOCKFILE_NAME]
             requireLockfile(workingDir) { lockfileName?.let { hasLockFile(workingDir.resolve(it).path) } ?: false }
 
             val jsonFile = createOrtTempDir().resolve("info.json")

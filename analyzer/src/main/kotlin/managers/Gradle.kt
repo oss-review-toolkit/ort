@@ -61,6 +61,11 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.temporaryProperties
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
+/**
+ * The name of the option to specify the Gradle version.
+ */
+const val OPTION_GRADLE_VERSION = "gradleVersion"
+
 private val GRADLE_USER_HOME = Os.env["GRADLE_USER_HOME"]?.let { File(it) } ?: Os.userHomeDirectory.resolve(".gradle")
 
 private val GRADLE_BUILD_FILES = listOf("build.gradle", "build.gradle.kts")
@@ -173,7 +178,7 @@ class Gradle(
 
         val gradleConnector = GradleConnector.newConnector()
 
-        val gradleVersion = options["gradleVersion"]
+        val gradleVersion = options[OPTION_GRADLE_VERSION]
         if (gradleVersion != null) {
             gradleConnector.useGradleVersion(gradleVersion)
         }
