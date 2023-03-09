@@ -408,7 +408,7 @@ class Pub(
         if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            val pubGradleVersion = options["gradleVersion"] ?: GRADLE_VERSION
+            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: GRADLE_VERSION
 
             logger.info {
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
@@ -416,7 +416,7 @@ class Pub(
 
             val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
                 "Gradle",
-                "gradleVersion",
+                OPTION_GRADLE_VERSION,
                 pubGradleVersion
             )
 
