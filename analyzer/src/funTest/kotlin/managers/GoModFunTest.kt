@@ -62,6 +62,15 @@ class GoModFunTest : StringSpec({
 
         result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
     }
+
+    "Unused dependencies are not contained in the result" {
+        val definitionFile = testDir.resolve("gomod-unused-deps/go.mod")
+        val expectedResultFile = testDir.resolve("gomod-unused-deps-expected-output.yml")
+
+        val result = createGoMod().resolveSingleProject(definitionFile)
+
+        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+    }
 })
 
 private fun createGoMod() = GoMod("GoMod", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
