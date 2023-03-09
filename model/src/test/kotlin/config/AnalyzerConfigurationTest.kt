@@ -31,6 +31,19 @@ import io.kotest.matchers.shouldNot
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerConfigurationTest : WordSpec({
+    "AnalyzerConfiguration()" should {
+        "throw an exception on duplicate package manager configuration" {
+            shouldThrow<IllegalArgumentException> {
+                AnalyzerConfiguration(
+                    packageManagers = mapOf(
+                        "Gradle" to PackageManagerConfiguration(),
+                        "gradle" to PackageManagerConfiguration()
+                    )
+                )
+            }
+        }
+    }
+
     "getPackageManagerConfiguration()" should {
         "be case-insensitive" {
             val config = AnalyzerConfiguration(
@@ -116,19 +129,6 @@ class AnalyzerConfigurationTest : WordSpec({
                         "NPM" to PackageManagerConfiguration()
                     )
                 }
-            }
-        }
-    }
-
-    "AnalyzerConfiguration()" should {
-        "throw an exception on duplicate package manager configuration" {
-            shouldThrow<IllegalArgumentException> {
-                AnalyzerConfiguration(
-                    packageManagers = mapOf(
-                        "Gradle" to PackageManagerConfiguration(),
-                        "gradle" to PackageManagerConfiguration()
-                    )
-                )
             }
         }
     }
