@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     // Apply core plugins.
     `java-library`
+    `java-test-fixtures`
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)
@@ -69,6 +70,11 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
+
+    testFixturesImplementation(project(":utils:test-utils"))
+
+    testFixturesImplementation(libs.kotestAssertionsCore)
+    testFixturesImplementation(libs.kotestRunnerJunit5)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
