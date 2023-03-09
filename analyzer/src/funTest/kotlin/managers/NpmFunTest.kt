@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class NpmFunTest : WordSpec() {
     private val projectsDir = getAssetFile("projects/synthetic/npm").absoluteFile

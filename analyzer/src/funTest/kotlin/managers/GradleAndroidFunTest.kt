@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle-android").absoluteFile

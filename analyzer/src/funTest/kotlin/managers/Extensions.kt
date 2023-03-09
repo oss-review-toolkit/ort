@@ -35,10 +35,7 @@ import org.ossreviewtoolkit.model.DependencyTreeNavigator
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
-
-fun Any?.toYaml() = yamlMapper.writeValueAsString(this)!!
 
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
     val managerResult = resolveDependencies(listOf(definitionFile), emptyMap())
