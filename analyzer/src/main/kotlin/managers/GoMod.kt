@@ -212,7 +212,7 @@ class GoMod(
 
     private fun ModuleInfo.toId(): Identifier =
         Identifier(
-            type = managerName.takeIf { version.isBlank() } ?: "Go",
+            type = managerName.takeIf { main } ?: "Go",
             namespace = "",
             name = path,
             version = normalizeModuleVersion(version)
