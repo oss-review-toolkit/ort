@@ -62,7 +62,6 @@ private val PYTHON_VERSIONS = listOf("2.7", "3.6", "3.7", "3.8", "3.9", OPTION_P
  *   "windows". Defaults to "linux".
  * - *pythonVersion*: The Python version to resolve dependencies for. Defaults to "3.10".
  */
-@Suppress("TooManyFunctions")
 class Pip(
     name: String,
     analysisRoot: File,
