@@ -132,4 +132,48 @@ class AnalyzerConfigurationTest : WordSpec({
             }
         }
     }
+
+    "withPackageManagerOption()" should {
+        "override an existing entry" {
+            val original = AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "Gradle" to PackageManagerConfiguration(
+                        mustRunAfter = listOf("Npm"),
+                        options = mapOf("gradleVersion" to "7.6.1")
+                    ),
+                    "Npm" to PackageManagerConfiguration(
+                        mustRunAfter = listOf("Yarn")
+                    )
+                )
+            )
+
+            val patched = AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "Gradle" to PackageManagerConfiguration(
+                        mustRunAfter = listOf("Npm"),
+                        options = mapOf("gradleVersion" to "8.0.2")
+                    ),
+                    "Npm" to PackageManagerConfiguration(
+                        mustRunAfter = listOf("Yarn")
+                    )
+                )
+            )
+
+            original.withPackageManagerOption("Gradle", "gradleVersion", "8.0.2") shouldBe patched
+        }
+
+        "add a non-existing entry" {
+            val original = AnalyzerConfiguration()
+
+            val patched = AnalyzerConfiguration(
+                packageManagers = mapOf(
+                    "Gradle" to PackageManagerConfiguration(
+                        options = mapOf("gradleVersion" to "8.0.2")
+                    )
+                )
+            )
+
+            original.withPackageManagerOption("Gradle", "gradleVersion", "8.0.2") shouldBe patched
+        }
+    }
 })
