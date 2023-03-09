@@ -53,6 +53,15 @@ class GoModFunTest : StringSpec({
 
         result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
     }
+
+    "Project dependencies are detected correctly if there are no dependencies" {
+        val definitionFile = testDir.resolve("gomod-no-deps/go.mod")
+        val expectedResultFile = testDir.resolve("gomod-no-deps-expected-output.yml")
+
+        val result = createGoMod().resolveSingleProject(definitionFile)
+
+        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+    }
 })
 
 private fun createGoMod() = GoMod("GoMod", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
