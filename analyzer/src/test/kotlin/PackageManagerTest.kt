@@ -137,7 +137,11 @@ class PackageManagerTest : WordSpec({
         "find only files for active package managers" {
             val managedFiles = PackageManager.findManagedFiles(
                 projectDir,
-                setOf(Gradle.Factory(), Pip.Factory(), Sbt.Factory())
+                setOf(
+                    PackageManager.ALL.getValue("Gradle"),
+                    PackageManager.ALL.getValue("Pip"),
+                    PackageManager.ALL.getValue("Sbt")
+                )
             )
 
             managedFiles.size shouldBe 3
