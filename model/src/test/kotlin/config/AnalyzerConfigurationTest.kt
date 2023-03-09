@@ -31,7 +31,7 @@ import io.kotest.matchers.shouldNot
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerConfigurationTest : WordSpec({
-    "getPackageManagerConfiguration" should {
+    "getPackageManagerConfiguration()" should {
         "be case-insensitive" {
             val config = AnalyzerConfiguration(
                 packageManagers = mapOf(
@@ -45,7 +45,7 @@ class AnalyzerConfigurationTest : WordSpec({
         }
     }
 
-    "merge" should {
+    "merge()" should {
         "overwrite properties with values from other" {
             val self = AnalyzerConfiguration(
                 allowDynamicVersions = false,
@@ -120,7 +120,7 @@ class AnalyzerConfigurationTest : WordSpec({
         }
     }
 
-    "AnalyzerConfiguration" should {
+    "AnalyzerConfiguration()" should {
         "throw an exception on duplicate package manager configuration" {
             shouldThrow<IllegalArgumentException> {
                 AnalyzerConfiguration(
