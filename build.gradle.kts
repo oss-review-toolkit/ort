@@ -256,9 +256,9 @@ subprojects {
 
         kotlinOptions {
             allWarningsAsErrors = true
-            jvmTarget = javaVersion.majorVersion
             apiVersion = "1.8"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+            jvmTarget = javaVersion.majorVersion
         }
     }
 
