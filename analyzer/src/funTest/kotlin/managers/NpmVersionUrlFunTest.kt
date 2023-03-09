@@ -45,9 +45,7 @@ class NpmVersionUrlFunTest : WordSpec({
     "NPM" should {
         "resolve dependencies with URLs as versions correctly" {
             val definitionFile = projectDir.resolve("package.json")
-
             val config = AnalyzerConfiguration(allowDynamicVersions = true)
-            val result = createNpm(config).resolveSingleProject(definitionFile, resolveScopes = true)
             val vcsPath = vcsDir.getPathToRoot(projectDir)
             val expectedResultYaml = patchExpectedResult(
                 projectDir.resolveSibling("npm-version-urls-expected-output.yml"),
@@ -58,7 +56,9 @@ class NpmVersionUrlFunTest : WordSpec({
             )
             val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
 
-            result.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            val actualResult = createNpm(config).resolveSingleProject(definitionFile, resolveScopes = true)
+
+            actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
 })
