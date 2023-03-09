@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class StackFunTest : StringSpec({
     "Dependencies should be resolved correctly for quickcheck-state-machine" {

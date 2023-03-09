@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class YarnFunTest : WordSpec() {
     private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {

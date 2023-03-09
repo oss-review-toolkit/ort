@@ -27,7 +27,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class CopyrightStatementsProcessorTest : WordSpec({
     "process" should {
@@ -54,5 +54,3 @@ class CopyrightStatementsProcessorTest : WordSpec({
         }
     }
 })
-
-private fun CopyrightStatementsProcessor.Result.toYaml() = yamlMapper.writeValueAsString(this)
