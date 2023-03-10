@@ -372,19 +372,6 @@ private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>>
             }
         )
 
-    /**
-     * Search for the single package that represents the main project. This is the only package without a version. Fail
-     * if no single package with this criterion can be found.
-     */
-    fun projectId(): Identifier =
-        nodes().filter { it.version.isBlank() }.let { idsWithoutVersion ->
-            require(idsWithoutVersion.size == 1) {
-                "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
-            }
-
-            idsWithoutVersion.first()
-        }
-
     private enum class NodeColor { WHITE, GRAY, BLACK }
 
     /**
@@ -514,6 +501,19 @@ private data class ModuleInfoFile(
         val subdir: String? = null
     )
 }
+
+/**
+ * Search for the single package that represents the main project. This is the only package without a version. Fail
+ * if no single package with this criterion can be found.
+ */
+private fun Graph.projectId(): Identifier =
+    nodes().filter { it.version.isBlank() }.let { idsWithoutVersion ->
+        require(idsWithoutVersion.size == 1) {
+            "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
+        }
+
+        idsWithoutVersion.first()
+    }
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val info = jsonMapper.readValue<ModuleInfoFile>(File(goMod).resolveSibling("$version.info"))
