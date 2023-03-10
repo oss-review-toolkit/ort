@@ -17,13 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer
+package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.concurrent.shouldCompleteWithin
 
 import java.util.concurrent.TimeUnit
 
+import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
