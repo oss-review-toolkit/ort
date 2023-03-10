@@ -74,7 +74,7 @@ if (version == Project.DEFAULT_VERSION) {
     }
 }
 
-logger.quiet("Building ORT version $version.")
+logger.lifecycle("Building ORT version $version.")
 
 // Note that Gradle's Java toolchain mechanism cannot be used here as that only applies to the Java version used in
 // compile tasks. But already ORT's build scripts, like the compilation of this file itself, depend on Java 11 due to
