@@ -350,7 +350,7 @@ private data class ModuleInfo(
     val version: String = "",
 
     @JsonProperty("Replace")
-    val replace: ModuleInfo? = null,
+    val replace: ModuleInfo?,
 
     @JsonProperty("Indirect")
     val indirect: Boolean = false,
@@ -364,7 +364,7 @@ private data class ModuleInfo(
 
 private data class DepInfo(
     @JsonProperty("Module")
-    val module: ModuleInfo? = null
+    val module: ModuleInfo?
 )
 
 /**
@@ -378,15 +378,15 @@ private data class ModuleInfoFile(
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class Origin(
         @JsonProperty("VCS")
-        val vcs: String? = null,
+        val vcs: String?,
         @JsonProperty("URL")
-        val url: String? = null,
+        val url: String?,
         @JsonProperty("Ref")
-        val ref: String? = null,
+        val ref: String?,
         @JsonProperty("Hash")
-        val hash: String? = null,
+        val hash: String?,
         @JsonProperty("Subdir")
-        val subdir: String? = null
+        val subdir: String?
     )
 }
 
