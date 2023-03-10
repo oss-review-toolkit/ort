@@ -59,7 +59,7 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
 
-internal const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
+const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
 
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"

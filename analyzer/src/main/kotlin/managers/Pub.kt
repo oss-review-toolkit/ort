@@ -72,7 +72,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-private const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
+const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
 
 private const val GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"

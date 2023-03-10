@@ -63,7 +63,7 @@ import org.semver4j.RangesListFactory
 /**
  * The name of the option to specify the name of the lockfile.
  */
-private const val OPTION_LOCKFILE_NAME = "lockfileName"
+const val OPTION_LOCKFILE_NAME = "lockfileName"
 
 /**
  * The [Conan](https://conan.io/) package manager for C / C++.

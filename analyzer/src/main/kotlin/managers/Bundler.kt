@@ -63,6 +63,11 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
+ * The name of the option to specify the Bundler version.
+ */
+const val OPTION_BUNDLER_VERSION = "bundlerVersion"
+
+/**
  * The path to the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
  */
 private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
@@ -76,11 +81,6 @@ private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_depende
  * The name of the Bundler Gem.
  */
 private const val BUNDLER_GEM_NAME = "bundler"
-
-/**
- * The name of the option to specify the Bundler version.
- */
-private const val OPTION_BUNDLER_VERSION = "bundlerVersion"
 
 /**
  * The name of the file where Bundler stores locked down dependency information.

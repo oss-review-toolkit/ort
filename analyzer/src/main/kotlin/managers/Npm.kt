@@ -83,6 +83,18 @@ import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+/** Name of the configuration option to toggle legacy peer dependency support. */
+const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
+
+/** Name of the scope with the regular dependencies. */
+private const val DEPENDENCIES_SCOPE = "dependencies"
+
+/** Name of the scope with optional dependencies. */
+private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
+
+/** Name of the scope with development dependencies. */
+private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
+
 /**
  * The [Node package manager](https://www.npmjs.com/) for JavaScript.
  *
@@ -669,15 +681,3 @@ open class Npm(
         return ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
     }
 }
-
-/** Name of the configuration option to toggle legacy peer dependency support. */
-private const val OPTION_LEGACY_PEER_DEPS = "legacyPeerDeps"
-
-/** Name of the scope with the regular dependencies. */
-private const val DEPENDENCIES_SCOPE = "dependencies"
-
-/** Name of the scope with optional dependencies. */
-private const val OPTIONAL_DEPENDENCIES_SCOPE = "optionalDependencies"
-
-/** Name of the scope with development dependencies. */
-private const val DEV_DEPENDENCIES_SCOPE = "devDependencies"
