@@ -301,7 +301,7 @@ class GoMod(
 
     private fun ModuleInfo.toSourceArtifact(): RemoteArtifact {
         /**
-         * The below construction of the remote artifact URL makes several simplifying assumptions and it is still
+         * The below construction of the remote artifact URL makes several simplifying assumptions, and it is still
          * questionable whether those assumptions are ok:
          *
          *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
