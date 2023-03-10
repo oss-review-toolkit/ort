@@ -672,7 +672,6 @@ following formats are supported (reporter names are case-insensitive):
     * XHTML (`-f XHtmlTemplate`)
     * DocBook (`-f DocBookTemplate`)
     * Man page (`-f ManPageTemplate`)
-    * AsciiDoc, without any further conversion beyond template processing (`-f AdocTemplate`)
 * [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform
   [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo)
   (`-f CtrlXAutomation`)
