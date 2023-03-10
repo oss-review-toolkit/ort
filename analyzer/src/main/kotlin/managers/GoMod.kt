@@ -307,11 +307,6 @@ class GoMod(
          *   1. GOPROXY in general can hold a list of (fallback) proxy URLs.
          *   2. There are special values like 'direct' and 'off'.
          *   3. GOPRIVATE variable can specify glob expression against paths for which the proxy should be bypassed.
-         *
-         * TODO: Reconsider removing the source artifact URLs in favor of VCS locations. Those could be obtained by
-         * 1. Exposing needed Go internals analog to https://github.com/kisielk/gotool/
-         * 2. Provide a simple CLI written in Go which uses those internals to obtain the VCS location and revision.
-         * 3. Make use of that CLI from within this class.
          */
         val goProxy = getGoProxy()
 
