@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.analyzer.managers.Gradle.Companion.OPTION_GRADLE_VERSION
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -427,7 +426,7 @@ class Pub(
         if (gradleFactory == null || !definitionFile.isFile) return emptyList()
 
         return analyzerResultCacheAndroid.getOrPut(packageName) {
-            val pubGradleVersion = options[OPTION_GRADLE_VERSION] ?: GRADLE_VERSION
+            val pubGradleVersion = options[gradleFactory.type] ?: GRADLE_VERSION
 
             logger.info {
                 "Analyzing Android dependencies for package '$packageName' using Gradle version $pubGradleVersion."
@@ -435,7 +434,7 @@ class Pub(
 
             val gradleAnalyzerConfig = analyzerConfig.withPackageManagerOption(
                 "Gradle",
-                OPTION_GRADLE_VERSION,
+                gradleFactory.type,
                 pubGradleVersion
             )
 
