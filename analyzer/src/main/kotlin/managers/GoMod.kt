@@ -114,12 +114,12 @@ class GoMod(
             val moduleInfoForModuleName = getModuleInfos(projectDir)
             val graph = getModuleGraph(projectDir, moduleInfoForModuleName)
             val projectId = graph.projectId()
-            val packageIds = graph.nodes() - projectId
+            val packageIds = graph.nodes - projectId
             val packages = packageIds.mapTo(mutableSetOf()) { moduleInfoForModuleName.getValue(it.name).toPackage() }
             val projectVcs = processProjectVcs(projectDir)
 
             val dependenciesScopePackageIds = getTransitiveMainModuleDependencies(projectDir).let { moduleNames ->
-                graph.nodes().filterTo(mutableSetOf()) { it.name in moduleNames }
+                graph.nodes.filterTo(mutableSetOf()) { it.name in moduleNames }
             }
 
             val scopes = sortedSetOf(
@@ -253,7 +253,7 @@ class GoMod(
     ): Set<Identifier> {
         val vendorModuleNames = mutableSetOf(graph.projectId().name)
 
-        graph.nodes().chunked(WHY_CHUNK_SIZE).forEach { ids ->
+        graph.nodes.chunked(WHY_CHUNK_SIZE).forEach { ids ->
             // Use the names of replaced modules, because `go mod why` returns only results for those.
             val moduleNames = ids.map { replacedModules[it.name] ?: it.name }.toTypedArray()
             // Use the ´-m´ switch to use module names because the graph also uses module names, not package names.
@@ -263,7 +263,7 @@ class GoMod(
             vendorModuleNames += parseWhyOutput(why.stdout)
         }
 
-        return graph.nodes().filterTo(mutableSetOf()) { (replacedModules[it.name] ?: it.name) in vendorModuleNames }
+        return graph.nodes.filterTo(mutableSetOf()) { (replacedModules[it.name] ?: it.name) in vendorModuleNames }
     }
 
     /**
@@ -395,7 +395,7 @@ private data class ModuleInfoFile(
  * if no single package with this criterion can be found.
  */
 private fun Graph.projectId(): Identifier =
-    nodes().filter { it.version.isBlank() }.let { idsWithoutVersion ->
+    nodes.filter { it.version.isBlank() }.let { idsWithoutVersion ->
         require(idsWithoutVersion.size == 1) {
             "Expected exactly one unique package without version but got ${idsWithoutVersion.joinToString()}."
         }
