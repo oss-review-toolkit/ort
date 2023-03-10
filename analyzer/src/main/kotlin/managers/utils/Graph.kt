@@ -32,8 +32,10 @@ import org.ossreviewtoolkit.model.PackageReference
  * A class to represent a graph with dependencies. This representation is basically an adjacency list implemented by a
  * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
  */
-internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>> = mutableMapOf()) {
+internal class Graph private constructor(private val nodeMap: MutableMap<Identifier, MutableSet<Identifier>>) {
     companion object : Logging
+
+    constructor() : this(mutableMapOf())
 
     /**
      * Return a set with all nodes (i.e. package identifiers) contained in this graph.
@@ -50,7 +52,7 @@ internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>
      * necessary.
      */
     fun addEdge(source: Identifier, target: Identifier) {
-        nodeMap.merge(source, setOf(target)) { set, _ -> set + target }
+        nodeMap.getOrPut(source) { mutableSetOf() } += target
         addNode(target)
     }
 
@@ -113,7 +115,7 @@ internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>
             visit(v)
         }
 
-        return Graph(outgoingEdgesForNodes.mapValuesTo(mutableMapOf()) { it.value.toSet() })
+        return Graph(outgoingEdgesForNodes.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() })
     }
 
     /**
