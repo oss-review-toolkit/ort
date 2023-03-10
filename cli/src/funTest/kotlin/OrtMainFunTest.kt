@@ -237,8 +237,7 @@ class OrtMainFunTest : StringSpec() {
         "EnvironmentVariableFilter is correctly initialized" {
             val referenceConfigFile = File("../model/src/main/resources/$REFERENCE_CONFIG_FILENAME").absolutePath
             runMain(
-                "-c",
-                referenceConfigFile,
+                "-c", referenceConfigFile,
                 "config"
             )
 
