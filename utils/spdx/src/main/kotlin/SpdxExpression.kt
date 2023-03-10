@@ -310,24 +310,29 @@ class SpdxCompoundExpression(
         right.validate(strictness)
     }
 
-    override fun validChoicesForDnf(): Set<SpdxExpression> =
-        when (operator) {
-            SpdxOperator.AND -> setOf(decompose().reduce(SpdxExpression::and))
-
-            SpdxOperator.OR -> {
-                val validChoicesLeft = when (left) {
-                    is SpdxCompoundExpression -> left.validChoicesForDnf()
-                    else -> left.validChoices()
-                }
-
-                val validChoicesRight = when (right) {
-                    is SpdxCompoundExpression -> right.validChoicesForDnf()
-                    else -> right.validChoices()
-                }
-
-                validChoicesLeft + validChoicesRight
-            }
+    override fun validChoicesForDnf(): Set<SpdxExpression> {
+        val validChoicesLeft = when (left) {
+            is SpdxCompoundExpression -> left.validChoicesForDnf()
+            else -> left.validChoices()
         }
+
+        val validChoicesRight = when (right) {
+            is SpdxCompoundExpression -> right.validChoicesForDnf()
+            else -> right.validChoices()
+        }
+
+        return when (operator) {
+            SpdxOperator.AND -> {
+                validChoicesLeft.map { leftChoice ->
+                    validChoicesRight.map { rightChoice ->
+                        if (leftChoice == rightChoice) leftChoice else leftChoice and rightChoice
+                    }
+                }.flatten().toSet()
+            }
+
+            SpdxOperator.OR -> validChoicesLeft + validChoicesRight
+        }
+    }
 
     override fun offersChoice(): Boolean =
         when (operator) {
