@@ -17,19 +17,6 @@ intermediate file is created that can be processed by AsciidoctorJ. If no option
 
 ## Supported formats
 
-### AsciiDoc
-
-Use the _AdocTemplateReporter_ to create AsciiDoc files from a Freemarker template. This template can be passed to the
-_report_ command using --report-option (or -O) with the `template.id` option.
-
-```bash
-cli/build/install/ort/bin/ort report
-  -i [scanner-output-dir]/scanner-result.yml
-  -o [reporter-output-dir]
-  -f AdocTemplate
-  --report-option AdocTemplate=template.id=[template-id]
-```
-
 ### PDF
 
 After the intermediate AsciiDoc files are generated, they are processed by AsciidoctorJ or to be more precise by its PDF
