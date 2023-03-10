@@ -45,7 +45,7 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
     /**
      * Return the size of this graph. This is the number of nodes it contains.
      */
-    fun size() = nodeMap.size
+    val size: Int get() = nodeMap.size
 
     /**
      * Add an edge (i.e. a dependency relation) from [source] to [target] to this dependency graph. Add missing nodes if

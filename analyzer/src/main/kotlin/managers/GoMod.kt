@@ -197,9 +197,9 @@ class GoMod(
         }.toMap()
 
         val vendorModules = getVendorModules(graph, projectDir, replacedModules)
-        if (vendorModules.size < graph.size()) {
+        if (vendorModules.size < graph.size) {
             logger.debug {
-                "Removing ${graph.size() - vendorModules.size} non-vendor modules from the dependency graph."
+                "Removing ${graph.size - vendorModules.size} non-vendor modules from the dependency graph."
             }
 
             graph = graph.subgraph(vendorModules)
