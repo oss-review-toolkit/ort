@@ -79,11 +79,13 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
         val jsonSlurper = JsonSlurper()
         val url = URL("https://scancode-licensedb.aboutcode.org/index.json")
 
-        logger.quiet("Downloading ScanCode license index from $url...")
+        logger.quiet("Downloading ScanCode license index...")
 
-        val json = jsonSlurper.parse(url, "UTF-8")
+        val json = jsonSlurper.parse(url, "UTF-8") as List<Map<String, Any?>>
 
-        (json as List<Map<String, Any?>>).mapNotNull { map ->
+        logger.quiet("Found ${json.size} ScanCode license entries.")
+
+        json.mapNotNull { map ->
             (map["spdx_license_key"] as? String)?.let { it to (map["license_key"] as String) }
         }.toMap()
     }
