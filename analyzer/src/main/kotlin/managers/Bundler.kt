@@ -63,11 +63,6 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
- * The name of the option to specify the Bundler version.
- */
-const val OPTION_BUNDLER_VERSION = "bundlerVersion"
-
-/**
  * The path to the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
  */
 private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
@@ -140,7 +135,12 @@ class Bundler(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging
+    companion object : Logging {
+        /**
+         * The name of the option to specify the Bundler version.
+         */
+        const val OPTION_BUNDLER_VERSION = "bundlerVersion"
+    }
 
     class Factory : AbstractPackageManagerFactory<Bundler>("Bundler") {
         override val globsForDefinitionFiles = listOf("Gemfile")

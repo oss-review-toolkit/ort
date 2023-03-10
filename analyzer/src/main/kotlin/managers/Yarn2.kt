@@ -73,8 +73,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
-
 // The various Yarn dependency types supported by this package manager.
 private enum class YarnDependencyType(val type: String) {
     DEPENDENCIES("dependencies"),
@@ -96,6 +94,11 @@ class Yarn2(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object : Logging {
+        /**
+         * The name of the option to disable HTTPS server certificate verification.
+         */
+        const val OPTION_DISABLE_REGISTRY_CERTIFICATE_VERIFICATION = "disableRegistryCertificateVerification"
+
         /**
          * The name of Yarn 2+ resource file.
          */

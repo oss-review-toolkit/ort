@@ -61,11 +61,6 @@ import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
 /**
- * The name of the option to specify the name of the lockfile.
- */
-const val OPTION_LOCKFILE_NAME = "lockfileName"
-
-/**
  * The [Conan](https://conan.io/) package manager for C / C++.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
@@ -81,6 +76,11 @@ class Conan(
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object : Logging {
+        /**
+         * The name of the option to specify the name of the lockfile.
+         */
+        const val OPTION_LOCKFILE_NAME = "lockfileName"
+
         private val DUMMY_COMPILER_SETTINGS = arrayOf(
             "-s", "compiler=gcc",
             "-s", "compiler.libcxx=libstdc++",

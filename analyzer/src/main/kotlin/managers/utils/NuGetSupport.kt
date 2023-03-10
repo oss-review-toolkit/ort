@@ -59,8 +59,6 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForFile
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.downloadText
 
-const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
-
 // See https://docs.microsoft.com/en-us/nuget/api/overview.
 private const val DEFAULT_SERVICE_INDEX_URL = "https://api.nuget.org/v3/index.json"
 private const val REGISTRATIONS_BASE_URL_TYPE = "RegistrationsBaseUrl/3.6.0"
@@ -76,6 +74,8 @@ class NuGetSupport(
     private val reader: XmlPackageFileReader
 ) {
     companion object : Logging {
+        const val OPTION_DIRECT_DEPENDENCIES_ONLY = "directDependenciesOnly"
+
         val XML_MAPPER = XmlMapper(
             XmlFactory().apply {
                 // Work-around for https://github.com/FasterXML/jackson-module-kotlin/issues/138.
