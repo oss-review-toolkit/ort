@@ -65,8 +65,6 @@ internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>
             }
         )
 
-    private enum class NodeColor { WHITE, GRAY, BLACK }
-
     /**
      * Return a copy of this Graph with edges removed so that no circle remains.
      * TODO: The code has been copied from DependencyGraphBuilder as a temporary solutions. Once GoMod is migrated to
@@ -136,3 +134,5 @@ internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>
      */
     private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
+
+private enum class NodeColor { WHITE, GRAY, BLACK }
