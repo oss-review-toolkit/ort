@@ -40,7 +40,7 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
     /**
      * Return a set with all nodes (i.e. package identifiers) contained in this graph.
      */
-    fun nodes(): Set<Identifier> = nodeMap.keys
+    val nodes: Set<Identifier> get() = nodeMap.keys
 
     /**
      * Return the size of this graph. This is the number of nodes it contains.
