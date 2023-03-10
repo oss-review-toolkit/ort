@@ -290,6 +290,7 @@ RUN --mount=type=tmpfs,target=/android \
     && curl -Os https://dl.google.com/android/repository/commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip \
     && unzip -q commandlinetools-linux-${ANDROID_CMD_VERSION}_latest.zip -d $ANDROID_HOME \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
+    && PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
         # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \

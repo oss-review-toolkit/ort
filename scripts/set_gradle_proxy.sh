@@ -38,6 +38,7 @@ writeProxyStringToGradleProps () {
     fi
 
     local PORT=${PROXY##*:}
+    PORT=${PORT/%\//}
     [ "$PORT" -ge 0 ] 2>/dev/null || PORT=80
 
     grep -qF "systemProp.$PROTOCOL.proxy" $FILE 2>/dev/null && return 1

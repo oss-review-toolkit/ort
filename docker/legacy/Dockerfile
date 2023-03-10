@@ -147,6 +147,7 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     unzip -q commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip -d $ANDROID_HOME && \
     rm commandlinetools-linux-${ANDROID_SDK_VERSION}_latest.zip && \
     PROXY_HOST_AND_PORT=${https_proxy#*://} && \
+    PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} && \
     if [ -n "$PROXY_HOST_AND_PORT" ]; then \
         # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
