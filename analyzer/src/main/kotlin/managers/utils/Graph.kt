@@ -51,7 +51,14 @@ internal class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>
      */
     fun addEdge(source: Identifier, target: Identifier) {
         nodeMap.merge(source, setOf(target)) { set, _ -> set + target }
-        nodeMap.getOrPut(target) { emptySet() }
+        addNode(target)
+    }
+
+    /**
+     * Add a node to this dependency graph.
+     */
+    fun addNode(node: Identifier) {
+        nodeMap.getOrPut(node) { mutableSetOf() }
     }
 
     /**
