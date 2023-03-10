@@ -25,20 +25,17 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.readValues
 
 import java.io.File
-import java.util.LinkedList
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.utils.Graph
 import org.ossreviewtoolkit.analyzer.managers.utils.normalizeModuleVersion
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageLinkage
-import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
@@ -333,115 +330,6 @@ class GoMod(
 
     private fun runGo(vararg args: CharSequence, workingDir: File? = null) =
         run(args = args, workingDir = workingDir, environment = environment)
-}
-
-/**
- * A class to represent a graph with dependencies. This representation is basically an adjacency list implemented by a
- * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
- */
-private class Graph(private val nodeMap: MutableMap<Identifier, Set<Identifier>> = mutableMapOf()) {
-    companion object : Logging
-
-    /**
-     * Return a set with all nodes (i.e. package identifiers) contained in this graph.
-     */
-    fun nodes(): Set<Identifier> = nodeMap.keys
-
-    /**
-     * Return the size of this graph. This is the number of nodes it contains.
-     */
-    fun size() = nodeMap.size
-
-    /**
-     * Add an edge (i.e. a dependency relation) from [source] to [target] to this dependency graph. Add missing nodes if
-     * necessary.
-     */
-    fun addEdge(source: Identifier, target: Identifier) {
-        nodeMap.merge(source, setOf(target)) { set, _ -> set + target }
-        nodeMap.getOrPut(target) { emptySet() }
-    }
-
-    /**
-     * Return a subgraph of this [Graph] that contains only nodes from the given set of [subNodes]. This can be used to
-     * construct graphs for specific scopes.
-     */
-    fun subgraph(subNodes: Set<Identifier>): Graph =
-        Graph(
-            nodeMap.filter { it.key in subNodes }.mapValuesTo(mutableMapOf()) { e ->
-                e.value.filterTo(mutableSetOf()) { it in subNodes }
-            }
-        )
-
-    private enum class NodeColor { WHITE, GRAY, BLACK }
-
-    /**
-     * Return a copy of this Graph with edges removed so that no circle remains.
-     * TODO: The code has been copied from DependencyGraphBuilder as a temporary solutions. Once GoMod is migrated to
-     * use the dependency graph, this function can be dropped and the one from DependencyGraphBuilder can be re-used,
-     * see also https://github.com/oss-review-toolkit/ort/issues/4249.
-     */
-    fun breakCycles(): Graph {
-        val outgoingEdgesForNodes = nodeMap.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
-        val color = outgoingEdgesForNodes.keys.associateWithTo(mutableMapOf()) { NodeColor.WHITE }
-
-        fun visit(u: Identifier) {
-            color[u] = NodeColor.GRAY
-
-            val nodesClosingCircle = mutableSetOf<Identifier>()
-
-            outgoingEdgesForNodes[u].orEmpty().forEach { v ->
-                if (color[v] == NodeColor.WHITE) {
-                    visit(v)
-                } else if (color[v] == NodeColor.GRAY) {
-                    nodesClosingCircle += v
-                }
-            }
-
-            outgoingEdgesForNodes[u]?.removeAll(nodesClosingCircle)
-            nodesClosingCircle.forEach { v ->
-                logger.debug { "Removing edge: ${u.toCoordinates()} -> ${v.toCoordinates()}}." }
-            }
-
-            color[u] = NodeColor.BLACK
-        }
-
-        val queue = LinkedList(outgoingEdgesForNodes.keys)
-
-        while (queue.isNotEmpty()) {
-            val v = queue.removeFirst()
-
-            if (color.getValue(v) != NodeColor.WHITE) continue
-
-            visit(v)
-        }
-
-        return Graph(outgoingEdgesForNodes.mapValuesTo(mutableMapOf()) { it.value.toSet() })
-    }
-
-    /**
-     * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
-     * of the given [root] package. The graph must not contain any cycles, so [breakCycles] should be called before.
-     */
-    fun toPackageReferenceForest(root: Identifier): SortedSet<PackageReference> {
-        fun getPackageReference(id: Identifier): PackageReference {
-            val dependencies = nodeMap.getValue(id).mapTo(sortedSetOf()) {
-                getPackageReference(it)
-            }
-
-            return PackageReference(
-                id = id,
-                linkage = PackageLinkage.PROJECT_STATIC,
-                dependencies = dependencies
-            )
-        }
-
-        return dependencies(root).mapTo(sortedSetOf()) { getPackageReference(it) }
-    }
-
-    /**
-     * Return the identifiers of the direct dependencies of the package denoted by [id].
-     */
-    private fun dependencies(id: Identifier): Set<Identifier> = nodeMap[id].orEmpty()
 }
 
 /** Separator string indicating that data of a new package follows in the output of the go mod why command. */
