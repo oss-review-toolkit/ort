@@ -22,8 +22,8 @@ The information from the `license-classifications.yml` is evaluated by the follo
 
 * [Rules]: By defining categories like "permissive" or "public domain", rules can determine how to handle specific
   licenses and issue warning or error messages if problems are detected.
-* [Notice templates]: Based on their associated categories, the templates can decide, which licenses to include into the
-  generated notice file.
+* [Plain text templates]: Based on their associated categories, the plain text templates for generating NOTICE files can
+  decide, which licenses to include into the generated notice file.
 
 The [license-classifications.yml example] demonstrates the intended use cases. It defines some categories that specify
 whether licenses are applicable to development projects. The [example.rules.kts] checks ORT results against these
@@ -56,6 +56,6 @@ cli/build/install/ort/bin/ort evaluate
 [generated license-classifications.yml]: https://github.com/maxhbr/LDBcollector/blob/generated/ort/license-classifications.yml
 [LDBcollector]: https://github.com/maxhbr/LDBcollector
 [Rules]: file-rules-kts.md
-[Notice templates]: reporters/notice-templates.md
+[Plain text templates]: reporters/plain-text-templates.md
 [license-classifications.yml example]: ../examples/license-classifications.yml
 [example.rules.kts]: ../examples/evaluator-rules/src/main/resources/example.rules.kts
