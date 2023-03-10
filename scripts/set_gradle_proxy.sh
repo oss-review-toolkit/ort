@@ -32,9 +32,9 @@ writeProxyStringToGradleProps () {
         # Strip authentication info.
         HOST=${HOST#$AUTH@}
         # Extract the user.
-        local USER=${AUTH%%:*}
+        local PROXY_USER=${AUTH%%:*}
         # Extract the password.
-        local PASSWORD=${AUTH#*:}
+        local PROXY_PASSWORD=${AUTH#*:}
     fi
 
     local PORT=${PROXY##*:}
@@ -48,8 +48,8 @@ writeProxyStringToGradleProps () {
     cat <<- EOF >> $FILE
 	systemProp.$PROTOCOL.proxyHost=$HOST
 	systemProp.$PROTOCOL.proxyPort=$PORT
-	systemProp.$PROTOCOL.proxyUser=$USER
-	systemProp.$PROTOCOL.proxyPassword=$PASSWORD
+	systemProp.$PROTOCOL.proxyUser=$PROXY_USER
+	systemProp.$PROTOCOL.proxyPassword=$PROXY_PASSWORD
 	EOF
 }
 
