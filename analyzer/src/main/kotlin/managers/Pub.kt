@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerDependencyResult
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
+import org.ossreviewtoolkit.analyzer.managers.Gradle.Companion.OPTION_GRADLE_VERSION
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.analyzer.managers.utils.PubCacheReader
 import org.ossreviewtoolkit.analyzer.parseAuthorString
@@ -72,8 +73,6 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
-const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
-
 private const val GRADLE_VERSION = "7.3"
 private const val PUBSPEC_YAML = "pubspec.yaml"
 private const val PUB_LOCK_FILE = "pubspec.lock"
@@ -109,7 +108,9 @@ class Pub(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging
+    companion object : Logging {
+        const val OPTION_PUB_DEPENDENCIES_ONLY = "pubDependenciesOnly"
+    }
 
     class Factory : AbstractPackageManagerFactory<Pub>("Pub") {
         override val globsForDefinitionFiles = listOf(PUBSPEC_YAML)
