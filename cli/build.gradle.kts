@@ -165,8 +165,6 @@ dependencies {
     testImplementation(libs.greenmail)
     testImplementation(libs.kotestAssertionsCore)
     testImplementation(libs.kotestRunnerJunit5)
-
-    funTestImplementation(sourceSets["main"].output)
 }
 
 configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
