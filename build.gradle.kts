@@ -300,6 +300,14 @@ subprojects {
     }
 
     tasks.withType<Test>().configureEach {
+        // Work-around for "--tests" only being able to include tests, see https://github.com/gradle/gradle/issues/6505.
+        properties["tests.exclude"]?.also { excludes ->
+            filter {
+                excludes.toString().split(',').map { excludeTestsMatching(it) }
+                isFailOnNoMatchingTests = false
+            }
+        }
+
         if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
             // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
             jvmArgs("--add-opens=java.base/java.util=ALL-UNNAMED")
