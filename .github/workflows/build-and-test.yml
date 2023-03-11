@@ -131,7 +131,7 @@ jobs:
     - name: Run functional tests
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: --scan funTest jacocoFunTestReport -x :analyzer:funTest
+        arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.analyzer.* funTest jacocoFunTestReport
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
