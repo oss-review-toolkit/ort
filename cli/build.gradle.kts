@@ -167,7 +167,6 @@ dependencies {
     testImplementation(libs.kotestRunnerJunit5)
 
     funTestImplementation(sourceSets["main"].output)
-    funTestImplementation(sourceSets["test"].output)
 }
 
 configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
