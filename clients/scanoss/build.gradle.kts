@@ -31,7 +31,7 @@ plugins {
 dependencies {
     api(libs.retrofit)
 
-    implementation(libs.kotlinxSerialization)
+    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.retrofitConverterKotlinxSerialization)
 
     testImplementation(libs.wiremock)

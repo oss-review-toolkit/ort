@@ -118,7 +118,8 @@ kotestFrameworkEngine = { module = "io.kotest:kotest-framework-engine", version.
 kotestRunnerJunit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinxHtml = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
-kotlinxSerialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
+kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 # @keep this library which is only being used via force().
@@ -155,5 +156,6 @@ xz = { module = "org.tukaani:xz", version.ref = "xz" }
 [bundles]
 exposed = ["exposedCore", "exposedDao", "exposedJdbc", "exposedJavaTime"]
 hoplite = ["hopliteCore", "hopliteYaml"]
+kotlinxSerialization = ["kotlinxSerializationCore", "kotlinxSerializationJson"]
 maven = ["mavenCore", "mavenCompat"]
 mavenResolver = ["mavenResolverConnectorBasic", "mavenResolverTransportFile", "mavenResolverTransportHttp", "mavenResolverTransportWagon"]

@@ -32,8 +32,8 @@ dependencies {
     implementation(project(":clients:vulnerable-code-client"))
 
     implementation(libs.cvssCalculator)
+    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.kotlinxSerialization)
     implementation(libs.ktorClientOkHttp)
 
     testImplementation(libs.mockk)
