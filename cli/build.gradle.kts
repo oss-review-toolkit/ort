@@ -161,9 +161,10 @@ dependencies {
 
     testImplementation(project(":utils:test-utils"))
 
-    testImplementation(libs.greenmail)
     testImplementation(libs.kotestAssertionsCore)
     testImplementation(libs.kotestRunnerJunit5)
+
+    funTestImplementation(libs.greenmail)
 }
 
 configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
