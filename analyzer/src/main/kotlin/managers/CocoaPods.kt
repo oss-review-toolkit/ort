@@ -101,19 +101,8 @@ class CocoaPods(
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        // CocoaPods originally used and may still use the Specs repository on GitHub [1] as package metadata database.
-        // Using [1] requires an initial clone which is slow to do and consumes already more than 5 GB on disk, see
-        // also [2]. (Final) CDN support has been added in version 1.7.2 [3] to speed things up.
-        //
-        // Temporarily re-configure the repos such that 'https://cdn.cocoapods.org' is the only repository in order to
-        // avoid having to clone and fetch the large Git repository. This ensures that the repositories used are
-        // independent of the hosts current setup.
-        //
-        // [1] https://github.com/CocoaPods/Specs
-        // [2] https://github.com/CocoaPods/CocoaPods/issues/7046.
-        // [3] https://blog.cocoapods.org/CocoaPods-1.7.2/
-
         return stashDirectories(File("~/.cocoapods/repos")).use {
+            // Ensure to use the CDN instead of the monolithic specs repo.
             run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
 
             try {
