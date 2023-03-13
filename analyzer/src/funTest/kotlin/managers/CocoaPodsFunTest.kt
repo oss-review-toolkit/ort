@@ -29,7 +29,6 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -40,7 +39,7 @@ private val SYNTHETIC_PROJECTS_DIR = getAssetFile("projects/synthetic")
 
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {
-        "determine dependencies from a Podfile without a dependency tree".config(enabled = !Os.isWindows) {
+        "determine dependencies from a Podfile without a dependency tree" {
             val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/regular/Podfile").absoluteFile
             val expectedResult = getExpectedResult(
                 definitionFile = definitionFile,
@@ -52,7 +51,7 @@ class CocoaPodsFunTest : WordSpec({
             result.toYaml() shouldBe expectedResult
         }
 
-        "determine dependencies from a Podfile with a dependency tree".config(enabled = !Os.isWindows) {
+        "determine dependencies from a Podfile with a dependency tree" {
             val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/dep-tree/Podfile").absoluteFile
             val expectedResult = getExpectedResult(
                 definitionFile = definitionFile,
@@ -64,7 +63,7 @@ class CocoaPodsFunTest : WordSpec({
             result.toYaml() shouldBe expectedResult
         }
 
-        "return no dependencies along with an issue if the lockfile is absent".config(enabled = !Os.isWindows) {
+        "return no dependencies along with an issue if the lockfile is absent" {
             val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/no-lockfile/Podfile").absoluteFile
             val expectedResult = getExpectedResult(
                 definitionFile = definitionFile,
