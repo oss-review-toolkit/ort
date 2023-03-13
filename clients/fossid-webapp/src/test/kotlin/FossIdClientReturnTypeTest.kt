@@ -37,11 +37,13 @@ import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
+import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 
 private const val PROJECT_CODE_1 = "semver4j"
 private const val PROJECT_CODE_2 = "semver4j_2"
@@ -117,6 +119,23 @@ class FossIdClientReturnTypeTest : StringSpec({
                 this shouldNot beEmpty()
                 forEach {
                     it.shouldBeTypeOf<FossIdScanResult>()
+                }
+            }
+        }
+    }
+
+    "Snippets can be listed when there is some" {
+        service.listSnippets(
+            "",
+            "",
+            SCAN_CODE_2,
+            "src/main/java/com/vdurmont/semver4j/Requirement.java"
+        ).shouldNotBeNull().run {
+            checkResponse("list snippets")
+            data.shouldNotBeNull().run {
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<Snippet>()
                 }
             }
         }

@@ -22,17 +22,22 @@
 package org.ossreviewtoolkit.clients.fossid
 
 import java.io.File
+import java.util.Base64
 
 import okio.buffer
 import okio.sink
 
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
+import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 
 internal const val SCAN_GROUP = "scans"
+private const val FILES_AND_FOLDERS_GROUP = "files_and_folders"
 private const val PROJECT_GROUP = "projects"
+
+private val base64Encoder = Base64.getEncoder()
 
 /**
  * Verify that a request for the given [operation] was successful. [operation] is a free label describing the operation.
@@ -230,6 +235,29 @@ suspend fun FossIdRestService.listScanResults(user: String, apiKey: String, scan
     listScanResults(
         PostRequestBody("get_results", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode))
     )
+
+/**
+ * List the snippets for the given file with [path] for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.listSnippets(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String
+): PolymorphicResponseBody<Snippet> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    return listSnippets(
+        PostRequestBody(
+            "get_fossid_results",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf("scan_code" to scanCode, "path" to base64Path)
+        )
+    )
+}
 
 /**
  * List the files that have been manually marked as identified for the given [scanCode].
