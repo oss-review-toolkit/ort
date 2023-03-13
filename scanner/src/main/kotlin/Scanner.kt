@@ -79,6 +79,15 @@ class Scanner(
         require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {
             "At least one ScannerWrapper must be provided."
         }
+
+        scannerWrappers.values.flatten().distinct().forEach { scannerWrapper ->
+            scannerWrapper.criteria?.let { criteria ->
+                require(criteria.matches(scannerWrapper.details)) {
+                    "The scanner details of scanner '${scannerWrapper.details.name}' must satisfy the configured " +
+                        "criteria for looking up scan storage entries."
+                }
+            }
+        }
     }
 
     private val archiver = scannerConfig.archive.createFileArchiver()
