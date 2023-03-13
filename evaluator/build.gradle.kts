@@ -41,7 +41,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-    implementation(libs.kotlinxSerialization)
+    implementation(libs.bundles.kotlinxSerialization)
 
     testImplementation(libs.mockk)
 }

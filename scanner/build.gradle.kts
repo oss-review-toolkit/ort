@@ -59,7 +59,7 @@ dependencies {
     implementation(libs.scanoss)
     implementation(libs.sw360Client)
 
-    testImplementation(libs.kotlinxSerialization)
+    testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)
     testImplementation(libs.retrofitConverterKotlinxSerialization)
     testImplementation(libs.wiremock)

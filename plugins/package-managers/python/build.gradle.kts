@@ -33,7 +33,7 @@ dependencies {
 
     implementation(project(":downloader"))
 
-    implementation(libs.kotlinxSerialization)
+    implementation(libs.bundles.kotlinxSerialization)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
