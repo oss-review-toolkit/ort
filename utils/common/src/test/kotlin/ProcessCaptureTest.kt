@@ -48,7 +48,11 @@ class ProcessCaptureTest : StringSpec({
             }
 
             proc.exitValue shouldBe 0
-            proc.stdout.trimEnd() shouldBe ":.my-db.example.org"
+            proc.stdout.trimEnd() shouldBe if (Os.isWindows) {
+                "%DB_USER%:%DB_PASSWORD%.my-db.example.org"
+            } else {
+                ":.my-db.example.org"
+            }
         }
     }
 
