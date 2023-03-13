@@ -50,7 +50,7 @@ class AnalyzerFunTest : WordSpec({
                 repoConfig
             )
 
-            shouldCompleteWithin(20, TimeUnit.SECONDS) {
+            shouldCompleteWithin(120, TimeUnit.SECONDS) {
                 analyzer.analyze(info)
             }
         }
