@@ -65,14 +65,12 @@ dependencies {
     testImplementation(libs.wiremock)
 }
 
-tasks.withType<KotlinCompile>().configureEach {
+tasks.named<KotlinCompile>("compileTestKotlin").configure {
     val customCompilerArgs = listOf(
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )
 
-    if ("test" in name.lowercase()) {
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-        }
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
     }
 }
