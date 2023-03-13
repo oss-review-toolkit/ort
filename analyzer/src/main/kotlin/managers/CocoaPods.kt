@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
+import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
@@ -92,7 +93,7 @@ class CocoaPods(
 
     private val podspecCache = mutableMapOf<String, Podspec>()
 
-    override fun command(workingDir: File?) = "pod"
+    override fun command(workingDir: File?) = if (Os.isWindows) "pod.bat" else "pod"
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.11.0,)")
 
