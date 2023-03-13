@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.databind.node.ObjectNode
 
 import java.io.File
+import java.io.IOException
 import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -201,8 +202,17 @@ class CocoaPods(
                 workingDir = workingDir
             )
         }.getOrElse {
+            val messages = it.collectMessages()
+
             logger.warn {
-                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': ${it.collectMessages()}"
+                "Failed to get the '.podspec' file for package '${id.toCoordinates()}': $messages"
+            }
+
+            if ("SSL peer certificate or SSH remote key was not OK" in messages) {
+                // When running into this error (see e.g. https://github.com/CocoaPods/CocoaPods/issues/11159) abort
+                // immediately, because connections are retried multiple times for each package's podspec to retrieve
+                // which would otherwise take a very long time.
+                throw IOException(messages)
             }
 
             return null
