@@ -37,7 +37,6 @@ dependencies {
     implementation(libs.bundles.mavenResolver)
 
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.jruby)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.semver4j)
 

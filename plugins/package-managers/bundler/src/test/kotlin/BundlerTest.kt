@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
@@ -58,7 +58,7 @@ class BundlerTest : WordSpec({
 
     "createFromJson()" should {
         "parse JSON metadata for a Gem correctly" {
-            val rspecGemJson = File("src/test/assets/bundler/rspec-3.7.0.yaml")
+            val rspecGemJson = File("src/test/assets/rspec-3.7.0.yaml")
 
             val gemspec = GemSpec.createFromGem(rspecGemJson.readValue())
 

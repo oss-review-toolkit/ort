@@ -1,5 +1,4 @@
 org.ossreviewtoolkit.analyzer.managers.Bower$Factory
-org.ossreviewtoolkit.analyzer.managers.Bundler$Factory
 org.ossreviewtoolkit.analyzer.managers.Cargo$Factory
 org.ossreviewtoolkit.analyzer.managers.Carthage$Factory
 org.ossreviewtoolkit.analyzer.managers.CocoaPods$Factory
