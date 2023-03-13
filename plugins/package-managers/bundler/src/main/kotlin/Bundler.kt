@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
@@ -65,12 +65,12 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 /**
  * The path to the helper script resource that resolves a `Gemfile`'s top-level dependencies with group information.
  */
-private const val ROOT_DEPENDENCIES_SCRIPT = "scripts/bundler_root_dependencies.rb"
+private const val ROOT_DEPENDENCIES_SCRIPT = "root_dependencies.rb"
 
 /**
  * The path to the helper script resource that resolves a `Gemfile`'s dependencies.
  */
-private const val RESOLVE_DEPENDENCIES_SCRIPT = "scripts/bundler_resolve_dependencies.rb"
+private const val RESOLVE_DEPENDENCIES_SCRIPT = "resolve_dependencies.rb"
 
 /**
  * The name of the Bundler Gem.

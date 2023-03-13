@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
@@ -27,6 +27,7 @@ import io.kotest.matchers.string.haveSubstring
 
 import java.io.File
 
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -39,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class BundlerFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic/bundler").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -52,7 +53,7 @@ class BundlerFunTest : WordSpec() {
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        projectsDir.resolveSibling("bundler-expected-output-lockfile.yml"),
+                        projectsDir.resolve("bundler-expected-output-lockfile.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -70,9 +71,9 @@ class BundlerFunTest : WordSpec() {
 
                 with(actualResult) {
                     project.id shouldBe
-                            Identifier("Bundler::src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile:")
+                            Identifier("Bundler::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
                     project.definitionFilePath shouldBe
-                            "analyzer/src/funTest/assets/projects/synthetic/bundler/no-lockfile/Gemfile"
+                            "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
                     packages should beEmpty()
                     issues.size shouldBe 1
                     issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
@@ -85,7 +86,7 @@ class BundlerFunTest : WordSpec() {
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
                     val expectedResult = patchExpectedResult(
-                        projectsDir.resolveSibling("bundler-expected-output-gemspec.yml"),
+                        projectsDir.resolve("bundler-expected-output-gemspec.yml"),
                         url = normalizeVcsUrl(vcsUrl),
                         revision = vcsRevision,
                         path = vcsDir.getPathToRoot(definitionFile.parentFile)

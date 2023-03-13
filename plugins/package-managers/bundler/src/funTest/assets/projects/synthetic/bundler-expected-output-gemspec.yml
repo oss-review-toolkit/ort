@@ -1,7 +1,9 @@
 ---
 project:
-  id: "Bundler::src/funTest/assets/projects/synthetic/bundler/lockfile/Gemfile:"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/bundler/lockfile/Gemfile"
+  id: "Bundler::test-project:1.0.0"
+  definition_file_path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/gemspec/Gemfile"
+  authors:
+  - "Bob Example"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
@@ -13,16 +15,25 @@ project:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    path: "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/gemspec"
   homepage_url: ""
   scopes:
   - name: "default"
     dependencies:
-    - id: "Gem::nokogiri:1.10.8"
+    - id: "Gem::test-project:1.0.0"
       dependencies:
-      - id: "Gem::mini_portile2:2.4.0"
-    - id: "Gem::rack:2.1.4"
-  - name: "test"
+      - id: "Gem::rack:2.2.3"
+      - id: "Gem::signet:0.8.1"
+        dependencies:
+        - id: "Gem::addressable:2.7.0"
+          dependencies:
+          - id: "Gem::public_suffix:4.0.5"
+        - id: "Gem::faraday:0.17.3"
+          dependencies:
+          - id: "Gem::multipart-post:2.1.1"
+        - id: "Gem::jwt:2.2.1"
+        - id: "Gem::multi_json:1.14.1"
+  - name: "development"
     dependencies:
     - id: "Gem::rspec:3.7.0"
       dependencies:
@@ -38,6 +49,38 @@ project:
         - id: "Gem::diff-lcs:1.3"
         - id: "Gem::rspec-support:3.7.1"
 packages:
+- id: "Gem::addressable:2.7.0"
+  purl: "pkg:gem/addressable@2.7.0"
+  authors:
+  - "Bob Aman"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Addressable is an alternative implementation to the URI implementation\
+    \ that is\npart of Ruby's standard library. It is flexible, offers heuristic parsing,\
+    \ and\nadditionally provides extensive support for IRIs and URI templates.\n"
+  homepage_url: "https://github.com/sporkmonger/addressable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/addressable-2.7.0.gem"
+    hash:
+      value: "5e9b62fe1239091ea9b2893cd00ffe1bcbdd9371f4e1d35fac595c98c5856cbb"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "http://github.com/sporkmonger/addressable.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sporkmonger/addressable.git"
+    revision: ""
+    path: ""
 - id: "Gem::diff-lcs:1.3"
   purl: "pkg:gem/diff-lcs@1.3"
   authors:
@@ -78,79 +121,170 @@ packages:
     url: "https://github.com/halostatue/diff-lcs.git"
     revision: ""
     path: ""
-- id: "Gem::mini_portile2:2.4.0"
-  purl: "pkg:gem/mini_portile2@2.4.0"
+- id: "Gem::faraday:0.17.3"
+  purl: "pkg:gem/faraday@0.17.3"
   authors:
-  - "Lars Kanis"
-  - "Luis Lavena"
-  - "Mike Dalessio"
+  - "@iMacTia"
+  - "@olleolleolle"
+  - "@technoweenie"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Simplistic port-like solution for developers. It provides a standard\
-    \ and simplified way to compile against dependency libraries without messing up\
-    \ your system."
-  homepage_url: "https://github.com/flavorjones/mini_portile"
+  description: ""
+  homepage_url: "https://lostisland.github.io/faraday"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/mini_portile2-2.4.0.gem"
+    url: "https://rubygems.org/gems/faraday-0.17.3.gem"
     hash:
-      value: "7e178a397ad62bb8a96977986130dc81f1b13201c6dd95a48bd8cec1dda5f797"
+      value: "c27a8fd7614f1abe9889d8b797246a8e0e5aa6e9d7f1e34ba05a445bf5844f8d"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/flavorjones/mini_portile.git"
+    url: "https://github.com/lostisland/faraday.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/flavorjones/mini_portile.git"
+    url: "https://github.com/lostisland/faraday.git"
     revision: ""
     path: ""
-- id: "Gem::nokogiri:1.10.8"
-  purl: "pkg:gem/nokogiri@1.10.8"
+- id: "Gem::jwt:2.2.1"
+  purl: "pkg:gem/jwt@2.2.1"
   authors:
-  - "Aaron Patterson"
-  - "Akinori MUSHA"
-  - "John Shahid"
-  - "Lars Kanis"
-  - "Mike Dalessio"
-  - "Tim Elliott"
-  - "Yoko Harada"
+  - "Tim Rudat"
   declared_licenses:
   - "MIT"
   declared_licenses_processed:
     spdx_expression: "MIT"
-  description: "Nokogiri (鋸) is an HTML, XML, SAX, and Reader parser.  Among\nNokogiri's\
-    \ many features is the ability to search documents via XPath\nor CSS3 selectors."
-  homepage_url: "https://nokogiri.org"
+  description: "A pure ruby implementation of the RFC 7519 OAuth JSON Web Token (JWT)\
+    \ standard."
+  homepage_url: "https://github.com/jwt/ruby-jwt"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/nokogiri-1.10.8.gem"
+    url: "https://rubygems.org/gems/jwt-2.2.1.gem"
     hash:
-      value: "0806b8b0541850b59c4f588c53cff42ef2da6c7fa2f0b1cbcb83d1cc219228fa"
+      value: "2c899043f87f4287e30a57c0e71e1e0339f846622ccf263d75837a3aee0eef07"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
-    url: "https://github.com/sparklemotion/nokogiri.git"
+    url: "https://github.com/jwt/ruby-jwt.git"
     revision: ""
     path: ""
   vcs_processed:
     type: "Git"
-    url: "https://github.com/sparklemotion/nokogiri.git"
+    url: "https://github.com/jwt/ruby-jwt.git"
     revision: ""
     path: ""
-- id: "Gem::rack:2.1.4"
-  purl: "pkg:gem/rack@2.1.4"
+- id: "Gem::multi_json:1.14.1"
+  purl: "pkg:gem/multi_json@1.14.1"
+  authors:
+  - "Erik Michaels-Ober"
+  - "Josh Kalderimis"
+  - "Michael Bleigh"
+  - "Pavel Pravosud"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A common interface to multiple JSON libraries, including Oj, Yajl,\
+    \ the JSON gem (with C-extensions), the pure-Ruby JSON gem, NSJSONSerialization,\
+    \ gson.rb, JrJackson, and OkJson."
+  homepage_url: "https://github.com/intridea/multi_json"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/multi_json-1.14.1.gem"
+    hash:
+      value: "d971296c0eacea289d31e4a7ab7ac5eda97262c62bbc8c110de4f5e36425c577"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/intridea/multi_json.git"
+    revision: "v1.14.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/intridea/multi_json.git"
+    revision: "v1.14.1"
+    path: ""
+- id: "Gem::multipart-post:2.1.1"
+  purl: "pkg:gem/multipart-post@2.1.1"
+  authors:
+  - "Nick Sieger"
+  - "Samuel Williams"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Use with Net::HTTP to do multipart form postspec. IO values that have\
+    \ #content_type, #original_filename, and #local_path will be posted as a binary\
+    \ file."
+  homepage_url: "https://github.com/socketry/multipart-post"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/multipart-post-2.1.1.gem"
+    hash:
+      value: "d2dd7aa957650e0d99e0513cd388401b069f09528441b87d884609c8e94ffcfd"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/socketry/multipart-post.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/socketry/multipart-post.git"
+    revision: ""
+    path: ""
+- id: "Gem::public_suffix:4.0.5"
+  purl: "pkg:gem/public_suffix@4.0.5"
+  authors:
+  - "Simone Carletti"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "PublicSuffix can parse and decompose a domain name into top level\
+    \ domain, domain and subdomains."
+  homepage_url: "https://simonecarletti.com/code/publicsuffix-ruby"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/public_suffix-4.0.5.gem"
+    hash:
+      value: "efbc976b8f8cd7e2f9387b41ad4dc5447bcc7e862cf3afd909f13b0048a3dc6f"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/weppos/publicsuffix-ruby.git"
+    revision: "v4.0.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/weppos/publicsuffix-ruby.git"
+    revision: "v4.0.5"
+    path: ""
+- id: "Gem::rack:2.2.3"
+  purl: "pkg:gem/rack@2.2.3"
   authors:
   - "Leah Neukirchen"
   declared_licenses:
@@ -158,20 +292,19 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Rack provides a minimal, modular and adaptable interface for developing\n\
-    web applications in Ruby.  By wrapping HTTP requests and responses in\nthe simplest\
+    web applications in Ruby. By wrapping HTTP requests and responses in\nthe simplest\
     \ way possible, it unifies and distills the API for web\nservers, web frameworks,\
-    \ and software in between (the so-called\nmiddleware) into a single method call.\n\
-    \nAlso see https://rack.github.io/.\n"
-  homepage_url: "https://rack.github.io"
+    \ and software in between (the so-called\nmiddleware) into a single method call.\n"
+  homepage_url: "https://github.com/rack/rack"
   binary_artifact:
     url: ""
     hash:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://rubygems.org/gems/rack-2.1.4.gem"
+    url: "https://rubygems.org/gems/rack-2.2.3.gem"
     hash:
-      value: "bfae1fd43aab62bb60b268329c860f214d2ffb15c4bca48931135a2dea52e2f4"
+      value: "2638e7eb6689a5725c7e16f30cc4aa4e31694dc3ca30d790952526781bd0bb44"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -346,5 +479,64 @@ packages:
   vcs_processed:
     type: "Git"
     url: "https://github.com/rspec/rspec-support.git"
+    revision: ""
+    path: ""
+- id: "Gem::signet:0.8.1"
+  purl: "pkg:gem/signet@0.8.1"
+  authors:
+  - "Bob Aman"
+  - "Steven Bazyl"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
+  description: "Signet is an OAuth 1.0 / OAuth 2.0 implementation.\n"
+  homepage_url: "https://github.com/googleapis/signet"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://rubygems.org/gems/signet-0.8.1.gem"
+    hash:
+      value: "7b2efb61e689a22b4fc721ba5e9f4fc45b1702dcca38e11e52bfe5883b0d484b"
+      algorithm: "SHA-256"
+  vcs:
+    type: "Git"
+    url: "https://github.com/googleapis/signet.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/googleapis/signet.git"
+    revision: ""
+    path: ""
+- id: "Gem::test-project:1.0.0"
+  purl: "pkg:gem/test-project@1.0.0"
+  authors:
+  - "Bob Example"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
     revision: ""
     path: ""
