@@ -191,9 +191,15 @@ subprojects {
 
     testing {
         suites {
-            @Suppress("UnusedPrivateMember")
-            val test by getting(JvmTestSuite::class) {
+            withType<JvmTestSuite>().configureEach {
                 useJUnitJupiter()
+
+                dependencies {
+                    implementation(project(":utils:test-utils"))
+
+                    implementation(rootProject.libs.kotestAssertionsCore)
+                    implementation(rootProject.libs.kotestRunnerJunit5)
+                }
             }
 
             register<JvmTestSuite>("funTest") {
@@ -210,17 +216,6 @@ subprojects {
     // functional tests.
     kotlin.target.compilations.apply {
         getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
-    }
-
-    plugins.withType<JavaLibraryPlugin>().configureEach {
-        dependencies {
-            testImplementation(project(":utils:test-utils"))
-
-            testImplementation(libs.kotestAssertionsCore)
-            testImplementation(libs.kotestRunnerJunit5)
-        }
-
-        configurations["funTestImplementation"].extendsFrom(configurations["testImplementation"])
     }
 
     dependencies {
