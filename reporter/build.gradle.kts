@@ -80,6 +80,7 @@ dependencies {
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
     implementation(libs.saxonHe)
 
-    testImplementation(libs.kotestAssertionsJson)
     testImplementation(libs.mockk)
+
+    funTestImplementation(libs.kotestAssertionsJson)
 }
