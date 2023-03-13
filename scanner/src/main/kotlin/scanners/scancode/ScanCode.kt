@@ -43,6 +43,9 @@ import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
+import org.semver4j.RangesList
+import org.semver4j.RangesListFactory
+
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
  *
@@ -123,6 +126,8 @@ class ScanCode internal constructor(
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
+
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[3.0.0,)")
 
     override fun transformVersion(output: String): String {
         // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
