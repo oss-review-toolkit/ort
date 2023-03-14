@@ -21,15 +21,24 @@ package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.concurrent.shouldCompleteWithin
+import io.kotest.matchers.shouldBe
 
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.downloader.vcs.GitRepo
+import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerFunTest : WordSpec({
     "A globally configured 'mustRunAfter'" should {
@@ -53,6 +62,32 @@ class AnalyzerFunTest : WordSpec({
             shouldCompleteWithin(120, TimeUnit.SECONDS) {
                 analyzer.analyze(info)
             }
+        }
+    }
+
+    "VcsInfo for git-repo projects" should {
+        "be correctly reported" {
+            val url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
+            val revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+            val vcs = VcsInfo(VcsType.GIT_REPO, url, revision)
+            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
+            val outputDir = createTestTempDir()
+
+            GitRepo().download(pkg, outputDir)
+
+            val expectedResult = patchExpectedResult(
+                getAssetFile("git-repo-expected-output.yml"),
+                revision = revision,
+                path = outputDir.invariantSeparatorsPath
+            )
+
+            val ortResult = Analyzer(AnalyzerConfiguration()).run {
+                analyze(findManagedFiles(outputDir))
+            }
+
+            val actualResult = ortResult.withResolvedScopes().toYaml()
+
+            patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 })
