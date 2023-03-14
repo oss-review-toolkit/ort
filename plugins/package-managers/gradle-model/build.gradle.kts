@@ -17,33 +17,4 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-}
-
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
-        }
-
-        filter {
-            includeGroup("org.gradle")
-        }
-    }
-}
-
-dependencies {
-    api(project(":analyzer"))
-
-    implementation(project(":downloader"))
-    implementation(project(":plugins:package-managers:gradle-model"))
-
-    implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.bundles.maven)
-
-    funTestImplementation(testFixtures(project(":analyzer")))
-
-    testImplementation(libs.mockk)
-}
+// Nothing needed here.
