@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle.utils
 
-import Dependency
+import OrtDependency
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
@@ -341,9 +341,9 @@ private fun createDependency(
     artifact: String,
     version: String,
     path: String? = null,
-    dependencies: List<Dependency> = emptyList()
-): Dependency {
-    val dependency = mockk<Dependency>()
+    dependencies: List<OrtDependency> = emptyList()
+): OrtDependency {
+    val dependency = mockk<OrtDependency>()
     every { dependency.groupId } returns group
     every { dependency.artifactId } returns artifact
     every { dependency.version } returns version
@@ -361,7 +361,7 @@ private fun createDependency(
  * Create a [DependencyGraphBuilder] equipped with a [GradleDependencyHandler] that is used by the test cases in
  * this class.
  */
-private fun createGraphBuilder(): DependencyGraphBuilder<Dependency> {
+private fun createGraphBuilder(): DependencyGraphBuilder<OrtDependency> {
     val dependencyHandler = GradleDependencyHandler(NAME, createMavenSupport())
     dependencyHandler.repositories = remoteRepositories
     return DependencyGraphBuilder(dependencyHandler)
@@ -393,7 +393,7 @@ private fun createMavenSupport(): MavenSupport {
 /**
  * Determine the type of the [Identifier] for this dependency.
  */
-private fun Dependency.type(): String =
+private fun OrtDependency.type(): String =
     if (localPath != null) {
         NAME
     } else {
@@ -403,7 +403,7 @@ private fun Dependency.type(): String =
 /**
  * Returns an [Identifier] for this [Dependency].
  */
-private fun Dependency.toId() = Identifier(type(), groupId, artifactId, version)
+private fun OrtDependency.toId() = Identifier(type(), groupId, artifactId, version)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
@@ -422,7 +422,7 @@ private fun Collection<PackageReference>.identifiers(): List<Identifier> = map {
 /**
  * Find the package corresponding to the given [dependency] in this collection.
  */
-private fun Collection<PackageReference>.findDependency(dependency: Dependency): PackageReference =
+private fun Collection<PackageReference>.findDependency(dependency: OrtDependency): PackageReference =
     findId(dependency.toId())
 
 /**
@@ -434,7 +434,7 @@ private fun Collection<PackageReference>.findId(id: Identifier): PackageReferenc
 /**
  * Check whether this [PackageReference] contains exactly the given [dependencies][expectedDependencies].
  */
-private fun PackageReference.checkDependencies(vararg expectedDependencies: Dependency): Set<PackageReference> {
+private fun PackageReference.checkDependencies(vararg expectedDependencies: OrtDependency): Set<PackageReference> {
     val ids = expectedDependencies.map { it.toId() }
     dependencies.identifiers() should containExactlyInAnyOrder(ids)
     return dependencies

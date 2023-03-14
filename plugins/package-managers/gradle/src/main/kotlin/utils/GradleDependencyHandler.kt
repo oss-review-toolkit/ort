@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle.utils
 
-import Dependency
+import OrtDependency
 
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.maven.project.ProjectBuildingException
@@ -49,7 +49,7 @@ class GradleDependencyHandler(
 
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
-) : DependencyHandler<Dependency> {
+) : DependencyHandler<OrtDependency> {
     companion object : Logging
 
     /**
@@ -59,7 +59,7 @@ class GradleDependencyHandler(
      */
     var repositories = emptyList<RemoteRepository>()
 
-    override fun identifierFor(dependency: Dependency): Identifier =
+    override fun identifierFor(dependency: OrtDependency): Identifier =
         Identifier(
             type = dependency.dependencyType(),
             namespace = dependency.groupId,
@@ -67,9 +67,9 @@ class GradleDependencyHandler(
             version = dependency.version
         )
 
-    override fun dependenciesFor(dependency: Dependency): Collection<Dependency> = dependency.dependencies
+    override fun dependenciesFor(dependency: OrtDependency): Collection<OrtDependency> = dependency.dependencies
 
-    override fun issuesForDependency(dependency: Dependency): Collection<Issue> =
+    override fun issuesForDependency(dependency: OrtDependency): Collection<Issue> =
         listOfNotNull(
             dependency.error?.let {
                 createAndLogIssue(
@@ -88,10 +88,10 @@ class GradleDependencyHandler(
             }
         )
 
-    override fun linkageFor(dependency: Dependency): PackageLinkage =
+    override fun linkageFor(dependency: OrtDependency): PackageLinkage =
         if (dependency.isProjectDependency()) PackageLinkage.PROJECT_DYNAMIC else PackageLinkage.DYNAMIC
 
-    override fun createPackage(dependency: Dependency, issues: MutableList<Issue>): Package? {
+    override fun createPackage(dependency: OrtDependency, issues: MutableList<Issue>): Package? {
         // Only look for a package if there was no error resolving the dependency and it is no project dependency.
         if (dependency.error != null || dependency.isProjectDependency()) return null
 
@@ -126,7 +126,7 @@ class GradleDependencyHandler(
      * the type of dependencies to packages is typically _Maven_ unless no pom is available. Only for module
      * dependencies, the type of this manager is used.
      */
-    private fun Dependency.dependencyType(): String =
+    private fun OrtDependency.dependencyType(): String =
         if (isProjectDependency()) {
             managerName
         } else {
@@ -137,4 +137,4 @@ class GradleDependencyHandler(
 /**
  * Return a flag whether this dependency references another project in the current build.
  */
-private fun Dependency.isProjectDependency() = localPath != null
+private fun OrtDependency.isProjectDependency() = localPath != null

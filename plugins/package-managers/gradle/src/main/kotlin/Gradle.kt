@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
-import DependencyTreeModel
+import OrtDependencyTreeModel
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -211,7 +211,7 @@ class Gradle(
                 val stderr = ByteArrayOutputStream()
 
                 val dependencyTreeModel = connection
-                    .model(DependencyTreeModel::class.java)
+                    .model(OrtDependencyTreeModel::class.java)
                     .addJvmArguments(jvmArgs)
                     .addProgressListener(ProgressListener { logger.debug { it.displayName } })
                     .setStandardOutput(stdout)
