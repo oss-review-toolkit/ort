@@ -64,7 +64,8 @@ interface ScanOssService {
     }
 
     /**
-     * Scan a file using the SCANOSS streaming API.
+     * Perform a scan using the streaming API based on the given winnowing fingerprint [file].
+     *
      * TODO: Implement support for scanning with SBOM.
      */
     @Multipart

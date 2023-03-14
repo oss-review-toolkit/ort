@@ -22,6 +22,10 @@ package org.ossreviewtoolkit.clients.scanoss.model
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Information about the engine running on the server providing the response. Note that different engine versions may be
+ * used within a single response as the request is distributed across random backends.
+ */
 @Serializable
 data class Server(
     val version: String,
@@ -29,6 +33,9 @@ data class Server(
     val kbVersion: KnowledgeBaseVersion? = null
 )
 
+/**
+ * Information about the version of the knowledge base running on the server providing the response.
+ */
 @Serializable
 data class KnowledgeBaseVersion(
     val monthly: String,
