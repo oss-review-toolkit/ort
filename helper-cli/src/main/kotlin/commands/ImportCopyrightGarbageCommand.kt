@@ -65,7 +65,7 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
             emptySet<String>()
         }
 
-        val locale = Locale.Builder().setLanguage("en").setRegion("US.utf-8").setVariant("POSIX").build()
+        val locale = Locale.Builder().setLanguage("en").setRegion("US").setVariant("POSIX").build()
         val collator = Collator.getInstance(locale)
         CopyrightGarbage((entriesToImport + existingCopyrightGarbage).toSortedSet(collator)).let {
             createYamlMapper().writeValue(outputCopyrightGarbageFile, it)
