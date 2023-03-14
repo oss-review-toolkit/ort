@@ -22,6 +22,7 @@ import groovy.transform.TupleConstructor
 
 import javax.inject.Inject
 
+import org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier
 import org.gradle.api.internal.artifacts.repositories.DefaultFlatDirArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultIvyArtifactRepository
 import org.gradle.api.internal.artifacts.repositories.DefaultMavenArtifactRepository
@@ -400,7 +401,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             }
         }
 
-        private static boolean canBeResolved(org.gradle.api.artifacts.Configuration configuration) {
+        private static boolean canBeResolved(Configuration configuration) {
             // The canBeResolved property is available since Gradle 3.3.
             boolean canBeResolved = !configuration.hasProperty('canBeResolved') || configuration.canBeResolved
 
@@ -516,7 +517,7 @@ class AbstractOrtDependencyTreePlugin<T> implements Plugin<T> {
             // One again the Gradle's internal API is used to access the identity path of the project, which is not
             // exposed in the 'ProjectComponentIdentifier' interface. This identity path is the path of the project
             // prefixed by the name of the included build e.g. ':includedBuild:subproject'.
-            def identityPath = (identifier as org.gradle.api.internal.artifacts.DefaultProjectComponentIdentifier).identityPath
+            def identityPath = (identifier as DefaultProjectComponentIdentifier).identityPath
             project.logger.quiet("Searching root project for identity path '$identityPath'.")
             def pathFragments = identityPath.path.split(":")
             if (pathFragments[0].isEmpty()) {
