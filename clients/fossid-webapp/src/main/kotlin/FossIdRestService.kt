@@ -190,6 +190,9 @@ interface FossIdRestService {
     suspend fun getProject(@Body body: PostRequestBody): EntityResponseBody<Project>
 
     @POST("api.php")
+    suspend fun getScan(@Body body: PostRequestBody): EntityResponseBody<Scan>
+
+    @POST("api.php")
     suspend fun listScansForProject(@Body body: PostRequestBody): PolymorphicResponseBody<Scan>
 
     @POST("api.php")

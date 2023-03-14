@@ -31,6 +31,7 @@ import io.kotest.matchers.types.shouldBeTypeOf
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
 import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.deleteScan
+import org.ossreviewtoolkit.clients.fossid.getScan
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
@@ -76,6 +77,13 @@ class FossIdClientReturnTypeTest : StringSpec({
 
     beforeTest {
         server.resetAll()
+    }
+
+    "Single scan can be queried" {
+        service.getScan("", "", SCAN_CODE_2).shouldNotBeNull().run {
+            checkResponse("get scan")
+            data.shouldBeTypeOf<Scan>()
+        }
     }
 
     "Scans for project can be listed when there is none" {
