@@ -88,5 +88,5 @@ tasks:
       - buildFunTest
     run:
       container: run
-      command: "'./gradlew funTest jacocoFunTestReport -Ptests.include=org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
+      command: "'./gradlew funTest jacocoFunTestReport -Ptests.include=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
       entrypoint: /bin/bash --login -c
