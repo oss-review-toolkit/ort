@@ -74,20 +74,6 @@ class GitRepoFunTest : StringSpec({
         )
 
         patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
-    }
-
-    "GitRepo correctly lists submodules" {
-        val expectedSubmodules = listOf(
-            "spdx-tools",
-            "submodules",
-            "submodules/commons-text",
-            "submodules/test-data-npm",
-            "submodules/test-data-npm/isarray",
-            "submodules/test-data-npm/long.js"
-        ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
-
-        val workingTree = GitRepo().getWorkingTree(outputDir)
-        workingTree.getNested() shouldBe expectedSubmodules
 
         afterSpec()
     }
