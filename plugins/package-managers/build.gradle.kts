@@ -28,6 +28,7 @@ javaPlatform {
 }
 
 dependencies {
+    api(project(":plugins:package-managers:bower-package-manager"))
     api(project(":plugins:package-managers:bundler-package-manager"))
     api(project(":plugins:package-managers:gradle-model"))
     api(project(":plugins:package-managers:gradle-package-manager"))

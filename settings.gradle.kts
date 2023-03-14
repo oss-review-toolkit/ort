@@ -45,6 +45,7 @@ include(":plugins:package-curation-providers:file")
 include(":plugins:package-curation-providers:ort-config")
 include(":plugins:package-curation-providers:sw360")
 include(":plugins:package-managers")
+include(":plugins:package-managers:bower")
 include(":plugins:package-managers:bundler")
 include(":plugins:package-managers:gradle")
 include(":plugins:package-managers:gradle-model")
@@ -74,6 +75,7 @@ project(":plugins:package-curation-providers:file").name = "file-package-curatio
 project(":plugins:package-curation-providers:ort-config").name = "ort-config-package-curation-provider"
 project(":plugins:package-curation-providers:sw360").name = "sw360-package-curation-provider"
 
+project(":plugins:package-managers:bower").name = "bower-package-manager"
 project(":plugins:package-managers:bundler").name = "bundler-package-manager"
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
 project(":plugins:package-managers:pub").name = "pub-package-manager"
