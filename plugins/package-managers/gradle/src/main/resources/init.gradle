@@ -47,7 +47,7 @@ if (gradle.gradleVersion.isAtLeastVersion(2, 14)) {
     apply plugin: DependencyTreeProjectPlugin
 }
 
-// The following three interfaces have to match the interfaces defined in "analyzer/src/main/kotlin/GradleSupport.kt"
+// The following interfaces have to match those in "plugins/package-managers/gradle/src/main/kotlin/utils/GradleSupport.kt"
 // because they are used to deserialize the model consumed there.
 
 interface DependencyTreeModel {

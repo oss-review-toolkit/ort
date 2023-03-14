@@ -19,8 +19,8 @@
 
 // As it is not possible to declare a package in "init.gradle" also no package is declared here.
 
-// The following three interfaces have to match the interfaces defined in "analyzer/src/resources/init.gradle" because
-// they are used to deserialize the model produced there.
+// The following interfaces have to match those in "plugins/package-managers/gradle/src/main/resources/init.gradle"
+// because they are used to deserialize the model produced there.
 
 interface DependencyTreeModel {
     val group: String
