@@ -48,7 +48,7 @@ if (gradle.gradleVersion.isAtLeastVersion(2, 14)) {
     apply plugin: OrtDependencyTreeProjectPlugin
 }
 
-// The following interfaces have to match those in "plugins/package-managers/gradle/src/main/kotlin/utils/GradleSupport.kt"
+// The following interfaces have to match those in "plugins/package-managers/gradle-model/src/main/kotlin/GradleModel.kt"
 // because they are used to deserialize the model consumed there.
 
 interface OrtDependencyTreeModel {
