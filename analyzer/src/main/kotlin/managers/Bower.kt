@@ -226,7 +226,7 @@ class Bower(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "bower.cmd" else "bower"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.8.8,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.8.8")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

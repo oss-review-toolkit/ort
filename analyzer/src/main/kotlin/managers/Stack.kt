@@ -104,7 +104,7 @@ class Stack(
         // Version 2.1.1, Git revision f612ea85316bbc327a64e4ad8d9f0b150dc12d4b (7648 commits) x86_64 hpack-0.31.2
         output.removePrefix("Version ").substringBefore(',').substringBefore(' ')
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.1.1,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.1.1")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

@@ -126,7 +126,7 @@ class Sbt(
         // We need at least sbt version 0.13.0 to be able to use "makePom" instead of the deprecated hyphenated
         // form "make-pom" and to support declaring Maven-style repositories, see
         // http://www.scala-sbt.org/0.13/docs/Publishing.html#Modifying+the+generated+POM.
-        RangesListFactory.create("[0.13.0,)")
+        RangesListFactory.create(">=0.13.0")
 
     private fun checkForSameSbtVersion(versions: List<Semver>): String {
         val uniqueVersions = versions.toSortedSet()

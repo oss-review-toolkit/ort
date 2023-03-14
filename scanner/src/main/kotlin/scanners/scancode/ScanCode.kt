@@ -127,7 +127,7 @@ class ScanCode internal constructor(
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[3.0.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=3.0.0")
 
     override fun transformVersion(output: String): String {
         // On first use, the output is prefixed by "Configuring ScanCode for first use...". The version string can be
