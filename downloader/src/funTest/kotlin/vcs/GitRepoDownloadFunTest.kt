@@ -19,33 +19,36 @@
 
 package org.ossreviewtoolkit.downloader.vcs
 
+import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.core.test.TestCase
 import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
 
 class GitRepoDownloadFunTest : StringSpec() {
-    private lateinit var outputDir: File
+    private val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
+    private val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
 
-    override suspend fun beforeTest(testCase: TestCase) {
-        outputDir = createTestTempDir()
+    private lateinit var outputDir: File
+    private lateinit var workingTree: WorkingTree
+
+    override suspend fun beforeSpec(spec: Spec) {
+        outputDir = createSpecTempDir()
+        workingTree = GitRepo().download(pkg, outputDir)
     }
 
     init {
         "GitRepo can download a given revision" {
-            val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
-            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
-            val workingTree = GitRepo().download(pkg, outputDir)
-
             val spdxDir = outputDir.resolve("spdx-tools")
             val expectedSpdxFiles = listOf(
                 ".git",
@@ -84,6 +87,20 @@ class GitRepoDownloadFunTest : StringSpec() {
 
             actualSpdxFiles.joinToString("\n") shouldBe expectedSpdxFiles.joinToString("\n")
             actualSubmodulesFiles.joinToString("\n") shouldBe expectedSubmodulesFiles.joinToString("\n")
+        }
+
+        "GitRepo correctly lists submodules" {
+            val expectedSubmodules = listOf(
+                "spdx-tools",
+                "submodules",
+                "submodules/commons-text",
+                "submodules/test-data-npm",
+                "submodules/test-data-npm/isarray",
+                "submodules/test-data-npm/long.js"
+            ).associateWith { VersionControlSystem.getPathInfo(outputDir.resolve(it)) }
+
+            val workingTree = GitRepo().getWorkingTree(outputDir)
+            workingTree.getNested() shouldBe expectedSubmodules
         }
     }
 }
