@@ -22,28 +22,28 @@
 // The following interfaces have to match those in "plugins/package-managers/gradle/src/main/resources/init.gradle"
 // because they are used to deserialize the model produced there.
 
-interface DependencyTreeModel {
+interface OrtDependencyTreeModel {
     val group: String
     val name: String
     val version: String
-    val configurations: List<Configuration>
+    val configurations: List<OrtConfiguration>
     val repositories: List<String>
     val errors: List<String>
     val warnings: List<String>
 }
 
-interface Configuration {
+interface OrtConfiguration {
     val name: String
-    val dependencies: List<Dependency>
+    val dependencies: List<OrtDependency>
 }
 
-interface Dependency {
+interface OrtDependency {
     val groupId: String
     val artifactId: String
     val version: String
     val classifier: String
     val extension: String
-    val dependencies: List<Dependency>
+    val dependencies: List<OrtDependency>
     val error: String?
     val warning: String?
     val pomFile: String?
