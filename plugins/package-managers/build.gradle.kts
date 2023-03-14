@@ -35,6 +35,7 @@ dependencies {
     api(project(":plugins:package-managers:cocoapods-package-manager"))
     api(project(":plugins:package-managers:composer-package-manager"))
     api(project(":plugins:package-managers:conan-package-manager"))
+    api(project(":plugins:package-managers:gradle-inspector"))
     api(project(":plugins:package-managers:gradle-model"))
     api(project(":plugins:package-managers:gradle-package-manager"))
     api(project(":plugins:package-managers:pub-package-manager"))
