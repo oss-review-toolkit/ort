@@ -123,7 +123,7 @@ class Conan(
         // Conan version 1.18.0
         output.removePrefix("Conan version ")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.18.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.18.0")
 
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 

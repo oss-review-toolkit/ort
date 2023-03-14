@@ -109,7 +109,7 @@ class Composer(
         // Composer version @package_branch_alias_version@ (1.0.0-beta2) 2016-03-27 16:00:34
         output.splitOnWhitespace().dropLast(2).last().removeSurrounding("(", ")")
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.5,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.5")
 
     override fun beforeResolution(definitionFiles: List<File>) {
         // If all directories we are analyzing contain a composer.phar, no global installation of Composer is required

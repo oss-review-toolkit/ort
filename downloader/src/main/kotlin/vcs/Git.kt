@@ -108,7 +108,7 @@ class Git : VersionControlSystem(), CommandLineTool {
     override fun getVersion() = getVersion(null)
 
     // Require at least Git 2.29 on the client side as it has protocol "v2" enabled by default.
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[2.29,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=2.29")
 
     override fun getDefaultBranchName(url: String): String {
         val refs = Git.lsRemoteRepository().setRemote(url).callAsMap()

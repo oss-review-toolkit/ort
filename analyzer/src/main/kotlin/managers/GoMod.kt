@@ -96,7 +96,7 @@ class GoMod(
 
     override fun transformVersion(output: String) = output.removePrefix("go version go").substringBefore(' ')
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.19.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.19.0")
 
     override fun mapDefinitionFiles(definitionFiles: List<File>): List<File> =
         definitionFiles.filterNot { definitionFile ->

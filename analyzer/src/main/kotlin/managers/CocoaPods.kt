@@ -96,7 +96,7 @@ class CocoaPods(
 
     override fun command(workingDir: File?) = if (Os.isWindows) "pod.bat" else "pod"
 
-    override fun getVersionRequirement(): RangesList = RangesListFactory.create("[1.11.0,)")
+    override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=1.11.0")
 
     override fun getVersionArguments() = "--version --allow-root"
 
