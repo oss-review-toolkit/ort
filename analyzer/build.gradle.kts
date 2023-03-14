@@ -47,6 +47,9 @@ dependencies {
         }
     }
 
+    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
+    funTestImplementation(testFixtures(project(":analyzer")))
+
     testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 
