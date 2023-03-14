@@ -28,7 +28,6 @@ import java.io.File
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
@@ -42,7 +41,7 @@ class GitRepoDownloadFunTest : StringSpec() {
     }
 
     init {
-        "GitRepo can download a given revision".config(tags = setOf(ExpensiveTag)) {
+        "GitRepo can download a given revision" {
             val vcs = VcsInfo(VcsType.GIT_REPO, REPO_URL, REPO_REV)
             val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
             val workingTree = GitRepo().download(pkg, outputDir)
