@@ -1,0 +1,26 @@
+{
+  "id" : "aaaeccb4-305b-4cd4-8c27-be65866c3d93",
+  "name" : "apiphp",
+  "request" : {
+    "url" : "/api.php",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{  \"action\": \"get_matched_lines\",  \"group\": \"files_and_folders\",  \"data\": {    \"username\": \"\",    \"key\": \"\",    \"scan_code\": \"semver4j_2_20201203_090342\",    \"path\": \"c3JjL21haW4vamF2YS9jb20vdmR1cm1vbnQvc2VtdmVyNGovUmVxdWlyZW1lbnQuamF2YQ==\",    \"client_result_id\": \"119\"  }}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "body" : "{  \"operation\": \"files_and_folders_get_matched_lines\",  \"status\": \"1\",  \"data\": {    \"local_file\": {      \"25\": \"25\",      \"26\": \"26\",      \"27\": \"27\",      \"28\": \"28\",      \"29\": \"29\",      \"30\": \"30\",      \"31\": \"31\",      \"32\": \"32\",      \"33\": \"33\",      \"34\": \"34\",      \"35\": \"35\",      \"36\": \"36\",      \"37\": \"37\",      \"38\": \"38\",      \"39\": \"39\"    },    \"mirror_file\": {      \"255\": \"255\",      \"256\": \"256\",      \"257\": \"257\",      \"258\": \"258\",      \"259\": \"259\",      \"260\": \"260\",      \"261\": \"261\",      \"262\": \"262\",      \"263\": \"263\",      \"264\": \"264\",      \"265\": \"265\",      \"266\": \"266\",      \"267\": \"267\",      \"268\": \"268\",      \"269\": \"269\",      \"270\": \"270\"    }  },  \"message\": \"Success\"}",
+    "headers" : {
+      "Content-Type" : "text/html; charset=UTF-8",
+      "Date" : "Thu, 03 Dec 2020 08:04:04 GMT",
+      "Server" : "Apache/2.4.38 (Debian)",
+      "Vary" : "Accept-Encoding"
+    }
+  },
+  "uuid" : "aaaeccb4-305b-4cd4-8c27-be65866c3d93",
+  "persistent" : true,
+  "insertionIndex" : 1
+}

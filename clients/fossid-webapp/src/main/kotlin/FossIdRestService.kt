@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -224,6 +225,9 @@ interface FossIdRestService {
 
     @POST("api.php")
     suspend fun listSnippets(@Body body: PostRequestBody): PolymorphicResponseBody<Snippet>
+
+    @POST("api.php")
+    suspend fun listMatchedLines(@Body body: PostRequestBody): EntityResponseBody<MatchedLines>
 
     @POST("api.php")
     suspend fun listIdentifiedFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IdentifiedFile>
