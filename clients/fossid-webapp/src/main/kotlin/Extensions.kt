@@ -29,6 +29,7 @@ import okio.sink
 
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
@@ -265,6 +266,31 @@ suspend fun FossIdRestService.listSnippets(
             user,
             apiKey,
             mapOf("scan_code" to scanCode, "path" to base64Path)
+        )
+    )
+}
+
+/**
+ * List matched lines for the given file with [path] and the given [scanCode], which the given [snippetId]. The
+ * corresponding snippet must have a partial match type, otherwise an error is returned by FossID.
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.listMatchedLines(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    snippetId: Int,
+): EntityResponseBody<MatchedLines> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    return listMatchedLines(
+        PostRequestBody(
+            "get_matched_lines",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf("scan_code" to scanCode, "path" to base64Path, "client_result_id" to "$snippetId")
         )
     )
 }

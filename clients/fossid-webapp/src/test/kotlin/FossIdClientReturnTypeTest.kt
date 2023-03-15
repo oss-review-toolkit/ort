@@ -22,6 +22,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -35,6 +36,7 @@ import org.ossreviewtoolkit.clients.fossid.getScan
 import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listMatchedLines
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
@@ -145,6 +147,22 @@ class FossIdClientReturnTypeTest : StringSpec({
                 forEach {
                     it.shouldBeTypeOf<Snippet>()
                 }
+            }
+        }
+    }
+
+    "Matched lines can be listed" {
+        service.listMatchedLines(
+            "",
+            "",
+            SCAN_CODE_2,
+            "src/main/java/com/vdurmont/semver4j/Requirement.java",
+            119
+        ).shouldNotBeNull().run {
+            checkResponse("list matched lines")
+            data.shouldNotBeNull().run {
+                localFile shouldNot beEmptyMap()
+                mirrorFile shouldNot beEmptyMap()
             }
         }
     }
