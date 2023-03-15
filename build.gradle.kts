@@ -304,6 +304,15 @@ subprojects {
             }
         }
 
+        // Convenience alternative to "--tests" that can take multiple patterns at once as Gradle is not planning to
+        // implement this, see https://github.com/gradle/gradle/issues/5719.
+        properties["tests.include"]?.also { includes ->
+            filter {
+                includes.toString().split(',').map { includeTestsMatching(it) }
+                isFailOnNoMatchingTests = false
+            }
+        }
+
         if (javaVersion.isCompatibleWith(JavaVersion.VERSION_17)) {
             // See https://kotest.io/docs/next/extensions/system_extensions.html#system-environment.
             jvmArgs("--add-opens=java.base/java.util=ALL-UNNAMED")
