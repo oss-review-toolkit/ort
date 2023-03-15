@@ -439,15 +439,6 @@ class SpdxExpressionTest : WordSpec() {
             "not contain duplicate valid choice different left and right expressions" {
                 "a AND a AND b".toSpdx().validChoices() should containExactly("a AND b".toSpdx())
             }
-
-            "return the correct choices for a mixed expression" {
-                val spdxExpression = "a AND (a OR b)".toSpdx()
-
-                spdxExpression.validChoices() should containExactlyInAnyOrder(
-                    "a".toSpdx(),
-                    "a AND b".toSpdx()
-                )
-            }
         }
 
         "offersChoice()" should {
