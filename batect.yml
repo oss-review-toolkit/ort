@@ -81,21 +81,12 @@ tasks:
     run:
       container: run
       command: ./cli/build/install/ort/bin/ort requirements
-  funTestAnalyzer:
+  runFunTest:
     description: >-
-      A task to execute ORT's functional tests for the analyzer in the runtime container.
+      A task to execute ORT's functional tests that require external tools in the runtime container.
     prerequisites:
       - buildFunTest
     run:
       container: run
-      command: "'./gradlew funTest jacocoFunTestReport -p analyzer $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
-      entrypoint: /bin/bash --login -c
-  funTestPackageManagers:
-    description: >-
-      A task to execute ORT's functional tests for the analyzer in the runtime container.
-    prerequisites:
-      - buildFunTest
-    run:
-      container: run
-      command: "'./gradlew funTest jacocoFunTestReport -p plugins/package-managers $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
+      command: "'./gradlew funTest jacocoFunTestReport -Ptests.include=org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
       entrypoint: /bin/bash --login -c
