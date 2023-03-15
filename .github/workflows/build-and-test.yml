@@ -128,7 +128,7 @@ jobs:
       with:
         distribution: temurin
         java-version: 17
-    - name: Run functional tests
+    - name: Run functional tests that do not require external tools
       uses: gradle/gradle-build-action@v2
       with:
         arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
@@ -152,22 +152,14 @@ jobs:
       uses: gradle/gradle-build-action@v2
     - name: Validate Batect wrapper scripts
       uses: batect/batect-wrapper-validation-action@v0
-    - name: Run functional analyzer tests
+    - name: Run functional tests that do require external tools
       run: |
           echo "Running as $(id)."
           BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit \
               --config-var docker_build_user_id=1001 \
               --config-var gradle_build_scan=true \
               --config-var gradle_console=plain \
-              funTestAnalyzer
-    - name: Run functional package manager tests
-      run: |
-        echo "Running as $(id)."
-        BATECT_QUIET_DOWNLOAD=true ./batect --enable-buildkit \
-            --config-var docker_build_user_id=1001 \
-            --config-var gradle_build_scan=true \
-            --config-var gradle_console=plain \
-            funTestPackageManagers
+              runFunTest
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
       with:
