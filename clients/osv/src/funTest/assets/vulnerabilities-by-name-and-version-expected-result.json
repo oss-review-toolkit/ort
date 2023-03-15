@@ -1,8 +1,8 @@
 [
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "GHSA-462w-v97r-4m45",
-    "modified": "2023-03-02T19:05:23.182768Z",
+    "modified":"2023-03-10T05:23:41.874079Z",
     "published": "2019-04-10T14:30:24Z",
     "aliases": [
       "CVE-2019-10906"
@@ -168,9 +168,9 @@
     }
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "GHSA-8r7q-cvjq-x353",
-    "modified": "2023-02-16T23:26:20.651559Z",
+    "modified":"2023-03-08T05:47:11.461578Z",
     "published": "2022-05-14T04:04:14Z",
     "aliases": [
       "CVE-2014-1402"
@@ -316,9 +316,9 @@
     }
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "GHSA-fqh9-2qgg-h84h",
-    "modified": "2023-02-16T23:22:26.096970Z",
+    "modified":"2023-03-09T05:31:42.262435Z",
     "published": "2022-05-17T04:01:00Z",
     "aliases": [
       "CVE-2014-0012"
@@ -416,9 +416,9 @@
     }
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "GHSA-g3rq-g295-4j3m",
-    "modified": "2023-02-16T23:22:02.441205Z",
+    "modified":"2023-03-12T05:29:26.243227Z",
     "published": "2021-03-19T21:28:05Z",
     "aliases": [
       "CVE-2020-28493"
@@ -536,9 +536,9 @@
     }
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "GHSA-hj2j-77xm-mc5v",
-    "modified": "2023-02-16T23:23:33.766576Z",
+    "modified":"2023-03-12T05:32:53.675797Z",
     "published": "2019-04-10T14:30:13Z",
     "aliases": [
       "CVE-2016-10745"
@@ -669,7 +669,7 @@
     }
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "PYSEC-2014-8",
     "modified": "2021-07-05T00:01:22.043149Z",
     "published": "2014-05-19T14:55:00Z",
@@ -800,7 +800,7 @@
     ]
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "PYSEC-2014-82",
     "modified": "2021-08-27T03:22:05.027573Z",
     "published": "2014-05-19T14:55:00Z",
@@ -903,7 +903,7 @@
     ]
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "PYSEC-2019-217",
     "modified": "2021-11-22T04:57:52.862665Z",
     "published": "2019-04-07T00:29:00Z",
@@ -1054,7 +1054,7 @@
     ]
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "PYSEC-2019-220",
     "modified": "2021-11-22T04:57:52.929678Z",
     "published": "2019-04-08T13:29:00Z",
@@ -1176,7 +1176,7 @@
     ]
   },
   {
-    "schema_version": "1.3.0",
+    "schema_version": "1.4.0",
     "id": "PYSEC-2021-66",
     "modified": "2021-03-22T16:34:00Z",
     "published": "2021-02-01T20:15:00Z",
