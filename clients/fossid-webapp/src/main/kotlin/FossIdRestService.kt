@@ -219,6 +219,7 @@ interface FossIdRestService {
     suspend fun runScan(@Body body: PostRequestBody): EntityResponseBody<Nothing>
 
     @POST("api.php")
+    @Headers("$READ_TIMEOUT_HEADER:${5 * 60 * 1000}")
     suspend fun deleteScan(@Body body: PostRequestBody): EntityResponseBody<PolymorphicInt>
 
     @POST("api.php")
