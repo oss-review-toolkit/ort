@@ -125,7 +125,7 @@ cli/build/install/ort/bin/ort report
   --package-configuration-file $ORT_CONFIG_DIR/packages.yml
 ```
 
-The code below shows an example for `packages.yml`:
+The code below shows an example for `package-configurations.yml`:
 
 ```yaml
 - id: "Pip::example-package:0.0.1"
