@@ -35,8 +35,9 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer
 import com.fasterxml.jackson.module.kotlin.jsonMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 
-import java.time.Duration
+import java.util.concurrent.TimeUnit
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
 
@@ -60,7 +61,10 @@ import retrofit2.Retrofit
 import retrofit2.converter.jackson.JacksonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.POST
+
+private const val READ_TIMEOUT_HEADER = "READ_TIMEOUT"
 
 interface FossIdRestService {
     companion object : Logging {
@@ -161,17 +165,11 @@ interface FossIdRestService {
         fun create(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
             logger.info { "The FossID server URL is $url." }
 
-            val minReadTimeout = Duration.ofSeconds(60)
-            val retrofit = Retrofit.Builder()
-                .apply {
-                    client(
-                        client?.run {
-                            takeUnless { readTimeoutMillis < minReadTimeout.toMillis() }
-                                ?: newBuilder().readTimeout(minReadTimeout).build()
-                        } ?: OkHttpClient.Builder().readTimeout(minReadTimeout).build()
-                    )
-                }
-                .baseUrl(url)
+            val retrofit = Retrofit.Builder().apply {
+                client(
+                    (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor(TimeoutInterceptor).build()
+                )
+            }.baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
@@ -184,6 +182,21 @@ interface FossIdRestService {
                     logger.info { "The FossID server is running version ${it.version}." }
                 }
             }
+        }
+    }
+
+    /**
+     * An interceptor to set the timeout of the requests based on the call headers. If no timeout header is present,
+     * default timeout of the client is used.
+     */
+    object TimeoutInterceptor : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+            val request = chain.request()
+            val newReadTimeout = request.header(READ_TIMEOUT_HEADER)
+
+            val readTimeout = newReadTimeout?.toIntOrNull() ?: chain.readTimeoutMillis()
+
+            return chain.withReadTimeout(readTimeout, TimeUnit.MILLISECONDS).proceed(request)
         }
     }
 
@@ -230,6 +243,7 @@ interface FossIdRestService {
     suspend fun listMatchedLines(@Body body: PostRequestBody): EntityResponseBody<MatchedLines>
 
     @POST("api.php")
+    @Headers("$READ_TIMEOUT_HEADER:${60 * 1000}")
     suspend fun listIdentifiedFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IdentifiedFile>
 
     @POST("api.php")
