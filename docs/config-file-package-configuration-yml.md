@@ -7,12 +7,13 @@ packages included via a package manager as project dependencies, and not for the
 be scanned.
 
 ### When To Use
+
 Use a package configuration file to:
 
-- mark files and directories as not included in released artifacts -- use it to make clear that license findings in
+- Mark files and directories as not included in released artifacts -- use it to make clear that license findings in
   documentation or tests in a package sources do not apply to the release (binary) artifact which is a dependency in
   your project.
-- overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
+- Overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
 
 # Package Configuration File Basics
 
@@ -22,18 +23,18 @@ Each package configuration applies exactly to one *package id* and *provenance* 
 Here is an example of a package configuration for `ansi-styles 4.2.1`, when the source artifact is (to be) scanned:
 
 ```yaml
-  id: "NPM::ansi-styles:4.2.1"
-  source_artifact_url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.2.1.tgz"
+id: "NPM::ansi-styles:4.2.1"
+source_artifact_url: "https://registry.npmjs.org/ansi-styles/-/ansi-styles-4.2.1.tgz"
 ```
 
 If the source repository is (to be) scanned, then use the package configuration below:
 
 ```yaml
-  id: "NPM::ansi-styles:4.2.1"
-  vcs:
-    type: "Git"
-    url: "https://github.com/chalk/ansi-styles.git"
-    revision: "74d421cf32342ac6ec7b507bd903a9e1105f74d7"
+id: "NPM::ansi-styles:4.2.1"
+vcs:
+  type: "Git"
+  url: "https://github.com/chalk/ansi-styles.git"
+  revision: "74d421cf32342ac6ec7b507bd903a9e1105f74d7"
 ```
 
 ## Defining Path Excludes and License Finding Curations
@@ -47,20 +48,20 @@ see [excluding paths](config-file-ort-yml.md#excluding-paths) and
 [curating license findings](config-file-ort-yml.md#curating-project-license-findings) for details.
 
 ```yaml
-  id: "Pip::example-package:0.0.1"
-  source_artifact_url: "https://some-host/some-file-path.tgz"
-  path_excludes:
-  - pattern: "docs/**"
-    reason: "DOCUMENTATION_OF"
-    comment: "This directory contains documentation which is not distributed."
-  license_finding_curations:
-  - path: "src/**/*.cpp"
-    start_lines: "3"
-    line_count: 11
-    detected_license: "GPL-2.0-only"
-    reason: "CODE"
-    comment: "The scanner matches a variable named `gpl`."
-    concluded_license: "Apache-2.0"
+id: "Pip::example-package:0.0.1"
+source_artifact_url: "https://some-host/some-file-path.tgz"
+path_excludes:
+- pattern: "docs/**"
+  reason: "DOCUMENTATION_OF"
+  comment: "This directory contains documentation which is not distributed."
+license_finding_curations:
+- path: "src/**/*.cpp"
+  start_lines: "3"
+  line_count: 11
+  detected_license: "GPL-2.0-only"
+  reason: "CODE"
+  comment: "The scanner matches a variable named `gpl`."
+  concluded_license: "Apache-2.0"
 ```
 
 ## Command Line
@@ -88,7 +89,7 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
-or to the _reporter_:
+Or to the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
@@ -114,7 +115,7 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
-or to the _reporter_:
+Or to the _reporter_:
 
 ```bash
 cli/build/install/ort/bin/ort report
