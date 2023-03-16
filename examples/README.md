@@ -5,3 +5,5 @@ capabilities of ORT and do not reflect any real-world configuration used by the 
 recommendation on the configuration to use.
 
 Please consult your legal counsel about how ORT should be configured for your use cases.
+
+Note: All files ending with '.ort.yml' are examples for (project specific) repository configuration files.
