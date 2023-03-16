@@ -25,8 +25,12 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
- * A container which holds all resolved data which augments ORT's automatically obtained data, like
- * package curations, package configurations, rule violation resolutions and issue resolutions.
+ * The [ResolvedConfiguration] contains non-administrative configuration which was resolved by an ORT tool to be
+ * available for subsequent tools. This is used to make the ORT result self-contained and consistent, so that it is not
+ * required to rely on external configuration for further processing.
+ * For example, [packageCurations] contains all package curations which apply to packages in this ORT result. This
+ * ensures that any tool that uses this ORT result as input does not have to query the package curation providers again
+ * and uses exactly the same set of package curations.
  *
  * TODO: Add further data.
  */
