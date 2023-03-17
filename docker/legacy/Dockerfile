@@ -30,7 +30,7 @@ ARG CRT_FILES=""
 ARG JAVA_VERSION=17
 
 # Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="31.2.1"
+ARG SCANCODE_VERSION="31.2.4"
 
 # Set this to the Python Inspector version to use.
 ARG PYTHON_INSPECTOR_VERSION="0.9.4"
