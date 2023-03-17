@@ -78,6 +78,7 @@ data class Affected(
     @SerialName("package")
     val pkg: Package,
     val ranges: List<Range> = emptyList(),
+    val severity: Set<Severity> = emptySet(),
     val versions: List<String> = emptyList(),
     @SerialName("ecosystem_specific")
     val ecosystemSpecific: JsonObject? = null,
