@@ -82,16 +82,19 @@ data class ScannerCriteria(
 
         /**
          * The name of the property defining the regular expression for the scanner name as part of [ScannerCriteria].
+         * The [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
          */
         const val PROP_CRITERIA_NAME = "regScannerName"
 
         /**
-         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria].
+         * The name of the property defining the minimum version of the scanner as part of [ScannerCriteria]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
          */
         const val PROP_CRITERIA_MIN_VERSION = "minVersion"
 
         /**
-         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria].
+         * The name of the property defining the maximum version of the scanner as part of [ScannerCriteria]. The
+         * [scanner details][ScannerDetails] of the corresponding scanner must match the criteria.
          */
         const val PROP_CRITERIA_MAX_VERSION = "maxVersion"
 
