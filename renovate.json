@@ -18,6 +18,7 @@
     "**/src/funTest/assets/**",
     "**/src/test/assets/**"
   ],
+  "labels": ["dependencies"],
   "packageRules": [
     {
       "matchPackageNames": [
