@@ -170,8 +170,8 @@ private class OrtResultStorage(private val storageDir: File) {
         val ortResultFile = ortResultFile(id)
         ortResultFile.parentFile.mkdirs()
 
-        XZCompressorOutputStream(ortResultFile.outputStream()).use {
-            ortResultJson.byteInputStream().copyTo(it)
+        XZCompressorOutputStream(ortResultFile.outputStream()).use { outputStream ->
+            ortResultJson.byteInputStream().use { it.copyTo(outputStream) }
         }
 
         val hash = HashAlgorithm.MD5.calculate(ortResultFile)

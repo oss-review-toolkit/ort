@@ -86,8 +86,8 @@ open class LocalFileStorage(
 
     @Synchronized
     override fun write(path: String, inputStream: InputStream) {
-        getOutputStream(path).use {
-            inputStream.copyTo(it)
+        getOutputStream(path).use { outputStream ->
+            inputStream.use { it.copyTo(outputStream) }
         }
     }
 }
