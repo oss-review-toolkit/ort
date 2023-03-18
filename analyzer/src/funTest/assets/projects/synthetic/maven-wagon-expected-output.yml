@@ -27,15 +27,18 @@ project:
       - timestamp: "1970-01-01T00:00:00Z"
         source: "Maven"
         message: "Could not get package information for dependency 'com.example:ftp-artifact:1.0.0':\
-          \ ProjectBuildingException: Error resolving project artifact: Could not\
-          \ transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository\
-          \ (ftp://localhost:40123): Password not specified for repository ftp-repository\
-          \ for project com.example:ftp-artifact:pom:1.0.0\nCaused by: ArtifactResolutionException:\
+          \ ProjectBuildingException: Error resolving project artifact: The following\
+          \ artifacts could not be resolved: com.example:ftp-artifact:pom:1.0.0 (absent):\
           \ Could not transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to\
           \ ftp-repository (ftp://localhost:40123): Password not specified for repository\
-          \ ftp-repository\n    Caused by: ArtifactTransferException: Could not transfer\
+          \ ftp-repository for project com.example:ftp-artifact:pom:1.0.0\nCaused\
+          \ by: ArtifactResolutionException: The following artifacts could not be\
+          \ resolved: com.example:ftp-artifact:pom:1.0.0 (absent): Could not transfer\
           \ artifact com.example:ftp-artifact:pom:1.0.0 from/to ftp-repository (ftp://localhost:40123):\
-          \ Password not specified for repository ftp-repository\n        Caused by:\
-          \ AuthenticationException: Password not specified for repository ftp-repository"
+          \ Password not specified for repository ftp-repository\n    Caused by: ArtifactTransferException:\
+          \ Could not transfer artifact com.example:ftp-artifact:pom:1.0.0 from/to\
+          \ ftp-repository (ftp://localhost:40123): Password not specified for repository\
+          \ ftp-repository\n        Caused by: AuthenticationException: Password not\
+          \ specified for repository ftp-repository"
         severity: "ERROR"
 packages: []
