@@ -47,6 +47,7 @@ include(":plugins:package-curation-providers:sw360")
 include(":plugins:package-managers")
 include(":plugins:package-managers:bower")
 include(":plugins:package-managers:bundler")
+include(":plugins:package-managers:cargo")
 include(":plugins:package-managers:gradle")
 include(":plugins:package-managers:gradle-model")
 include(":plugins:package-managers:pub")
@@ -77,6 +78,7 @@ project(":plugins:package-curation-providers:sw360").name = "sw360-package-curat
 
 project(":plugins:package-managers:bower").name = "bower-package-manager"
 project(":plugins:package-managers:bundler").name = "bundler-package-manager"
+project(":plugins:package-managers:cargo").name = "cargo-package-manager"
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
 project(":plugins:package-managers:pub").name = "pub-package-manager"
 project(":plugins:package-managers:python").name = "python-package-manager"
