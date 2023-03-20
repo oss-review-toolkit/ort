@@ -132,7 +132,7 @@ curations:
     reason: "DOCUMENTATION_OF"
     comment: >-
       Findings reference a file with 'gpl' in its name.
-  - path: "analyzer/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
+  - path: "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python/spdx/licenses.json"
     concluded_license: "CC0-1.0"
     reason: "DATA_OF"
     comment: >-
