@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 /**
@@ -242,11 +243,18 @@ private fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isPr
 
 private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
     when {
-        unmapped.isEmpty() -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
-        spdxExpression == null -> SpdxConstants.NOASSERTION
-        spdxExpression.toString().isBlank() -> SpdxConstants.NOASSERTION
-        spdxExpression.toString() == SpdxConstants.NONE -> SpdxConstants.NOASSERTION
-        else -> spdxExpression.toString()
+        // If there are unmapped licenses, represent this by adding NOASSERTION.
+        unmapped.isNotEmpty() -> {
+            spdxExpression?.let {
+                if (SpdxConstants.NOASSERTION !in it.licenses()) {
+                    (it and SpdxConstants.NOASSERTION.toSpdx()).toString()
+                } else {
+                    it.toString()
+                }
+            } ?: SpdxConstants.NOASSERTION
+        }
+
+        else -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
     }
 
 private fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
