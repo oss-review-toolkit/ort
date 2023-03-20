@@ -378,16 +378,27 @@ class SpdxExpressionTest : WordSpec() {
             }
 
             "correctly convert an OR on the left side of an AND expression" {
-                "(a OR b) AND c".toSpdx().disjunctiveNormalForm() should beString("(a AND c) OR (b AND c)")
+                "(a OR b OR c) AND d".toSpdx().disjunctiveNormalForm() should
+                        beString("(a AND d) OR (b AND d) OR (c AND d)")
             }
 
             "correctly convert an OR on the right side of an AND expression" {
-                "a AND (b OR c)".toSpdx().disjunctiveNormalForm() should beString("(a AND b) OR (a AND c)")
+                "a AND (b OR c OR d)".toSpdx().disjunctiveNormalForm() should
+                        beString("(a AND b) OR (a AND c) OR (a AND d)")
             }
 
             "correctly convert ORs on both sides of an AND expression" {
-                "(a OR b) AND (c OR d)".toSpdx().disjunctiveNormalForm() should
-                        beString("(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)")
+                "(a OR b OR c) AND (d OR e OR f)".toSpdx().disjunctiveNormalForm() should beString(
+                    "(a AND d) OR " +
+                    "(a AND e) OR " +
+                    "(a AND f) OR " +
+                    "(b AND d) OR " +
+                    "(b AND e) OR " +
+                    "(b AND f) OR " +
+                    "(c AND d) OR " +
+                    "(c AND e) OR " +
+                    "(c AND f)"
+                )
             }
 
             "correctly convert a complex expression" {
@@ -421,6 +432,16 @@ class SpdxExpressionTest : WordSpec() {
                     "a AND c AND e".toSpdx(),
                     "b AND c AND d".toSpdx(),
                     "b AND c AND e".toSpdx()
+                )
+            }
+
+            "return the correct choices for a mixed expression" {
+                val spdxExpression = "a AND (a OR b OR c)".toSpdx()
+
+                spdxExpression.validChoices() should containExactlyInAnyOrder(
+                    "a".toSpdx(),
+                    "a AND b".toSpdx(),
+                    "a AND c".toSpdx()
                 )
             }
 

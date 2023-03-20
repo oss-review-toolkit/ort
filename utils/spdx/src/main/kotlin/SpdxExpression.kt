@@ -253,22 +253,25 @@ class SpdxCompoundExpression(
         val rightDnf = right.disjunctiveNormalForm()
 
         return when (operator) {
-            SpdxOperator.OR -> SpdxCompoundExpression(leftDnf, SpdxOperator.OR, rightDnf)
+            SpdxOperator.OR -> leftDnf or rightDnf
+            SpdxOperator.AND -> distributeAndOverOr(leftDnf, rightDnf)
+        }
+    }
 
-            SpdxOperator.AND -> when {
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
-                        rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
-                            ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
-
-                leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
-                    (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
-
-                rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
-                    (leftDnf and rightDnf.left) or (leftDnf and rightDnf.right)
-
-                else -> SpdxCompoundExpression(leftDnf, operator, rightDnf)
+    /**
+     * Distribute the AND operator over the OR operator e.g. a AND (b OR c) to (a AND b) OR (a AND c).
+     */
+    private fun distributeAndOverOr(left: SpdxExpression, right: SpdxExpression): SpdxExpression {
+        return when {
+            left is SpdxCompoundExpression && left.operator == SpdxOperator.OR -> {
+                distributeAndOverOr(left.left, right) or distributeAndOverOr(left.right, right)
             }
+
+            right is SpdxCompoundExpression && right.operator == SpdxOperator.OR -> {
+                distributeAndOverOr(left, right.left) or distributeAndOverOr(left, right.right)
+            }
+
+            else -> left and right
         }
     }
 
@@ -674,3 +677,5 @@ enum class SpdxOperator(
      */
     OR(0)
 }
+
+enum class Test { AND, OR }
