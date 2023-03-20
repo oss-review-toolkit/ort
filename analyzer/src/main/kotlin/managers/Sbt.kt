@@ -161,13 +161,22 @@ class Sbt(
 
         // Generate the POM files. Note that a single run of makePom might create multiple POM files in case of
         // aggregate projects.
+        val pomFiles = mutableListOf<File>()
+
         val makePomCommand = internalProjectNames.joinToString("") { ";$it/makePom" }
-        val pomFiles = runSbt(makePomCommand).stdout.lines().mapNotNull { line ->
+        runSbt(makePomCommand).stdout.lines().mapNotNullTo(pomFiles) { line ->
             POM_REGEX.matchEntire(line)?.groupValues?.getOrNull(1)?.let { File(it) }
         }
 
         if (pomFiles.isEmpty()) {
-            logger.warn { "No generated POM files found inside the '$workingDir' directory." }
+            val targetDir = workingDir.resolve("target")
+
+            logger.info {
+                "No POM locations found in the output of SBT's 'makePom' command. Falling back to look for POMs in " +
+                        "the '$targetDir' directory."
+            }
+
+            targetDir.walk().maxDepth(1).filterTo(pomFiles) { it.extension == "pom" }
         }
 
         return pomFiles.distinct().map { moveGeneratedPom(it) }
