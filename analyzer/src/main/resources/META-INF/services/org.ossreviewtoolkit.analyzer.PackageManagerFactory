@@ -1,6 +1,5 @@
 org.ossreviewtoolkit.analyzer.managers.Carthage$Factory
 org.ossreviewtoolkit.analyzer.managers.CocoaPods$Factory
-org.ossreviewtoolkit.analyzer.managers.Composer$Factory
 org.ossreviewtoolkit.analyzer.managers.Conan$Factory
 org.ossreviewtoolkit.analyzer.managers.DotNet$Factory
 org.ossreviewtoolkit.analyzer.managers.GoDep$Factory

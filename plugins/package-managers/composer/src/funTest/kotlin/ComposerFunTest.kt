@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.composer
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
@@ -25,6 +25,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -36,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ComposerFunTest : StringSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic/composer").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic").absoluteFile
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()
@@ -47,7 +48,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.resolveSibling("composer-expected-output.yml"),
+                projectsDir.resolve("composer-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -62,11 +63,10 @@ class ComposerFunTest : StringSpec() {
 
             with(result) {
                 project.id shouldBe Identifier(
-                    "Composer::src/funTest/assets/projects/synthetic/" +
-                            "composer/no-lockfile/composer.json:"
+                    "Composer::src/funTest/assets/projects/synthetic/no-lockfile/composer.json:"
                 )
-                project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/composer/no-lockfile/composer.json"
+                project.definitionFilePath shouldBe "plugins/package-managers/composer/src/funTest/assets/projects/" +
+                        "synthetic/no-lockfile/composer.json"
                 packages should beEmpty()
                 issues.size shouldBe 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
@@ -78,7 +78,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.resolveSibling("composer-expected-output-no-deps.yml"),
+                projectsDir.resolve("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -93,7 +93,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.resolveSibling("composer-expected-output-no-deps.yml"),
+                projectsDir.resolve("composer-expected-output-no-deps.yml"),
                 definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
@@ -108,7 +108,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.resolveSibling("composer-expected-output-with-provide.yml"),
+                projectsDir.resolve("composer-expected-output-with-provide.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
@@ -122,7 +122,7 @@ class ComposerFunTest : StringSpec() {
 
             val result = createComposer().resolveSingleProject(definitionFile)
             val expectedResults = patchExpectedResult(
-                projectsDir.resolveSibling("composer-expected-output-with-replace.yml"),
+                projectsDir.resolve("composer-expected-output-with-replace.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsDir.getPathToRoot(definitionFile.parentFile)
