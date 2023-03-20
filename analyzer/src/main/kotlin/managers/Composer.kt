@@ -124,41 +124,40 @@ class Composer(
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val workingDir = definitionFile.parentFile
 
+        val manifest = definitionFile.readTree()
+        val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
+            key.startsWith("require") && value.count() > 0
+        }
+
+        if (!hasDependencies) {
+            val project = parseProject(definitionFile, scopes = sortedSetOf())
+            val result = ProjectAnalyzerResult(project, packages = emptySet())
+
+            return listOf(result)
+        }
+
         stashDirectories(workingDir.resolve("vendor")).use {
-            val manifest = definitionFile.readTree()
-            val hasDependencies = manifest.fields().asSequence().any { (key, value) ->
-                key.startsWith("require") && value.count() > 0
-            }
+            installDependencies(workingDir)
 
-            val (packages, scopes) = if (hasDependencies) {
-                installDependencies(workingDir)
+            val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-                val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
+            logger.info { "Reading '$lockFile'..." }
 
-                logger.info { "Reading '$lockFile'..." }
+            val json = jsonMapper.readTree(lockFile)
+            val packages = parseInstalledPackages(json)
 
-                val json = jsonMapper.readTree(lockFile)
-                val packages = parseInstalledPackages(json)
+            // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
+            // required, but are not listed in composer.lock as installed.
+            // If we didn't handle them specifically, we would report them as missing when trying to load the
+            // dependency information for them. We can't simply put these "virtual" packages in the normal package
+            // map as this would cause us to report a package which is not actually installed with the contents of
+            // the "replacing" package.
+            val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
-                // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
-                // required, but are not listed in composer.lock as installed.
-                // If we didn't handle them specifically, we would report them as missing when trying to load the
-                // dependency information for them. We can't simply put these "virtual" packages in the normal package
-                // map as this would cause us to report a package which is not actually installed with the contents of
-                // the "replacing" package.
-                val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
-
-                val scopes = sortedSetOf(
-                    parseScope("require", manifest, json, packages, virtualPackages),
-                    parseScope("require-dev", manifest, json, packages, virtualPackages)
-                )
-
-                Pair(packages, scopes)
-            } else {
-                Pair(emptyMap(), sortedSetOf())
-            }
-
-            logger.info { "Reading ${definitionFile.name} file in $workingDir..." }
+            val scopes = sortedSetOf(
+                parseScope("require", manifest, json, packages, virtualPackages),
+                parseScope("require-dev", manifest, json, packages, virtualPackages)
+            )
 
             val project = parseProject(definitionFile, scopes)
 
@@ -225,6 +224,8 @@ class Composer(
     }
 
     private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+        logger.info { "Parsing project metadata from '$definitionFile'..." }
+
         val json = definitionFile.readTree()
         val homepageUrl = json["homepage"].textValueOrEmpty()
         val vcs = parseVcsInfo(json)
