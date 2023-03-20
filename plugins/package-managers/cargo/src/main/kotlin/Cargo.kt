@@ -19,7 +19,7 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 
 import com.fasterxml.jackson.databind.JsonNode
 
