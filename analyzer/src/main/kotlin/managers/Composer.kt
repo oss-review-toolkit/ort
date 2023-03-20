@@ -52,12 +52,12 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.fieldNamesOrEmpty
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
-import org.ossreviewtoolkit.utils.common.stashDirectories
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"
@@ -136,33 +136,30 @@ class Composer(
             return listOf(result)
         }
 
-        stashDirectories(workingDir.resolve("vendor")).use {
-            installDependencies(workingDir)
+        val lockFile = ensureLockFile(workingDir)
 
-            val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
+        logger.info { "Parsing lock file at '$lockFile'..." }
 
-            logger.info { "Reading '$lockFile'..." }
+        val json = jsonMapper.readTree(lockFile)
+        val packages = parseInstalledPackages(json)
 
-            val json = jsonMapper.readTree(lockFile)
-            val packages = parseInstalledPackages(json)
+        // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
+        // required, but are not listed in composer.lock as installed.
+        // If we didn't handle them specifically, we would report them as missing when trying to load the
+        // dependency information for them. We can't simply put these "virtual" packages in the normal package
+        // map as this would cause us to report a package which is not actually installed with the contents of
+        // the "replacing" package.
+        val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
-            // Let's also determine the "virtual" (replaced and provided) packages. These can be declared as
-            // required, but are not listed in composer.lock as installed.
-            // If we didn't handle them specifically, we would report them as missing when trying to load the
-            // dependency information for them. We can't simply put these "virtual" packages in the normal package
-            // map as this would cause us to report a package which is not actually installed with the contents of
-            // the "replacing" package.
-            val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
+        val scopes = sortedSetOf(
+            parseScope("require", manifest, json, packages, virtualPackages),
+            parseScope("require-dev", manifest, json, packages, virtualPackages)
+        )
 
-            val scopes = sortedSetOf(
-                parseScope("require", manifest, json, packages, virtualPackages),
-                parseScope("require-dev", manifest, json, packages, virtualPackages)
-            )
+        val project = parseProject(definitionFile, scopes)
+        val result = ProjectAnalyzerResult(project, packages.values.toSet())
 
-            val project = parseProject(definitionFile, scopes)
-
-            return listOf(ProjectAnalyzerResult(project, packages.values.toSet()))
-        }
+        return listOf(result)
     }
 
     private fun parseScope(
@@ -357,11 +354,22 @@ class Composer(
         return emptySequence()
     }
 
-    private fun installDependencies(workingDir: File) {
-        requireLockfile(workingDir) { workingDir.resolve(COMPOSER_LOCK_FILE).isFile }
+    private fun ensureLockFile(workingDir: File): File {
+        val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
-        // The "install" command creates a "composer.lock" file (if not yet present) except for projects without any
-        // dependencies, see https://getcomposer.org/doc/01-basic-usage.md#installing-without-composer-lock.
-        run(workingDir, "install", "--ignore-platform-reqs")
+        val hasLockFile = lockFile.isFile
+        requireLockfile(workingDir) { hasLockFile }
+        if (hasLockFile) return lockFile
+
+        val composerVersion = Semver(getVersion(workingDir))
+        val args = listOfNotNull(
+            "update",
+            "--ignore-platform-reqs",
+            "--no-install".takeIf { composerVersion.major >= 2 }
+        )
+
+        run(workingDir, *args.toTypedArray())
+
+        return lockFile
     }
 }
