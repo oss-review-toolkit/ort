@@ -41,6 +41,8 @@ configure<PublishingExtension> {
         create<MavenPublication>(name) {
             groupId = "org.ossreviewtoolkit.plugins"
 
+            from(components["javaPlatform"])
+
             pom {
                 licenses {
                     license {
