@@ -1,7 +1,7 @@
 ---
 project:
   id: "Composer:ort:composer-test-project:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/composer/lockfile/composer.json"
+  definition_file_path: "plugins/package-managers/composer/src/funTest/assets/projects/synthetic/lockfile/composer.json"
   declared_licenses:
   - "Apache-2.0"
   - "MIT"
