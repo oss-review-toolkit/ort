@@ -96,7 +96,7 @@
     "filesAnalyzed" : false,
     "homepage" : "NONE",
     "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "MIT",
+    "licenseDeclared" : "MIT AND NOASSERTION",
     "name" : "fourth-package",
     "summary" : "A package with partially mapped declared license.",
     "versionInfo" : "0.0.1"
