@@ -26,6 +26,7 @@ import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -166,6 +167,13 @@ class ReporterCommand : OrtCommand(
         name = OPTION_GROUP_CONFIGURATION
     ).single()
 
+    private val refreshResolutions by option(
+        "--refresh-resolutions",
+        help = "Use the resolutions from the global and repository configuration instead of the resolved " +
+                "configuration. This can make the output inconsistent with the evaluator output but is useful when " +
+                "testing resolutions."
+    ).flag().configurationGroup()
+
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides the repository configuration " +
@@ -207,9 +215,10 @@ class ReporterCommand : OrtCommand(
             ortResult = ortResult.replaceConfig(config)
         }
 
-        val resolutionProvider = ortResult.resolvedConfiguration.resolutions?.let { resolutions ->
-            DefaultResolutionProvider().add(resolutions)
-        } ?: DefaultResolutionProvider.create(ortResult, resolutionsFile)
+        val resolutionProvider =
+            ortResult.resolvedConfiguration.resolutions.takeUnless { refreshResolutions }?.let { resolutions ->
+                DefaultResolutionProvider().add(resolutions)
+            } ?: DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
