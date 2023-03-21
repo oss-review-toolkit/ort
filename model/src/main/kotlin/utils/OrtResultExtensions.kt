@@ -27,6 +27,15 @@ import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
 /**
+ * Add all resolutions from [resolutionProvider] that match the content of this [OrtResult] to
+ * [OrtResult.resolvedConfiguration], overwriting any previously contained resolutions.
+ */
+fun OrtResult.addResolutions(resolutionProvider: ResolutionProvider): OrtResult {
+    val resolutions = resolutionProvider.getResolutionsFor(this)
+    return copy(resolvedConfiguration = resolvedConfiguration.copy(resolutions = resolutions))
+}
+
+/**
  * Create a [LicenseInfoResolver] for [this] [OrtResult]. If the resolver is used multiple times it should be stored
  * instead of calling this function multiple times for better performance.
  */
