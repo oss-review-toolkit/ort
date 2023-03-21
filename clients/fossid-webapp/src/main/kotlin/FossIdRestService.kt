@@ -165,11 +165,9 @@ interface FossIdRestService {
         fun create(url: String, client: OkHttpClient? = null): FossIdServiceWithVersion {
             logger.info { "The FossID server URL is $url." }
 
-            val retrofit = Retrofit.Builder().apply {
-                client(
-                    (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor(TimeoutInterceptor).build()
-                )
-            }.baseUrl(url)
+            val retrofit = Retrofit.Builder()
+                .client((client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor(TimeoutInterceptor).build())
+                .baseUrl(url)
                 .addConverterFactory(JacksonConverterFactory.create(JSON_MAPPER))
                 .build()
 
