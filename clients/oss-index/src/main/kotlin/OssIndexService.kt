@@ -57,18 +57,16 @@ interface OssIndexService {
             password: String? = null,
             client: OkHttpClient? = null
         ): OssIndexService {
-            val ossIndexClient = (client ?: OkHttpClient()).newBuilder()
-                .addInterceptor { chain ->
-                    val request = chain.request()
-                    val requestBuilder = request.newBuilder()
+            val ossIndexClient = (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor { chain ->
+                val request = chain.request()
+                val requestBuilder = request.newBuilder()
 
-                    if (user != null && password != null) {
-                        requestBuilder.header("Authorization", Credentials.basic(user, password))
-                    }
-
-                    chain.proceed(requestBuilder.build())
+                if (user != null && password != null) {
+                    requestBuilder.header("Authorization", Credentials.basic(user, password))
                 }
-                .build()
+
+                chain.proceed(requestBuilder.build())
+            }.build()
 
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()

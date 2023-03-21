@@ -74,21 +74,19 @@ interface NexusIqService {
             password: String? = null,
             client: OkHttpClient? = null
         ): NexusIqService {
-            val nexusIqClient = (client ?: OkHttpClient()).newBuilder()
-                .addInterceptor { chain ->
-                    val request = chain.request()
-                    val token = UUID.randomUUID().toString()
-                    val requestBuilder = request.newBuilder()
-                        .header("X-CSRF-TOKEN", token)
-                        .header("Cookie", "CLM-CSRF-TOKEN=$token")
+            val nexusIqClient = (client?.newBuilder() ?: OkHttpClient.Builder()).addInterceptor { chain ->
+                val request = chain.request()
+                val token = UUID.randomUUID().toString()
+                val requestBuilder = request.newBuilder()
+                    .header("X-CSRF-TOKEN", token)
+                    .header("Cookie", "CLM-CSRF-TOKEN=$token")
 
-                    if (user != null && password != null) {
-                        requestBuilder.header("Authorization", Credentials.basic(user, password))
-                    }
-
-                    chain.proceed(requestBuilder.build())
+                if (user != null && password != null) {
+                    requestBuilder.header("Authorization", Credentials.basic(user, password))
                 }
-                .build()
+
+                chain.proceed(requestBuilder.build())
+            }.build()
 
             val contentType = "application/json".toMediaType()
             val retrofit = Retrofit.Builder()
