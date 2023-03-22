@@ -217,7 +217,7 @@ class ReporterCommand : OrtCommand(
 
         val resolutionProvider =
             ortResult.resolvedConfiguration.resolutions.takeUnless { refreshResolutions }?.let { resolutions ->
-                DefaultResolutionProvider().add(resolutions)
+                DefaultResolutionProvider(resolutions)
             } ?: DefaultResolutionProvider.create(ortResult, resolutionsFile)
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })

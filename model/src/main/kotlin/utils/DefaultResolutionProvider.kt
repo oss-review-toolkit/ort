@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.readValue
 /**
  * A [ResolutionProvider] that provides previously added resolutions.
  */
-class DefaultResolutionProvider : ResolutionProvider {
+class DefaultResolutionProvider(private var resolutions: Resolutions = Resolutions()) : ResolutionProvider {
     companion object {
         /**
          * Create a [DefaultResolutionProvider] and add the resolutions from the [ortResult] and the [resolutionsFile].
@@ -42,8 +42,6 @@ class DefaultResolutionProvider : ResolutionProvider {
                 resolutionsFile?.takeIf { it.isFile }?.readValue<Resolutions>()?.let { add(it) }
             }
     }
-
-    private var resolutions = Resolutions()
 
     /**
      * Add [other] resolutions that get merged with the existing resolutions.

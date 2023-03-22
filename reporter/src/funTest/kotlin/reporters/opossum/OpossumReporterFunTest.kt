@@ -61,7 +61,7 @@ class OpossumReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
     val input = ReporterInput(
         ortResult = ortResult,
-        resolutionProvider = DefaultResolutionProvider().add(ortResult.getResolutions()),
+        resolutionProvider = DefaultResolutionProvider(ortResult.getResolutions()),
         howToFixTextProvider = { "Some how to fix text." }
     )
 
