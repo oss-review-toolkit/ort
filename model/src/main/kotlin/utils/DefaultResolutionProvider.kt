@@ -29,24 +29,20 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 
 /**
- * A [ResolutionProvider] that provides previously added resolutions.
+ * A [ResolutionProvider] that provides the given [resolutions].
  */
-class DefaultResolutionProvider(private var resolutions: Resolutions = Resolutions()) : ResolutionProvider {
+class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutions()) : ResolutionProvider {
     companion object {
         /**
          * Create a [DefaultResolutionProvider] and add the resolutions from the [ortResult] and the [resolutionsFile].
          */
-        fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider =
-            DefaultResolutionProvider().apply {
-                ortResult?.let { add(it.getResolutions()) }
-                resolutionsFile?.takeIf { it.isFile }?.readValue<Resolutions>()?.let { add(it) }
-            }
-    }
+        fun create(ortResult: OrtResult? = null, resolutionsFile: File? = null): DefaultResolutionProvider {
+            val resolutionsFromOrtResult = ortResult?.getResolutions() ?: Resolutions()
+            val resolutionsFromFile = resolutionsFile?.takeIf { it.isFile }?.readValue() ?: Resolutions()
 
-    /**
-     * Add [other] resolutions that get merged with the existing resolutions.
-     */
-    fun add(other: Resolutions) = apply { resolutions = resolutions.merge(other) }
+            return DefaultResolutionProvider(resolutionsFromOrtResult.merge(resolutionsFromFile))
+        }
+    }
 
     override fun getIssueResolutionsFor(issue: Issue) = resolutions.issues.filter { it.matches(issue) }
 
