@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.readValue
 
 /**
- * A provider of previously added resolutions for [Issue]s and [RuleViolation]s.
+ * A [ResolutionProvider] that provides previously added resolutions.
  */
 class DefaultResolutionProvider : ResolutionProvider {
     companion object {
