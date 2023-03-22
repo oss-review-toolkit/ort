@@ -30,7 +30,10 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    implementation(libs.bundles.maven)
+    implementation(libs.mavenCore)
+
+    // TODO: Remove this once https://issues.apache.org/jira/browse/MNG-6561 is resolved.
+    implementation(libs.mavenCompat)
 
     // The classes from the maven-resolver dependencies are not used directly but initialized by the Plexus IoC
     // container automatically. They are required on the classpath for Maven dependency resolution to work.

@@ -41,7 +41,7 @@ dependencies {
     implementation(project(":plugins:package-managers:gradle-model"))
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
-    implementation(libs.bundles.maven)
+    implementation(libs.mavenCore)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 
