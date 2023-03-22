@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -54,8 +55,10 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
+import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
@@ -253,8 +256,8 @@ class GradleInspector(
                 ),
                 description = model.description.orEmpty(),
                 homepageUrl = model.homepageUrl.orEmpty(),
-                binaryArtifact = RemoteArtifact.EMPTY,
-                sourceArtifact = RemoteArtifact.EMPTY,
+                binaryArtifact = createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension),
+                sourceArtifact = createRemoteArtifact(dep.pomFile, "sources", "jar"),
                 vcs = vcs,
                 vcsProcessed = vcsProcessed
             )
@@ -285,6 +288,38 @@ private fun Collection<OrtDependency>.toPackageRefs(
 
         PackageReference(id, linkage, dep.dependencies.toPackageRefs(packageDependencies))
     }
+
+/**
+ * Create a [RemoteArtifact] based on the given [pomUrl], [classifier], [extension] and hash [algorithm]. The hash value
+ * is retrieved remotely.
+ */
+private fun createRemoteArtifact(
+    pomUrl: String?, classifier: String = "", extension: String = "jar", algorithm: String = "sha1"
+): RemoteArtifact {
+    val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
+
+    val artifactUrl = buildString {
+        append(artifactBaseUrl)
+        if (classifier.isNotEmpty()) append("-$classifier")
+        if (extension.isNotEmpty()) append(".$extension")
+    }
+
+    // TODO: How to handle authentication for private repositories here, or rely on Gradle for the download?
+    val checksum = OkHttpClientHelper.downloadText("$artifactUrl.$algorithm")
+        .getOrElse { return RemoteArtifact.EMPTY }
+
+    return RemoteArtifact(artifactUrl, parseChecksum(checksum, algorithm))
+}
+
+/**
+ * Split the provided [checksum] by whitespace and return a [Hash] for the first element that matches the provided
+ * algorithm. If no element matches, return [Hash.NONE]. This works around the issue that Maven checksum files sometimes
+ * contain arbitrary strings before or after the actual checksum.
+ */
+private fun parseChecksum(checksum: String, algorithm: String) =
+    checksum.splitOnWhitespace().firstNotNullOfOrNull {
+        runCatching { Hash.create(it, algorithm) }.getOrNull()
+    } ?: Hash.NONE
 
 // See http://maven.apache.org/pom.html#SCM.
 private val SCM_REGEX = Regex("scm:(?<type>[^:@]+):(?<url>.+)")
