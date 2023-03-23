@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
+import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
@@ -36,6 +37,12 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
  * TODO: Add further data.
  */
 data class ResolvedConfiguration(
+    /**
+     * All [PackageConfiguration]s that match the scan results in this [OrtResult].
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val packageConfigurations: List<PackageConfiguration>? = null,
+
     /**
      * The curations for all enabled providers ordered highest-priority-first. The list contains exactly one entry for
      * each enabled provider.
