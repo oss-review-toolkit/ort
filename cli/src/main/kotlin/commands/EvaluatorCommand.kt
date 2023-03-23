@@ -68,6 +68,7 @@ import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.model.utils.addPackageConfigurations
 import org.ossreviewtoolkit.model.utils.addResolutions
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
@@ -318,6 +319,7 @@ class EvaluatorCommand : OrtCommand(
         // Note: This overwrites any existing EvaluatorRun from the input file.
         val ortResultOutput = ortResultInput.copy(evaluator = evaluatorRun)
             .mergeLabels(labels)
+            .addPackageConfigurations(packageConfigurationProvider)
             .addResolutions(resolutionProvider)
 
         outputDir?.let { absoluteOutputDir ->
