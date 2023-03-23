@@ -27,6 +27,20 @@ import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
 /**
+ * Add all package configurations from [packageConfigurationProvider] that match any scan result in this [OrtResult] to
+ * [OrtResult.resolvedConfiguration], overwriting any previously contained package configurations.
+ */
+fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConfigurationProvider): OrtResult {
+    val packageConfigurations = getUncuratedPackages().flatMap { pkg ->
+        getScanResultsForId(pkg.id).flatMap { scanResult ->
+            packageConfigurationProvider.getPackageConfigurations(pkg.id, scanResult.provenance)
+        }
+    }.distinct()
+
+    return copy(resolvedConfiguration = resolvedConfiguration.copy(packageConfigurations = packageConfigurations))
+}
+
+/**
  * Add all resolutions from [resolutionProvider] that match the content of this [OrtResult] to
  * [OrtResult.resolvedConfiguration], overwriting any previously contained resolutions.
  */
