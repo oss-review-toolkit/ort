@@ -222,17 +222,26 @@ class ReporterCommand : OrtCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
-        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
-            CompositePackageConfigurationProvider(
-                SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
-                packageConfigurationOption.createProvider()
-            )
-        } else {
-            if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
-                logger.info { "Local package configurations were not applied because the feature is not enabled." }
+        val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
+        val packageConfigurationProvider = when {
+            resolvedPackageConfigurations != null && packageConfigurationOption == null -> {
+                SimplePackageConfigurationProvider(resolvedPackageConfigurations)
             }
 
-            packageConfigurationOption.createProvider()
+            ortConfig.enableRepositoryPackageConfigurations -> {
+                CompositePackageConfigurationProvider(
+                    SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
+                    packageConfigurationOption.createProvider()
+                )
+            }
+
+            else -> {
+                if (ortResult.repository.config.packageConfigurations.isNotEmpty()) {
+                    logger.info { "Local package configurations were not applied because the feature is not enabled." }
+                }
+
+                packageConfigurationOption.createProvider()
+            }
         }
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
