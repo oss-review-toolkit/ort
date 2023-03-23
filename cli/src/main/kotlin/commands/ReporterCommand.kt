@@ -111,7 +111,8 @@ class ReporterCommand : OrtCommand(
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
-        help = "A file containing copyright statements which are marked as garbage."
+        help = "A file containing copyright statements which are marked as garbage. This can make the output " +
+                "inconsistent with the evaluator output but is useful when testing copyright garbage."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -141,7 +142,8 @@ class ReporterCommand : OrtCommand(
 
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
-        help = "A file containing the license classifications."
+        help = "A file containing the license classifications. This can make the output inconsistent with the " +
+                "evaluator output but is useful when testing license classifications."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -153,14 +155,16 @@ class ReporterCommand : OrtCommand(
             "--package-configuration-dir",
             help = "A directory that is searched recursively for package configuration files. Each file must only " +
                     "contain a single package configuration. Must not be used together with " +
-                    "'--package-configuration-file'."
+                    "'--package-configuration-file'. This can make the output inconsistent with the evaluator output " +
+                    "but is useful when testing package configurations."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
         option(
             "--package-configuration-file",
             help = "A file containing a list of package configurations. Must not be used together with " +
-                    "'--package-configuration-dir'."
+                    "'--package-configuration-dir'. This can make the output inconsistent with the evaluator output " +
+                    "but is useful when testing package configurations."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
@@ -177,7 +181,8 @@ class ReporterCommand : OrtCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides the repository configuration " +
-                "contained in the ORT result input file."
+                "contained in the ORT result input file. This can make the output inconsistent with the output of " +
+                "previous commands but is useful when testing changes in the repository configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
