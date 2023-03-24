@@ -38,7 +38,7 @@ internal class ExcludesFilter {
 }
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
-internal class LicenseChoiceFilter {
+internal class LicenseChoicesFilter {
     override fun equals(other: Any?): Boolean =
         other is LicenseChoices && other.isEmpty()
 }

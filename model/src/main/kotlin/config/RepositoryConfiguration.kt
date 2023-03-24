@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.utils.CurationsFilter
 import org.ossreviewtoolkit.model.utils.ExcludesFilter
-import org.ossreviewtoolkit.model.utils.LicenseChoiceFilter
+import org.ossreviewtoolkit.model.utils.LicenseChoicesFilter
 import org.ossreviewtoolkit.model.utils.ResolutionsFilter
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 
@@ -66,6 +66,6 @@ data class RepositoryConfiguration(
     /**
      * Defines license choices within this repository.
      */
-    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LicenseChoiceFilter::class)
+    @JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = LicenseChoicesFilter::class)
     val licenseChoices: LicenseChoices = LicenseChoices()
 )
