@@ -30,36 +30,34 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class CargoSubcrateFunTest : StringSpec() {
-    init {
-        "Lib project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/Cargo.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-lib-expected-output.yml")
+class CargoSubcrateFunTest : StringSpec({
+    "Lib project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/Cargo.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-lib-expected-output.yml")
 
-            val result = createCargo().resolveSingleProject(definitionFile)
+        val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Integration sub-project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-integration-expected-output.yml")
-
-            val result = createCargo().resolveSingleProject(definitionFile)
-
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Client sub-project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-client-expected-output.yml")
-
-            val result = createCargo().resolveSingleProject(definitionFile)
-
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
-    private fun createCargo() =
-        Cargo("Cargo", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+    "Integration sub-project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-integration-expected-output.yml")
+
+        val result = createCargo().resolveSingleProject(definitionFile)
+
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+
+    "Client sub-project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-client-expected-output.yml")
+
+        val result = createCargo().resolveSingleProject(definitionFile)
+
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+})
+
+private fun createCargo() =
+    Cargo("Cargo", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

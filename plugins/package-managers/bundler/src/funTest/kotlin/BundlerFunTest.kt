@@ -37,52 +37,50 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class BundlerFunTest : WordSpec() {
-    init {
-        "Bundler" should {
-            "resolve dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
-                val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
+class BundlerFunTest : WordSpec({
+    "Bundler" should {
+        "resolve dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-                try {
-                    val actualResult = createBundler().resolveSingleProject(definitionFile)
-
-                    actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-                } finally {
-                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
-                }
-            }
-
-            "show error if no lockfile is present" {
-                val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
+            try {
                 val actualResult = createBundler().resolveSingleProject(definitionFile)
 
-                with(actualResult) {
-                    project.id shouldBe
-                            Identifier("Bundler::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
-                    project.definitionFilePath shouldBe
-                            "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
-                    packages should beEmpty()
-                    issues.size shouldBe 1
-                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
-                }
+                actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            } finally {
+                File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
             }
+        }
 
-            "resolve dependencies correctly when the project is a Gem" {
-                val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
-                val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
+        "show error if no lockfile is present" {
+            val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
+            val actualResult = createBundler().resolveSingleProject(definitionFile)
 
-                try {
-                    val actualResult = createBundler().resolveSingleProject(definitionFile)
+            with(actualResult) {
+                project.id shouldBe
+                        Identifier("Bundler::src/funTest/assets/projects/synthetic/no-lockfile/Gemfile:")
+                project.definitionFilePath shouldBe
+                        "plugins/package-managers/bundler/src/funTest/assets/projects/synthetic/no-lockfile/Gemfile"
+                packages should beEmpty()
+                issues.size shouldBe 1
+                issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
+            }
+        }
 
-                    actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-                } finally {
-                    File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
-                }
+        "resolve dependencies correctly when the project is a Gem" {
+            val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
+
+            try {
+                val actualResult = createBundler().resolveSingleProject(definitionFile)
+
+                actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            } finally {
+                File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
             }
         }
     }
+})
 
-    private fun createBundler() =
-        Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createBundler() =
+    Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

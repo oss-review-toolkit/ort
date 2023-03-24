@@ -30,18 +30,15 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class BowerFunTest : StringSpec() {
-     init {
-        "Project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/bower/bower.json")
-            val expectedResultFile = getAssetFile("projects/synthetic/bower-expected-output.yml")
+class BowerFunTest : StringSpec({
+    "Project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/bower/bower.json")
+        val expectedResultFile = getAssetFile("projects/synthetic/bower-expected-output.yml")
 
-            val result = createBower().resolveSingleProject(definitionFile)
+        val result = createBower().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
+})
 
-    private fun createBower() =
-        Bower("Bower", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createBower() = Bower("Bower", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
