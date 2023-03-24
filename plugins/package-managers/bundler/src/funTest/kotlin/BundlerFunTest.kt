@@ -25,8 +25,11 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
+import java.io.File
+
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
@@ -41,18 +44,14 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-            try {
-                val actualResult = createBundler().resolveSingleProject(definitionFile)
+            val actualResult = resolveSingleProject(definitionFile)
 
-                actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            } finally {
-                definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
-            }
+            actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
-            val actualResult = createBundler().resolveSingleProject(definitionFile)
+            val actualResult = resolveSingleProject(definitionFile)
 
             with(actualResult) {
                 project.id shouldBe
@@ -69,16 +68,19 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
-            try {
-                val actualResult = createBundler().resolveSingleProject(definitionFile)
+            val actualResult = resolveSingleProject(definitionFile)
 
-                actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            } finally {
-                definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
-            }
+            actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 })
 
 private fun createBundler() =
     Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+
+private fun resolveSingleProject(definitionFile: File): ProjectAnalyzerResult =
+    try {
+        createBundler().resolveSingleProject(definitionFile)
+    } finally {
+        definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
+    }
