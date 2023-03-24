@@ -23,70 +23,40 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class CargoSubcrateFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/cargo-subcrate")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Lib project dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("Cargo.toml")
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("cargo-subcrate-lib-expected-output.yml"),
-                definitionFilePath = "$vcsPath/Cargo.toml",
-                path = vcsPath,
-                revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/Cargo.toml")
+            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-lib-expected-output.yml")
 
             val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Integration sub-project dependencies are detected correctly" {
-            val integrationProjectDir = projectDir.resolve("integration")
-            val definitionFile = integrationProjectDir.resolve("Cargo.toml")
-            val vcsPath = vcsDir.getPathToRoot(integrationProjectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("cargo-subcrate-integration-expected-output.yml"),
-                definitionFilePath = "$vcsPath/Cargo.toml",
-                path = vcsPath,
-                revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml")
+            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-integration-expected-output.yml")
 
             val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Client sub-project dependencies are detected correctly" {
-            val clientProjectDir = projectDir.resolve("client")
-            val definitionFile = clientProjectDir.resolve("Cargo.toml")
-            val vcsPath = vcsDir.getPathToRoot(clientProjectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("cargo-subcrate-client-expected-output.yml"),
-                definitionFilePath = "$vcsPath/Cargo.toml",
-                path = vcsPath,
-                revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
+            val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-client-expected-output.yml")
 
             val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 

@@ -28,45 +28,33 @@ import io.kotest.matchers.string.haveSubstring
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class BundlerFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic")
-    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsRevision = vcsDir.getRevision()
-    private val vcsUrl = vcsDir.getRemoteUrl()
-
     init {
         "Bundler" should {
             "resolve dependencies correctly" {
-                val definitionFile = projectsDir.resolve("lockfile/Gemfile")
+                val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
+                val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
-                    val expectedResult = patchExpectedResult(
-                        projectsDir.resolve("bundler-expected-output-lockfile.yml"),
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsDir.getPathToRoot(definitionFile.parentFile)
-                    )
 
-                    actualResult.toYaml() shouldBe expectedResult
+                    actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
                 }
             }
 
             "show error if no lockfile is present" {
-                val definitionFile = projectsDir.resolve("no-lockfile/Gemfile")
+                val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
                 val actualResult = createBundler().resolveSingleProject(definitionFile)
 
                 with(actualResult) {
@@ -81,18 +69,13 @@ class BundlerFunTest : WordSpec() {
             }
 
             "resolve dependencies correctly when the project is a Gem" {
-                val definitionFile = projectsDir.resolve("gemspec/Gemfile")
+                val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
+                val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
                 try {
                     val actualResult = createBundler().resolveSingleProject(definitionFile)
-                    val expectedResult = patchExpectedResult(
-                        projectsDir.resolve("bundler-expected-output-gemspec.yml"),
-                        url = normalizeVcsUrl(vcsUrl),
-                        revision = vcsRevision,
-                        path = vcsDir.getPathToRoot(definitionFile.parentFile)
-                    )
 
-                    actualResult.toYaml() shouldBe expectedResult
+                    actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
                 } finally {
                     File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
                 }
