@@ -43,8 +43,10 @@ internal class LicenseChoiceFilter {
         other is LicenseChoices && other.isEmpty()
 }
 
-// A custom value filter for [PackageLinkage] to work around
-// https://github.com/FasterXML/jackson-module-kotlin/issues/193.
+/**
+ * A custom value filter for [PackageLinkage] to work around
+ * https://github.com/FasterXML/jackson-module-kotlin/issues/193.
+ */
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist")
 internal class PackageLinkageValueFilter {
     override fun equals(other: Any?) = other == PackageLinkage.DYNAMIC
