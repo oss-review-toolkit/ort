@@ -30,18 +30,15 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class CargoFunTest : StringSpec() {
-    init {
-        "Projects dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
-            val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
+class CargoFunTest : StringSpec({
+    "Projects dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
+        val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
 
-            val result = createCargo().resolveSingleProject(definitionFile)
+        val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
+})
 
-    private fun createCargo() =
-        Cargo("Cargo", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createCargo() = Cargo("Cargo", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
