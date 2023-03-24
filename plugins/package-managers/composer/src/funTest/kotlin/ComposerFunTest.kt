@@ -26,39 +26,27 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ComposerFunTest : StringSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic")
-    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsRevision = vcsDir.getRevision()
-    private val vcsUrl = vcsDir.getRemoteUrl()
-
     init {
         "Project dependencies are detected correctly" {
-            val definitionFile = projectsDir.resolve("lockfile/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/lockfile/composer.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/composer-expected-output.yml")
 
             val result = createComposer().resolveSingleProject(definitionFile)
-            val expectedResults = patchExpectedResult(
-                projectsDir.resolve("composer-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsDir.getPathToRoot(definitionFile.parentFile)
-            )
 
-            result.toYaml() shouldBe expectedResults
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Error is shown when no lockfile is present" {
-            val definitionFile = projectsDir.resolve("no-lockfile/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/no-lockfile/composer.json")
             val result = createComposer().resolveSingleProject(definitionFile)
 
             with(result) {
@@ -74,61 +62,39 @@ class ComposerFunTest : StringSpec() {
         }
 
         "No composer.lock is required for projects without dependencies" {
-            val definitionFile = projectsDir.resolve("no-deps/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/no-deps/composer.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/composer-expected-output-no-deps.yml")
 
             val result = createComposer().resolveSingleProject(definitionFile)
-            val expectedResults = patchExpectedResult(
-                projectsDir.resolve("composer-expected-output-no-deps.yml"),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsDir.getPathToRoot(definitionFile.parentFile)
-            )
 
-            result.toYaml() shouldBe expectedResults
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "No composer.lock is required for projects with empty dependencies" {
-            val definitionFile = projectsDir.resolve("empty-deps/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/empty-deps/composer.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/composer-expected-output-no-deps.yml")
 
             val result = createComposer().resolveSingleProject(definitionFile)
-            val expectedResults = patchExpectedResult(
-                projectsDir.resolve("composer-expected-output-no-deps.yml"),
-                definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsDir.getPathToRoot(definitionFile.parentFile)
-            )
 
-            result.toYaml() shouldBe expectedResults
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Packages defined as provided are not reported as missing" {
-            val definitionFile = projectsDir.resolve("with-provide/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/with-provide/composer.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/composer-expected-output-with-provide.yml")
 
             val result = createComposer().resolveSingleProject(definitionFile)
-            val expectedResults = patchExpectedResult(
-                projectsDir.resolve("composer-expected-output-with-provide.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsDir.getPathToRoot(definitionFile.parentFile)
-            )
 
-            result.toYaml() shouldBe expectedResults
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Packages defined as replaced are not reported as missing" {
-            val definitionFile = projectsDir.resolve("with-replace/composer.json")
+            val definitionFile = getAssetFile("projects/synthetic/with-replace/composer.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/composer-expected-output-with-replace.yml")
 
             val result = createComposer().resolveSingleProject(definitionFile)
-            val expectedResults = patchExpectedResult(
-                projectsDir.resolve("composer-expected-output-with-replace.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsDir.getPathToRoot(definitionFile.parentFile)
-            )
 
-            result.toYaml() shouldBe expectedResults
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 

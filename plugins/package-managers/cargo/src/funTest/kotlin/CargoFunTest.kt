@@ -23,36 +23,22 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class CargoFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/cargo")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Projects dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("Cargo.toml")
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("cargo-expected-output.yml"),
-                definitionFilePath = "$vcsPath/Cargo.toml",
-                path = vcsPath,
-                revision = vcsRevision,
-                url = normalizeVcsUrl(vcsUrl)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cargo/Cargo.toml")
+            val expectedResultFile = getAssetFile("projects/synthetic/cargo-expected-output.yml")
 
             val result = createCargo().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
