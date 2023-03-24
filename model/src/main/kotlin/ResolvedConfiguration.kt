@@ -41,8 +41,8 @@ data class ResolvedConfiguration(
     /**
      * All [PackageConfiguration]s that correspond to the scan results in this [OrtResult].
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val packageConfigurations: List<PackageConfiguration>? = null,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val packageConfigurations: List<PackageConfiguration> = emptyList(),
 
     /**
      * The curations for all enabled providers ordered highest-priority-first. The list contains exactly one entry for

@@ -227,10 +227,9 @@ class ReporterCommand : OrtCommand(
 
         val licenseTextDirectories = listOfNotNull(customLicenseTextsDir.takeIf { it.isDirectory })
 
-        val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
         val packageConfigurationProvider = when {
-            resolvedPackageConfigurations != null && packageConfigurationOption == null -> {
-                SimplePackageConfigurationProvider(resolvedPackageConfigurations)
+            packageConfigurationOption == null -> {
+                SimplePackageConfigurationProvider(ortResult.resolvedConfiguration.packageConfigurations)
             }
 
             ortConfig.enableRepositoryPackageConfigurations -> {
