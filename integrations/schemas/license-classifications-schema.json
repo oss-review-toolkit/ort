@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://oss-review-toolkit.org/license-classifications.yml",
+  "title": "ORT license classifications",
+  "description": "Configuration file for user-defined classifications of licenses, used by the OSS-Review-Toolkit (ORT). A full list of all available options can be found at https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-license-classifications-yml.md.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "categories": {
+      "description": "Definition of categories.",
+      "items": {
+        "$ref": "#/definitions/Category"
+      },
+      "type": "array"
+    },
+    "categorizations": {
+      "description": "List of licenses to categorize.",
+      "items": {
+        "$ref": "#/definitions/Categorization"
+      },
+      "type": "array"
+    }
+  },
+  "definitions": {
+    "Category": {
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "description": "Unique name of this category.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "Categorization": {
+      "additionalProperties": false,
+      "properties": {
+        "categories": {
+          "description": "Categories which apply to this license. Must be values from the \"categories\" list.",
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "id": {
+          "description": "SPDX license identifier.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    }
+  }
+}
