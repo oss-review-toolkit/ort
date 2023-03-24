@@ -22,21 +22,30 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 import OrtDependency
 import OrtDependencyTreeModel
 
+import org.apache.maven.model.building.FileModelSource
+import org.apache.maven.model.building.ModelBuildingResult
+
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ModuleVersionIdentifier
+import org.gradle.api.artifacts.component.ComponentIdentifier
 import org.gradle.api.artifacts.component.ModuleComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentIdentifier
 import org.gradle.api.artifacts.component.ProjectComponentSelector
 import org.gradle.api.artifacts.repositories.UrlArtifactRepository
 import org.gradle.api.artifacts.result.DependencyResult
+import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
 import org.gradle.api.attributes.Attribute
+import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
 import org.gradle.api.logging.Logging
+import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
 import org.gradle.internal.deprecation.DeprecatableConfiguration
 import org.gradle.internal.resolve.ModuleVersionResolveException
+import org.gradle.maven.MavenModule
+import org.gradle.maven.MavenPomArtifact
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.util.GradleVersion
 
@@ -62,11 +71,13 @@ class OrtModelBuilder : ToolingModelBuilder {
         val resolvableConfigurations = project.configurations.filter { it.isResolvable() }
 
         val ortConfigurations = resolvableConfigurations.mapNotNull { config ->
+            // Explicitly resolve all POM files and their parents, as the latter otherwise may get resolved in Gradle's
+            // own binary "descriptor.bin" format only.
+            val poms = project.resolvePoms(config)
+
             // Get the root of the resolved dependency graph. This is also what Gradle's own "dependencies" task uses to
             // recursively obtain information about resolved dependencies. Resolving dependencies triggers the download
-            // of metadata (like Maven POMs) only, not of binary artifacts, also see [1]. However, Gradle stores the
-            // metadata e.g. for Maven parent POMs in its own binary "descriptor.bin" format only, as long as the parent
-            // POM artifact is no explicitly requested.
+            // of metadata (like Maven POMs) only, not of binary artifacts, also see [1].
             //
             // [1]: https://docs.gradle.org/current/userguide/dependency_management.html#obtaining_module_metadata
             val root = config.incoming.resolutionResult.root
@@ -77,7 +88,7 @@ class OrtModelBuilder : ToolingModelBuilder {
                 visitedDependencies.clear()
                 visitedProjects.clear()
 
-                OrtConfigurationImpl(name = config.name, dependencies = dep.toOrtDependencies())
+                OrtConfigurationImpl(name = config.name, dependencies = dep.toOrtDependencies(poms))
             }
         }
 
@@ -101,7 +112,50 @@ class OrtModelBuilder : ToolingModelBuilder {
         return canBeResolved && !isDeprecatedConfiguration
     }
 
-    private fun Collection<DependencyResult>.toOrtDependencies(): List<OrtDependency> =
+    /**
+     * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
+     */
+    private fun Project.resolvePoms(config: Configuration): Map<String, ModelBuildingResult> {
+        val allComponentIds = config.incoming.resolutionResult.allDependencies
+            .filterIsInstance<ResolvedDependencyResult>()
+            .map { it.selected.id }
+            .distinct()
+
+        // Get the POM files for all resolved dependencies.
+        val pomFiles = resolvePoms(allComponentIds)
+
+        val fileModelBuilder = FileModelBuilder { groupId, artifactId, version ->
+            val moduleId = DefaultModuleIdentifier.newId(groupId, artifactId)
+            val componentId = DefaultModuleComponentIdentifier.newId(moduleId, version)
+
+            val pomFile = resolvePoms(listOf(componentId)).single().file
+
+            FileModelSource(pomFile)
+        }
+
+        return pomFiles.associate {
+            // Trigger resolution of parent POMs by building the POM model.
+            it.id.componentIdentifier.toString() to fileModelBuilder.buildModel(it.file)
+        }
+    }
+
+    /**
+     * Resolve the POM files for the given [componentIds] and return them.
+     */
+    private fun Project.resolvePoms(componentIds: List<ComponentIdentifier>): List<ResolvedArtifactResult> {
+        val resolutionResult = dependencies.createArtifactResolutionQuery()
+            .forComponents(componentIds)
+            .withArtifacts(MavenModule::class.java, MavenPomArtifact::class.java)
+            .execute()
+
+        return resolutionResult.resolvedComponents.flatMap {
+            it.getArtifacts(MavenPomArtifact::class.java)
+        }.filterIsInstance<ResolvedArtifactResult>()
+    }
+
+    private fun Collection<DependencyResult>.toOrtDependencies(
+        poms: Map<String, ModelBuildingResult>
+    ): List<OrtDependency> =
         if (GradleVersion.current() < GradleVersion.version("5.1")) {
             this
         } else {
@@ -139,16 +193,25 @@ class OrtModelBuilder : ToolingModelBuilder {
                                 }
                             }
 
+                            val modelBuildingResult = poms.getValue(id.toString())
+
                             OrtDependencyImpl(
                                 groupId = id.group,
                                 artifactId = id.module,
                                 version = id.version,
                                 classifier = "",
                                 extension = extension,
-                                dependencies = selectedComponent.dependencies.toOrtDependencies(),
+                                dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
                                 error = null,
                                 warning = null,
                                 pomFile = pomFile,
+                                mavenModel = OrtMavenModelImpl(
+                                    licenses = modelBuildingResult.effectiveModel.collectLicenses(),
+                                    authors = modelBuildingResult.effectiveModel.collectAuthors(),
+                                    description = modelBuildingResult.effectiveModel.description.orEmpty(),
+                                    homepageUrl = modelBuildingResult.effectiveModel.url.orEmpty(),
+                                    vcs = modelBuildingResult.getVcsModel()
+                                ),
                                 localPath = null
                             )
                         }
@@ -166,10 +229,11 @@ class OrtModelBuilder : ToolingModelBuilder {
                                 version = moduleId.version,
                                 classifier = "",
                                 extension = "",
-                                dependencies = selectedComponent.dependencies.toOrtDependencies(),
+                                dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
                                 error = null,
                                 warning = null,
                                 pomFile = null,
+                                mavenModel = null,
                                 localPath = id.projectPath
                             )
                         }

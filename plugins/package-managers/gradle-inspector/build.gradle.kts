@@ -47,6 +47,7 @@ dependencies {
 
     implementation(project(":downloader"))
     implementation(project(":plugins:package-managers:gradle-model"))
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
