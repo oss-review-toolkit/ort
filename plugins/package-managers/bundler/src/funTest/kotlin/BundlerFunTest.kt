@@ -25,8 +25,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -48,7 +46,7 @@ class BundlerFunTest : WordSpec({
 
                 actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             } finally {
-                File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
+                definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
             }
         }
 
@@ -76,7 +74,7 @@ class BundlerFunTest : WordSpec({
 
                 actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             } finally {
-                File(definitionFile.parentFile, ".bundle").safeDeleteRecursively(force = true)
+                definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
             }
         }
     }
