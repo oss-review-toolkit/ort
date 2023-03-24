@@ -47,5 +47,20 @@ interface OrtDependency {
     val error: String?
     val warning: String?
     val pomFile: String?
+    val mavenModel: OrtMavenModel?
     val localPath: String?
+}
+
+interface OrtMavenModel {
+    val licenses: Set<String>
+    val authors: Set<String>
+    val description: String?
+    val homepageUrl: String?
+    val vcs: OrtVcsModel?
+}
+
+interface OrtVcsModel {
+    val connection: String
+    val tag: String
+    val browsableUrl: String
 }

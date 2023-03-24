@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 import OrtConfiguration
 import OrtDependency
 import OrtDependencyTreeModel
+import OrtMavenModel
+import OrtVcsModel
 
 import java.io.Serializable
 
@@ -42,7 +44,7 @@ class OrtConfigurationImpl(
     override val dependencies: List<OrtDependency>
 ) : OrtConfiguration, Serializable
 
-@Suppress("SerialVersionUIDInSerializableClass")
+@Suppress("LongParameterList", "SerialVersionUIDInSerializableClass")
 class OrtDependencyImpl(
     override val groupId: String,
     override val artifactId: String,
@@ -53,5 +55,22 @@ class OrtDependencyImpl(
     override val error: String?,
     override val warning: String?,
     override val pomFile: String?,
+    override val mavenModel: OrtMavenModel?,
     override val localPath: String?
 ) : OrtDependency, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+class OrtMavenModelImpl(
+    override val licenses: Set<String>,
+    override val authors: Set<String>,
+    override val description: String?,
+    override val homepageUrl: String?,
+    override val vcs: OrtVcsModel?
+) : OrtMavenModel, Serializable
+
+@Suppress("SerialVersionUIDInSerializableClass")
+class OrtVcsModelImpl(
+    override val connection: String,
+    override val tag: String,
+    override val browsableUrl: String
+) : OrtVcsModel, Serializable
