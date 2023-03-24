@@ -47,7 +47,7 @@ private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
 fun getAssetAsString(path: String): String = getAssetFile(path).readText()
 
 /**
- * Return the fun test asset file located  under [path] relative to the 'assets' directory.
+ * Return the fun test asset file located under [path] relative to the 'assets' directory.
  */
 fun getAssetFile(path: String) = File("src/funTest/assets", path)
 
