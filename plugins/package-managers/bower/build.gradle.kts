@@ -24,8 +24,16 @@ plugins {
 
 dependencies {
     api(project(":analyzer"))
+    api(project(":model"))
+    api(project(":utils:common-utils"))
+
+    api(libs.semver4j)
 
     implementation(project(":downloader"))
+    implementation(project(":utils:ort-utils"))
+    implementation(project(":utils:spdx-utils"))
+
+    implementation(libs.jacksonDatabind)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
