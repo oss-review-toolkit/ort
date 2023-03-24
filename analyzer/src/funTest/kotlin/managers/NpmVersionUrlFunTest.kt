@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NpmVersionUrlFunTest : WordSpec({
-    val projectDir = getAssetFile("projects/synthetic/npm-version-urls").absoluteFile
+    val projectDir = getAssetFile("projects/synthetic/npm-version-urls")
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleLibraryFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-library").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/gradle-library")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

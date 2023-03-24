@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
-        val projectDir = getAssetFile("projects/external/sbt-multi-project-example").absoluteFile
+        val projectDir = getAssetFile("projects/external/sbt-multi-project-example")
         val expectedResult = patchExpectedResult(
             projectDir.resolveSibling("sbt-multi-project-example-expected-output.yml")
         )
@@ -49,7 +49,7 @@ class SbtFunTest : StringSpec({
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
-        val projectDir = getAssetFile("projects/synthetic/sbt-http4s-template").absoluteFile
+        val projectDir = getAssetFile("projects/synthetic/sbt-http4s-template")
         val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
         val vcsUrl = vcsDir.getRemoteUrl()
         val vcsRevision = vcsDir.getRevision()

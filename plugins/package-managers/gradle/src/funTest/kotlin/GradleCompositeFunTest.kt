@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleCompositeFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-composite").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/gradle-composite")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

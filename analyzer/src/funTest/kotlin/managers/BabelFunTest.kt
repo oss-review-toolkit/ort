@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class BabelFunTest : WordSpec({
-    val projectDir = getAssetFile("projects/synthetic/npm-babel").absoluteFile
+    val projectDir = getAssetFile("projects/synthetic/npm-babel")
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

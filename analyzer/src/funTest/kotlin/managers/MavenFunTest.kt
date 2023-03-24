@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class MavenFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/maven").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/maven")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -117,7 +117,7 @@ class MavenFunTest : StringSpec() {
                 .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                 .safeDeleteRecursively(force = true)
 
-            val projectDir = getAssetFile("projects/synthetic/maven-parent").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/maven-parent")
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("maven-parent-expected-output-root.yml"),
@@ -131,7 +131,7 @@ class MavenFunTest : StringSpec() {
         }
 
         "Maven Wagon extensions can be loaded" {
-            val projectDir = getAssetFile("projects/synthetic/maven-wagon").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/maven-wagon")
             val pomFile = projectDir.resolve("pom.xml")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("maven-wagon-expected-output.yml"),

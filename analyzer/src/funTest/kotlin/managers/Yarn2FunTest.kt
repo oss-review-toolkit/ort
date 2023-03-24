@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.toYaml
 class Yarn2FunTest : WordSpec({
     "Yarn 2" should {
         "resolve dependencies correctly" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2")
 
             val result = resolveDependencies(projectDir)
 
@@ -48,7 +48,7 @@ class Yarn2FunTest : WordSpec({
         }
 
         "exclude scopes if configured" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2")
 
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
@@ -62,7 +62,7 @@ class Yarn2FunTest : WordSpec({
         }
 
         "resolve workspace dependencies correctly" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces")
 
             val result = resolveMultipleDependencies(projectDir)
 

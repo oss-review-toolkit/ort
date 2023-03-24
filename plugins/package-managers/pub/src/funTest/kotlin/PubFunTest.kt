@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PubFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic").absoluteFile
-    private val projectsDirExternal = getAssetFile("projects/external").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic")
+    private val projectsDirExternal = getAssetFile("projects/external")
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

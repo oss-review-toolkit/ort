@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-android").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/gradle-android")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()
@@ -81,7 +81,7 @@ class GradleAndroidFunTest : StringSpec() {
         }
 
         "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
-            val cyclicProjectDir = getAssetFile("projects/synthetic/gradle-android-cyclic").absoluteFile
+            val cyclicProjectDir = getAssetFile("projects/synthetic/gradle-android-cyclic")
             val definitionFile = cyclicProjectDir.resolve("app/build.gradle")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("gradle-android-cyclic-expected-output-app.yml"),

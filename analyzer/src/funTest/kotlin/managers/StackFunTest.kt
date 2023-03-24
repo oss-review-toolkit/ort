@@ -46,7 +46,7 @@ class StackFunTest : StringSpec({
     }
 })
 
-private val projectsDir = getAssetFile("projects").absoluteFile
+private val projectsDir = getAssetFile("projects")
 
 private fun createStack() =
     Stack("Stack", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ComposerFunTest : StringSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic")
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsRevision = vcsDir.getRevision()
     private val vcsUrl = vcsDir.getRemoteUrl()

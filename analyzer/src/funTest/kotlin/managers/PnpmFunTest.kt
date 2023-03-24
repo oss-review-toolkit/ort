@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.test.toYaml
 class PnpmFunTest : WordSpec({
     "Pnpm" should {
         "resolve dependencies correctly in a simple project" {
-            val projectDir = getAssetFile("projects/synthetic/pnpm").absoluteFile
+            val projectDir = getAssetFile("projects/synthetic/pnpm")
 
             val result = resolveDependencies(projectDir)
             val expectedResult = getExpectedResult(projectDir, "pnpm-expected-output.yml")
@@ -47,7 +47,7 @@ class PnpmFunTest : WordSpec({
         }
 
         "resolve dependencies correctly in a workspaces project" {
-            val rootProjectDir = getAssetFile("projects/synthetic/pnpm-workspaces").absoluteFile
+            val rootProjectDir = getAssetFile("projects/synthetic/pnpm-workspaces")
 
             val ortResult = Analyzer(AnalyzerConfiguration()).run {
                 analyze(findManagedFiles(rootProjectDir, setOf(Pnpm.Factory())))
