@@ -24,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
+import org.ossreviewtoolkit.model.utils.ResolutionsFilter
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
@@ -53,8 +54,8 @@ data class ResolvedConfiguration(
     /**
      * All resolutions that apply to this [OrtResult].
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val resolutions: Resolutions? = null
+    @JsonInclude(JsonInclude.Include.CUSTOM, valueFilter = ResolutionsFilter::class)
+    val resolutions: Resolutions = Resolutions()
 ) {
     init {
         val duplicateProviderIds = packageCurations.getDuplicates().map { it.provider.id }
