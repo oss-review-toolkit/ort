@@ -25,12 +25,7 @@ import java.util.Deque
 import java.util.LinkedList
 import java.util.SortedSet
 
-// A custom value filter for [PackageLinkage] to work around
-// https://github.com/FasterXML/jackson-module-kotlin/issues/193.
-@Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist")
-internal class PackageLinkageValueFilter {
-    override fun equals(other: Any?) = other == PackageLinkage.DYNAMIC
-}
+import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package

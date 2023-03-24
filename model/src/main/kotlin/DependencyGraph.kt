@@ -24,6 +24,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
+
 /**
  * Type alias for a [Map] that associates a [DependencyGraphNode] with the nodes representing its dependencies.
  */
