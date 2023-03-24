@@ -28,6 +28,7 @@ dependencies {
     api(libs.kotestAssertionsCore)
     api(libs.kotestFrameworkApi)
 
+    implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
 
     implementation(libs.jacksonModuleKotlin)

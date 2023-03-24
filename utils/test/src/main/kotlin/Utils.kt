@@ -28,9 +28,11 @@ import io.kotest.matchers.neverNullMatcher
 import java.io.File
 import java.time.Instant
 
+import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val USER_DIR = File(System.getProperty("user.dir"))
 
@@ -73,6 +75,22 @@ fun patchExpectedResult(
         .replaceIfNotNull("<REPLACE_REVISION>", revision)
         .replaceIfNotNull("<REPLACE_PATH>", path)
         .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
+}
+
+fun patchExpectedResult2(expectedResultFile: File, definitionFile: File): String {
+    val projectDir = definitionFile.parentFile
+    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+    val vcsUrl = vcsDir.getRemoteUrl()
+    val vcsRevision = vcsDir.getRevision()
+    val vcsPath = vcsDir.getPathToRoot(projectDir)
+
+    return patchExpectedResult(
+        expectedResultFile,
+        definitionFilePath = "$vcsPath/${definitionFile.name}",
+        path = vcsPath,
+        revision = vcsRevision,
+        url = normalizeVcsUrl(vcsUrl)
+    )
 }
 
 fun patchActualResult(
