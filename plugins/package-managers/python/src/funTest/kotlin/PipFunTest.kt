@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PipFunTest : WordSpec({
-    val projectsDir = getAssetFile("projects").absoluteFile
+    val projectsDir = getAssetFile("projects")
     val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

@@ -35,12 +35,12 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ConanFunTest : StringSpec() {
-    private val projectsDirTxt = getAssetFile("projects/synthetic/conan-txt").absoluteFile
+    private val projectsDirTxt = getAssetFile("projects/synthetic/conan-txt")
     private val vcsDirTxt = VersionControlSystem.forDirectory(projectsDirTxt)!!
     private val vcsRevisionTxt = vcsDirTxt.getRevision()
     private val vcsUrlTxt = vcsDirTxt.getRemoteUrl()
 
-    private val projectsDirPy = getAssetFile("projects/synthetic/conan-py").absoluteFile
+    private val projectsDirPy = getAssetFile("projects/synthetic/conan-py")
     private val vcsDirPy = VersionControlSystem.forDirectory(projectsDirPy)!!
     private val vcsRevisionPy = vcsDirPy.getRevision()
     private val vcsUrlPy = vcsDirPy.getRemoteUrl()

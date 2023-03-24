@@ -60,7 +60,7 @@ class YarnFunTest : WordSpec() {
     init {
         "yarn" should {
             "resolve dependencies correctly" {
-                val projectDir = getAssetFile("projects/synthetic/yarn").absoluteFile
+                val projectDir = getAssetFile("projects/synthetic/yarn")
 
                 val result = resolveDependencies(projectDir)
 
@@ -71,7 +71,7 @@ class YarnFunTest : WordSpec() {
             "resolve workspace dependencies correctly" {
                 // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
                 // dependencies get assigned to a scope.
-                val projectDir = getAssetFile("projects/synthetic/yarn-workspaces").absoluteFile
+                val projectDir = getAssetFile("projects/synthetic/yarn-workspaces")
 
                 val result = resolveDependencies(projectDir)
 

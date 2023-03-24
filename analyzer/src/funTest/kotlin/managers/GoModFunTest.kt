@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GoModFunTest : StringSpec({
-    val testDir = getAssetFile("projects/synthetic").absoluteFile
+    val testDir = getAssetFile("projects/synthetic")
 
     "Project dependencies are detected correctly" {
         val definitionFile = testDir.resolve("gomod/go.mod")

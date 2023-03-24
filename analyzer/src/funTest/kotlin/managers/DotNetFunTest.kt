@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class DotNetFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/dotnet").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/dotnet")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

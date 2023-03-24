@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PoetryFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects").absoluteFile
+    private val projectsDir = getAssetFile("projects")
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

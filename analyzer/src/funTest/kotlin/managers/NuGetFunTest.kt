@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NuGetFunTest : StringSpec({
-    val projectDir = getAssetFile("projects/synthetic/nuget").absoluteFile
+    val projectDir = getAssetFile("projects/synthetic/nuget")
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
     val vcsRevision = vcsDir.getRevision()

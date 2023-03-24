@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class CarthageFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/carthage").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/carthage")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleBomFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-bom").absoluteFile
+    private val projectDir = getAssetFile("projects/synthetic/gradle-bom")
     private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

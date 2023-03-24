@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NpmFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic/npm").absoluteFile
+    private val projectsDir = getAssetFile("projects/synthetic/npm")
     private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
     private val vcsUrl = vcsDir.getRemoteUrl()
     private val vcsRevision = vcsDir.getRevision()

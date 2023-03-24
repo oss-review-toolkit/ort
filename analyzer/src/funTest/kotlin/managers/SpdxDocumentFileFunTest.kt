@@ -262,7 +262,7 @@ class SpdxDocumentFileFunTest : WordSpec({
     }
 })
 
-private val projectDir = getAssetFile("projects/synthetic/spdx").absoluteFile
+private val projectDir = getAssetFile("projects/synthetic/spdx")
 private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
 private val vcsUrl = vcsDir.getRemoteUrl()
 private val vcsRevision = vcsDir.getRevision()

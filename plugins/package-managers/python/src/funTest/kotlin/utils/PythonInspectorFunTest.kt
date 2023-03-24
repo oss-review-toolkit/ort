@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class PythonInspectorFunTest : StringSpec({
-    val projectsDir = getAssetFile("projects").absoluteFile
+    val projectsDir = getAssetFile("projects")
 
     "python-inspector output can be deserialized" {
         val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
