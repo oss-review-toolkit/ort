@@ -61,6 +61,10 @@ class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutio
             resolutions.ruleViolations.filter { resolution -> violations.any { resolution.matches(it) } }
         }.orEmpty()
 
-        return Resolutions(issueResolutions, ruleViolationResolutions)
+        val vulnerabilityResolutions = ortResult.getVulnerabilities().values.flatten().let { vulnerabilities ->
+            resolutions.vulnerabilities.filter { resolution -> vulnerabilities.any { resolution.matches(it) } }
+        }
+
+        return Resolutions(issueResolutions, ruleViolationResolutions, vulnerabilityResolutions)
     }
 }
