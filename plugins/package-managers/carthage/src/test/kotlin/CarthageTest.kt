@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.carthage
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.Tuple2
@@ -49,7 +49,7 @@ class CarthageTest : WordSpec() {
     init {
         "resolveDependencies" should {
             "parse a github dependency" {
-                val cartfile = File("src/test/assets/carthage/Cartfile-github.resolved")
+                val cartfile = File("src/test/assets/Cartfile-github.resolved")
 
                 val result = carthage.resolveDependencies(cartfile, emptyMap()).single()
 
@@ -64,7 +64,7 @@ class CarthageTest : WordSpec() {
             }
 
             "parse a generic git dependency" {
-                val cartfile = File("src/test/assets/carthage/Cartfile-generic-git.resolved")
+                val cartfile = File("src/test/assets/Cartfile-generic-git.resolved")
 
                 val result = carthage.resolveDependencies(cartfile, emptyMap()).single()
 
@@ -82,9 +82,9 @@ class CarthageTest : WordSpec() {
             "parse a binary dependency url" {
                 mockkStatic("kotlin.io.TextStreamsKt")
                 every { URL("https://host.tld/path/to/binary/spec.json").readBytes() } returns
-                        File("src/test/assets/carthage/Carthage-binary-specification.json").readText().toByteArray()
+                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
-                val cartfile = File("src/test/assets/carthage/Cartfile-binary.resolved")
+                val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
                 val result = carthage.resolveDependencies(cartfile, emptyMap()).single()
                 with(result.packages) {
@@ -100,9 +100,9 @@ class CarthageTest : WordSpec() {
             "parse mixed dependencies" {
                 mockkStatic("kotlin.io.TextStreamsKt")
                 every { URL("https://host.tld/path/to/binary/spec.json").readBytes() } returns
-                        File("src/test/assets/carthage/Carthage-binary-specification.json").readText().toByteArray()
+                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
-                val cartfile = File("src/test/assets/carthage/Cartfile-mixed.resolved")
+                val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
 
                 val result = carthage.resolveDependencies(cartfile, emptyMap()).single()
 
@@ -118,7 +118,7 @@ class CarthageTest : WordSpec() {
             }
 
             "throw an error for a wrongly defined dependency" {
-                val cartfile = File("src/test/assets/carthage/Cartfile-faulty.resolved")
+                val cartfile = File("src/test/assets/Cartfile-faulty.resolved")
 
                 shouldThrow<IllegalArgumentException> {
                     carthage.resolveDependencies(cartfile, emptyMap())
