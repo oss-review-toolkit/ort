@@ -97,6 +97,7 @@ greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 hopliteCore = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hopliteYaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jacksonDataformatXml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
 jacksonDataformatYaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
