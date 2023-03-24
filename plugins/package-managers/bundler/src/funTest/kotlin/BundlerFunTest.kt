@@ -75,12 +75,10 @@ class BundlerFunTest : WordSpec({
     }
 })
 
-private fun createBundler() =
-    Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-
 private fun resolveSingleProject(definitionFile: File): ProjectAnalyzerResult =
     try {
-        createBundler().resolveSingleProject(definitionFile)
+        val bundler = Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+        bundler.resolveSingleProject(definitionFile)
     } finally {
         definitionFile.resolveSibling(".bundle").safeDeleteRecursively(force = true)
     }
