@@ -30,6 +30,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
+import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATION_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
@@ -90,6 +91,15 @@ class JsonSchemaTest : StringSpec({
         val referenceConfigFile = File("src/main/resources/$REFERENCE_CONFIG_FILENAME").toJsonNode()
 
         val errors = schemaV7.getSchema(ortConfigurationSchema).validate(referenceConfigFile)
+
+        errors should beEmpty()
+    }
+
+    "The example license classifications file validates successfully" {
+        val licenseClassificationsSchema = File("../integrations/schemas/license-classifications-schema.json").toURI()
+        val licenseClassificationsExample = File("../examples/$ORT_LICENSE_CLASSIFICATIONS_FILENAME").toJsonNode()
+
+        val errors = schemaV7.getSchema(licenseClassificationsSchema).validate(licenseClassificationsExample)
 
         errors should beEmpty()
     }
