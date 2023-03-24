@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.common.getDuplicates
  */
 data class ResolvedConfiguration(
     /**
-     * All [PackageConfiguration]s that match the scan results in this [OrtResult].
+     * All [PackageConfiguration]s that correspond to the scan results in this [OrtResult].
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     val packageConfigurations: List<PackageConfiguration>? = null,
