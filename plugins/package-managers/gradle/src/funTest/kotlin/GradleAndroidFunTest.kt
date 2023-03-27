@@ -32,8 +32,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class GradleAndroidFunTest : StringSpec() {
-    init {
+class GradleAndroidFunTest : StringSpec({
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
             val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
@@ -69,8 +68,6 @@ class GradleAndroidFunTest : StringSpec() {
 
             result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
-    }
+})
 
-    private fun createGradle() =
-        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createGradle() = Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

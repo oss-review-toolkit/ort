@@ -30,17 +30,15 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class GradleCompositeFunTest : StringSpec() {
-    init {
-        "Dependencies from included build are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-composite-expected-output.yml")
+class GradleCompositeFunTest : StringSpec({
+    "Dependencies from included build are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-composite-expected-output.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
+})
 
-    private fun createGradle() = Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createGradle() = Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
