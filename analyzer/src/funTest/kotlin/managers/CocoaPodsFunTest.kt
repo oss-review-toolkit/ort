@@ -22,57 +22,43 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
 import java.time.Instant
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
-
-private val SYNTHETIC_PROJECTS_DIR = getAssetFile("projects/synthetic")
 
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {
         "determine dependencies from a Podfile without a dependency tree" {
-            val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/regular/Podfile").absoluteFile
-            val expectedResult = getExpectedResult(
-                definitionFile = definitionFile,
-                expectedResultFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods-regular-expected-output.yml")
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cocoapods/regular/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-regular-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "determine dependencies from a Podfile with a dependency tree" {
-            val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/dep-tree/Podfile").absoluteFile
-            val expectedResult = getExpectedResult(
-                definitionFile = definitionFile,
-                expectedResultFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods-dep-tree-expected-output.yml")
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cocoapods/dep-tree/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-dep-tree-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "return no dependencies along with an issue if the lockfile is absent" {
-            val definitionFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods/no-lockfile/Podfile").absoluteFile
-            val expectedResult = getExpectedResult(
-                definitionFile = definitionFile,
-                expectedResultFile = SYNTHETIC_PROJECTS_DIR.resolve("cocoapods-no-lockfile-expected-output.yml")
-            )
+            val definitionFile = getAssetFile("projects/synthetic/cocoapods/no-lockfile/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-no-lockfile-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.replaceIssueTimestamps().toYaml() shouldBe expectedResult
+            result.replaceIssueTimestamps().toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 })
@@ -83,22 +69,6 @@ private fun createCocoaPods(): CocoaPods =
         analyzerConfig = AnalyzerConfiguration(),
         repoConfig = RepositoryConfiguration()
     )
-
-private fun getExpectedResult(definitionFile: File, expectedResultFile: File): String {
-    val projectDir = definitionFile.parentFile
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsRevision = vcsDir.getRevision()
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsPath = vcsDir.getPathToRoot(projectDir)
-
-    return patchExpectedResult(
-        expectedResultFile,
-        definitionFilePath = "$vcsPath/${definitionFile.name}",
-        path = vcsPath,
-        revision = vcsRevision,
-        url = normalizeVcsUrl(vcsUrl)
-    )
-}
 
 private fun ProjectAnalyzerResult.replaceIssueTimestamps(): ProjectAnalyzerResult =
     copy(issues = issues.map { it.copy(timestamp = Instant.EPOCH) })
