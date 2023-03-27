@@ -54,10 +54,10 @@ class GoDepFunTest : WordSpec() {
     init {
         "GoDep" should {
             "resolve dependencies from a lockfile correctly" {
-                val manifestFile = projectsDir.resolve("synthetic/godep/lockfile/Gopkg.toml")
-                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
+                val definitionFile = projectsDir.resolve("synthetic/godep/lockfile/Gopkg.toml")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createGoDep().resolveSingleProject(manifestFile)
+                val result = createGoDep().resolveSingleProject(definitionFile)
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godep-expected-output.yml"),
@@ -71,8 +71,8 @@ class GoDepFunTest : WordSpec() {
             }
 
             "show error if no lockfile is present" {
-                val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
-                val result = createGoDep().resolveSingleProject(manifestFile)
+                val definitionFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
+                val result = createGoDep().resolveSingleProject(definitionFile)
 
                 with(result) {
                     project.id shouldBe
@@ -86,9 +86,9 @@ class GoDepFunTest : WordSpec() {
             }
 
             "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
-                val manifestFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
+                val definitionFile = projectsDir.resolve("synthetic/godep/no-lockfile/Gopkg.toml")
                 val config = AnalyzerConfiguration(allowDynamicVersions = true)
-                val result = createGoDep(config).resolveSingleProject(manifestFile)
+                val result = createGoDep(config).resolveSingleProject(definitionFile)
 
                 with(result) {
                     project shouldNotBe Project.EMPTY
@@ -97,10 +97,10 @@ class GoDepFunTest : WordSpec() {
             }
 
             "import dependencies from Glide" {
-                val manifestFile = projectsDir.resolve("synthetic/godep/glide/glide.yaml")
-                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile)
+                val definitionFile = projectsDir.resolve("synthetic/godep/glide/glide.yaml")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
 
-                val result = createGoDep().resolveSingleProject(manifestFile)
+                val result = createGoDep().resolveSingleProject(definitionFile)
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/glide-expected-output.yml"),
@@ -114,10 +114,10 @@ class GoDepFunTest : WordSpec() {
             }
 
             "import dependencies from godeps" {
-                val manifestFile = projectsDir.resolve("synthetic/godep/godeps/Godeps/Godeps.json")
-                val vcsPath = vcsDir.getPathToRoot(manifestFile.parentFile.parentFile)
+                val definitionFile = projectsDir.resolve("synthetic/godep/godeps/Godeps/Godeps.json")
+                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile.parentFile)
 
-                val result = createGoDep().resolveSingleProject(manifestFile)
+                val result = createGoDep().resolveSingleProject(definitionFile)
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
