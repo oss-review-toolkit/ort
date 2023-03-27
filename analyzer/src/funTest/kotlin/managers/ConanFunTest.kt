@@ -22,60 +22,34 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ConanFunTest : StringSpec() {
-    private val projectsDirTxt = getAssetFile("projects/synthetic/conan-txt")
-    private val vcsDirTxt = VersionControlSystem.forDirectory(projectsDirTxt)!!
-    private val vcsRevisionTxt = vcsDirTxt.getRevision()
-    private val vcsUrlTxt = vcsDirTxt.getRemoteUrl()
-
-    private val projectsDirPy = getAssetFile("projects/synthetic/conan-py")
-    private val vcsDirPy = VersionControlSystem.forDirectory(projectsDirPy)!!
-    private val vcsRevisionPy = vcsDirPy.getRevision()
-    private val vcsUrlPy = vcsDirPy.getRemoteUrl()
-
     init {
         "Project dependencies are detected correctly for conanfile.txt" {
-            val definitionFile = projectsDirTxt.resolve("conanfile.txt")
-            val vcsPath = vcsDirTxt.getPathToRoot(projectsDirTxt)
-            val expectedResult = patchExpectedResult(
-                projectsDirTxt.resolveSibling("conan-expected-output-txt.yml"),
-                definitionFilePath = "$vcsPath/conanfile.txt",
-                path = vcsPath,
-                revision = vcsRevisionTxt,
-                url = normalizeVcsUrl(vcsUrlTxt)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
+            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-txt.yml")
 
             val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly for conanfile.py" {
-            val definitionFile = projectsDirPy.resolve("conanfile.py")
-            val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
-            val expectedResult = patchExpectedResult(
-                projectsDirPy.resolveSibling("conan-expected-output-py.yml"),
-                definitionFilePath = "$vcsPath/conanfile.py",
-                path = vcsPath,
-                revision = vcsRevisionPy,
-                url = normalizeVcsUrl(vcsUrlPy)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
+            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
             val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         /**
@@ -83,19 +57,12 @@ class ConanFunTest : StringSpec() {
          * system. The `package id` is set to the one calculated on Linux.
          */
         "Project dependencies are detected correctly with the lockfile".config(enabled = Os.isLinux) {
-            val definitionFile = projectsDirPy.resolve("conanfile.py")
-            val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
-            val expectedResult = patchExpectedResult(
-                projectsDirPy.parentFile.resolve("conan-expected-output-py.yml"),
-                definitionFilePath = "$vcsPath/conanfile.py",
-                path = vcsPath,
-                revision = vcsRevisionPy,
-                url = normalizeVcsUrl(vcsUrlPy)
-            )
+            val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
+            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
             val result = createConanWithLockFile().resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
