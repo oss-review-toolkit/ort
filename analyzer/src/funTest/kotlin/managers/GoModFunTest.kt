@@ -22,15 +22,11 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GoModFunTest : StringSpec({
@@ -42,7 +38,7 @@ class GoModFunTest : StringSpec({
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly if the main package does not contain any code" {
@@ -51,7 +47,7 @@ class GoModFunTest : StringSpec({
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly if there are no dependencies" {
@@ -60,7 +56,7 @@ class GoModFunTest : StringSpec({
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
     "Unused dependencies are not contained in the result" {
@@ -69,27 +65,8 @@ class GoModFunTest : StringSpec({
 
         val result = createGoMod().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(definitionFile, expectedResultFile)
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 })
 
 private fun createGoMod() = GoMod("GoMod", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-
-private fun patchExpectedResult(
-    definitionFile: File,
-    expectedResultFile: File
-): String {
-    val projectDir = definitionFile.parentFile
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
-    val vcsPath = vcsDir.getPathToRoot(projectDir)
-
-    return patchExpectedResult(
-        expectedResultFile,
-        definitionFilePath = "$vcsPath/go.mod",
-        path = vcsPath,
-        revision = vcsRevision,
-        url = normalizeVcsUrl(vcsUrl)
-    )
-}
