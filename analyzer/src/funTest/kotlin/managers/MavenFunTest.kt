@@ -25,7 +25,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -33,41 +32,27 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class MavenFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/maven")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Root project dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-expected-output-root.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/maven/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-root.yml")
 
             val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly" {
-            val definitionFileApp = projectDir.resolve("app/pom.xml")
-            val definitionFileLib = projectDir.resolve("lib/pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-expected-output-app.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFileApp = getAssetFile("projects/synthetic/maven/app/pom.xml")
+            val definitionFileLib = getAssetFile("projects/synthetic/maven/lib/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-app.yml")
 
             // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
             // available in the Maven.projectsByIdentifier cache. Otherwise, resolution of transitive dependencies would
@@ -81,29 +66,23 @@ class MavenFunTest : StringSpec() {
 
             result.shouldNotBeNull()
             result should haveSize(1)
-            managerResult.resolveScopes(result.single()).toYaml() shouldBe expectedResult
+            managerResult.resolveScopes(result.single()).toYaml() shouldBe patchExpectedResult2(
+                expectedResultFile, definitionFileApp
+            )
         }
 
         "External dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("lib/pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-expected-output-lib.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-lib.yml")
 
             val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Scopes can be excluded" {
-            val definitionFile = projectDir.resolve("lib/pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-expected-output-scope-excludes.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-scope-excludes.yml")
 
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val scopeExclude = ScopeExclude("test.*", ScopeExcludeReason.TEST_DEPENDENCY_OF)
@@ -112,7 +91,7 @@ class MavenFunTest : StringSpec() {
             val result = createMaven(analyzerConfig, repoConfig)
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Parent POM from Maven central can be resolved" {
@@ -121,31 +100,23 @@ class MavenFunTest : StringSpec() {
                 .resolve(".m2/repository/org/springframework/boot/spring-boot-starter-parent/1.5.3.RELEASE")
                 .safeDeleteRecursively(force = true)
 
-            val projectDir = getAssetFile("projects/synthetic/maven-parent")
-            val definitionFile = projectDir.resolve("pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-parent-expected-output-root.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/maven-parent/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-parent-expected-output-root.yml")
 
             val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Maven Wagon extensions can be loaded" {
-            val projectDir = getAssetFile("projects/synthetic/maven-wagon")
-            val definitionFile = projectDir.resolve("pom.xml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("maven-wagon-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/maven-wagon/pom.xml")
+            val expectedResultFile = getAssetFile("projects/synthetic/maven-wagon-expected-output.yml")
 
             val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe patchExpectedResult2(
+                expectedResultFile, definitionFile
+            )
         }
     }
 
