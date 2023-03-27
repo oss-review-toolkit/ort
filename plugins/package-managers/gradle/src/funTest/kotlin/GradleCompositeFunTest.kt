@@ -40,14 +40,14 @@ class GradleCompositeFunTest : StringSpec() {
 
     init {
         "Dependencies from included build are detected correctly" {
-            val packageFile = projectDir.resolve("project1/build.gradle.kts")
+            val definitionFile = projectDir.resolve("project1/build.gradle.kts")
             val expectedResult = patchExpectedResult(
                 projectDir.resolveSibling("gradle-composite-expected-output.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision
             )
 
-            val result = createGradle().resolveSingleProject(packageFile, resolveScopes = true)
+            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe expectedResult
         }
