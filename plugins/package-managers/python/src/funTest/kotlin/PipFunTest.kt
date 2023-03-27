@@ -25,98 +25,66 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PipFunTest : WordSpec({
-    val projectsDir = getAssetFile("projects")
-    val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
-
     "Python 2" should {
         "resolve setup.py dependencies correctly for spdx-tools-python" {
-            val definitionFile = projectsDir.resolve("external/spdx-tools-python/setup.py")
+            val definitionFile = getAssetFile("projects/external/spdx-tools-python/setup.py")
+            val expectedResultFile = getAssetFile("projects/external/spdx-tools-python-expected-output.yml")
 
             val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
-            val expectedResult = projectsDir.resolve("external/spdx-tools-python-expected-output.yml").readText()
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "capture metadata from setup.py even if requirements.txt is present" {
-            val definitionFile = projectsDir.resolve("synthetic/pip/requirements.txt")
-            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
-
-            val expectedResult = patchExpectedResult(
-                projectsDir.resolve("synthetic/pip-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
+            val definitionFile = getAssetFile("projects/synthetic/pip/requirements.txt")
+            val expectedResultFile = getAssetFile("projects/synthetic/pip-expected-output.yml")
 
             val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
     "Python 3" should {
         "resolve requirements.txt dependencies correctly for example-python-flask" {
-            val definitionFile = projectsDir.resolve("external/example-python-flask/requirements.txt")
+            val definitionFile = getAssetFile("projects/external/example-python-flask/requirements.txt")
+
+            // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
+            val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
+            val expectedResultFile = getAssetFile("projects/external/example-python-flask-expected-output$suffix.yml")
 
             val result = createPip().resolveSingleProject(definitionFile)
 
-            // Note: The expected results were generated with Python 3.8 and are incorrect for versions < 3.8.
-            val expectedResultsFile = buildString {
-                append("external/example-python-flask-expected-output")
-                if (Os.isWindows) append("-windows")
-                append(".yml")
-            }
-
-            val expectedResult = projectsDir.resolve(expectedResultsFile).readText()
-
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly for a Django project" {
-            val definitionFile = projectsDir.resolve("synthetic/pip-python3/requirements.txt")
-            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+            val definitionFile = getAssetFile("projects/synthetic/pip-python3/requirements.txt")
+            val expectedResultFile = getAssetFile("projects/synthetic/pip-python3-expected-output.yml")
 
             val result = createPip().resolveSingleProject(definitionFile)
-            val expectedResultFile = projectsDir.resolve("synthetic/pip-python3-expected-output.yml")
-            val expectedResult = patchExpectedResult(
-                expectedResultFile,
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "capture metadata using python-inspector" {
-            val definitionFile = projectsDir.resolve("synthetic/python-inspector/requirements.txt")
-            val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile)
+            val definitionFile = getAssetFile("projects/synthetic/python-inspector/requirements.txt")
+            val expectedResultFile = getAssetFile("projects/synthetic/python-inspector-expected-output.yml")
 
             val result = createPip().resolveSingleProject(definitionFile)
-            val expectedResult = patchExpectedResult(
-                projectsDir.resolve("synthetic/python-inspector-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "not fail if the requirements file is empty" {
