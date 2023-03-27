@@ -187,12 +187,12 @@ class GradleFunTest : StringSpec() {
 
             val gradleVersionTable = table(headers("version", "resultsFileSuffix"), *gradleVersions)
 
-            forAll(gradleVersionTable) { version, resultsFileSuffix ->
+            forAll(gradleVersionTable) { version, suffix ->
                 installGradleWrapper(version)
 
                 val definitionFile = projectDir.resolve("app/build.gradle")
                 val expectedResult = patchExpectedResult(
-                    projectDir.resolveSibling("gradle-expected-output-app$resultsFileSuffix.yml"),
+                    projectDir.resolveSibling("gradle-expected-output-app$suffix.yml"),
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision
                 )
