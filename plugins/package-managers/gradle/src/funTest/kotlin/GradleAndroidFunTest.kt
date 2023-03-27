@@ -23,76 +23,51 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-android")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = projectDir.resolve("build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-android-expected-output-root.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = projectDir.resolve("app/build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-android-expected-output-app.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = projectDir.resolve("lib/build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-android-expected-output-lib.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
-            val cyclicProjectDir = getAssetFile("projects/synthetic/gradle-android-cyclic")
-            val definitionFile = cyclicProjectDir.resolve("app/build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-android-cyclic-expected-output-app.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                absoluteDefinitionFilePath = definitionFile.absolutePath
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
             val result = createGradle().resolveDependencies(listOf(definitionFile), emptyMap())
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 

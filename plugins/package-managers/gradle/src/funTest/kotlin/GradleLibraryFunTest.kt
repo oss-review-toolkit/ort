@@ -23,59 +23,40 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleLibraryFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-library")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Root project dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-library-expected-output-root.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-library/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-root.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("app/build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-library-expected-output-app.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-library/app/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-app.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "External dependencies are detected correctly" {
-            val definitionFile = projectDir.resolve("lib/build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-library-expected-output-lib.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-library/lib/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-lib.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 

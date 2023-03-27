@@ -23,33 +23,22 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleBomFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/gradle-bom")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Gradle BOM dependencies are ignored" {
-            val definitionFile = projectDir.resolve("build.gradle")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("gradle-bom-expected-output.yml"),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/gradle-bom/build.gradle")
+            val expectedResultFile = getAssetFile("projects/synthetic/gradle-bom-expected-output.yml")
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
