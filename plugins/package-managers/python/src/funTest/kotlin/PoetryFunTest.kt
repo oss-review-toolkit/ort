@@ -30,20 +30,17 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class PoetryFunTest : WordSpec() {
-    init {
-        "Python 3" should {
-            "resolve dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/poetry/poetry.lock")
-                val expectedResultFile = getAssetFile("projects/synthetic/poetry-expected-output.yml")
+class PoetryFunTest : WordSpec({
+    "Python 3" should {
+        "resolve dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/poetry/poetry.lock")
+            val expectedResultFile = getAssetFile("projects/synthetic/poetry-expected-output.yml")
 
-                val result = createPoetry().resolveSingleProject(definitionFile)
+            val result = createPoetry().resolveSingleProject(definitionFile)
 
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
+})
 
-    private fun createPoetry() =
-        Poetry("Poetry", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createPoetry() = Poetry("Poetry", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

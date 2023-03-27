@@ -30,31 +30,28 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class PipenvFunTest : WordSpec() {
-    init {
-        "Python 2" should {
-            "resolve dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/pipenv/Pipfile.lock")
-                val expectedResultFile = getAssetFile("projects/synthetic/pipenv-expected-output.yml")
+class PipenvFunTest : WordSpec({
+    "Python 2" should {
+        "resolve dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/pipenv/Pipfile.lock")
+            val expectedResultFile = getAssetFile("projects/synthetic/pipenv-expected-output.yml")
 
-                val result = createPipenv().resolveSingleProject(definitionFile)
+            val result = createPipenv().resolveSingleProject(definitionFile)
 
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
-        }
-
-        "Python 3" should {
-            "resolve dependencies correctly for a Django project" {
-                val definitionFile = getAssetFile("projects/synthetic/pipenv-python3/Pipfile.lock")
-                val expectedResultFile = getAssetFile("projects/synthetic/pipenv-python3-expected-output.yml")
-
-                val result = createPipenv().resolveSingleProject(definitionFile)
-
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
-    private fun createPipenv() =
-        Pipenv("Pipenv", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+    "Python 3" should {
+        "resolve dependencies correctly for a Django project" {
+            val definitionFile = getAssetFile("projects/synthetic/pipenv-python3/Pipfile.lock")
+            val expectedResultFile = getAssetFile("projects/synthetic/pipenv-python3-expected-output.yml")
+
+            val result = createPipenv().resolveSingleProject(definitionFile)
+
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
+    }
+})
+
+private fun createPipenv() = Pipenv("Pipenv", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
