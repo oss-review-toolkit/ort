@@ -30,36 +30,34 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class GradleLibraryFunTest : StringSpec() {
-    init {
-        "Root project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-library/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-root.yml")
+class GradleLibraryFunTest : StringSpec({
+    "Root project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-root.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-library/app/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-app.yml")
-
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
-
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "External dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-library/lib/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-lib.yml")
-
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
-
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
-    private fun createGradle() =
-        Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+    "Project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/app/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-app.yml")
+
+        val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+
+    "External dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-library/lib/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-library-expected-output-lib.yml")
+
+        val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+})
+
+private fun createGradle() =
+    Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
