@@ -24,30 +24,21 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport.Companion.OPTION_DIRECT_DEPENDENCIES_ONLY
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class DotNetFunTest : StringSpec() {
-    private val projectDir = getAssetFile("projects/synthetic/dotnet")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-    private val definitionFile = projectDir.resolve("subProjectTest/test.csproj")
-
     init {
         "Definition file is correctly read" {
+            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
             val reader = DotNetPackageFileReader()
             val result = reader.getDependencies(definitionFile)
 
@@ -70,52 +61,32 @@ class DotNetFunTest : StringSpec() {
         }
 
         "Project dependencies are detected correctly" {
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                File(
-                    projectDir.parentFile,
-                    "dotnet-expected-output.yml"
-                ),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = "$vcsPath/subProjectTest"
-            )
+            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
+            val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output.yml")
+
             val result = createDotNet().resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Direct project dependencies are detected correctly" {
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                File(
-                    projectDir.parentFile,
-                    "dotnet-direct-dependencies-only-expected-output.yml"
-                ),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = "$vcsPath/subProjectTest"
+            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/dotnet-direct-dependencies-only-expected-output.yml"
             )
+
             val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "Project metadata is correctly extracted from a .nuspec file" {
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResult = patchExpectedResult(
-                File(
-                    projectDir.parentFile,
-                    "dotnet-expected-output-with-nuspec.yml"
-                ),
-                url = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = "$vcsPath/subProjectTestWithNuspec"
-            )
-            val result = createDotNet()
-                .resolveSingleProject(projectDir.resolve("subProjectTestWithNuspec/test.csproj"))
+            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj")
+            val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output-with-nuspec.yml")
 
-            patchActualResult(result.toYaml()) shouldBe expectedResult
+            val result = createDotNet().resolveSingleProject(definitionFile)
+
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
