@@ -43,114 +43,112 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class NpmFunTest : WordSpec() {
-    init {
-        "NPM" should {
-            "resolve shrinkwrap dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+class NpmFunTest : WordSpec({
+    "NPM" should {
+        "resolve shrinkwrap dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
-                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
 
-                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
-                    expectedResultFile,
-                    definitionFile,
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
-                    )
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                expectedResultFile,
+                definitionFile,
+                custom = mapOf(
+                    "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                    "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
                 )
-            }
+            )
+        }
 
-            "exclude scopes if configured" {
-                val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-scope-excludes.yml")
+        "exclude scopes if configured" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-scope-excludes.yml")
 
-                val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-                val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
-                val excludes = Excludes(scopes = listOf(scopeExclude))
-                val repoConfig = RepositoryConfiguration(excludes = excludes)
+            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
+            val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
+            val excludes = Excludes(scopes = listOf(scopeExclude))
+            val repoConfig = RepositoryConfiguration(excludes = excludes)
 
-                val result = createNpm(analyzerConfig = analyzerConfig, repoConfig = repoConfig)
-                    .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = createNpm(analyzerConfig = analyzerConfig, repoConfig = repoConfig)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
-                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
-                    expectedResultFile,
-                    definitionFile,
-                    custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json")
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                expectedResultFile,
+                definitionFile,
+                custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json")
+            )
+        }
+
+        "resolve package-lock dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+
+            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                expectedResultFile,
+                definitionFile,
+                custom = mapOf(
+                    "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                    "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
                 )
-            }
+            )
+        }
 
-            "resolve package-lock dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+        "show an error if no lockfile is present" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-no-lockfile.yml")
 
-                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = createNpm().resolveSingleProject(definitionFile)
 
-                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
-                    expectedResultFile,
-                    definitionFile,
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
-                    )
-                )
-            }
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-            "show an error if no lockfile is present" {
-                val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-no-lockfile.yml")
+        "show an error if the 'package.json' file is invalid" {
+            val workingDir = createTestTempDir()
+            val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
-                val result = createNpm().resolveSingleProject(definitionFile)
+            val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = true)
+            val result = createNpm(analyzerConfig = analyzerConfig).resolveSingleProject(definitionFile)
 
-                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
-
-            "show an error if the 'package.json' file is invalid" {
-                val workingDir = createTestTempDir()
-                val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
-
-                val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = true)
-                val result = createNpm(analyzerConfig = analyzerConfig).resolveSingleProject(definitionFile)
-
-                result.issues shouldHaveSize 1
-                with(result.issues.first()) {
-                    source shouldBe "NPM"
-                    severity shouldBe Severity.ERROR
-                    message shouldContain "Unexpected token \"<\" (0x3C) in JSON at position 0 while parsing \"<>\""
-                }
-            }
-
-            "resolve dependencies even if the 'node_modules' directory already exists" {
-                val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
-
-                val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-
-                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
-                    expectedResultFile,
-                    definitionFile,
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
-                    )
-                )
-            }
-
-            "resolve Babel dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/npm-babel/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/npm-babel-expected-output.yml")
-                val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
-                    yamlMapper.readValue<ProjectAnalyzerResult>(it)
-                }
-
-                val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-
-                actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            result.issues shouldHaveSize 1
+            with(result.issues.first()) {
+                source shouldBe "NPM"
+                severity shouldBe Severity.ERROR
+                message shouldContain "Unexpected token \"<\" (0x3C) in JSON at position 0 while parsing \"<>\""
             }
         }
+
+        "resolve dependencies even if the 'node_modules' directory already exists" {
+            val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
+
+            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                expectedResultFile,
+                definitionFile,
+                custom = mapOf(
+                    "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                    "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
+                )
+            )
+        }
+
+        "resolve Babel dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/npm-babel/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-babel-expected-output.yml")
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
+                yamlMapper.readValue<ProjectAnalyzerResult>(it)
+            }
+
+            val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+
+            actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+        }
     }
-}
+})
 
 private fun createNpm(
     analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),

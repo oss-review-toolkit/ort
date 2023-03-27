@@ -32,56 +32,54 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class ConanFunTest : StringSpec() {
-    init {
-        "Project dependencies are detected correctly for conanfile.txt" {
-            val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
-            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-txt.yml")
+class ConanFunTest : StringSpec({
+    "Project dependencies are detected correctly for conanfile.txt" {
+        val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-txt.yml")
 
-            val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
+        val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Project dependencies are detected correctly for conanfile.py" {
-            val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
-            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
-
-            val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
-
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        /**
-         * This test cannot complete successfully when you run it locally as `package id` differs depending on operating
-         * system. The `package id` is set to the one calculated on Linux.
-         */
-        "Project dependencies are detected correctly with the lockfile".config(enabled = Os.isLinux) {
-            val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
-            val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
-
-            val result = createConanWithLockFile().resolveSingleProject(definitionFile)
-
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
-    private fun createConanDynamicVersions() =
-        Conan("Conan", USER_DIR, AnalyzerConfiguration(true), RepositoryConfiguration())
+    "Project dependencies are detected correctly for conanfile.py" {
+        val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
-    private fun createConanWithLockFile() =
-        Conan(
-            "Conan",
-            USER_DIR,
-            AnalyzerConfiguration().copy(
-                packageManagers = mapOf(
-                    "Conan" to PackageManagerConfiguration(
-                        options = mapOf(
-                            "lockfileName" to "lockfile.lock"
-                        )
+        val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+
+    /**
+     * This test cannot complete successfully when you run it locally as `package id` differs depending on operating
+     * system. The `package id` is set to the one calculated on Linux.
+     */
+    "Project dependencies are detected correctly with the lockfile".config(enabled = Os.isLinux) {
+        val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
+        val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
+
+        val result = createConanWithLockFile().resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+})
+
+private fun createConanDynamicVersions() =
+    Conan("Conan", USER_DIR, AnalyzerConfiguration(true), RepositoryConfiguration())
+
+private fun createConanWithLockFile() =
+    Conan(
+        "Conan",
+        USER_DIR,
+        AnalyzerConfiguration().copy(
+            packageManagers = mapOf(
+                "Conan" to PackageManagerConfiguration(
+                    options = mapOf(
+                        "lockfileName" to "lockfile.lock"
                     )
                 )
-            ),
-            RepositoryConfiguration()
-        )
-}
+            )
+        ),
+        RepositoryConfiguration()
+    )

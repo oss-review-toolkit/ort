@@ -35,74 +35,72 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class DotNetFunTest : StringSpec() {
-    init {
-        "Definition file is correctly read" {
-            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
-            val reader = DotNetPackageFileReader()
-            val result = reader.getDependencies(definitionFile)
+class DotNetFunTest : StringSpec({
+    "Definition file is correctly read" {
+        val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
+        val reader = DotNetPackageFileReader()
+        val result = reader.getDependencies(definitionFile)
 
-            result should containExactlyInAnyOrder(
-                NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
-                NuGetDependency(name = "System.Threading", version = "4.0.11", targetFramework = "netcoreapp3.1"),
-                NuGetDependency(
-                    name = "System.Threading.Tasks.Extensions",
-                    version = "4.5.4",
-                    targetFramework = "net45"
-                ),
-                NuGetDependency(
-                    name = "WebGrease",
-                    version = "1.5.2",
-                    targetFramework = "netcoreapp3.1",
-                    developmentDependency = true
-                ),
-                NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "netcoreapp3.1")
-            )
-        }
-
-        "Project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
-            val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output.yml")
-
-            val result = createDotNet().resolveSingleProject(definitionFile)
-
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Direct project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
-            val expectedResultFile = getAssetFile(
-                "projects/synthetic/dotnet-direct-dependencies-only-expected-output.yml"
-            )
-
-            val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
-
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
-
-        "Project metadata is correctly extracted from a .nuspec file" {
-            val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj")
-            val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output-with-nuspec.yml")
-
-            val result = createDotNet().resolveSingleProject(definitionFile)
-
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result should containExactlyInAnyOrder(
+            NuGetDependency(name = "System.Globalization", version = "4.3.0", targetFramework = "netcoreapp3.1"),
+            NuGetDependency(name = "System.Threading", version = "4.0.11", targetFramework = "netcoreapp3.1"),
+            NuGetDependency(
+                name = "System.Threading.Tasks.Extensions",
+                version = "4.5.4",
+                targetFramework = "net45"
+            ),
+            NuGetDependency(
+                name = "WebGrease",
+                version = "1.5.2",
+                targetFramework = "netcoreapp3.1",
+                developmentDependency = true
+            ),
+            NuGetDependency(name = "foobar", version = "1.2.3", targetFramework = "netcoreapp3.1")
+        )
     }
 
-    private fun createDotNet(directDependenciesOnly: Boolean = false) =
-        DotNet(
-            "DotNet",
-            USER_DIR,
-            AnalyzerConfiguration().copy(
-                packageManagers = mapOf(
-                    "DotNet" to PackageManagerConfiguration(
-                        options = mapOf(
-                            OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
-                        )
+    "Project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
+        val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output.yml")
+
+        val result = createDotNet().resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+
+    "Direct project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
+        val expectedResultFile = getAssetFile(
+            "projects/synthetic/dotnet-direct-dependencies-only-expected-output.yml"
+        )
+
+        val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+
+    "Project metadata is correctly extracted from a .nuspec file" {
+        val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj")
+        val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output-with-nuspec.yml")
+
+        val result = createDotNet().resolveSingleProject(definitionFile)
+
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+    }
+})
+
+private fun createDotNet(directDependenciesOnly: Boolean = false) =
+    DotNet(
+        "DotNet",
+        USER_DIR,
+        AnalyzerConfiguration().copy(
+            packageManagers = mapOf(
+                "DotNet" to PackageManagerConfiguration(
+                    options = mapOf(
+                        OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
                     )
                 )
-            ),
-            RepositoryConfiguration()
-        )
-}
+            )
+        ),
+        RepositoryConfiguration()
+    )
