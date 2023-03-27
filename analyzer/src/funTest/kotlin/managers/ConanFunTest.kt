@@ -83,7 +83,7 @@ class ConanFunTest : StringSpec() {
          * system. The `package id` is set to the one calculated on Linux.
          */
         "Project dependencies are detected correctly with the lockfile".config(enabled = Os.isLinux) {
-            val packageFile = projectsDirPy.resolve("conanfile.py")
+            val definitionFile = projectsDirPy.resolve("conanfile.py")
             val vcsPath = vcsDirPy.getPathToRoot(projectsDirPy)
             val expectedResult = patchExpectedResult(
                 projectsDirPy.parentFile.resolve("conan-expected-output-py.yml"),
@@ -93,7 +93,7 @@ class ConanFunTest : StringSpec() {
                 url = normalizeVcsUrl(vcsUrlPy)
             )
 
-            val result = createConanWithLockFile().resolveSingleProject(packageFile)
+            val result = createConanWithLockFile().resolveSingleProject(definitionFile)
 
             patchActualResult(result.toYaml()) shouldBe expectedResult
         }
