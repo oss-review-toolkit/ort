@@ -87,7 +87,7 @@ class GradleAndroidFunTest : StringSpec() {
                 projectDir.resolveSibling("gradle-android-cyclic-expected-output-app.yml"),
                 url = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
-                definitionFilePath = definitionFile.absolutePath
+                absoluteDefinitionFilePath = definitionFile.absolutePath
             )
 
             val result = createGradle().resolveDependencies(listOf(definitionFile), emptyMap())

@@ -53,10 +53,12 @@ fun getAssetAsString(path: String): String = getAssetFile(path).readText()
  */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
+ @Suppress("LongParameterList")
 fun patchExpectedResult(
     result: File,
     custom: Map<String, String> = emptyMap(),
     definitionFilePath: String? = null,
+    absoluteDefinitionFilePath: String? = null,
     url: String? = null,
     revision: String? = null,
     path: String? = null,
@@ -71,6 +73,7 @@ fun patchExpectedResult(
         .replaceIfNotNull("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
         .replaceIfNotNull("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
         .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
+        .replaceIfNotNull("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", absoluteDefinitionFilePath)
         .replaceIfNotNull("<REPLACE_URL>", url)
         .replaceIfNotNull("<REPLACE_REVISION>", revision)
         .replaceIfNotNull("<REPLACE_PATH>", path)
@@ -87,6 +90,7 @@ fun patchExpectedResult2(expectedResultFile: File, definitionFile: File): String
     return patchExpectedResult(
         expectedResultFile,
         definitionFilePath = "$vcsPath/${definitionFile.name}",
+        absoluteDefinitionFilePath = definitionFile.absolutePath,
         path = vcsPath,
         revision = vcsRevision,
         url = normalizeVcsUrl(vcsUrl)
