@@ -1,6 +1,6 @@
 ---
 project:
-  id: "NPM::npm-project:1.0.0"
+  id: "NPM::npm-shrinkwrap:1.0.0"
   definition_file_path: "<REPLACE_DEFINITION_FILE_PATH>"
   authors:
   - "The Author"
