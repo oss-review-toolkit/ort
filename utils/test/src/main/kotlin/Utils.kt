@@ -80,7 +80,11 @@ fun patchExpectedResult(
         .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
 }
 
-fun patchExpectedResult2(expectedResultFile: File, definitionFile: File): String {
+fun patchExpectedResult2(
+    expectedResultFile: File,
+    definitionFile: File,
+    custom: Map<String, String> = emptyMap()
+): String {
     val projectDir = definitionFile.parentFile
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
@@ -93,7 +97,8 @@ fun patchExpectedResult2(expectedResultFile: File, definitionFile: File): String
         absoluteDefinitionFilePath = definitionFile.absolutePath,
         path = vcsPath,
         revision = vcsRevision,
-        url = normalizeVcsUrl(vcsUrl)
+        url = normalizeVcsUrl(vcsUrl),
+        custom = custom
     )
 }
 
