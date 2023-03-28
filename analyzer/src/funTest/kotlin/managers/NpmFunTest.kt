@@ -171,10 +171,10 @@ class NpmFunTest : WordSpec() {
             }
         }
     }
-
-    private fun createNpm(
-        analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-        repoConfig: RepositoryConfiguration = RepositoryConfiguration()
-    ) =
-        Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
 }
+
+private fun createNpm(
+    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
+    repoConfig: RepositoryConfiguration = RepositoryConfiguration()
+) =
+    Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
