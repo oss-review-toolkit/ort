@@ -79,9 +79,9 @@ private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: Stri
     return patchExpectedResult(
         result = expectedOutputTemplate,
         definitionFilePath = "$vcsPath/package.json",
+        url = vcsUrl,
         urlProcessed = normalizeVcsUrl(vcsUrl),
         revision = vcsRevision,
-        path = vcsPath,
-        custom = mapOf("<REPLACE_RAW_URL>" to vcsUrl)
+        path = vcsPath
     )
 }
