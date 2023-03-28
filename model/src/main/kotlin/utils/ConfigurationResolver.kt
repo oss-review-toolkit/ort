@@ -44,7 +44,7 @@ object ConfigurationResolver : Logging {
         )
 
     /**
-     * Return the resolved [PackageCurations] for the given [packages]. The [curationProviders] must be ordered
+     * Return the resolved [PackageCuration]s for the given [packages]. The [curationProviders] must be ordered
      * highest-priority-first.
      */
     fun resolvePackageCurations(
