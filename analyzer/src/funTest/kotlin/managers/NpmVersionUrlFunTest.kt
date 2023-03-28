@@ -50,7 +50,7 @@ class NpmVersionUrlFunTest : WordSpec({
             val expectedResultYaml = patchExpectedResult(
                 projectDir.resolveSibling("npm-version-urls-expected-output.yml"),
                 definitionFilePath = "$vcsPath/package.json",
-                url = normalizeVcsUrl(vcsUrl),
+                urlProcessed = normalizeVcsUrl(vcsUrl),
                 revision = vcsRevision,
                 path = vcsPath
             )

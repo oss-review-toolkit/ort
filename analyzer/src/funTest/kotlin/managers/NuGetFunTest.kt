@@ -70,7 +70,7 @@ class NuGetFunTest : StringSpec({
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val expectedResult = patchExpectedResult(
             projectDir.resolveSibling("nuget-expected-output.yml"),
-            url = normalizeVcsUrl(vcsUrl),
+            urlProcessed = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath
         )
@@ -83,7 +83,7 @@ class NuGetFunTest : StringSpec({
         val vcsPath = vcsDir.getPathToRoot(projectDir)
         val expectedResult = patchExpectedResult(
             projectDir.resolveSibling("nuget-direct-dependencies-only-expected-output.yml"),
-            url = normalizeVcsUrl(vcsUrl),
+            urlProcessed = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath
         )

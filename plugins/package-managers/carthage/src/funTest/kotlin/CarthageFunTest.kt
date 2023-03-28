@@ -50,7 +50,7 @@ class CarthageFunTest : StringSpec() {
                 definitionFilePath = "$vcsPath/Cartfile.resolved",
                 path = vcsPath,
                 revision = vcsRevision,
-                url = normalizedVcsUrl,
+                urlProcessed = normalizedVcsUrl,
                 custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
             )
 
