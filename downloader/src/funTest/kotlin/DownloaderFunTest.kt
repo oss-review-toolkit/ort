@@ -41,7 +41,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderFunTest : WordSpec({
     lateinit var outputDir: File
@@ -230,6 +232,55 @@ class DownloaderFunTest : WordSpec({
     }
 
     "A VCS download" should {
+        "succeed for the Babel project hosted in Git" {
+            val vcsFromPackage = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/babel/babel/tree/master/packages/babel-cli",
+                revision = ""
+            )
+            val vcsFromUrl = VcsHost.parseUrl(normalizeVcsUrl(vcsFromPackage.url))
+            val vcsMerged = vcsFromUrl.merge(vcsFromPackage)
+
+            val pkg = Package(
+                id = Identifier(
+                    type = "NPM",
+                    namespace = "",
+                    name = "babel-cli",
+                    version = "6.26.0"
+                ),
+                declaredLicenses = setOf("MIT"),
+                description = "Babel command line.",
+                homepageUrl = "https://babeljs.io/",
+                binaryArtifact = RemoteArtifact(
+                    url = "https://registry.npmjs.org/babel-cli/-/babel-cli-6.26.0.tgz",
+                    hash = Hash.create("502ab54874d7db88ad00b887a06383ce03d002f1")
+                ),
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcsFromPackage,
+                vcsProcessed = vcsMerged
+            )
+
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+            val workingTree = VersionControlSystem.forDirectory(outputDir)
+            val babelCliDir = outputDir.resolve("packages/babel-cli")
+
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.type shouldBe pkg.vcsProcessed.type
+                vcsInfo.url shouldBe pkg.vcsProcessed.url
+                vcsInfo.revision shouldBe "master"
+                vcsInfo.path shouldBe pkg.vcsProcessed.path
+                resolvedRevision shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            }
+
+            workingTree shouldNotBeNull {
+                isValid() shouldBe true
+                getRevision() shouldBe "cee4cde53e4f452d89229986b9368ecdb41e00da"
+            }
+
+            babelCliDir.isDirectory shouldBe true
+            babelCliDir.walk().count() shouldBe 242
+        }
+
         "be tried as a fallback when the source artifact download fails" {
             val downloaderConfiguration = DownloaderConfiguration(
                 sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
