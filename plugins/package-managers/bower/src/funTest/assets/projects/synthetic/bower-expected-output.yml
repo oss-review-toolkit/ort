@@ -16,7 +16,7 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: "https://github.com/oss-review-toolkit/ort"

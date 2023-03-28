@@ -61,7 +61,7 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godep-expected-output.yml"),
-                    url = normalizedVcsUrl,
+                    urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
                     custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
@@ -104,7 +104,7 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/glide-expected-output.yml"),
-                    url = normalizedVcsUrl,
+                    urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
                     custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
@@ -121,7 +121,7 @@ class GoDepFunTest : WordSpec() {
 
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
-                    url = normalizedVcsUrl,
+                    urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
                     path = vcsPath,
                     custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)

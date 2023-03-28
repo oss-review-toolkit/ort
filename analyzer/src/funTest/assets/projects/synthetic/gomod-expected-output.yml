@@ -6,12 +6,12 @@ project:
   declared_licenses_processed: {}
   vcs:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""

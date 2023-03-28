@@ -125,7 +125,7 @@ class PubFunTest : WordSpec() {
 
         return patchExpectedResult(
             expectedResultDir.resolve(expectedResultFilename),
-            url = normalizeVcsUrl(vcsUrl),
+            urlProcessed = normalizeVcsUrl(vcsUrl),
             revision = vcsRevision,
             path = vcsPath
         )

@@ -13,7 +13,7 @@ project:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces"
   homepage_url: ""
@@ -82,7 +82,7 @@ packages:
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
 - id: "NPM:@here:harp-fetch:0.3.6"
@@ -170,6 +170,6 @@ packages:
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"

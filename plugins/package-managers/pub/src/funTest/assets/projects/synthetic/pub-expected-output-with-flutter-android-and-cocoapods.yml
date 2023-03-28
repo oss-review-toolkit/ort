@@ -11,7 +11,7 @@ projects:
     path: ""
   vcs_processed:
     type: "Git"
-    url: "<REPLACE_URL>"
+    url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "plugins/package-managers/pub/src/funTest/assets/projects/synthetic/flutter-project-with-android-and-cocoapods"
   homepage_url: ""

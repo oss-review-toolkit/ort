@@ -97,7 +97,8 @@ fun patchExpectedResult2(
         absoluteDefinitionFilePath = definitionFile.absolutePath,
         path = vcsPath,
         revision = vcsRevision,
-        url = normalizeVcsUrl(vcsUrl),
+        url = vcsUrl,
+        urlProcessed = normalizeVcsUrl(vcsUrl),
         custom = custom
     )
 }
