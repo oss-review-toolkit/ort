@@ -28,7 +28,6 @@ import io.kotest.matchers.string.shouldContain
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -37,46 +36,35 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NpmFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic/npm")
-    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "NPM" should {
             "resolve shrinkwrap dependencies correctly" {
-                val workingDir = projectsDir.resolve("shrinkwrap")
-                val definitionFile = workingDir.resolve("package.json")
+                val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-expected-output.yml"),
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
-                    ),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                patchActualResult(result.toYaml()) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                    expectedResultFile,
+                    definitionFile,
+                    custom = mapOf(
+                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
+                    )
+                )
             }
 
             "exclude scopes if configured" {
-                val workingDir = projectsDir.resolve("shrinkwrap")
-                val definitionFile = workingDir.resolve("package.json")
+                val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-scope-excludes.yml")
 
                 val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
                 val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
@@ -85,55 +73,37 @@ class NpmFunTest : WordSpec() {
 
                 val result = createNpm(analyzerConfig = analyzerConfig, repoConfig = repoConfig)
                     .resolveSingleProject(definitionFile, resolveScopes = true)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-expected-output-scope-excludes.yml"),
-                    custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                patchActualResult(result.toYaml()) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                    expectedResultFile,
+                    definitionFile,
+                    custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json")
+                )
             }
 
             "resolve package-lock dependencies correctly" {
-                val workingDir = projectsDir.resolve("package-lock")
-                val definitionFile = workingDir.resolve("package.json")
+                val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-expected-output.yml"),
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
-                    ),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                patchActualResult(result.toYaml()) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                    expectedResultFile,
+                    definitionFile,
+                    custom = mapOf(
+                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
+                    )
+                )
             }
 
             "show an error if no lockfile is present" {
-                val workingDir = projectsDir.resolve("no-lockfile")
-                val definitionFile = workingDir.resolve("package.json")
+                val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-no-lockfile.yml")
 
                 val result = createNpm().resolveSingleProject(definitionFile)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-expected-output-no-lockfile.yml"),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                patchActualResult(result.toYaml()) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             }
 
             "show an error if the 'package.json' file is invalid" {
@@ -152,34 +122,27 @@ class NpmFunTest : WordSpec() {
             }
 
             "resolve dependencies even if the 'node_modules' directory already exists" {
-                val workingDir = projectsDir.resolve("node-modules")
-                val definitionFile = workingDir.resolve("package.json")
+                val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
                 val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-                val vcsPath = vcsDir.getPathToRoot(workingDir)
-                val expectedResult = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-expected-output.yml"),
-                    custom = mapOf(
-                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
-                    ),
-                    definitionFilePath = "$vcsPath/package.json",
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision,
-                    path = vcsPath
-                )
 
-                patchActualResult(result.toYaml()) shouldBe expectedResult
+                patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+                    expectedResultFile,
+                    definitionFile,
+                    custom = mapOf(
+                        "<REPLACE_PROJECT_NAME>" to "npm-${definitionFile.parentFile.name}",
+                        "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
+                    )
+                )
             }
 
             "resolve Babel dependencies correctly" {
-                val definitionFile = projectsDir.resolveSibling("npm-babel/package.json")
-                val expectedResultYaml = patchExpectedResult(
-                    projectsDir.resolveSibling("npm-babel-expected-output.yml"),
-                    url = normalizeVcsUrl(vcsUrl),
-                    revision = vcsRevision
-                )
-                val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
+                val definitionFile = getAssetFile("projects/synthetic/npm-babel/package.json")
+                val expectedResultFile = getAssetFile("projects/synthetic/npm-babel-expected-output.yml")
+                val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
+                    yamlMapper.readValue<ProjectAnalyzerResult>(it)
+                }
 
                 val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
 
