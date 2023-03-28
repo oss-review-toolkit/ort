@@ -130,7 +130,6 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output-no-lockfile.yml"),
-                    custom = mapOf("npm-project" to "npm-${workingDir.name}"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
