@@ -62,7 +62,7 @@ class NpmFunTest : WordSpec() {
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
-                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
                     ),
                     definitionFilePath = "$vcsPath/package.json",
@@ -107,7 +107,7 @@ class NpmFunTest : WordSpec() {
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
-                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
                     ),
                     definitionFilePath = "$vcsPath/package.json",
@@ -160,7 +160,7 @@ class NpmFunTest : WordSpec() {
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output.yml"),
                     custom = mapOf(
-                        "npm-project" to "npm-${workingDir.name}",
+                        "<REPLACE_PROJECT_NAME>" to "npm-${workingDir.name}",
                         "<REPLACE_LOCKFILE_NAME>" to "package-lock.json"
                     ),
                     definitionFilePath = "$vcsPath/package.json",
