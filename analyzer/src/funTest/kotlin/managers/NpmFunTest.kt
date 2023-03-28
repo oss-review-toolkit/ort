@@ -88,10 +88,7 @@ class NpmFunTest : WordSpec() {
                 val vcsPath = vcsDir.getPathToRoot(workingDir)
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolveSibling("npm-expected-output-scope-excludes.yml"),
-                    custom = mapOf(
-                        "npm-project" to "npm-${workingDir.name}",
-                        "<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"
-                    ),
+                    custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json"),
                     definitionFilePath = "$vcsPath/package.json",
                     url = normalizeVcsUrl(vcsUrl),
                     revision = vcsRevision,
