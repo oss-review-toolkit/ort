@@ -22,66 +22,38 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PnpmFunTest : WordSpec({
     "Pnpm" should {
         "resolve dependencies correctly in a simple project" {
-            val projectDir = getAssetFile("projects/synthetic/pnpm")
+            val definitionFile = getAssetFile("projects/synthetic/pnpm/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-expected-output.yml")
 
-            val result = resolveDependencies(projectDir)
-            val expectedResult = getExpectedResult(projectDir, "pnpm-expected-output.yml")
+            val result = createPnpm().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result shouldBe expectedResult
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly in a workspaces project" {
-            val rootProjectDir = getAssetFile("projects/synthetic/pnpm-workspaces")
+            val definitionFile = getAssetFile("projects/synthetic/pnpm-workspaces/packages.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
 
             val ortResult = Analyzer(AnalyzerConfiguration()).run {
-                analyze(findManagedFiles(rootProjectDir, setOf(Pnpm.Factory())))
-            }
-
-            val expectedResult = getExpectedResult(rootProjectDir, "pnpm-workspaces-expected-output.yml")
+                analyze(findManagedFiles(definitionFile.parentFile, setOf(Pnpm.Factory())))
+            }.withResolvedScopes()
 
             patchActualResult(ortResult.withResolvedScopes(), patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 })
 
-private fun resolveDependencies(projectDir: File): String {
-    val definitionFile = projectDir.resolve("package.json")
-    val result = createPnpm().resolveSingleProject(definitionFile, resolveScopes = true)
-
-    return result.toYaml()
-}
-
 private fun createPnpm() = Pnpm("PNPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-
-private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsPath = vcsDir.getPathToRoot(projectDir)
-    val vcsRevision = vcsDir.getRevision()
-    val expectedOutputTemplate = projectDir.resolveSibling(expectedResultTemplateFile)
-
-    return patchExpectedResult(
-        result = expectedOutputTemplate,
-        definitionFilePath = "$vcsPath/package.json",
-        url = vcsUrl,
-        urlProcessed = normalizeVcsUrl(vcsUrl),
-        revision = vcsRevision,
-        path = vcsPath
-    )
-}
