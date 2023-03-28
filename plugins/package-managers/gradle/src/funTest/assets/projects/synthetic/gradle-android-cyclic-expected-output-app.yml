@@ -1,6 +1,6 @@
 ---
 project_results:
-  <REPLACE_DEFINITION_FILE_PATH>:
+  <REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>:
   - project:
       id: "Gradle:org.ossreviewtoolkit.gradle.example:app:1.0.0"
       definition_file_path: "plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle-android-cyclic/app/build.gradle"
