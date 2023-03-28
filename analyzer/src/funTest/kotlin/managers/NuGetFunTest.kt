@@ -26,23 +26,17 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport.Companion.OPTION_DIRECT_DEPENDENCIES_ONLY
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NuGetFunTest : StringSpec({
-    val projectDir = getAssetFile("projects/synthetic/nuget")
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
-    val definitionFile = projectDir.resolve("packages.config")
+    val definitionFile = getAssetFile("projects/synthetic/nuget/packages.config")
 
     "Definition file is correctly read" {
         val reader = NuGetPackageFileReader()
@@ -67,29 +61,19 @@ class NuGetFunTest : StringSpec({
     }
 
     "Project dependencies are detected correctly" {
-        val vcsPath = vcsDir.getPathToRoot(projectDir)
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("nuget-expected-output.yml"),
-            urlProcessed = normalizeVcsUrl(vcsUrl),
-            revision = vcsRevision,
-            path = vcsPath
-        )
+        val expectedResultFile = getAssetFile("projects/synthetic/nuget-expected-output.yml")
+
         val result = createNuGet().resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe expectedResult
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 
     "Direct project dependencies are detected correctly" {
-        val vcsPath = vcsDir.getPathToRoot(projectDir)
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("nuget-direct-dependencies-only-expected-output.yml"),
-            urlProcessed = normalizeVcsUrl(vcsUrl),
-            revision = vcsRevision,
-            path = vcsPath
-        )
+        val expectedResultFile = getAssetFile("projects/synthetic/nuget-direct-dependencies-only-expected-output.yml")
+
         val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe expectedResult
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
 })
 
