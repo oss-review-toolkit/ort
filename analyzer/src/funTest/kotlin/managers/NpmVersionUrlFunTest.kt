@@ -26,37 +26,24 @@ import io.kotest.matchers.shouldBe
 
 import java.time.Instant
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 
 class NpmVersionUrlFunTest : WordSpec({
-    val projectDir = getAssetFile("projects/synthetic/npm-version-urls")
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
-
     "NPM" should {
         "resolve dependencies with URLs as versions correctly" {
-            val definitionFile = projectDir.resolve("package.json")
-            val vcsPath = vcsDir.getPathToRoot(projectDir)
-            val expectedResultYaml = patchExpectedResult(
-                projectDir.resolveSibling("npm-version-urls-expected-output.yml"),
-                definitionFilePath = "$vcsPath/package.json",
-                urlProcessed = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision,
-                path = vcsPath
-            )
-            val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
+            val definitionFile = getAssetFile("projects/synthetic/npm-version-urls/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/npm-version-urls-expected-output.yml")
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
+                yamlMapper.readValue<ProjectAnalyzerResult>(it)
+            }
 
             val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
-
             actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
