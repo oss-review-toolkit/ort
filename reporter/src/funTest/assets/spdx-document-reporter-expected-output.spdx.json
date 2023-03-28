@@ -59,7 +59,7 @@
     "filesAnalyzed" : true,
     "homepage" : "first package's homepage URL",
     "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "NOASSERTION",
+    "licenseDeclared" : "BSD-3-Clause AND (MIT OR GPL-2.0-only)",
     "licenseInfoFromFiles" : [ "Apache-2.0", "BSD-2-Clause" ],
     "name" : "first-package",
     "packageVerificationCode" : {
@@ -79,7 +79,7 @@
     "filesAnalyzed" : true,
     "homepage" : "first package's homepage URL",
     "licenseConcluded" : "NOASSERTION",
-    "licenseDeclared" : "NOASSERTION",
+    "licenseDeclared" : "BSD-3-Clause AND (MIT OR GPL-2.0-only)",
     "licenseInfoFromFiles" : [ "Apache-2.0", "BSD-2-Clause" ],
     "name" : "first-package",
     "packageVerificationCode" : {
