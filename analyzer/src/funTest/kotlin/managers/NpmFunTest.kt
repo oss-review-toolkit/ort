@@ -19,18 +19,24 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -169,6 +175,20 @@ class NpmFunTest : WordSpec() {
 
                 patchActualResult(result.toYaml()) shouldBe expectedResult
             }
+
+            "resolve Babel dependencies correctly" {
+                val definitionFile = projectsDir.resolveSibling("npm-babel/package.json")
+                val expectedResultYaml = patchExpectedResult(
+                    projectsDir.resolveSibling("npm-babel-expected-output.yml"),
+                    url = normalizeVcsUrl(vcsUrl),
+                    revision = vcsRevision
+                )
+                val expectedResult = yamlMapper.readValue<ProjectAnalyzerResult>(expectedResultYaml)
+
+                val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+
+                actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
+            }
         }
     }
 }
@@ -178,3 +198,7 @@ private fun createNpm(
     repoConfig: RepositoryConfiguration = RepositoryConfiguration()
 ) =
     Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
+
+private fun ProjectAnalyzerResult.withInvariantIssues() =
+    // Account for different NPM versions to return issues in different order.
+    copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })
