@@ -281,6 +281,41 @@ class DownloaderFunTest : WordSpec({
             babelCliDir.walk().count() shouldBe 242
         }
 
+        "succeed for the BeanUtils project hosted in Subversion" {
+            val vcsFromCuration = VcsInfo(
+                type = VcsType.SUBVERSION,
+                url = "https://svn.apache.org/repos/asf/commons/_moved_to_git/beanutils",
+                revision = ""
+            )
+
+            val pkg = Package(
+                id = Identifier(
+                    type = "Maven",
+                    namespace = "commons-beanutils",
+                    name = "commons-beanutils-bean-collections",
+                    version = "1.8.3"
+                ),
+                declaredLicenses = setOf("The Apache Software License, Version 2.0"),
+                description = "",
+                homepageUrl = "http://commons.apache.org/beanutils/",
+                binaryArtifact = RemoteArtifact.EMPTY,
+                sourceArtifact = RemoteArtifact.EMPTY,
+                vcs = vcsFromCuration
+            )
+
+            val provenance = Downloader(DownloaderConfiguration()).download(pkg, outputDir)
+
+            outputDir.walk().onEnter { it.name != ".svn" }.count() shouldBe 302
+
+            provenance.shouldBeTypeOf<RepositoryProvenance>().apply {
+                vcsInfo.type shouldBe VcsType.SUBVERSION
+                vcsInfo.url shouldBe vcsFromCuration.url
+                vcsInfo.revision shouldBe ""
+                vcsInfo.path shouldBe vcsFromCuration.path
+                resolvedRevision shouldBe "928490"
+            }
+        }
+
         "be tried as a fallback when the source artifact download fails" {
             val downloaderConfiguration = DownloaderConfiguration(
                 sourceCodeOrigins = listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)
