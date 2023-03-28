@@ -120,8 +120,8 @@ object SpdxDocumentModelMapper {
                     spdxId = "${binaryPackage.spdxId}-vcs",
                     filesAnalyzed = filesAnalyzed,
                     downloadLocation = pkg.vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision),
+                    // Clear the concluded license as it might need to be different for the VCS location.
                     licenseConcluded = SpdxConstants.NOASSERTION,
-                    licenseDeclared = SpdxConstants.NOASSERTION,
                     packageVerificationCode = packageVerificationCode
                 )
 
@@ -152,8 +152,8 @@ object SpdxDocumentModelMapper {
                     spdxId = "${binaryPackage.spdxId}-source-artifact",
                     filesAnalyzed = filesAnalyzed,
                     downloadLocation = curatedPackage.metadata.sourceArtifact.url.nullOrBlankToSpdxNone(),
+                    // Clear the concluded license as it might need to be different for the source artifact.
                     licenseConcluded = SpdxConstants.NOASSERTION,
-                    licenseDeclared = SpdxConstants.NOASSERTION,
                     packageVerificationCode = packageVerificationCode
                 )
 
