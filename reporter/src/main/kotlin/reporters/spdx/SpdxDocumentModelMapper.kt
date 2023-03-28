@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
+import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -236,6 +237,12 @@ private fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isPr
         homepage = homepageUrl.nullOrBlankToSpdxNone(),
         licenseConcluded = concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
         licenseDeclared = declaredLicensesProcessed.toSpdxDeclaredLicense(),
+        licenseInfoFromFiles = licenseInfoResolver.resolveLicenseInfo(id)
+            .filterExcluded()
+            .filter(LicenseView.ONLY_DETECTED)
+            .map { it.license.nullOrBlankToSpdxNoassertionOrNone() }
+            .distinct()
+            .sorted(),
         name = id.name,
         summary = description.nullOrBlankToSpdxNone(),
         versionInfo = id.version
