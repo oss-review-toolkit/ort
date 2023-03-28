@@ -77,7 +77,7 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "<REPLACE_RAW_URL>"
+    url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
   vcs_processed:
@@ -165,7 +165,7 @@ packages:
       algorithm: ""
   vcs:
     type: "Git"
-    url: "<REPLACE_RAW_URL>"
+    url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
   vcs_processed:

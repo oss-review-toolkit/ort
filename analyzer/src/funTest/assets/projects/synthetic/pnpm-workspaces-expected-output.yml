@@ -2,7 +2,7 @@
 repository:
   vcs:
     type: "Git"
-    url: "<REPLACE_RAW_URL>"
+    url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
     path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
   vcs_processed:
@@ -625,7 +625,7 @@ analyzer:
           algorithm: ""
       vcs:
         type: "Git"
-        url: "<REPLACE_RAW_URL>"
+        url: "<REPLACE_URL>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
       vcs_processed:
@@ -776,7 +776,7 @@ analyzer:
           algorithm: ""
       vcs:
         type: "Git"
-        url: "<REPLACE_RAW_URL>"
+        url: "<REPLACE_URL>"
         revision: "<REPLACE_REVISION>"
         path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
       vcs_processed:
