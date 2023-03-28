@@ -44,7 +44,7 @@ data class HttpFileStorageConfiguration(
      * credentials, values are masked when this class is serialized with Jackson.
      */
     @JsonSerialize(contentConverter = MaskStringConverter::class)
-    val headers: Map<String, String>
+    val headers: Map<String, String> = emptyMap()
 )
 
 class MaskStringConverter : StdConverter<String, String>() {
