@@ -25,9 +25,13 @@ plugins {
 dependencies {
     api(project(":analyzer"))
     api(project(":model"))
-    api(project(":utils:common-utils"))
+    api(project(":utils:common-utils")) {
+        because("This is a CommandLineTool.")
+    }
 
-    api(libs.semver4j)
+    api(libs.semver4j) {
+        because("This is a CommandLineTool.")
+    }
 
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
