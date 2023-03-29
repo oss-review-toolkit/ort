@@ -42,42 +42,28 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
         "succeed if a project with inline packages is provided" {
-            val definitionFile = projectDir.resolve("inline-packages/project-xyz.spdx.yml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("spdx-project-xyz-expected-output.yml"),
-                definitionFilePath = vcsDir.getPathToRoot(definitionFile),
-                path = vcsDir.getPathToRoot(definitionFile.parentFile),
-                url = vcsUrl,
-                urlProcessed = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/spdx/inline-packages/project-xyz.spdx.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe expectedResult
+            actualResult shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "succeed if a project with package references is provided" {
-            val definitionFile = projectDir.resolve("package-references/project-xyz.spdx.yml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("spdx-project-xyz-expected-output.yml"),
-                definitionFilePath = vcsDir.getPathToRoot(definitionFile),
-                path = vcsDir.getPathToRoot(definitionFile.parentFile),
-                url = vcsUrl,
-                urlProcessed = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
-            )
+            val definitionFile = getAssetFile("projects/synthetic/spdx/package-references/project-xyz.spdx.yml")
+            val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe expectedResult
+            actualResult shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "succeed if no project is provided" {
@@ -192,23 +178,18 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "resolve dependencies from other package managers" {
-            val testProjectDir = projectDir.resolve("subproject-conan")
-            val definitionFile = testProjectDir.resolve("project-xyz.spdx.yml")
-            val expectedResult = patchExpectedResult(
-                projectDir.resolveSibling("spdx-project-xyz-expected-output-subproject-conan.yml"),
-                definitionFilePath = vcsDir.getPathToRoot(definitionFile),
-                url = vcsUrl,
-                urlProcessed = normalizeVcsUrl(vcsUrl),
-                revision = vcsRevision
+            val definitionFile = getAssetFile("projects/synthetic/spdx/subproject-conan/project-xyz.spdx.yml")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
             )
 
             val analyzer = Analyzer(AnalyzerConfiguration(allowDynamicVersions = true))
-            val managedFiles = analyzer.findManagedFiles(testProjectDir)
+            val managedFiles = analyzer.findManagedFiles(definitionFile.parentFile)
 
             val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
             val analyzerResult = analyzerRun.result.withResolvedScopes()
 
-            analyzerResult.toYaml() shouldBe expectedResult
+            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
