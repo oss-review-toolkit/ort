@@ -206,11 +206,22 @@ class FossId internal constructor(
             }
         }
 
+    /**
+     * Create a [ScanSummary] containing a single [issue], started at [startTime] and finished at [endTime].
+     */
+    private fun createSingleIssueSummary(
+        startTime: Instant,
+        endTime: Instant = Instant.now(),
+        issue: Issue
+    ) = ScanSummary(
+        startTime, endTime, "", sortedSetOf(), sortedSetOf(), listOf(issue)
+    )
+
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val (result, duration) = measureTimedValue {
             fun createSingleIssueResult(issue: Issue, provenance: Provenance): ScanResult {
                 val time = Instant.now()
-                val summary = ScanSummary(time, time, "", sortedSetOf(), sortedSetOf(), listOf(issue))
+                val summary = createSingleIssueSummary(time, time, issue)
                 return ScanResult(provenance, details, summary)
             }
 
@@ -284,9 +295,7 @@ class FossId internal constructor(
                                     "Scan results need to be inspected on the server instance.",
                             severity = Severity.HINT
                         )
-                        val summary = ScanSummary(
-                            startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue)
-                        )
+                        val summary = createSingleIssueSummary(startTime, issue = issue)
 
                         ScanResult(
                             provenance,
@@ -302,7 +311,7 @@ class FossId internal constructor(
                         source = name,
                         message = "Failed to scan package '${pkg.id.toCoordinates()}' from $url."
                     )
-                    val summary = ScanSummary(startTime, Instant.now(), "", sortedSetOf(), sortedSetOf(), listOf(issue))
+                    val summary = createSingleIssueSummary(startTime, issue = issue)
 
                     if (!config.keepFailedScans) {
                         createdScans.forEach { code ->
