@@ -20,11 +20,9 @@
 package org.ossreviewtoolkit.model.utils
 
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.IssueResolution
-import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 
@@ -46,12 +44,6 @@ interface ResolutionProvider {
      * Get all vulnerability resolutions that match [vulnerability].
      */
     fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability): List<VulnerabilityResolution>
-
-    /**
-     * Get a [Resolutions] object that contains all resolutions which apply to [Issue]s or [RuleViolation]s contained
-     * in [ortResult].
-     */
-    fun getResolutionsFor(ortResult: OrtResult): Resolutions
 
     /**
      * Return true if there is at least one issue resolution that matches [issue].

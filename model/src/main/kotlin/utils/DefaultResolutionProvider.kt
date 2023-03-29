@@ -51,20 +51,4 @@ class DefaultResolutionProvider(private val resolutions: Resolutions = Resolutio
 
     override fun getVulnerabilityResolutionsFor(vulnerability: Vulnerability) =
         resolutions.vulnerabilities.filter { it.matches(vulnerability) }
-
-    override fun getResolutionsFor(ortResult: OrtResult): Resolutions {
-        val issueResolutions = ortResult.collectIssues().values.flatten().let { issues ->
-            resolutions.issues.filter { resolution -> issues.any { resolution.matches(it) } }
-        }
-
-        val ruleViolationResolutions = ortResult.evaluator?.violations?.let { violations ->
-            resolutions.ruleViolations.filter { resolution -> violations.any { resolution.matches(it) } }
-        }.orEmpty()
-
-        val vulnerabilityResolutions = ortResult.getVulnerabilities().values.flatten().let { vulnerabilities ->
-            resolutions.vulnerabilities.filter { resolution -> vulnerabilities.any { resolution.matches(it) } }
-        }
-
-        return Resolutions(issueResolutions, ruleViolationResolutions, vulnerabilityResolutions)
-    }
 }

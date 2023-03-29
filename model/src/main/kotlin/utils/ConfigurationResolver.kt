@@ -26,13 +26,17 @@ import org.apache.logging.log4j.kotlin.logger
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.ResolvedPackageCurations
+import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.config.PackageConfiguration
+import org.ossreviewtoolkit.model.config.Resolutions
 
 object ConfigurationResolver : Logging {
     /**
@@ -99,5 +103,20 @@ object ConfigurationResolver : Logging {
                 curations = curations
             )
         }
+    }
+
+    fun resolveResolutions(
+        issues: List<Issue>,
+        ruleViolations: List<RuleViolation>,
+        vulnerabilities: List<Vulnerability>,
+        resolutionProvider: ResolutionProvider
+    ): Resolutions {
+        val issueResolutions = issues.flatMap { resolutionProvider.getIssueResolutionsFor(it) }.distinct()
+        val ruleViolationResolutions =
+            ruleViolations.flatMap { resolutionProvider.getRuleViolationResolutionsFor(it) }.distinct()
+        val vulnerabilityResolutions =
+            vulnerabilities.flatMap { resolutionProvider.getVulnerabilityResolutionsFor(it) }.distinct()
+
+        return Resolutions(issueResolutions, ruleViolationResolutions, vulnerabilityResolutions)
     }
 }
