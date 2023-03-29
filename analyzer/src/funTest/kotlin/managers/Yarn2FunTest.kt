@@ -24,88 +24,64 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class Yarn2FunTest : WordSpec({
     "Yarn 2" should {
         "resolve dependencies correctly" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2")
+            val definitionFile = getAssetFile("projects/synthetic/yarn2/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn2-expected-output.yml")
 
-            val result = resolveDependencies(projectDir)
+            val result = resolveDependencies(definitionFile)
 
-            val expectedResult = getExpectedResult(projectDir, "yarn2-expected-output.yml")
-            result shouldBe expectedResult
+            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "exclude scopes if configured" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2")
+            val definitionFile = getAssetFile("projects/synthetic/yarn2/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn2-expected-output-scope-excludes.yml")
 
             val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
             val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
             val excludes = Excludes(scopes = listOf(scopeExclude))
             val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val result = resolveDependencies(projectDir, analyzerConfig, repositoryConfig)
+            val result = resolveDependencies(definitionFile, analyzerConfig, repositoryConfig)
 
-            val expectedResult = getExpectedResult(projectDir, "yarn2-expected-output-scope-excludes.yml")
-            result shouldBe expectedResult
+            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
-            val projectDir = getAssetFile("projects/synthetic/yarn2-workspaces")
+            val definitionFile = getAssetFile("projects/synthetic/yarn2-workspaces/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn2-workspaces-expected-output.yml")
 
-            val result = resolveMultipleDependencies(projectDir)
+            val result = resolveMultipleDependencies(definitionFile)
 
-            val expectedResult = getExpectedResult(
-                projectDir,
-                "yarn2-workspaces-expected-output.yml"
-            )
-            result shouldBe expectedResult
+            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 })
 
-private fun getExpectedResult(projectDir: File, expectedResultTemplateFile: String): String {
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsPath = vcsDir.getPathToRoot(projectDir)
-    val vcsRevision = vcsDir.getRevision()
-    val expectedOutputTemplate = projectDir.resolveSibling(expectedResultTemplateFile)
-
-    return patchExpectedResult(
-        result = expectedOutputTemplate,
-        definitionFilePath = "$vcsPath/package.json",
-        url = vcsUrl,
-        urlProcessed = normalizeVcsUrl(vcsUrl),
-        revision = vcsRevision,
-        path = vcsPath
-    )
-}
-
 private fun resolveDependencies(
-    projectDir: File,
+    definitionFile: File,
     analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
     repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
 ): String {
-    val definitionFile = projectDir.resolve("package.json")
     val result = createYarn2(analyzerConfig, repositoryConfig)
         .resolveSingleProject(definitionFile, resolveScopes = true)
     return result.toYaml()
 }
 
-private fun resolveMultipleDependencies(projectDir: File): String {
-    val definitionFile = projectDir.resolve("package.json")
-    val result = createYarn2().collateMultipleProjects(definitionFile)
+private fun resolveMultipleDependencies(definitionFile: File): String {
+     val result = createYarn2().collateMultipleProjects(definitionFile)
     // Remove the dependency graph and add scope information.
     return result.withResolvedScopes().toYaml()
 }
