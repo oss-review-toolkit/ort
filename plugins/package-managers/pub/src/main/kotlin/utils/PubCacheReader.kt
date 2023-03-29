@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.common.textValueOrEmpty
  * installation directory.
  */
 internal class PubCacheReader {
-    companion object : Logging
+    private companion object : Logging
 
     private val pubCacheRoot by lazy {
         Os.env["PUB_CACHE"]?.let { return@lazy File(it) }

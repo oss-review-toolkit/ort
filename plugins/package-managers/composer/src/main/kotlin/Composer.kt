@@ -78,7 +78,7 @@ class Composer(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Composer>("Composer") {
         override val globsForDefinitionFiles = listOf("composer.json")

@@ -80,7 +80,7 @@ class CocoaPods(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<CocoaPods>("CocoaPods") {
         override val globsForDefinitionFiles = listOf("Podfile")
