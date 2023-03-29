@@ -27,7 +27,9 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
-import org.ossreviewtoolkit.model.utils.replacePackageCurations
+import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
+import org.ossreviewtoolkit.model.utils.addPackageCurations
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
@@ -58,10 +60,23 @@ class SetCommand : CliktCommand(
         .convert { it.absoluteFile.normalize() }
 
     override fun run() {
-        val provider = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir)
+        val ortResultInput = readOrtResult(ortFile)
 
-        val ortResult = readOrtResult(ortFile).replacePackageCurations(provider, providerId = "SetCommandOption")
+        val packageCurationProviders = buildList {
+            val hasRepositoryConfigurationPackageCurations = ortResultInput.resolvedConfiguration.packageCurations.any {
+                it.provider.id == REPOSITORY_CONFIGURATION_PROVIDER_ID
+            }
 
-        writeOrtResult(ortResult, ortFile)
+            if (hasRepositoryConfigurationPackageCurations) {
+                val packageCurations = ortResultInput.repository.config.curations.packages
+                add(REPOSITORY_CONFIGURATION_PROVIDER_ID to SimplePackageCurationProvider(packageCurations))
+            }
+
+            add("SetCommandOption" to FilePackageCurationProvider(packageCurationsFile, packageCurationsDir))
+        }
+
+        val ortResultOutput = ortResultInput.addPackageCurations(packageCurationProviders)
+
+        writeOrtResult(ortResultOutput, ortFile)
     }
 }
