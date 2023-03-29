@@ -39,7 +39,6 @@ class CarthageFunTest : StringSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
-    private val gitHubProject = normalizedVcsUrl.split('/', '.').dropLast(1).takeLast(2).joinToString(":")
 
     init {
         "Project dependencies are detected correctly" {
@@ -50,8 +49,7 @@ class CarthageFunTest : StringSpec() {
                 definitionFilePath = "$vcsPath/Cartfile.resolved",
                 path = vcsPath,
                 revision = vcsRevision,
-                urlProcessed = normalizedVcsUrl,
-                custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
+                urlProcessed = normalizedVcsUrl
             )
 
             val result = createCarthage().resolveSingleProject(cartfileResolved)
