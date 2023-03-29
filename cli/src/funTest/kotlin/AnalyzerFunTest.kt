@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.concurrent.shouldCompleteWithin
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 import java.util.concurrent.TimeUnit
@@ -38,6 +39,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerFunTest : WordSpec({
@@ -58,6 +60,21 @@ class AnalyzerFunTest : WordSpec({
             }.withResolvedScopes().toYaml()
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
+        }
+
+        "resolve dependencies from other package managers" {
+            val definitionFile = getAssetFile("projects/synthetic/spdx-subproject-conan/project-xyz.spdx.yml")
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
+            )
+
+            val analyzer = Analyzer(AnalyzerConfiguration(allowDynamicVersions = true))
+            val managedFiles = analyzer.findManagedFiles(definitionFile.parentFile)
+
+            val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
+            val analyzerResult = analyzerRun.result.withResolvedScopes()
+
+            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 

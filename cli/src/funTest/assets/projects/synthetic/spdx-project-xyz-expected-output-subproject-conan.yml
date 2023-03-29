@@ -1,7 +1,7 @@
 ---
 projects:
 - id: "Conan::ConanProject:1.0.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/subproject/conanfile.py"
+  definition_file_path: "cli/src/funTest/assets/projects/synthetic/spdx-subproject-conan/subproject/conanfile.py"
   authors:
   - "The ORT Project Authors"
   declared_licenses:
@@ -18,7 +18,7 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/subproject"
+    path: "cli/src/funTest/assets/projects/synthetic/spdx-subproject-conan/subproject"
   homepage_url: ""
   scopes:
   - name: "requires"
@@ -27,7 +27,7 @@ projects:
       dependencies:
       - id: "Conan::zlib:1.2.12"
 - id: "SpdxDocumentFile::xyz:0.1.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan/project-xyz.spdx.yml"
+  definition_file_path: "cli/src/funTest/assets/projects/synthetic/spdx-subproject-conan/project-xyz.spdx.yml"
   authors:
   - "Thomas Steenbergen"
   declared_licenses:
@@ -38,12 +38,12 @@ projects:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan"
+    path: "cli/src/funTest/assets/projects/synthetic/spdx-subproject-conan"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/spdx/subproject-conan"
+    path: "cli/src/funTest/assets/projects/synthetic/spdx-subproject-conan"
   homepage_url: "https://example.com/products/xyz"
   scopes:
   - name: "runtime"
