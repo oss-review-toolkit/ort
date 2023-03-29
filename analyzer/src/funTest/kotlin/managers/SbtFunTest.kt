@@ -23,48 +23,38 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
-        val projectDir = getAssetFile("projects/external/sbt-multi-project-example")
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("sbt-multi-project-example-expected-output.yml")
-        )
+        val definitionFile = getAssetFile("projects/external/sbt-multi-project-example/build.sbt")
+        val expectedResultFile = getAssetFile("projects/external/sbt-multi-project-example-expected-output.yml")
+        val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        Git().run(projectDir, "clean", "-fd")
+        Git().run(definitionFile.parentFile, "clean", "-fd")
 
         val ortResult = Analyzer(AnalyzerConfiguration()).run {
-            analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
+            analyze(findManagedFiles(definitionFile.parentFile, setOf(Sbt.Factory())))
         }
 
         patchActualResult(ortResult.withResolvedScopes(), patchStartAndEndTime = true) shouldBe expectedResult
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
-        val projectDir = getAssetFile("projects/synthetic/sbt-http4s-template")
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-        val vcsUrl = vcsDir.getRemoteUrl()
-        val vcsRevision = vcsDir.getRevision()
-        val expectedResult = patchExpectedResult(
-            projectDir.resolveSibling("sbt-http4s-template-expected-output.yml"),
-            url = vcsUrl,
-            revision = vcsRevision,
-            urlProcessed = normalizeVcsUrl(vcsUrl)
-        )
+        val definitionFile = getAssetFile("projects/synthetic/sbt-http4s-template/build.sbt")
+        val expectedResultFile = getAssetFile("projects/synthetic/sbt-http4s-template-expected-output.yml")
+        val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
-        Git().run(projectDir, "clean", "-fd")
+        Git().run(definitionFile.parentFile, "clean", "-fd")
 
         val ortResult = Analyzer(AnalyzerConfiguration()).run {
-            analyze(findManagedFiles(projectDir, setOf(Sbt.Factory())))
+            analyze(findManagedFiles(definitionFile.parentFile, setOf(Sbt.Factory())))
         }
 
         patchActualResult(ortResult.withResolvedScopes(), patchStartAndEndTime = true) shouldBe expectedResult
