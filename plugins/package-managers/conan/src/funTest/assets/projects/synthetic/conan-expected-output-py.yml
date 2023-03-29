@@ -1,7 +1,7 @@
 ---
 project:
   id: "Conan::Poco:1.9.3"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/conan-py/conanfile.py"
+  definition_file_path: "plugins/package-managers/conan/src/funTest/assets/projects/synthetic/conan-py/conanfile.py"
   authors:
   - "The Author"
   declared_licenses:

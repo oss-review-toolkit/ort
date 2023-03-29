@@ -51,6 +51,7 @@ include(":plugins:package-managers:cargo")
 include(":plugins:package-managers:carthage")
 include(":plugins:package-managers:cocoapods")
 include(":plugins:package-managers:composer")
+include(":plugins:package-managers:conan")
 include(":plugins:package-managers:gradle")
 include(":plugins:package-managers:gradle-model")
 include(":plugins:package-managers:pub")
@@ -85,6 +86,7 @@ project(":plugins:package-managers:cargo").name = "cargo-package-manager"
 project(":plugins:package-managers:carthage").name = "carthage-package-manager"
 project(":plugins:package-managers:cocoapods").name = "cocoapods-package-manager"
 project(":plugins:package-managers:composer").name = "composer-package-manager"
+project(":plugins:package-managers:conan").name = "conan-package-manager"
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
 project(":plugins:package-managers:pub").name = "pub-package-manager"
 project(":plugins:package-managers:python").name = "python-package-manager"

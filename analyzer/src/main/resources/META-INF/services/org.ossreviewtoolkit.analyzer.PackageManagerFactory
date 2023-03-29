@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.analyzer.managers.Conan$Factory
 org.ossreviewtoolkit.analyzer.managers.DotNet$Factory
 org.ossreviewtoolkit.analyzer.managers.GoDep$Factory
 org.ossreviewtoolkit.analyzer.managers.GoMod$Factory

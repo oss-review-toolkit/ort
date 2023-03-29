@@ -17,11 +17,12 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
