@@ -41,6 +41,26 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerFunTest : WordSpec({
+    "An analysis" should {
+        "correctly report VcsInfo for git-repo projects" {
+            val expectedResultFile = getAssetFile("git-repo-expected-output.yml")
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT_REPO,
+                    url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml",
+                    revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+                )
+            )
+            val outputDir = createTestTempDir().also { GitRepo().download(pkg, it) }
+
+            val result = Analyzer(AnalyzerConfiguration()).run {
+                analyze(findManagedFiles(outputDir))
+            }.withResolvedScopes().toYaml()
+
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
+        }
+    }
+
     "A globally configured 'mustRunAfter'" should {
         "not block when depending on a package manager for which no definition files have been found" {
             val inputDir = createTestTempDir()
@@ -62,26 +82,6 @@ class AnalyzerFunTest : WordSpec({
             shouldCompleteWithin(120, TimeUnit.SECONDS) {
                 analyzer.analyze(info)
             }
-        }
-    }
-
-    "VcsInfo for git-repo projects" should {
-        "be correctly reported" {
-            val expectedResultFile = getAssetFile("git-repo-expected-output.yml")
-            val pkg = Package.EMPTY.copy(
-                vcsProcessed = VcsInfo(
-                    type = VcsType.GIT_REPO,
-                    url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml",
-                    revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
-                )
-            )
-            val outputDir = createTestTempDir().also { GitRepo().download(pkg, it) }
-
-            val result = Analyzer(AnalyzerConfiguration()).run {
-                analyze(findManagedFiles(outputDir))
-            }.withResolvedScopes().toYaml()
-
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
         }
     }
 })
