@@ -176,6 +176,11 @@ private fun getScopeExcludesForPackageManager(packageManagerName: String): List<
                 comment = "Packages to process code annotations only."
             ),
             ScopeExclude(
+                pattern = ".*Kapt.*",
+                reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
+                comment = "Packages to process code annotations only."
+            ),
+            ScopeExclude(
                 pattern = "kotlinCompiler.*",
                 reason = ScopeExcludeReason.BUILD_DEPENDENCY_OF,
                 comment = "Packages for Kotlin compiler only."
