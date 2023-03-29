@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 /**
  * A specialized [DependencyHandler] implementation for Gradle's dependency model.
  */
-class GradleDependencyHandler(
+internal class GradleDependencyHandler(
     /** The name of the associated package manager. */
     val managerName: String,
 
