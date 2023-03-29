@@ -97,6 +97,7 @@ greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
 hopliteCore = { module = "com.sksamuel.hoplite:hoplite-core", version.ref = "hoplite" }
 hopliteYaml = { module = "com.sksamuel.hoplite:hoplite-yaml", version.ref = "hoplite" }
+jacksonAnnotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
 jacksonCore = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
 jacksonDatabind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jacksonDataformatXml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-xml", version.ref = "jackson" }
@@ -130,6 +131,7 @@ log4jApiToSlf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.
 logbackClassic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 mavenCompat = { module = "org.apache.maven:maven-compat", version.ref = "maven" }
 mavenCore = { module = "org.apache.maven:maven-core", version.ref = "maven" }
+mavenResolverApi = { module = "org.apache.maven.resolver:maven-resolver-api", version.ref = "mavenResolver" }
 mavenResolverConnectorBasic = { module = "org.apache.maven.resolver:maven-resolver-connector-basic", version.ref = "mavenResolver" }
 mavenResolverTransportFile = { module = "org.apache.maven.resolver:maven-resolver-transport-file", version.ref = "mavenResolver" }
 mavenResolverTransportHttp = { module = "org.apache.maven.resolver:maven-resolver-transport-http", version.ref = "mavenResolver" }
