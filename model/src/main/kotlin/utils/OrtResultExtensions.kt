@@ -20,12 +20,9 @@
 package org.ossreviewtoolkit.model.utils
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.PackageCuration
 import org.ossreviewtoolkit.model.RepositoryProvenance
-import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
@@ -107,23 +104,3 @@ fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
  * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.
  */
 fun OrtResult.mergeLabels(labels: Map<String, String>) = copy(labels = this.labels + labels)
-
-/**
- * Add all package curations from [packageCurationProvider] that match any package in this [OrtResult] to
- * [OrtResult.resolvedConfiguration], overwriting any previously contained package curations except those from
- * [RepositoryConfiguration.curations].
- */
-fun OrtResult.replacePackageCurations(packageCurationProvider: PackageCurationProvider, providerId: String): OrtResult {
-    require(providerId != ResolvedPackageCurations.REPOSITORY_CONFIGURATION_PROVIDER_ID) {
-        "Cannot replace curations for id '${ResolvedPackageCurations.REPOSITORY_CONFIGURATION_PROVIDER_ID}' which is reserved and not allowed."
-    }
-
-    val packageCurations = resolvedConfiguration.packageCurations.find {
-        it.provider.id == ResolvedPackageCurations.REPOSITORY_CONFIGURATION_PROVIDER_ID
-    }.let { listOfNotNull(it) } + ConfigurationResolver.resolvePackageCurations(
-        packages = getUncuratedPackages(),
-        curationProviders = listOf(providerId to packageCurationProvider)
-    )
-
-    return copy(resolvedConfiguration = resolvedConfiguration.copy(packageCurations = packageCurations))
-}
