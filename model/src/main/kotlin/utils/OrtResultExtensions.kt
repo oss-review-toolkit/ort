@@ -45,7 +45,13 @@ fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConf
  * [OrtResult.resolvedConfiguration], overwriting any previously contained resolutions.
  */
 fun OrtResult.addResolutions(resolutionProvider: ResolutionProvider): OrtResult {
-    val resolutions = resolutionProvider.getResolutionsFor(this)
+    val resolutions = ConfigurationResolver.resolveResolutions(
+        issues = collectIssues().values.flatten(),
+        ruleViolations = getRuleViolations(),
+        vulnerabilities = getVulnerabilities().values.flatten(),
+        resolutionProvider = resolutionProvider
+    )
+
     return copy(resolvedConfiguration = resolvedConfiguration.copy(resolutions = resolutions))
 }
 
