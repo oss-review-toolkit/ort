@@ -118,13 +118,13 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
     }
 
     /**
-     * Return the result of analyzing the given [managed file][info]. The given [curationProviders] must be ordered
-     * highest-priority-first.
+     * Return the result of analyzing the given [managed file][info]. The given [packageCurationProviders] must be
+     * ordered highest-priority-first.
      */
     @JvmOverloads
     fun analyze(
         info: ManagedFileInfo,
-        curationProviders: List<Pair<String, PackageCurationProvider>> = emptyList()
+        packageCurationProviders: List<Pair<String, PackageCurationProvider>> = emptyList()
     ): OrtResult {
         val startTime = Instant.now()
 
@@ -151,7 +151,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
 
         val run = AnalyzerRun(startTime, endTime, Environment(toolVersions = toolVersions), config, analyzerResult)
 
-        return OrtResult(repository = repository, analyzer = run).addPackageCurations(curationProviders)
+        return OrtResult(repository = repository, analyzer = run).addPackageCurations(packageCurationProviders)
     }
 
     private fun analyzeInParallel(managedFiles: Map<PackageManager, List<File>>): AnalyzerResult {
