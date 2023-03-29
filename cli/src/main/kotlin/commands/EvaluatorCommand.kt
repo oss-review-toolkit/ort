@@ -68,6 +68,7 @@ import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.addPackageConfigurations
 import org.ossreviewtoolkit.model.utils.addResolutions
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.model.utils.replacePackageCurations
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs

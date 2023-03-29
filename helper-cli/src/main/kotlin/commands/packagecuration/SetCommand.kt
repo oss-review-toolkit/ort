@@ -27,6 +27,7 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
+import org.ossreviewtoolkit.model.utils.replacePackageCurations
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
