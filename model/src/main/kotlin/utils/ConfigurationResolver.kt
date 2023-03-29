@@ -24,13 +24,10 @@ import kotlin.time.measureTimedValue
 import org.apache.logging.log4j.kotlin.Logging
 import org.apache.logging.log4j.kotlin.logger
 
-import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageCuration
-import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.ScanResult
@@ -39,18 +36,6 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 
 object ConfigurationResolver : Logging {
-    /**
-     * Return the resolved configuration for the given [analyzerResult]. The [curationProviders] must be ordered
-     * highest-priority-first.
-     */
-    fun resolveConfiguration(
-        analyzerResult: AnalyzerResult,
-        curationProviders: List<Pair<String, PackageCurationProvider>>
-    ): ResolvedConfiguration =
-        ResolvedConfiguration(
-            packageCurations = resolvePackageCurations(analyzerResult.packages, curationProviders)
-        )
-
     /**
      * Resolved the [PackageConfiguration]s that match the [scan results][scanResultProvider] for the provided
      * [identifiers].
