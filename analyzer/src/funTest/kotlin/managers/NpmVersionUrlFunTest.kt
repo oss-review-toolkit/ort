@@ -24,8 +24,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -51,7 +49,3 @@ class NpmVersionUrlFunTest : WordSpec({
 
 private fun createNpm() =
     Npm("NPM", USER_DIR, AnalyzerConfiguration(allowDynamicVersions = true), RepositoryConfiguration())
-
-private fun ProjectAnalyzerResult.withInvariantIssues() =
-    // Account for different NPM versions to return issues in different order.
-    copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })

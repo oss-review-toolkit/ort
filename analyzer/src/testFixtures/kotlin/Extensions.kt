@@ -25,6 +25,7 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 
 import java.io.File
+import java.time.Instant
 
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -92,3 +93,7 @@ private fun Project.filterReferencedPackages(allPackages: Set<Package>): Set<Pac
     val projectDependencies = DependencyTreeNavigator.projectDependencies(this)
     return allPackages.filterTo(mutableSetOf()) { it.id in projectDependencies }
 }
+
+fun ProjectAnalyzerResult.withInvariantIssues() =
+    // Account for different NPM versions to return issues in different order.
+    copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })
