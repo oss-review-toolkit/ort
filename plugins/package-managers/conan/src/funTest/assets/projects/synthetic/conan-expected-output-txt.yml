@@ -1,7 +1,7 @@
 ---
 project:
   id: "Conan::conanfile.txt:"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/conan-txt/conanfile.txt"
+  definition_file_path: "plugins/package-managers/conan/src/funTest/assets/projects/synthetic/conan-txt/conanfile.txt"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
