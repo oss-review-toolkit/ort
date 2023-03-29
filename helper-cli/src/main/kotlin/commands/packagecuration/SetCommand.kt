@@ -47,14 +47,14 @@ class SetCommand : CliktCommand(
 
     private val packageCurationsDir by option(
         "--package-curations-dir",
-        help = "A directory containing package curation data."
+        help = "A directory containing package curation files."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
     private val packageCurationsFile by option(
         "--package-curations-file",
-        help = "A file containing package curation data."
+        help = "A file containing package curations."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
