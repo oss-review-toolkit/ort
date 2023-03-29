@@ -3,12 +3,12 @@ repository:
   vcs:
     type: "GitRepo"
     url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
-    revision: "<REPLACE_REVISION>"
+    revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
     path: ""
   vcs_processed:
     type: "GitRepo"
     url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo.git?manifest=manifest.xml"
-    revision: "<REPLACE_REVISION>"
+    revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
     path: ""
   nested_repositories:
     spdx-tools:
@@ -378,7 +378,7 @@ analyzer:
         path: ""
       homepage_url: ""
       scopes: []
-    - id: "Unmanaged:manifest.xml:manifest:<REPLACE_REVISION>"
+    - id: "Unmanaged:manifest.xml:manifest:31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
       definition_file_path: ""
       declared_licenses: []
       declared_licenses_processed: {}
@@ -390,7 +390,7 @@ analyzer:
       vcs_processed:
         type: "GitRepo"
         url: "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
-        revision: "<REPLACE_REVISION>"
+        revision: "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
         path: ""
       homepage_url: ""
       scopes: []
