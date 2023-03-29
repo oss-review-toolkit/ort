@@ -29,80 +29,68 @@ import java.io.File
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PubFunTest : WordSpec() {
-    private val projectsDir = getAssetFile("projects/synthetic")
-    private val projectsDirExternal = getAssetFile("projects/external")
-    private val vcsDir = VersionControlSystem.forDirectory(projectsDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     init {
         "Pub" should {
             "resolve dart http dependencies correctly" {
-                val workingDir = projectsDirExternal.resolve("dart-http")
-                val lockFile = workingDir.resolve("pubspec.lock")
-                projectsDirExternal.resolve("dart-http-pubspec.lock").copyTo(lockFile, overwrite = true)
+                val definitionFile = getAssetFile("projects/external/dart-http/pubspec.yaml")
+                val expectedResultFile = getAssetFile("projects/external/dart-http-expected-output.yml")
+                val lockFile = definitionFile.resolveSibling("pubspec.lock").also {
+                    getAssetFile("projects/external/dart-http-pubspec.lock").copyTo(it, overwrite = true)
+                }
 
-                try {
-                    val definitionFile = workingDir.resolve("pubspec.yaml")
-                    val expectedResult = getExpectedResult("dart-http-expected-output.yml", workingDir)
-
-                    val result = createPub(
-                        AnalyzerConfiguration(allowDynamicVersions = true)
-                    ).resolveSingleProject(definitionFile)
-
-                    result.toYaml() shouldBe expectedResult
+                val result = try {
+                    createPub(AnalyzerConfiguration(allowDynamicVersions = true)).resolveSingleProject(definitionFile)
                 } finally {
                     lockFile.delete()
                 }
+
+                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             }
 
             "resolve dependencies for a project with dependencies without a static version" {
-                val workingDir = projectsDir.resolve("any-version")
-                val definitionFile = workingDir.resolve("pubspec.yaml")
-                val expectedResult = getExpectedResult("pub-expected-output-any-version.yml", workingDir)
+                val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
+                val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
 
                 val result = createPub().resolveSingleProject(definitionFile)
 
-                result.toYaml() shouldBe expectedResult
+                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             }
 
             "resolve multi-module dependencies correctly" {
-                val workingDir = projectsDir.resolve("multi-module")
-                val expectedResult = getExpectedResult("pub-expected-output-multi-module.yml", workingDir)
+                val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
+                val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
-                val analyzerResult = analyze(workingDir).patchPackages()
+                val analyzerResult = analyze(definitionFile.parentFile).patchPackages()
 
-                analyzerResult.toYaml() shouldBe expectedResult
+                analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             }
 
             "resolve dependencies for a project with Flutter, Android and Cocoapods" {
-                val workingDir = projectsDir.resolve("flutter-project-with-android-and-cocoapods")
-                val expectedResult = getExpectedResult(
-                    "pub-expected-output-with-flutter-android-and-cocoapods.yml",
-                    workingDir
+                val definitionFile = getAssetFile(
+                    "projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
+                )
+                val expectedResultFile = getAssetFile(
+                    "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
                 )
 
-                val analyzerResult = analyze(workingDir).patchPackages().reduceToPubProjects()
+                val analyzerResult = analyze(definitionFile.parentFile).patchPackages().reduceToPubProjects()
 
-                analyzerResult.toYaml() shouldBe expectedResult
+                analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
             }
 
             "show an error if no lockfile is present" {
-                val workingDir = projectsDir.resolve("no-lockfile")
-                val definitionFile = workingDir.resolve("pubspec.yaml")
+                val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
 
                 val result = createPub().resolveSingleProject(definitionFile)
 
@@ -113,22 +101,6 @@ class PubFunTest : WordSpec() {
                 }
             }
         }
-    }
-
-    private fun getExpectedResult(expectedResultFilename: String, workingDir: File): String {
-        val vcsPath = vcsDir.getPathToRoot(workingDir)
-        val expectedResultDir = if (workingDir.startsWith(projectsDirExternal)) {
-            projectsDirExternal
-        } else {
-            projectsDir
-        }
-
-        return patchExpectedResult(
-            expectedResultDir.resolve(expectedResultFilename),
-            urlProcessed = normalizeVcsUrl(vcsUrl),
-            revision = vcsRevision,
-            path = vcsPath
-        )
     }
 }
 
