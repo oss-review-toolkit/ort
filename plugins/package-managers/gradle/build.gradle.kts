@@ -36,14 +36,23 @@ repositories {
 
 dependencies {
     api(project(":analyzer"))
+    api(project(":model"))
+
+    api(libs.log4jApiKotlin)
 
     implementation(project(":downloader"))
     implementation(project(":plugins:package-managers:gradle-model"))
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:ort-utils"))
 
     implementation("org.gradle:gradle-tooling-api:${gradle.gradleVersion}")
+    implementation(libs.log4jApi)
     implementation(libs.mavenCore)
+    implementation(libs.mavenResolverApi)
 
     funTestImplementation(testFixtures(project(":analyzer")))
+
+    testImplementation(project(":utils:spdx-utils"))
 
     testImplementation(libs.mockk)
 }
