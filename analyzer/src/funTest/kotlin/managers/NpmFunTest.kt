@@ -26,8 +26,6 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -155,7 +153,3 @@ private fun createNpm(
     repoConfig: RepositoryConfiguration = RepositoryConfiguration()
 ) =
     Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
-
-private fun ProjectAnalyzerResult.withInvariantIssues() =
-    // Account for different NPM versions to return issues in different order.
-    copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })
