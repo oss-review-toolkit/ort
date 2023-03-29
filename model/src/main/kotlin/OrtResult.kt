@@ -30,8 +30,6 @@ import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.Resolutions
 import org.ossreviewtoolkit.model.config.orEmpty
-import org.ossreviewtoolkit.model.utils.ConfigurationResolver
-import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.zipWithCollections
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 
@@ -349,29 +347,6 @@ data class OrtResult(
                 }
             )
         )
-
-    /**
-     * Return a copy of this [OrtResult] with the [PackageCuration]s replaced by the ones from the given [provider]
-     * associated with the given [providerId].
-     */
-    fun replacePackageCurations(provider: PackageCurationProvider, providerId: String): OrtResult {
-        require(providerId != REPOSITORY_CONFIGURATION_PROVIDER_ID) {
-            "Cannot replace curations for id '$REPOSITORY_CONFIGURATION_PROVIDER_ID' which is reserved and not allowed."
-        }
-
-        val packageCurations = resolvedConfiguration.packageCurations.find {
-            it.provider.id == REPOSITORY_CONFIGURATION_PROVIDER_ID
-        }.let { listOfNotNull(it) } + ConfigurationResolver.resolvePackageCurations(
-            packages = getUncuratedPackages(),
-            curationProviders = listOf(providerId to provider)
-        )
-
-        return copy(
-            resolvedConfiguration = resolvedConfiguration.copy(
-                packageCurations = packageCurations
-            )
-        )
-    }
 
     /**
      * Return the [Project] denoted by the given [id].
