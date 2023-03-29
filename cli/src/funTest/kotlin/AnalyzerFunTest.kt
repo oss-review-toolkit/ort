@@ -67,23 +67,21 @@ class AnalyzerFunTest : WordSpec({
 
     "VcsInfo for git-repo projects" should {
         "be correctly reported" {
-            val url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
-            val revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
-            val vcs = VcsInfo(VcsType.GIT_REPO, url, revision)
-            val pkg = Package.EMPTY.copy(vcsProcessed = vcs)
-            val outputDir = createTestTempDir()
+            val expectedResultFile = getAssetFile("git-repo-expected-output.yml")
+            val pkg = Package.EMPTY.copy(
+                vcsProcessed = VcsInfo(
+                    type = VcsType.GIT_REPO,
+                    url = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml",
+                    revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
+                )
+            )
+            val outputDir = createTestTempDir().also { GitRepo().download(pkg, it) }
 
-            GitRepo().download(pkg, outputDir)
-
-            val expectedResult = patchExpectedResult(getAssetFile("git-repo-expected-output.yml"))
-
-            val ortResult = Analyzer(AnalyzerConfiguration()).run {
+            val result = Analyzer(AnalyzerConfiguration()).run {
                 analyze(findManagedFiles(outputDir))
-            }
+            }.withResolvedScopes().toYaml()
 
-            val actualResult = ortResult.withResolvedScopes().toYaml()
-
-            patchActualResult(actualResult, patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
         }
     }
 })
