@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
+import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
@@ -69,9 +70,10 @@ import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.addPackageConfigurations
+import org.ossreviewtoolkit.model.utils.addPackageCurations
 import org.ossreviewtoolkit.model.utils.addResolutions
 import org.ossreviewtoolkit.model.utils.mergeLabels
-import org.ossreviewtoolkit.model.utils.replacePackageCurations
+import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
@@ -275,8 +277,17 @@ class EvaluatorCommand : OrtCommand(
         }
 
         if (packageCurationsDir != null || packageCurationsFile != null) {
-            val provider = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir)
-            ortResultInput = ortResultInput.replacePackageCurations(provider, providerId = "EvaluatorCommandOption")
+            val packageCurationProviders = buildList {
+                if (ortConfig.enableRepositoryPackageCurations) {
+                    val packageCurations = ortResultInput.repository.config.curations.packages
+                    add(REPOSITORY_CONFIGURATION_PROVIDER_ID to SimplePackageCurationProvider(packageCurations))
+                }
+
+                val providerFromOption = FilePackageCurationProvider(packageCurationsFile, packageCurationsDir)
+                add("EvaluatorCommandOption" to providerFromOption)
+            }
+
+            ortResultInput = ortResultInput.addPackageCurations(packageCurationProviders)
         }
 
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
