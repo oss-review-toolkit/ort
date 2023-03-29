@@ -25,6 +25,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ResolvedPackageCurations
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 
@@ -40,6 +41,18 @@ fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConf
     )
 
     return copy(resolvedConfiguration = resolvedConfiguration.copy(packageConfigurations = packageConfigurations))
+}
+
+/**
+ * Add all package curations from [packageCurationProviders] that match any packages in this [OrtResult] to
+ * [OrtResult.resolvedConfiguration], overwriting any previously contained package curations. The
+ * [packageCurationProviders] must be ordered highest-priority-first.
+ */
+fun OrtResult.addPackageCurations(packageCurationProviders: List<Pair<String, PackageCurationProvider>>): OrtResult {
+    val packageCurations =
+        ConfigurationResolver.resolvePackageCurations(getUncuratedPackages(), packageCurationProviders)
+
+    return copy(resolvedConfiguration = resolvedConfiguration.copy(packageCurations = packageCurations))
 }
 
 /**
@@ -97,7 +110,8 @@ fun OrtResult.mergeLabels(labels: Map<String, String>) = copy(labels = this.labe
 
 /**
  * Add all package curations from [packageCurationProvider] that match any package in this [OrtResult] to
- * [OrtResult.resolvedConfiguration], overwriting any previously contained package curations.
+ * [OrtResult.resolvedConfiguration], overwriting any previously contained package curations except those from
+ * [RepositoryConfiguration.curations].
  */
 fun OrtResult.replacePackageCurations(packageCurationProvider: PackageCurationProvider, providerId: String): OrtResult {
     require(providerId != ResolvedPackageCurations.REPOSITORY_CONFIGURATION_PROVIDER_ID) {
