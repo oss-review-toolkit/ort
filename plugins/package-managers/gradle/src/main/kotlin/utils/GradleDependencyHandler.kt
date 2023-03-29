@@ -50,7 +50,7 @@ internal class GradleDependencyHandler(
     /** The helper object to resolve packages via Maven. */
     private val maven: MavenSupport
 ) : DependencyHandler<OrtDependency> {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * A list with repositories to use when resolving packages. This list must be set before using this handler for

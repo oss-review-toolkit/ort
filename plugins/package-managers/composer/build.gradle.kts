@@ -29,7 +29,6 @@ dependencies {
         because("This is a CommandLineTool.")
     }
 
-    api(libs.log4jApiKotlin)
     api(libs.semver4j) {
         because("This is a CommandLineTool.")
     }
@@ -40,6 +39,7 @@ dependencies {
 
     implementation(libs.jacksonDatabind)
     implementation(libs.log4jApi)
+    implementation(libs.log4jApiKotlin)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
