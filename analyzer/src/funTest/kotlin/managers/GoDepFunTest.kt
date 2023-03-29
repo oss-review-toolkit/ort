@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -48,8 +47,6 @@ class GoDepFunTest : WordSpec() {
     private val vcsRevision = vcsDir.getRevision()
 
     private val normalizedVcsUrl = normalizeVcsUrl(vcsUrl)
-    private val gitHubProject = normalizedVcsUrl.replaceCredentialsInUri()
-        .substringAfter("://").substringBefore(".git")
 
     init {
         "GoDep" should {
@@ -63,8 +60,7 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/godep-expected-output.yml"),
                     urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
-                    path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
+                    path = vcsPath
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -106,8 +102,7 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/glide-expected-output.yml"),
                     urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
-                    path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
+                    path = vcsPath
                 )
 
                 result.toYaml() shouldBe expectedResult
@@ -123,8 +118,7 @@ class GoDepFunTest : WordSpec() {
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
                     urlProcessed = normalizedVcsUrl,
                     revision = vcsRevision,
-                    path = vcsPath,
-                    custom = mapOf("<REPLACE_GITHUB_PROJECT>" to gitHubProject)
+                    path = vcsPath
                 )
 
                 result.toYaml() shouldBe expectedResult

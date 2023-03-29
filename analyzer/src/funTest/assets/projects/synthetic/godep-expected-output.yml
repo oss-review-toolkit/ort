@@ -1,6 +1,6 @@
 ---
 project:
-  id: "GoDep::<REPLACE_GITHUB_PROJECT>/analyzer/src/funtest/assets/projects/synthetic/godep/lockfile:<REPLACE_REVISION>"
+  id: "GoDep::github.com/oss-review-toolkit/ort/analyzer/src/funtest/assets/projects/synthetic/godep/lockfile:<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/godep/lockfile/Gopkg.toml"
   declared_licenses: []
   declared_licenses_processed: {}
