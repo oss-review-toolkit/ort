@@ -34,7 +34,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
@@ -44,23 +43,17 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.redirectStdout
-import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
  * A test for the main entry point of the application.
  */
 class OrtMainFunTest : StringSpec() {
-    private val projectDir = File("../plugins/package-managers/gradle/src/funTest/assets/projects/synthetic")
-    private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    private val vcsUrl = vcsDir.getRemoteUrl()
-    private val vcsRevision = vcsDir.getRevision()
-
     private lateinit var configFile: File
     private lateinit var outputDir: File
 
@@ -200,19 +193,18 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Analyzer creates correct output" {
-            val expectedResult = patchExpectedResult(
-                getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml"),
-                url = vcsUrl,
-                revision = vcsRevision,
-                urlProcessed = normalizeVcsUrl(vcsUrl)
+            val definitionFile = File(
+                "../plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/build.gradle"
             )
+            val expectedResultFile = getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml")
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
 
             @Suppress("IgnoredReturnValue")
             runMain(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle",
                 "analyze",
-                "-i", projectDir.resolve("gradle").absolutePath,
+                "-i", definitionFile.parentFile.absolutePath,
                 "-o", outputDir.path
             )
 
