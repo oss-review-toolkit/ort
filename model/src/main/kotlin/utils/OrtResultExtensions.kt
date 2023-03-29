@@ -31,11 +31,11 @@ import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
  * [OrtResult.resolvedConfiguration], overwriting any previously contained package configurations.
  */
 fun OrtResult.addPackageConfigurations(packageConfigurationProvider: PackageConfigurationProvider): OrtResult {
-    val packageConfigurations = getUncuratedPackages().flatMap { pkg ->
-        getScanResultsForId(pkg.id).flatMap { scanResult ->
-            packageConfigurationProvider.getPackageConfigurations(pkg.id, scanResult.provenance)
-        }
-    }.distinct()
+    val packageConfigurations = ConfigurationResolver.resolvePackageConfigurations(
+        identifiers = getUncuratedPackages().mapTo(mutableSetOf()) { it.id },
+        scanResultProvider = { id -> getScanResultsForId(id) },
+        packageConfigurationProvider = packageConfigurationProvider
+    )
 
     return copy(resolvedConfiguration = resolvedConfiguration.copy(packageConfigurations = packageConfigurations))
 }
