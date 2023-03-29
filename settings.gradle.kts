@@ -49,6 +49,7 @@ include(":plugins:package-managers:bower")
 include(":plugins:package-managers:bundler")
 include(":plugins:package-managers:cargo")
 include(":plugins:package-managers:carthage")
+include(":plugins:package-managers:cocoapods")
 include(":plugins:package-managers:composer")
 include(":plugins:package-managers:gradle")
 include(":plugins:package-managers:gradle-model")
@@ -82,6 +83,7 @@ project(":plugins:package-managers:bower").name = "bower-package-manager"
 project(":plugins:package-managers:bundler").name = "bundler-package-manager"
 project(":plugins:package-managers:cargo").name = "cargo-package-manager"
 project(":plugins:package-managers:carthage").name = "carthage-package-manager"
+project(":plugins:package-managers:cocoapods").name = "cocoapods-package-manager"
 project(":plugins:package-managers:composer").name = "composer-package-manager"
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
 project(":plugins:package-managers:pub").name = "pub-package-manager"

@@ -124,7 +124,7 @@ kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serializati
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-# @keep this library which is only being used via force().
+# @keep this library which is being used via force().
 log4jApi = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
 log4jApiKotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
 log4jApiToSlf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4jApi" }

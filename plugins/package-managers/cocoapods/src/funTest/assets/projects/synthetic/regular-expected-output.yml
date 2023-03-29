@@ -1,7 +1,7 @@
 ---
 project:
-  id: "CocoaPods::src/funTest/assets/projects/synthetic/cocoapods/regular/Podfile:"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/cocoapods/regular/Podfile"
+  id: "CocoaPods::src/funTest/assets/projects/synthetic/regular/Podfile:"
+  definition_file_path: "plugins/package-managers/cocoapods/src/funTest/assets/projects/synthetic/regular/Podfile"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
