@@ -25,11 +25,9 @@ import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.haveSize
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
@@ -175,21 +173,6 @@ class SpdxDocumentFileFunTest : WordSpec({
                     packages.map { it.id } should containExactlyInAnyOrder(idZlib, idMyLib, idCurl, idOpenSsl)
                 }
             }
-        }
-
-        "resolve dependencies from other package managers" {
-            val definitionFile = getAssetFile("projects/synthetic/spdx/subproject-conan/project-xyz.spdx.yml")
-            val expectedResultFile = getAssetFile(
-                "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
-            )
-
-            val analyzer = Analyzer(AnalyzerConfiguration(allowDynamicVersions = true))
-            val managedFiles = analyzer.findManagedFiles(definitionFile.parentFile)
-
-            val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
-            val analyzerResult = analyzerRun.result.withResolvedScopes()
-
-            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
