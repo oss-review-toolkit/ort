@@ -74,17 +74,14 @@ private fun resolveDependencies(
     definitionFile: File,
     analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
     repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
-): String {
-    val result = createYarn2(analyzerConfig, repositoryConfig)
+): String =
+    createYarn2(analyzerConfig, repositoryConfig)
         .resolveSingleProject(definitionFile, resolveScopes = true)
-    return result.toYaml()
-}
+        .toYaml()
 
-private fun resolveMultipleDependencies(definitionFile: File): String {
-     val result = createYarn2().collateMultipleProjects(definitionFile)
+private fun resolveMultipleDependencies(definitionFile: File): String =
     // Remove the dependency graph and add scope information.
-    return result.withResolvedScopes().toYaml()
-}
+    createYarn2().collateMultipleProjects(definitionFile).withResolvedScopes().toYaml()
 
 private fun createYarn2(
     analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
