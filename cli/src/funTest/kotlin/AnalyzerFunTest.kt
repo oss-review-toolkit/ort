@@ -75,11 +75,7 @@ class AnalyzerFunTest : WordSpec({
 
             GitRepo().download(pkg, outputDir)
 
-            val expectedResult = patchExpectedResult(
-                getAssetFile("git-repo-expected-output.yml"),
-                revision = revision,
-                path = outputDir.invariantSeparatorsPath
-            )
+            val expectedResult = patchExpectedResult(getAssetFile("git-repo-expected-output.yml"))
 
             val ortResult = Analyzer(AnalyzerConfiguration()).run {
                 analyze(findManagedFiles(outputDir))
