@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -35,8 +36,8 @@ import org.ossreviewtoolkit.utils.test.toYaml
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {
         "determine dependencies from a Podfile without a dependency tree" {
-            val definitionFile = getAssetFile("projects/synthetic/cocoapods/regular/Podfile")
-            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-regular-expected-output.yml")
+            val definitionFile = getAssetFile("projects/synthetic/regular/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/regular-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
@@ -44,8 +45,8 @@ class CocoaPodsFunTest : WordSpec({
         }
 
         "determine dependencies from a Podfile with a dependency tree" {
-            val definitionFile = getAssetFile("projects/synthetic/cocoapods/dep-tree/Podfile")
-            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-dep-tree-expected-output.yml")
+            val definitionFile = getAssetFile("projects/synthetic/dep-tree/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/dep-tree-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
@@ -53,8 +54,8 @@ class CocoaPodsFunTest : WordSpec({
         }
 
         "return no dependencies along with an issue if the lockfile is absent" {
-            val definitionFile = getAssetFile("projects/synthetic/cocoapods/no-lockfile/Podfile")
-            val expectedResultFile = getAssetFile("projects/synthetic/cocoapods-no-lockfile-expected-output.yml")
+            val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
