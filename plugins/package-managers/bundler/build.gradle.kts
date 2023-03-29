@@ -24,11 +24,21 @@ plugins {
 
 dependencies {
     api(project(":analyzer"))
+    api(project(":model"))
+
+    api(libs.log4jApiKotlin)
 
     implementation(project(":downloader"))
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:ort-utils"))
+    implementation(project(":utils:spdx-utils"))
 
+    implementation(libs.jacksonCore)
+    implementation(libs.jacksonDatabind)
+    implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.jruby)
+    implementation(libs.log4jApi)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
