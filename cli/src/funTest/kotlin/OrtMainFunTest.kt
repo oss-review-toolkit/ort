@@ -184,7 +184,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Output formats are deduplicated" {
-            val inputDir = projectDir.resolve("gradle")
+            val inputDir = createTestTempDir()
 
             val stdout = runMain(
                 "-c", configFile.path,
