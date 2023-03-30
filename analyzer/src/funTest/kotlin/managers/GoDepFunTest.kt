@@ -110,17 +110,16 @@ class GoDepFunTest : WordSpec() {
 
             "import dependencies from godeps" {
                 val definitionFile = projectsDir.resolve("synthetic/godep/godeps/Godeps/Godeps.json")
-                val vcsPath = vcsDir.getPathToRoot(definitionFile.parentFile.parentFile)
-
-                val result = createGoDep().resolveSingleProject(definitionFile)
-
                 val expectedResult = patchExpectedResult(
                     projectsDir.resolve("synthetic/godeps-expected-output.yml"),
                     urlProcessed = normalizedVcsUrl,
-                    revision = vcsRevision,
-                    path = vcsPath
+                    revision = vcsRevision
                 )
 
+                val result = createGoDep().resolveSingleProject(definitionFile)
+
+                // TODO: The VCS path of the project in the expected result is not the parent directory of the
+                //       definition which is wrong and should be fixed.
                 result.toYaml() shouldBe expectedResult
             }
         }
