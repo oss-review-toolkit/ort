@@ -54,7 +54,6 @@ dependencies {
     funTestImplementation(testFixtures(project(":analyzer")))
 
     testImplementation(libs.mockk)
-    testImplementation(libs.wiremock)
 
     testFixturesImplementation(project(":utils:test-utils"))
 

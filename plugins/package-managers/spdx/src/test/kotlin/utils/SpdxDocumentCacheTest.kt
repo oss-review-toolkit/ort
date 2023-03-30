@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
@@ -50,4 +50,4 @@ class SpdxDocumentCacheTest : WordSpec({
 
 /** A test document that is loaded by the test cases. */
 private val TEST_DOCUMENT =
-    File("src/funTest/assets/projects/synthetic/spdx/package-references/project-xyz.spdx.yml").absoluteFile
+    File("src/funTest/assets/projects/synthetic/package-references/project-xyz.spdx.yml").absoluteFile

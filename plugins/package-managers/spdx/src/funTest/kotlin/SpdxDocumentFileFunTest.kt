@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
@@ -28,6 +28,7 @@ import io.kotest.matchers.maps.haveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Project
@@ -47,7 +48,7 @@ import org.ossreviewtoolkit.utils.test.toYaml
 class SpdxDocumentFileFunTest : WordSpec({
     "resolveDependencies()" should {
         "succeed if a project with inline packages is provided" {
-            val definitionFile = getAssetFile("projects/synthetic/spdx/inline-packages/project-xyz.spdx.yml")
+            val definitionFile = getAssetFile("projects/synthetic/inline-packages/project-xyz.spdx.yml")
             val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
@@ -56,7 +57,7 @@ class SpdxDocumentFileFunTest : WordSpec({
         }
 
         "succeed if a project with package references is provided" {
-            val definitionFile = getAssetFile("projects/synthetic/spdx/package-references/project-xyz.spdx.yml")
+            val definitionFile = getAssetFile("projects/synthetic/package-references/project-xyz.spdx.yml")
             val expectedResultFile = getAssetFile("projects/synthetic/spdx-project-xyz-expected-output.yml")
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
@@ -226,7 +227,7 @@ class SpdxDocumentFileFunTest : WordSpec({
     }
 })
 
-private val projectDir = getAssetFile("projects/synthetic/spdx")
+private val projectDir = getAssetFile("projects/synthetic")
 private val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
 private val vcsUrl = vcsDir.getRemoteUrl()
 private val vcsRevision = vcsDir.getRevision()
