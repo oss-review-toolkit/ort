@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
@@ -47,9 +46,7 @@ class PnpmFunTest : WordSpec({
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
             val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
 
-            val ortResult = Analyzer(AnalyzerConfiguration()).run {
-                analyze(findManagedFiles(definitionFile.parentFile, setOf(Pnpm.Factory())))
-            }.withResolvedScopes()
+            val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 
             patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
         }

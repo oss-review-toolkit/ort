@@ -21,13 +21,13 @@ package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.concurrent.shouldCompleteWithin
-import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 
 import java.util.concurrent.TimeUnit
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.managers.analyze
 import org.ossreviewtoolkit.downloader.vcs.GitRepo
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
@@ -55,9 +55,7 @@ class AnalyzerFunTest : WordSpec({
             )
             val outputDir = createTestTempDir().also { GitRepo().download(pkg, it) }
 
-            val result = Analyzer(AnalyzerConfiguration()).run {
-                analyze(findManagedFiles(outputDir))
-            }.withResolvedScopes().toYaml()
+            val result = analyze(outputDir).toYaml()
 
             patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
         }
@@ -68,13 +66,9 @@ class AnalyzerFunTest : WordSpec({
                 "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
             )
 
-            val analyzer = Analyzer(AnalyzerConfiguration(allowDynamicVersions = true))
-            val managedFiles = analyzer.findManagedFiles(definitionFile.parentFile)
+            val result = analyze(definitionFile.parentFile, allowDynamicVersions = true).analyzer!!.result
 
-            val analyzerRun = analyzer.analyze(managedFiles).analyzer.shouldNotBeNull()
-            val analyzerResult = analyzerRun.result.withResolvedScopes()
-
-            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
