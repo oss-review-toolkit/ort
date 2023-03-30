@@ -31,7 +31,6 @@ import java.time.Instant
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.mapper
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val USER_DIR = File(System.getProperty("user.dir"))
@@ -119,12 +118,6 @@ fun patchActualResult(
         .replace(TIMESTAMP_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
         .replaceIf(patchStartAndEndTime, START_AND_END_TIME_REGEX) { "${it.groupValues[1]}: \"${Instant.EPOCH}\"" }
 }
-
-fun patchActualResult(
-    result: OrtResult,
-    patchStartAndEndTime: Boolean = false
-): String =
-    patchActualResult(yamlMapper.writeValueAsString(result), patchStartAndEndTime = patchStartAndEndTime)
 
 fun readOrtResult(file: String) = readOrtResult(File(file))
 

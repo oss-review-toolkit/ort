@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
+import org.ossreviewtoolkit.utils.test.toYaml
 
 /**
  * A test for the main entry point of the application.
@@ -210,7 +211,7 @@ class OrtMainFunTest : StringSpec() {
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
 
-            patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
         }
 
         "Passing mutually exclusive evaluator options fails" {
