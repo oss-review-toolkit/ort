@@ -31,7 +31,6 @@ import com.github.ajalt.clikt.output.HelpFormatter
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
@@ -98,15 +97,6 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
                 "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
-    private val forceOverwrite by option(
-        "--force-overwrite",
-        help = "Overwrite any output files if they already exist."
-    ).flag().deprecated(
-        message = "--force-overwrite is deprecated, use -P ort.forceOverwrite=... on the ort " +
-                "command instead.",
-        tagValue = "use -P ort.forceOverwrite=... on the ort command instead"
-    )
-
     private val helpAll by option(
         "--help-all",
         help = "Display help for all subcommands."
@@ -168,13 +158,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         printStackTrace = stacktrace
 
         // Make options available to subcommands and apply static configuration.
-        val ortConfig = OrtConfiguration.load(
-            args = buildMap {
-                if (forceOverwrite) put("ort.forceOverwrite", "true")
-                putAll(configArguments)
-            },
-            file = configFile
-        )
+        val ortConfig = OrtConfiguration.load(args = configArguments, file = configFile)
         currentContext.findOrSetObject { ortConfig }
         LicenseFilePatterns.configure(ortConfig.licenseFilePatterns)
 
