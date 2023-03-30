@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
@@ -233,12 +232,7 @@ class EvaluatorCommand : OrtCommand(
                 absoluteOutputDir.resolve("evaluation-result.${format.fileExtension}")
             }
 
-            if (!ortConfig.forceOverwrite) {
-                val existingOutputFiles = outputFiles.filter { it.exists() }
-                if (existingOutputFiles.isNotEmpty()) {
-                    throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
-                }
-            }
+            validateOutputFiles(outputFiles)
         }
 
         if (checkSyntax) {

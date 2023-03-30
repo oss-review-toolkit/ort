@@ -21,7 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -111,12 +110,7 @@ class AdvisorCommand : OrtCommand(
             outputDir.resolve("advisor-result.${format.fileExtension}")
         }
 
-        if (!ortConfig.forceOverwrite) {
-            val existingOutputFiles = outputFiles.filter { it.exists() }
-            if (existingOutputFiles.isNotEmpty()) {
-                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
-            }
-        }
+        validateOutputFiles(outputFiles)
 
         val distinctProviders = providerFactories.distinct()
         println("The following advisors are activated:")
