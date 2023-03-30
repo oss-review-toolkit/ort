@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
@@ -29,11 +29,11 @@ import io.mockk.mockk
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.managers.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils.SpdxResolvedDocument
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
@@ -74,7 +74,7 @@ private val pkgForVcs = SpdxPackage(
 )
 
 private fun createSpdxDocument(filename: String): SpdxDocument {
-    val projectDir = File("src/funTest/assets/projects/synthetic/spdx").absoluteFile
+    val projectDir = File("src/funTest/assets/projects/synthetic").absoluteFile
     val definitionFile = projectDir.resolve(filename)
     return SpdxModelMapper.read(definitionFile)
 }

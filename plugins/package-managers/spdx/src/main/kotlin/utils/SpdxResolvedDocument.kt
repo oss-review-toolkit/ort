@@ -19,18 +19,18 @@
 
 @file:Suppress("TooManyFunctions")
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.spdx.utils
 
 import java.io.File
 import java.net.URI
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.analyzer.managers.SpdxDocumentFile
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.plugins.packagemanagers.spdx.SpdxDocumentFile
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
