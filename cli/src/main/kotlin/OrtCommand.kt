@@ -48,15 +48,15 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
      * Validates that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
      */
     protected fun validateOutputFiles(outputFiles: Collection<File>) {
-        if (!ortConfig.forceOverwrite) {
-            val existingOutputFiles = outputFiles.filter { it.exists() }
-            if (existingOutputFiles.isNotEmpty()) {
-                throw UsageError(
-                    text = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
-                            "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
-                    statusCode = 2
-                )
-            }
+        if (ortConfig.forceOverwrite) return
+
+        val existingOutputFiles = outputFiles.filter { it.exists() }
+        if (existingOutputFiles.isNotEmpty()) {
+            throw UsageError(
+                text = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
+                        "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
+                statusCode = 2
+            )
         }
     }
 }
