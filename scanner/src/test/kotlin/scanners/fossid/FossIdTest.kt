@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
@@ -69,6 +70,8 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredF
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.License
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.LicenseFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
+import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
@@ -78,23 +81,29 @@ import org.ossreviewtoolkit.clients.fossid.model.status.UnversionedScanDescripti
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.utils.Snippet as OrtSnippet
+import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 @Suppress("LargeClass")
 class FossIdTest : WordSpec({
@@ -314,6 +323,7 @@ class FossIdTest : WordSpec({
             summary.licenseFindings shouldContainExactlyInAnyOrder expectedLicenseFindings
         }
 
+        // TODO: Deprecation: Remove the pending files in issues. This is a breaking change.
         "report pending files as issues" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
@@ -328,17 +338,55 @@ class FossIdTest : WordSpec({
                 .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
                 .expectCreateScan(projectCode, scanCode, vcsInfo, "")
                 .expectDownload(scanCode)
-                .mockFiles(scanCode, pendingRange = 4..5)
+                .mockFiles(scanCode, pendingRange = 4..5, snippetRange = 1..5)
 
             val fossId = createFossId(config)
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
-            val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
+            val pendingFilesIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
                 Issue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
             }
+            val urlMappingIssues = (1..5).map {
+                Issue(
+                    Instant.EPOCH,
+                    "FossId",
+                    "Cannot determine PURL type for url 'url$it' and provider 'null'.",
+                    Severity.ERROR
+                )
+            }
+            // Add the mapping issues from the snippet fake URLs: 5 issues for each pending file.
+            val expectedIssues = pendingFilesIssues + urlMappingIssues + urlMappingIssues
 
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues
+        }
+
+        "report pending files as snippets" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(scanCode, pendingRange = 1..5, snippetRange = 1..5)
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
+
+            val expectedPendingFile = (1..5).map(::createPendingFile).toSet()
+            val expectedSnippetFindings = (1..5).map(::createSnippetFindings).flatten()
+
+            summary.snippetFindings shouldHaveSize expectedPendingFile.size * 5
+            summary.snippetFindings.map { it.sourceLocation.path }.toSet() shouldBe expectedPendingFile
+            summary.snippetFindings shouldBe expectedSnippetFindings
         }
 
         "create a new project if none exists yet" {
@@ -1239,6 +1287,52 @@ private fun createIgnoredFile(index: Int): IgnoredFile =
 private fun createPendingFile(index: Int): String = "/pending/file/$index"
 
 /**
+ * Generate a FossID snippet based on the given [index].
+ */
+private fun createSnippet(index: Int): Snippet = Snippet(
+    index,
+    "created$index",
+    index,
+    index,
+    index,
+    MatchType.PARTIAL,
+    "reason$index",
+    "author$index",
+    "artifact$index",
+    "version$index",
+    "MIT",
+    "releaseDate$index",
+    "mirror$index",
+    "file$index",
+    "fileLicense$index",
+    "url$index",
+    "hits$index",
+    index,
+    "updated$index",
+    "cpe$index",
+    "$index",
+    "matchField$index",
+    "classification$index",
+    "highlighting$index"
+)
+
+/**
+ * Generate a ORT snippet finding based on the given [index].
+ */
+private fun createSnippetFindings(index: Int): Set<SnippetFinding> = (1..5).map { snippetIndex ->
+    SnippetFinding(
+        TextLocation("/pending/file/$index", TextLocation.UNKNOWN_LINE),
+        OrtSnippet(
+            snippetIndex.toFloat(),
+            TextLocation("file$snippetIndex", TextLocation.UNKNOWN_LINE),
+            ArtifactProvenance(RemoteArtifact("url$snippetIndex", Hash.NONE)),
+            "pkg:generic/author$snippetIndex/artifact$snippetIndex@version$snippetIndex",
+            SpdxExpression.Companion.parse("MIT")
+        )
+    )
+}.toSet()
+
+/**
  * Prepare this service mock to answer a request for a project with the given [projectCode]. Return a response with
  * the given [status] and [error].
  */
@@ -1348,12 +1442,14 @@ private fun FossIdServiceWithVersion.mockFiles(
     identifiedRange: IntRange = IntRange.EMPTY,
     markedRange: IntRange = IntRange.EMPTY,
     ignoredRange: IntRange = IntRange.EMPTY,
-    pendingRange: IntRange = IntRange.EMPTY
+    pendingRange: IntRange = IntRange.EMPTY,
+    snippetRange: IntRange = IntRange.EMPTY
 ): FossIdServiceWithVersion {
     val identifiedFiles = identifiedRange.map(::createIdentifiedFile)
     val markedFiles = markedRange.map(::createMarkedIdentifiedFile)
     val ignoredFiles = ignoredRange.map(::createIgnoredFile)
     val pendingFiles = pendingRange.map(::createPendingFile)
+    val snippets = snippetRange.map(::createSnippet)
 
     coEvery { listIdentifiedFiles(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(
@@ -1367,6 +1463,8 @@ private fun FossIdServiceWithVersion.mockFiles(
             PolymorphicResponseBody(status = 1, data = PolymorphicList(ignoredFiles))
     coEvery { listPendingFiles(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(status = 1, data = PolymorphicList(pendingFiles))
+    coEvery { listSnippets(USER, API_KEY, scanCode, any()) } returns
+            PolymorphicResponseBody(status = 1, data = PolymorphicList(snippets))
 
     return this
 }
