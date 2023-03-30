@@ -27,6 +27,7 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.Plugin
+import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 
 /**
  * An interface for [CliktCommand]-based ORT commands that come as named plugins.
@@ -50,7 +51,11 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
         if (!ortConfig.forceOverwrite) {
             val existingOutputFiles = outputFiles.filter { it.exists() }
             if (existingOutputFiles.isNotEmpty()) {
-                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+                throw UsageError(
+                    text = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
+                            "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
+                    statusCode = 2
+                )
             }
         }
     }
