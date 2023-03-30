@@ -46,6 +46,12 @@ interface Plugin {
      * The type of the plugin.
      */
     val type: String
+
+    /**
+     * A flag to indicate whether the plugin should be enabled by default or not.
+     */
+    val isEnabledByDefault: Boolean
+        get() = true
 }
 
 /**
