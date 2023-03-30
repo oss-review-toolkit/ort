@@ -52,7 +52,8 @@ interface PackageManagerFactory : Plugin {
  * A generic factory class for a [PackageManager].
  */
 abstract class AbstractPackageManagerFactory<out T : PackageManager>(
-    override val type: String
+    override val type: String,
+    override val isEnabledByDefault: Boolean = true
 ) : PackageManagerFactory {
     /**
      * The prioritized list of glob patterns of definition files supported by this package manager. Only all matches of
