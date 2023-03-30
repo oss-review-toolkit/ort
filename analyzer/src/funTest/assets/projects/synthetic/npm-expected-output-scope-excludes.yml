@@ -1153,7 +1153,7 @@ packages:
 issues:
 - timestamp: "1970-01-01T00:00:00Z"
   source: "NPM"
-  message: "The <REPLACE_LOCKFILE_NAME> file was created with an old version of npm, so\
+  message: "The npm-shrinkwrap.json file was created with an old version of npm, so\
     \ supplemental metadata must be fetched from the registry. This is a one-time\
     \ fix-up, please be patient..."
   severity: "WARNING"

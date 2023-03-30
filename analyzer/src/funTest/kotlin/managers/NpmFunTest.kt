@@ -71,11 +71,7 @@ class NpmFunTest : WordSpec({
                 resolveScopes = true
             )
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
-                expectedResultFile,
-                definitionFile,
-                custom = mapOf("<REPLACE_LOCKFILE_NAME>" to "npm-shrinkwrap.json")
-            )
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
 
         "resolve package-lock dependencies correctly" {
