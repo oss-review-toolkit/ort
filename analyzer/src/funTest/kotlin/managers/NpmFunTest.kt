@@ -26,6 +26,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
+import java.io.File
+
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -47,7 +49,7 @@ class NpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
-            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
                 expectedResultFile,
@@ -63,13 +65,11 @@ class NpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/npm/shrinkwrap/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-scope-excludes.yml")
 
-            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-            val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
-            val excludes = Excludes(scopes = listOf(scopeExclude))
-            val repoConfig = RepositoryConfiguration(excludes = excludes)
-
-            val result = createNpm(analyzerConfig = analyzerConfig, repoConfig = repoConfig)
-                .resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = resolveSingleProject(
+                definitionFile,
+                excludedScopes = setOf("devDependencies"),
+                resolveScopes = true
+            )
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
                 expectedResultFile,
@@ -82,7 +82,7 @@ class NpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/npm/package-lock/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
-            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
                 expectedResultFile,
@@ -98,7 +98,7 @@ class NpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/npm/no-lockfile/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output-no-lockfile.yml")
 
-            val result = createNpm().resolveSingleProject(definitionFile)
+            val result = resolveSingleProject(definitionFile)
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
@@ -107,8 +107,7 @@ class NpmFunTest : WordSpec({
             val workingDir = createTestTempDir()
             val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
-            val analyzerConfig = AnalyzerConfiguration(allowDynamicVersions = true)
-            val result = createNpm(analyzerConfig = analyzerConfig).resolveSingleProject(definitionFile)
+            val result = resolveSingleProject(definitionFile, allowDynamicVersions = true)
 
             result.issues shouldHaveSize 1
             with(result.issues.first()) {
@@ -122,7 +121,7 @@ class NpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/npm/node-modules/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-expected-output.yml")
 
-            val result = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
                 expectedResultFile,
@@ -141,15 +140,30 @@ class NpmFunTest : WordSpec({
                 yamlMapper.readValue<ProjectAnalyzerResult>(it)
             }
 
-            val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val actualResult = resolveSingleProject(definitionFile, resolveScopes = true)
 
             actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
 })
 
-private fun createNpm(
-    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-    repoConfig: RepositoryConfiguration = RepositoryConfiguration()
-) =
-    Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
+private fun resolveSingleProject(
+    definitionFile: File,
+    excludedScopes: Collection<String> = emptySet(),
+    allowDynamicVersions: Boolean = false,
+    resolveScopes: Boolean = false
+): ProjectAnalyzerResult {
+    val analyzerConfig = AnalyzerConfiguration(
+        allowDynamicVersions = allowDynamicVersions,
+        skipExcluded = excludedScopes.isNotEmpty()
+    )
+    val repoConfig = RepositoryConfiguration(
+        excludes = Excludes(
+            scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) }
+        )
+    )
+
+    val npm = Npm("NPM", USER_DIR, analyzerConfig, repoConfig)
+
+    return npm.resolveSingleProject(definitionFile, resolveScopes)
+}
