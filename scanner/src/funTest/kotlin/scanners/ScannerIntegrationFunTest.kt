@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.Scanner
@@ -46,6 +45,7 @@ import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class ScannerIntegrationFunTest : StringSpec() {
     private val assetsDir = File("src/funTest/assets")
@@ -80,10 +80,9 @@ class ScannerIntegrationFunTest : StringSpec() {
                 )
             )
 
-            val ortResult = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
-            val result = yamlMapper.writeValueAsString(ortResult)
+            val result = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
 
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 
