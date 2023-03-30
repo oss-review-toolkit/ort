@@ -53,7 +53,7 @@ data class PackageCuration(
     @JsonProperty("curations")
     val data: PackageCurationData
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * Return true if this [PackageCuration] is applicable to the package with the given [identifier][pkgId],

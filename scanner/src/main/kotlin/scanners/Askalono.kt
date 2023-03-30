@@ -44,7 +44,7 @@ class Askalono internal constructor(
     private val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : CommandLinePathScannerWrapper(name) {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<Askalono>("Askalono") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =

@@ -55,7 +55,7 @@ open class GitWorkingTree(
     vcsType: VcsType,
     private val repositoryUrlPrefixReplacements: Map<String, String> = emptyMap()
 ) : WorkingTree(workingDir, vcsType) {
-    companion object : Logging
+    private companion object : Logging
 
     fun <T> useRepo(block: Repository.() -> T): T = findGitOrSubmoduleDir(workingDir).use(block)
 

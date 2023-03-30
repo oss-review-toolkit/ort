@@ -44,7 +44,7 @@ abstract class Rule(
      */
     val name: String
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     private val ruleMatcherManager = RuleMatcherManager()
 

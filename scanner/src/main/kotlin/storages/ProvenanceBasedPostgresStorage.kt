@@ -61,7 +61,7 @@ class ProvenanceBasedPostgresStorage(
      */
     private val tableName: String = "provenance_scan_results"
 ) : ProvenanceBasedScanStorage {
-    companion object : Logging
+    private companion object : Logging
 
     private val table = ProvenanceScanResults(tableName)
 

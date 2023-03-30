@@ -46,7 +46,7 @@ class Unmanaged(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Unmanaged>("Unmanaged") {
         // The empty list returned here deliberately causes this special package manager to never be considered in

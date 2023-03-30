@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.utils.convertToDependencyGraph
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 class AnalyzerResultBuilder {
-    companion object : Logging
+    private companion object : Logging
 
     private val projects = mutableSetOf<Project>()
     private val packages = mutableSetOf<Package>()

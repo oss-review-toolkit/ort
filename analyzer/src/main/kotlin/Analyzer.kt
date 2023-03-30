@@ -58,7 +58,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
  * The class to run the analysis. The signatures of public functions in this class define the library API.
  */
 class Analyzer(private val config: AnalyzerConfiguration, private val labels: Map<String, String> = emptyMap()) {
-    companion object : Logging
+    internal companion object : Logging
 
     data class ManagedFileInfo(
         val absoluteProjectPath: File,

@@ -47,7 +47,7 @@ data class FileArchiverConfiguration(
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     init {
         if (fileStorage != null && postgresStorage != null) {

@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.nextOrNull
  * A simple non-caching authenticator that reads credentials from .netrc-style files.
  */
 class NetRcAuthenticator : Authenticator() {
-    companion object : Logging
+    internal companion object : Logging
 
     // TODO: Add support for ".authinfo" files (which use the same syntax as .netrc files) once Git.kt does not call the
     //       Git CLI anymore which only supports ".netrc" (and "_netrc") files.

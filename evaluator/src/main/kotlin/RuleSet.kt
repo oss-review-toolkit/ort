@@ -40,7 +40,7 @@ class RuleSet(
     val resolutionProvider: ResolutionProvider,
     val projectSourceResolver: SourceTreeResolver
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * The set of all issues created by the rules of this [RuleSet].

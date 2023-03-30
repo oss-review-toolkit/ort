@@ -56,7 +56,7 @@ class Maven(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Maven>("Maven") {
         override val globsForDefinitionFiles = listOf("pom.xml")

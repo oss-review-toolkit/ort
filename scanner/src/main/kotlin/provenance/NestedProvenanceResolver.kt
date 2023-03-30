@@ -48,7 +48,7 @@ class DefaultNestedProvenanceResolver(
     private val storage: NestedProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : NestedProvenanceResolver {
-    companion object : Logging
+    private companion object : Logging
 
     override fun resolveNestedProvenance(provenance: KnownProvenance): NestedProvenance {
         return when (provenance) {

@@ -47,7 +47,7 @@ object MercurialCommand : CommandLineTool {
 }
 
 class Mercurial : VersionControlSystem(MercurialCommand) {
-    companion object : Logging
+    private companion object : Logging
 
     override val type = VcsType.MERCURIAL
     override val priority = 20

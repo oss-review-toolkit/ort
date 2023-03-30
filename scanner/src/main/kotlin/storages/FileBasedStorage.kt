@@ -47,7 +47,7 @@ class FileBasedStorage(
      */
     val backend: FileStorage
 ) : ScanResultsStorage() {
-    companion object : Logging
+    private companion object : Logging
 
     override val name = "${javaClass.simpleName} with ${backend.javaClass.simpleName} backend"
 

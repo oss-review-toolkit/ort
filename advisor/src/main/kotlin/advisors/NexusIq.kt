@@ -61,7 +61,7 @@ private val READ_TIMEOUT = Duration.ofSeconds(60)
  * A wrapper for [Nexus IQ Server](https://help.sonatype.com/iqserver) security vulnerability data.
  */
 class NexusIq(name: String, private val config: NexusIqConfiguration) : AdviceProvider(name) {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<NexusIq>("NexusIQ") {
         override fun create(config: AdvisorConfiguration) = NexusIq(type, config.forProvider { nexusIq })

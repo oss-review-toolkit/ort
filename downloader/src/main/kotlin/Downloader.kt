@@ -51,7 +51,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
  * The class to download source code. The signatures of public functions in this class define the library API.
  */
 class Downloader(private val config: DownloaderConfiguration) {
-    companion object : Logging
+    private companion object : Logging
 
     private fun verifyOutputDirectory(outputDirectory: File) {
         require(!outputDirectory.exists() || outputDirectory.list().isEmpty()) {

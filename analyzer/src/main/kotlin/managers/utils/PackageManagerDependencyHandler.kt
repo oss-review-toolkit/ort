@@ -119,7 +119,7 @@ private data class PackageManagerDependency(
     val scope: String,
     val linkage: PackageLinkage
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     fun findProjects(analyzerResult: AnalyzerResult): List<Project> =
         analyzerResult.projects.filter { it.definitionFilePath == definitionFile }.also { projects ->

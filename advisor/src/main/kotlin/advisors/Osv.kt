@@ -53,7 +53,7 @@ import us.springett.cvss.Cvss
  * An advice provider that obtains vulnerability information from Open Source Vulnerabilities (https://osv.dev/).
  */
 class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
-    companion object : Logging
+    internal companion object : Logging
 
     class Factory : AbstractAdviceProviderFactory<Osv>("OSV") {
         override fun create(config: AdvisorConfiguration) =

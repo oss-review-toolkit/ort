@@ -37,7 +37,7 @@ import org.apache.logging.log4j.kotlin.Logging
  * A class providing the framework to run Kotlin scripts.
  */
 abstract class ScriptRunner {
-    companion object : Logging
+    private companion object : Logging
 
     /** The scripting host instance. */
     private val scriptingHost = BasicJvmScriptingHost()

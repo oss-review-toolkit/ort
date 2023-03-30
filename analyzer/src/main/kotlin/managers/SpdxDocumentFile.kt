@@ -264,7 +264,7 @@ class SpdxDocumentFile(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(managerName, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging
+    internal companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<SpdxDocumentFile>(MANAGER_NAME) {
         override val globsForDefinitionFiles = listOf("*.spdx.yml", "*.spdx.yaml", "*.spdx.json")

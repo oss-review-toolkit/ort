@@ -105,7 +105,7 @@ class DependencyGraphBuilder<D>(
      */
     private val dependencyHandler: DependencyHandler<D>
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * A list storing the identifiers of all dependencies added to this builder. This list is then used to resolve

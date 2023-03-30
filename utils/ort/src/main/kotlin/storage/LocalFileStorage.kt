@@ -37,7 +37,7 @@ open class LocalFileStorage(
      */
     val directory: File
 ) : FileStorage {
-    companion object : Logging
+    private companion object : Logging
 
     init {
         if (!directory.exists()) {

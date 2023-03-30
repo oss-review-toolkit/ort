@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceBasedScanStorage {
-    companion object : Logging
+    private companion object : Logging
 
     override fun read(provenance: KnownProvenance): List<ScanResult> {
         requireEmptyVcsPath(provenance)

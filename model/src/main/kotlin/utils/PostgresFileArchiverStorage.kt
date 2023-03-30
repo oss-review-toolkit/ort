@@ -54,7 +54,7 @@ class PostgresFileArchiverStorage(
      */
     dataSource: Lazy<DataSource>
 ) : FileArchiverStorage {
-    companion object : Logging
+    private companion object : Logging
 
     /** Stores the database connection used by this object. */
     private val database by lazy {

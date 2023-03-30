@@ -54,7 +54,7 @@ class ScanOss internal constructor(
     private val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : PathScannerWrapper {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractScannerWrapperFactory<ScanOss>("SCANOSS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
