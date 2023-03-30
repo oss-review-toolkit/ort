@@ -20,7 +20,10 @@
 package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
+
+import java.io.File
 
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -39,4 +42,16 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
     override val type = commandName
 
     protected val ortConfig by requireObject<OrtConfiguration>()
+
+    /**
+     * Validates that the provided [outputFiles] can be used. Throws a [UsageError] otherwise.
+     */
+    protected fun validateOutputFiles(outputFiles: Collection<File>) {
+        if (!ortConfig.forceOverwrite) {
+            val existingOutputFiles = outputFiles.filter { it.exists() }
+            if (existingOutputFiles.isNotEmpty()) {
+                throw UsageError("None of the output files $existingOutputFiles must exist yet.", statusCode = 2)
+            }
+        }
+    }
 }
