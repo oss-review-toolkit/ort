@@ -79,7 +79,7 @@ class ClearlyDefinedStorage(
     config: ClearlyDefinedStorageConfiguration,
     client: OkHttpClient? = null
 ) : ScanResultsStorage() {
-    companion object : Logging
+    private companion object : Logging
 
     constructor(serverUrl: String, client: OkHttpClient? = null) : this(
         ClearlyDefinedStorageConfiguration(serverUrl), client

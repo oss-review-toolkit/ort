@@ -208,7 +208,7 @@ class OpossumReporter : Reporter {
         val baseUrlsForSources: SortedMap<String, String> = sortedMapOf(),
         val externalAttributionSources: SortedMap<String, OpossumExternalAttributionSource> = sortedMapOf()
     ) {
-        companion object : Logging
+        private companion object : Logging
 
         fun toJson(): Map<*, *> =
             sortedMapOf(

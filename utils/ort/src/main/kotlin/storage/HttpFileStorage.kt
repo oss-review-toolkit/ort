@@ -67,7 +67,7 @@ class HttpFileStorage(
      */
     private val cacheMaxAgeInSeconds: Int = 0
 ) : FileStorage {
-    companion object : Logging
+    private companion object : Logging
 
     private val httpClient by lazy {
         OkHttpClientHelper.buildClient {

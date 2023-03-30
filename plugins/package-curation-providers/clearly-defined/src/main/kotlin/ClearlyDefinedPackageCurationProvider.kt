@@ -86,7 +86,7 @@ class ClearlyDefinedPackageCurationProvider(
     private val config: ClearlyDefinedPackageCurationProviderConfig,
     client: OkHttpClient? = null
 ) : PackageCurationProvider {
-    companion object : Logging
+    private companion object : Logging
 
     constructor(serverUrl: String, client: OkHttpClient? = null) : this(
         ClearlyDefinedPackageCurationProviderConfig(serverUrl, minTotalLicenseScore = 0), client

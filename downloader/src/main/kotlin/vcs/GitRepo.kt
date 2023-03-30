@@ -67,7 +67,7 @@ private data class Include(
 )
 
 class GitRepo : VersionControlSystem(), CommandLineTool {
-    companion object : Logging
+    private companion object : Logging
 
     override val type = VcsType.GIT_REPO
     override val priority = 50

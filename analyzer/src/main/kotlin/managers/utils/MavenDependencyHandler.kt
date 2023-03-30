@@ -55,7 +55,7 @@ class MavenDependencyHandler(
      */
     private val sbtMode: Boolean
 ) : DependencyHandler<DependencyNode> {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * A set of identifiers that are known to point to local projects. This is updated for packages that are resolved

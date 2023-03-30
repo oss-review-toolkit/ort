@@ -73,7 +73,7 @@ class Scanner(
     val nestedProvenanceResolver: NestedProvenanceResolver,
     val scannerWrappers: Map<PackageType, List<ScannerWrapper>>
 ) {
-    companion object : Logging
+    private companion object : Logging
 
     init {
         require(scannerWrappers.isNotEmpty() && scannerWrappers.any { it.value.isNotEmpty() }) {

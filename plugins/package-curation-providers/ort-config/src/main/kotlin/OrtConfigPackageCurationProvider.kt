@@ -53,7 +53,7 @@ class OrtConfigPackageCurationProviderFactory : PackageCurationProviderFactory<U
  * [ort-config repository](https://github.com/oss-review-toolkit/ort-config).
  */
 open class OrtConfigPackageCurationProvider : PackageCurationProvider {
-    companion object : Logging
+    internal companion object : Logging
 
     private val curationsDir by lazy {
         ortDataDirectory.resolve("ort-config").also {

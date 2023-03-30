@@ -60,7 +60,7 @@ class DefaultPackageProvenanceResolver(
     private val storage: PackageProvenanceStorage,
     private val workingTreeCache: WorkingTreeCache
 ) : PackageProvenanceResolver {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * Resolve the [Provenance] of [pkg] based on the provided [sourceCodeOriginPriority]. For source artifacts it is

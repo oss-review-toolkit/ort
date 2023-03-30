@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  * Implementation note: This implementation is not thread-safe.
  */
 internal class SpdxDocumentCache {
-    companion object : Logging
+    private companion object : Logging
 
     /** A cache for the documents that have already been loaded. */
     private val documentCache = mutableMapOf<File, Result<SpdxDocument>>()

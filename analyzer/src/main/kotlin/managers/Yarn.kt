@@ -56,7 +56,7 @@ class Yarn(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : Npm(name, analysisRoot, analyzerConfig, repoConfig) {
-    companion object : Logging
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Yarn>("Yarn") {
         override val globsForDefinitionFiles = listOf("package.json")

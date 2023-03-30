@@ -45,7 +45,7 @@ private fun toPlexusLoggerLevel(level: Level) =
  * appropriate log levels.
  */
 class MavenLogger(level: Level) : AbstractLogger(toPlexusLoggerLevel(level), "MavenLogger") {
-    companion object : Logging
+    private companion object : Logging
 
     override fun getChildLogger(name: String?) = this
 

@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.PackageReference
  * map whose keys are package identifiers and whose values are the identifiers of packages these packages depend on.
  */
 internal class Graph private constructor(private val nodeMap: MutableMap<Identifier, MutableSet<Identifier>>) {
-    companion object : Logging
+    private companion object : Logging
 
     constructor() : this(mutableMapOf())
 

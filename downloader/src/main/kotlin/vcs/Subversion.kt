@@ -53,7 +53,7 @@ import org.tmatesoft.svn.core.wc.SVNRevision
 import org.tmatesoft.svn.util.Version
 
 class Subversion : VersionControlSystem() {
-    companion object : Logging
+    internal companion object : Logging
 
     private val ortAuthManager = OrtSVNAuthenticationManager()
     private val clientManager = SVNClientManager.newInstance().apply {

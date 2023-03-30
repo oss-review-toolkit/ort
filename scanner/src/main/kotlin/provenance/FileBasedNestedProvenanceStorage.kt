@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : NestedProvenanceStorage {
-    companion object : Logging
+    private companion object : Logging
 
     override fun readNestedProvenance(root: RepositoryProvenance): NestedProvenanceResolutionResult? =
         readResults(root).find { it.nestedProvenance.root == root }

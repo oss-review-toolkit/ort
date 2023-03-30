@@ -40,7 +40,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             .createWithBasicHttpAuthentication(URI(config.host), config.username, config.password)
     )
 
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * Create a [comment] within the issue specified by the [issueKey].

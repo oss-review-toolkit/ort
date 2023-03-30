@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProvenanceStorage {
-    companion object : Logging
+    private companion object : Logging
 
     override fun readProvenance(id: Identifier, sourceArtifact: RemoteArtifact): PackageProvenanceResolutionResult? =
         readResults(id).find { it.sourceArtifact == sourceArtifact }?.result

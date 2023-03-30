@@ -42,7 +42,7 @@ class FileArchiverFileStorage(
      */
     private val storage: FileStorage
 ) : FileArchiverStorage {
-    companion object : Logging
+    private companion object : Logging
 
     override fun hasArchive(provenance: KnownProvenance): Boolean {
         val archivePath = getArchivePath(provenance)

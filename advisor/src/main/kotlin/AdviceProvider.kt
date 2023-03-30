@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * or code analysis results.
  */
 abstract class AdviceProvider(val providerName: String) {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * For a given set of [Package]s, retrieve findings and return a map that associates each package with a list of

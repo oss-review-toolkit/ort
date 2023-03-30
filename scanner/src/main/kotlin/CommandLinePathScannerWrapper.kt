@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.utils.common.CommandLineTool
  * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
  */
 abstract class CommandLinePathScannerWrapper(name: String) : PathScannerWrapper, CommandLineTool {
-    companion object : Logging
+    private companion object : Logging
 
     /**
      * The configuration used by the scanner, should contain command line options that influence the scan result.
