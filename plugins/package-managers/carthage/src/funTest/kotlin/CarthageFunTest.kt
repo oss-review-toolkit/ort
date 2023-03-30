@@ -30,18 +30,16 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class CarthageFunTest : StringSpec() {
-    init {
-        "Project dependencies are detected correctly" {
-            val definitionFile = getAssetFile("projects/synthetic/carthage/Cartfile.resolved")
-            val expectedResultFile = getAssetFile("projects/synthetic/carthage-expected-output.yml")
+class CarthageFunTest : StringSpec({
+    "Project dependencies are detected correctly" {
+        val definitionFile = getAssetFile("projects/synthetic/carthage/Cartfile.resolved")
+        val expectedResultFile = getAssetFile("projects/synthetic/carthage-expected-output.yml")
 
-            val result = createCarthage().resolveSingleProject(definitionFile)
+        val result = createCarthage().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
     }
+})
 
-    private fun createCarthage() =
-        Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-}
+private fun createCarthage() =
+    Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

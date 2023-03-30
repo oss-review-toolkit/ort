@@ -38,85 +38,83 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class GoDepFunTest : WordSpec() {
-    init {
-        "GoDep" should {
-            "resolve dependencies from a lockfile correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/godep/lockfile/Gopkg.toml")
-                val expectedResultFile = getAssetFile("projects/synthetic/godep-expected-output.yml")
+class GoDepFunTest : WordSpec({
+    "GoDep" should {
+        "resolve dependencies from a lockfile correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/godep/lockfile/Gopkg.toml")
+            val expectedResultFile = getAssetFile("projects/synthetic/godep-expected-output.yml")
 
-                val result = createGoDep().resolveSingleProject(definitionFile)
+            val result = createGoDep().resolveSingleProject(definitionFile)
 
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-            "show error if no lockfile is present" {
-                val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
+        "show error if no lockfile is present" {
+            val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
 
-                val result = createGoDep().resolveSingleProject(definitionFile)
+            val result = createGoDep().resolveSingleProject(definitionFile)
 
-                with(result) {
-                    project.id shouldBe
-                            Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
-                    project.definitionFilePath shouldBe
-                            "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
-                    packages should beEmpty()
-                    issues.size shouldBe 1
-                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
-                }
-            }
-
-            "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
-                val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
-                val config = AnalyzerConfiguration(allowDynamicVersions = true)
-                val result = createGoDep(config).resolveSingleProject(definitionFile)
-
-                with(result) {
-                    project shouldNotBe Project.EMPTY
-                    issues should beEmpty()
-                }
-            }
-
-            "import dependencies from Glide" {
-                val definitionFile = getAssetFile("projects/synthetic/godep/glide/glide.yaml")
-                val expectedResultFile = getAssetFile("projects/synthetic/glide-expected-output.yml")
-
-                val result = createGoDep().resolveSingleProject(definitionFile)
-
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
-
-            "import dependencies from godeps" {
-                val definitionFile = getAssetFile("projects/synthetic/godep/godeps/Godeps/Godeps.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/godeps-expected-output.yml")
-
-                val result = createGoDep().resolveSingleProject(definitionFile)
-
-                // TODO: The VCS path of the project in the expected result is not the parent directory of the
-                //       definition which is wrong and should be fixed.
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            with(result) {
+                project.id shouldBe
+                        Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                project.definitionFilePath shouldBe
+                        "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
+                packages should beEmpty()
+                issues.size shouldBe 1
+                issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }
 
-        "deduceImportPath()" should {
-            val projectDir = getAssetFile("projects/synthetic/godep/lockfile")
-            val gopath = File("/tmp/gopath")
+        "invoke the dependency solver if no lockfile is present and allowDynamicVersions is set" {
+            val definitionFile = getAssetFile("projects/synthetic/godep/no-lockfile/Gopkg.toml")
+            val config = AnalyzerConfiguration(allowDynamicVersions = true)
+            val result = createGoDep(config).resolveSingleProject(definitionFile)
 
-            "deduce an import path from VCS info" {
-                val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
-
-                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
-                        gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
+            with(result) {
+                project shouldNotBe Project.EMPTY
+                issues should beEmpty()
             }
+        }
 
-            "deduce an import path without VCS info" {
-                val vcsInfo = VcsInfo.EMPTY
+        "import dependencies from Glide" {
+            val definitionFile = getAssetFile("projects/synthetic/godep/glide/glide.yaml")
+            val expectedResultFile = getAssetFile("projects/synthetic/glide-expected-output.yml")
 
-                createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe gopath.resolve("src/lockfile")
-            }
+            val result = createGoDep().resolveSingleProject(definitionFile)
+
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
+
+        "import dependencies from godeps" {
+            val definitionFile = getAssetFile("projects/synthetic/godep/godeps/Godeps/Godeps.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/godeps-expected-output.yml")
+
+            val result = createGoDep().resolveSingleProject(definitionFile)
+
+            // TODO: The VCS path of the project in the expected result is not the parent directory of the
+            //       definition which is wrong and should be fixed.
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
 
-    private fun createGoDep(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
-        GoDep("GoDep", USER_DIR, config, RepositoryConfiguration())
-}
+    "deduceImportPath()" should {
+        val projectDir = getAssetFile("projects/synthetic/godep/lockfile")
+        val gopath = File("/tmp/gopath")
+
+        "deduce an import path from VCS info" {
+            val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
+
+            createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
+                    gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
+        }
+
+        "deduce an import path without VCS info" {
+            val vcsInfo = VcsInfo.EMPTY
+
+            createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe gopath.resolve("src/lockfile")
+        }
+    }
+})
+
+private fun createGoDep(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
+    GoDep("GoDep", USER_DIR, config, RepositoryConfiguration())

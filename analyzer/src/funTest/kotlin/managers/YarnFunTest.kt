@@ -31,36 +31,34 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class YarnFunTest : WordSpec() {
-    private fun resolveDependencies(definitionFile: File): String {
-        val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
-        return result.toYaml()
-    }
+class YarnFunTest : WordSpec({
+    "yarn" should {
+        "resolve dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/yarn/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn-expected-output.yml")
 
-    init {
-        "yarn" should {
-            "resolve dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/yarn/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/yarn-expected-output.yml")
+            val result = resolveDependencies(definitionFile)
 
-                val result = resolveDependencies(definitionFile)
+            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-                result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+        "resolve workspace dependencies correctly" {
+            // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
+            // dependencies get assigned to a scope.
+            val definitionFile = getAssetFile("projects/synthetic/yarn-workspaces/package.json")
+            val expectedResultFile = getAssetFile("projects/synthetic/yarn-workspaces-expected-output.yml")
 
-            "resolve workspace dependencies correctly" {
-                // This test case illustrates the lack of Yarn workspaces support, in particular not all workspace
-                // dependencies get assigned to a scope.
-                val definitionFile = getAssetFile("projects/synthetic/yarn-workspaces/package.json")
-                val expectedResultFile = getAssetFile("projects/synthetic/yarn-workspaces-expected-output.yml")
+            val result = resolveDependencies(definitionFile)
 
-                val result = resolveDependencies(definitionFile)
-
-                result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
     }
+})
 
-    private fun createYarn() =
-        Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+private fun createYarn() =
+    Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
+
+private fun resolveDependencies(definitionFile: File): String {
+    val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
+    return result.toYaml()
 }

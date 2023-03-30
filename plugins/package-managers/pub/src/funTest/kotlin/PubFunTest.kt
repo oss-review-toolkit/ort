@@ -39,70 +39,68 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class PubFunTest : WordSpec() {
-    init {
-        "Pub" should {
-            "resolve dart http dependencies correctly" {
-                val definitionFile = getAssetFile("projects/external/dart-http/pubspec.yaml")
-                val expectedResultFile = getAssetFile("projects/external/dart-http-expected-output.yml")
-                val lockFile = definitionFile.resolveSibling("pubspec.lock").also {
-                    getAssetFile("projects/external/dart-http-pubspec.lock").copyTo(it, overwrite = true)
-                }
-
-                val result = try {
-                    createPub(AnalyzerConfiguration(allowDynamicVersions = true)).resolveSingleProject(definitionFile)
-                } finally {
-                    lockFile.delete()
-                }
-
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+class PubFunTest : WordSpec({
+    "Pub" should {
+        "resolve dart http dependencies correctly" {
+            val definitionFile = getAssetFile("projects/external/dart-http/pubspec.yaml")
+            val expectedResultFile = getAssetFile("projects/external/dart-http-expected-output.yml")
+            val lockFile = definitionFile.resolveSibling("pubspec.lock").also {
+                getAssetFile("projects/external/dart-http-pubspec.lock").copyTo(it, overwrite = true)
             }
 
-            "resolve dependencies for a project with dependencies without a static version" {
-                val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
-                val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
-
-                val result = createPub().resolveSingleProject(definitionFile)
-
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            val result = try {
+                createPub(AnalyzerConfiguration(allowDynamicVersions = true)).resolveSingleProject(definitionFile)
+            } finally {
+                lockFile.delete()
             }
 
-            "resolve multi-module dependencies correctly" {
-                val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
-                val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-                val analyzerResult = analyze(definitionFile.parentFile).patchPackages()
+        "resolve dependencies for a project with dependencies without a static version" {
+            val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
+            val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
 
-                analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            val result = createPub().resolveSingleProject(definitionFile)
 
-            "resolve dependencies for a project with Flutter, Android and Cocoapods" {
-                val definitionFile = getAssetFile(
-                    "projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
-                )
-                val expectedResultFile = getAssetFile(
-                    "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
-                )
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-                val analyzerResult = analyze(definitionFile.parentFile).patchPackages().reduceToPubProjects()
+        "resolve multi-module dependencies correctly" {
+            val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
+            val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
-                analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
-            }
+            val analyzerResult = analyze(definitionFile.parentFile).patchPackages()
 
-            "show an error if no lockfile is present" {
-                val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
+            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
 
-                val result = createPub().resolveSingleProject(definitionFile)
+        "resolve dependencies for a project with Flutter, Android and Cocoapods" {
+            val definitionFile = getAssetFile(
+                "projects/synthetic/flutter-project-with-android-and-cocoapods/pubspec.yaml"
+            )
+            val expectedResultFile = getAssetFile(
+                "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
+            )
 
-                with(result) {
-                    packages should beEmpty()
-                    issues.size shouldBe 1
-                    issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
-                }
+            val analyzerResult = analyze(definitionFile.parentFile).patchPackages().reduceToPubProjects()
+
+            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
+
+        "show an error if no lockfile is present" {
+            val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
+
+            val result = createPub().resolveSingleProject(definitionFile)
+
+            with(result) {
+                packages should beEmpty()
+                issues.size shouldBe 1
+                issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
             }
         }
     }
-}
+})
 
 private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
     val pubProjects = projects.filterTo(mutableSetOf()) { it.id.type == "Pub" }
