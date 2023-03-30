@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.default
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
@@ -58,7 +57,6 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
@@ -186,8 +184,6 @@ class DownloaderCommand : OrtCommand(
         "--skip-excluded",
         help = "Do not download excluded projects or packages. Works only with the '--ort-file' parameter."
     ).flag()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val failureMessages = mutableListOf<String>()

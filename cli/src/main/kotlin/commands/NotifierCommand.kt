@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -32,7 +31,6 @@ import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.configurationGroup
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
@@ -76,8 +74,6 @@ class NotifierCommand : OrtCommand(
         help = "Set a label in the ORT result passed to the notifier script, overwriting any existing label of the " +
                 "same name. Can be used multiple times. For example: --label distribution=external"
     ).associate()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val ortResult = readOrtResult(ortFile).mergeLabels(labels)

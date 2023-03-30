@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.cli.commands
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
@@ -55,7 +54,6 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.orEmpty
@@ -202,8 +200,6 @@ class EvaluatorCommand : OrtCommand(
         "--check-syntax",
         help = "Do not evaluate the script but only check its syntax. No output is written in this case."
     ).flag()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val scriptUrls = listOfNotNull(

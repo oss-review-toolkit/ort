@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.cli.commands
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -47,7 +46,6 @@ import org.ossreviewtoolkit.cli.utils.outputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -107,8 +105,6 @@ class AdvisorCommand : OrtCommand(
         "--skip-excluded",
         help = "Do not check excluded projects or packages."
     ).flag()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->

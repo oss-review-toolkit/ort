@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.cli.commands
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -141,8 +140,6 @@ class ScannerCommand : OrtCommand(
         .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_RESOLUTIONS_FILENAME))
         .configurationGroup()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
