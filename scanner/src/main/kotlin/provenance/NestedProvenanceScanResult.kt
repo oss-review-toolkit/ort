@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.utils.SnippetFinding
 
 /**
  * A class that contains all [ScanResult]s for a [NestedProvenance].
@@ -87,6 +88,7 @@ data class NestedProvenanceScanResult(
 
             val licenseFindings = scanResultsForScanner.mergeLicenseFindings()
             val copyrightFindings = scanResultsForScanner.mergeCopyrightFindings()
+            val snippetFindings = scanResultsForScanner.mergeSnippetFindings()
 
             ScanResult(
                 provenance = nestedProvenance.root,
@@ -97,6 +99,7 @@ data class NestedProvenanceScanResult(
                     packageVerificationCode = "",
                     licenseFindings = licenseFindings,
                     copyrightFindings = copyrightFindings,
+                    snippetFindings = snippetFindings,
                     issues = issues
                 ),
                 additionalData = allScanResults.map { it.additionalData }.reduce { acc, map -> acc + map }
@@ -128,6 +131,27 @@ data class NestedProvenanceScanResult(
         }
 
         return findings
+    }
+
+    private fun Map<KnownProvenance, List<ScanResult>>.mergeSnippetFindings(): Set<SnippetFinding> {
+        val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
+            mutableSetOf<SnippetFinding>().also { acc ->
+                scanResults.forEach { acc += it.summary.snippetFindings }
+            }
+        }
+
+        val allFindings = mutableSetOf<SnippetFinding>()
+
+        findingsByPath.forEach { (path, findings) ->
+            val prefix = if (path.isEmpty()) path else "$path/"
+
+            allFindings += findings.map { finding ->
+                val newPath = "$prefix${finding.sourceLocation.path}"
+                finding.copy(sourceLocation = finding.sourceLocation.copy(path = newPath))
+            }
+        }
+
+        return allFindings
     }
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)

@@ -36,4 +36,9 @@ class ProjectSortedSetConverter : StdConverter<Set<Project>, SortedSet<Project>>
     override fun convert(value: Set<Project>) = value.toSortedSet(compareBy { it.id })
 }
 
+class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, SortedSet<SnippetFinding>>() {
+    override fun convert(value: Set<SnippetFinding>) =
+        value.toSortedSet(compareBy<SnippetFinding> { it.sourceLocation.path }.thenByDescending { it.snippet.purl })
+}
+
 // TODO: Add more converters to get rid of Comparable implementations that just serve sorted output.
