@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -40,7 +39,6 @@ import org.ossreviewtoolkit.cli.OrtCommand
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.PostgresStorageConfiguration
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.DatabaseUtils.checkDatabaseEncoding
@@ -77,8 +75,6 @@ class UploadResultToPostgresCommand : OrtCommand(
         "--create-table",
         help = "Create the table if it does not exist."
     ).flag()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)

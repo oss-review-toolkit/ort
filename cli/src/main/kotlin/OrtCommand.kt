@@ -20,7 +20,9 @@
 package org.ossreviewtoolkit.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.requireObject
 
+import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.utils.common.Plugin
 
 /**
@@ -35,4 +37,6 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
     }
 
     override val type = commandName
+
+    protected val ortConfig by requireObject<OrtConfiguration>()
 }

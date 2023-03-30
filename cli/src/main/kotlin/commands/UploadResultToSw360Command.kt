@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -44,7 +43,6 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
@@ -71,8 +69,6 @@ class UploadResultToSw360Command : OrtCommand(
         "--attach-sources", "-a",
         help = "Download sources of packages and upload them as attachments to SW360 releases."
     ).flag()
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)

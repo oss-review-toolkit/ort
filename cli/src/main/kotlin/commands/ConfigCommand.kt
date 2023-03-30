@@ -23,7 +23,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
@@ -67,8 +66,6 @@ class ConfigCommand : OrtCommand(
         help = "Perform a simple conversion of the given HOCON configuration file to YAML and print the result."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-
-    private val ortConfig by requireObject<OrtConfiguration>()
 
     private val mapper = YAMLMapper().apply {
         registerKotlinModule()
