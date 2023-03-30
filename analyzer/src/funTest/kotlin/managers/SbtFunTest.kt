@@ -26,6 +26,7 @@ import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
@@ -38,7 +39,7 @@ class SbtFunTest : StringSpec({
 
         val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
 
-        patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
     }
 
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
@@ -51,6 +52,6 @@ class SbtFunTest : StringSpec({
 
         val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Sbt.Factory()))
 
-        patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
     }
 })
