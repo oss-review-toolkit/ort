@@ -27,6 +27,9 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.measureTimedValue
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeoutOrNull
@@ -48,6 +51,7 @@ import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
+import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
@@ -56,28 +60,40 @@ import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.PurlType
+import org.ossreviewtoolkit.model.utils.Snippet
+import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * A wrapper for [FossID](https://fossid.com/).
@@ -746,7 +762,23 @@ class FossId internal constructor(
             "${pendingFiles.size} pending files have been returned for scan '$scanCode'."
         }
 
-        return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles)
+        val snippets = runBlocking(Dispatchers.IO) {
+            pendingFiles.map {
+                async {
+                    logger.info { "Listing snippet for $it..." }
+                    val snippetResponse = service.listSnippets(config.user, config.apiKey, scanCode, it)
+                        .checkResponse("list snippets")
+                    val snippets = checkNotNull(snippetResponse.data) {
+                        "Snippet could not be listed. Response was ${snippetResponse.message}."
+                    }
+                    logger.info { "${snippets.size} snippets." }
+
+                    it to snippets.toSet()
+                }
+            }.awaitAll().toMap()
+        }
+
+        return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles, snippets)
     }
 
     /**
@@ -760,8 +792,59 @@ class FossId internal constructor(
         scanId: String
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
+
+        // TODO: Deprecation: Remove the pending files in issues. This is a breaking change.
         val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
             Issue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
+        }
+
+        val snippetFindings = mutableSetOf<SnippetFinding>()
+        val fakeLocation = TextLocation(".", TextLocation.UNKNOWN_LINE)
+        snippetFindings += rawResults.listSnippets.flatMap { (file, rawSnippets) ->
+            val snippets = rawSnippets.map {
+                val license = it.artifactLicense?.let {
+                    runCatching {
+                        LicenseFinding.createAndMap(
+                            it,
+                            fakeLocation,
+                            detectedLicenseMapping = scannerConfig.detectedLicenseMapping
+                        ).license
+                    }.onFailure { spdxException ->
+                        issues += FossId.createAndLogIssue(
+                            source = "FossId",
+                            message = "Failed to parse license '$it' as an SPDX expression:" +
+                                    " ${spdxException.collectMessages()}"
+                        )
+                    }.getOrNull()
+                } ?: SpdxConstants.NOASSERTION.toSpdx()
+
+                // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
+                // matched file in the remote artifact as part of the "match_file_id" property.
+                val snippetProvenance = it.url?.let { url ->
+                    ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
+                } ?: UnknownProvenance
+                val purlType = it.url?.let { url -> urlToPackageType(url, issues)?.toString() } ?: "generic"
+
+                // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
+                //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
+                //       call per snippet which is too expensive. When it is available for a batch of snippets, it can
+                //       be used here.
+                Snippet(
+                    it.score.toFloat(),
+                    TextLocation(it.file, TextLocation.UNKNOWN_LINE),
+                    snippetProvenance,
+                    "pkg:$purlType/${it.author}/${it.artifact}@${it.version}",
+                    license
+                )
+            }
+
+            val sourceLocation = TextLocation(file, TextLocation.UNKNOWN_LINE)
+            snippets.map {
+                SnippetFinding(
+                    sourceLocation,
+                    it
+                )
+            }
         }
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
@@ -776,6 +859,7 @@ class FossId internal constructor(
             packageVerificationCode = "",
             licenseFindings = licenseFindings.toSortedSet(),
             copyrightFindings = copyrightFindings.toSortedSet(),
+            snippetFindings = snippetFindings,
             issues = issues
         )
 
@@ -786,4 +870,32 @@ class FossId internal constructor(
             mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
         )
     }
+
+    /**
+     * Return the [PurlType] as determined from the given [url], or null if there is no match, in which case an issue
+     * will be added to [issues].
+     */
+    private fun urlToPackageType(url: String, issues: MutableList<Issue>): PurlType? =
+        when (val provider = PackageProvider.get(url)) {
+            PackageProvider.COCOAPODS -> PurlType.COCOAPODS
+            PackageProvider.CRATES_IO -> PurlType.CARGO
+            PackageProvider.DEBIAN -> PurlType.DEBIAN
+            PackageProvider.GITHUB -> PurlType.GITHUB
+            PackageProvider.GITLAB -> PurlType.GITLAB
+            PackageProvider.GOLANG -> PurlType.GOLANG
+            PackageProvider.MAVEN_CENTRAL, PackageProvider.MAVEN_GOOGLE -> PurlType.MAVEN
+            PackageProvider.NPM_JS -> PurlType.NPM
+            PackageProvider.NUGET -> PurlType.NUGET
+            PackageProvider.PACKAGIST -> PurlType.COMPOSER
+            PackageProvider.PYPI -> PurlType.PYPI
+            PackageProvider.RUBYGEMS -> PurlType.GEM
+
+            else -> {
+                issues += FossId.createAndLogIssue(
+                    source = "FossId",
+                    message = "Cannot determine PURL type for url '$url' and provider '$provider'."
+                )
+                null
+            }
+        }
 }

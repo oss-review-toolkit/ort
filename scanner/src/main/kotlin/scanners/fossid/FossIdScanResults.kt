@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Issue
@@ -37,7 +38,8 @@ internal data class RawResults(
     val identifiedFiles: List<IdentifiedFile>,
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
     val listIgnoredFiles: List<IgnoredFile>,
-    val listPendingFiles: List<String>
+    val listPendingFiles: List<String>,
+    val listSnippets: Map<String, Set<Snippet>>
 )
 
 /**
