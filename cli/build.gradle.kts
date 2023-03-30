@@ -160,5 +160,7 @@ dependencies {
     implementation(libs.reflections)
     implementation(libs.sw360Client)
 
+    funTestImplementation(testFixtures(project(":analyzer")))
+
     funTestImplementation(libs.greenmail)
 }

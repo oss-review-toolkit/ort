@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
+import io.kotest.core.spec.Spec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -26,16 +27,20 @@ import io.kotest.matchers.should
 
 import java.io.File
 import java.time.Instant
+import org.ossreviewtoolkit.analyzer.Analyzer
 
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.analyzer.PackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyTreeNavigator
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
@@ -97,3 +102,15 @@ private fun Project.filterReferencedPackages(allPackages: Set<Package>): Set<Pac
 fun ProjectAnalyzerResult.withInvariantIssues() =
     // Account for different NPM versions to return issues in different order.
     copy(issues = issues.sortedBy { it.message }.map { it.copy(timestamp = Instant.EPOCH) })
+
+fun Spec.analyze(
+    projectDir: File,
+    allowDynamicVersions: Boolean = false,
+    packageManagers: Collection<PackageManagerFactory> = PackageManager.ALL.values
+): OrtResult {
+    val config = AnalyzerConfiguration(allowDynamicVersions)
+    val analyzer = Analyzer(config)
+    val managedFiles = analyzer.findManagedFiles(projectDir, packageManagers)
+
+    return analyzer.analyze(managedFiles).withResolvedScopes()
+}

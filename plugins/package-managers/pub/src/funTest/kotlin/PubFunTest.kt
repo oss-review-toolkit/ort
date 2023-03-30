@@ -25,9 +25,7 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
-import java.io.File
-
-import org.ossreviewtoolkit.analyzer.Analyzer
+import org.ossreviewtoolkit.analyzer.managers.analyze
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
@@ -70,7 +68,7 @@ class PubFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
-            val analyzerResult = analyze(definitionFile.parentFile).patchPackages()
+            val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
 
             analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
@@ -83,7 +81,8 @@ class PubFunTest : WordSpec({
                 "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
             )
 
-            val analyzerResult = analyze(definitionFile.parentFile).patchPackages().reduceToPubProjects()
+            val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
+                .reduceToPubProjects()
 
             analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
         }
@@ -112,14 +111,6 @@ private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
         packages = packages.filterTo(mutableSetOf()) { it.id in dependencies },
         issues = issues
     )
-}
-
-private fun analyze(workingDir: File): AnalyzerResult {
-    val analyzer = Analyzer(AnalyzerConfiguration())
-    val managedFiles = analyzer.findManagedFiles(workingDir)
-    val analyzerRun = analyzer.analyze(managedFiles).analyzer
-
-    return checkNotNull(analyzerRun).result.withResolvedScopes()
 }
 
 private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
