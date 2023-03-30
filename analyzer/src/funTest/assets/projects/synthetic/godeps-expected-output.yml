@@ -13,7 +13,7 @@ project:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "<REPLACE_PATH>"
+    path: "analyzer/src/funTest/assets/projects/synthetic/godep/godeps"
   homepage_url: ""
   scopes:
   - name: "default"
