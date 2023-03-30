@@ -214,7 +214,7 @@ class FossId internal constructor(
         endTime: Instant = Instant.now(),
         issue: Issue
     ) = ScanSummary(
-        startTime, endTime, "", sortedSetOf(), sortedSetOf(), listOf(issue)
+        startTime, endTime, "", sortedSetOf(), sortedSetOf(), issues = listOf(issue)
     )
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {

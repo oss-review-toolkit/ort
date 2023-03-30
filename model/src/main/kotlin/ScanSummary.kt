@@ -23,12 +23,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.time.Instant
 import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
+import org.ossreviewtoolkit.model.utils.SnippetFinding
+import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -67,6 +70,13 @@ data class ScanSummary(
     val copyrightFindings: SortedSet<CopyrightFinding>,
 
     /**
+     * The detected snippet findings.
+     */
+    @JsonProperty("snippets")
+    @JsonSerialize(converter = SnippetFindingSortedSetConverter::class)
+    val snippetFindings: Set<SnippetFinding> = emptySet(),
+
+    /**
      * The list of issues that occurred during the scan. This property is not serialized if the list is empty to reduce
      * the size of the result file. If there are no issues at all, [ScannerRun.hasIssues] already contains that
      * information.
@@ -84,7 +94,8 @@ data class ScanSummary(
             endTime = Instant.EPOCH,
             packageVerificationCode = "",
             licenseFindings = sortedSetOf(),
-            copyrightFindings = sortedSetOf()
+            copyrightFindings = sortedSetOf(),
+            snippetFindings = sortedSetOf()
         )
     }
 
