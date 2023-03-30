@@ -51,7 +51,7 @@ class PnpmFunTest : WordSpec({
                 analyze(findManagedFiles(definitionFile.parentFile, setOf(Pnpm.Factory())))
             }.withResolvedScopes()
 
-            patchActualResult(ortResult.withResolvedScopes(), patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(ortResult, patchStartAndEndTime = true) shouldBe expectedResult
         }
     }
 })
