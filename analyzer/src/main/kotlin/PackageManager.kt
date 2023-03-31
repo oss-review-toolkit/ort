@@ -104,7 +104,7 @@ abstract class PackageManager(
          */
         fun findManagedFiles(
             directory: File,
-            packageManagers: Collection<PackageManagerFactory> = ALL.values,
+            packageManagers: Collection<PackageManagerFactory> = ENABLED_BY_DEFAULT,
             excludes: Excludes = Excludes.EMPTY
         ): ManagedProjectFiles {
             require(directory.isDirectory) {
