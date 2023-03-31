@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.assertions.assertSoftly
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -33,6 +31,7 @@ import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.model.utils.createPurl
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class IdentifierTest : WordSpec({
@@ -97,7 +96,7 @@ class IdentifierTest : WordSpec({
         "be deserialized correctly" {
             val serializedId = "--- \"type:namespace:name:version\""
 
-            val id = yamlMapper.readValue<Identifier>(serializedId)
+            val id = serializedId.fromYaml<Identifier>()
 
             id shouldBe Identifier("type", "namespace", "name", "version")
         }
@@ -105,7 +104,7 @@ class IdentifierTest : WordSpec({
         "be deserialized correctly even if incomplete" {
             val serializedId = "--- \"type:namespace:\""
 
-            val id = yamlMapper.readValue<Identifier>(serializedId)
+            val id = serializedId.fromYaml<Identifier>()
 
             id shouldBe Identifier("type", "namespace", "", "")
         }
@@ -113,7 +112,7 @@ class IdentifierTest : WordSpec({
         "be deserialized correctly from a map key" {
             val serializedMap = "---\ntype:namespace:name:version: 1"
 
-            val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
+            val map = serializedMap.fromYaml<Map<Identifier, Int>>()
 
             map should containExactly(Identifier("type", "namespace", "name", "version") to 1)
         }
@@ -121,7 +120,7 @@ class IdentifierTest : WordSpec({
         "be deserialized correctly from a map key even if incomplete" {
             val serializedMap = "---\ntype:namespace:: 1"
 
-            val map = yamlMapper.readValue<Map<Identifier, Int>>(serializedMap)
+            val map = serializedMap.fromYaml<Map<Identifier, Int>>()
 
             map should containExactly(Identifier("type", "namespace", "", "") to 1)
         }

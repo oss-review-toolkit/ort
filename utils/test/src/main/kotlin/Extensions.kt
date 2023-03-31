@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.utils.test
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
 
@@ -35,6 +37,8 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)
+
+inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }

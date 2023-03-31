@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
@@ -51,6 +49,7 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 import org.ossreviewtoolkit.utils.test.toYaml
 
@@ -132,7 +131,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .build()
 
                 val serializedMergedResults = mergedResults.toYaml()
-                val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
+                val deserializedMergedResults = serializedMergedResults.fromYaml<AnalyzerResult>()
 
                 deserializedMergedResults shouldBe mergedResults
             }
@@ -149,8 +148,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = result.toYaml()
-                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
+                val deserializedResult = result.toYaml().fromYaml<AnalyzerResult>()
 
                 deserializedResult shouldBe result
             }
@@ -167,11 +165,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = result.toYaml()
-                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
-                val serializedResult2 = deserializedResult.toYaml()
+                val serializedResult = result.toYaml().fromYaml<AnalyzerResult>().toYaml()
 
-                serializedResult2 shouldBe serializedResult
+                serializedResult shouldBe serializedResult
             }
 
             "use the dependency graph representation on serialization" {
@@ -203,8 +199,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = result.toYaml()
-                val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
+                val deserializedResult = result.toYaml().fromYaml<AnalyzerResult>()
 
                 deserializedResult.withResolvedScopes() shouldBe result.withResolvedScopes()
             }
