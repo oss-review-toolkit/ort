@@ -29,6 +29,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class AdvisorConfigurationTest : WordSpec({
     "Generic advisor options" should {
@@ -106,8 +107,5 @@ private fun loadAdvisorConfig(): AdvisorConfiguration =
  * Perform a serialization round-trip of the given advisor [config] and return the result. This is used to check
  * whether serialization and deserialization of advisor configurations work as expected.
  */
-private fun rereadAdvisorConfig(config: AdvisorConfiguration): AdvisorConfiguration {
-    val yaml = yamlMapper.writeValueAsString(config)
-
-    return yamlMapper.readValue(yaml)
-}
+private fun rereadAdvisorConfig(config: AdvisorConfiguration): AdvisorConfiguration =
+    config.toYaml().let { yamlMapper.readValue(it) }

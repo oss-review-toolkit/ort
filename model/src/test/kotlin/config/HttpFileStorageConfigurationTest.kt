@@ -22,15 +22,13 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class HttpFileStorageConfigurationTest : StringSpec({
     "Header values should be masked in serialization" {
         val config = HttpFileStorageConfiguration("url", headers = mapOf("key1" to "value1", "key2" to "value2"))
 
-        val yaml = yamlMapper.writeValueAsString(config).trim()
-
-        yaml shouldBe """
+        config.toYaml().trim() shouldBe """
             ---
             url: "url"
             headers:
@@ -42,9 +40,7 @@ class HttpFileStorageConfigurationTest : StringSpec({
     "Query string should be masked in serialization" {
         val config = HttpFileStorageConfiguration("url", "?query=value", emptyMap())
 
-        val yaml = yamlMapper.writeValueAsString(config).trim()
-
-        yaml shouldBe """
+        config.toYaml().trim() shouldBe """
             ---
             url: "url"
             query: "***"

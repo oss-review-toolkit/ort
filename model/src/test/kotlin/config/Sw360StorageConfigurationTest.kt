@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.string.shouldNotContain
 
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class Sw360StorageConfigurationTest : StringSpec({
     "Credentials should be ignored in serialization" {
@@ -35,7 +35,7 @@ class Sw360StorageConfigurationTest : StringSpec({
             "clientPassword",
             "token"
         )
-        val yaml = yamlMapper.writeValueAsString(sw360StorageConfiguration).lowercase()
+        val yaml = sw360StorageConfiguration.toYaml().lowercase()
 
         yaml shouldNotContain "password"
         yaml shouldNotContain "clientPassword"

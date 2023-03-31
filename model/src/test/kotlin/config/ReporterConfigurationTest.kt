@@ -28,6 +28,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class ReporterConfigurationTest : WordSpec({
     "Generic reporter options" should {
@@ -47,7 +48,5 @@ private fun loadReporterConfig(): ReporterConfiguration =
  * Perform a serialization round-trip of the given reporter [config] and return the result. This is used to check
  * whether serialization and deserialization of reporter configurations work as expected.
  */
-private fun rereadReporterConfig(config: ReporterConfiguration): ReporterConfiguration {
-    val yaml = yamlMapper.writeValueAsString(config)
-    return yamlMapper.readValue(yaml)
-}
+private fun rereadReporterConfig(config: ReporterConfiguration): ReporterConfiguration =
+    config.toYaml().let { yamlMapper.readValue(it) }

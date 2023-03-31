@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerResultBuilderTest : WordSpec() {
     private val issue1 = Issue(source = "source-1", message = "message-1")
@@ -130,7 +131,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
+                val serializedMergedResults = mergedResults.toYaml()
                 val deserializedMergedResults = yamlMapper.readValue<AnalyzerResult>(serializedMergedResults)
 
                 deserializedMergedResults shouldBe mergedResults
@@ -148,7 +149,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = yamlMapper.writeValueAsString(result)
+                val serializedResult = result.toYaml()
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
 
                 deserializedResult shouldBe result
@@ -166,9 +167,9 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = yamlMapper.writeValueAsString(result)
+                val serializedResult = result.toYaml()
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
-                val serializedResult2 = yamlMapper.writeValueAsString(deserializedResult)
+                val serializedResult2 = deserializedResult.toYaml()
 
                 serializedResult2 shouldBe serializedResult
             }
@@ -179,7 +180,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addResult(analyzerResult2)
                     .build()
 
-                val serializedMergedResults = yamlMapper.writeValueAsString(mergedResults)
+                val serializedMergedResults = mergedResults.toYaml()
                 val resultTree = yamlMapper.readTree(serializedMergedResults)
 
                 resultTree["dependency_graphs"] shouldNotBeNull {
@@ -202,7 +203,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     )
                 )
 
-                val serializedResult = yamlMapper.writeValueAsString(result)
+                val serializedResult = result.toYaml()
                 val deserializedResult = yamlMapper.readValue<AnalyzerResult>(serializedResult)
 
                 deserializedResult.withResolvedScopes() shouldBe result.withResolvedScopes()
