@@ -47,6 +47,7 @@ class RepositoryConfigurationTest : WordSpec({
                 """.trimIndent()
 
             val config = yamlMapper.readValue<RepositoryConfiguration>(configuration)
+
             config.excludes.paths.first().matches("android/project1/build.gradle") shouldBe true
         }
 
