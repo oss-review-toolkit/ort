@@ -839,11 +839,10 @@ private class FakePathScannerWrapper : PathScannerWrapper {
  * provenance, instead of actually downloading the source code.
  */
 private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
-    override fun download(provenance: KnownProvenance): File {
-        val file = createOrtTempDir().resolve(filename)
-        file.writeText(yamlMapper.writeValueAsString(provenance))
-        return file.parentFile
-    }
+    override fun download(provenance: KnownProvenance): File =
+        createOrtTempDir().apply {
+            resolve(filename).writeText(yamlMapper.writeValueAsString(provenance))
+        }
 }
 
 /**
