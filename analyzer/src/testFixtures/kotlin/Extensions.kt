@@ -106,7 +106,7 @@ fun ProjectAnalyzerResult.withInvariantIssues() =
 fun Spec.analyze(
     projectDir: File,
     allowDynamicVersions: Boolean = false,
-    packageManagers: Collection<PackageManagerFactory> = PackageManager.ALL.values
+    packageManagers: Collection<PackageManagerFactory> = PackageManager.ENABLED_BY_DEFAULT
 ): OrtResult {
     val config = AnalyzerConfiguration(allowDynamicVersions)
     val analyzer = Analyzer(config)
