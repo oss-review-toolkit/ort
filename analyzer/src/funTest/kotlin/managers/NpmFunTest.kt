@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -35,9 +33,9 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
@@ -132,9 +130,8 @@ class NpmFunTest : WordSpec({
         "resolve Babel dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm-babel/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-babel-expected-output.yml")
-            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
-                yamlMapper.readValue<ProjectAnalyzerResult>(it)
-            }
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
+                .fromYaml<ProjectAnalyzerResult>()
 
             val actualResult = resolveSingleProject(definitionFile, resolveScopes = true)
 

@@ -19,15 +19,13 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ReporterConfigurationTest : WordSpec({
@@ -49,4 +47,4 @@ private fun loadReporterConfig(): ReporterConfiguration =
  * whether serialization and deserialization of reporter configurations work as expected.
  */
 private fun rereadReporterConfig(config: ReporterConfiguration): ReporterConfiguration =
-    config.toYaml().let { yamlMapper.readValue(it) }
+    config.toYaml().fromYaml()

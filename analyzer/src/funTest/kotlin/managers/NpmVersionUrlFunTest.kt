@@ -19,16 +19,14 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.USER_DIR
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 
@@ -37,9 +35,8 @@ class NpmVersionUrlFunTest : WordSpec({
         "resolve dependencies with URLs as versions correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm-version-urls/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-version-urls-expected-output.yml")
-            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile).let {
-                yamlMapper.readValue<ProjectAnalyzerResult>(it)
-            }
+            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
+                .fromYaml<ProjectAnalyzerResult>()
 
             val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
             actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()

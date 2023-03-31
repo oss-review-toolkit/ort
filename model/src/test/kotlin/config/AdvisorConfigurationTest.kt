@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.model.config
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
@@ -28,7 +26,7 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class AdvisorConfigurationTest : WordSpec({
@@ -108,4 +106,4 @@ private fun loadAdvisorConfig(): AdvisorConfiguration =
  * whether serialization and deserialization of advisor configurations work as expected.
  */
 private fun rereadAdvisorConfig(config: AdvisorConfiguration): AdvisorConfiguration =
-    config.toYaml().let { yamlMapper.readValue(it) }
+    config.toYaml().fromYaml()

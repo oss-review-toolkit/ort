@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.utils.spdx
 
-import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
@@ -38,11 +35,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class SpdxExpressionTest : WordSpec({
-    val yamlMapper = YAMLMapper()
-
     "toString()" should {
         "return the textual SPDX expression" {
             val expression = "a+ AND (b WITH exception1 OR c+) AND d WITH exception2"
@@ -81,7 +77,7 @@ class SpdxExpressionTest : WordSpec({
         "be deserializable from a string representation" {
             val serializedExpression = "--- \"$dummyExpression\"\n"
 
-            val deserializedExpression = yamlMapper.readValue<SpdxExpression>(serializedExpression)
+            val deserializedExpression = serializedExpression.fromYaml<SpdxExpression>()
 
             deserializedExpression shouldBe SpdxCompoundExpression(
                 SpdxCompoundExpression(
