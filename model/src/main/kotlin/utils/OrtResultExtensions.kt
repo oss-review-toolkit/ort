@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.model.utils
 
+import org.ossreviewtoolkit.model.OrtConfigType
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.OrtTool
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
@@ -77,12 +79,12 @@ fun OrtResult.createLicenseInfoResolver(
     addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
 ) = LicenseInfoResolver(
-        DefaultLicenseInfoProvider(this, packageConfigurationProvider),
-        copyrightGarbage,
-        addAuthorsToCopyrights,
-        archiver,
-        LicenseFilePatterns.getInstance()
-    )
+    DefaultLicenseInfoProvider(this, packageConfigurationProvider),
+    copyrightGarbage,
+    addAuthorsToCopyrights,
+    archiver,
+    LicenseFilePatterns.getInstance()
+)
 
 /**
  * Return the path where the repository given by [provenance] is linked into the source tree.
@@ -104,3 +106,50 @@ fun OrtResult.getRepositoryPath(provenance: RepositoryProvenance): String {
  * Copy this [OrtResult] and add all [labels] to the existing labels, overwriting existing labels on conflict.
  */
 fun OrtResult.mergeLabels(labels: Map<String, String>) = copy(labels = this.labels + labels)
+
+/**
+ * Return true if the provided [type] is [resolvable][OrtConfigType.resolvable] and the
+ * [resolved configuration][OrtResult.resolvedConfiguration] contains the respective configuration.
+ */
+fun OrtResult.hasResolvedConfiguration(type: OrtConfigType): Boolean =
+    when (type) {
+        OrtConfigType.PACKAGE_CONFIGURATIONS -> resolvedConfiguration.packageConfigurations != null
+        OrtConfigType.PACKAGE_CURATIONS -> resolvedConfiguration.packageCurations.isNotEmpty()
+        OrtConfigType.RESOLUTIONS -> resolvedConfiguration.resolutions != null
+
+        else -> {
+            require(!type.resolvable) {
+                "${type.name} is resolvable but no handling is implemented in this function."
+            }
+
+            false
+        }
+    }
+
+fun OrtResult.hasToolResult(tool: OrtTool): Boolean =
+    when (tool) {
+        OrtTool.ANALYZER -> analyzer != null
+        OrtTool.ADVISOR -> advisor != null
+        OrtTool.SCANNER -> scanner != null
+        OrtTool.EVALUATOR -> evaluator != null
+
+        // The remaining tools do not add their output to the OrtResult.
+        else -> false
+    }
+
+fun OrtResult.resolveConfiguration(tool: OrtTool, types: Set<OrtConfigType>): OrtResult {
+    tool.input.filter { hasToolResult(it) }.forEach { inputTool ->
+        types.forEach { type ->
+            if (type in inputTool.consumedConfig) {
+                println(
+                    "Resolving configuration '${type.name}' which previously resolved and already consumed by the " +
+                            "'${inputTool.alias}'. This can lead to inconsistencies in the result."
+                )
+            }
+        }
+    }
+
+    // TODO: Implement actual resolution.
+
+    return this
+}
