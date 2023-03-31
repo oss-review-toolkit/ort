@@ -74,6 +74,11 @@ abstract class PackageManager(
          */
         val ALL by lazy { Plugin.getAll<PackageManagerFactory>() }
 
+        /**
+         * The available [package manager factories][PackageManagerFactory] that are enabled by default.
+         */
+        val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
+
         private val PACKAGE_MANAGER_DIRECTORIES = listOf(
             // Ignore intermediate build system directories.
             ".gradle",

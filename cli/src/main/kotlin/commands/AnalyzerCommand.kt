@@ -162,7 +162,7 @@ class AnalyzerCommand : OrtCommand(
         println("\t" + configurationInfo)
 
         val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
-            (enabledPackageManagers ?: PackageManager.ALL.values.filter { it.isEnabledByDefault }).toSet() -
+            (enabledPackageManagers ?: PackageManager.ENABLED_BY_DEFAULT).toSet() -
                     disabledPackageManagers.orEmpty().toSet()
         } else {
             ortConfig.analyzer.determineEnabledPackageManagers()
@@ -252,8 +252,7 @@ class AnalyzerCommand : OrtCommand(
 }
 
 private fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
-    val enabled = enabledPackageManagers?.mapNotNull { PackageManager.ALL[it] }
-        ?: PackageManager.ALL.values.filter { it.isEnabledByDefault }
+    val enabled = enabledPackageManagers?.mapNotNull { PackageManager.ALL[it] } ?: PackageManager.ENABLED_BY_DEFAULT
     val disabled = disabledPackageManagers?.mapNotNull { PackageManager.ALL[it] }.orEmpty()
 
     return enabled.toSet() - disabled.toSet()

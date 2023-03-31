@@ -257,7 +257,7 @@ internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue>
  * Return all path excludes from this [OrtResult] represented as [RepositoryPathExcludes].
  */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
-    fun isDefinitionsFile(pathExclude: PathExclude) = PackageManager.ALL.values.any {
+    fun isDefinitionsFile(pathExclude: PathExclude) = PackageManager.ENABLED_BY_DEFAULT.any {
         it.matchersForDefinitionFiles.any { matcher ->
             pathExclude.pattern.endsWith(matcher.toString())
         }

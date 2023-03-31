@@ -87,7 +87,7 @@ class PackageManagerFunTest : WordSpec({
 
             // The test project contains at least one file per package manager, so the result should also contain an
             // entry for each package manager.
-            managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ALL.values.filterNot {
+            managedFiles.keys shouldContainExactlyInAnyOrder PackageManager.ENABLED_BY_DEFAULT.filterNot {
                 it is Unmanaged.Factory
             }
 
