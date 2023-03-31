@@ -33,6 +33,7 @@ import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.model.utils.createPurl
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class IdentifierTest : WordSpec({
     "String representations" should {
@@ -88,7 +89,7 @@ class IdentifierTest : WordSpec({
         "be serialized correctly" {
             val id = Identifier("type", "namespace", "name", "version")
 
-            val serializedId = yamlMapper.writeValueAsString(id)
+            val serializedId = id.toYaml()
 
             serializedId shouldBe "--- \"type:namespace:name:version\"\n"
         }

@@ -58,7 +58,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
@@ -66,6 +65,7 @@ import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class ScannerTest : WordSpec({
     "Creating the scanner" should {
@@ -841,7 +841,7 @@ private class FakePathScannerWrapper : PathScannerWrapper {
 private class FakeProvenanceDownloader(val filename: String = "fake.txt") : ProvenanceDownloader {
     override fun download(provenance: KnownProvenance): File =
         createOrtTempDir().apply {
-            resolve(filename).writeText(yamlMapper.writeValueAsString(provenance))
+            resolve(filename).writeText(provenance.toYaml())
         }
 }
 

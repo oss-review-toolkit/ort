@@ -26,6 +26,7 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class LicenseFindingCurationTest : WordSpec({
     "A License finding curation" should {
@@ -40,7 +41,7 @@ class LicenseFindingCurationTest : WordSpec({
 
             val curation = yamlMapper
                 .readValue<LicenseFindingCuration>(yaml)
-                .let { yamlMapper.writeValueAsString(it) }
+                .toYaml()
                 .let { yamlMapper.readValue<LicenseFindingCuration>(it) }
 
             curation.startLines should containExactly(1, 2, 3, 5)

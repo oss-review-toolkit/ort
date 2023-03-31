@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
+import org.ossreviewtoolkit.utils.test.toYaml
 
 class SpdxExpressionTest : WordSpec() {
     private val yamlMapper = YAMLMapper()
@@ -73,7 +74,7 @@ class SpdxExpressionTest : WordSpec() {
             "be serializable to a string representation" {
                 val spdxExpression = dummyExpression.toSpdx()
 
-                val serializedExpression = yamlMapper.writeValueAsString(spdxExpression)
+                val serializedExpression = spdxExpression.toYaml()
 
                 serializedExpression shouldBe "--- \"$dummyExpression\"\n"
             }
