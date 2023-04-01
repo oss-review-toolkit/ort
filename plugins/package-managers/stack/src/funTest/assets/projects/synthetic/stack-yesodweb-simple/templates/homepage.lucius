@@ -1,0 +1,13 @@
+h2##{aDomId} {
+    color: #990
+}
+
+li {
+    line-height: 2em;
+    font-size: 16px
+}
+
+##{commentTextareaId} {
+    width: 400px;
+    height: 100px;
+}

@@ -85,11 +85,11 @@ class GitWorkingTreeFunTest : StringSpec({
 
     "Git correctly lists submodules" {
         val expectedSubmodules = listOf(
-            "analyzer/src/funTest/assets/projects/external/quickcheck-state-machine",
             "analyzer/src/funTest/assets/projects/external/sbt-multi-project-example",
             "plugins/package-managers/pub/src/funTest/assets/projects/external/dart-http",
             "plugins/package-managers/python/src/funTest/assets/projects/external/example-python-flask",
-            "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python"
+            "plugins/package-managers/python/src/funTest/assets/projects/external/spdx-tools-python",
+            "plugins/package-managers/stack/src/funTest/assets/projects/external/quickcheck-state-machine"
         ).associateWith { VersionControlSystem.getPathInfo(File("../$it")) }
 
         val workingTree = git.getWorkingTree(File(".."))

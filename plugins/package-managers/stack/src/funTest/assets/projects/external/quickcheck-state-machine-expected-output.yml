@@ -1,0 +1,3602 @@
+---
+project:
+  id: "Stack:Testing:quickcheck-state-machine:0.6.0"
+  definition_file_path: "stack.yaml"
+  authors:
+  - "Stevan Andjelkovic"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  vcs:
+    type: "Git"
+    url: "https://github.com/advancedtelematic/quickcheck-state-machine"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/advancedtelematic/quickcheck-state-machine.git"
+    revision: "2520c3c04814cf920b42d7c7fe8944ee3f89ca79"
+    path: ""
+  homepage_url: "https://github.com/advancedtelematic/quickcheck-state-machine#readme"
+  scopes:
+  - name: "bench"
+    dependencies: []
+  - name: "external"
+    dependencies:
+    - id: "Hackage:Control:mtl:2.2.2"
+      dependencies:
+      - id: "Hackage:Control:transformers:0.5.5.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Control:unliftio:0.2.10"
+      dependencies:
+      - id: "Hackage:Concurrency:async:2.2.1"
+        dependencies:
+        - id: "Hackage:Concurrency:stm:2.5.0.0"
+          dependencies:
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:hashable:1.2.7.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Concurrency:stm:2.5.0.0"
+        dependencies:
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Control:deepseq:1.4.4.0"
+      - id: "Hackage:Control:transformers:0.5.5.0"
+      - id: "Hackage:Control:unliftio-core:0.1.2.0"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:System:directory:1.3.3.0"
+      - id: "Hackage:System:filepath:1.4.2.1"
+      - id: "Hackage:System:process:1.6.3.0"
+      - id: "Hackage:System:unix:2.7.2.2"
+      - id: "Hackage:Time:time:1.8.0.2"
+    - id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
+      dependencies:
+      - id: "Hackage:Compatibility:transformers-compat:0.6.2"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Concurrency:stm:2.5.0.0"
+        dependencies:
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Control:mtl:2.2.2"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Control:transformers:0.5.5.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+    - id: "Hackage:Data Structures:containers:0.6.0.1"
+    - id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
+      dependencies:
+      - id: "Hackage:Compatibility:base-compat:0.10.5"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:unix:2.7.2.2"
+      - id: "Hackage:Data:MemoTrie:0.6.9"
+        dependencies:
+        - id: "Hackage:Control:newtype-generics:0.5.3"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:bytestring:0.10.8.2"
+      - id: "Hackage:Data:hashable:1.2.7.0"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:scientific:0.3.6.2"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data:hashable:1.2.7.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+          dependencies:
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:unordered-containers:0.2.9.0"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:hashable:1.2.7.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:uuid-types:1.0.3"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data:hashable:1.2.7.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:random:1.1"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Time:time:1.8.0.2"
+      - id: "Hackage:Data Structures:containers:0.6.0.1"
+      - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data, Phantom Types:tagged:0.8.6"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+      - id: "Hackage:Data, Text:text:1.2.3.1"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Generics:generics-sop:0.4.0.1"
+        dependencies:
+        - id: "Hackage:Data:sop-core:0.4.0.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+      - id: "Hackage:Parsing:parsec:3.1.13.0"
+        dependencies:
+        - id: "Hackage:Control:mtl:2.2.2"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Testing:QuickCheck:2.13.1"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:random:1.1"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:System:splitmix:0.0.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:System:random:1.1"
+            dependencies:
+            - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Time:time:1.8.0.2"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+      - id: "Hackage:Text:pretty:1.1.3.6"
+      - id: "Hackage:Text, Parsing:parsers:0.12.9"
+        dependencies:
+        - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Compatibility:base-orphans:0.8"
+          dependencies:
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Control:mtl:2.2.2"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Data:charset:0.3.7.1"
+          dependencies:
+          - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
+            dependencies:
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:unordered-containers:0.2.9.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:hashable:1.2.7.0"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data, Text:text:1.2.3.1"
+                dependencies:
+                - id: "Hackage:Control:deepseq:1.4.4.0"
+                - id: "Hackage:Data:bytestring:0.10.8.2"
+                - id: "Hackage:Data Structures:array:0.5.3.0"
+                - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+                - id: "Hackage:GHC:ghc-prim:0.5.3"
+                - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+                - id: "Hackage:Prelude:base:4.12.0.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:scientific:0.3.6.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:hashable:1.2.7.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data:primitive:0.6.4.0"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:unordered-containers:0.2.9.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:hashable:1.2.7.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Parsing:parsec:3.1.13.0"
+          dependencies:
+          - id: "Hackage:Control:mtl:2.2.2"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:scientific:0.3.6.2"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data:hashable:1.2.7.0"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data, Text:text:1.2.3.1"
+                dependencies:
+                - id: "Hackage:Control:deepseq:1.4.4.0"
+                - id: "Hackage:Data:bytestring:0.10.8.2"
+                - id: "Hackage:Data Structures:array:0.5.3.0"
+                - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+                - id: "Hackage:GHC:ghc-prim:0.5.3"
+                - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+                - id: "Hackage:Prelude:base:4.12.0.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Data:primitive:0.6.4.0"
+              dependencies:
+              - id: "Hackage:Control:transformers:0.5.5.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Data Structures:containers:0.6.0.1"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+              dependencies:
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
+        dependencies:
+        - id: "Hackage:Compatibility:base-compat:0.10.5"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:System:unix:2.7.2.2"
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data:dlist:0.8.0.5"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:hashable:1.2.7.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:scientific:0.3.6.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:hashable:1.2.7.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data:primitive:0.6.4.0"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:unordered-containers:0.2.9.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:hashable:1.2.7.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:uuid-types:1.0.3"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:hashable:1.2.7.0"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:System:random:1.1"
+            dependencies:
+            - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:primitive:0.6.4.0"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data, Phantom Types:tagged:0.8.6"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Development:th-abstraction:0.2.10.0"
+          dependencies:
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:time-locale-compat:0.1.1.5"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+        - id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data:scientific:0.3.6.2"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data:hashable:1.2.7.0"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data, Text:text:1.2.3.1"
+                dependencies:
+                - id: "Hackage:Control:deepseq:1.4.4.0"
+                - id: "Hackage:Data:bytestring:0.10.8.2"
+                - id: "Hackage:Data Structures:array:0.5.3.0"
+                - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+                - id: "Hackage:GHC:ghc-prim:0.5.3"
+                - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+                - id: "Hackage:Prelude:base:4.12.0.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Data:primitive:0.6.4.0"
+              dependencies:
+              - id: "Hackage:Control:transformers:0.5.5.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Data Structures:containers:0.6.0.1"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+              dependencies:
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Time:time:1.8.0.2"
+      - id: "Hackage:Time:time:1.8.0.2"
+      - id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:data, graphics:colour:2.3.4"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:data, graphics:colour:2.3.4"
+            dependencies:
+            - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Data, Text:text:1.2.3.1"
+      dependencies:
+      - id: "Hackage:Control:deepseq:1.4.4.0"
+      - id: "Hackage:Data:bytestring:0.10.8.2"
+      - id: "Hackage:Data Structures:array:0.5.3.0"
+      - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+      - id: "Hackage:GHC:ghc-prim:0.5.3"
+      - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
+      dependencies:
+      - id: "Hackage:Control:mtl:2.2.2"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:bytestring:0.10.8.2"
+      - id: "Hackage:Data:dlist:0.8.0.5"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data Structures:containers:0.6.0.1"
+      - id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data, Text:text:1.2.3.1"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:System:directory:1.3.3.0"
+      - id: "Hackage:System:filepath:1.4.2.1"
+      - id: "Hackage:System:process:1.6.3.0"
+      - id: "Hackage:System, Utils:temporary:1.3"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
+          dependencies:
+          - id: "Hackage:Compatibility:transformers-compat:0.6.2"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Concurrency:stm:2.5.0.0"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Control:mtl:2.2.2"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:directory:1.3.3.0"
+        - id: "Hackage:System:filepath:1.4.2.1"
+        - id: "Hackage:System:random:1.1"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:System:unix:2.7.2.2"
+      - id: "Hackage:Text:wl-pprint-text:1.2.0.0"
+        dependencies:
+        - id: "Hackage:Compatibility:base-compat:0.10.5"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:System:unix:2.7.2.2"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Text, Parsing:polyparse:1.12.1"
+        dependencies:
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data, Text:text:1.2.3.1"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:data, graphics:colour:2.3.4"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:List:split:0.2.3.3"
+      dependencies:
+      - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Math:matrix:0.3.6.1"
+      dependencies:
+      - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Control:deepseq:1.4.4.0"
+      - id: "Hackage:Control:loop:0.3.0"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data:primitive:0.6.4.0"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Other:generic-data:0.3.0.0"
+      dependencies:
+      - id: "Hackage:Compatibility:base-orphans:0.8"
+        dependencies:
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Control, Data:contravariant:1.5"
+        dependencies:
+        - id: "Hackage:Control:transformers:0.5.5.0"
+        - id: "Hackage:Data:StateVar:1.1.1.1"
+          dependencies:
+          - id: "Hackage:Concurrency:stm:2.5.0.0"
+            dependencies:
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Text:show-combinators:0.1.0.0"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:System:directory:1.3.3.0"
+    - id: "Hackage:System:filepath:1.4.2.1"
+    - id: "Hackage:System:process:1.6.3.0"
+    - id: "Hackage:System:random:1.1"
+      dependencies:
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Time:time:1.8.0.2"
+    - id: "Hackage:Testing:QuickCheck:2.13.1"
+      dependencies:
+      - id: "Hackage:Control:deepseq:1.4.4.0"
+      - id: "Hackage:Control:transformers:0.5.5.0"
+      - id: "Hackage:Data Structures:containers:0.6.0.1"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:System:random:1.1"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Time:time:1.8.0.2"
+      - id: "Hackage:System:splitmix:0.0.2"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:random:1.1"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:Time:time:1.8.0.2"
+      - id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+    - id: "Hackage:Testing:markov-chain-usage-model:0.0.0"
+      dependencies:
+      - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Math:matrix:0.3.6.1"
+        dependencies:
+        - id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Control:loop:0.3.0"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data:primitive:0.6.4.0"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Data:primitive:0.6.4.0"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:GHC:ghc-prim:0.5.3"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+    - id: "Hackage:Text:pretty-show:1.9.5"
+      dependencies:
+      - id: "Hackage:Data Structures:array:0.5.3.0"
+      - id: "Hackage:Data, Text:text:1.2.3.1"
+        dependencies:
+        - id: "Hackage:Control:deepseq:1.4.4.0"
+        - id: "Hackage:Data:bytestring:0.10.8.2"
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+        - id: "Hackage:GHC:ghc-prim:0.5.3"
+        - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Development:happy:1.19.9"
+        dependencies:
+        - id: "Hackage:Control:mtl:2.2.2"
+          dependencies:
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:Data Structures:array:0.5.3.0"
+        - id: "Hackage:Data Structures:containers:0.6.0.1"
+        - id: "Hackage:Distribution:Cabal:2.4.1.0"
+          dependencies:
+          - id: "Hackage:Control:deepseq:1.4.4.0"
+          - id: "Hackage:Control:mtl:2.2.2"
+            dependencies:
+            - id: "Hackage:Control:transformers:0.5.5.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Control:transformers:0.5.5.0"
+          - id: "Hackage:Data:bytestring:0.10.8.2"
+          - id: "Hackage:Data Structures:array:0.5.3.0"
+          - id: "Hackage:Data Structures:containers:0.6.0.1"
+          - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+          - id: "Hackage:Data, Text:text:1.2.3.1"
+            dependencies:
+            - id: "Hackage:Control:deepseq:1.4.4.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data Structures:array:0.5.3.0"
+            - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+            - id: "Hackage:GHC:ghc-prim:0.5.3"
+            - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Parsing:parsec:3.1.13.0"
+            dependencies:
+            - id: "Hackage:Control:mtl:2.2.2"
+              dependencies:
+              - id: "Hackage:Control:transformers:0.5.5.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Data:bytestring:0.10.8.2"
+            - id: "Hackage:Data, Text:text:1.2.3.1"
+              dependencies:
+              - id: "Hackage:Control:deepseq:1.4.4.0"
+              - id: "Hackage:Data:bytestring:0.10.8.2"
+              - id: "Hackage:Data Structures:array:0.5.3.0"
+              - id: "Hackage:Data, Parsing:binary:0.8.6.0"
+              - id: "Hackage:GHC:ghc-prim:0.5.3"
+              - id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+              - id: "Hackage:Prelude:base:4.12.0.0"
+            - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:Prelude:base:4.12.0.0"
+          - id: "Hackage:System:directory:1.3.3.0"
+          - id: "Hackage:System:filepath:1.4.2.1"
+          - id: "Hackage:System:process:1.6.3.0"
+          - id: "Hackage:System:unix:2.7.2.2"
+          - id: "Hackage:Text:pretty:1.1.3.6"
+          - id: "Hackage:Time:time:1.8.0.2"
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:System:directory:1.3.3.0"
+        - id: "Hackage:System:filepath:1.4.2.1"
+      - id: "Hackage:GHC:ghc-prim:0.5.3"
+      - id: "Hackage:Language:haskell-lexer:1.0.2"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:System:filepath:1.4.2.1"
+      - id: "Hackage:Text:pretty:1.1.3.6"
+    - id: "Hackage:Time:time:1.8.0.2"
+    - id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
+      dependencies:
+      - id: "Hackage:Prelude:base:4.12.0.0"
+      - id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
+        dependencies:
+        - id: "Hackage:Prelude:base:4.12.0.0"
+        - id: "Hackage:data, graphics:colour:2.3.4"
+          dependencies:
+          - id: "Hackage:Prelude:base:4.12.0.0"
+  - name: "test"
+    dependencies: []
+packages:
+- id: "Hackage:Algebra, Data, Data Structures, Math:semigroups:0.18.5"
+  purl: "pkg:hackage/Algebra%2C%20Data%2C%20Data%20Structures%2C%20Math/semigroups@0.18.5"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "In mathematics, a semigroup is an algebraic structure consisting of\
+    \ a set together with an associative binary operation. A semigroup generalizes\
+    \ a monoid in that there might not exist an identity element. It also (originally)\
+    \ generalized a group (a monoid with all inverses) to a type where every element\
+    \ did not have to have an inverse, thus the name semigroup."
+  homepage_url: "http://github.com/ekmett/semigroups/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/semigroups-0.18.5/semigroups-0.18.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/semigroups.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/semigroups.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Compatibility:base-compat:0.10.5"
+  purl: "pkg:hackage/Compatibility/base-compat@0.10.5"
+  authors:
+  - "João Cristóvão"
+  - "Ryan Scott"
+  - "Simon Hengel"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Provides functions available in later versions of @base@ to\na wider\
+    \ range of compilers, without requiring you to use CPP\npragmas in your code.\
+    \  See the\n<https://github.com/haskell-compat/base-compat/blob/master/base-compat/README.markdown\
+    \ README>\nfor what is covered. Also see the\n<https://github.com/haskell-compat/base-compat/blob/master/base-compat/CHANGES.markdown\
+    \ changelog>\nfor recent changes.\n\nNote that @base-compat@ does not add any\
+    \ orphan instances.\nThere is a separate package,\n@<http://hackage.haskell.org/package/base-orphans\
+    \ base-orphans>@,\nfor that.\n\nIn addition, @base-compat@ does not backport any\
+    \ data types\nor type classes. See\n@<https://github.com/haskell-compat/base-compat/blob/master/base-compat/README.markdown#data-types-and-type-classes\
+    \ this section of the README>@\nfor more info.\n\n@base-compat@ is designed to\
+    \ have zero dependencies. For a\nversion of @base-compat@ that depends on compatibility\n\
+    libraries for a wider support window, see the\n@<http://hackage.haskell.org/package/base-compat-batteries\
+    \ base-compat-batteries>@\npackage. Most of the modules in this library have the\
+    \ same\nnames as in @base-compat-batteries@ to make it easier to\nswitch between\
+    \ the two. There also exist versions of each\nmodule with the suffix @.Repl@,\
+    \ which are distinct from\nanything in @base-compat-batteries@, to allow for easier\n\
+    use in GHCi."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/base-compat-0.10.5/base-compat-0.10.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell-compat/base-compat"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell-compat/base-compat.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Compatibility:base-orphans:0.8"
+  purl: "pkg:hackage/Compatibility/base-orphans@0.8"
+  authors:
+  - "João Cristóvão"
+  - "Ryan Scott"
+  - "Simon Hengel"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "@base-orphans@ defines orphan instances that mimic instances available\
+    \ in later versions of @base@ to a wider (older) range of compilers. @base-orphans@\
+    \ does not export anything except the orphan instances themselves and complements\
+    \ @<http://hackage.haskell.org/package/base-compat base-compat>@.\nSee the README\
+    \ for what instances are covered: <https://github.com/haskell-compat/base-orphans#readme>.\
+    \ See also the <https://github.com/haskell-compat/base-orphans#what-is-not-covered\
+    \ what is not covered> section."
+  homepage_url: "https://github.com/haskell-compat/base-orphans#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/base-orphans-0.8/base-orphans-0.8.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell-compat/base-orphans"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell-compat/base-orphans.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Compatibility:transformers-compat:0.6.2"
+  purl: "pkg:hackage/Compatibility/transformers-compat@0.6.2"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package includes backported versions of types that were added\n\
+    to transformers in transformers 0.3, 0.4, and 0.5 for users who need strict\n\
+    transformers 0.2 or 0.3 compatibility to run on old versions of the\nplatform,\
+    \ but also need those types.\n\nThose users should be able to just depend on @transformers\
+    \ >= 0.2@\nand @transformers-compat >= 0.3@.\n\nNote: missing methods are not\
+    \ supplied, but this at least permits the types to be used."
+  homepage_url: "http://github.com/ekmett/transformers-compat/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/transformers-compat-0.6.2/transformers-compat-0.6.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/transformers-compat.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/transformers-compat.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Concurrency:async:2.2.1"
+  purl: "pkg:hackage/Concurrency/async@2.2.1"
+  authors:
+  - "Simon Marlow"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides a higher-level interface over\nthreads, in which\
+    \ an @Async a@ is a concurrent\nthread that will eventually deliver a value of\n\
+    type @a@.  The package provides ways to create\n@Async@ computations, wait for\
+    \ their results, and\ncancel them.\n\nUsing @Async@ is safer than using threads\
+    \ in two\nways:\n\n* When waiting for a thread to return a result,\nif the thread\
+    \ dies with an exception then the\ncaller must either re-throw the exception\n\
+    ('wait') or handle it ('waitCatch'); the\nexception cannot be ignored.\n\n* The\
+    \ API makes it possible to build a tree of\nthreads that are automatically killed\
+    \ when\ntheir parent dies (see 'withAsync')."
+  homepage_url: "https://github.com/simonmar/async"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/async-2.2.1/async-2.2.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/simonmar/async.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/simonmar/async.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Concurrency:stm:2.5.0.0"
+  purl: "pkg:hackage/Concurrency/stm@2.5.0.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Software Transactional Memory, or STM, is an abstraction for\nconcurrent\
+    \ communication. The main benefits of STM are\n/composability/ and /modularity/.\
+    \ That is, using STM you can write\nconcurrent abstractions that can be easily\
+    \ composed with any other\nabstraction built using STM, without exposing the details\
+    \ of how\nyour abstraction ensures safety. This is typically not the case\nwith\
+    \ other forms of concurrent communication, such as locks or\n'MVar's."
+  homepage_url: "https://wiki.haskell.org/Software_transactional_memory"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/stm-2.5.0.0/stm-2.5.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/stm.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/stm.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:deepseq:1.4.4.0"
+  purl: "pkg:hackage/Control/deepseq@1.4.4.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides methods for fully evaluating data structures\n\
+    (\\\"deep evaluation\\\"). Deep evaluation is often used for adding\nstrictness\
+    \ to a program, e.g. in order to force pending exceptions,\nremove space leaks,\
+    \ or force lazy I/O to happen. It is also useful\nin parallel programs, to ensure\
+    \ pending work does not migrate to the\nwrong thread.\n\nThe primary use of this\
+    \ package is via the 'deepseq' function, a\n\\\"deep\\\" version of 'seq'. It\
+    \ is implemented on top of an 'NFData'\ntypeclass (\\\"Normal Form Data\\\", data\
+    \ structures with no unevaluated\ncomponents) which defines strategies for fully\
+    \ evaluating different\ndata types. See module documentation in \"Control.DeepSeq\"\
+    \ for more\ndetails."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/deepseq-1.4.4.0/deepseq-1.4.4.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/deepseq.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/deepseq.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:loop:0.3.0"
+  purl: "pkg:hackage/Control/loop@0.3.0"
+  authors:
+  - "Niklas Hambüchen"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "This package provides a convenient and fast alternative to the common\n\
+    `forM_ [1..n]` idiom, which in many cases GHC cannot fuse to efficient\ncode.\n\
+    \nSee <https://ghc.haskell.org/trac/ghc/ticket/8763>."
+  homepage_url: "https://github.com/nh2/loop"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/loop-0.3.0/loop-0.3.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/nh2/loop.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nh2/loop.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:mtl:2.2.2"
+  purl: "pkg:hackage/Control/mtl@2.2.2"
+  authors:
+  - "Andy Gill"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Monad classes using functional dependencies, with instances\nfor various\
+    \ monad transformers, inspired by the paper\n/Functional Programming with Overloading\
+    \ and Higher-Order Polymorphism/,\nby Mark P Jones, in /Advanced School of Functional\
+    \ Programming/, 1995\n(<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>)."
+  homepage_url: "http://github.com/haskell/mtl"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/mtl-2.2.2/mtl-2.2.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/mtl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/mtl.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:newtype-generics:0.5.3"
+  purl: "pkg:hackage/Control/newtype-generics@0.5.3"
+  authors:
+  - "Conor McBride"
+  - "Darius Jahandarie"
+  - "João Cristóvão"
+  - "Simon Jakobi"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Per Conor McBride, the Newtype typeclass represents the packing and\
+    \ unpacking of a newtype,\nand allows you to operate under that newtype with functions\
+    \ such as ala.\nGenerics support was added in version 0.4, making this package\
+    \ a full replacement\nfor the original newtype package, and a better alternative\
+    \ to newtype-th."
+  homepage_url: "http://github.com/sjakobi/bsb-http-chunked"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/newtype-generics-0.5.3/newtype-generics-0.5.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/sjakobi/newtype-generics"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/sjakobi/newtype-generics.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:transformers:0.5.5.0"
+  purl: "pkg:hackage/Control/transformers@0.5.5.0"
+  authors:
+  - "Andy Gill"
+  - "Ross Paterson"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A portable library of functor and monad transformers, inspired by\n\
+    the paper \\\"Functional Programming with Overloading and Higher-Order\nPolymorphism\\\
+    \", by Mark P Jones,\nin /Advanced School of Functional Programming/, 1995\n(<http://web.cecs.pdx.edu/~mpj/pubs/springschool.html>).\n\
+    \nThis package contains:\n\n* the monad transformer class (in \"Control.Monad.Trans.Class\"\
+    )\n\n* concrete functor and monad transformers, each with associated\noperations\
+    \ and functions to lift operations associated with other\ntransformers.\n\nThe\
+    \ package can be used on its own in portable Haskell code, in\nwhich case operations\
+    \ need to be manually lifted through transformer\nstacks (see \"Control.Monad.Trans.Class\"\
+    \ for some examples).\nAlternatively, it can be used with the non-portable monad\
+    \ classes in\nthe @mtl@ or @monads-tf@ packages, which automatically lift operations\n\
+    introduced by monad transformers through other transformers."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/transformers-0.5.5.0/transformers-0.5.5.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "darcs"
+    url: "http://hub.darcs.net/ross/transformers"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "darcs"
+    url: "http://hub.darcs.net/ross/transformers"
+    revision: ""
+    path: ""
+- id: "Hackage:Control:unliftio:0.2.10"
+  purl: "pkg:hackage/Control/unliftio@0.2.10"
+  authors:
+  - "Francesco Mazzoli"
+  - "Michael Snoyman"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Please see the documentation and README at <https://www.stackage.org/package/unliftio>"
+  homepage_url: "https://github.com/fpco/unliftio/tree/master/unliftio#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/unliftio-0.2.10/unliftio-0.2.10.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fpco/unliftio.git"
+    revision: "master"
+    path: "unliftio"
+- id: "Hackage:Control:unliftio-core:0.1.2.0"
+  purl: "pkg:hackage/Control/unliftio-core@0.1.2.0"
+  authors:
+  - "Francesco Mazzoli"
+  - "Michael Snoyman"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Please see the documentation and README at <https://www.stackage.org/package/unliftio-core>"
+  homepage_url: "https://github.com/fpco/unliftio/tree/master/unliftio-core#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/unliftio-core-0.1.2.0/unliftio-core-0.1.2.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/fpco/unliftio.git"
+    revision: "master"
+    path: "unliftio-core"
+- id: "Hackage:Control, Data:contravariant:1.5"
+  purl: "pkg:hackage/Control%2C%20Data/contravariant@1.5"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Contravariant functors."
+  homepage_url: "http://github.com/ekmett/contravariant/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/contravariant-1.5/contravariant-1.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/contravariant.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/contravariant.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Control, Exceptions, Monad:exceptions:0.10.0"
+  purl: "pkg:hackage/Control%2C%20Exceptions%2C%20Monad/exceptions@0.10.0"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Extensible optionally-pure exceptions."
+  homepage_url: "http://github.com/ekmett/exceptions/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/exceptions-0.10.0/exceptions-0.10.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/exceptions.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/exceptions.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:MemoTrie:0.6.9"
+  purl: "pkg:hackage/Data/MemoTrie@0.6.9"
+  authors:
+  - "Conal Elliott"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "MemoTrie provides a basis for memoized functions over some domains,\n\
+    using tries.  It's based on ideas from Ralf Hinze and code from\nSpencer Janssen.\
+    \ Generic support thanks to Sam Boosalis.\n\nProject wiki page: <http://haskell.org/haskellwiki/MemoTrie>\n\
+    \n&#169; 2008-2016 by Conal Elliott; BSD3 license."
+  homepage_url: "https://github.com/conal/MemoTrie"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/MemoTrie-0.6.9/MemoTrie-0.6.9.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/conal/MemoTrie.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/conal/MemoTrie.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:StateVar:1.1.1.1"
+  purl: "pkg:hackage/Data/StateVar@1.1.1.1"
+  authors:
+  - "Sven Panne and Edward Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package contains state variables, which are references in the\
+    \ IO monad,\nlike IORefs or parts of the OpenGL state."
+  homepage_url: "https://github.com/haskell-opengl/StateVar"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/StateVar-1.1.1.1/StateVar-1.1.1.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell-opengl/StateVar.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell-opengl/StateVar.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:bytestring:0.10.8.2"
+  purl: "pkg:hackage/Data/bytestring@0.10.8.2"
+  authors:
+  - "Don Stewart"
+  - "Duncan Coutts"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "An efficient compact, immutable byte string type (both strict and\
+    \ lazy)\nsuitable for binary or 8-bit character data.\n\nThe 'ByteString' type\
+    \ represents sequences of bytes or 8-bit characters.\nIt is suitable for high\
+    \ performance use, both in terms of large data\nquantities, or high speed requirements.\
+    \ The 'ByteString' functions follow\nthe same style as Haskell\\'s ordinary lists,\
+    \ so it is easy to convert code\nfrom using 'String' to 'ByteString'.\n\nTwo 'ByteString'\
+    \ variants are provided:\n\n* Strict 'ByteString's keep the string as a single\
+    \ large array. This\nmakes them convenient for passing data between C and Haskell.\n\
+    \n* Lazy 'ByteString's use a lazy list of strict chunks which makes it\nsuitable\
+    \ for I\\/O streaming tasks.\n\nThe @Char8@ modules provide a character-based\
+    \ view of the same\nunderlying 'ByteString' types. This makes it convenient to\
+    \ handle mixed\nbinary and 8-bit character content (which is common in many file\
+    \ formats\nand network protocols).\n\nThe 'Builder' module provides an efficient\
+    \ way to build up 'ByteString's\nin an ad-hoc way by repeated concatenation. This\
+    \ is ideal for fast\nserialisation or pretty printing.\n\nThere is also a 'ShortByteString'\
+    \ type which has a lower memory overhead\nand can can be converted to or from\
+    \ a 'ByteString', but supports very few\nother operations. It is suitable for\
+    \ keeping many short strings in memory.\n\n'ByteString's are not designed for\
+    \ Unicode. For Unicode strings you should\nuse the 'Text' type from the @text@\
+    \ package.\n\nThese modules are intended to be imported qualified, to avoid name\
+    \ clashes\nwith \"Prelude\" functions, e.g.\n\n> import qualified Data.ByteString\
+    \ as BS"
+  homepage_url: "https://github.com/haskell/bytestring"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/bytestring-0.10.8.2/bytestring-0.10.8.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/bytestring"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/bytestring.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:charset:0.3.7.1"
+  purl: "pkg:hackage/Data/charset@0.3.7.1"
+  authors:
+  - "Edward Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Fast unicode character sets based on complemented PATRICIA tries"
+  homepage_url: "http://github.com/ekmett/charset"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/charset-0.3.7.1/charset-0.3.7.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/charset.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/charset.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:dlist:0.8.0.5"
+  purl: "pkg:hackage/Data/dlist@0.8.0.5"
+  authors:
+  - "Don Stewart"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Difference lists are a list-like type supporting O(1) append. This\
+    \ is\nparticularly useful for efficient logging and pretty printing (e.g. with\
+    \ the\nWriter monad), where list append quickly becomes too expensive."
+  homepage_url: "https://github.com/spl/dlist"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/dlist-0.8.0.5/dlist-0.8.0.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/spl/dlist.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/spl/dlist.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:hashable:1.2.7.0"
+  purl: "pkg:hackage/Data/hashable@1.2.7.0"
+  authors:
+  - "Milan Straka"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package defines a class, 'Hashable', for types that\ncan be converted\
+    \ to a hash value.  This class\nexists for the benefit of hashing-based data\n\
+    structures.  The package provides instances for\nbasic types and a way to combine\
+    \ hash values."
+  homepage_url: "http://github.com/tibbe/hashable"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/hashable-1.2.7.0/hashable-1.2.7.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/tibbe/hashable.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tibbe/hashable.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:primitive:0.6.4.0"
+  purl: "pkg:hackage/Data/primitive@0.6.4.0"
+  authors:
+  - "Roman Leshchinskiy"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides various primitive memory-related operations."
+  homepage_url: "https://github.com/haskell/primitive"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/primitive-0.6.4.0/primitive-0.6.4.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/primitive"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/primitive.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:scientific:0.3.6.2"
+  purl: "pkg:hackage/Data/scientific@0.3.6.2"
+  authors:
+  - "Bas van Dijk"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "\"Data.Scientific\" provides the number type 'Scientific'. Scientific\
+    \ numbers are\narbitrary precision and space efficient. They are represented using\n\
+    <http://en.wikipedia.org/wiki/Scientific_notation scientific notation>.\nThe implementation\
+    \ uses a coefficient @c :: 'Integer'@ and a base-10 exponent\n@e :: 'Int'@. A\
+    \ scientific number corresponds to the\n'Fractional' number: @'fromInteger' c\
+    \ * 10 '^^' e@.\n\nNote that since we're using an 'Int' to represent the exponent\
+    \ these numbers\naren't truly arbitrary precision. I intend to change the type\
+    \ of the exponent\nto 'Integer' in a future release.\n\nThe main application of\
+    \ 'Scientific' is to be used as the target of parsing\narbitrary precision numbers\
+    \ coming from an untrusted source. The advantages\nover using 'Rational' for this\
+    \ are that:\n\n* A 'Scientific' is more efficient to construct. Rational numbers\
+    \ need to be\nconstructed using '%' which has to compute the 'gcd' of the 'numerator'\
+    \ and\n'denominator'.\n\n* 'Scientific' is safe against numbers with huge exponents.\
+    \ For example:\n@1e1000000000 :: 'Rational'@ will fill up all space and crash\
+    \ your\nprogram. Scientific works as expected:\n\n>>> read \"1e1000000000\" ::\
+    \ Scientific\n1.0e1000000000\n\n* Also, the space usage of converting scientific\
+    \ numbers with huge exponents to\n@'Integral's@ (like: 'Int') or @'RealFloat's@\
+    \ (like: 'Double' or 'Float')\nwill always be bounded by the target type."
+  homepage_url: "https://github.com/basvandijk/scientific"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/scientific-0.3.6.2/scientific-0.3.6.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/basvandijk/scientific.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/basvandijk/scientific.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:sop-core:0.4.0.0"
+  purl: "pkg:hackage/Data/sop-core@0.4.0.0"
+  authors:
+  - "Andres Löh"
+  - "Edsko de Vries"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Implementation of n-ary sums and n-ary products.\n\nThe module \"\
+    Data.SOP\" is the main module of this library and contains\nmore detailed documentation.\n\
+    \nThe main use case of this package is to serve as the core of\n@<https://hackage.haskell.org/package/generics-sop\
+    \ generics-sop>@.\n\nA detailed description of the ideas behind this library is\
+    \ provided by\nthe paper:\n\n* Edsko de Vries and Andres Löh.\n<http://www.andres-loeh.de/TrueSumsOfProducts\
+    \ True Sums of Products>.\nWorkshop on Generic Programming (WGP) 2014."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/sop-core-0.4.0.0/sop-core-0.4.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/well-typed/generics-sop"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/well-typed/generics-sop.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:unordered-containers:0.2.9.0"
+  purl: "pkg:hackage/Data/unordered-containers@0.2.9.0"
+  authors:
+  - "Johan Tibell"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Efficient hashing-based container types.  The containers have been\n\
+    optimized for performance critical use, both in terms of large data\nquantities\
+    \ and high speed.\n\nThe declared cost of each operation is either worst-case\
+    \ or\namortized, but remains valid even if structures are shared."
+  homepage_url: "https://github.com/tibbe/unordered-containers"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/unordered-containers-0.2.9.0/unordered-containers-0.2.9.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/tibbe/unordered-containers.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/tibbe/unordered-containers.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data:uuid-types:1.0.3"
+  purl: "pkg:hackage/Data/uuid-types@1.0.3"
+  authors:
+  - "Antoine Latter"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This library contains type definitions for Universally Unique Identifiers\n\
+    and basic conversion functions.\n\nSee <http://en.wikipedia.org/wiki/UUID> for\
+    \ the general idea."
+  homepage_url: "https://github.com/aslatter/uuid"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/uuid-types-1.0.3/uuid-types-1.0.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/aslatter/uuid.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data Structures:array:0.5.3.0"
+  purl: "pkg:hackage/Data%20Structures/array@0.5.3.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "In addition to providing the \"Data.Array\" module\n<http://www.haskell.org/onlinereport/haskell2010/haskellch14.html\
+    \ as specified in the Haskell 2010 Language Report>,\nthis package also defines\
+    \ the classes 'IArray' of\nimmutable arrays and 'MArray' of arrays mutable within\
+    \ appropriate\nmonads, as well as some instances of these classes."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/array-0.5.3.0/array-0.5.3.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://git.haskell.org/packages/array.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git.haskell.org/packages/array.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data Structures:containers:0.6.0.1"
+  purl: "pkg:hackage/Data%20Structures/containers@0.6.0.1"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package contains efficient general-purpose implementations\n\
+    of various immutable container types including sets, maps, sequences,\ntrees,\
+    \ and graphs.\n\nFor a walkthrough of what this package provides with examples\
+    \ of common\noperations see the [containers\nintroduction](https://haskell-containers.readthedocs.io).\n\
+    \nThe declared cost of each operation is either worst-case or amortized, but\n\
+    remains valid even if structures are shared."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/containers-0.6.0.1/containers-0.6.0.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://github.com/haskell/containers.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/containers.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data Structures, Graphs:fgl:5.7.0.1"
+  purl: "pkg:hackage/Data%20Structures%2C%20Graphs/fgl@5.7.0.1"
+  authors:
+  - "Ivan Lazar Miljenovic"
+  - "Martin Erwig"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "An inductive representation of manipulating graph data structures.\n\
+    \nOriginal website can be found at <http://web.engr.oregonstate.edu/~erwig/fgl/haskell>."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/fgl-5.7.0.1/fgl-5.7.0.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/fgl.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/fgl.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data, Data Structures:vector:0.12.0.2"
+  purl: "pkg:hackage/Data%2C%20Data%20Structures/vector@0.12.0.2"
+  authors:
+  - "Roman Leshchinskiy"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "An efficient implementation of Int-indexed arrays (both mutable\n\
+    and immutable), with a powerful loop optimisation framework .\n\nIt is structured\
+    \ as follows:\n\n[\"Data.Vector\"] Boxed vectors of arbitrary types.\n\n[\"Data.Vector.Unboxed\"\
+    ] Unboxed vectors with an adaptive\nrepresentation based on data type families.\n\
+    \n[\"Data.Vector.Storable\"] Unboxed vectors of 'Storable' types.\n\n[\"Data.Vector.Primitive\"\
+    ] Unboxed vectors of primitive types as\ndefined by the @primitive@ package. \"\
+    Data.Vector.Unboxed\" is more\nflexible at no performance cost.\n\n[\"Data.Vector.Generic\"\
+    ] Generic interface to the vector types.\n\nThere is also a (draft) tutorial on\
+    \ common uses of vector.\n\n* <http://haskell.org/haskellwiki/Numeric_Haskell:_A_Vector_Tutorial>"
+  homepage_url: "https://github.com/haskell/vector"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/vector-0.12.0.2/vector-0.12.0.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/vector.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/vector.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data, Parsing:binary:0.8.6.0"
+  purl: "pkg:hackage/Data%2C%20Parsing/binary@0.8.6.0"
+  authors:
+  - "Lennart Kolmodin"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Efficient, pure binary serialisation using lazy ByteStrings.\nHaskell\
+    \ values may be encoded to and from binary formats,\nwritten to disk as binary,\
+    \ or sent over the network.\nThe format used can be automatically generated, or\n\
+    you can choose to implement a custom format if needed.\nSerialisation speeds of\
+    \ over 1 G\\/sec have been observed,\nso this library should be suitable for high\
+    \ performance\nscenarios."
+  homepage_url: "https://github.com/kolmodin/binary"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/binary-0.8.6.0/binary-0.8.6.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/kolmodin/binary.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kolmodin/binary.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data, Phantom Types:tagged:0.8.6"
+  purl: "pkg:hackage/Data%2C%20Phantom%20Types/tagged@0.8.6"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Haskell 98 phantom types to avoid unsafely passing dummy arguments."
+  homepage_url: "http://github.com/ekmett/tagged"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/tagged-0.8.6/tagged-0.8.6.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/tagged.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/tagged.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data, Testing:tree-diff:0.0.2.1"
+  purl: "pkg:hackage/Data%2C%20Testing/tree-diff@0.0.2.1"
+  authors:
+  - "Oleg Grenrus"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Common diff algorithm works on list structures:\n\n@\ndiff :: Eq a\
+    \ => [a] -> [a] -> [Edit a]\n@\n\nThis package works on trees.\n\n@\ntreeDiff\
+    \ :: Eq a => Tree a -> Tree a -> Edit (EditTree a)\n@\n\nThis package also provides\
+    \ a way to diff arbitrary ADTs,\nusing @Generics@-derivable helpers.\n\nThis package\
+    \ differs from <http://hackage.haskell.org/package/gdiff gdiff>,\nin a two ways:\
+    \ @tree-diff@ doesn't have patch function,\nand the \"edit-script\" is a tree\
+    \ itself, which is useful for pretty-printing.\n\n@\n>>> prettyEditExpr $ ediff\
+    \ (Foo 42 [True, False] \"old\") (Foo 42 [False, False, True] \"new\")\nFoo\n\
+    {fooBool = [-True, +False, False, +True],\nfooInt = 42,\nfooString = -\"old\"\
+    \ +\"new\"}\n@"
+  homepage_url: "https://github.com/phadej/tree-diff"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/tree-diff-0.0.2.1/tree-diff-0.0.2.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/phadej/tree-diff.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/phadej/tree-diff.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Data, Text:text:1.2.3.1"
+  purl: "pkg:hackage/Data%2C%20Text/text@1.2.3.1"
+  authors:
+  - "Bryan O'Sullivan"
+  declared_licenses:
+  - "BSD2"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+    mapped:
+      BSD2: "BSD-2-Clause"
+  description: "An efficient packed, immutable Unicode text type (both strict and\n\
+    lazy), with a powerful loop fusion optimization framework.\n\nThe 'Text' type\
+    \ represents Unicode character strings, in a time and\nspace-efficient manner.\
+    \ This package provides text processing\ncapabilities that are optimized for performance\
+    \ critical use, both\nin terms of large data quantities and high speed.\n\nThe\
+    \ 'Text' type provides character-encoding, type-safe case\nconversion via whole-string\
+    \ case conversion functions (see \"Data.Text\").\nIt also provides a range of\
+    \ functions for converting 'Text' values to\nand from 'ByteStrings', using several\
+    \ standard encodings\n(see \"Data.Text.Encoding\").\n\nEfficient locale-sensitive\
+    \ support for text IO is also supported\n(see \"Data.Text.IO\").\n\nThese modules\
+    \ are intended to be imported qualified, to avoid name\nclashes with Prelude functions,\
+    \ e.g.\n\n> import qualified Data.Text as T\n\nTo use an extended and very rich\
+    \ family of functions for working\nwith Unicode text (including normalization,\
+    \ regular expressions,\nnon-standard encodings, text breaking, and locales), see\n\
+    the [text-icu package](https://hackage.haskell.org/package/text-icu)\nbased on\
+    \ the well-respected and liberally\nlicensed [ICU library](http://site.icu-project.org/)."
+  homepage_url: "https://github.com/haskell/text"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/text-1.2.3.1/text-1.2.3.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Mercurial"
+    url: "https://bitbucket.org/bos/text"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Mercurial"
+    url: "https://bitbucket.org/bos/text"
+    revision: ""
+    path: ""
+- id: "Hackage:Development:happy:1.19.9"
+  purl: "pkg:hackage/Development/happy@1.19.9"
+  authors:
+  - "Andy Gill and Simon Marlow"
+  declared_licenses:
+  - "BSD2"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+    mapped:
+      BSD2: "BSD-2-Clause"
+  description: "Happy is a parser generator for Haskell.  Given a grammar\nspecification\
+    \ in BNF, Happy generates Haskell code to parse the\ngrammar.  Happy works in\
+    \ a similar way to the @yacc@ tool for C."
+  homepage_url: "https://www.haskell.org/happy/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/happy-1.19.9/happy-1.19.9.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/simonmar/happy.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/simonmar/happy.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Development:th-abstraction:0.2.10.0"
+  purl: "pkg:hackage/Development/th-abstraction@0.2.10.0"
+  authors:
+  - "Eric Mertens"
+  declared_licenses:
+  - "ISC"
+  declared_licenses_processed:
+    spdx_expression: "ISC"
+  description: "This package normalizes variations in the interface for\ninspecting\
+    \ datatype information via Template Haskell\nso that packages and support a single,\
+    \ easier to use\ninformational datatype while supporting many versions\nof Template\
+    \ Haskell."
+  homepage_url: "https://github.com/glguy/th-abstraction"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/th-abstraction-0.2.10.0/th-abstraction-0.2.10.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/glguy/th-abstraction.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/glguy/th-abstraction.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Distribution:Cabal:2.4.1.0"
+  purl: "pkg:hackage/Distribution/Cabal@2.4.1.0"
+  authors:
+  - "Cabal Development Team"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "The Haskell Common Architecture for Building Applications and\nLibraries:\
+    \ a framework defining a common interface for authors to more\neasily build their\
+    \ Haskell applications in a portable way.\n\nThe Haskell Cabal is part of a larger\
+    \ infrastructure for distributing,\norganizing, and cataloging Haskell libraries\
+    \ and tools."
+  homepage_url: "http://www.haskell.org/cabal/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/Cabal-2.4.1.0/Cabal-2.4.1.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/cabal/"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/cabal.git"
+    revision: ""
+    path: ""
+- id: "Hackage:GHC:ghc-prim:0.5.3"
+  purl: "pkg:hackage/GHC/ghc-prim@0.5.3"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "This package contains the primitive types and operations supplied\
+    \ by GHC."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/ghc-prim-0.5.3/ghc-prim-0.5.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Generics:generics-sop:0.4.0.1"
+  purl: "pkg:hackage/Generics/generics-sop@0.4.0.1"
+  authors:
+  - "Andres Löh"
+  - "Edsko de Vries"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A library to support the definition of generic functions.\nDatatypes\
+    \ are viewed in a uniform, structured way:\nthe choice between constructors is\
+    \ represented using an n-ary\nsum, and the arguments of each constructor are represented\
+    \ using\nan n-ary product.\n\nThe module \"Generics.SOP\" is the main module of\
+    \ this library and contains\nmore detailed documentation.\n\nSince version 0.4.0.0,\
+    \ this package is now based on\n@<https://hackage.haskell.org/package/sop-core\
+    \ sop-core>@. The core package\ncontains all the functionality of n-ary sums and\
+    \ products, whereas this\npackage provides the datatype-generic programming support\
+    \ on top.\n\nExamples of using this library are provided by the following\npackages:\n\
+    \n* @<https://hackage.haskell.org/package/basic-sop basic-sop>@ basic examples,\n\
+    \n* @<https://hackage.haskell.org/package/pretty-sop pretty-sop>@ generic pretty\
+    \ printing,\n\n* @<https://hackage.haskell.org/package/lens-sop lens-sop>@ generically\
+    \ computed lenses,\n\n* @<https://hackage.haskell.org/package/json-sop json-sop>@\
+    \ generic JSON conversions.\n\nA detailed description of the ideas behind this\
+    \ library is provided by\nthe paper:\n\n* Edsko de Vries and Andres Löh.\n<http://www.andres-loeh.de/TrueSumsOfProducts\
+    \ True Sums of Products>.\nWorkshop on Generic Programming (WGP) 2014."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/generics-sop-0.4.0.1/generics-sop-0.4.0.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/well-typed/generics-sop"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/well-typed/generics-sop.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Graphs, Graphics:graphviz:2999.20.0.3"
+  purl: "pkg:hackage/Graphs%2C%20Graphics/graphviz@2999.20.0.3"
+  authors:
+  - "Ivan Lazar Miljenovic"
+  - "Matthew Sackman"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This library provides bindings for the Dot language used by the\n\
+    Graphviz (<http://graphviz.org/>) suite of programs for visualising\ngraphs, as\
+    \ well as functions to call those programs.\n\nMain features of the graphviz library\
+    \ include:\n\n* Almost complete coverage of all Graphviz attributes and syntax.\n\
+    \n* Support for specifying clusters.\n\n* The ability to use a custom node type.\n\
+    \n* Functions for running a Graphviz layout tool with all specified\noutput types.\n\
+    \n* The ability to not only generate but also parse Dot code with two\noptions:\
+    \ strict and liberal (in terms of ordering of statements).\n\n* Functions to convert\
+    \ FGL graphs and other graph-like data structures\nto Dot code - including support\
+    \ to group them into clusters - with a\nhigh degree of customisation by specifying\
+    \ which attributes to use\nand limited support for the inverse operation.\n\n\
+    * Round-trip support for passing an FGL graph through Graphviz to\naugment node\
+    \ and edge labels with positional information, etc."
+  homepage_url: "http://projects.haskell.org/graphviz/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/graphviz-2999.20.0.3/graphviz-2999.20.0.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ivan-m/graphviz.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ivan-m/graphviz.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Language:haskell-lexer:1.0.2"
+  purl: "pkg:hackage/Language/haskell-lexer@1.0.2"
+  authors:
+  - "Thomas Hallgren"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A fully compliant Haskell 98 lexer."
+  homepage_url: "https://github.com/yav/haskell-lexer"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/haskell-lexer-1.0.2/haskell-lexer-1.0.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/yav/haskell-lexer.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/yav/haskell-lexer.git"
+    revision: ""
+    path: ""
+- id: "Hackage:List:split:0.2.3.3"
+  purl: "pkg:hackage/List/split@0.2.3.3"
+  authors:
+  - "Brent Yorgey"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A collection of various methods for splitting\nlists into parts, akin\
+    \ to the \\\"split\\\" function\nfound in several mainstream languages. Here is\n\
+    its tale:\n\nOnce upon a time the standard \"Data.List\" module\nheld no function\
+    \ for splitting a list into parts\naccording to a delimiter.  Many a brave\nlambda-knight\
+    \ strove to add such a function, but\ntheir striving was in vain, for Lo, the\
+    \ Supreme\nCouncil fell to bickering amongst themselves what\nwas to be the essential\
+    \ nature of the One True\nFunction which could cleave a list in twain (or\nthrain,\
+    \ or any required number of parts).\n\nAnd thus came to pass the split package,\n\
+    comprising divers functions for splitting a list\nasunder, each according to its\
+    \ nature.  And the\nSupreme Council had no longer any grounds for\nargument, for\
+    \ the favored method of each was\ncontained therein.\n\nTo get started, see the\
+    \ \"Data.List.Split\" module."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/split-0.2.3.3/split-0.2.3.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://github.com/byorgey/split.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/byorgey/split.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Math:matrix:0.3.6.1"
+  purl: "pkg:hackage/Math/matrix@0.3.6.1"
+  authors:
+  - "Daniel Díaz"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Matrix library. Basic operations and some algorithms.\n\nTo get the\
+    \ library update your cabal package list (if needed) with @cabal update@ and\n\
+    then use @cabal install matrix@, assuming that you already have Cabal installed.\n\
+    Usage examples are included in the API reference generated by Haddock.\n\nIf you\
+    \ want to use GSL, BLAS and LAPACK, @hmatrix@ (<http://hackage.haskell.org/package/hmatrix>)\n\
+    is the way to go."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/matrix-0.3.6.1/matrix-0.3.6.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/Daniel-Diaz/matrix.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Daniel-Diaz/matrix.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Math, Algorithms, Number Theory:integer-logarithms:1.0.2.2"
+  purl: "pkg:hackage/Math%2C%20Algorithms%2C%20Number%20Theory/integer-logarithms@1.0.2.2"
+  authors:
+  - "Daniel Fischer"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "\"Math.NumberTheory.Logarithms\" and \"Math.NumberTheory.Powers.Integer\"\
+    \nfrom the arithmoi package.\n\nAlso provides \"GHC.Integer.Logarithms.Compat\"\
+    \ and\n\"Math.NumberTheory.Power.Natural\" modules, as well as some\nadditional\
+    \ functions in migrated modules."
+  homepage_url: "https://github.com/Bodigrim/integer-logarithms"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/integer-logarithms-1.0.2.2/integer-logarithms-1.0.2.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Bodigrim/integer-logarithms"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Bodigrim/integer-logarithms.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Numeric, Algebra:integer-gmp:1.0.2.0"
+  purl: "pkg:hackage/Numeric%2C%20Algebra/integer-gmp@1.0.2.0"
+  authors:
+  - "Herbert Valerio Riedel"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides the low-level implementation of the standard\n\
+    'Integer' type based on the\n<http://gmplib.org/ GNU Multiple Precision Arithmetic\
+    \ Library (GMP)>.\n\nThis package provides access to the internal representation\
+    \ of\n'Integer' as well as primitive operations with no proper error\nhandling,\
+    \ and should only be used directly with the utmost care."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/integer-gmp-1.0.2.0/integer-gmp-1.0.2.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+- id: "Hackage:Other:generic-data:0.3.0.0"
+  purl: "pkg:hackage/Other/generic-data@0.3.0.0"
+  authors:
+  - "Li-yao Xia"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "This package provides common functions on generic types.\nSee README."
+  homepage_url: "https://github.com/Lysxia/generic-data#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/generic-data-0.3.0.0/generic-data-0.3.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Lysxia/generic-data"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Lysxia/generic-data.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Parsing:parsec:3.1.13.0"
+  purl: "pkg:hackage/Parsing/parsec@3.1.13.0"
+  authors:
+  - "Antoine Latter"
+  - "Daan Leijen"
+  - "Paolo Martini"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Parsec is designed from scratch as an industrial-strength parser\n\
+    library.  It is simple, safe, well documented (on the package\nhomepage), has\
+    \ extensive libraries, good error messages,\nand is fast.  It is defined as a\
+    \ monad transformer that can be\nstacked on arbitrary monads, and it is also parametric\
+    \ in the\ninput stream type.\n\nThe main entry point is the \"Text.Parsec\" module\
+    \ which provides\ndefaults for parsing 'Char'acter data.\n\nThe \"Text.ParserCombinators.Parsec\"\
+    \ module hierarchy contains\nthe legacy @parsec-2@ API and may be removed at some\
+    \ point in\nthe future."
+  homepage_url: "https://github.com/hvr/parsec"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/parsec-3.1.13.0/parsec-3.1.13.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/hvr/parsec"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hvr/parsec.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Prelude:base:4.12.0.0"
+  purl: "pkg:hackage/Prelude/base@4.12.0.0"
+  declared_licenses:
+  - "BSD-3-Clause"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+  description: "This package contains the Standard Haskell \"Prelude\" and its support\
+    \ libraries,\nand a large collection of useful libraries ranging from data\nstructures\
+    \ to parsing combinators and debugging utilities."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/base-4.12.0.0/base-4.12.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:directory:1.3.3.0"
+  purl: "pkg:hackage/System/directory@1.3.3.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This library provides a basic set of operations for manipulating files\
+    \ and\ndirectories in a portable way."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/directory-1.3.3.0/directory-1.3.3.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/directory"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/directory.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:filepath:1.4.2.1"
+  purl: "pkg:hackage/System/filepath@1.4.2.1"
+  authors:
+  - "Neil Mitchell"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides functionality for manipulating @FilePath@ values,\
+    \ and is shipped with both <https://www.haskell.org/ghc/ GHC> and the <https://www.haskell.org/platform/\
+    \ Haskell Platform>. It provides three modules:\n\n* \"System.FilePath.Posix\"\
+    \ manipulates POSIX\\/Linux style @FilePath@ values (with @\\/@ as the path separator).\n\
+    \n* \"System.FilePath.Windows\" manipulates Windows style @FilePath@ values (with\
+    \ either @\\\\@ or @\\/@ as the path separator, and deals with drives).\n\n* \"\
+    System.FilePath\" is an alias for the module appropriate to your platform.\n\n\
+    All three modules provide the same API, and the same documentation (calling out\
+    \ differences in the different variants)."
+  homepage_url: "https://github.com/haskell/filepath#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/filepath-1.4.2.1/filepath-1.4.2.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/filepath.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/filepath.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:process:1.6.3.0"
+  purl: "pkg:hackage/System/process@1.6.3.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package contains libraries for dealing with system processes.\n\
+    \nThe typed-process package is a more recent take on a process API,\nwhich uses\
+    \ this package internally. It features better binary\nsupport, easier concurrency,\
+    \ and a more composable API. You can\nread more about it at\n<https://haskell-lang.org/library/typed-process>."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/process-1.6.3.0/process-1.6.3.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/process.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/process.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:random:1.1"
+  purl: "pkg:hackage/System/random@1.1"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides a basic random number generation\nlibrary, including\
+    \ the ability to split random number\ngenerators."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/random-1.1/random-1.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://git.haskell.org/packages/random.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git.haskell.org/packages/random.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:splitmix:0.0.2"
+  purl: "pkg:hackage/System/splitmix@0.0.2"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Pure Haskell implementation of SplitMix described in\n\nGuy L. Steele,\
+    \ Jr., Doug Lea, and Christine H. Flood. 2014.\nFast splittable pseudorandom number\
+    \ generators. In Proceedings\nof the 2014 ACM International Conference on Object\
+    \ Oriented\nProgramming Systems Languages & Applications (OOPSLA '14). ACM,\n\
+    New York, NY, USA, 453-472. DOI:\n<https://doi.org/10.1145/2660193.2660195>\n\n\
+    The paper describes a new algorithm /SplitMix/ for /splittable/\npseudorandom\
+    \ number generator that is quite fast: 9 64 bit arithmetic/logical\noperations\
+    \ per 64 bits generated.\n\n/SplitMix/ is tested with two standard statistical\
+    \ test suites (DieHarder and\nTestU01, this implementation only using the former)\
+    \ and it appears to be\nadequate for \"everyday\" use, such as Monte Carlo algorithms\
+    \ and randomized\ndata structures where speed is important.\n\nIn particular,\
+    \ it __should not be used for cryptographic or security applications__,\nbecause\
+    \ generated sequences of pseudorandom values are too predictable\n(the mixing\
+    \ functions are easily inverted, and two successive outputs\nsuffice to reconstruct\
+    \ the internal state)."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/splitmix-0.0.2/splitmix-0.0.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/phadej/splitmix.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/phadej/splitmix.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System:time-locale-compat:0.1.1.5"
+  purl: "pkg:hackage/System/time-locale-compat@0.1.1.5"
+  authors:
+  - "Kei Hibino"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package contains wrapped name module for time-format locale between\
+    \ old-locale and time-1.5."
+  homepage_url: "https://github.com/khibino/haskell-time-locale-compat"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/time-locale-compat-0.1.1.5/time-locale-compat-0.1.1.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Mercurial"
+    url: "https://bitbucket.org/khibino/haskell-time-locale-compat"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Mercurial"
+    url: "https://bitbucket.org/khibino/haskell-time-locale-compat"
+    revision: ""
+    path: ""
+- id: "Hackage:System:unix:2.7.2.2"
+  purl: "pkg:hackage/System/unix@2.7.2.2"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package gives you access to the set of operating system\nservices\
+    \ standardised by\n<http://pubs.opengroup.org/onlinepubs/9699919799/ POSIX.1-2008>\n\
+    (or the IEEE Portable Operating System Interface for Computing\nEnvironments -\
+    \ IEEE Std. 1003.1).\n\nThe package is not supported under Windows."
+  homepage_url: "https://github.com/haskell/unix"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/unix-2.7.2.2/unix-2.7.2.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/unix.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/unix.git"
+    revision: ""
+    path: ""
+- id: "Hackage:System, Utils:temporary:1.3"
+  purl: "pkg:hackage/System%2C%20Utils/temporary@1.3"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "Functions for creating temporary files and directories."
+  homepage_url: "https://github.com/feuerbach/temporary"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/temporary-1.3/temporary-1.3.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/feuerbach/temporary.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feuerbach/temporary.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Template Haskell:template-haskell:2.14.0.0"
+  purl: "pkg:hackage/Template%20Haskell/template-haskell@2.14.0.0"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package provides modules containing facilities for manipulating\n\
+    Haskell source code using Template Haskell.\n\nSee <http://www.haskell.org/haskellwiki/Template_Haskell>\
+    \ for more\ninformation."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/template-haskell-2.14.0.0/template-haskell-2.14.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "http://git.haskell.org/ghc.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Testing:QuickCheck:2.13.1"
+  purl: "pkg:hackage/Testing/QuickCheck@2.13.1"
+  authors:
+  - "Koen Claessen"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "QuickCheck is a library for random testing of program properties.\n\
+    The programmer provides a specification of the program, in the form of\nproperties\
+    \ which functions should satisfy, and QuickCheck then tests that the\nproperties\
+    \ hold in a large number of randomly generated cases.\nSpecifications are expressed\
+    \ in Haskell, using combinators provided by\nQuickCheck. QuickCheck provides combinators\
+    \ to define properties, observe the\ndistribution of test data, and define test\
+    \ data generators.\n\nMost of QuickCheck's functionality is exported by the main\
+    \ \"Test.QuickCheck\"\nmodule. The main exception is the monadic property testing\
+    \ library in\n\"Test.QuickCheck.Monadic\".\n\nIf you are new to QuickCheck, you\
+    \ can try looking at the following resources:\n\n* The <http://www.cse.chalmers.se/~rjmh/QuickCheck/manual.html\
+    \ official QuickCheck manual>.\nIt's a bit out-of-date in some details and doesn't\
+    \ cover newer QuickCheck features,\nbut is still full of good advice.\n* <https://begriffs.com/posts/2017-01-14-design-use-quickcheck.html>,\n\
+    a detailed tutorial written by a user of QuickCheck.\n\nThe <https://hackage.haskell.org/package/quickcheck-instances\
+    \ quickcheck-instances>\ncompanion package provides instances for types in Haskell\
+    \ Platform packages\nat the cost of additional dependencies."
+  homepage_url: "https://github.com/nick8325/quickcheck"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/QuickCheck-2.13.1/QuickCheck-2.13.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/nick8325/quickcheck"
+    revision: "2.13.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/nick8325/quickcheck.git"
+    revision: "2.13.1"
+    path: ""
+- id: "Hackage:Testing:markov-chain-usage-model:0.0.0"
+  purl: "pkg:hackage/Testing/markov-chain-usage-model@0.0.0"
+  authors:
+  - "Stevan Andjelkovic"
+  declared_licenses:
+  - "BSD2"
+  declared_licenses_processed:
+    spdx_expression: "BSD-2-Clause"
+    mapped:
+      BSD2: "BSD-2-Clause"
+  description: "Please see the README on GitHub at <https://github.com/advancedtelematic/markov-chain-usage-model#readme>"
+  homepage_url: "https://github.com/advancedtelematic/markov-chain-usage-model#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/markov-chain-usage-model-0.0.0/markov-chain-usage-model-0.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/advancedtelematic/markov-chain-usage-model"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/advancedtelematic/markov-chain-usage-model.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text:pretty:1.1.3.6"
+  purl: "pkg:hackage/Text/pretty@1.1.3.6"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This package contains a pretty-printing library, a set of API's\n\
+    that provides a way to easily print out text in a consistent\nformat of your choosing.\
+    \ This is useful for compilers and related\ntools.\n\nThis library was originally\
+    \ designed by John Hughes's and has since\nbeen heavily modified by Simon Peyton\
+    \ Jones."
+  homepage_url: "http://github.com/haskell/pretty"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/pretty-1.1.3.6/pretty-1.1.3.6.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "http://github.com/haskell/pretty.git"
+    revision: "1.1.3.5"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/pretty.git"
+    revision: "1.1.3.5"
+    path: ""
+- id: "Hackage:Text:pretty-show:1.9.5"
+  purl: "pkg:hackage/Text/pretty-show@1.9.5"
+  authors:
+  - "Iavor S. Diatchki"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "We provide a library and an executable for working with derived 'Show'\n\
+    instances. By using the library, we can parse derived 'Show' instances into a\n\
+    generic data structure. The @ppsh@ tool uses the library to produce\nhuman-readable\
+    \ versions of 'Show' instances, which can be quite handy for\ndebugging Haskell\
+    \ programs.  We can also render complex generic values into\nan interactive Html\
+    \ page, for easier examination."
+  homepage_url: "http://wiki.github.com/yav/pretty-show"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/pretty-show-1.9.5/pretty-show-1.9.5.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/yav/pretty-show.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/yav/pretty-show.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text:show-combinators:0.1.0.0"
+  purl: "pkg:hackage/Text/show-combinators@0.1.0.0"
+  authors:
+  - "Li-yao Xia"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A minimal pretty-printing library for Show instances in Haskell."
+  homepage_url: "https://github.com/Lysxia/show-combinators#readme"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/show-combinators-0.1.0.0/show-combinators-0.1.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/Lysxia/show-combinators"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/Lysxia/show-combinators.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text:wl-pprint-text:1.2.0.0"
+  purl: "pkg:hackage/Text/wl-pprint-text@1.2.0.0"
+  authors:
+  - "Ivan Lazar Miljenovic"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A clone of wl-pprint for use with the text library."
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/wl-pprint-text-1.2.0.0/wl-pprint-text-1.2.0.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ivan-m/wl-pprint-text.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ivan-m/wl-pprint-text.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text, Parsing:attoparsec:0.13.2.2"
+  purl: "pkg:hackage/Text%2C%20Parsing/attoparsec@0.13.2.2"
+  authors:
+  - "Bryan O'Sullivan"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A fast parser combinator library, aimed particularly at dealing\n\
+    efficiently with network protocols and complicated text/binary\nfile formats."
+  homepage_url: "https://github.com/bos/attoparsec"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/attoparsec-0.13.2.2/attoparsec-0.13.2.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/bos/attoparsec"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bos/attoparsec.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text, Parsing:parsers:0.12.9"
+  purl: "pkg:hackage/Text%2C%20Parsing/parsers@0.12.9"
+  authors:
+  - "Edward A. Kmett"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This library provides convenient combinators for working with and\
+    \ building parsing combinator libraries.\n\nGiven a few simple instances, e.g.\
+    \ for the class 'Text.Parser.Combinators.Parsing' in \"Text.Parser.Combinators.Parsing\"\
+    \ you\nget access to a large number of canned definitions. Instances exist for\
+    \ the parsers provided by @parsec@,\n@attoparsec@ and base’s \"Text.Read\"."
+  homepage_url: "http://github.com/ekmett/parsers/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/parsers-0.12.9/parsers-0.12.9.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/ekmett/parsers.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/parsers.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Text, Parsing:polyparse:1.12.1"
+  purl: "pkg:hackage/Text%2C%20Parsing/polyparse@1.12.1"
+  authors:
+  - "Malcolm Wallace"
+  declared_licenses:
+  - "LGPL"
+  declared_licenses_processed:
+    spdx_expression: "LGPL-2.0-or-later"
+    mapped:
+      LGPL: "LGPL-2.0-or-later"
+  description: "This version, 1.12.1 is a Non-Maintainer Upload (NMU). Report issues\
+    \ to the Hackage Trustees issue tracker.\n\nA variety of alternative parser combinator\
+    \ libraries, including\nthe original HuttonMeijer set.  The Poly sets have features\
+    \ like\ngood error reporting, arbitrary token type, running state, lazy\nparsing,\
+    \ and so on.  Finally, Text.Parse is a proposed\nreplacement for the standard\
+    \ Read class, for better\ndeserialisation of Haskell values from Strings."
+  homepage_url: "http://code.haskell.org/~malcolm/polyparse/"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/polyparse-1.12.1/polyparse-1.12.1.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/hackage-/malcolm-wallace-universe.git"
+    revision: "1.12.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/hackage-/malcolm-wallace-universe.git"
+    revision: "1.12.1"
+    path: ""
+- id: "Hackage:Text, Web, JSON:aeson:1.4.2.0"
+  purl: "pkg:hackage/Text%2C%20Web%2C%20JSON/aeson@1.4.2.0"
+  authors:
+  - "Bryan O'Sullivan"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A JSON parsing and encoding library optimized for ease of use\nand\
+    \ high performance.\n\nTo get started, see the documentation for the @Data.Aeson@\
+    \ module\nbelow.\n\n(A note on naming: in Greek mythology, Aeson was the father\
+    \ of Jason.)"
+  homepage_url: "https://github.com/bos/aeson"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/aeson-1.4.2.0/aeson-1.4.2.0.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/bos/aeson.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/bos/aeson.git"
+    revision: ""
+    path: ""
+- id: "Hackage:Time:time:1.8.0.2"
+  purl: "pkg:hackage/Time/time@1.8.0.2"
+  authors:
+  - "Ashley Yakeley"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "A time library"
+  homepage_url: "https://github.com/haskell/time"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/time-1.8.0.2/time-1.8.0.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/haskell/time"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/haskell/time.git"
+    revision: ""
+    path: ""
+- id: "Hackage:User Interfaces:ansi-terminal:0.8.2"
+  purl: "pkg:hackage/User%20Interfaces/ansi-terminal@0.8.2"
+  authors:
+  - "Max Bolingbroke"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "ANSI terminal support for Haskell: allows cursor movement,\nscreen\
+    \ clearing, color output, showing or hiding the\ncursor, and changing the title.\
+    \ Works on UNIX and Windows."
+  homepage_url: "https://github.com/feuerbach/ansi-terminal"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/ansi-terminal-0.8.2/ansi-terminal-0.8.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "git://github.com/feuerbach/ansi-terminal.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/feuerbach/ansi-terminal.git"
+    revision: ""
+    path: ""
+- id: "Hackage:User Interfaces, Text:ansi-wl-pprint:0.6.8.2"
+  purl: "pkg:hackage/User%20Interfaces%2C%20Text/ansi-wl-pprint@0.6.8.2"
+  authors:
+  - "Daan Leijen"
+  - "Max Bolingbroke"
+  declared_licenses:
+  - "BSD3"
+  declared_licenses_processed:
+    spdx_expression: "BSD-3-Clause"
+    mapped:
+      BSD3: "BSD-3-Clause"
+  description: "This is a pretty printing library based on Wadler's paper [\"A Prettier\
+    \ Printer\"](https://homepages.inf.ed.ac.uk/wadler/papers/prettier/prettier.pdf).\
+    \ It has been enhanced with support for ANSI terminal colored output using the\
+    \ [ansi-terminal](https://hackage.haskell.org/package/ansi-terminal) package."
+  homepage_url: "http://github.com/ekmett/ansi-wl-pprint"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/ansi-wl-pprint-0.6.8.2/ansi-wl-pprint-0.6.8.2.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/ekmett/ansi-wl-pprint.git"
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/ekmett/ansi-wl-pprint.git"
+    revision: ""
+    path: ""
+- id: "Hackage:data, graphics:colour:2.3.4"
+  purl: "pkg:hackage/data%2C%20graphics/colour@2.3.4"
+  authors:
+  - "Russell O'Connor"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "This package provides a data type for colours and transparency.\n\
+    Colours can be blended and composed.\nVarious colour spaces are supported.\nA\
+    \ module of colour names (\"Data.Colour.Names\") is provided."
+  homepage_url: "http://www.haskell.org/haskellwiki/Colour"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: "https://hackage.haskell.org/package/colour-2.3.4/colour-2.3.4.tar.gz"
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
