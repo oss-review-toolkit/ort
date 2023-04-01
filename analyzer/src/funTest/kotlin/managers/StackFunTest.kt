@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
@@ -27,17 +27,31 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
-class StackFunTest : StringSpec({
-    "Dependencies should be resolved correctly for quickcheck-state-machine" {
-        val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
-        val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
-        val expectedResultFile = getAssetFile("projects/external/quickcheck-state-machine-expected-output$suffix.yml")
+class StackFunTest : WordSpec({
+    "Resolving project dependencies" should {
+        "succeed for quickcheck-state-machine" {
+            val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
+            val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
+            val expectedResultFile = getAssetFile(
+                "projects/external/quickcheck-state-machine-expected-output$suffix.yml"
+            )
 
-        val result = createStack().resolveSingleProject(definitionFile)
+            val result = createStack().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe expectedResultFile.readText()
+            result.toYaml() shouldBe expectedResultFile.readText()
+        }
+
+        "succeed for stack-yesodweb-simple" {
+            val definitionFile = getAssetFile("projects/synthetic/stack-yesodweb-simple/stack.yaml")
+            val expectedResultFile = getAssetFile("projects/synthetic/stack-yesodweb-simple-expected-output.yml")
+
+            val result = createStack().resolveSingleProject(definitionFile)
+
+            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        }
     }
 })
 
