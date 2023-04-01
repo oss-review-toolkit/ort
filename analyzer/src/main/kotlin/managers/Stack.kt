@@ -82,13 +82,13 @@ class Stack(
     }
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class Location(
+    private data class Location(
         val url: String,
         val type: String
     )
 
     @JsonIgnoreProperties(ignoreUnknown = true)
-    data class Dependency(
+    private data class Dependency(
         val name: String,
         val version: String,
         val license: String,
