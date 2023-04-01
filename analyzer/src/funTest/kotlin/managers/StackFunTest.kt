@@ -34,11 +34,8 @@ class StackFunTest : StringSpec({
         val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
 
         val result = createStack().resolveSingleProject(definitionFile)
-        val expectedOutput = if (Os.isWindows) {
-            "external/quickcheck-state-machine-expected-output-win32.yml"
-        } else {
-            "external/quickcheck-state-machine-expected-output.yml"
-        }
+        val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
+        val expectedOutput = "external/quickcheck-state-machine-expected-output$suffix.yml"
         val expectedResult = projectsDir.resolve(expectedOutput).readText()
         val actualResult = result.toYaml()
 
