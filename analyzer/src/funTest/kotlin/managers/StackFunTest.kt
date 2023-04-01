@@ -31,19 +31,15 @@ import org.ossreviewtoolkit.utils.test.toYaml
 
 class StackFunTest : StringSpec({
     "Dependencies should be resolved correctly for quickcheck-state-machine" {
-        val definitionFile = projectsDir.resolve("external/quickcheck-state-machine/stack.yaml")
+        val definitionFile = getAssetFile("projects/external/quickcheck-state-machine/stack.yaml")
+        val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
+        val expectedResultFile = getAssetFile("projects/external/quickcheck-state-machine-expected-output$suffix.yml")
 
         val result = createStack().resolveSingleProject(definitionFile)
-        val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
-        val expectedOutput = "external/quickcheck-state-machine-expected-output$suffix.yml"
-        val expectedResult = projectsDir.resolve(expectedOutput).readText()
-        val actualResult = result.toYaml()
 
-        actualResult shouldBe expectedResult
+        result.toYaml() shouldBe expectedResultFile.readText()
     }
 })
-
-private val projectsDir = getAssetFile("projects")
 
 private fun createStack() =
     Stack("Stack", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
