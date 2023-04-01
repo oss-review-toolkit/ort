@@ -53,10 +53,10 @@ dependencies {
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))
 
-    testImplementation(libs.mockk)
-
     testFixturesImplementation(project(":utils:test-utils"))
 
     testFixturesImplementation(libs.kotestAssertionsCore)
     testFixturesImplementation(libs.kotestRunnerJunit5)
+
+    testImplementation(libs.mockk)
 }
