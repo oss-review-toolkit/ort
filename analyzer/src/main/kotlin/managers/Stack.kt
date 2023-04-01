@@ -53,6 +53,13 @@ import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
 
+private const val EXTERNAL_SCOPE_NAME = "external"
+private const val TEST_SCOPE_NAME = "test"
+private const val BENCH_SCOPE_NAME = "bench"
+
+private const val HACKAGE_PACKAGE_TYPE = "hackage"
+private const val PROJECT_PACKAGE_TYPE = "project package"
+
 /**
  * The [Stack](https://haskellstack.org/) package manager for Haskell.
  */
@@ -62,14 +69,7 @@ class Stack(
     analyzerConfig: AnalyzerConfiguration,
     repoConfig: RepositoryConfiguration
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
-    companion object : Logging {
-        const val EXTERNAL_SCOPE_NAME = "external"
-        const val TEST_SCOPE_NAME = "test"
-        const val BENCH_SCOPE_NAME = "bench"
-
-        const val HACKAGE_PACKAGE_TYPE = "hackage"
-        const val PROJECT_PACKAGE_TYPE = "project package"
-    }
+    private companion object : Logging
 
     class Factory : AbstractPackageManagerFactory<Stack>("Stack") {
         override val globsForDefinitionFiles = listOf("stack.yaml")
