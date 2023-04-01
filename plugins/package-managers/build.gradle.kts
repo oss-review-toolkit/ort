@@ -40,6 +40,7 @@ dependencies {
     api(project(":plugins:package-managers:pub-package-manager"))
     api(project(":plugins:package-managers:python-package-manager"))
     api(project(":plugins:package-managers:spdx-package-manager"))
+    api(project(":plugins:package-managers:stack-package-manager"))
 }
 
 configure<PublishingExtension> {
