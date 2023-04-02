@@ -324,7 +324,7 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
  * specify the author of a package: An object with multiple properties or a single string.
  */
 fun parseNpmAuthors(json: JsonNode): Set<String> =
-    mutableSetOf<String>().apply {
+    buildSet {
         json["author"]?.let { authorNode ->
             when {
                 authorNode.isObject -> authorNode["name"]?.textValue()

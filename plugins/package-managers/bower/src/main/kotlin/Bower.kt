@@ -147,7 +147,7 @@ private fun parseVcsInfo(node: JsonNode) =
     )
 
 private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
-    mutableSetOf<String>().apply {
+    buildSet {
         val license = node["pkgMeta"]["license"].textValueOrEmpty()
         if (license.isNotEmpty()) add(license)
     }
@@ -158,7 +158,7 @@ private fun parseDeclaredLicenses(node: JsonNode): Set<String> =
  * strings or objects are inside an array.
  */
 private fun parseAuthors(node: JsonNode): Set<String> =
-    mutableSetOf<String>().apply {
+    buildSet {
         node["pkgMeta"]["authors"]?.mapNotNull { authorNode ->
             when {
                 authorNode.isObject -> authorNode["name"]?.textValue()

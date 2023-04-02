@@ -143,7 +143,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         }
 
         fun parseAuthors(mavenProject: MavenProject): Set<String> =
-            mutableSetOf<String>().apply {
+            buildSet {
                 mavenProject.organization?.let {
                     if (!it.name.isNullOrEmpty()) add(it.name)
                 }
