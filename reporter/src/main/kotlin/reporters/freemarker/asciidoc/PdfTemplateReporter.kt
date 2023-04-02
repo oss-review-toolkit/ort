@@ -62,12 +62,10 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
 
     override fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().apply {
-            val pdfThemeAttribute = options.remove(OPTION_PDF_THEME_FILE)?.let {
-                val pdfThemeFile = File(it).absoluteFile
-
-                require(pdfThemeFile.isFile) { "Could not find PDF theme file at '$pdfThemeFile'." }
-
-                pdfThemeFile.path
+            val pdfTheme = options.remove(OPTION_PDF_THEME_FILE)?.let { option ->
+                File(option).absoluteFile.also {
+                    require(it.isFile) { "Could not find PDF theme file at '$it'." }
+                }.path
             } ?: run {
                 // Images are being looked up relative to the themes directory. As images currently are the only use for
                 // the themes directory, point it at the images directory. However, the themes directory does not
@@ -81,17 +79,15 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
                 "uri:classloader:/templates/asciidoc/pdf-theme.yml"
             }
 
-            attribute("pdf-theme", pdfThemeAttribute)
+            attribute("pdf-theme", pdfTheme)
 
-            val pdfFontsDirAttribute = options.remove(OPTION_PDF_FONTS_DIR)?.let {
-                val pdfFontsDir = File(it).absoluteFile
-
-                require(pdfFontsDir.isDirectory) { "Could not find PDF fonts directory at '$pdfFontsDir'." }
-
-                pdfFontsDir.path
+            val pdfFontsDir = options.remove(OPTION_PDF_FONTS_DIR)?.let { option ->
+                File(option).absoluteFile.also {
+                    require(it.isDirectory) { "Could not find PDF fonts directory at '$it'." }
+                }.path
             } ?: "uri:classloader:/fonts"
 
-            attribute("pdf-fontsdir", "$pdfFontsDirAttribute,GEM_FONTS_DIR")
+            attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
         }.build()
 
     private fun extractImageResources(targetDir: File) {
