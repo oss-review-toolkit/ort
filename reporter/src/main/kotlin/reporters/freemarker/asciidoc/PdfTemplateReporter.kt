@@ -24,7 +24,6 @@ import java.io.File
 import org.asciidoctor.Attributes
 
 import org.ossreviewtoolkit.reporter.Reporter
-import org.ossreviewtoolkit.utils.common.safeMkdirs
 
 /**
  * A [Reporter] that creates PDF files using a combination of [Apache Freemarker][1] templates and [AsciiDoc][2]
@@ -66,18 +65,7 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
                 File(option).absoluteFile.also {
                     require(it.isFile) { "Could not find PDF theme file at '$it'." }
                 }.path
-            } ?: run {
-                // Images are being looked up relative to the themes directory. As images currently are the only use for
-                // the themes directory, point it at the images directory. However, the themes directory does not
-                // support the "uri:classloader:" syntax and can only refer to local paths, see
-                // https://github.com/asciidoctor/asciidoctor-pdf/issues/2383. So extract the images resource to the
-                // temporary directory and point to there.
-                val imagesDir = outputDir.resolve("images").safeMkdirs()
-                extractImageResources(imagesDir)
-                attribute("pdf-themesdir", imagesDir.absolutePath)
-
-                "uri:classloader:/templates/asciidoc/pdf-theme.yml"
-            }
+            } ?: "uri:classloader:/pdf-theme/pdf-theme.yml"
 
             attribute("pdf-theme", pdfTheme)
 
@@ -89,17 +77,4 @@ class PdfTemplateReporter : AsciiDocTemplateReporter("pdf", "PdfTemplate") {
 
             attribute("pdf-fontsdir", "$pdfFontsDir,GEM_FONTS_DIR")
         }.build()
-
-    private fun extractImageResources(targetDir: File) {
-        val imagesResourceDir = "/images"
-        val imageNames = listOf("ort.png")
-
-        imageNames.forEach { imageName ->
-            javaClass.getResourceAsStream("$imagesResourceDir/$imageName").use { inputStream ->
-                targetDir.resolve(imageName).outputStream().use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
-            }
-        }
-    }
 }
