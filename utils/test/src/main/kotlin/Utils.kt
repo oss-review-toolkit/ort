@@ -81,9 +81,11 @@ fun patchExpectedResult(
 
 fun patchExpectedResult2(
     expectedResultFile: File,
-    definitionFile: File,
+    definitionFile: File? = null,
     custom: Map<String, String> = emptyMap()
 ): String {
+    if (definitionFile == null) return patchExpectedResult(expectedResultFile, custom)
+
     val projectDir = definitionFile.parentFile
     val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
     val vcsUrl = vcsDir.getRemoteUrl()
@@ -121,7 +123,7 @@ fun patchActualResult(
 
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
-fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
+fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult2(file))
 
 /**
  * A helper function to create a custom matcher that compares an [expected] collection to a collection obtained by
