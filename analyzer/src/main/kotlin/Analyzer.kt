@@ -37,7 +37,6 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.PackageManager.Companion.excludes
-import org.ossreviewtoolkit.analyzer.managers.Unmanaged
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -109,7 +108,8 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         }
 
         if (!hasOnlyManagedDirs) {
-            distinctPackageManagers.find { it is Unmanaged.Factory }
+            val unmanagedPackageManagerFactory = PackageManager.ALL["Unmanaged"]
+            distinctPackageManagers.find { it == unmanagedPackageManagerFactory }
                 ?.create(absoluteProjectPath, config, repositoryConfiguration)
                 ?.run { managedFiles[this] = listOf(absoluteProjectPath) }
         }
