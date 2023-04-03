@@ -28,14 +28,14 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NpmVersionUrlFunTest : WordSpec({
     "NPM" should {
         "resolve dependencies with URLs as versions correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm-version-urls/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-version-urls-expected-output.yml")
-            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
+            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
                 .fromYaml<ProjectAnalyzerResult>()
 
             val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)

@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 import org.ossreviewtoolkit.utils.test.toYaml
 
@@ -53,7 +53,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            actualResult shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "succeed if a project with package references is provided" {
@@ -62,7 +62,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val actualResult = createSpdxDocumentFile().resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            actualResult shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "succeed if no project is provided" {

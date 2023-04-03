@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec({
@@ -39,7 +39,7 @@ class GradleAndroidFunTest : StringSpec({
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -48,7 +48,7 @@ class GradleAndroidFunTest : StringSpec({
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -57,7 +57,7 @@ class GradleAndroidFunTest : StringSpec({
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
@@ -66,7 +66,7 @@ class GradleAndroidFunTest : StringSpec({
 
             val result = createGradle().resolveDependencies(listOf(definitionFile), emptyMap())
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 })
 

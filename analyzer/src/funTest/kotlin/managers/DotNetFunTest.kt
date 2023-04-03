@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class DotNetFunTest : StringSpec({
@@ -65,7 +65,7 @@ class DotNetFunTest : StringSpec({
 
         val result = createDotNet().resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Direct project dependencies are detected correctly" {
@@ -76,7 +76,7 @@ class DotNetFunTest : StringSpec({
 
         val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project metadata is correctly extracted from a .nuspec file" {
@@ -85,7 +85,7 @@ class DotNetFunTest : StringSpec({
 
         val result = createDotNet().resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
 

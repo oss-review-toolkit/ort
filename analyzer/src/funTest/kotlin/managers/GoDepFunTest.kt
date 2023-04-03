@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GoDepFunTest : WordSpec({
@@ -46,7 +46,7 @@ class GoDepFunTest : WordSpec({
 
             val result = createGoDep().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
@@ -82,7 +82,7 @@ class GoDepFunTest : WordSpec({
 
             val result = createGoDep().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "import dependencies from godeps" {
@@ -93,7 +93,7 @@ class GoDepFunTest : WordSpec({
 
             // TODO: The VCS path of the project in the expected result is not the parent directory of the
             //       definition which is wrong and should be fixed.
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 

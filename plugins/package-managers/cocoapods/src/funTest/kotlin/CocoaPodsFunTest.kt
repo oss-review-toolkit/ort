@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class CocoaPodsFunTest : WordSpec({
@@ -41,7 +41,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "determine dependencies from a Podfile with a dependency tree" {
@@ -50,7 +50,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "return no dependencies along with an issue if the lockfile is absent" {
@@ -59,7 +59,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = createCocoaPods().resolveSingleProject(definitionFile)
 
-            result.replaceIssueTimestamps().toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.replaceIssueTimestamps().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

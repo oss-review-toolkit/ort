@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleFunTest : StringSpec() {
@@ -59,7 +59,7 @@ class GradleFunTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly" {
@@ -68,7 +68,7 @@ class GradleFunTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "External dependencies are detected correctly" {
@@ -77,7 +77,7 @@ class GradleFunTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Unresolved dependencies are detected correctly" {
@@ -86,7 +86,7 @@ class GradleFunTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Scopes are correctly excluded from the dependency graph" {
@@ -100,7 +100,7 @@ class GradleFunTest : StringSpec() {
             val result = createGradle(analyzerConfig, repoConfig)
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         // Disabled because despite following the example at [1] Gradle says there is "No service of type
@@ -113,7 +113,7 @@ class GradleFunTest : StringSpec() {
 
             val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         // Disabled as it causes hangs and memory issues on CI.
@@ -165,7 +165,7 @@ class GradleFunTest : StringSpec() {
 
                 val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
 
-                result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+                result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
             }
         }
     }

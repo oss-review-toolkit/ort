@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class CargoSubcrateFunTest : StringSpec({
@@ -37,7 +37,7 @@ class CargoSubcrateFunTest : StringSpec({
 
         val result = createCargo().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Integration sub-project dependencies are detected correctly" {
@@ -46,7 +46,7 @@ class CargoSubcrateFunTest : StringSpec({
 
         val result = createCargo().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Client sub-project dependencies are detected correctly" {
@@ -55,7 +55,7 @@ class CargoSubcrateFunTest : StringSpec({
 
         val result = createCargo().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
 

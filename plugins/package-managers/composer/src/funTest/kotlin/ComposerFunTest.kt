@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ComposerFunTest : StringSpec({
@@ -41,7 +41,7 @@ class ComposerFunTest : StringSpec({
 
         val result = createComposer().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Error is shown when no lockfile is present" {
@@ -66,7 +66,7 @@ class ComposerFunTest : StringSpec({
 
         val result = createComposer().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "No composer.lock is required for projects with empty dependencies" {
@@ -75,7 +75,7 @@ class ComposerFunTest : StringSpec({
 
         val result = createComposer().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Packages defined as provided are not reported as missing" {
@@ -84,7 +84,7 @@ class ComposerFunTest : StringSpec({
 
         val result = createComposer().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Packages defined as replaced are not reported as missing" {
@@ -93,7 +93,7 @@ class ComposerFunTest : StringSpec({
 
         val result = createComposer().resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
 

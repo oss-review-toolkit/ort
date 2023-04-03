@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PnpmFunTest : WordSpec({
@@ -38,13 +38,13 @@ class PnpmFunTest : WordSpec({
 
             val result = createPnpm().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly in a workspaces project" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm-workspaces/packages.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
-            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
+            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
 
             val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 

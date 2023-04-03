@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class Yarn2FunTest : WordSpec({
@@ -42,7 +42,7 @@ class Yarn2FunTest : WordSpec({
 
             val result = resolveDependencies(definitionFile)
 
-            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "exclude scopes if configured" {
@@ -56,7 +56,7 @@ class Yarn2FunTest : WordSpec({
 
             val result = resolveDependencies(definitionFile, analyzerConfig, repositoryConfig)
 
-            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
@@ -65,7 +65,7 @@ class Yarn2FunTest : WordSpec({
 
             val result = resolveMultipleDependencies(definitionFile)
 
-            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

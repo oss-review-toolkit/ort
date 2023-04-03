@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NuGetFunTest : StringSpec({
@@ -65,7 +65,7 @@ class NuGetFunTest : StringSpec({
 
         val result = createNuGet().resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Direct project dependencies are detected correctly" {
@@ -73,7 +73,7 @@ class NuGetFunTest : StringSpec({
 
         val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
 
