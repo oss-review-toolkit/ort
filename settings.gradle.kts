@@ -58,6 +58,7 @@ include(":plugins:package-managers:pub")
 include(":plugins:package-managers:python")
 include(":plugins:package-managers:spdx")
 include(":plugins:package-managers:stack")
+include(":plugins:package-managers:unmanaged")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
@@ -94,6 +95,7 @@ project(":plugins:package-managers:pub").name = "pub-package-manager"
 project(":plugins:package-managers:python").name = "python-package-manager"
 project(":plugins:package-managers:spdx").name = "spdx-package-manager"
 project(":plugins:package-managers:stack").name = "stack-package-manager"
+project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"

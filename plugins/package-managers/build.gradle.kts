@@ -41,6 +41,7 @@ dependencies {
     api(project(":plugins:package-managers:python-package-manager"))
     api(project(":plugins:package-managers:spdx-package-manager"))
     api(project(":plugins:package-managers:stack-package-manager"))
+    api(project(":plugins:package-managers:unmanaged-package-manager"))
 }
 
 configure<PublishingExtension> {
