@@ -32,7 +32,7 @@ but just configure the pipeline parameters and its stages. Note that this first 
 After this run, there will be a new *Build with Parameters* entry in the job menu. Clicking on it will show the job
 parameter form. For a start, leave all the defaults and click on *Build* at the bottom. This first run will take quite a
 long time in the "Build ORT Docker image" stage as the Docker image is built from scratch. However, unless changes to
-the `Dockerfile` are done, subsequent runs will be *much* faster. Also the "Run ORT scanner" stage will take a bit
+`Dockerfile-legacy` are done, subsequent runs will be *much* faster. Also the "Run ORT scanner" stage will take a bit
 longer, but again subsequent scans will be faster thanks to the use of stored scan results.
 
 Once the pipeline run completes you will see that the "Run ORT evaluator" stage is actually yellow and marked as

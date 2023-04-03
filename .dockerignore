@@ -2,7 +2,7 @@
 # the Docker files are changed during development.
 .dockerignore
 Dockerfile
-docker/legacy/Dockerfile
+Dockerfile-legacy
 scripts/docker_*.sh
 
 # Ignore the Jenkinsfile to avoid that all layers are invalidated if the
