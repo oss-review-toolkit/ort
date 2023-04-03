@@ -57,40 +57,35 @@ fun patchExpectedResult(
     definitionFile: File? = null,
     custom: Map<String, String> = emptyMap()
 ): String {
-    var url: String? = null
-    var urlProcessed: String? = null
-    var revision: String? = null
-    var path: String? = null
-    var absoluteDefinitionFilePath: String? = null
-    var definitionFilePath: String? = null
+    val replacements = buildMap {
+        put("<REPLACE_JAVA>", System.getProperty("java.version"))
+        put("<REPLACE_OS>", System.getProperty("os.name"))
+        put("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
+        put("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
 
-    if (definitionFile != null) {
-        val projectDir = definitionFile.parentFile
-        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+        if (definitionFile != null) {
+            val projectDir = definitionFile.parentFile
+            val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+            val url = vcsDir.getRemoteUrl()
+            val path = vcsDir.getPathToRoot(projectDir)
 
-        url = vcsDir.getRemoteUrl()
-        urlProcessed = normalizeVcsUrl(url)
-        revision = vcsDir.getRevision()
-        path = vcsDir.getPathToRoot(projectDir)
-        absoluteDefinitionFilePath = definitionFile.absolutePath
-        definitionFilePath = "$path/${definitionFile.name}"
+            put("<REPLACE_DEFINITION_FILE_PATH>", "$path/${definitionFile.name}")
+            put("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", definitionFile.absolutePath)
+            put("<REPLACE_URL>", url)
+            put("<REPLACE_REVISION>", vcsDir.getRevision())
+            put("<REPLACE_PATH>", path)
+            put("<REPLACE_URL_PROCESSED>", normalizeVcsUrl(url))
+        }
+
+        putAll(custom)
     }
 
     fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
         if (newValue != null) replace(oldValue, newValue) else this
 
-    return custom.entries.fold(expectedResultFile.readText()) { text, entry ->
+    return replacements.entries.fold(expectedResultFile.readText()) { text, entry ->
         text.replaceIfNotNull(entry.key, entry.value)
-    }.replaceIfNotNull("<REPLACE_JAVA>", System.getProperty("java.version"))
-        .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
-        .replaceIfNotNull("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
-        .replaceIfNotNull("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
-        .replaceIfNotNull("<REPLACE_DEFINITION_FILE_PATH>", definitionFilePath)
-        .replaceIfNotNull("<REPLACE_ABSOLUTE_DEFINITION_FILE_PATH>", absoluteDefinitionFilePath)
-        .replaceIfNotNull("<REPLACE_URL>", url)
-        .replaceIfNotNull("<REPLACE_REVISION>", revision)
-        .replaceIfNotNull("<REPLACE_PATH>", path)
-        .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
+    }
 }
 
 fun patchActualResult(
