@@ -28,7 +28,7 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 
 # Check and set apt proxy
-COPY docker/set_apt_proxy.sh /etc/scripts/set_apt_proxy.sh
+COPY scripts/set_apt_proxy.sh /etc/scripts/set_apt_proxy.sh
 RUN /etc/scripts/set_apt_proxy.sh
 
 # Base package set
