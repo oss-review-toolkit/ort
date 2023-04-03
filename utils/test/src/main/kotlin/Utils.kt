@@ -52,22 +52,36 @@ fun getAssetAsString(path: String): String = getAssetFile(path).readText()
  */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
- @Suppress("LongParameterList")
-fun patchExpectedResult(
-    result: File,
-    custom: Map<String, String> = emptyMap(),
-    definitionFilePath: String? = null,
-    absoluteDefinitionFilePath: String? = null,
-    url: String? = null,
-    revision: String? = null,
-    path: String? = null,
-    urlProcessed: String? = null
+fun patchExpectedResult2(
+    expectedResultFile: File,
+    definitionFile: File? = null,
+    custom: Map<String, String> = emptyMap()
 ): String {
+    var url: String? = null
+    var urlProcessed: String? = null
+    var revision: String? = null
+    var path: String? = null
+    var absoluteDefinitionFilePath: String? = null
+    var definitionFilePath: String? = null
+
+    if (definitionFile != null) {
+        val projectDir = definitionFile.parentFile
+        val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
+
+        url = vcsDir.getRemoteUrl()
+        urlProcessed = normalizeVcsUrl(url)
+        revision = vcsDir.getRevision()
+        path = vcsDir.getPathToRoot(projectDir)
+        absoluteDefinitionFilePath = definitionFile.absolutePath
+        definitionFilePath = "$path/${definitionFile.name}"
+    }
+
     fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
         if (newValue != null) replace(oldValue, newValue) else this
 
-    return custom.entries.fold(result.readText()) { text, entry -> text.replaceIfNotNull(entry.key, entry.value) }
-        .replaceIfNotNull("<REPLACE_JAVA>", System.getProperty("java.version"))
+    return custom.entries.fold(expectedResultFile.readText()) { text, entry ->
+        text.replaceIfNotNull(entry.key, entry.value)
+    }.replaceIfNotNull("<REPLACE_JAVA>", System.getProperty("java.version"))
         .replaceIfNotNull("<REPLACE_OS>", System.getProperty("os.name"))
         .replaceIfNotNull("\"<REPLACE_PROCESSORS>\"", Runtime.getRuntime().availableProcessors().toString())
         .replaceIfNotNull("\"<REPLACE_MAX_MEMORY>\"", Runtime.getRuntime().maxMemory().toString())
@@ -77,31 +91,6 @@ fun patchExpectedResult(
         .replaceIfNotNull("<REPLACE_REVISION>", revision)
         .replaceIfNotNull("<REPLACE_PATH>", path)
         .replaceIfNotNull("<REPLACE_URL_PROCESSED>", urlProcessed)
-}
-
-fun patchExpectedResult2(
-    expectedResultFile: File,
-    definitionFile: File? = null,
-    custom: Map<String, String> = emptyMap()
-): String {
-    if (definitionFile == null) return patchExpectedResult(expectedResultFile, custom)
-
-    val projectDir = definitionFile.parentFile
-    val vcsDir = VersionControlSystem.forDirectory(projectDir)!!
-    val vcsUrl = vcsDir.getRemoteUrl()
-    val vcsRevision = vcsDir.getRevision()
-    val vcsPath = vcsDir.getPathToRoot(projectDir)
-
-    return patchExpectedResult(
-        expectedResultFile,
-        definitionFilePath = "$vcsPath/${definitionFile.name}",
-        absoluteDefinitionFilePath = definitionFile.absolutePath,
-        path = vcsPath,
-        revision = vcsRevision,
-        url = vcsUrl,
-        urlProcessed = normalizeVcsUrl(vcsUrl),
-        custom = custom
-    )
 }
 
 fun patchActualResult(
