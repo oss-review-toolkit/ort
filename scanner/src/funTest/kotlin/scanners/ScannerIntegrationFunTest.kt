@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ScannerIntegrationFunTest : StringSpec() {
@@ -53,7 +53,7 @@ class ScannerIntegrationFunTest : StringSpec() {
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
             val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
-            val expectedResult = patchExpectedResult(
+            val expectedResult = patchExpectedResult2(
                 assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
             )
 
