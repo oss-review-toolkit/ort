@@ -43,19 +43,17 @@ import org.ossreviewtoolkit.scanner.provenance.DummyNestedProvenanceStorage
 import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
+import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult2
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class ScannerIntegrationFunTest : StringSpec() {
-    private val assetsDir = File("src/funTest/assets")
-
     init {
         "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
-            val analyzerResultFile = assetsDir.resolve("analyzer-result.yml")
-            val expectedResult = patchExpectedResult2(
-                assetsDir.resolve("dummy-expected-output-for-analyzer-result.yml")
-            )
+            val analyzerResultFile = getAssetFile("analyzer-result.yml")
+            val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
+            val expectedResult = patchExpectedResult2(expectedResultFile)
 
             val downloaderConfiguration = DownloaderConfiguration()
             val workingTreeCache = DefaultWorkingTreeCache()
