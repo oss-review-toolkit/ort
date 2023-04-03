@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PubFunTest : WordSpec({
@@ -52,7 +52,7 @@ class PubFunTest : WordSpec({
                 lockFile.delete()
             }
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies for a project with dependencies without a static version" {
@@ -61,7 +61,7 @@ class PubFunTest : WordSpec({
 
             val result = createPub().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve multi-module dependencies correctly" {
@@ -70,7 +70,7 @@ class PubFunTest : WordSpec({
 
             val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
 
-            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            analyzerResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies for a project with Flutter, Android and Cocoapods" {
@@ -84,7 +84,7 @@ class PubFunTest : WordSpec({
             val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
                 .reduceToPubProjects()
 
-            analyzerResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            analyzerResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if no lockfile is present" {

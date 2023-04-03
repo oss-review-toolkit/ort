@@ -52,7 +52,7 @@ fun getAssetAsString(path: String): String = getAssetFile(path).readText()
  */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
-fun patchExpectedResult2(
+fun patchExpectedResult(
     expectedResultFile: File,
     definitionFile: File? = null,
     custom: Map<String, String> = emptyMap()
@@ -112,7 +112,7 @@ fun patchActualResult(
 
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
-fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult2(file))
+fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
 
 /**
  * A helper function to create a custom matcher that compares an [expected] collection to a collection obtained by

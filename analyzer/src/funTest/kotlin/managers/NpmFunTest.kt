@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class NpmFunTest : WordSpec({
@@ -49,7 +49,7 @@ class NpmFunTest : WordSpec({
 
             val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(
@@ -69,7 +69,7 @@ class NpmFunTest : WordSpec({
                 resolveScopes = true
             )
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve package-lock dependencies correctly" {
@@ -78,7 +78,7 @@ class NpmFunTest : WordSpec({
 
             val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(
@@ -94,7 +94,7 @@ class NpmFunTest : WordSpec({
 
             val result = resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if the 'package.json' file is invalid" {
@@ -117,7 +117,7 @@ class NpmFunTest : WordSpec({
 
             val result = resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult2(
+            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(
@@ -130,7 +130,7 @@ class NpmFunTest : WordSpec({
         "resolve Babel dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/npm-babel/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/npm-babel-expected-output.yml")
-            val expectedResult = patchExpectedResult2(expectedResultFile, definitionFile)
+            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
                 .fromYaml<ProjectAnalyzerResult>()
 
             val actualResult = resolveSingleProject(definitionFile, resolveScopes = true)

@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class BundlerFunTest : WordSpec({
@@ -46,7 +46,7 @@ class BundlerFunTest : WordSpec({
 
             val actualResult = resolveSingleProject(definitionFile)
 
-            actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
@@ -70,7 +70,7 @@ class BundlerFunTest : WordSpec({
 
             val actualResult = resolveSingleProject(definitionFile)
 
-            actualResult.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

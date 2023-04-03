@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerFunTest : WordSpec({
@@ -56,7 +56,7 @@ class AnalyzerFunTest : WordSpec({
 
             val result = analyze(outputDir).toYaml()
 
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult2(expectedResultFile)
+            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
         }
 
         "resolve dependencies from other package managers" {
@@ -67,7 +67,7 @@ class AnalyzerFunTest : WordSpec({
 
             val result = analyze(definitionFile.parentFile, allowDynamicVersions = true).analyzer!!.result
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 

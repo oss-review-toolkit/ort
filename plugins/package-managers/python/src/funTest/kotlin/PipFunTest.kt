@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class PipFunTest : WordSpec({
@@ -43,7 +43,7 @@ class PipFunTest : WordSpec({
 
             val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "capture metadata from setup.py even if requirements.txt is present" {
@@ -52,7 +52,7 @@ class PipFunTest : WordSpec({
 
             val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 
@@ -66,7 +66,7 @@ class PipFunTest : WordSpec({
 
             val result = createPip().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly for a Django project" {
@@ -75,7 +75,7 @@ class PipFunTest : WordSpec({
 
             val result = createPip().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "capture metadata using python-inspector" {
@@ -84,7 +84,7 @@ class PipFunTest : WordSpec({
 
             val result = createPip().resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "not fail if the requirements file is empty" {

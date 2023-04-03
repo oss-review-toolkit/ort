@@ -68,7 +68,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
@@ -128,7 +128,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileF
 }
 
 private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: SpdxDocument): String =
-    patchExpectedResult2(
+    patchExpectedResult(
         File(expectedResultFile),
         custom = mapOf(
             "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),

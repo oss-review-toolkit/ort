@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult2
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class YarnFunTest : WordSpec({
@@ -39,7 +39,7 @@ class YarnFunTest : WordSpec({
 
             val result = resolveDependencies(definitionFile)
 
-            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
@@ -50,7 +50,7 @@ class YarnFunTest : WordSpec({
 
             val result = resolveDependencies(definitionFile)
 
-            result shouldBe patchExpectedResult2(expectedResultFile, definitionFile)
+            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
