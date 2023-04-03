@@ -24,6 +24,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactlyInAnyOrder
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.should
 
 import io.mockk.every
@@ -35,10 +36,16 @@ import java.util.UUID
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.utils.Snippet
+import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.ScanContext
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/scanoss/filesToScan")
 
@@ -94,18 +101,29 @@ class ScanOssScannerDirectoryTest : StringSpec({
                 LicenseFinding(
                     license = "Apache-2.0",
                     location = TextLocation(
-                        path = "utils/src/main/kotlin/ArchiveUtils.kt",
-                        line = TextLocation.UNKNOWN_LINE
-                    ),
-                    score = 99.0f
-                ),
-                LicenseFinding(
-                    license = "Apache-2.0",
-                    location = TextLocation(
                         path = "scanner/src/main/kotlin/ScannerFactory.kt",
                         line = TextLocation.UNKNOWN_LINE
                     ),
                     score = 100.0f
+                )
+            )
+
+            snippetFindings.shouldContainExactly(
+                SnippetFinding(
+                    TextLocation("utils/src/main/kotlin/ArchiveUtils.kt", 1, 240),
+                    Snippet(
+                        99.0f,
+                        TextLocation(
+                            "https://osskb.org/api/file_contents/871fb0c5188c2f620d9b997e225b0095",
+                            128,
+                            367
+                        ),
+                        RepositoryProvenance(
+                            VcsInfo(VcsType.UNKNOWN, "https://github.com/scanoss/ort", ""), "."
+                        ),
+                        "pkg:github/scanoss/ort",
+                        SpdxExpression.parse("Apache-2.0")
+                    )
                 )
             )
         }

@@ -23,11 +23,17 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
+import org.ossreviewtoolkit.clients.scanoss.model.IdentificationType
 import org.ossreviewtoolkit.clients.scanoss.model.ScanResponse
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.utils.Snippet
+import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
@@ -64,11 +70,25 @@ internal fun generateSummary(
 ): ScanSummary {
     val licenseFindings = mutableListOf<LicenseFinding>()
     val copyrightFindings = mutableListOf<CopyrightFinding>()
+    val snippetFindings = mutableSetOf<SnippetFinding>()
 
     result.forEach { (_, scanResponses) ->
         scanResponses.forEach { scanResponse ->
-            licenseFindings += getLicenseFindings(scanResponse, detectedLicenseMapping)
-            copyrightFindings += getCopyrightFindings(scanResponse)
+            if (scanResponse.id == IdentificationType.FILE) {
+                licenseFindings += getLicenseFindings(scanResponse, detectedLicenseMapping)
+                copyrightFindings += getCopyrightFindings(scanResponse)
+            }
+
+            if (scanResponse.id == IdentificationType.SNIPPET) {
+                val file = requireNotNull(scanResponse.file)
+                val lines = requireNotNull(scanResponse.lines)
+                val sourceLocation = convertLines(file, lines)
+                val snippets = getSnippets(scanResponse)
+
+                snippets.forEach {
+                    snippetFindings += SnippetFinding(sourceLocation, it)
+                }
+            }
         }
     }
 
@@ -78,6 +98,7 @@ internal fun generateSummary(
         packageVerificationCode = verificationCode,
         licenseFindings = licenseFindings.toSortedSet(),
         copyrightFindings = copyrightFindings.toSortedSet(),
+        snippetFindings = snippetFindings,
         issues = emptyList()
     )
 }
@@ -129,5 +150,48 @@ private fun getCopyrightFindings(scanResponse: ScanResponse): List<CopyrightFind
                 endLine = TextLocation.UNKNOWN_LINE
             )
         )
+    }
+}
+
+/**
+ * Get the snippet findings from the given [scanResponse]. If a snippet returned by ScanOSS contains several Purls,
+ * several snippets are created in ORT each containing a single Purl.
+ */
+private fun getSnippets(scanResponse: ScanResponse): Set<Snippet> {
+    val matched = requireNotNull(scanResponse.matched)
+    val fileUrl = requireNotNull(scanResponse.fileUrl)
+    val ossLines = requireNotNull(scanResponse.ossLines)
+    val url = requireNotNull(scanResponse.url)
+    val purls = requireNotNull(scanResponse.purl)
+
+    val licenses = scanResponse.licenses.map { license ->
+        SpdxExpression.parse(license.name)
+    }.toSet()
+
+    val score = matched.substringBeforeLast("%").toFloat()
+    val snippetLocation = convertLines(fileUrl, ossLines)
+    // TODO: No resolved revision is available. Should a ArtifactProvenance be created instead ?
+    val snippetProvenance = RepositoryProvenance(VcsInfo(VcsType.UNKNOWN, url, ""), ".")
+
+    return purls.map {
+        Snippet(
+            score,
+            snippetLocation,
+            snippetProvenance,
+            it,
+            licenses.distinct().reduce(SpdxExpression::and).sorted()
+        )
+    }.toSet()
+}
+
+/**
+ * Split a [lineRange] returned by ScanOSS such as 1-321 into a [TextLocation] for the given [file].
+ */
+private fun convertLines(file: String, lineRange: String): TextLocation {
+    val splitLines = lineRange.split("-")
+    return if (splitLines.size == 2) {
+        TextLocation(file, splitLines.first().toInt(), splitLines.last().toInt())
+    } else {
+        TextLocation(file, splitLines.first().toInt())
     }
 }
