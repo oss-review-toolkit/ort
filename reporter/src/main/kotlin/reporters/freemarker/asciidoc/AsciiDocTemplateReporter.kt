@@ -86,12 +86,10 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
     private fun generateAsciiDocFiles(
         input: ReporterInput,
         outputDir: File,
-        options: Map<String, String> = emptyMap()
+        options: MutableMap<String, String>
     ): List<File> {
-        val templateOptions = options.toMutableMap()
-
-        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in templateOptions) {
-            templateOptions.putIfAbsent(
+        if (FreemarkerTemplateProcessor.OPTION_TEMPLATE_PATH !in options) {
+            options.putIfAbsent(
                 FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID,
                 buildString {
                     append(DISCLOSURE_TEMPLATE_ID)
@@ -103,7 +101,7 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
             )
         }
 
-        return templateProcessor.processTemplates(input, outputDir, templateOptions)
+        return templateProcessor.processTemplates(input, outputDir, options)
     }
 
     /**
