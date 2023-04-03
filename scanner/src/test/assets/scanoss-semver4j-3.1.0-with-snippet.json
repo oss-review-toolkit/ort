@@ -1,0 +1,415 @@
+{
+  "src/main/java/com/vdurmont/semver4j/Range.java": [
+    {
+      "component": "semver4j",
+      "file": "com/vdurmont/semver4j/Range.java",
+      "file_hash": "8b917844b6bb13a7a377d091cac9e231",
+      "file_url": "https://osskb.org/api/file_contents/8b917844b6bb13a7a377d091cac9e231",
+      "id": "file",
+      "latest": "2.2.0-graylog.1",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/Apache-2.0.txt",
+          "copyleft": "no",
+          "name": "Apache-2.0",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "yes",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/Apache-2.0.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/BSD-2-Clause.txt",
+          "copyleft": "no",
+          "name": "BSD-2-Clause",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/BSD-2-Clause.html"
+        },
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/EPL-2.0.txt",
+          "copyleft": "yes",
+          "name": "EPL-2.0",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "yes",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/EPL-2.0.html"
+        },
+        {
+          "name": "SSPL",
+          "source": "license_file",
+          "url": "https://spdx.org/licenses/SSPL.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:maven/org.graylog.repackaged/semver4j",
+        "pkg:maven/org.graylog2/graylog2-server",
+        "pkg:github/graylog2/graylog2-server",
+        "pkg:maven/org.graylog/graylog-parent",
+        "pkg:maven/org.graylog/graylog-project-parent",
+        "pkg:maven/org.graylog.repackaged/os-platform-finder",
+        "pkg:maven/org.graylog.telemetry/graylog-telemetry-plugin",
+        "pkg:maven/org.graylog.plugins/graylog-plugin-parent",
+        "pkg:maven/org.graylog.shaded/kafka09",
+        "pkg:maven/org.graylog.shaded/elasticsearch5"
+      ],
+      "release_date": "2018-07-04",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "8b917844b6bb13a7a377d091cac9e231",
+      "status": "pending",
+      "url": "https://mvnrepository.com/artifact/org.graylog.repackaged/semver4j",
+      "url_hash": "9b0606cb3068e838edb89aeb2158d3be",
+      "vendor": "org.graylog.repackaged",
+      "version": "2.2.0-graylog.1"
+    }
+  ],
+  "src/main/java/com/vdurmont/semver4j/Requirement.java":[
+    {
+      "id": "snippet",
+      "lines": "1-710",
+      "oss_lines": "1-710",
+      "matched": "98%",
+      "file_hash": "6ff2427335b985212c9b79dfa795799f",
+      "source_hash": "bd4bff27f540f4f2c9de012acc4b48a3",
+      "file_url": "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "vendor": "vdurmont",
+      "component": "semver4j",
+      "version": "3.1.0",
+      "latest": "3.1.0",
+      "url": "https://github.com/vdurmont/semver4j",
+      "status": "pending",
+      "release_date": "2019-09-13",
+      "file": "src/main/java/com/vdurmont/semver4j/Requirement.java",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "licenses": [
+        {
+          "name": "CC-BY-SA-2.0",
+          "patent_hints": "no",
+          "copyleft": "no",
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "source": "component_declared",
+          "url": "https://scancode-licensedb.aboutcode.org/cc-by-sa-2.0.LICENSE"
+        }
+      ],
+      "server": {
+        "version": "5.2.5",
+        "kb_version": {
+          "monthly": "23.03",
+          "daily": "23.03.19"
+        }
+      }
+    }
+  ],
+  "src/main/java/com/vdurmont/semver4j/Semver.java": [
+    {
+      "component": "semver4j",
+      "file": "src/main/java/com/vdurmont/semver4j/Semver.java",
+      "file_hash": "a51addd1e051f8ff4feb0fc879726e2c",
+      "file_url": "https://osskb.org/api/file_contents/a51addd1e051f8ff4feb0fc879726e2c",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "a51addd1e051f8ff4feb0fc879726e2c",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ],
+  "src/main/java/com/vdurmont/semver4j/SemverException.java": [
+    {
+      "id": "none",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      }
+    }
+  ],
+  "src/main/java/com/vdurmont/semver4j/Tokenizer.java": [
+    {
+      "component": "semver4j",
+      "file": "src/main/java/com/vdurmont/semver4j/Tokenizer.java",
+      "file_hash": "72189e2d96994bde6483571eb6bf1825",
+      "file_url": "https://osskb.org/api/file_contents/72189e2d96994bde6483571eb6bf1825",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "72189e2d96994bde6483571eb6bf1825",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ],
+  "src/test/java/com/vdurmont/semver4j/NpmSemverTest.java": [
+    {
+      "component": "semver4j",
+      "file": "src/test/java/com/vdurmont/semver4j/NpmSemverTest.java",
+      "file_hash": "8fa5ef7baab5071e49b2393905231420",
+      "file_url": "https://osskb.org/api/file_contents/8fa5ef7baab5071e49b2393905231420",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "8fa5ef7baab5071e49b2393905231420",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ],
+  "src/test/java/com/vdurmont/semver4j/RangeTest.java": [
+    {
+      "component": "semver4j",
+      "file": "src/test/java/com/vdurmont/semver4j/RangeTest.java",
+      "file_hash": "7069133e87c482fe935a7a54ca5b5a5d",
+      "file_url": "https://osskb.org/api/file_contents/7069133e87c482fe935a7a54ca5b5a5d",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-08-16",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "7069133e87c482fe935a7a54ca5b5a5d",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "7cc91d1fce4275d9ef74fb5ae1bd4f63",
+      "vendor": "vdurmont",
+      "version": "3.0.0"
+    }
+  ],
+  "src/test/java/com/vdurmont/semver4j/RequirementTest.java": [
+    {
+      "component": "semver4j",
+      "file": "src/test/java/com/vdurmont/semver4j/RequirementTest.java",
+      "file_hash": "5e9fbaa3bde70a3a5a077fe6d65e36de",
+      "file_url": "https://osskb.org/api/file_contents/5e9fbaa3bde70a3a5a077fe6d65e36de",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "5e9fbaa3bde70a3a5a077fe6d65e36de",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ],
+  "src/test/java/com/vdurmont/semver4j/SemverTest.java": [
+    {
+      "component": "semver4j",
+      "file": "src/test/java/com/vdurmont/semver4j/SemverTest.java",
+      "file_hash": "ef32d9061afb0be4d07285813321e306",
+      "file_url": "https://osskb.org/api/file_contents/ef32d9061afb0be4d07285813321e306",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "ef32d9061afb0be4d07285813321e306",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ],
+  "src/test/java/com/vdurmont/semver4j/TokenizerTest.java": [
+    {
+      "component": "semver4j",
+      "file": "src/test/java/com/vdurmont/semver4j/TokenizerTest.java",
+      "file_hash": "4498810681d4cbdc111ddbf4015b351e",
+      "file_url": "https://osskb.org/api/file_contents/4498810681d4cbdc111ddbf4015b351e",
+      "id": "file",
+      "latest": "3.1.0",
+      "licenses": [
+        {
+          "checklist_url": "https://www.osadl.org/fileadmin/checklists/unreflicenses/MIT.txt",
+          "copyleft": "no",
+          "name": "MIT",
+          "osadl_updated": "2023-03-26T02:11:00+00:00",
+          "patent_hints": "no",
+          "source": "component_declared",
+          "url": "https://spdx.org/licenses/MIT.html"
+        }
+      ],
+      "lines": "all",
+      "matched": "100%",
+      "oss_lines": "all",
+      "purl": [
+        "pkg:github/vdurmont/semver4j"
+      ],
+      "release_date": "2019-09-13",
+      "server": {
+        "kb_version": {
+          "daily": "23.03.19",
+          "monthly": "23.03"
+        },
+        "version": "5.2.5"
+      },
+      "source_hash": "4498810681d4cbdc111ddbf4015b351e",
+      "status": "pending",
+      "url": "https://github.com/vdurmont/semver4j",
+      "url_hash": "b92cd7e4d588747588d1b5fe1f8c664c",
+      "vendor": "vdurmont",
+      "version": "3.1.0"
+    }
+  ]
+}
