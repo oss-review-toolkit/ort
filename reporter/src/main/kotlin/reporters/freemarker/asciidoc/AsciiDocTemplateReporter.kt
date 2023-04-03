@@ -60,6 +60,10 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
 
     private val asciidoctor by lazy { Asciidoctor.Factory.create() }
 
+    /**
+     * Turn recognized [options] into [Attributes] and remove them from [options] afterwards to mark them as processed.
+     * By default no [options] are processed and the returned [Attributes] are empty.
+     */
     protected open fun processTemplateOptions(outputDir: File, options: MutableMap<String, String>): Attributes =
         Attributes.builder().build()
 
