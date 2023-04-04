@@ -44,7 +44,10 @@ internal fun Configuration.isRelevant(): Boolean {
     val isDeprecatedConfiguration = GradleVersion.current() >= GradleVersion.version("6.0")
             && this is DeprecatableConfiguration && resolutionAlternatives != null
 
-    return canBeResolved && !isDeprecatedConfiguration
+    // Do not try to resolve dependencies metadata configurations as there often cause failures with Gradle itself.
+    val isDependenciesMetadata = name.endsWith("DependenciesMetadata")
+
+    return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata
 }
 
 /**
