@@ -312,7 +312,7 @@ abstract class PackageManager(
         definitionFiles.forEach { definitionFile ->
             val relativePath = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath.ifEmpty { "." }
 
-            logger.info { "Resolving $managerName dependencies for path '$relativePath'..." }
+            logger.info { "Using $managerName to resolve dependencies for path '$relativePath'..." }
 
             val duration = measureTime {
                 runCatching {
@@ -338,7 +338,7 @@ abstract class PackageManager(
                     val issues = listOf(
                         createAndLogIssue(
                             source = managerName,
-                            message = "Resolving $managerName dependencies for path '$relativePath' failed with: " +
+                            message = "$managerName failed to resolve dependencies for path '$relativePath': " +
                                     it.collectMessages()
                         )
                     )
@@ -347,7 +347,7 @@ abstract class PackageManager(
                 }
             }
 
-            logger.info { "Resolving $managerName dependencies for path '$relativePath' took $duration." }
+            logger.info { "$managerName resolved dependencies for path '$relativePath' in $duration." }
         }
 
         afterResolution(definitionFiles)
