@@ -104,14 +104,14 @@ class GoDepFunTest : WordSpec({
         "deduce an import path from VCS info" {
             val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
 
-            createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
+            deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
                     gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
         }
 
         "deduce an import path without VCS info" {
             val vcsInfo = VcsInfo.EMPTY
 
-            createGoDep().deduceImportPath(projectDir, vcsInfo, gopath) shouldBe gopath.resolve("src/lockfile")
+            deduceImportPath(projectDir, vcsInfo, gopath) shouldBe gopath.resolve("src/lockfile")
         }
     }
 })
