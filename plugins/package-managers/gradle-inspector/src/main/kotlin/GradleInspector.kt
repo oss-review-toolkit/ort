@@ -55,11 +55,12 @@ import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
+import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
+import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
@@ -105,6 +106,8 @@ class GradleInspector(
         ) = GradleInspector(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
+    private val initScriptFile by lazy { extractInitScript() }
+
     private fun extractInitScript(): File {
         fun extractResource(name: String, target: File) = target.apply {
             val resource = checkNotNull(GradleInspector::class.java.getResource(name)) {
@@ -120,12 +123,13 @@ class GradleInspector(
             }
         }
 
-        val pluginJar = extractResource("/gradle-plugin.jar", createOrtTempFile(prefix = "plugin", suffix = ".jar"))
+        val toolsDir = ortToolsDirectory.resolve(managerName).apply { safeMkdirs() }
+        val pluginJar = extractResource("/gradle-plugin.jar", toolsDir.resolve("gradle-plugin.jar"))
 
         val initScriptText = javaClass.getResource("/init.gradle.template").readText()
             .replace("<REPLACE_PLUGIN_JAR>", pluginJar.invariantSeparatorsPath)
 
-        val initScript = createOrtTempFile("init", ".gradle")
+        val initScript = toolsDir.resolve("init.gradle")
 
         logger.debug { "Extracting Gradle init script to '$initScript'..." }
 
@@ -134,8 +138,6 @@ class GradleInspector(
 
     private fun GradleConnector.getOrtDependencyTreeModel(projectDir: File): OrtDependencyTreeModel =
         forProjectDirectory(projectDir).connect().use { connection ->
-            val initScriptFile = extractInitScript()
-
             val stdout = ByteArrayOutputStream()
             val stderr = ByteArrayOutputStream()
 
@@ -161,10 +163,6 @@ class GradleInspector(
                     "Analyzing the project in '$projectDir' produced the following error output:\n" +
                             stderr.toString().prependIndent("\t")
                 }
-            }
-
-            if (!initScriptFile.delete()) {
-                logger.warn { "Init script file '$initScriptFile' could not be deleted." }
             }
 
             model
