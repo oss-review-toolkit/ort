@@ -24,11 +24,9 @@ import io.kotest.matchers.shouldBe
 
 import java.time.Instant
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -39,7 +37,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/regular/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/regular-expected-output.yml")
 
-            val result = createCocoaPods().resolveSingleProject(definitionFile)
+            val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -48,7 +46,7 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/dep-tree/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/dep-tree-expected-output.yml")
 
-            val result = createCocoaPods().resolveSingleProject(definitionFile)
+            val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -57,19 +55,12 @@ class CocoaPodsFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")
 
-            val result = createCocoaPods().resolveSingleProject(definitionFile)
+            val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
             result.replaceIssueTimestamps().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createCocoaPods(): CocoaPods =
-    CocoaPods.Factory().create(
-        analysisRoot = USER_DIR,
-        analyzerConfig = AnalyzerConfiguration(),
-        repoConfig = RepositoryConfiguration()
-    )
 
 private fun ProjectAnalyzerResult.replaceIssueTimestamps(): ProjectAnalyzerResult =
     copy(issues = issues.map { it.copy(timestamp = Instant.EPOCH) })

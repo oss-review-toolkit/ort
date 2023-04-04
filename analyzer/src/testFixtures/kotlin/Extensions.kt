@@ -41,6 +41,12 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
+import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
+import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
+import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 fun PackageManager.resolveSingleProject(definitionFile: File, resolveScopes: Boolean = false): ProjectAnalyzerResult {
@@ -114,3 +120,30 @@ fun Spec.analyze(
 
     return analyzer.analyze(managedFiles).withResolvedScopes()
 }
+
+fun Spec.create(
+    managerName: String,
+    analyzerConfig: AnalyzerConfiguration,
+    repoConfig: RepositoryConfiguration = RepositoryConfiguration()
+) = PackageManager.ALL.getValue(managerName).create(USER_DIR, analyzerConfig, repoConfig)
+
+fun Spec.create(
+    managerName: String,
+    vararg options: Pair<String, String>,
+    allowDynamicVersions: Boolean = false,
+    excludedScopes: Collection<String> = emptySet()
+) = create(
+    managerName = managerName,
+    analyzerConfig = AnalyzerConfiguration(
+        allowDynamicVersions = allowDynamicVersions,
+        skipExcluded = excludedScopes.isNotEmpty(),
+        packageManagers = mapOf(
+            managerName to PackageManagerConfiguration(options = mapOf(*options))
+        )
+    ),
+    repoConfig = RepositoryConfiguration(
+        excludes = Excludes(
+            scopes = excludedScopes.map { ScopeExclude(it, ScopeExcludeReason.TEST_DEPENDENCY_OF) }
+        )
+    )
+)

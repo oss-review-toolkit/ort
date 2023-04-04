@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.carthage
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -35,11 +33,8 @@ class CarthageFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/carthage/Cartfile.resolved")
         val expectedResultFile = getAssetFile("projects/synthetic/carthage-expected-output.yml")
 
-        val result = createCarthage().resolveSingleProject(definitionFile)
+        val result = create("Carthage").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createCarthage() =
-    Carthage("Carthage", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

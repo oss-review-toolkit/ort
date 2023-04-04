@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -36,7 +33,7 @@ class PnpmFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pnpm/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm-expected-output.yml")
 
-            val result = createPnpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -52,5 +49,3 @@ class PnpmFunTest : WordSpec({
         }
     }
 })
-
-private fun createPnpm() = Pnpm("PNPM", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

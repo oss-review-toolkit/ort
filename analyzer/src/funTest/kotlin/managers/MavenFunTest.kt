@@ -25,14 +25,8 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -43,7 +37,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-root.yml")
 
-        val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -56,7 +50,7 @@ class MavenFunTest : StringSpec({
         // app depends on lib, so we also have to pass the pom.xml of lib to resolveDependencies so that it is
         // available in the Maven.projectsByIdentifier cache. Otherwise, resolution of transitive dependencies would
         // not work.
-        val managerResult = createMaven().resolveDependencies(
+        val managerResult = create("Maven").resolveDependencies(
             listOf(definitionFileApp, definitionFileLib),
             emptyMap()
         )
@@ -74,7 +68,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-lib.yml")
 
-        val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -83,11 +77,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven/lib/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-expected-output-scope-excludes.yml")
 
-        val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-        val scopeExclude = ScopeExclude("test.*", ScopeExcludeReason.TEST_DEPENDENCY_OF)
-        val repoConfig = RepositoryConfiguration(excludes = Excludes(scopes = listOf(scopeExclude)))
-
-        val result = createMaven(analyzerConfig, repoConfig)
+        val result = create("Maven", excludedScopes = setOf("test.*"))
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
@@ -102,7 +92,7 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven-parent/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-parent-expected-output-root.yml")
 
-        val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -111,16 +101,10 @@ class MavenFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/maven-wagon/pom.xml")
         val expectedResultFile = getAssetFile("projects/synthetic/maven-wagon-expected-output.yml")
 
-        val result = createMaven().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe patchExpectedResult(
             expectedResultFile, definitionFile
         )
     }
 })
-
-private fun createMaven(
-    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-    repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
-) =
-    Maven("Maven", USER_DIR, analyzerConfig, repositoryConfig)

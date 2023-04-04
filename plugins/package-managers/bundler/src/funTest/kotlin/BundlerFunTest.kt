@@ -25,15 +25,9 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
-import java.io.File
-
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -44,14 +38,14 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/lockfile/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-lockfile.yml")
 
-            val actualResult = resolveSingleProject(definitionFile)
+            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
 
             actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Gemfile")
-            val actualResult = resolveSingleProject(definitionFile)
+            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
 
             with(actualResult) {
                 project.id shouldBe
@@ -68,14 +62,9 @@ class BundlerFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/gemspec/Gemfile")
             val expectedResultFile = getAssetFile("projects/synthetic/bundler-expected-output-gemspec.yml")
 
-            val actualResult = resolveSingleProject(definitionFile)
+            val actualResult = create("Bundler").resolveSingleProject(definitionFile)
 
             actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun resolveSingleProject(definitionFile: File): ProjectAnalyzerResult {
-    val bundler = Bundler("Bundler", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-    return bundler.resolveSingleProject(definitionFile)
-}

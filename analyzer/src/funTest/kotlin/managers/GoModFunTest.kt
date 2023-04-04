@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -36,7 +33,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("gomod/go.mod")
         val expectedResultFile = testDir.resolve("gomod-expected-output.yml")
 
-        val result = createGoMod().resolveSingleProject(definitionFile)
+        val result = create("GoMod").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -45,7 +42,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("gomod-subpkg/go.mod")
         val expectedResultFile = testDir.resolve("gomod-subpkg-expected-output.yml")
 
-        val result = createGoMod().resolveSingleProject(definitionFile)
+        val result = create("GoMod").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -54,7 +51,7 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("gomod-no-deps/go.mod")
         val expectedResultFile = testDir.resolve("gomod-no-deps-expected-output.yml")
 
-        val result = createGoMod().resolveSingleProject(definitionFile)
+        val result = create("GoMod").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -63,10 +60,8 @@ class GoModFunTest : StringSpec({
         val definitionFile = testDir.resolve("gomod-unused-deps/go.mod")
         val expectedResultFile = testDir.resolve("gomod-unused-deps-expected-output.yml")
 
-        val result = createGoMod().resolveSingleProject(definitionFile)
+        val result = create("GoMod").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createGoMod() = GoMod("GoMod", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bower
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -35,10 +33,8 @@ class BowerFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/bower/bower.json")
         val expectedResultFile = getAssetFile("projects/synthetic/bower-expected-output.yml")
 
-        val result = createBower().resolveSingleProject(definitionFile)
+        val result = create("Bower").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createBower() = Bower("Bower", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

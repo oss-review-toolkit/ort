@@ -26,13 +26,11 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.haveSubstring
 
 import org.ossreviewtoolkit.analyzer.managers.analyze
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -47,7 +45,7 @@ class PubFunTest : WordSpec({
             }
 
             val result = try {
-                createPub(AnalyzerConfiguration(allowDynamicVersions = true)).resolveSingleProject(definitionFile)
+                create("Pub", allowDynamicVersions = true).resolveSingleProject(definitionFile)
             } finally {
                 lockFile.delete()
             }
@@ -59,7 +57,7 @@ class PubFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/any-version/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-any-version.yml")
 
-            val result = createPub().resolveSingleProject(definitionFile)
+            val result = create("Pub").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -90,7 +88,7 @@ class PubFunTest : WordSpec({
         "show an error if no lockfile is present" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/pubspec.yaml")
 
-            val result = createPub().resolveSingleProject(definitionFile)
+            val result = create("Pub").resolveSingleProject(definitionFile)
 
             with(result) {
                 packages should beEmpty()
@@ -112,9 +110,6 @@ private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
         issues = issues
     )
 }
-
-private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
-    Pub("Pub", USER_DIR, config, RepositoryConfiguration())
 
 private fun AnalyzerResult.patchPackages(): AnalyzerResult {
     val patchedPackages = packages.mapTo(mutableSetOf()) { pkg ->

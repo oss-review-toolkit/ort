@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cargo
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -35,7 +33,7 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-lib-expected-output.yml")
 
-        val result = createCargo().resolveSingleProject(definitionFile)
+        val result = create("Cargo").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -44,7 +42,7 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/integration/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-integration-expected-output.yml")
 
-        val result = createCargo().resolveSingleProject(definitionFile)
+        val result = create("Cargo").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -53,11 +51,8 @@ class CargoSubcrateFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/cargo-subcrate/client/Cargo.toml")
         val expectedResultFile = getAssetFile("projects/synthetic/cargo-subcrate-client-expected-output.yml")
 
-        val result = createCargo().resolveSingleProject(definitionFile)
+        val result = create("Cargo").resolveSingleProject(definitionFile)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createCargo() =
-    Cargo("Cargo", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

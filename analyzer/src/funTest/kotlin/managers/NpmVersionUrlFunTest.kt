@@ -23,9 +23,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -38,11 +35,10 @@ class NpmVersionUrlFunTest : WordSpec({
             val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
                 .fromYaml<ProjectAnalyzerResult>()
 
-            val actualResult = createNpm().resolveSingleProject(definitionFile, resolveScopes = true)
+            val actualResult = create("NPM", allowDynamicVersions = true)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
+
             actualResult.withInvariantIssues() shouldBe expectedResult.withInvariantIssues()
         }
     }
 })
-
-private fun createNpm() =
-    Npm("NPM", USER_DIR, AnalyzerConfiguration(allowDynamicVersions = true), RepositoryConfiguration())

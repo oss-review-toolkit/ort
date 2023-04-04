@@ -22,12 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -37,7 +35,7 @@ class GradleAndroidFunTest : StringSpec({
             val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -46,7 +44,7 @@ class GradleAndroidFunTest : StringSpec({
             val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -55,7 +53,7 @@ class GradleAndroidFunTest : StringSpec({
             val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -64,10 +62,8 @@ class GradleAndroidFunTest : StringSpec({
             val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
-            val result = createGradle().resolveDependencies(listOf(definitionFile), emptyMap())
+            val result = create("Gradle").resolveDependencies(listOf(definitionFile), emptyMap())
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 })
-
-private fun createGradle() = Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

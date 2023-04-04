@@ -26,10 +26,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport.Companion.OPTION_DIRECT_DEPENDENCIES_ONLY
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -63,7 +59,7 @@ class DotNetFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTest/test.csproj")
         val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output.yml")
 
-        val result = createDotNet().resolveSingleProject(definitionFile)
+        val result = create("DotNet").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -74,7 +70,7 @@ class DotNetFunTest : StringSpec({
             "projects/synthetic/dotnet-direct-dependencies-only-expected-output.yml"
         )
 
-        val result = createDotNet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
+        val result = create("DotNet", OPTION_DIRECT_DEPENDENCIES_ONLY to "true").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -83,24 +79,8 @@ class DotNetFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/dotnet/subProjectTestWithNuspec/test.csproj")
         val expectedResultFile = getAssetFile("projects/synthetic/dotnet-expected-output-with-nuspec.yml")
 
-        val result = createDotNet().resolveSingleProject(definitionFile)
+        val result = create("DotNet").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createDotNet(directDependenciesOnly: Boolean = false) =
-    DotNet(
-        "DotNet",
-        USER_DIR,
-        AnalyzerConfiguration().copy(
-            packageManagers = mapOf(
-                "DotNet" to PackageManagerConfiguration(
-                    options = mapOf(
-                        OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
-                    )
-                )
-            )
-        ),
-        RepositoryConfiguration()
-    )
