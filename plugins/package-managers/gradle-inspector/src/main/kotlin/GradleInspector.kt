@@ -106,20 +106,18 @@ class GradleInspector(
     }
 
     private fun extractInitScript(): File {
-        fun extractResource(name: String, target: File): File {
-            target.outputStream().use { outputStream ->
-                val resource = checkNotNull(javaClass.getResource(name)) {
-                    "Resource '$name' not found."
-                }
+        fun extractResource(name: String, target: File) = target.apply {
+            val resource = checkNotNull(GradleInspector::class.java.getResource(name)) {
+                "Resource '$name' not found."
+            }
 
-                logger.debug { "Extracting resource '${resource.path.substringAfterLast('/')}' to '$target'..." }
+            logger.debug { "Extracting resource '${resource.path.substringAfterLast('/')}' to '$target'..." }
 
-                resource.openStream().use { inputStream ->
+            resource.openStream().use { inputStream ->
+                outputStream().use { outputStream ->
                     inputStream.copyTo(outputStream)
                 }
             }
-
-            return target
         }
 
         val pluginJar = extractResource("/gradle-plugin.jar", createOrtTempFile(prefix = "plugin", suffix = ".jar"))
