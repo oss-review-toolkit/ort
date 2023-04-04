@@ -251,7 +251,7 @@ class GoDep(
     }
 }
 
-fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
+internal fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
     gopath.resolve("src").let { src ->
         val uri = vcs.url.toUri().getOrNull()
         if (uri?.host != null) {
