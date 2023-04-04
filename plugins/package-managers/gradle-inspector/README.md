@@ -24,7 +24,7 @@ injects both the [init.gradle] and a fat-JAR for the [Gradle plugin] into the pr
 ## Limitations
 
 The retrieval of the checksum values for remote artifacts is currently done via plain OkHttp calls, which means it will
-not work out of the box for private repositories. To worka round this, crednetials need to be configured in `.netrc`
+not work out of the box for private repositories. To work around this, credentials need to be configured in `.netrc`
 additionally to in Gradle. This is similar to how the "legacy" [Gradle] analyzer required to additionally configure
 credentials in Maven.
 
