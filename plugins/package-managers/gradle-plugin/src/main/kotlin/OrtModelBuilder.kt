@@ -49,7 +49,7 @@ import org.gradle.maven.MavenPomArtifact
 import org.gradle.tooling.provider.model.ToolingModelBuilder
 import org.gradle.util.GradleVersion
 
-class OrtModelBuilder : ToolingModelBuilder {
+internal class OrtModelBuilder : ToolingModelBuilder {
     private lateinit var repositories: Map<String, String?>
 
     private val visitedDependencies = mutableSetOf<ModuleComponentIdentifier>()

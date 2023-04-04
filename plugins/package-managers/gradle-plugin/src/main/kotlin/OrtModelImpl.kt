@@ -28,7 +28,7 @@ import OrtVcsModel
 import java.io.Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-class OrtDependencyTreeModelImpl(
+internal class OrtDependencyTreeModelImpl(
     override val group: String,
     override val name: String,
     override val version: String,
@@ -39,13 +39,13 @@ class OrtDependencyTreeModelImpl(
 ) : OrtDependencyTreeModel, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-class OrtConfigurationImpl(
+internal class OrtConfigurationImpl(
     override val name: String,
     override val dependencies: List<OrtDependency>
 ) : OrtConfiguration, Serializable
 
 @Suppress("LongParameterList", "SerialVersionUIDInSerializableClass")
-class OrtDependencyImpl(
+internal class OrtDependencyImpl(
     override val groupId: String,
     override val artifactId: String,
     override val version: String,
@@ -60,7 +60,7 @@ class OrtDependencyImpl(
 ) : OrtDependency, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-class OrtMavenModelImpl(
+internal class OrtMavenModelImpl(
     override val licenses: Set<String>,
     override val authors: Set<String>,
     override val description: String?,
@@ -69,7 +69,7 @@ class OrtMavenModelImpl(
 ) : OrtMavenModel, Serializable
 
 @Suppress("SerialVersionUIDInSerializableClass")
-class OrtVcsModelImpl(
+internal class OrtVcsModelImpl(
     override val connection: String,
     override val tag: String,
     override val browsableUrl: String
