@@ -22,11 +22,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.stack
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -40,7 +38,7 @@ class StackFunTest : WordSpec({
                 "projects/external/quickcheck-state-machine-expected-output$suffix.yml"
             )
 
-            val result = createStack().resolveSingleProject(definitionFile)
+            val result = create("Stack").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe expectedResultFile.readText()
         }
@@ -49,12 +47,9 @@ class StackFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/stack-yesodweb-simple/stack.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/stack-yesodweb-simple-expected-output.yml")
 
-            val result = createStack().resolveSingleProject(definitionFile)
+            val result = create("Stack").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createStack() =
-    Stack("Stack", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

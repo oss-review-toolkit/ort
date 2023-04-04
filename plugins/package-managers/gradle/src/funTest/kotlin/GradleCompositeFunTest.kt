@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -35,10 +33,8 @@ class GradleCompositeFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/gradle-composite/project1/build.gradle.kts")
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-composite-expected-output.yml")
 
-        val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createGradle() = Gradle("Gradle", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

@@ -22,12 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -38,7 +32,7 @@ class Yarn2FunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn2/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn2-expected-output.yml")
 
-            val result = createYarn2().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -47,12 +41,7 @@ class Yarn2FunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn2/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn2-expected-output-scope-excludes.yml")
 
-            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-            val scopeExclude = ScopeExclude("devDependencies", ScopeExcludeReason.TEST_DEPENDENCY_OF)
-            val excludes = Excludes(scopes = listOf(scopeExclude))
-            val repositoryConfig = RepositoryConfiguration(excludes = excludes)
-
-            val result = createYarn2(analyzerConfig, repositoryConfig)
+            val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
@@ -62,15 +51,9 @@ class Yarn2FunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn2-workspaces/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn2-workspaces-expected-output.yml")
 
-            val result = createYarn2().collateMultipleProjects(definitionFile).withResolvedScopes()
+            val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createYarn2(
-    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-    repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
-) =
-    Yarn2("Yarn2", USER_DIR, analyzerConfig, repositoryConfig)

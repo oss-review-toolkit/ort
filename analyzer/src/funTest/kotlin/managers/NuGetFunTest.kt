@@ -26,10 +26,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetDependency
 import org.ossreviewtoolkit.analyzer.managers.utils.NuGetSupport.Companion.OPTION_DIRECT_DEPENDENCIES_ONLY
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -63,7 +59,7 @@ class NuGetFunTest : StringSpec({
     "Project dependencies are detected correctly" {
         val expectedResultFile = getAssetFile("projects/synthetic/nuget-expected-output.yml")
 
-        val result = createNuGet().resolveSingleProject(definitionFile)
+        val result = create("NuGet").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -71,24 +67,8 @@ class NuGetFunTest : StringSpec({
     "Direct project dependencies are detected correctly" {
         val expectedResultFile = getAssetFile("projects/synthetic/nuget-direct-dependencies-only-expected-output.yml")
 
-        val result = createNuGet(directDependenciesOnly = true).resolveSingleProject(definitionFile)
+        val result = create("NuGet", OPTION_DIRECT_DEPENDENCIES_ONLY to "true").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createNuGet(directDependenciesOnly: Boolean = false) =
-    NuGet(
-        "NuGet",
-        USER_DIR,
-        AnalyzerConfiguration(
-            packageManagers = mapOf(
-                "NuGet" to PackageManagerConfiguration(
-                    options = mapOf(
-                        OPTION_DIRECT_DEPENDENCIES_ONLY to "$directDependenciesOnly"
-                    )
-                )
-            )
-        ),
-        RepositoryConfiguration()
-    )

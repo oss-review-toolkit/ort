@@ -27,17 +27,12 @@ import io.kotest.data.row
 import io.kotest.data.table
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.vcs.Git
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.Excludes
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.config.ScopeExclude
-import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -57,7 +52,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-root.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -66,7 +61,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -75,7 +70,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -84,7 +79,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/lib-without-repo/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-lib-without-repo.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -93,11 +88,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle/app/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-scopes-excludes.yml")
 
-            val analyzerConfig = AnalyzerConfiguration(skipExcluded = true)
-            val scopeExclude = ScopeExclude("test.*", ScopeExcludeReason.TEST_DEPENDENCY_OF)
-            val repoConfig = RepositoryConfiguration(excludes = Excludes(scopes = listOf(scopeExclude)))
-
-            val result = createGradle(analyzerConfig, repoConfig)
+            val result = create("Gradle", excludedScopes = setOf("test.*"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
@@ -111,7 +102,7 @@ class GradleFunTest : StringSpec() {
             val definitionFile = getAssetFile("projects/synthetic/gradle-unsupported-version/build.gradle")
             val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-unsupported-version.yml")
 
-            val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -163,7 +154,7 @@ class GradleFunTest : StringSpec() {
                 val definitionFile = getAssetFile("projects/synthetic/app/build.gradle")
                 val expectedResultFile = getAssetFile("projects/synthetic/gradle-expected-output-app$suffix.yml")
 
-                val result = createGradle().resolveSingleProject(definitionFile, resolveScopes = true)
+                val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
                 result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
             }
@@ -186,9 +177,4 @@ class GradleFunTest : StringSpec() {
         ProcessCapture(projectDir, command, "--no-daemon", "wrapper", "--gradle-version", version)
             .requireSuccess()
     }
-
-    private fun createGradle(
-        analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-        repoConfig: RepositoryConfiguration = RepositoryConfiguration()
-    ) = Gradle("Gradle", USER_DIR, analyzerConfig, repoConfig)
 }

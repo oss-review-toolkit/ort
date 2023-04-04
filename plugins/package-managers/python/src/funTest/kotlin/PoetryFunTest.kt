@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -36,11 +34,9 @@ class PoetryFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/poetry/poetry.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/poetry-expected-output.yml")
 
-            val result = createPoetry().resolveSingleProject(definitionFile)
+            val result = create("Poetry").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createPoetry() = Poetry("Poetry", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

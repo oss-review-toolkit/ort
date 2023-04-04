@@ -22,12 +22,10 @@ package org.ossreviewtoolkit.plugins.packagemanagers.conan
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.OPTION_LOCKFILE_NAME
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -38,7 +36,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-txt/conanfile.txt")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-txt.yml")
 
-        val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
+        val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -47,7 +45,7 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
-        val result = createConanDynamicVersions().resolveSingleProject(definitionFile)
+        val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
@@ -60,27 +58,8 @@ class ConanFunTest : StringSpec({
         val definitionFile = getAssetFile("projects/synthetic/conan-py/conanfile.py")
         val expectedResultFile = getAssetFile("projects/synthetic/conan-expected-output-py.yml")
 
-        val result = createConanWithLockFile().resolveSingleProject(definitionFile)
+        val result = create("Conan", OPTION_LOCKFILE_NAME to "lockfile.lock").resolveSingleProject(definitionFile)
 
         patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
-
-private fun createConanDynamicVersions() =
-    Conan("Conan", USER_DIR, AnalyzerConfiguration(true), RepositoryConfiguration())
-
-private fun createConanWithLockFile() =
-    Conan(
-        "Conan",
-        USER_DIR,
-        AnalyzerConfiguration().copy(
-            packageManagers = mapOf(
-                "Conan" to PackageManagerConfiguration(
-                    options = mapOf(
-                        "lockfileName" to "lockfile.lock"
-                    )
-                )
-            )
-        ),
-        RepositoryConfiguration()
-    )

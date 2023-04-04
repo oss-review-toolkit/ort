@@ -22,9 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -35,7 +32,7 @@ class YarnFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn-expected-output.yml")
 
-            val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -46,12 +43,9 @@ class YarnFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn-workspaces/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn-workspaces-expected-output.yml")
 
-            val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
+            val result = create("Yarn").resolveSingleProject(definitionFile, resolveScopes = true)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createYarn() =
-    Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

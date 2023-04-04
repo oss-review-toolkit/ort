@@ -22,10 +22,8 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -36,7 +34,7 @@ class PipenvFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pipenv/Pipfile.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/pipenv-expected-output.yml")
 
-            val result = createPipenv().resolveSingleProject(definitionFile)
+            val result = create("Pipenv").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -47,11 +45,9 @@ class PipenvFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pipenv-python3/Pipfile.lock")
             val expectedResultFile = getAssetFile("projects/synthetic/pipenv-python3-expected-output.yml")
 
-            val result = createPipenv().resolveSingleProject(definitionFile)
+            val result = create("Pipenv").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun createPipenv() = Pipenv("Pipenv", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())

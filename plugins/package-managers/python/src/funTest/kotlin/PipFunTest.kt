@@ -24,12 +24,10 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
-import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
-import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_PYTHON_VERSION
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -41,7 +39,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/external/spdx-tools-python/setup.py")
             val expectedResultFile = getAssetFile("projects/external/spdx-tools-python-expected-output.yml")
 
-            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -50,7 +48,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pip/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/pip-expected-output.yml")
 
-            val result = createPip(pythonVersion = "2.7").resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -64,7 +62,7 @@ class PipFunTest : WordSpec({
             val suffix = "-windows".takeIf { Os.isWindows }.orEmpty()
             val expectedResultFile = getAssetFile("projects/external/example-python-flask-expected-output$suffix.yml")
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -73,7 +71,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/pip-python3/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/pip-python3-expected-output.yml")
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -82,7 +80,7 @@ class PipFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/python-inspector/requirements.txt")
             val expectedResultFile = getAssetFile("projects/synthetic/python-inspector-expected-output.yml")
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
             result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
@@ -90,21 +88,9 @@ class PipFunTest : WordSpec({
         "not fail if the requirements file is empty" {
             val definitionFile = createTestTempFile(prefix = "requirements", suffix = ".txt")
 
-            val result = createPip().resolveSingleProject(definitionFile)
+            val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
             result.issues should beEmpty()
         }
     }
 })
-
-private fun createPip(pythonVersion: String = "3.10") =
-    Pip("PIP", USER_DIR, createAnalyzerConfiguration(pythonVersion), RepositoryConfiguration())
-
-private fun createAnalyzerConfiguration(pythonVersion: String) =
-    AnalyzerConfiguration(
-        packageManagers = mapOf(
-            Pip.Factory().type to PackageManagerConfiguration(
-                options = mapOf("pythonVersion" to pythonVersion)
-            )
-        )
-    )
