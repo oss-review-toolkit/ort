@@ -2,7 +2,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-462w-v97r-4m45",
-        "modified": "2023-03-10T05:23:41.874079Z",
+        "modified": "2023-03-28T05:38:46.649127Z",
         "published": "2019-04-10T14:30:24Z",
         "aliases": [
             "CVE-2019-10906"
@@ -171,7 +171,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2023-03-08T05:47:11.461578Z",
+        "modified": "2023-03-28T05:34:47.958777Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
             "CVE-2014-1402"
@@ -319,7 +319,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-fqh9-2qgg-h84h",
-        "modified": "2023-03-09T05:31:42.262435Z",
+        "modified": "2023-03-28T05:32:13.513552Z",
         "published": "2022-05-17T04:01:00Z",
         "aliases": [
             "CVE-2014-0012"
@@ -419,7 +419,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-g3rq-g295-4j3m",
-        "modified": "2023-03-12T05:29:26.243227Z",
+        "modified": "2023-04-03T19:04:42.225806Z",
         "published": "2021-03-19T21:28:05Z",
         "aliases": [
             "CVE-2020-28493"
@@ -491,6 +491,11 @@
                     "2.9.5",
                     "2.9.6"
                 ],
+                "ecosystem_specific": {
+                    "affected_functions": [
+                        "jinja2.utils.urlize"
+                    ]
+                },
                 "database_specific": {
                     "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2021/03/GHSA-g3rq-g295-4j3m/GHSA-g3rq-g295-4j3m.json"
                 }
@@ -504,6 +509,10 @@
             {
                 "type": "WEB",
                 "url": "https://github.com/pallets/jinja/pull/1343"
+            },
+            {
+                "type": "WEB",
+                "url": "https://github.com/pallets/jinja/commit/15ef8f09b659f9100610583938005a7a10472d4d"
             },
             {
                 "type": "PACKAGE",
@@ -539,7 +548,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-hj2j-77xm-mc5v",
-        "modified": "2023-03-12T05:32:53.675797Z",
+        "modified": "2023-03-28T05:27:00.632427Z",
         "published": "2019-04-10T14:30:13Z",
         "aliases": [
             "CVE-2016-10745"
