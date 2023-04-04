@@ -20,8 +20,15 @@
 package org.ossreviewtoolkit.model.licenses
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeTypeOf
 
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 class DefaultLicenseInfoProviderTest : WordSpec({
@@ -36,4 +43,31 @@ class DefaultLicenseInfoProviderTest : WordSpec({
             defaultLicenseInfoProvider.get(project.id).declaredLicenseInfo.authors shouldBe projectAuthors
         }
     }
+
+    "filterByVcsPath()" should {
+        "return identity if the target path is not a subdirectory of the scan result's VCS path" {
+            val scanResult = createScanResult("a/b")
+
+            listOf("", "a").forAll { path ->
+                scanResult.filterByVcsPath(path) shouldBe scanResult
+            }
+        }
+
+        "return filtered scan result if the target path is a subdirectory of the scan result's VCS path" {
+            val scanResult = createScanResult("a/b")
+
+            scanResult.filterByPath("a/b/c").provenance
+                .shouldBeTypeOf<RepositoryProvenance>().vcsInfo.path shouldBe "a/b/c"
+        }
+    }
 })
+
+private fun createScanResult(vcsPath: String) =
+    ScanResult(
+        provenance = RepositoryProvenance(
+            vcsInfo = VcsInfo.EMPTY.copy(path = vcsPath),
+            resolvedRevision = "0000000000000000000000000000000000000000"
+        ),
+        summary = ScanSummary.EMPTY,
+        scanner = ScannerDetails.EMPTY
+    )
