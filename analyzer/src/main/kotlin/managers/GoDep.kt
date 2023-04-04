@@ -188,22 +188,6 @@ class GoDep(
         )
     }
 
-    fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
-        gopath.resolve("src").let { src ->
-            val uri = vcs.url.toUri().getOrNull()
-            if (uri?.host != null) {
-                src.resolve("${uri.host}/${uri.path}")
-            } else {
-                src.resolve(projectDir.name)
-            }
-        }
-
-    private fun resolveProjectRoot(definitionFile: File) =
-        when (definitionFile.name) {
-            "Godeps.json" -> definitionFile.parentFile.parentFile
-            else -> definitionFile.parentFile
-        }
-
     private fun importLegacyManifest(lockfileName: String, workingDir: File, gopath: File) {
         requireLockfile(workingDir) { lockfileName.isEmpty() || workingDir.resolve(lockfileName).isFile }
 
@@ -265,38 +249,54 @@ class GoDep(
 
         return projects
     }
+}
 
-    private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
-        val pc = ProcessCapture(
-            "go", "get", "-d", importPath,
-            environment = mapOf("GOPATH" to gopath.path, "GO111MODULE" to "off")
+fun deduceImportPath(projectDir: File, vcs: VcsInfo, gopath: File): File =
+    gopath.resolve("src").let { src ->
+        val uri = vcs.url.toUri().getOrNull()
+        if (uri?.host != null) {
+            src.resolve("${uri.host}/${uri.path}")
+        } else {
+            src.resolve(projectDir.name)
+        }
+    }
+
+private fun resolveProjectRoot(definitionFile: File) =
+    when (definitionFile.name) {
+        "Godeps.json" -> definitionFile.parentFile.parentFile
+        else -> definitionFile.parentFile
+    }
+
+private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): VcsInfo {
+    val pc = ProcessCapture(
+        "go", "get", "-d", importPath,
+        environment = mapOf("GOPATH" to gopath.path, "GO111MODULE" to "off")
+    )
+
+    // HACK Some failure modes from "go get" can be ignored:
+    // 1. repositories that don't have .go files in the root directory
+    // 2. all files in the root directory have certain "build constraints" (like "// +build ignore")
+    if (pc.isError) {
+        val msg = pc.stderr
+
+        val errorMessagesToIgnore = listOf(
+            "no Go files in",
+            "no buildable Go source files in",
+            "build constraints exclude all Go files in"
         )
 
-        // HACK Some failure modes from "go get" can be ignored:
-        // 1. repositories that don't have .go files in the root directory
-        // 2. all files in the root directory have certain "build constraints" (like "// +build ignore")
-        if (pc.isError) {
-            val msg = pc.stderr
-
-            val errorMessagesToIgnore = listOf(
-                "no Go files in",
-                "no buildable Go source files in",
-                "build constraints exclude all Go files in"
-            )
-
-            if (!errorMessagesToIgnore.any { it in msg }) throw IOException(msg)
-        }
-
-        val repoRoot = gopath.resolve("src/$importPath")
-
-        // The "processProjectVcs()" function should always be able to deduce VCS information from the working tree
-        // created by "go get". However, if that fails for whatever reason, fall back to guessing VCS information from
-        // the "importPath" (which usually resembles a URL).
-        val fallbackVcsInfo = VcsHost.parseUrl("https://$importPath").takeIf {
-            it.type != VcsType.UNKNOWN
-        } ?: VcsInfo.EMPTY
-
-        // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
-        return processProjectVcs(repoRoot, fallbackVcsInfo).copy(revision = revision)
+        if (!errorMessagesToIgnore.any { it in msg }) throw IOException(msg)
     }
+
+    val repoRoot = gopath.resolve("src/$importPath")
+
+    // The "processProjectVcs()" function should always be able to deduce VCS information from the working tree
+    // created by "go get". However, if that fails for whatever reason, fall back to guessing VCS information from
+    // the "importPath" (which usually resembles a URL).
+    val fallbackVcsInfo = VcsHost.parseUrl("https://$importPath").takeIf {
+        it.type != VcsType.UNKNOWN
+    } ?: VcsInfo.EMPTY
+
+    // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
+    return PackageManager.processProjectVcs(repoRoot, fallbackVcsInfo).copy(revision = revision)
 }
