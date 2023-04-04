@@ -65,18 +65,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
         repositories = project.repositories.associate { it.name to (it as? UrlArtifactRepository)?.url?.toString() }
 
-        val resolvableConfigurations = project.configurations.filter { it.isRelevant() }.run {
-            if (project.isAndroidProject()) {
-                // Filter out dependencies metadata configuration as created by the Android Gradle plugin 4.0.0 and
-                // higher, see [1]. Also see [2] for valuable information in this context.
-                //
-                // [1]: https://developer.android.com/studio/past-releases/past-agp-releases/agp-4-0-0-release-notes#dependency-metadata
-                // [2]: https://gist.github.com/h0tk3y/41c73d1f822378f52f1e6cce8dcf56aa#orgjetbrainskotlinplatformtype
-                filterNot { it.name.endsWith("DependenciesMetadata") }
-            } else {
-                this
-            }
-        }
+        val resolvableConfigurations = project.configurations.filter { it.isRelevant() }
 
         val ortConfigurations = resolvableConfigurations.mapNotNull { config ->
             // Explicitly resolve all POM files and their parents, as the latter otherwise may get resolved in Gradle's
