@@ -110,6 +110,11 @@ internal class CreateCommand : CliktCommand(
                 "files or directories which only contain non-offending licenses."
     ).split(",").default(emptyList())
 
+    private val noSkeletonFiles by option(
+        "--no-skeleton-files",
+        help = "Only write the package configuration if it contains path excludes or license finding curations."
+    ).flag()
+
     override fun run() {
         outputDir.safeMkdirs()
 
@@ -134,8 +139,12 @@ internal class CreateCommand : CliktCommand(
             throw UsageError("The output file '${outputFile.absolutePath}' must not exist yet.", statusCode = 2)
         }
 
-        write(outputFile)
-        println("Wrote a package configuration to '${outputFile.absolutePath}'.")
+        if (pathExcludes.isEmpty() && noSkeletonFiles) {
+            println("Skip writing empty package configuration to '${outputFile.absolutePath}'.")
+        } else {
+            write(outputFile)
+            println("Wrote a package configuration to '${outputFile.absolutePath}'.")
+        }
     }
 
     private fun getOutputFile(filename: String): File {
