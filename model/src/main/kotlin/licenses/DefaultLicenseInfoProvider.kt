@@ -19,12 +19,15 @@
 
 package org.ossreviewtoolkit.model.licenses
 
+import java.io.File
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ConcurrentMap
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
@@ -82,7 +85,13 @@ class DefaultLicenseInfoProvider(
     private fun createDetectedLicenseInfo(id: Identifier): DetectedLicenseInfo {
         val findings = mutableListOf<Findings>()
 
-        ortResult.getScanResultsForId(id).forEach { (provenance, _, summary, _) ->
+        ortResult.getScanResultsForId(id).map {
+            // If a VCS path curation has been applied after the scanning stage, it is possible to apply that
+            // curation without re-scanning in case the new VCS path is a subdirectory of the scanned VCS path.
+            // So, filter by VCS path to enable the user to see the effect on the detected license with a shorter
+            // turn around time / without re-scanning.
+            it.filterByVcsPath(ortResult.getPackage(id)?.metadata?.vcsProcessed?.path.orEmpty())
+        }.forEach { (provenance, _, summary, _) ->
             val (licenseFindingCurations, pathExcludes, relativeFindingsPath) = getConfiguration(id, provenance)
 
             findings += Findings(
@@ -115,4 +124,11 @@ class DefaultLicenseInfoProvider(
                 ""
             )
         }
+}
+
+internal fun ScanResult.filterByVcsPath(path: String): ScanResult {
+    if (provenance !is RepositoryProvenance) return this
+
+    return takeUnless { provenance.vcsInfo.path != path && File(path).startsWith(File(provenance.vcsInfo.path)) }
+        ?: filterByPath(path)
 }
