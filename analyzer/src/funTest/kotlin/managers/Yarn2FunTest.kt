@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -40,9 +38,9 @@ class Yarn2FunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn2/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn2-expected-output.yml")
 
-            val result = resolveDependencies(definitionFile)
+            val result = createYarn2().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "exclude scopes if configured" {
@@ -54,34 +52,22 @@ class Yarn2FunTest : WordSpec({
             val excludes = Excludes(scopes = listOf(scopeExclude))
             val repositoryConfig = RepositoryConfiguration(excludes = excludes)
 
-            val result = resolveDependencies(definitionFile, analyzerConfig, repositoryConfig)
+            val result = createYarn2(analyzerConfig, repositoryConfig)
+                .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
             val definitionFile = getAssetFile("projects/synthetic/yarn2-workspaces/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn2-workspaces-expected-output.yml")
 
-            val result = resolveMultipleDependencies(definitionFile)
+            val result = createYarn2().collateMultipleProjects(definitionFile).withResolvedScopes()
 
-            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun resolveDependencies(
-    definitionFile: File,
-    analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),
-    repositoryConfig: RepositoryConfiguration = RepositoryConfiguration()
-): String =
-    createYarn2(analyzerConfig, repositoryConfig)
-        .resolveSingleProject(definitionFile, resolveScopes = true)
-        .toYaml()
-
-private fun resolveMultipleDependencies(definitionFile: File): String =
-    // Remove the dependency graph and add scope information.
-    createYarn2().collateMultipleProjects(definitionFile).withResolvedScopes().toYaml()
 
 private fun createYarn2(
     analyzerConfig: AnalyzerConfiguration = AnalyzerConfiguration(),

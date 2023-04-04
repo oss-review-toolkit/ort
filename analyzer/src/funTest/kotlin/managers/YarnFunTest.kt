@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.test.USER_DIR
@@ -37,9 +35,9 @@ class YarnFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn-expected-output.yml")
 
-            val result = resolveDependencies(definitionFile)
+            val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
@@ -48,17 +46,12 @@ class YarnFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/yarn-workspaces/package.json")
             val expectedResultFile = getAssetFile("projects/synthetic/yarn-workspaces-expected-output.yml")
 
-            val result = resolveDependencies(definitionFile)
+            val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
 
 private fun createYarn() =
     Yarn("Yarn", USER_DIR, AnalyzerConfiguration(), RepositoryConfiguration())
-
-private fun resolveDependencies(definitionFile: File): String {
-    val result = createYarn().resolveSingleProject(definitionFile, resolveScopes = true)
-    return result.toYaml()
-}
