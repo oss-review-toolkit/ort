@@ -35,6 +35,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.shouldNotBeEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.net.URI
@@ -140,6 +141,32 @@ class VulnerableCodeTest : WordSpec({
             )
 
             strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
+        }
+
+        "handle invalid URIs in references gracefully" {
+            server.stubPackagesRequest("response_invalid_uri.json")
+            val vulnerableCode = createVulnerableCode(server)
+            val packagesToAdvise = inputPackagesFromAnalyzerResult()
+
+            val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
+
+            val langResults = result.getValue(idLang)
+            langResults shouldHaveSize(1)
+
+            val issues = langResults.first().summary.issues
+            issues shouldHaveSize 1
+            with(issues.first()) {
+                severity shouldBe Severity.HINT
+                source shouldBe ADVISOR_NAME
+                message shouldContain "oracle:siebel_engineering_-_installer_\\&_deployment:*:*:*:*:*:*:*:*"
+            }
+
+            val expLangVulnerability = Vulnerability(
+                id = "CVE-2014-8242",
+                references = emptyList()
+            )
+
+            langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
         }
 
         "extract the CVE ID from an alias" {
