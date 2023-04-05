@@ -50,6 +50,8 @@ import org.gradle.util.GradleVersion
 internal class OrtModelBuilder : ToolingModelBuilder {
     private lateinit var repositories: Map<String, String?>
 
+    private val platformCategories = setOf("platform", "enforced-platform")
+
     private val visitedDependencies = mutableSetOf<ModuleComponentIdentifier>()
     private val visitedProjects = mutableSetOf<ModuleVersionIdentifier>()
 
@@ -160,8 +162,14 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         }.mapNotNull { dep ->
             when (dep) {
                 is ResolvedDependencyResult -> {
-                    val selectedComponent = dep.selected
                     val attributes = dep.resolvedVariant.attributes
+
+                    // Ignore BOMs as they do not define dependencies but version constraints, see
+                    // https://docs.gradle.org/current/userguide/platforms.html#sub:bom_import.
+                    val isBom = attributes.getValueByName("org.gradle.category") in platformCategories
+                    if (isBom) return@mapNotNull null
+
+                    val selectedComponent = dep.selected
 
                     when (val id = selectedComponent.id) {
                         is ModuleComponentIdentifier -> {
