@@ -42,6 +42,23 @@ class GradleFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle")
     private val isJava9OrAbove = System.getProperty("java.version").split('.').first().toInt() >= 9
 
+    private fun installGradleWrapper(version: String) {
+        println("Installing Gradle wrapper version $version.")
+
+        val (gradle, wrapper) = if (Os.isWindows) {
+            Pair("gradle.bat", projectDir.resolve("gradlew.bat"))
+        } else {
+            Pair("gradle", projectDir.resolve("gradlew"))
+        }
+
+        val command = if (wrapper.isFile) wrapper.absolutePath else gradle
+
+        // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
+        // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
+        ProcessCapture(projectDir, command, "--no-daemon", "wrapper", "--gradle-version", version)
+            .requireSuccess()
+    }
+
     override suspend fun afterSpec(spec: Spec) {
         // Reset the Gradle wrapper files to the committed state.
         Git().run(projectDir, "checkout", "gradle/", "gradlew*")
@@ -159,22 +176,5 @@ class GradleFunTest : StringSpec() {
                 result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
             }
         }
-    }
-
-    private fun installGradleWrapper(version: String) {
-        println("Installing Gradle wrapper version $version.")
-
-        val (gradle, wrapper) = if (Os.isWindows) {
-            Pair("gradle.bat", projectDir.resolve("gradlew.bat"))
-        } else {
-            Pair("gradle", projectDir.resolve("gradlew"))
-        }
-
-        val command = if (wrapper.isFile) wrapper.absolutePath else gradle
-
-        // When calling Windows batch files directly (without passing them to "cmd" as an argument), Windows requires
-        // the absolute path to the batch file to be passed to the underlying ProcessBuilder for some reason.
-        ProcessCapture(projectDir, command, "--no-daemon", "wrapper", "--gradle-version", version)
-            .requireSuccess()
     }
 }
