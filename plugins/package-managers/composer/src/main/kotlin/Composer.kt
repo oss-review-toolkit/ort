@@ -282,78 +282,6 @@ class Composer(
         return packages
     }
 
-    /**
-     * Get all names of "virtual" (replaced or provided) packages in the package or lock file.
-     *
-     * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
-     * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
-     * 'composer.lock' we can ignore any virtual package with the same name. Since the code later depends on the virtual
-     * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
-     * packages for which are not in the installed package map.
-     */
-    private fun parseVirtualPackageNames(packages: Map<String, Package>, manifest: JsonNode, lockFile: JsonNode):
-            Set<String> {
-        val replacedNames = mutableSetOf<String>()
-
-        // The contents of the manifest file, which can also define replacements, is not included in the lock file, so
-        // we parse the manifest file as well.
-        replacedNames += parseVirtualNames(manifest)
-
-        listOf("packages", "packages-dev").forEach { type ->
-            lockFile[type]?.flatMap { pkgInfo ->
-                parseVirtualNames(pkgInfo)
-            }?.let {
-                replacedNames += it
-            }
-        }
-        return replacedNames - packages.keys
-    }
-
-    private fun parseVirtualNames(packageInfo: JsonNode) =
-        listOf("replace", "provide").flatMap {
-            packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
-        }.toSet()
-
-    private fun parseAuthors(packageInfo: JsonNode): Set<String> =
-        mutableSetOf<String>().also { authors ->
-            packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
-        }
-
-    private fun parseDeclaredLicenses(packageInfo: JsonNode): Set<String> =
-        mutableSetOf<String>().also { licenses ->
-            packageInfo["license"]?.mapNotNullTo(licenses) { it.textValue() }
-        }
-
-    private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
-        packageInfo["source"]?.let {
-            VcsInfo(
-                type = VcsType.forName(it["type"].textValueOrEmpty()),
-                url = it["url"].textValueOrEmpty(),
-                revision = it["reference"].textValueOrEmpty()
-            )
-        }.orEmpty()
-
-    private fun parseArtifact(packageInfo: JsonNode) =
-        packageInfo["dist"]?.let {
-            val shasum = it["shasum"].textValueOrEmpty()
-            RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
-        }.orEmpty()
-
-    private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
-        listOf("packages", "packages-dev").forEach {
-            lockFile[it]?.forEach { packageInfo ->
-                if (packageInfo["name"].textValueOrEmpty() == packageName) {
-                    val requiredPackages = packageInfo["require"]
-                    if (requiredPackages != null && requiredPackages.isObject) {
-                        return (requiredPackages as ObjectNode).fieldNames().asSequence()
-                    }
-                }
-            }
-        }
-
-        return emptySequence()
-    }
-
     private fun ensureLockFile(workingDir: File): File {
         val lockFile = workingDir.resolve(COMPOSER_LOCK_FILE)
 
@@ -373,3 +301,78 @@ class Composer(
         return lockFile
     }
 }
+
+private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
+    listOf("packages", "packages-dev").forEach {
+        lockFile[it]?.forEach { packageInfo ->
+            if (packageInfo["name"].textValueOrEmpty() == packageName) {
+                val requiredPackages = packageInfo["require"]
+                if (requiredPackages != null && requiredPackages.isObject) {
+                    return (requiredPackages as ObjectNode).fieldNames().asSequence()
+                }
+            }
+        }
+    }
+
+    return emptySequence()
+}
+
+private fun parseArtifact(packageInfo: JsonNode) =
+    packageInfo["dist"]?.let {
+        val shasum = it["shasum"].textValueOrEmpty()
+        RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
+    }.orEmpty()
+
+private fun parseAuthors(packageInfo: JsonNode): Set<String> =
+    mutableSetOf<String>().also { authors ->
+        packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
+    }
+
+private fun parseDeclaredLicenses(packageInfo: JsonNode): Set<String> =
+    mutableSetOf<String>().also { licenses ->
+        packageInfo["license"]?.mapNotNullTo(licenses) { it.textValue() }
+    }
+
+private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
+    packageInfo["source"]?.let {
+        VcsInfo(
+            type = VcsType.forName(it["type"].textValueOrEmpty()),
+            url = it["url"].textValueOrEmpty(),
+            revision = it["reference"].textValueOrEmpty()
+        )
+    }.orEmpty()
+
+/**
+ * Get all names of "virtual" (replaced or provided) packages in the package or lock file.
+ *
+ * While Composer also takes the versions of the virtual packages into account, we simply use priorities here. Since
+ * Composer can't handle the same package in multiple version, we can assume that as soon as a package is found in
+ * 'composer.lock' we can ignore any virtual package with the same name. Since the code later depends on the virtual
+ * packages not accidentally containing a package which is actually installed, we make sure to only return virtual
+ * packages for which are not in the installed package map.
+ */
+private fun parseVirtualPackageNames(
+    packages: Map<String, Package>,
+    manifest: JsonNode,
+    lockFile: JsonNode
+): Set<String> {
+    val replacedNames = mutableSetOf<String>()
+
+    // The contents of the manifest file, which can also define replacements, is not included in the lock file, so
+    // we parse the manifest file as well.
+    replacedNames += parseVirtualNames(manifest)
+
+    listOf("packages", "packages-dev").forEach { type ->
+        lockFile[type]?.flatMap { pkgInfo ->
+            parseVirtualNames(pkgInfo)
+        }?.let {
+            replacedNames += it
+        }
+    }
+    return replacedNames - packages.keys
+}
+
+private fun parseVirtualNames(packageInfo: JsonNode) =
+    listOf("replace", "provide").flatMap {
+        packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
+    }.toSet()
