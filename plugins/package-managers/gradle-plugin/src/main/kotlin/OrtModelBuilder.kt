@@ -103,7 +103,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         return OrtDependencyTreeModelImpl(
             group = project.group.toString(),
             name = project.name,
-            version = project.version.toString(),
+            version = project.version.toString().takeUnless { it == "unspecified" }.orEmpty(),
             configurations = ortConfigurations,
             repositories = repositories.values.filterNotNull(),
             errors = errors,
@@ -231,7 +231,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                             OrtDependencyImpl(
                                 groupId = moduleId.group,
                                 artifactId = moduleId.name,
-                                version = moduleId.version,
+                                version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
                                 classifier = "",
                                 extension = "",
                                 dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
