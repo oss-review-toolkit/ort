@@ -62,12 +62,6 @@ import org.semver4j.Semver
 const val COMPOSER_PHAR_BINARY = "composer.phar"
 const val COMPOSER_LOCK_FILE = "composer.lock"
 
-private val EXCLUDED_PACKAGES = setOf(
-    "php", // Exclude the PHP runtime itself.
-    "composer-plugin-api", // Exclude the package to specify the supported composer plugin versions.
-    "composer-runtime-api" // Exclude the package to specify the supported composer versions for additional features.
-)
-
 /**
  * The [Composer](https://getcomposer.org/) package manager for PHP.
  */
@@ -181,9 +175,7 @@ class Composer(
         val packageReferences = mutableSetOf<PackageReference>()
 
         dependencies.filterNot { packageName ->
-            packageName in EXCLUDED_PACKAGES
-                    || packageName.startsWith("ext-") // Exclude extensions to PHP itself.
-                    || packageName in virtualPackages // Exclude virtual packages as they have no metadata.
+            packageName.isPlatformDependency() || packageName in virtualPackages // Virtual packages have no metadata.
         }.forEach { packageName ->
             val packageInfo = packages[packageName]
                 ?: throw IOException("Could not find package info for $packageName")
@@ -301,6 +293,16 @@ class Composer(
         return lockFile
     }
 }
+
+/**
+ * Return whether this String denotes a type of platform dependency, see
+ * https://getcomposer.org/doc/articles/composer-platform-dependencies.md#different-types-of-platform-packages.
+ */
+private fun String.isPlatformDependency(): Boolean =
+    this in (COMPOSER_PLATFORM_TYPES + PHP_PLATFORM_TYPES) || startsWith("ext-") || startsWith("lib-")
+
+private val COMPOSER_PLATFORM_TYPES = setOf("composer", "composer-plugin-api", "composer-runtime-api")
+private val PHP_PLATFORM_TYPES = setOf("php", "php-64bit", "php-ipv6", "php-zts", "php-debug")
 
 private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Sequence<String> {
     listOf("packages", "packages-dev").forEach {
