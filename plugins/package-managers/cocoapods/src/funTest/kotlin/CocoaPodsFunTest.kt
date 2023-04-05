@@ -22,11 +22,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
-import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
@@ -57,10 +55,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
-            result.replaceIssueTimestamps().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.withInvariantIssues().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })
-
-private fun ProjectAnalyzerResult.replaceIssueTimestamps(): ProjectAnalyzerResult =
-    copy(issues = issues.map { it.copy(timestamp = Instant.EPOCH) })
