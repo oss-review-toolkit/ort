@@ -68,7 +68,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
         repositories = project.repositories.associate { it.name to (it as? UrlArtifactRepository)?.url?.toString() }
 
-        val resolvableConfigurations = project.configurations.filter { it.isResolvable() }.run {
+        val resolvableConfigurations = project.configurations.filter { it.isRelevant() }.run {
             if (project.isAndroidProject()) {
                 // Filter out dependencies metadata configuration as created by the Android Gradle plugin 4.0.0 and
                 // higher, see [1]. Also see [2] for valuable information in this context.
@@ -114,7 +114,10 @@ internal class OrtModelBuilder : ToolingModelBuilder {
         )
     }
 
-    private fun Configuration.isResolvable(): Boolean {
+    /**
+     * Return whether this Gradle configuration is relevant for ORT's dependency resolution.
+     */
+    private fun Configuration.isRelevant(): Boolean {
         val canBeResolved = GradleVersion.current() < GradleVersion.version("3.3") || isCanBeResolved
 
         val isDeprecatedConfiguration = GradleVersion.current() >= GradleVersion.version("6.0")
