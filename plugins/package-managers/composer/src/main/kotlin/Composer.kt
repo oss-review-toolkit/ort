@@ -317,7 +317,7 @@ private fun getRuntimeDependencies(packageName: String, lockFile: JsonNode): Seq
     return emptySequence()
 }
 
-private fun parseArtifact(packageInfo: JsonNode) =
+private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact =
     packageInfo["dist"]?.let {
         val shasum = it["shasum"].textValueOrEmpty()
         RemoteArtifact(it["url"].textValueOrEmpty(), Hash.create(shasum))
@@ -372,7 +372,7 @@ private fun parseVirtualPackageNames(
     return replacedNames - packages.keys
 }
 
-private fun parseVirtualNames(packageInfo: JsonNode) =
+private fun parseVirtualNames(packageInfo: JsonNode): Set<String> =
     listOf("replace", "provide").flatMap {
         packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
     }.toSet()
