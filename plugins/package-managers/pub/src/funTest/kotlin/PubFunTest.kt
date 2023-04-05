@@ -116,11 +116,9 @@ private fun AnalyzerResult.reduceToPubProjects(): AnalyzerResult {
 private fun createPub(config: AnalyzerConfiguration = AnalyzerConfiguration()) =
     Pub("Pub", USER_DIR, config, RepositoryConfiguration())
 
-/**
- * Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
- */
 private fun AnalyzerResult.patchPackages(): AnalyzerResult {
     val patchedPackages = packages.mapTo(mutableSetOf()) { pkg ->
+        // Replace aapt2 URL and hash value with dummy values, as these are platform dependent.
         pkg.takeUnless { it.id.toCoordinates().startsWith("Maven:com.android.tools.build:aapt2:") }
             ?: pkg.copy(
                 binaryArtifact = pkg.binaryArtifact.copy(
