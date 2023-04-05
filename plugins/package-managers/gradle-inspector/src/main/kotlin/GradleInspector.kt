@@ -235,6 +235,25 @@ class GradleInspector(
                 return@mapNotNullTo Package.EMPTY.copy(id = id)
             }
 
+            val isSpringMetadataProject = with(id) {
+                listOf("boot", "cloud").any {
+                    namespace == "org.springframework.$it"
+                            && (name.startsWith("spring-$it-starter") || name.startsWith("spring-$it-contract-spec"))
+                }
+            }
+
+            val isMetadataOnly = dep.extension == "pom" || isSpringMetadataProject
+
+            val binaryArtifact = when {
+                isMetadataOnly -> RemoteArtifact.EMPTY
+                else -> createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension)
+            }
+
+            val sourceArtifact = when {
+                isMetadataOnly -> RemoteArtifact.EMPTY
+                else -> createRemoteArtifact(dep.pomFile, "sources", "jar")
+            }
+
             val vcs = dep.toVcsInfo()
             val vcsFallbackUrls = listOfNotNull(model.vcs?.browsableUrl, model.homepageUrl).toTypedArray()
             val vcsProcessed = processPackageVcs(vcs, *vcsFallbackUrls)
@@ -252,10 +271,11 @@ class GradleInspector(
                 ),
                 description = model.description.orEmpty(),
                 homepageUrl = model.homepageUrl.orEmpty(),
-                binaryArtifact = createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension),
-                sourceArtifact = createRemoteArtifact(dep.pomFile, "sources", "jar"),
+                binaryArtifact = binaryArtifact,
+                sourceArtifact = sourceArtifact,
                 vcs = vcs,
-                vcsProcessed = vcsProcessed
+                vcsProcessed = vcsProcessed,
+                isMetadataOnly = isMetadataOnly
             )
         }
 
