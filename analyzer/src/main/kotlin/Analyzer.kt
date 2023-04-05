@@ -245,22 +245,6 @@ private class AnalyzerState {
 
     fun addResult(manager: PackageManager, result: PackageManagerResult) {
         scope.launch {
-            // By convention, project ids must be of the type of the respective package manager. An exception
-            // for this is Pub with Flutter, which internally calls Gradle.
-            result.projectResults.forEach { (_, result) ->
-                val invalidProjects = result.filterNot {
-                    val projectType = it.project.id.type
-
-                    projectType == manager.managerName ||
-                            (manager.managerName == "Pub" && projectType == "Gradle")
-                }
-
-                require(invalidProjects.isEmpty()) {
-                    val projectString = invalidProjects.joinToString { "'${it.project.id.toCoordinates()}'" }
-                    "Projects $projectString must be of type '${manager.managerName}'."
-                }
-            }
-
             addMutex.withLock {
                 result.projectResults.values.flatten().forEach { builder.addResult(it) }
                 result.dependencyGraph?.let {
