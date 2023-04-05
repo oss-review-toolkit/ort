@@ -177,8 +177,6 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                             if (id in visitedDependencies) return@mapNotNull null
                             visitedDependencies += id
 
-                            val extension = attributes.getValueByName("org.gradle.libraryelements")?.toString() ?: "jar"
-
                             val repositoryName = (selectedComponent as? ResolvedComponentResultInternal)?.repositoryName
                             val pomFile = repositories[repositoryName]?.let { repositoryUrl ->
                                 // Note: Only Maven-style layout is supported for now.
@@ -205,7 +203,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 artifactId = id.module,
                                 version = id.version,
                                 classifier = "",
-                                extension = extension,
+                                extension = modelBuildingResult.effectiveModel.packaging,
                                 dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
                                 error = null,
                                 warning = null,
