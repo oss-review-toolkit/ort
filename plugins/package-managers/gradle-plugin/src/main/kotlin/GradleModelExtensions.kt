@@ -21,8 +21,16 @@ package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.attributes.AttributeContainer
 import org.gradle.internal.deprecation.DeprecatableConfiguration
 import org.gradle.util.GradleVersion
+
+/**
+ * Look up an attribute by its name irrespective of the type and return its value, or return null if there is no such
+ * attribute.
+ */
+internal fun AttributeContainer.getValueByName(name: String): Any? =
+    attributes.keySet().find { it.name == name }?.let { getAttribute(it) }
 
 /**
  * Return whether this Gradle configuration is relevant for ORT's dependency resolution.

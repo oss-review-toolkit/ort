@@ -37,7 +37,6 @@ import org.gradle.api.artifacts.result.DependencyResult
 import org.gradle.api.artifacts.result.ResolvedArtifactResult
 import org.gradle.api.artifacts.result.ResolvedDependencyResult
 import org.gradle.api.artifacts.result.UnresolvedDependencyResult
-import org.gradle.api.attributes.Attribute
 import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
 import org.gradle.api.logging.Logging
@@ -53,9 +52,6 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
     private val visitedDependencies = mutableSetOf<ModuleComponentIdentifier>()
     private val visitedProjects = mutableSetOf<ModuleVersionIdentifier>()
-
-    // Note: Using "LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE" does not work for the lookup as it is not String-typed.
-    private val libraryElementsAttribute = Attribute.of("org.gradle.libraryelements", String::class.java)
 
     private val logger = Logging.getLogger(OrtModelBuilder::class.java)
     private val errors = mutableListOf<String>()
@@ -173,7 +169,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                             if (id in visitedDependencies) return@mapNotNull null
                             visitedDependencies += id
 
-                            val extension = attributes.getAttribute(libraryElementsAttribute) ?: "jar"
+                            val extension = attributes.getValueByName("org.gradle.libraryelements")?.toString() ?: "jar"
 
                             val repositoryName = (selectedComponent as? ResolvedComponentResultInternal)?.repositoryName
                             val pomFile = repositories[repositoryName]?.let { repositoryUrl ->
