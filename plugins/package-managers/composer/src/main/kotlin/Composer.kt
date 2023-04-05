@@ -324,14 +324,10 @@ private fun parseArtifact(packageInfo: JsonNode): RemoteArtifact =
     }.orEmpty()
 
 private fun parseAuthors(packageInfo: JsonNode): Set<String> =
-    mutableSetOf<String>().also { authors ->
-        packageInfo["authors"]?.mapNotNullTo(authors) { it["name"]?.textValue() }
-    }
+    packageInfo["authors"]?.mapNotNullTo(mutableSetOf()) { it["name"]?.textValue() }.orEmpty()
 
 private fun parseDeclaredLicenses(packageInfo: JsonNode): Set<String> =
-    mutableSetOf<String>().also { licenses ->
-        packageInfo["license"]?.mapNotNullTo(licenses) { it.textValue() }
-    }
+    packageInfo["license"]?.mapNotNullTo(mutableSetOf()) { it.textValue() }.orEmpty()
 
 private fun parseVcsInfo(packageInfo: JsonNode): VcsInfo =
     packageInfo["source"]?.let {
@@ -373,6 +369,6 @@ private fun parseVirtualPackageNames(
 }
 
 private fun parseVirtualNames(packageInfo: JsonNode): Set<String> =
-    listOf("replace", "provide").flatMap {
-        packageInfo[it]?.fieldNames()?.asSequence()?.toSet().orEmpty()
-    }.toSet()
+    listOf("replace", "provide").flatMapTo(mutableSetOf()) {
+        packageInfo[it]?.fieldNames()?.asSequence().orEmpty()
+    }
