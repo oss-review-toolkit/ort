@@ -31,39 +31,39 @@ import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec({
-        "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
+    "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-root.yml")
 
-            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
+    "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/app/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-app.yml")
 
-            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
+    "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android/lib/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-expected-output-lib.yml")
 
-            val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
+        val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+    }
 
-        "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
-            val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle")
-            val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
+    "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
+        val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle")
+        val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
-            val result = create("Gradle").resolveDependencies(listOf(definitionFile), emptyMap())
+        val result = create("Gradle").resolveDependencies(listOf(definitionFile), emptyMap())
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
-        }
+        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+    }
 })
