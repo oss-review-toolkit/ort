@@ -42,7 +42,6 @@ import org.gradle.api.internal.artifacts.DefaultModuleIdentifier
 import org.gradle.api.internal.artifacts.result.ResolvedComponentResultInternal
 import org.gradle.api.logging.Logging
 import org.gradle.internal.component.external.model.DefaultModuleComponentIdentifier
-import org.gradle.internal.deprecation.DeprecatableConfiguration
 import org.gradle.internal.resolve.ModuleVersionResolveException
 import org.gradle.maven.MavenModule
 import org.gradle.maven.MavenPomArtifact
@@ -113,24 +112,6 @@ internal class OrtModelBuilder : ToolingModelBuilder {
             warnings = warnings
         )
     }
-
-    /**
-     * Return whether this Gradle configuration is relevant for ORT's dependency resolution.
-     */
-    private fun Configuration.isRelevant(): Boolean {
-        val canBeResolved = GradleVersion.current() < GradleVersion.version("3.3") || isCanBeResolved
-
-        val isDeprecatedConfiguration = GradleVersion.current() >= GradleVersion.version("6.0")
-                && this is DeprecatableConfiguration && resolutionAlternatives != null
-
-        return canBeResolved && !isDeprecatedConfiguration
-    }
-
-    /**
-     * Return whether the Android plugin for Gradle has been applied to the project.
-     */
-    private fun Project.isAndroidProject() =
-        plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")
 
     /**
      * Resolve the POM files for all dependences in the given [Gradle configuration][config] incl. their parent POMs.
