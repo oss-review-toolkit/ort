@@ -36,8 +36,11 @@ internal fun AttributeContainer.getValueByName(name: String): Any? =
  * Return whether this Gradle configuration is relevant for ORT's dependency resolution.
  */
 internal fun Configuration.isRelevant(): Boolean {
+    // Configurations can be resolved and / or consumed, but not neither, see the table at
+    // https://docs.gradle.org/current/userguide/declaring_dependencies.html#sec:resolvable-consumable-configs
     val canBeResolved = GradleVersion.current() < GradleVersion.version("3.3") || isCanBeResolved
 
+    // Check if a configuration is deprecated in favor of alternatives.
     val isDeprecatedConfiguration = GradleVersion.current() >= GradleVersion.version("6.0")
             && this is DeprecatableConfiguration && resolutionAlternatives != null
 
