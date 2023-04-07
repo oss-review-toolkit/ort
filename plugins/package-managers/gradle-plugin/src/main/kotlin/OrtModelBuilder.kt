@@ -65,9 +65,9 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
         repositories = project.repositories.associate { it.name to (it as? UrlArtifactRepository)?.url?.toString() }
 
-        val resolvableConfigurations = project.configurations.filter { it.isRelevant() }
+        val relevantConfigurations = project.configurations.filter { it.isRelevant() }
 
-        val ortConfigurations = resolvableConfigurations.mapNotNull { config ->
+        val ortConfigurations = relevantConfigurations.mapNotNull { config ->
             // Explicitly resolve all POM files and their parents, as the latter otherwise may get resolved in Gradle's
             // own binary "descriptor.bin" format only.
             val poms = project.resolvePoms(config)
