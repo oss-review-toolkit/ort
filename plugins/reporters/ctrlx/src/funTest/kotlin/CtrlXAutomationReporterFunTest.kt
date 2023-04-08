@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.ctrlx
+package org.ossreviewtoolkit.plugins.reporters.ctrlx
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
@@ -25,9 +25,9 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.plugins.reporters.ctrlx.CtrlXAutomationReporter.Companion.REPORT_FILENAME
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.ctrlx.CtrlXAutomationReporter.Companion.REPORT_FILENAME
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
