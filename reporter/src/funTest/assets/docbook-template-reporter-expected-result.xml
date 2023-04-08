@@ -4,11 +4,11 @@
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>Disclosure Document</title>
-<date>1970-01-01</date>
+<date><REPLACE_DATE></date>
 <revhistory>
 <revision>
 <revnumber>1.0.0</revnumber>
-<date>1970-01-01</date>
+<date><REPLACE_DATE></date>
 </revision>
 </revhistory>
 </info>

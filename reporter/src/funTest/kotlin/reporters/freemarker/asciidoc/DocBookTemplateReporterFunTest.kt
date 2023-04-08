@@ -22,19 +22,24 @@ package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import java.time.LocalDate
+
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.getAssetAsString
+import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
-        val expectedText = getAssetAsString("docbook-template-reporter-expected-result.xml")
+        val expectedResultFile = getAssetFile("docbook-template-reporter-expected-result.xml")
 
         val reportContent =
             DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
 
-        reportContent.patchAsciiDocTemplateResult() shouldBe expectedText
+        reportContent shouldBe patchExpectedResult(
+            expectedResultFile,
+            custom = mapOf("<REPLACE_DATE>" to "${LocalDate.now()}")
+        )
     }
 })
