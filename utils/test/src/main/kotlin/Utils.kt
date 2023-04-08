@@ -80,11 +80,8 @@ fun patchExpectedResult(
         putAll(custom)
     }
 
-    fun String.replaceIfNotNull(oldValue: String, newValue: String?) =
-        if (newValue != null) replace(oldValue, newValue) else this
-
     return replacements.entries.fold(expectedResultFile.readText()) { text, entry ->
-        text.replaceIfNotNull(entry.key, entry.value)
+        text.replace(entry.key, entry.value)
     }
 }
 
