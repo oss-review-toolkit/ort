@@ -28,7 +28,7 @@ javaPlatform {
 }
 
 dependencies {
-    // TODO: Add reporter plugins projects.
+    api(project(":plugins:reporters:ctrlx-reporter"))
 }
 
 configure<PublishingExtension> {
