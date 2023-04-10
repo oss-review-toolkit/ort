@@ -124,7 +124,8 @@ open class AsciiDocTemplateReporter(private val backend: String, override val ty
         asciiDocFiles.forEach { file ->
             val outputFile = outputDir.resolve("${file.nameWithoutExtension}.$backend")
 
-            asciidoctor.convertFile(file, optionsBuilder.toFile(outputFile).build())
+            val options = optionsBuilder.toFile(outputFile).build()
+            asciidoctor.convertFile(file, options)
 
             outputFiles += outputFile
         }
