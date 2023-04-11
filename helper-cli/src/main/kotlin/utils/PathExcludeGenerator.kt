@@ -253,6 +253,7 @@ private val PATH_EXCLUDE_REASON_FOR_FILENAME = listOf(
     "gradlew.bat" to BUILD_TOOL_OF,
     "install-sh" to BUILD_TOOL_OF,
     "jitpack.yml" to BUILD_TOOL_OF,
+    "libtool-ldflags" to BUILD_TOOL_OF, // GNU Libtool script, see https://www.gnu.org/software/libtool/.
     "ltmain.sh" to BUILD_TOOL_OF, // GNU Libtool script, see https://www.gnu.org/software/libtool/.
     "make-tests.sh" to BUILD_TOOL_OF,
     "makefile.*" to BUILD_TOOL_OF,
