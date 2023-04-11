@@ -34,7 +34,6 @@ import org.cyclonedx.parsers.XmlParser
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.patchCycloneDxResult
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
@@ -168,3 +167,9 @@ class CycloneDxReporterFunTest : WordSpec({
         }
     }
 })
+
+private fun String.patchCycloneDxResult() =
+    replace(
+        """urn:uuid:[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}""".toRegex(),
+        "urn:uuid:01234567-0123-0123-0123-01234567"
+    )
