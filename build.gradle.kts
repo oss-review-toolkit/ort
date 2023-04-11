@@ -180,7 +180,8 @@ allprojects {
 subprojects {
     version = rootProject.version
 
-    if (name in listOf("reporter-web-app", "package-curation-providers", "package-managers")) return@subprojects
+    val nonJavaProjects = listOf("reporter-web-app", "package-curation-providers", "package-managers", "reporters")
+    if (name in nonJavaProjects) return@subprojects
 
     // Apply core plugins.
     apply(plugin = "jacoco")
