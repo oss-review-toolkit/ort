@@ -10,7 +10,6 @@ org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.DocBookTemplateRepor
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.HtmlTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.ManPageTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.XHtmlTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModelReporter
 org.ossreviewtoolkit.reporter.reporters.opossum.OpossumReporter
 org.ossreviewtoolkit.reporter.reporters.spdx.SpdxDocumentReporter

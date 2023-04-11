@@ -669,7 +669,6 @@ following formats are supported (reporter names are case-insensitive):
   * Supports multiple AsciiDoc backends:
     * PDF (`-f PdfTemplate`)
     * HTML (`-f HtmlTemplate`)
-    * XHTML (`-f XHtmlTemplate`)
     * DocBook (`-f DocBookTemplate`)
     * Man page (`-f ManPageTemplate`)
 * [ctrlX AUTOMATION](https://apps.boschrexroth.com/microsites/ctrlx-automation/) platform
