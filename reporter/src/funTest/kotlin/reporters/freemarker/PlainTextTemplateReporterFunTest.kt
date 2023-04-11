@@ -24,7 +24,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.FileStorageConfiguration
 import org.ossreviewtoolkit.model.config.LocalFileStorageConfiguration
@@ -86,13 +85,11 @@ class PlainTextTemplateReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(
     ortResult: OrtResult,
     config: OrtConfiguration = OrtConfiguration(),
-    copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     options: Map<String, String> = emptyMap()
 ): String {
     val input = ReporterInput(
         ortResult,
         config,
-        copyrightGarbage = copyrightGarbage,
         licenseClassifications = createLicenseClassifications()
     )
 
