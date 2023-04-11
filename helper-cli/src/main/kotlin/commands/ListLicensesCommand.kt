@@ -183,7 +183,7 @@ internal class ListLicensesCommand : CliktCommand(
             )
             .mapValues { (provenance, locationsByLicense) ->
                 locationsByLicense.filter { (license, _) ->
-                    !offendingOnly || license in violatedRulesByLicense
+                    !offendingOnly || license.decompose().any { it in violatedRulesByLicense }
                 }.mapValues { (license, locations) ->
                     locations.filter { location ->
                         val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
