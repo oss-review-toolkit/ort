@@ -179,8 +179,8 @@ internal fun OrtResult.getLicenseFindingsById(
     packageConfigurationProvider: PackageConfigurationProvider,
     applyCurations: Boolean = true,
     decomposeLicenseExpressions: Boolean = true
-): Map<Provenance, Map<SpdxSingleLicenseExpression, Set<TextLocation>>> {
-    val result = mutableMapOf<Provenance, MutableMap<SpdxSingleLicenseExpression, MutableSet<TextLocation>>>()
+): Map<Provenance, Map<SpdxExpression, Set<TextLocation>>> {
+    val result = mutableMapOf<Provenance, MutableMap<SpdxExpression, MutableSet<TextLocation>>>()
 
     fun getLicenseFindingsCurations(provenance: Provenance): List<LicenseFindingCuration> =
         if (isProject(id)) {
@@ -208,9 +208,7 @@ internal fun OrtResult.getLicenseFindingsById(
                 findings
             }
         }.forEach { finding ->
-            finding.license.decompose().forEach {
-                findingsForProvenance.getOrPut(it) { mutableSetOf() } += finding.location
-            }
+            findingsForProvenance.getOrPut(finding.license) { mutableSetOf() } += finding.location
         }
     }
 
