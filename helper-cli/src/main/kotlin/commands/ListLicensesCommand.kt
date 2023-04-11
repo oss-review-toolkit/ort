@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.expandTilde
-import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 internal class ListLicensesCommand : CliktCommand(
     help = "Lists the license findings for a given package as distinct text locations."
@@ -198,7 +198,7 @@ internal class ListLicensesCommand : CliktCommand(
                 }.filter { (_, locations) ->
                     locations.isNotEmpty()
                 }.filter { (license, _) ->
-                    licenseAllowlist.isEmpty() || license.simpleLicense() in licenseAllowlist
+                    licenseAllowlist.isEmpty() || license.decompose().any { it.simpleLicense() in licenseAllowlist }
                 }
             }
 
@@ -241,7 +241,7 @@ private fun Collection<TextLocationGroup>.assignReferenceNameAndSort(): List<Pai
     }
 }
 
-private fun Map<SpdxSingleLicenseExpression, List<TextLocationGroup>>.writeValueAsString(
+private fun Map<SpdxExpression, List<TextLocationGroup>>.writeValueAsString(
     isPathExcluded: (String) -> Boolean,
     provenanceIndex: Int,
     includeLicenseTexts: Boolean = true
