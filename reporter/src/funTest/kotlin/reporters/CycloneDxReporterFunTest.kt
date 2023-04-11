@@ -41,11 +41,11 @@ import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = CycloneDxReporter.DEFAULT_SCHEMA_VERSION.versionString
-    val optionSingle = mapOf("single.bom" to "true")
-    val optionMulti = mapOf("single.bom" to "false")
     val outputDir = createSpecTempDir()
 
     "BOM generation with single option" should {
+        val optionSingle = mapOf("single.bom" to "true")
+
         "create just one file" {
             val jsonOptions = optionSingle + mapOf("output.file.formats" to "json")
 
@@ -96,6 +96,8 @@ class CycloneDxReporterFunTest : WordSpec({
     }
 
     "BOM generation with multi option" should {
+        val optionMulti = mapOf("single.bom" to "false")
+
         "create one file per project" {
             val jsonOptions = optionMulti + mapOf("output.file.formats" to "json")
 
