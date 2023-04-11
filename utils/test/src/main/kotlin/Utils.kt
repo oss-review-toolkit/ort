@@ -80,8 +80,8 @@ fun patchExpectedResult(
         putAll(custom)
     }
 
-    return replacements.entries.fold(expectedResultFile.readText()) { text, entry ->
-        text.replace(entry.key, entry.value)
+    return replacements.entries.fold(expectedResultFile.readText()) { text, (oldValue, newValue) ->
+        text.replace(oldValue, newValue)
     }
 }
 
