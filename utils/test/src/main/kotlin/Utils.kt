@@ -52,6 +52,11 @@ fun getAssetAsString(path: String): String = getAssetFile(path).readText()
  */
 fun getAssetFile(path: String): File = File("src/funTest/assets", path).absoluteFile
 
+/**
+ * Return a string representation of the [expectedResultFile] contents that has placeholders replaced. If a
+ * [definitionFile] is provided, values that can be derived from it, like the VCS revision, are also replaced.
+ * Additionally, [custom] placeholders can be replaced as well.
+ */
 fun patchExpectedResult(
     expectedResultFile: File,
     definitionFile: File? = null,
@@ -85,6 +90,12 @@ fun patchExpectedResult(
     }
 }
 
+/**
+ * Return a patched version of the [result] string, which is assumed to represent an ORT result (but is not required to
+ * do). Values that usually change between ORT runs, like timestamps, are replaced with invariant values to allow for
+ * easy comparison with expected results. If [patchStartAndEndTime] is true, start and end times are also replaced.
+ * Additionally, [custom] regex replacements with substitutions can be specified.
+ */
 fun patchActualResult(
     result: String,
     custom: Map<String, String> = emptyMap(),
