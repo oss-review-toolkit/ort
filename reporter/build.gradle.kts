@@ -20,6 +20,7 @@
 plugins {
     // Apply core plugins.
     `java-library`
+    `java-test-fixtures`
 }
 
 val generatedResourcesDir = file("$buildDir/generated-resources/main")
@@ -81,6 +82,9 @@ dependencies {
     implementation(libs.saxonHe)
 
     testImplementation(libs.mockk)
+
+    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
+    funTestImplementation(testFixtures(project))
 
     funTestImplementation(libs.kotestAssertionsJson)
 }
