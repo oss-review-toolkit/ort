@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdx.model.SpdxCreationInfo
@@ -240,7 +241,10 @@ private fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isPr
         licenseInfoFromFiles = licenseInfoResolver.resolveLicenseInfo(id)
             .filterExcluded()
             .filter(LicenseView.ONLY_DETECTED)
-            .map { it.license.nullOrBlankToSpdxNoassertionOrNone() }
+            .map { resolvedLicense ->
+                resolvedLicense.license.takeIf { it.isValid(Strictness.ALLOW_DEPRECATED) }
+                    .nullOrBlankToSpdxNoassertionOrNone()
+            }
             .distinct()
             .sorted(),
         name = id.name,
