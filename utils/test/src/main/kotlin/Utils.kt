@@ -93,7 +93,7 @@ fun patchActualResult(
     fun String.replaceIf(condition: Boolean, regex: Regex, transform: (MatchResult) -> CharSequence) =
         if (condition) replace(regex, transform) else this
 
-    return custom.entries.fold(result) { text, entry -> text.replace(entry.key, entry.value) }
+    return custom.entries.fold(result) { text, (pattern, replacement) -> text.replace(pattern.toRegex(), replacement) }
         .replace(ORT_VERSION_REGEX) { "${it.groupValues[1]}: \"HEAD\"" }
         .replace(JAVA_VERSION_REGEX) { "${it.groupValues[1]}: \"${System.getProperty("java.version")}\"" }
         .replace(ENV_VAR_REGEX) { "${it.groupValues[1]} {}" }
