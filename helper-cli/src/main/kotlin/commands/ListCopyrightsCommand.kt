@@ -20,22 +20,19 @@
 package org.ossreviewtoolkit.helper.commands
 
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
-import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
-import org.ossreviewtoolkit.helper.utils.PackageConfigurationOption
-import org.ossreviewtoolkit.helper.utils.createProvider
 import org.ossreviewtoolkit.helper.utils.processAllCopyrightStatements
 import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ListCopyrightsCommand : CliktCommand(
@@ -71,26 +68,17 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "Show the raw statements corresponding to each processed statement if these are any different."
     ).flag()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "The directory containing the package configuration files to read as input. It is searched " +
-                    "recursively."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it) },
-        option(
-            "--package-configuration-file",
-            help = "The file containing the package configurations to read as input."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it) }
-    ).single()
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "The directory containing the package configuration files to read as input. It is searched " +
+                "recursively."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
-        val packageConfigurationProvider = packageConfigurationOption.createProvider()
+        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
 
         val copyrightStatements = ortResult.processAllCopyrightStatements(
             copyrightGarbage = copyrightGarbage.items,
