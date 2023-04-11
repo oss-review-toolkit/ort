@@ -59,18 +59,6 @@ cli/build/install/ort/bin/ort report
   --report-option HtmlTemplate=template.id=[template-id]
 ```
 
-### XHTML
-
-Create an XHTML report from the Freemarker template using [Asciidoctor's XTML converter][8].
-
-```bash
-cli/build/install/ort/bin/ort report
-  -i [scanner-output-dir]/scanner-result.yml
-  -o [reporter-output-dir]
-  -f XhtmlTemplate
-  --report-option XhtmlTemplate=template.id=[template-id]
-```
-
 ### DocBook
 
 Create a [DocBook][9] report from the Freemarker template using [Asciidoctor's DocBook converter][10].
