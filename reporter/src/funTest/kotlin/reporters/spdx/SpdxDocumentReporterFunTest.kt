@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
-import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -109,10 +108,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 })
 
 private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileFormat): String {
-    val input = ReporterInput(
-        ortResult = ortResult,
-        licenseTextProvider = DefaultLicenseTextProvider()
-    )
+    val input = ReporterInput(ortResult)
 
     val outputDir = createTestTempDir()
 
