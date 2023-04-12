@@ -54,8 +54,8 @@ open class SimplePackageConfigurationProvider(
  * configuration files, each containing only a single package configuration. Throws an exception if there is more than
  * one configuration per [Identifier] and [Provenance].
  */
-class DirectoryPackageConfigurationProvider(directory: File) :
-    SimplePackageConfigurationProvider(readDirectory(directory))
+class DirectoryPackageConfigurationProvider(directory: File?) :
+    SimplePackageConfigurationProvider(directory?.let { readDirectory(it) }.orEmpty())
 
 private fun readDirectory(directory: File) =
     FileFormat.findFilesWithKnownExtensions(directory).map { file ->
