@@ -9,9 +9,6 @@ gradlew	text eol=lf
 *.bat	text eol=crlf
 *.cmd	text eol=crlf
 
-# Use Unix line endings for SPDX files as they might be referenced by checksum.
-analyzer/src/funTest/assets/projects/synthetic/spdx/**/*.spdx.*	text eol=lf
-
 # Use Unix line endings for expected test results for consistency across platforms.
 **/src/*/assets/**/*expected*.txt		text eol=lf
 **/src/*/assets/**/*expected*.yml		text eol=lf

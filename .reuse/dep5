@@ -8,6 +8,10 @@ Files: .*
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0
 
+Files: */.gitattributes
+Copyright: 2018 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+License: Apache-2.0
+
 Files: */.gitignore
 Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
 License: Apache-2.0

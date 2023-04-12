@@ -1,0 +1,2 @@
+# Use Unix line endings for SPDX files as they might be referenced by checksum.
+src/funTest/assets/projects/synthetic/**/*.spdx.*	text eol=lf
