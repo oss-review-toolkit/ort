@@ -81,6 +81,7 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
 
         logger.quiet("Downloading ScanCode license index...")
 
+        @Suppress("UNCHECKED_CAST")
         val json = jsonSlurper.parse(url, "UTF-8") as List<Map<String, Any?>>
 
         logger.quiet("Found ${json.size} ScanCode license entries.")
@@ -155,11 +156,14 @@ fun getLicenseInfo(
     logger.quiet("Downloading SPDX $description list...")
 
     val jsonSlurper = JsonSlurper()
+
+    @Suppress("UNCHECKED_CAST")
     val json = jsonSlurper.parse(URL(jsonUrl), "UTF-8") as Map<String, Any>
 
     val licenseListVersion = json["licenseListVersion"] as String
     logger.quiet("Found SPDX $description list version $licenseListVersion.")
 
+    @Suppress("UNCHECKED_CAST")
     return (json[listKeyName] as List<Map<String, Any>>).map {
         val id = it[idKeyName] as String
         LicenseInfo(id, it["name"] as String, it["isDeprecatedLicenseId"] as Boolean, isException = isException)
