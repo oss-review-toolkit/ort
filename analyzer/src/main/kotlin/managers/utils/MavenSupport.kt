@@ -638,9 +638,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     Hash.NONE
                 }
 
-                return RemoteArtifact(info.downloadUrl, hash).also {
+                return RemoteArtifact(info.downloadUrl, hash).also { remoteArtifact ->
                     logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
-                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(it))
+                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(remoteArtifact))
                 }
             } else {
                 logger.debug { artifactDownload.exception.collectMessages() }
