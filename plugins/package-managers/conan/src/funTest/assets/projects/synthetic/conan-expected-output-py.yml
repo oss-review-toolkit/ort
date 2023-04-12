@@ -11,7 +11,7 @@ project:
     - "The Boost Software License 1.0"
   vcs:
     type: "Git"
-    url: "http://github.com/pocoproject/conan-poco"
+    url: "http://github.com/pocoproject/conan-poco.git"
     revision: ""
     path: ""
   vcs_processed:

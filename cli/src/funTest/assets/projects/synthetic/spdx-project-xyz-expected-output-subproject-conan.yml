@@ -11,7 +11,7 @@ projects:
     - "The Boost Software License 1.0"
   vcs:
     type: "Git"
-    url: "http://github.com/ossreviewtoolkit/ort"
+    url: "http://github.com/ossreviewtoolkit/ort.git"
     revision: ""
     path: ""
   vcs_processed:
