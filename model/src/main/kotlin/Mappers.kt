@@ -51,16 +51,21 @@ val mapperConfig: ObjectMapper.() -> Unit = {
 val jsonMapper = JsonMapper().apply(mapperConfig)
 val xmlMapper = XmlMapper().apply(mapperConfig)
 
-private val loaderOptions = LoaderOptions().apply {
-    // Set the code point limit to the maximum possible value which is approximately 2GB, required since SnakeYAML 1.32.
-    // Also see:
-    // https://github.com/FasterXML/jackson-dataformats-text/tree/2.15/yaml#maximum-input-yaml-document-size-3-mb
-    // https://github.com/FasterXML/jackson-dataformats-text/issues/337
-    // TODO: Consider making this configurable.
-    codePointLimit = Int.MAX_VALUE
-}
-private val yamlFactory = YAMLFactory.builder().loaderOptions(loaderOptions).build()
-val yamlMapper: YAMLMapper = YAMLMapper(yamlFactory).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
+val yamlMapper: YAMLMapper = YAMLMapper(
+    YAMLFactory.builder()
+        .loaderOptions(
+            LoaderOptions().apply {
+                // Set the code point limit to the maximum possible value which is approximately 2GB, required since
+                // SnakeYAML 1.32. Also see:
+                //
+                // https://github.com/FasterXML/jackson-dataformats-text/tree/2.15/yaml#maximum-input-yaml-document-size-3-mb
+                // https://github.com/FasterXML/jackson-dataformats-text/issues/337
+                //
+                // TODO: Consider making this configurable.
+                codePointLimit = Int.MAX_VALUE
+            }
+        ).build()
+).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
 
