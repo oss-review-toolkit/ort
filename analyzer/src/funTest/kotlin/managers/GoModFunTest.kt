@@ -22,9 +22,9 @@ package org.ossreviewtoolkit.analyzer.managers
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class GoModFunTest : StringSpec({
     val testDir = getAssetFile("projects/synthetic")

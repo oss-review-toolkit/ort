@@ -23,8 +23,8 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.fromYaml
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class LicenseFindingCurationTest : WordSpec({
     "A License finding curation" should {

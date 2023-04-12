@@ -26,12 +26,12 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_PYTHON_VERSION
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class PipFunTest : WordSpec({
     "Python 2" should {

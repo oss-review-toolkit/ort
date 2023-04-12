@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.test.toYaml
+import org.ossreviewtoolkit.model.toYaml
 
 class HttpFileStorageConfigurationTest : StringSpec({
     "Header values should be masked in serialization" {
