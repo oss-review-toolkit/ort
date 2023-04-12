@@ -30,6 +30,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.parseAuthorString
+import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -40,7 +41,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
-import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -376,12 +376,12 @@ class Conan(
     /**
      * Return the [VcsInfo] contained in [node].
      */
-    private fun parseVcsInfo(node: JsonNode) =
-        VcsInfo(
-            type = VcsType.GIT,
-            url = node["url"].textValueOrEmpty(),
-            revision = node["revision"].textValueOrEmpty().takeUnless { it == "0" }.orEmpty()
-        )
+    private fun parseVcsInfo(node: JsonNode): VcsInfo {
+        val revision = node["revision"].textValueOrEmpty()
+        val url = node["url"].textValueOrEmpty()
+        val vcsInfo = VcsHost.parseUrl(url)
+        return if (revision == "0") vcsInfo else vcsInfo.copy(revision = revision)
+    }
 
     /**
      * Return the value of [field] from the output of `conan inspect --raw` for the package in [node].

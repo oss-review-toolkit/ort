@@ -5,7 +5,7 @@ project:
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
-    type: "Git"
+    type: ""
     url: ""
     revision: ""
     path: ""
