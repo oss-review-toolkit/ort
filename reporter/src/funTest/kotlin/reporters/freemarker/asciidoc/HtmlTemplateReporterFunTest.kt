@@ -24,7 +24,6 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.patchAsciiDocTemplateResult
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
@@ -38,3 +37,12 @@ class HtmlTemplateReporterFunTest : StringSpec({
         reportContent.patchAsciiDocTemplateResult() shouldBe expectedText
     }
 })
+
+private fun String.patchAsciiDocTemplateResult() =
+    // Asciidoctor renders the line breaks platform dependent.
+    replace("\r\n", "\n")
+        .replace("""\d{4}-\d{2}-\d{2}""".toRegex(), "1970-01-01")
+        .replace("""\d{2}:\d{2}:\d{2}""".toRegex(), "00:00:00")
+        // Asciidoctor renders time zones differently depending on the platform.
+        // For macOS the time is rendered as `00:00:00 +0000` while for Linux it is `00:00:00 UTC`.
+        .replace("""[+-]\d{4}""".toRegex(), "UTC")
