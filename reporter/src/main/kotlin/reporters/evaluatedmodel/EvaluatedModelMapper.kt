@@ -41,10 +41,10 @@ import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
 import org.ossreviewtoolkit.model.licenses.LicenseView
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.FindingsMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -142,7 +142,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             repository = input.ortResult.repository,
             severeIssueThreshold = input.ortConfig.severeIssueThreshold,
             severeRuleViolationThreshold = input.ortConfig.severeRuleViolationThreshold,
-            repositoryConfiguration = yamlMapper.writeValueAsString(input.ortResult.repository.config),
+            repositoryConfiguration = input.ortResult.repository.config.toYaml(),
             labels = input.ortResult.labels,
             metadata = MetadataCalculator().getMetadata(input.ortResult)
         )

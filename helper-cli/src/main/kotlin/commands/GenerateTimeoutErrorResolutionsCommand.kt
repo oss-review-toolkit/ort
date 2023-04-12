@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.replaceConfig
 import org.ossreviewtoolkit.model.config.IssueResolution
 import org.ossreviewtoolkit.model.config.IssueResolutionReason
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
@@ -84,6 +84,6 @@ internal class GenerateTimeoutErrorResolutionsCommand : CliktCommand(
             )
         }.sortedBy { it.message }
 
-        println(yamlMapper.writeValueAsString(generatedResolutions))
+        println(generatedResolutions.toYaml())
     }
 }

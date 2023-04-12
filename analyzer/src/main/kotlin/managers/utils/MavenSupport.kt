@@ -83,6 +83,7 @@ import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
@@ -640,7 +641,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
                 return RemoteArtifact(info.downloadUrl, hash).also { remoteArtifact ->
                     logger.debug { "Writing remote artifact for '$artifact' to disk cache." }
-                    remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(remoteArtifact))
+                    remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
                 }
             } else {
                 logger.debug { artifactDownload.exception.collectMessages() }
@@ -657,7 +658,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             if (downloadUrls.any { url -> PACKAGING_TYPES.any { url.endsWith(".$it") } }) {
                 logger.debug { "Writing empty remote artifact for '$artifact' to disk cache." }
 
-                remoteArtifactCache.write(cacheKey, yamlMapper.writeValueAsString(remoteArtifact))
+                remoteArtifactCache.write(cacheKey, remoteArtifact.toYaml())
             } else {
                 logger.warn { "Could not find artifact $artifact in any of $downloadUrls." }
             }

@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.model.yamlMapper
@@ -209,8 +210,7 @@ class SetDependencyRepresentationCommand : CliktCommand(
         println("Writing converted result to $targetFile.")
 
         if (handlePlaceholders) {
-            val yaml = yamlMapper.writeValueAsString(result)
-            val text = replacePlaceholders(yaml, outputPlaceholderReplacements())
+            val text = replacePlaceholders(result.toYaml(), outputPlaceholderReplacements())
             targetFile.writeText(text)
         } else {
             targetFile.writeValue(result)

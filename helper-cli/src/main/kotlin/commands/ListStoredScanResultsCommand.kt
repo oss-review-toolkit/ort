@@ -31,7 +31,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import org.ossreviewtoolkit.helper.utils.logger
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
@@ -76,7 +76,7 @@ internal class ListStoredScanResultsCommand : CliktCommand(
         println("Found ${scanResults.size} scan results:")
 
         scanResults.forEach { result ->
-            println("\n${yamlMapper.writeValueAsString(result.provenance)}")
+            println("\n${result.provenance.toYaml()}")
         }
     }
 }
