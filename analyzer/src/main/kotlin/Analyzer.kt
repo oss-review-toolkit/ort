@@ -46,9 +46,9 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.orEmpty
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.model.utils.addPackageCurations
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -79,7 +79,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
         require(absoluteProjectPath.isAbsolute)
 
         logger.debug {
-            "Using the following configuration settings:\n${yamlMapper.writeValueAsString(repositoryConfiguration)}"
+            "Using the following configuration settings:\n${repositoryConfiguration.toYaml()}"
         }
 
         val distinctPackageManagers = packageManagers.distinct()

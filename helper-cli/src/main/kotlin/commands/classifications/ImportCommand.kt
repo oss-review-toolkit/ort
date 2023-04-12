@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.licenses.LicenseCategorization
 import org.ossreviewtoolkit.model.licenses.LicenseCategory
 import org.ossreviewtoolkit.model.licenses.LicenseClassifications
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
@@ -66,7 +67,7 @@ internal class ImportCommand : CliktCommand(
             prefix?.let { prefixCategoryNames(it) } ?: this
         }.sort()
 
-        val yaml = yamlMapper.writeValueAsString(classifications)
+        val yaml = classifications.toYaml()
 
         licenseClassificationsFile?.run {
             writeText(yaml)
