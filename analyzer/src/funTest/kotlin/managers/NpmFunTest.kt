@@ -26,12 +26,12 @@ import io.kotest.matchers.string.shouldContain
 
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class NpmFunTest : WordSpec({
     "NPM" should {

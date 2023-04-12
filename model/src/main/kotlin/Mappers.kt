@@ -63,3 +63,5 @@ private val yamlFactory = YAMLFactory.builder().loaderOptions(loaderOptions).bui
 val yamlMapper = YAMLMapper(yamlFactory).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
+
+fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)

@@ -30,13 +30,13 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle")

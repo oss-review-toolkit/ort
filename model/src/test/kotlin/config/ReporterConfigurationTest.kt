@@ -25,8 +25,8 @@ import io.kotest.matchers.should
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.fromYaml
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class ReporterConfigurationTest : WordSpec({
     "Generic reporter options" should {

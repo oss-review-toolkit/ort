@@ -24,9 +24,9 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class CarthageFunTest : StringSpec({
     "Project dependencies are detected correctly" {

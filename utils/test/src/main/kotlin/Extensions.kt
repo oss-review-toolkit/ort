@@ -36,12 +36,10 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)
-
-inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
-
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
+
+inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()

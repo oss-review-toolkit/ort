@@ -25,12 +25,12 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class MavenFunTest : StringSpec({
     "Root project dependencies are detected correctly" {

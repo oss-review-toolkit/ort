@@ -48,10 +48,10 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class AnalyzerResultBuilderTest : WordSpec() {
     private val issue1 = Issue(source = "source-1", message = "message-1")

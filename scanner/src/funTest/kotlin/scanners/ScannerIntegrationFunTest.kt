@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.Scanner
@@ -46,7 +47,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class ScannerIntegrationFunTest : StringSpec({
     "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {

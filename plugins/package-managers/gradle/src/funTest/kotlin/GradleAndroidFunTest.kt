@@ -24,11 +24,11 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class GradleAndroidFunTest : StringSpec({
     "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {

@@ -23,10 +23,10 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.downloader.vcs.Git
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
-import org.ossreviewtoolkit.utils.test.toYaml
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {

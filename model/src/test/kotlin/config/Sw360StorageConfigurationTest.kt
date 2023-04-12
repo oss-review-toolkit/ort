@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.string.shouldNotContain
 
-import org.ossreviewtoolkit.utils.test.toYaml
+import org.ossreviewtoolkit.model.toYaml
 
 class Sw360StorageConfigurationTest : StringSpec({
     "Credentials should be ignored in serialization" {
