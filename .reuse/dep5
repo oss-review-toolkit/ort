@@ -5,7 +5,7 @@ Source: https://github.com/oss-review-toolkit/ort
 # If multiple globs match the same files, the last match wins.
 
 Files: .*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: */.gitattributes
@@ -13,7 +13,7 @@ Copyright: 2018 The ORT Project Authors (see <https://github.com/oss-review-tool
 License: Apache-2.0
 
 Files: */.gitignore
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: *.json
@@ -21,7 +21,7 @@ Copyright: 2020 The ORT Project Authors (see <https://github.com/oss-review-tool
 License: Apache-2.0
 
 Files: *.md
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: *.yml
@@ -33,31 +33,31 @@ Copyright: 2017-2021 Charles Korn <me@charleskorn.com>
 License: Apache-2.0
 
 Files: NOTICE
-Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
+Copyright: 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: */src/main/resources/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: */src/funTest/assets/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: */src/test/assets/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: ci/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: clients/fossid-webapp/src/test/assets/*
-Copyright: 2020-2021 Bosch.IO GmbH <osm@bosch.com>
+Copyright: 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: clients/github-graphql/src/main/assets/*
-Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+Copyright: 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: clients/osv/src/test/assets/vulnerability/examples/*
@@ -65,15 +65,15 @@ Copyright: 2021-2022 OSV Schema Authors
 License: Apache-2.0
 
 Files: docs/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: examples/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: integrations/completions/*
-Copyright: 2022 Bosch.IO GmbH <osm@bosch.com>
+Copyright: 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: integrations/jenkins/*
@@ -81,7 +81,7 @@ Copyright: 2022 The ORT Project Authors (see <https://github.com/oss-review-tool
 License: Apache-2.0
 
 Files: integrations/schemas/*
-Copyright: 2021 Bosch.IO GmbH <osm@bosch.com>
+Copyright: 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: integrations/tekton/*
@@ -89,7 +89,7 @@ Copyright: 2022 Google, LLC.
 License: Apache-2.0
 
 Files: logos/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: plugins/reporters/spdx/src/funTest/assets/spdx-schema.json
@@ -101,7 +101,7 @@ Copyright: 2012-2015 The Mozilla Foundation and Telefonica S.A.
 License: OFL-1.1
 
 Files: reporter-web-app/*
-Copyright: 2017-2020 HERE Europe B.V. <opensource@here.com>
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 # Third-party files.
