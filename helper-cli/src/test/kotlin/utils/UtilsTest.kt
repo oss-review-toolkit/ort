@@ -17,11 +17,11 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.helper.utils
+
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
-
-import org.ossreviewtoolkit.helper.utils.greedySetCover
 
 class UtilsTest : WordSpec({
     "greedySetCover()" should {
