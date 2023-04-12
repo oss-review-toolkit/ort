@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+import java.util.Locale
+
 import org.apache.tools.ant.taskdefs.condition.Os
 
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
@@ -42,7 +44,7 @@ val yarnJs = yarnDir.resolve("bin/yarn.js")
 tasks.addRule("Pattern: yarn<Command>") {
     val taskName = this
     if (taskName.startsWith("yarn")) {
-        val command = taskName.removePrefix("yarn").decapitalize()
+        val command = taskName.removePrefix("yarn").replaceFirstChar { it.lowercase(Locale.ROOT) }
 
         tasks.register<Exec>(taskName).configure {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
