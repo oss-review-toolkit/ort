@@ -66,16 +66,9 @@ license_finding_curations:
 
 ## Command Line
 
-ORT offers two different ways to use package configurations:
-
-- A single configuration `.yml` containing an array with each entry defining the configuration for one package.
-- A directory with configuration files with one file for each configured package/provenance combination.
-
-Note that in both of the above options only one package configuration can exist for a package/provenance combination.
-
-### Using a Package Configuration Directory
-
-By default, ORT uses a directory with configuration files for each *package id* located at
+ORT consumes package configuration from a so-called "package configuration directory" which is searched recursively
+for `.yml` files. Each such file must contain exactly one package configuration and there must not be more than one
+package configuration for any package/provenance combination within that directory. The default location is
 `$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configuration-dir`
 option of the _evaluator_:
 
@@ -98,63 +91,4 @@ cli/build/install/ort/bin/ort report
   --report-formats PlainTextTemplate,WebApp
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-configuration-dir $ORT_CONFIG_DIR/packages
-```
- 
-### Using a Single Package Configuration File
-
-To use a single package configuration `.yml` file, pass it to the `--package-configuration-file` option of the
-_evaluator_:
-
-```bash
-cli/build/install/ort/bin/ort evaluate
-  -i [scanner-output-dir]/scan-result.yml
-  -o [evaluator-output-dir]
-  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
-  --package-curations-file $ORT_CONFIG_DIR/curations.yml
-  --package-configuration-file $ORT_CONFIG_DIR/packages.yml
-  --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
-```
-
-Or to the _reporter_:
-
-```bash
-cli/build/install/ort/bin/ort report
-  -i [evaluator-output-dir]/evaluation-result.yml
-  -o [reporter-output-dir]
-  --report-formats PlainTextTemplate,WebApp
-  --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
-  --package-configuration-file $ORT_CONFIG_DIR/packages.yml
-```
-
-The code below shows an example for `package-configurations.yml`:
-
-```yaml
-- id: "Pip::example-package:0.0.1"
-  source_artifact_url: "https://some-host/some-file-path.tgz"
-  path_excludes:
-  - pattern: "docs/**"
-    reason: "DOCUMENTATION_OF"
-    comment: "This directory contains documentation which is not distributed."
-  license_finding_curations:
-  - path: "src/**/*.cpp"
-    start_lines: "3"
-    line_count: 11
-    detected_license: "GPL-2.0-only"
-    reason: "CODE"
-    comment: "The scanner matches a variable named `gpl`."
-    concluded_license: "Apache-2.0"
-- id: "Pip::example-package:0.0.2"
-  source_artifact_url: "https://some-host/some-other-file-path.tgz"
-  path_excludes:
-  - pattern: "docs/**"
-    reason: "DOCUMENTATION_OF"
-    comment: "This directory contains documentation which is not distributed."
-  license_finding_curations:
-  - path: "src/**/*.cpp"
-    start_lines: "3"
-    line_count: 11
-    detected_license: "GPL-2.0-only"
-    reason: "CODE"
-    comment: "The scanner matches a variable named `gpl`."
-    concluded_license: "Apache-2.0"
 ```
