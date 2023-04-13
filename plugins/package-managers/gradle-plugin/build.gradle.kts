@@ -44,10 +44,14 @@ tasks.register("fatJar", Jar::class) {
     manifest.from(tasks.jar.get().manifest)
 
     val classpath = configurations.runtimeClasspath.get().filter {
-        // Only bundle JARs that are not specific to the Gradle version.
-        it.isFile && it.extension == "jar" && !("gradle" in it.path && gradle.gradleVersion in it.path)
-    }.map {
-        zipTree(it)
+        // Only bundle files that are not specific to the Gradle version.
+        it.isFile && !("gradle" in it.path && gradle.gradleVersion in it.path)
+    }.mapNotNull {
+        when (it.extension) {
+            "class" -> it
+            "jar" -> zipTree(it)
+            else -> null
+        }
     }
 
     from(classpath) {
@@ -57,4 +61,18 @@ tasks.register("fatJar", Jar::class) {
     }
 
     with(tasks.jar.get())
+
+    doLast {
+        val pluginFatJar = zipTree(outputs.files.singleFile)
+        val pluginClasses = pluginFatJar.files.map { it.invariantSeparatorsPath }
+        val commonPath = pluginClasses.reduce { acc, s -> acc.commonPrefixWith(s) }
+        val rootClasses = pluginClasses.filter { "/" !in it.removePrefix(commonPath) && it.endsWith(".class") }
+
+        val expectedClassCount = 5
+        val actualClassCount = rootClasses.size
+        if (actualClassCount != expectedClassCount) {
+            throw GradleException("The gradle-plugin JAR contains $actualClassCount instead of the expected " +
+                    "$expectedClassCount classes in the root.")
+        }
+    }
 }
