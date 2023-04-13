@@ -15,6 +15,7 @@
         "GoDep",
         "GoMod",
         "Gradle",
+        "GradleInspector",
         "Maven",
         "NPM",
         "NuGet",
