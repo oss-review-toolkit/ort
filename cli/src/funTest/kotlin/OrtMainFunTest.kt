@@ -19,10 +19,8 @@
 
 package org.ossreviewtoolkit.cli
 
-import com.github.ajalt.clikt.core.MutuallyExclusiveGroupException
 import com.github.ajalt.clikt.core.ProgramResult
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
@@ -212,19 +210,6 @@ class OrtMainFunTest : StringSpec() {
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
-        }
-
-        "Passing mutually exclusive evaluator options fails" {
-            shouldThrow<MutuallyExclusiveGroupException> {
-                runMain(
-                    "-c", configFile.path,
-                    "evaluate",
-                    "-i", "src/funTest/assets/semver4j-ort-result.yml",
-                    "--rules-resource", "/rules/osadl.rules.kts",
-                    "--package-configuration-dir", "src",
-                    "--package-configuration-file", "build.gradle.kts"
-                )
-            }
         }
 
         "EnvironmentVariableFilter is correctly initialized" {

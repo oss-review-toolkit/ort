@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
-import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
@@ -41,10 +39,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
-import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.createProvider
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -62,6 +57,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
@@ -148,26 +144,13 @@ class ReporterCommand : OrtCommand(
         .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
         .configurationGroup()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                    "contain a single package configuration. Must not be used together with " +
-                    "'--package-configuration-file'. This can make the output inconsistent with the evaluator output " +
-                    "but is useful when testing package configurations."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
-        option(
-            "--package-configuration-file",
-            help = "A file containing a list of package configurations. Must not be used together with " +
-                    "'--package-configuration-dir'. This can make the output inconsistent with the evaluator output " +
-                    "but is useful when testing package configurations."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
-        name = OPTION_GROUP_CONFIGURATION
-    ).single()
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                "contain a single package configuration. This can make the output inconsistent with the evaluator " +
+                "output but is useful when testing package configurations."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     private val refreshResolutions by option(
         "--refresh-resolutions",
@@ -225,14 +208,14 @@ class ReporterCommand : OrtCommand(
 
         val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
         val packageConfigurationProvider = when {
-            resolvedPackageConfigurations != null && packageConfigurationOption == null -> {
+            resolvedPackageConfigurations != null && packageConfigurationDir == null -> {
                 SimplePackageConfigurationProvider(resolvedPackageConfigurations)
             }
 
             ortConfig.enableRepositoryPackageConfigurations -> {
                 CompositePackageConfigurationProvider(
                     SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
-                    packageConfigurationOption.createProvider()
+                    DirectoryPackageConfigurationProvider(packageConfigurationDir)
                 )
             }
 
@@ -241,7 +224,7 @@ class ReporterCommand : OrtCommand(
                     logger.info { "Local package configurations were not applied because the feature is not enabled." }
                 }
 
-                packageConfigurationOption.createProvider()
+                DirectoryPackageConfigurationProvider(packageConfigurationDir)
             }
         }
 
