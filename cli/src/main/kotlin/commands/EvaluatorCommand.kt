@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.cli.commands
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
-import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
-import com.github.ajalt.clikt.parameters.groups.single
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -38,11 +36,8 @@ import java.time.Duration
 import kotlin.time.toKotlinDuration
 
 import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_CONFIGURATION
-import org.ossreviewtoolkit.cli.utils.PackageConfigurationOption
 import org.ossreviewtoolkit.cli.utils.SeverityStats
 import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.createProvider
 import org.ossreviewtoolkit.cli.utils.inputGroup
 import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.cli.utils.outputGroup
@@ -65,6 +60,7 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
+import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.addPackageConfigurations
 import org.ossreviewtoolkit.model.utils.addPackageCurations
@@ -137,24 +133,12 @@ class EvaluatorCommand : OrtCommand(
         .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
         .configurationGroup()
 
-    private val packageConfigurationOption by mutuallyExclusiveOptions(
-        option(
-            "--package-configuration-dir",
-            help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                    "contain a single package configuration. Must not be used together with " +
-                    "'--package-configuration-file'."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.Dir(it.absoluteFile.normalize()) },
-        option(
-            "--package-configuration-file",
-            help = "A file containing a list of package configurations. Must not be used together with " +
-                    "'--package-configuration-dir'."
-        ).convert { it.expandTilde() }
-            .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-            .convert { PackageConfigurationOption.File(it.absoluteFile.normalize()) },
-        name = OPTION_GROUP_CONFIGURATION
-    ).single()
+    private val packageConfigurationDir by option(
+        "--package-configuration-dir",
+        help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                "contain a single package configuration."
+    ).convert { it.expandTilde() }
+        .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
     private val packageCurationsFile by option(
         "--package-curations-file",
@@ -285,14 +269,14 @@ class EvaluatorCommand : OrtCommand(
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResultInput.repository.config.packageConfigurations),
-                packageConfigurationOption.createProvider()
+                DirectoryPackageConfigurationProvider(packageConfigurationDir)
             )
         } else {
             if (ortResultInput.repository.config.packageConfigurations.isNotEmpty()) {
                 logger.info { "Local package configurations were not applied because the feature is not enabled." }
             }
 
-            packageConfigurationOption.createProvider()
+            DirectoryPackageConfigurationProvider(packageConfigurationDir)
         }
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
