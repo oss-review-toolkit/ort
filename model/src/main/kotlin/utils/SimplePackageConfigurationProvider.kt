@@ -66,13 +66,6 @@ private fun readDirectory(directory: File) =
         }
     }
 
-/**
- * A [PackageConfigurationProvider] that provides all [PackageConfiguration]s found in the given file. Throws an
- * exception if there is more than one configuration per [Identifier] and [Provenance].
- */
-class FilePackageConfigurationProvider(file: File) :
-    SimplePackageConfigurationProvider(file.readValue<List<PackageConfiguration>>())
-
 private fun Collection<PackageConfiguration>.checkAtMostOneConfigurationPerIdAndProvenance() {
     data class Key(val id: Identifier, val sourceArtifactUrl: String?, val vcsMatcher: VcsMatcher?)
 
