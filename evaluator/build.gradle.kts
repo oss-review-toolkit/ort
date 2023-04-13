@@ -55,7 +55,7 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-tasks.register("updateOsadlMatrix", Download::class).configure {
+tasks.register<Download>("updateOsadlMatrix").configure {
     src("https://www.osadl.org/fileadmin/checklists/matrixseqexpl.json")
     dest("src/main/resources/rules/matrixseqexpl.json")
 }

@@ -35,7 +35,7 @@ dependencies {
     api(libs.mavenModelBuilder)
 }
 
-tasks.register("fatJar", Jar::class) {
+tasks.register<Jar>("fatJar") {
     description = "Creates a fat JAR that includes all required runtime dependencies."
     group = "Build"
 
