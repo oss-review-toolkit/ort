@@ -39,22 +39,17 @@ tasks.register<Jar>("fatJar") {
     description = "Creates a fat JAR that includes all required runtime dependencies."
     group = "Build"
 
-    archiveBaseName.set("${project.name}-fat")
+    archiveClassifier.set("fat")
 
-    manifest.from(tasks.jar.get().manifest)
+    from(sourceSets.main.get().output)
+    dependsOn(configurations.runtimeClasspath)
 
-    val classpath = configurations.runtimeClasspath.get().filter {
-        // Only bundle JARs that are not specific to the Gradle version.
-        it.isFile && it.extension == "jar" && !("gradle" in it.path && gradle.gradleVersion in it.path)
-    }.map {
-        zipTree(it)
-    }
-
-    from(classpath) {
-        exclude("META-INF/*.DSA")
-        exclude("META-INF/*.RSA")
-        exclude("META-INF/*.SF")
-    }
-
-    with(tasks.jar.get())
+    from({
+        configurations.runtimeClasspath.get().filter {
+            // Only bundle JARs that are not specific to the Gradle version.
+            it.extension == "jar" && !("gradle" in it.path && gradle.gradleVersion in it.path)
+        }.map {
+            zipTree(it)
+        }
+    })
 }
