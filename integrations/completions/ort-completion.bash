@@ -48,11 +48,6 @@ _ort() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='-P' || in_param=''
           continue
           ;;
-        --force-overwrite)
-          __skip_opt_eq
-          in_param=''
-          continue
-          ;;
         --help-all)
           __skip_opt_eq
           in_param=''
@@ -134,7 +129,7 @@ _ort() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--config -c --error --warn --info --debug --stacktrace -P --force-overwrite --help-all --generate-completion --version -v -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--config -c --error --warn --info --debug --stacktrace -P --help-all --generate-completion --version -v -h --help' -- "${word}"))
     return
   fi
 
@@ -152,8 +147,6 @@ _ort() {
     --stacktrace)
       ;;
     -P)
-      ;;
-    --force-overwrite)
       ;;
     --help-all)
       ;;
@@ -692,12 +685,6 @@ _ort_evaluate() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--package-configuration-dir' || in_param=''
           continue
           ;;
-        --package-configuration-file)
-          __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--package-configuration-file' || in_param=''
-          continue
-          ;;
         --package-curations-file)
           __skip_opt_eq
           (( i = i + 1 ))
@@ -750,7 +737,7 @@ _ort_evaluate() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --output-formats -f --rules-file -r --rules-resource --copyright-garbage-file --license-classifications-file --package-configuration-dir --package-configuration-file --package-curations-file --package-curations-dir --repository-configuration-file --resolutions-file --label -l --check-syntax -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --output-formats -f --rules-file -r --rules-resource --copyright-garbage-file --license-classifications-file --package-configuration-dir --package-curations-file --package-curations-dir --repository-configuration-file --resolutions-file --label -l --check-syntax -h --help' -- "${word}"))
     return
   fi
 
@@ -781,9 +768,6 @@ _ort_evaluate() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --package-configuration-dir)
-       COMPREPLY=($(compgen -o default -- "${word}"))
-      ;;
-    --package-configuration-file)
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --package-curations-file)
@@ -952,10 +936,9 @@ _ort_report() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--package-configuration-dir' || in_param=''
           continue
           ;;
-        --package-configuration-file)
+        --refresh-resolutions)
           __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--package-configuration-file' || in_param=''
+          in_param=''
           continue
           ;;
         --repository-configuration-file)
@@ -993,7 +976,7 @@ _ort_report() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-classifications-file --package-configuration-dir --package-configuration-file --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--ort-file -i --output-dir -o --report-formats -f --copyright-garbage-file --custom-license-texts-dir --how-to-fix-text-provider-script --license-classifications-file --package-configuration-dir --refresh-resolutions --repository-configuration-file --resolutions-file --report-option -O -h --help' -- "${word}"))
     return
   fi
 
@@ -1026,8 +1009,7 @@ _ort_report() {
     --package-configuration-dir)
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
-    --package-configuration-file)
-       COMPREPLY=($(compgen -o default -- "${word}"))
+    --refresh-resolutions)
       ;;
     --repository-configuration-file)
        COMPREPLY=($(compgen -o default -- "${word}"))
