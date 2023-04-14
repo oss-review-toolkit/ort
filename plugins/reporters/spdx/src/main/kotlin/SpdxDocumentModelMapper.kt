@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdxId
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
-object SpdxDocumentModelMapper {
+internal object SpdxDocumentModelMapper {
     data class SpdxDocumentParams(
         val documentName: String,
         val documentComment: String,
