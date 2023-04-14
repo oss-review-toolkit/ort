@@ -67,7 +67,6 @@ dependencies {
     implementation(libs.asciidoctorj)
     implementation(libs.asciidoctorjPdf)
     implementation(libs.commonsCompress)
-    implementation(libs.cyclonedx)
     implementation(libs.flexmark)
     implementation(libs.freemarker)
     implementation(libs.jacksonDatatypeJsr310)

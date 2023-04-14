@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
 import java.io.File
 import java.util.Base64
