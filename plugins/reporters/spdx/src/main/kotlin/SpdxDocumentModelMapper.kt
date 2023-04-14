@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.spdx
+package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import java.time.Instant
 import java.time.temporal.ChronoUnit

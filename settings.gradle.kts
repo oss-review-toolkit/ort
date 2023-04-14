@@ -63,6 +63,7 @@ include(":plugins:package-managers:stack")
 include(":plugins:package-managers:unmanaged")
 include(":plugins:reporters")
 include(":plugins:reporters:ctrlx")
+include(":plugins:reporters:spdx")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
@@ -102,6 +103,7 @@ project(":plugins:package-managers:stack").name = "stack-package-manager"
 project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager"
 
 project(":plugins:reporters:ctrlx").name = "ctrlx-reporter"
+project(":plugins:reporters:spdx").name = "spdx-reporter"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"
