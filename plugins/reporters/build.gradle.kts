@@ -29,6 +29,7 @@ javaPlatform {
 
 dependencies {
     api(project(":plugins:reporters:ctrlx-reporter"))
+    api(project(":plugins:reporters:spdx-reporter"))
 }
 
 configure<PublishingExtension> {

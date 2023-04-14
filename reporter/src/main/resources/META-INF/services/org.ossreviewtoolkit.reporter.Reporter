@@ -11,4 +11,3 @@ org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.ManPageTemplateRepor
 org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
 org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModelReporter
 org.ossreviewtoolkit.reporter.reporters.opossum.OpossumReporter
-org.ossreviewtoolkit.reporter.reporters.spdx.SpdxDocumentReporter
