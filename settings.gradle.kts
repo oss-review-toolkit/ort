@@ -64,6 +64,7 @@ include(":plugins:package-managers:unmanaged")
 include(":plugins:reporters")
 include(":plugins:reporters:ctrlx")
 include(":plugins:reporters:cyclonedx")
+include(":plugins:reporters:fossid")
 include(":plugins:reporters:spdx")
 include(":reporter")
 include(":reporter-web-app")
@@ -105,6 +106,7 @@ project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager
 
 project(":plugins:reporters:ctrlx").name = "ctrlx-reporter"
 project(":plugins:reporters:cyclonedx").name = "cyclonedx-reporter"
+project(":plugins:reporters:fossid").name = "fossid-reporter"
 project(":plugins:reporters:spdx").name = "spdx-reporter"
 
 project(":utils:common").name = "common-utils"
