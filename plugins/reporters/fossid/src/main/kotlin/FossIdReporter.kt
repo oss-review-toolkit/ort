@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.fossid
+package org.ossreviewtoolkit.plugins.reporters.fossid
 
 import java.io.File
 
