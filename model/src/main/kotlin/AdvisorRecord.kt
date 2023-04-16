@@ -68,19 +68,16 @@ data class AdvisorRecord(
     }
 
     @JsonIgnore
-    fun getIssues(): Map<Identifier, Set<Issue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
-
-        advisorResults.forEach { (id, results) ->
-            results.forEach { result ->
-                if (result.summary.issues.isNotEmpty()) {
-                    collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
+    fun getIssues(): Map<Identifier, Set<Issue>> =
+        buildMap<Identifier, MutableSet<Issue>> {
+            advisorResults.forEach { (id, results) ->
+                results.forEach { result ->
+                    if (result.summary.issues.isNotEmpty()) {
+                        getOrPut(id) { mutableSetOf() } += result.summary.issues
+                    }
                 }
             }
         }
-
-        return collectedIssues
-    }
 
     /**
      * True if any of the [advisorResults] contain [Issue]s.

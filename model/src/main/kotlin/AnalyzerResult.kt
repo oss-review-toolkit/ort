@@ -80,27 +80,26 @@ data class AnalyzerResult(
      * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
     @JsonIgnore
-    fun getAllIssues(): Map<Identifier, Set<Issue>> {
-        val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
+    fun getAllIssues(): Map<Identifier, Set<Issue>> =
+        buildMap<Identifier, MutableSet<Issue>> {
+            putAll(issues.mapValues { it.value.toMutableSet() })
 
-        // Collecting issues from projects is necessary only if they use the dependency tree format; otherwise, the
-        // issues can be retrieved from the graph. So, once analyzer results are created with dependency graphs
-        // exclusively, this step can be removed.
-        projects.filter { it.scopeDependencies != null }.forEach { project ->
-            val projectDependencies = project.scopeDependencies.orEmpty().asSequence().flatMap(Scope::dependencies)
-            DependencyNavigator.collectIssues(projectDependencies).forEach { (id, issues) ->
-                collectedIssues.getOrPut(id) { mutableSetOf() } += issues
+            // Collecting issues from projects is necessary only if they use the dependency tree format; otherwise, the
+            // issues can be retrieved from the graph. So, once analyzer results are created with dependency graphs
+            // exclusively, this step can be removed.
+            projects.filter { it.scopeDependencies != null }.forEach { project ->
+                val projectDependencies = project.scopeDependencies.orEmpty().asSequence().flatMap(Scope::dependencies)
+                DependencyNavigator.collectIssues(projectDependencies).forEach { (id, issues) ->
+                    getOrPut(id) { mutableSetOf() } += issues
+                }
+            }
+
+            dependencyGraphs.values.forEach { graph ->
+                graph.collectIssues().forEach { (id, issues) ->
+                    getOrPut(id) { mutableSetOf() } += issues
+                }
             }
         }
-
-        dependencyGraphs.values.forEach { graph ->
-            graph.collectIssues().forEach { (id, issues) ->
-                collectedIssues.getOrPut(id) { mutableSetOf() } += issues
-            }
-        }
-
-        return collectedIssues
-    }
 
     /**
      * True if there were any issues during the analysis, false otherwise.
