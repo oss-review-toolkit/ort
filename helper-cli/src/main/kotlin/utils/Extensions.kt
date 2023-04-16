@@ -184,7 +184,7 @@ internal fun OrtResult.getLicenseFindingsById(
 
     fun getLicenseFindingsCurations(provenance: Provenance): List<LicenseFindingCuration> =
         if (isProject(id)) {
-            getLicenseFindingsCurations(id)
+            getLicenseFindingCurations(id)
         } else {
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }

@@ -253,7 +253,7 @@ data class OrtResult(
     /**
      * Return the [LicenseFindingCuration]s associated with the given package [id].
      */
-    fun getLicenseFindingsCurations(id: Identifier): List<LicenseFindingCuration> =
+    fun getLicenseFindingCurations(id: Identifier): List<LicenseFindingCuration> =
         if (projects.containsKey(id)) {
             repository.config.curations.licenseFindings
         } else {
