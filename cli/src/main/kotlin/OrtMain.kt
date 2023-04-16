@@ -189,7 +189,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
         val commandName = currentContext.invokedSubcommand?.commandName
         val command = commandName?.let { " '$commandName'" }.orEmpty()
-        val user = System.getProperty("user.name")
+        val user = System.getProperty("user.name").takeUnless { it == "?" } ?: Os.userHomeDirectory.name
 
         val header = mutableListOf<String>()
         val maxMemInMib = env.maxMemory / 1.mebibytes
