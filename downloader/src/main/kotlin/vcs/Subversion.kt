@@ -232,8 +232,7 @@ private class OrtSVNAuthenticationManager : DefaultSVNAuthenticationManager(
 
             override fun getProxyHost() = proxyAddress.hostName
 
-            @Suppress("EmptyFunctionBlock")
-            override fun acknowledgeProxyContext(accepted: Boolean, errorMessage: SVNErrorMessage?) {}
+            override fun acknowledgeProxyContext(accepted: Boolean, errorMessage: SVNErrorMessage?) = Unit
         }
     }
 }
