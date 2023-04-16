@@ -96,34 +96,21 @@ data class OrtResult(
         )
     }
 
-    /** An object that can be used to navigate the dependency information contained in this result. */
-    @get:JsonIgnore
-    val dependencyNavigator: DependencyNavigator by lazy { CompatibilityDependencyNavigator.create(this) }
-
     private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
-
-    /**
-     * A map of projects and their excluded state. Calculating this map once brings massive performance improvements
-     * when querying projects in large analyzer results.
-     */
-    private val projects: Map<Identifier, ProjectEntry> by lazy {
-        getProjects().associateBy(
-            { project -> project.id },
-            { project ->
-                val pathExcludes = getExcludes().findPathExcludes(project, this)
-                ProjectEntry(
-                    project = project,
-                    isExcluded = pathExcludes.isNotEmpty()
-                )
-            }
-        )
-    }
 
     private data class PackageEntry(
         val pkg: Package?,
         val curatedPackage: CuratedPackage?,
         val isExcluded: Boolean
     )
+
+    /** An object that can be used to navigate the dependency information contained in this result. */
+    @get:JsonIgnore
+    val dependencyNavigator: DependencyNavigator by lazy { CompatibilityDependencyNavigator.create(this) }
+
+    private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
+        advisor?.results?.advisorResults.orEmpty()
+    }
 
     /**
      * A map of packages and their excluded state. Calculating this map once brings massive performance improvements
@@ -161,11 +148,28 @@ data class OrtResult(
         }
     }
 
-    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.scanResults.orEmpty() }
-
-    private val advisorResultsById: Map<Identifier, List<AdvisorResult>> by lazy {
-        advisor?.results?.advisorResults.orEmpty()
+    /**
+     * A map of projects and their excluded state. Calculating this map once brings massive performance improvements
+     * when querying projects in large analyzer results.
+     */
+    private val projects: Map<Identifier, ProjectEntry> by lazy {
+        getProjects().associateBy(
+            { project -> project.id },
+            { project ->
+                val pathExcludes = getExcludes().findPathExcludes(project, this)
+                ProjectEntry(
+                    project = project,
+                    isExcluded = pathExcludes.isNotEmpty()
+                )
+            }
+        )
     }
+
+    private val relativeProjectVcsPath: Map<Identifier, String?> by lazy {
+        getProjects().associateBy({ it.id }, { repository.getRelativePath(it.vcsProcessed) })
+    }
+
+    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.scanResults.orEmpty() }
 
     /**
      * Return the dependencies of the given [id] (which can refer to a [Project] or a [Package]), up to and including a
@@ -260,10 +264,6 @@ data class OrtResult(
      */
     fun getDefinitionFilePathRelativeToAnalyzerRoot(project: Project) =
         getFilePathRelativeToAnalyzerRoot(project, project.definitionFilePath)
-
-    private val relativeProjectVcsPath: Map<Identifier, String?> by lazy {
-        getProjects().associateBy({ it.id }, { repository.getRelativePath(it.vcsProcessed) })
-    }
 
     /**
      * Return the path of a file contained in [project], relative to the analyzer root. If the project was checked out
