@@ -117,13 +117,13 @@ pipeline {
 
         string(
             name: 'ENABLED_PACKAGE_MANAGERS',
-            description: 'A custom list of package managers to enable. By default all package managers are enabled.',
+            description: 'A comma-separated list of package managers to enable. By default all package managers are enabled.',
             defaultValue: ''
         )
 
         string(
             name: 'DISABLED_PACKAGE_MANAGERS',
-            description: 'A custom list of package managers to disable. By default no package manager is disabled.',
+            description: 'A comma-separated list of package managers to disable. By default no package manager is disabled.',
             defaultValue: ''
         )
 
