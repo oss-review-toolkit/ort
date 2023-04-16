@@ -82,19 +82,16 @@ data class ScannerRun(
      * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
     @JsonIgnore
-    fun getIssues(): Map<Identifier, Set<Issue>> {
-        val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
-
-        scanResults.forEach { (id, results) ->
-            results.forEach { result ->
-                if (result.summary.issues.isNotEmpty()) {
-                    collectedIssues.getOrPut(id) { mutableSetOf() } += result.summary.issues
+    fun getIssues(): Map<Identifier, Set<Issue>> =
+        buildMap<Identifier, MutableSet<Issue>> {
+            scanResults.forEach { (id, results) ->
+                results.forEach { result ->
+                    if (result.summary.issues.isNotEmpty()) {
+                        getOrPut(id) { mutableSetOf() } += result.summary.issues
+                    }
                 }
             }
         }
-
-        return collectedIssues
-    }
 
     /**
      * True if any of the [scanResults] contain [Issue]s.
