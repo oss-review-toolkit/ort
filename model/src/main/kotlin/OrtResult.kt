@@ -96,14 +96,6 @@ data class OrtResult(
         )
     }
 
-    private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
-
-    private data class PackageEntry(
-        val pkg: Package?,
-        val curatedPackage: CuratedPackage?,
-        val isExcluded: Boolean
-    )
-
     /** An object that can be used to navigate the dependency information contained in this result. */
     @get:JsonIgnore
     val dependencyNavigator: DependencyNavigator by lazy { CompatibilityDependencyNavigator.create(this) }
@@ -575,3 +567,11 @@ private fun applyPackageCurations(
         }
     }
 }
+
+private data class PackageEntry(
+    val pkg: Package?,
+    val curatedPackage: CuratedPackage?,
+    val isExcluded: Boolean
+)
+
+private data class ProjectEntry(val project: Project, val isExcluded: Boolean)
