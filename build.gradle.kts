@@ -25,9 +25,13 @@ import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 import java.net.URL
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.lib.Config
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.revwalk.RevWalk
+import org.eclipse.jgit.storage.file.FileBasedConfig
 import org.eclipse.jgit.treewalk.TreeWalk
+import org.eclipse.jgit.util.FS
+import org.eclipse.jgit.util.SystemReader
 
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
@@ -61,6 +65,28 @@ buildscript {
         }
     }
 }
+
+class GitConfigNoSystemReader(private val delegate: SystemReader) : SystemReader() {
+    override fun getenv(variable: String): String? {
+        if (variable == "GIT_CONFIG_NOSYSTEM") return "true"
+        return delegate.getenv(variable)
+    }
+
+    override fun openSystemConfig(parent: Config?, fs: FS): FileBasedConfig =
+        object : FileBasedConfig(parent, null, fs) {
+            override fun load() = Unit
+            override fun isOutdated(): Boolean = false
+        }
+
+    override fun getHostname(): String = delegate.hostname
+    override fun getProperty(key: String): String? = delegate.getProperty(key)
+    override fun openUserConfig(parent: Config?, fs: FS): FileBasedConfig = delegate.openUserConfig(parent, fs)
+    override fun openJGitConfig(parent: Config?, fs: FS): FileBasedConfig = delegate.openJGitConfig(parent, fs)
+    override fun getCurrentTime(): Long = delegate.currentTime
+    override fun getTimezone(`when`: Long): Int = delegate.getTimezone(`when`)
+}
+
+SystemReader.setInstance(GitConfigNoSystemReader(SystemReader.getInstance()))
 
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
