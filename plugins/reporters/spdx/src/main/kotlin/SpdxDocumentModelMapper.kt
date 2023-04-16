@@ -77,7 +77,7 @@ internal object SpdxDocumentModelMapper {
         val projectPackages = projects.map { project ->
             val spdxProjectPackage = project.toPackage().toSpdxPackage(licenseInfoResolver, isProject = true)
 
-            ortResult.collectDependencies(project.id, 1).mapTo(relationships) { dependency ->
+            ortResult.getDependencies(project.id, 1).mapTo(relationships) { dependency ->
                 SpdxRelationship(
                     spdxElementId = spdxProjectPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.DEPENDS_ON,
@@ -92,7 +92,7 @@ internal object SpdxDocumentModelMapper {
             val pkg = curatedPackage.metadata
             val binaryPackage = pkg.toSpdxPackage(licenseInfoResolver)
 
-            ortResult.collectDependencies(pkg.id, 1).mapTo(relationships) { dependency ->
+            ortResult.getDependencies(pkg.id, 1).mapTo(relationships) { dependency ->
                 SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.DEPENDS_ON,

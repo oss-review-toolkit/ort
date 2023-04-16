@@ -51,7 +51,7 @@ class OrtResultTest : WordSpec({
             )
 
             val id = Identifier("Maven:com.typesafe.akka:akka-stream_2.12:2.5.6")
-            val dependencies = ortResult.collectDependencies(id, 1).map { it.toCoordinates() }
+            val dependencies = ortResult.getDependencies(id, 1).map { it.toCoordinates() }
 
             dependencies should containExactlyInAnyOrder(
                 "Maven:com.typesafe.akka:akka-actor_2.12:2.5.6",
