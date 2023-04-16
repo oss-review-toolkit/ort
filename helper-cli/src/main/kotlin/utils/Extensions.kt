@@ -182,7 +182,7 @@ internal fun OrtResult.getLicenseFindingsById(
 ): Map<Provenance, Map<SpdxExpression, Set<TextLocation>>> {
     val result = mutableMapOf<Provenance, MutableMap<SpdxExpression, MutableSet<TextLocation>>>()
 
-    fun getLicenseFindingsCurations(provenance: Provenance): List<LicenseFindingCuration> =
+    fun getLicenseFindingCurations(provenance: Provenance): List<LicenseFindingCuration> =
         if (isProject(id)) {
             getLicenseFindingCurations(id)
         } else {
@@ -194,7 +194,7 @@ internal fun OrtResult.getLicenseFindingsById(
 
         scanResult.summary.licenseFindings.let { findings ->
             if (applyCurations) {
-                FindingCurationMatcher().applyAll(findings, getLicenseFindingsCurations(scanResult.provenance))
+                FindingCurationMatcher().applyAll(findings, getLicenseFindingCurations(scanResult.provenance))
                     .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
             } else {
                 findings
