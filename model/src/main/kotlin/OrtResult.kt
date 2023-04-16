@@ -199,7 +199,8 @@ data class OrtResult(
      * Return the set of all project or package identifiers in the result, optionally [including those of subprojects]
      * [includeSubProjects].
      */
-    fun collectProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
+    @JsonIgnore
+    fun getProjectsAndPackages(includeSubProjects: Boolean = true): Set<Identifier> {
         val projectsAndPackages = mutableSetOf<Identifier>()
         val projects = getProjects(includeSubProjects = includeSubProjects)
 

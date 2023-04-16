@@ -86,7 +86,7 @@ class ListPackagesCommand : CliktCommand(
             it.severity in offendingSeverities
         }.mapNotNullTo(mutableSetOf()) { it.pkg }
 
-        val packages = ortResult.collectProjectsAndPackages().filter { id ->
+        val packages = ortResult.getProjectsAndPackages().filter { id ->
             (ortResult.isPackage(id) && PACKAGE in type) || (ortResult.isProject(id) && PROJECT in type)
         }.filter { id ->
             matchDetectedLicenses.isEmpty() || (matchDetectedLicenses - getDetectedLicenses(id)).isEmpty()

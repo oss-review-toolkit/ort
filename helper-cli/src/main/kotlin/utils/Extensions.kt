@@ -134,7 +134,7 @@ internal fun OrtResult.processAllCopyrightStatements(
         addAuthorsToCopyrights = addAuthorsToCopyrights
     )
 
-    collectProjectsAndPackages().forEach { id ->
+    getProjectsAndPackages().forEach { id ->
         licenseInfoResolver.resolveLicenseInfo(id).forEach inner@{ resolvedLicense ->
             if (omitExcluded && resolvedLicense.isDetectedExcluded) return@inner
 
