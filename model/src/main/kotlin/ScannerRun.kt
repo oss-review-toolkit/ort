@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
 import java.time.Instant
@@ -80,7 +81,8 @@ data class ScannerRun(
     /**
      * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<Issue>> {
+    @JsonIgnore
+    fun getIssues(): Map<Identifier, Set<Issue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
         scanResults.forEach { (id, results) ->
@@ -97,5 +99,5 @@ data class ScannerRun(
     /**
      * True if any of the [scanResults] contain [Issue]s.
      */
-    val hasIssues by lazy { collectIssues().isNotEmpty() }
+    val hasIssues by lazy { getIssues().isNotEmpty() }
 }

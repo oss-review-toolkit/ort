@@ -162,7 +162,7 @@ class ScannerCommand : OrtCommand(
         println("The scan took $duration.")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) = scannerRun.collectIssues().flatMap { it.value }
+        val (resolvedIssues, unresolvedIssues) = scannerRun.getIssues().flatMap { it.value }
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 

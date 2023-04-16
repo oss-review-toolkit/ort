@@ -243,7 +243,7 @@ class AnalyzerCommand : OrtCommand(
         println("Applied $curationCount curation(s) from ${enabledCurationProviders.size} provider(s).")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) = analyzerRun.result.collectIssues().flatMap { it.value }
+        val (resolvedIssues, unresolvedIssues) = analyzerRun.result.getAllIssues().flatMap { it.value }
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 

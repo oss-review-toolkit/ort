@@ -185,10 +185,11 @@ data class OrtResult(
     /**
      * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<Issue>> {
-        val analyzerIssues = analyzer?.result?.collectIssues().orEmpty()
-        val scannerIssues = scanner?.collectIssues().orEmpty()
-        val advisorIssues = advisor?.results?.collectIssues().orEmpty()
+    @JsonIgnore
+    fun getIssues(): Map<Identifier, Set<Issue>> {
+        val analyzerIssues = analyzer?.result?.getAllIssues().orEmpty()
+        val scannerIssues = scanner?.getIssues().orEmpty()
+        val advisorIssues = advisor?.results?.getIssues().orEmpty()
 
         val analyzerAndScannerIssues = analyzerIssues.zipWithCollections(scannerIssues)
         return analyzerAndScannerIssues.zipWithCollections(advisorIssues)
@@ -482,7 +483,7 @@ data class OrtResult(
      * [OrtResult] with severities equal to or over [minSeverity].
      */
     @JsonIgnore
-    fun getOpenIssues(minSeverity: Severity = Severity.WARNING) = collectIssues()
+    fun getOpenIssues(minSeverity: Severity = Severity.WARNING) = getIssues()
         .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
         .flatten()
         .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }

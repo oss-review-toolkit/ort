@@ -295,7 +295,7 @@ class FreemarkerTemplateProcessor(
         @JvmOverloads
         @Suppress("UNUSED") // This function is used in the templates.
         fun hasUnresolvedIssues(threshold: Severity = input.ortConfig.severeIssueThreshold) =
-            input.ortResult.collectIssues().any { (identifier, issues) ->
+            input.ortResult.getIssues().any { (identifier, issues) ->
                 issues.any { issue ->
                     val isResolved = input.resolutionProvider.isResolved(issue)
                     val isExcluded = input.ortResult.isExcluded(identifier)

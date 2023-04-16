@@ -67,7 +67,8 @@ data class AdvisorRecord(
         }
     }
 
-    fun collectIssues(): Map<Identifier, Set<Issue>> {
+    @JsonIgnore
+    fun getIssues(): Map<Identifier, Set<Issue>> {
         val collectedIssues = mutableMapOf<Identifier, MutableSet<Issue>>()
 
         advisorResults.forEach { (id, results) ->
@@ -84,7 +85,7 @@ data class AdvisorRecord(
     /**
      * True if any of the [advisorResults] contain [Issue]s.
      */
-    val hasIssues by lazy { collectIssues().isNotEmpty() }
+    val hasIssues by lazy { getIssues().isNotEmpty() }
 
     /**
      * Return a map of all [Package]s and the associated [Vulnerabilities][Vulnerability].

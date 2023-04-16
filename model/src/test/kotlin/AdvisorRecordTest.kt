@@ -61,7 +61,7 @@ class AdvisorRecordTest : WordSpec({
                 langId to listOf(createResult())
             )
 
-            val issues = record.collectIssues()
+            val issues = record.getIssues()
 
             issues.keys shouldNotContain langId
         }
@@ -75,7 +75,7 @@ class AdvisorRecordTest : WordSpec({
                 queryId to listOf(createResult(issues = listOf(issue1, issue2)))
             )
 
-            val issues = record.collectIssues()
+            val issues = record.getIssues()
 
             issues.keys should containExactlyInAnyOrder(langId, queryId)
             issues[langId] should containExactly(issue3)
