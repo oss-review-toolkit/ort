@@ -213,7 +213,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     .addDependencyGraph("foo", graph2)
                     .build()
 
-                analyzerResult.collectIssues() should containExactly(
+                analyzerResult.getAllIssues() should containExactly(
                     package1.id to setOf(issue1),
                     package3.id to setOf(issue2),
                     project1.id to setOf(issue3, issue4),

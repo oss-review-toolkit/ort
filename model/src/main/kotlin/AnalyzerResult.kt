@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
@@ -78,7 +79,8 @@ data class AnalyzerResult(
     /**
      * Return a map of all de-duplicated [Issue]s associated by [Identifier].
      */
-    fun collectIssues(): Map<Identifier, Set<Issue>> {
+    @JsonIgnore
+    fun getAllIssues(): Map<Identifier, Set<Issue>> {
         val collectedIssues = issues.mapValuesTo(mutableMapOf()) { it.value.toMutableSet() }
 
         // Collecting issues from projects is necessary only if they use the dependency tree format; otherwise, the
@@ -103,7 +105,7 @@ data class AnalyzerResult(
     /**
      * True if there were any issues during the analysis, false otherwise.
      */
-    val hasIssues by lazy { collectIssues().isNotEmpty() }
+    val hasIssues by lazy { getAllIssues().isNotEmpty() }
 
     /**
      * Return a result, in which all contained [Project]s have their scope information resolved. If this result

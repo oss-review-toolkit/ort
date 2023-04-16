@@ -58,7 +58,7 @@ fun OrtResult.addPackageCurations(packageCurationProviders: List<Pair<String, Pa
  */
 fun OrtResult.addResolutions(resolutionProvider: ResolutionProvider): OrtResult {
     val resolutions = ConfigurationResolver.resolveResolutions(
-        issues = collectIssues().values.flatten(),
+        issues = getIssues().values.flatten(),
         ruleViolations = getRuleViolations(),
         vulnerabilities = getVulnerabilities().values.flatten(),
         resolutionProvider = resolutionProvider

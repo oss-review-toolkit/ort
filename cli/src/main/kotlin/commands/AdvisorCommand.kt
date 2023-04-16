@@ -146,7 +146,7 @@ class AdvisorCommand : OrtCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) = advisorRun.results.collectIssues().flatMap { it.value }
+        val (resolvedIssues, unresolvedIssues) = advisorRun.results.getIssues().flatMap { it.value }
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 

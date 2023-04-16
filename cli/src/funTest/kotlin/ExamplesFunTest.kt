@@ -190,7 +190,7 @@ class ExamplesFunTest : StringSpec({
 
         actualBody shouldContain "Content-Type: text/html; charset=UTF-8"
         actualBody shouldContain "Content-Type: text/plain; charset=UTF-8" // Fallback
-        actualBody shouldContain "Number of issues found: ${ortResult.collectIssues().size}"
+        actualBody shouldContain "Number of issues found: ${ortResult.getIssues().size}"
 
         greenMail.stop()
     }
