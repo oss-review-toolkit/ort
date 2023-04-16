@@ -115,6 +115,18 @@ pipeline {
             defaultValue: true
         )
 
+        string(
+            name: 'ENABLED_PACKAGE_MANAGERS',
+            description: 'A custom list of package managers to enable. By default all package managers are enabled.',
+            defaultValue: ''
+        )
+
+        string(
+            name: 'DISABLED_PACKAGE_MANAGERS',
+            description: 'A custom list of package managers to disable. By default no package manager is disabled.',
+            defaultValue: ''
+        )
+
         /*
          * ORT scanner tool parameters.
          */
@@ -349,6 +361,14 @@ pipeline {
                 script {
                     def status = sh returnStatus: true, script: '''
                     ORT_OPTIONS="$LOG_LEVEL -P ort.analyzer.allowDynamicVersions=$ALLOW_DYNAMIC_VERSIONS"
+
+                    if [ -n "$ENABLED_PACKAGE_MANAGERS" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS -P ort.analyzer.enabledPackageManagers=$ENABLED_PACKAGE_MANAGERS"
+                    fi
+
+                    if [ -n "$DISABLED_PACKAGE_MANAGERS" ]; then
+                        ORT_OPTIONS="$ORT_OPTIONS -P ort.analyzer.disabledPackageManagers=$DISABLED_PACKAGE_MANAGERS"
+                    fi
 
                     if [ "$STACKTRACE" = "true" ]; then
                         ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
