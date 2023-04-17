@@ -61,7 +61,7 @@ cli/build/install/ort/bin/ort report
 
 ### DocBook
 
-Create a [DocBook][9] report from the Freemarker template using [Asciidoctor's DocBook converter][10].
+Create a [DocBook][8] report from the Freemarker template using [Asciidoctor's DocBook converter][9].
 
 ```bash
 cli/build/install/ort/bin/ort report
@@ -73,7 +73,7 @@ cli/build/install/ort/bin/ort report
 
 ### Man page
 
-Create a ManPage report from the Freemarker template using [Asciidoctor's ManPage converter][11].
+Create a ManPage report from the Freemarker template using [Asciidoctor's ManPage converter][10].
 
 ```bash
 cli/build/install/ort/bin/ort report
@@ -90,7 +90,6 @@ cli/build/install/ort/bin/ort report
 [5]: https://docs.asciidoctor.org/pdf-converter/latest/theme/
 [6]: https://docs.asciidoctor.org/pdf-converter/latest/theme/font-support/
 [7]: https://docs.asciidoctor.org/asciidoctor/latest/html-backend
-[8]: https://docs.asciidoctor.org/asciidoctor/latest/html-backend/#xhtml
-[9]: https://docbook.org
-[10]: https://docs.asciidoctor.org/asciidoctor/latest/docbook-backend
-[11]: https://docs.asciidoctor.org/asciidoctor/latest/manpage-backend
+[8]: https://docbook.org
+[9]: https://docs.asciidoctor.org/asciidoctor/latest/docbook-backend
+[10]: https://docs.asciidoctor.org/asciidoctor/latest/manpage-backend
