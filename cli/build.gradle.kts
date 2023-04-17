@@ -111,15 +111,6 @@ repositories {
 
     exclusiveContent {
         forRepository {
-            maven("https://jitpack.io/")
-        }
-
-        filter {
-            includeGroup("com.github.everit-org.json-schema")
-        }
-    }
-    exclusiveContent {
-        forRepository {
             maven("https://packages.atlassian.com/maven-external")
         }
 
