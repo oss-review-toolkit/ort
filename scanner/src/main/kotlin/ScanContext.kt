@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner
 
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.config.Excludes
 
 /**
  * Additional context information that can be used by a [ScannerWrapper] to alter its behavior.
@@ -34,5 +35,10 @@ data class ScanContext(
     /**
      * The [type][PackageType] of the packages to scan.
      */
-    val packageType: PackageType
+    val packageType: PackageType,
+
+    /**
+     * The [Excludes] of the project to scan.
+     */
+    val excludes: Excludes? = null
 )

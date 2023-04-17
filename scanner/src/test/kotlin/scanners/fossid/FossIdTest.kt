@@ -99,6 +99,7 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
@@ -562,7 +563,11 @@ class FossIdTest : WordSpec({
                     launch {
                         fossId.scanPackage(
                             createPackage(createIdentifier(index = 1), vcsInfo),
-                            ScanContext(labels = emptyMap(), packageType = PackageType.PACKAGE)
+                            ScanContext(
+                                labels = emptyMap(),
+                                packageType = PackageType.PACKAGE,
+                                Excludes()
+                            )
                         )
                     }
                 }
@@ -1513,4 +1518,4 @@ private fun FossIdServiceWithVersion.mockFiles(
  * Trigger a FossID scan of the given [package][pkg].
  */
 private fun FossId.scan(pkg: Package, labels: Map<String, String> = emptyMap()): ScanResult =
-scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE))
+scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE, Excludes()))
