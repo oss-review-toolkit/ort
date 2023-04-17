@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.gitlab
+package org.ossreviewtoolkit.plugins.reporters.gitlab
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
