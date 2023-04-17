@@ -43,7 +43,8 @@ internal class FindCommand : CliktCommand(
 
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
-        help = "The package configurations directory."
+        help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                "contain a single package configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

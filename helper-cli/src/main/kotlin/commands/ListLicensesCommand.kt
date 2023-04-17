@@ -122,8 +122,8 @@ internal class ListLicensesCommand : CliktCommand(
 
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
-        help = "The directory containing the package configuration files to read as input. It is searched " +
-                "recursively."
+        help = "A directory that is searched recursively for package configuration files. Each file must only " +
+                "contain a single package configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
