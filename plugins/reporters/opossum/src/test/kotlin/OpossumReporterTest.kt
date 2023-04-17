@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.opossum
+package org.ossreviewtoolkit.plugins.reporters.opossum
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
