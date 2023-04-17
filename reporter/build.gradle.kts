@@ -39,18 +39,6 @@ sourceSets.named("main") {
     output.dir(mapOf("builtBy" to copyWebAppTemplate), generatedResourcesDir)
 }
 
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://jitpack.io")
-        }
-
-        filter {
-            includeGroup("com.github.everit-org.json-schema")
-        }
-    }
-}
-
 dependencies {
     api(project(":model"))
 
