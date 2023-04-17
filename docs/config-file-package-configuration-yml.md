@@ -69,7 +69,7 @@ license_finding_curations:
 ORT consumes package configuration from a so-called "package configuration directory" which is searched recursively
 for `.yml` files. Each such file must contain exactly one package configuration and there must not be more than one
 package configuration for any package/provenance combination within that directory. The default location is
-`$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configuration-dir`
+`$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configurations-dir`
 option of the _evaluator_:
 
 ```bash
@@ -78,7 +78,7 @@ cli/build/install/ort/bin/ort evaluate
   -o [evaluator-output-dir]
   --license-classifications-file $ORT_CONFIG_DIR/license-classifications.yml
   --package-curations-file $ORT_CONFIG_DIR/curations.yml
-  --package-configuration-dir $ORT_CONFIG_DIR/packages
+  --package-configurations-dir $ORT_CONFIG_DIR/packages
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
