@@ -31,6 +31,7 @@ dependencies {
     api(project(":plugins:reporters:ctrlx-reporter"))
     api(project(":plugins:reporters:cyclonedx-reporter"))
     api(project(":plugins:reporters:fossid-reporter"))
+    api(project(":plugins:reporters:gitlab-reporter"))
     api(project(":plugins:reporters:spdx-reporter"))
 }
 

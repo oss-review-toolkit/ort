@@ -17,14 +17,19 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.gitlab
+plugins {
+    // Apply core plugins.
+    `java-library`
+}
 
-import com.fasterxml.jackson.databind.util.StdConverter
+dependencies {
+    api(project(":reporter"))
 
-import java.util.SortedSet
+    implementation(project(":model"))
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:ort-utils"))
+    implementation(project(":utils:spdx-utils"))
 
-import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.License
-
-internal class LicenseSortedSetConverter : StdConverter<Set<License>, SortedSet<License>>() {
-    override fun convert(value: Set<License>) = value.toSortedSet(compareBy { it.id })
+    implementation(libs.jacksonDatabind)
+    implementation(libs.log4jApiKotlin)
 }

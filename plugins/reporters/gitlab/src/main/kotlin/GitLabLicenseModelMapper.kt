@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.gitlab
+package org.ossreviewtoolkit.plugins.reporters.gitlab
 
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.Dependency
-import org.ossreviewtoolkit.reporter.reporters.gitlab.GitLabLicenseModel.License
+import org.ossreviewtoolkit.plugins.reporters.gitlab.GitLabLicenseModel.Dependency
+import org.ossreviewtoolkit.plugins.reporters.gitlab.GitLabLicenseModel.License
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
