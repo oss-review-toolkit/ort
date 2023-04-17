@@ -32,7 +32,5 @@ dependencies {
 
     implementation(libs.jacksonDatabind)
 
-    funTestImplementation(testFixtures(project(":reporter")))
-
     funTestImplementation(libs.jsonSchemaValidator)
 }
