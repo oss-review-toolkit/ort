@@ -68,8 +68,8 @@ internal class ListCopyrightsCommand : CliktCommand(
         help = "Show the raw statements corresponding to each processed statement if these are any different."
     ).flag()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "The directory containing the package configuration files to read as input. It is searched " +
                 "recursively."
     ).convert { it.expandTilde() }
@@ -78,7 +78,7 @@ internal class ListCopyrightsCommand : CliktCommand(
     override fun run() {
         val ortResult = readOrtResult(ortFile)
         val copyrightGarbage = copyrightGarbageFile?.readValue<CopyrightGarbage>().orEmpty()
-        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
+        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationsDir)
 
         val copyrightStatements = ortResult.processAllCopyrightStatements(
             copyrightGarbage = copyrightGarbage.items,

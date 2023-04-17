@@ -65,15 +65,15 @@ class GetPackageLicensesCommand : CliktCommand(
     ).convert { Identifier(it) }
         .required()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "The directory containing the package configuration files to read as input. It is searched recursively."
     ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.expandTilde() }
 
     override fun run() {
         val scanResults = getStoredScanResults(packageId)
-        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
+        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationsDir)
 
         val result = scanResults.firstOrNull()?.let { scanResult ->
             val packageConfigurations =
