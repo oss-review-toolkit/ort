@@ -84,7 +84,7 @@ class OpossumReporter : Reporter {
         const val OPTION_SCANNER_MAX_DEPTH = "scanner.maxDepth"
     }
 
-    data class OpossumSignal(
+    internal data class OpossumSignal(
         val source: String,
         val id: Identifier? = null,
         val url: String? = null,
@@ -127,7 +127,7 @@ class OpossumReporter : Reporter {
                     && preselected == other.preselected
     }
 
-    data class OpossumResources(
+    internal data class OpossumResources(
         val tree: MutableMap<String, OpossumResources> = mutableMapOf()
     ) {
         private fun addResource(pathPieces: List<String>) {
@@ -171,7 +171,7 @@ class OpossumReporter : Reporter {
             }.plus("/")
     }
 
-    data class OpossumFrequentLicense(
+    internal data class OpossumFrequentLicense(
         val shortName: String,
         val fullName: String?,
         val defaultText: String?
@@ -192,12 +192,12 @@ class OpossumReporter : Reporter {
             )
     }
 
-    data class OpossumExternalAttributionSource(
+    internal data class OpossumExternalAttributionSource(
         val name: String,
         val priority: Int,
     )
 
-    data class OpossumInput(
+    internal data class OpossumInput(
         val resources: OpossumResources = OpossumResources(),
         val signals: MutableList<OpossumSignal> = mutableListOf(),
         val pathToSignal: SortedMap<String, SortedSet<UUID>> = sortedMapOf(),
@@ -505,7 +505,7 @@ class OpossumReporter : Reporter {
         jsonFile.delete()
     }
 
-    fun generateOpossumInput(
+    internal fun generateOpossumInput(
         ortResult: OrtResult,
         maxDepth: Int = Int.MAX_VALUE
     ): OpossumInput {
