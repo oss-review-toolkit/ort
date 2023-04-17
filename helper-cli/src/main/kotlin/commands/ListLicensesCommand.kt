@@ -120,8 +120,8 @@ internal class ListLicensesCommand : CliktCommand(
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "The directory containing the package configuration files to read as input. It is searched " +
                 "recursively."
     ).convert { it.expandTilde() }
@@ -151,7 +151,7 @@ internal class ListLicensesCommand : CliktCommand(
             ortResult.fetchScannedSources(packageId)
         }
 
-        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationDir)
+        val packageConfigurationProvider = DirectoryPackageConfigurationProvider(packageConfigurationsDir)
 
         fun isPathExcluded(provenance: Provenance, path: String): Boolean =
             if (ortResult.isProject(packageId)) {

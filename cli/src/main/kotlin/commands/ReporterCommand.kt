@@ -144,8 +144,8 @@ class ReporterCommand : OrtCommand(
         .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
         .configurationGroup()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
                 "contain a single package configuration. This can make the output inconsistent with the evaluator " +
                 "output but is useful when testing package configurations."
@@ -208,14 +208,14 @@ class ReporterCommand : OrtCommand(
 
         val resolvedPackageConfigurations = ortResult.resolvedConfiguration.packageConfigurations
         val packageConfigurationProvider = when {
-            resolvedPackageConfigurations != null && packageConfigurationDir == null -> {
+            resolvedPackageConfigurations != null && packageConfigurationsDir == null -> {
                 SimplePackageConfigurationProvider(resolvedPackageConfigurations)
             }
 
             ortConfig.enableRepositoryPackageConfigurations -> {
                 CompositePackageConfigurationProvider(
                     SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
-                    DirectoryPackageConfigurationProvider(packageConfigurationDir)
+                    DirectoryPackageConfigurationProvider(packageConfigurationsDir)
                 )
             }
 
@@ -224,7 +224,7 @@ class ReporterCommand : OrtCommand(
                     logger.info { "Local package configurations were not applied because the feature is not enabled." }
                 }
 
-                DirectoryPackageConfigurationProvider(packageConfigurationDir)
+                DirectoryPackageConfigurationProvider(packageConfigurationsDir)
             }
         }
 

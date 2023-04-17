@@ -133,8 +133,8 @@ class EvaluatorCommand : OrtCommand(
         .default(ortConfigDirectory.resolve(ORT_LICENSE_CLASSIFICATIONS_FILENAME))
         .configurationGroup()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
                 "contain a single package configuration."
     ).convert { it.expandTilde() }
@@ -269,14 +269,14 @@ class EvaluatorCommand : OrtCommand(
         val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
             CompositePackageConfigurationProvider(
                 SimplePackageConfigurationProvider(ortResultInput.repository.config.packageConfigurations),
-                DirectoryPackageConfigurationProvider(packageConfigurationDir)
+                DirectoryPackageConfigurationProvider(packageConfigurationsDir)
             )
         } else {
             if (ortResultInput.repository.config.packageConfigurations.isNotEmpty()) {
                 logger.info { "Local package configurations were not applied because the feature is not enabled." }
             }
 
-            DirectoryPackageConfigurationProvider(packageConfigurationDir)
+            DirectoryPackageConfigurationProvider(packageConfigurationsDir)
         }
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()

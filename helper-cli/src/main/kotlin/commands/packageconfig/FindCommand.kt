@@ -41,8 +41,8 @@ internal class FindCommand : CliktCommand(
     ).convert { Identifier(it) }
         .required()
 
-    private val packageConfigurationDir by option(
-        "--package-configuration-dir",
+    private val packageConfigurationsDir by option(
+        "--package-configurations-dir",
         help = "The package configurations directory."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
@@ -51,7 +51,7 @@ internal class FindCommand : CliktCommand(
 
     override fun run() {
         // TODO: There could be multiple package configurations matching the given identifier which is not handled.
-        FileFormat.findFilesWithKnownExtensions(packageConfigurationDir).find {
+        FileFormat.findFilesWithKnownExtensions(packageConfigurationsDir).find {
             it.readValue<PackageConfiguration>().id == packageId
         }?.let {
             println(it.absolutePath)
