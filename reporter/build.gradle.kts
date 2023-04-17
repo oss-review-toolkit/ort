@@ -46,7 +46,6 @@ repositories {
         }
 
         filter {
-            includeGroup("com.github.ralfstuckert.pdfbox-layout")
             includeGroup("com.github.everit-org.json-schema")
         }
     }
