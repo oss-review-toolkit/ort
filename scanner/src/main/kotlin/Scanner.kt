@@ -109,7 +109,14 @@ class Scanner(
 
             logger.info { "Scanning ${packages.size} project(s) with ${projectScannerWrappers.size} scanner(s)." }
 
-            scan(packages, ScanContext(ortResult.labels + labels, PackageType.PROJECT))
+            scan(
+                packages,
+                ScanContext(
+                    ortResult.labels + labels,
+                    PackageType.PROJECT,
+                    ortResult.repository.config.excludes
+                )
+            )
         } else {
             logger.info { "Skipping project scan as no project scanner is configured." }
 
@@ -122,7 +129,7 @@ class Scanner(
 
             logger.info { "Scanning ${packages.size} package(s) with ${packageScannerWrappers.size} scanner(s)." }
 
-            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE))
+            scan(packages, ScanContext(ortResult.labels, PackageType.PACKAGE, ortResult.repository.config.excludes))
         } else {
             logger.info { "Skipping package scan as no package scanner is configured." }
 
@@ -302,7 +309,9 @@ class Scanner(
                             "started."
                 }
 
-                val scanResult = scanner.scanPackage(referencePackage, context)
+                // Filter the scan context to hide the excludes from scanner with scan criteria.
+                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                val scanResult = scanner.scanPackage(referencePackage, filteredContext)
 
                 logger.info {
                     "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.details.name}' " +
@@ -346,7 +355,9 @@ class Scanner(
                             "'${scanner.details.name}'."
                 }
 
-                val scanResult = scanner.scanProvenance(provenance, context)
+                // Filter the scan context to hide the excludes from scanner with scan criteria.
+                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                val scanResult = scanner.scanProvenance(provenance, filteredContext)
 
                 val completedPackages = controller.getPackagesCompletedByProvenance(scanner, provenance)
 
@@ -529,7 +540,9 @@ class Scanner(
             scanners.associateWith { scanner ->
                 logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' started." }
 
-                val summary = scanner.scanPath(downloadDir, context)
+                // Filter the scan context to hide the excludes from scanner with scan criteria.
+                val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
+                val summary = scanner.scanPath(downloadDir, filteredContext)
 
                 logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' finished." }
 
