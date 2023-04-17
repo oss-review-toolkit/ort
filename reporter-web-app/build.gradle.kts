@@ -21,12 +21,14 @@ import java.util.Locale
 
 import org.apache.tools.ant.taskdefs.condition.Os
 
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsRootPlugin
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsSetupTask
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin
 import org.jetbrains.kotlin.gradle.targets.js.yarn.YarnSetupTask
 
-// The Yarn plugin is only applied programmatically for Kotlin projects that target JavaScript. As we do not target
-// JavaScript from Kotlin (yet), manually apply the plugin to make its setup tasks available.
+// The Kotlin/JS plugins are only applied programmatically for Kotlin projects that target JavaScript. As we do not
+// directly target JavaScript from Kotlin, manually apply the plugins and configure the tool versions.
+NodeJsRootPlugin.apply(rootProject).nodeVersion = "16.13.0"
 YarnPlugin.apply(rootProject).version = "1.22.17"
 
 // The Yarn plugin registers tasks always on the root project, see
