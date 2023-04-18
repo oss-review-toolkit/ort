@@ -246,7 +246,7 @@ class GradleInspector(
 
             val binaryArtifact = when {
                 isMetadataOnly -> RemoteArtifact.EMPTY
-                else -> createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension)
+                else -> createRemoteArtifact(dep.pomFile, dep.classifier, dep.extension.takeUnless { it == "bundle" })
             }
 
             val sourceArtifact = when {
@@ -310,14 +310,14 @@ private fun Collection<OrtDependency>.toPackageRefs(
  * is retrieved remotely.
  */
 private fun createRemoteArtifact(
-    pomUrl: String?, classifier: String = "", extension: String = "jar", algorithm: String = "sha1"
+    pomUrl: String?, classifier: String? = null, extension: String? = null, algorithm: String = "sha1"
 ): RemoteArtifact {
     val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
 
     val artifactUrl = buildString {
         append(artifactBaseUrl)
-        if (classifier.isNotEmpty()) append("-$classifier")
-        if (extension.isNotEmpty()) append(".$extension")
+        if (!classifier.isNullOrEmpty()) append("-$classifier")
+        if (!extension.isNullOrEmpty()) append(".$extension") else append(".jar")
     }
 
     // TODO: How to handle authentication for private repositories here, or rely on Gradle for the download?
