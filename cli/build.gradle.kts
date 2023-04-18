@@ -46,6 +46,21 @@ graalvmNative {
     binaries {
         named("main") {
             imageName.set("ort")
+
+            val initializeAtBuildTime = listOf(
+                "ch.qos.logback.classic.Level",
+                "ch.qos.logback.classic.Logger",
+                "ch.qos.logback.classic.PatternLayout",
+                "ch.qos.logback.core.CoreConstants",
+                "ch.qos.logback.core.status.InfoStatus",
+                "ch.qos.logback.core.status.StatusBase",
+                "ch.qos.logback.core.util.Loader",
+                "ch.qos.logback.core.util.StatusPrinter",
+                "org.apache.sshd.sftp.client.fs.SftpFileSystemProvider",
+                "org.slf4j.LoggerFactory"
+            ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
+
+            buildArgs.add(initializeAtBuildTime)
         }
     }
 
