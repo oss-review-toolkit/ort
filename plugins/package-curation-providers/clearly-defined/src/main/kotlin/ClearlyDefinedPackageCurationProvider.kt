@@ -173,12 +173,8 @@ class ClearlyDefinedPackageCurationProvider(
                 vcs = sourceLocation as? VcsInfoCurationData
             )
 
-            if (data != PackageCurationData()) {
-                pkgCurations += PackageCuration(
-                    id = pkgId,
-                    data = data.copy(comment = "Provided by ClearlyDefined.")
-                )
-            }
+            // Add the curation if it is non-empty.
+            if (data != PackageCurationData()) pkgCurations += PackageCuration(pkgId, data)
         }
 
         return pkgCurations
