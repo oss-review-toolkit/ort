@@ -790,7 +790,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             sourceArtifact = sourceRemoteArtifact,
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
-            isMetadataOnly = mavenProject.packaging == "pom" || isSpringMetadataProject,
+            isMetadataOnly = (mavenProject.packaging == "pom" && binaryRemoteArtifact.url.endsWith(".pom"))
+                    || isSpringMetadataProject,
             isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }

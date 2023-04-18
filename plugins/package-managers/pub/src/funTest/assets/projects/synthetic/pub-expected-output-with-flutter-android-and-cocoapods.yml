@@ -1362,7 +1362,6 @@ packages:
     url: "https://github.com/Kotlin/kotlinx.coroutines.git"
     revision: ""
     path: ""
-  is_metadata_only: true
 - id: "Maven:org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.2"
   purl: "pkg:maven/org.jetbrains.kotlinx/kotlinx-coroutines-core-jvm@1.5.2"
   authors:
