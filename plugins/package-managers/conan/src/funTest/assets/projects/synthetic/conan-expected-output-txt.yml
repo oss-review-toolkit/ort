@@ -28,7 +28,9 @@ project:
     dependencies:
     - id: "Conan::libcurl:7.85.0"
       dependencies:
-      - id: "Conan::openssl:1.1.1t"
+      - id: "Conan::openssl:3.1.0"
+        dependencies:
+        - id: "Conan::zlib:1.2.13"
       - id: "Conan::zlib:1.2.13"
     - id: "Conan::zlib:1.2.13"
 packages:
@@ -146,12 +148,12 @@ packages:
     revision: ""
     path: ""
   is_modified: true
-- id: "Conan::openssl:1.1.1t"
-  purl: "pkg:conan/openssl@1.1.1t"
+- id: "Conan::openssl:3.1.0"
+  purl: "pkg:conan/openssl@3.1.0"
   declared_licenses:
-  - "OpenSSL"
+  - "Apache-2.0"
   declared_licenses_processed:
-    spdx_expression: "OpenSSL"
+    spdx_expression: "Apache-2.0"
   description: "A toolkit for the Transport Layer Security (TLS) and Secure Sockets\
     \ Layer (SSL) protocols"
   homepage_url: "https://github.com/openssl/openssl"
@@ -161,9 +163,9 @@ packages:
       value: ""
       algorithm: ""
   source_artifact:
-    url: "https://www.openssl.org/source/openssl-1.1.1t.tar.gz"
+    url: "https://www.openssl.org/source/openssl-3.1.0.tar.gz"
     hash:
-      value: "8dee9b24bdb1dcbf0c3d1e9b02fb8f6bf22165e807f45adeb7c9677536859d3b"
+      value: "aaa925ad9828745c4cad9d9efeb273deca820f2cdcf2c3ac7d7c1212b7c497b4"
       algorithm: "SHA-256"
   vcs:
     type: "Git"
@@ -175,7 +177,6 @@ packages:
     url: "https://github.com/openssl/openssl.git"
     revision: ""
     path: ""
-  is_modified: true
 - id: "Conan::zlib:1.2.13"
   purl: "pkg:conan/zlib@1.2.13"
   declared_licenses:
