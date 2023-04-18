@@ -137,6 +137,7 @@ jobs:
       with:
         flags: funTest-non-docker
   funTest-docker:
+    needs: build
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout Repository
