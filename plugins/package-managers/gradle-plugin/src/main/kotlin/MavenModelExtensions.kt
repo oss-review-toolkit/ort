@@ -26,14 +26,15 @@ import org.apache.maven.model.Scm
 import org.apache.maven.model.building.ModelBuildingResult
 
 fun Model.collectAuthors(): Set<String> =
-    buildSet {
+    // The SetBuilder returned by buildSet is not serializable by Java, so manually call toSet().
+    buildList {
         organization?.let {
             if (!it.name.isNullOrEmpty()) add(it.name)
         }
 
         val developers = developers.mapNotNull { it.organization.orEmpty().ifEmpty { it.name } }
         addAll(developers)
-    }
+    }.toSet()
 
 fun Model.collectLicenses(): Set<String> =
     licenses.mapNotNullTo(mutableSetOf()) { license ->
