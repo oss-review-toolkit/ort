@@ -58,7 +58,11 @@ class GradleAndroidFunTest : StringSpec({
         result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
+    "Cyclic dependencies over multiple libraries can be handled".config(
+        tags = setOf(AndroidTag, ExpensiveTag),
+        // This requires some work to make results comparable to the serialized PackageManagerResult.
+        enabled = false
+    ) {
         val definitionFile = getAssetFile("projects/synthetic/gradle-android-cyclic/app/build.gradle").toGradle()
         val expectedResultFile = getAssetFile("projects/synthetic/gradle-android-cyclic-expected-output-app.yml")
 
