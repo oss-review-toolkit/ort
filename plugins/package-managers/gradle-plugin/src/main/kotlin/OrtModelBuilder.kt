@@ -162,10 +162,6 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                     when (val id = selectedComponent.id) {
                         is ModuleComponentIdentifier -> {
-                            // Cut the graph on cyclic dependencies.
-                            if (id in visitedDependencies) return@mapNotNull null
-                            visitedDependencies += id
-
                             val repositoryName = (selectedComponent as? ResolvedComponentResultInternal)?.repositoryName
                             val pomFile = repositories[repositoryName]?.let { repositoryUrl ->
                                 // Note: Only Maven-style layout is supported for now.
@@ -186,6 +182,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                             }
 
                             val modelBuildingResult = poms.getValue(id.toString())
+                            val dependencies = if (id in visitedDependencies) {
+                                // Cut the graph on cyclic dependencies.
+                                emptyList()
+                            } else {
+                                visitedDependencies += id
+                                selectedComponent.dependencies.toOrtDependencies(poms)
+                            }
 
                             OrtDependencyImpl(
                                 groupId = id.group,
@@ -193,7 +196,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 version = id.version,
                                 classifier = "",
                                 extension = modelBuildingResult.effectiveModel.packaging,
-                                dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
+                                dependencies = dependencies,
                                 error = null,
                                 warning = null,
                                 pomFile = pomFile,
@@ -210,10 +213,13 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                         is ProjectComponentIdentifier -> {
                             val moduleId = selectedComponent.moduleVersion ?: return@mapNotNull null
-
-                            // Cut the graph on cyclic dependencies.
-                            if (moduleId in visitedProjects) return@mapNotNull null
-                            visitedProjects += moduleId
+                            val dependencies = if (moduleId in visitedProjects) {
+                                // Cut the graph on cyclic dependencies.
+                                emptyList()
+                            } else {
+                                visitedProjects += moduleId
+                                selectedComponent.dependencies.toOrtDependencies(poms)
+                            }
 
                             OrtDependencyImpl(
                                 groupId = moduleId.group,
@@ -221,7 +227,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                                 version = moduleId.version.takeUnless { it == "unspecified" }.orEmpty(),
                                 classifier = "",
                                 extension = "",
-                                dependencies = selectedComponent.dependencies.toOrtDependencies(poms),
+                                dependencies = dependencies,
                                 error = null,
                                 warning = null,
                                 pomFile = null,
