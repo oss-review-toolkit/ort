@@ -94,6 +94,8 @@ tasks {
         dependsOn(kotlinYarnSetup)
 
         inputs.files(".yarnrc", "package.json", "yarn.lock")
+
+        // Note that "node_modules" cannot be cached due to symlinks, see https://github.com/gradle/gradle/issues/3525.
         outputs.dir("node_modules")
     }
 
@@ -108,6 +110,7 @@ tasks {
         inputs.dir("public")
         inputs.dir("src")
 
+        outputs.cacheIf { true }
         outputs.dir("build")
     }
 
