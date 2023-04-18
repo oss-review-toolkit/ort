@@ -5,8 +5,8 @@
     "license": "Apache-2.0",
     "private": true,
     "author": {
-        "name": "HERE Europe B.V.",
-        "url": "https://here.com"
+        "name": "The ORT Project Authors",
+        "url": "https://oss-review-toolkit.org/"
     },
     "repository": {
         "type": "git",
