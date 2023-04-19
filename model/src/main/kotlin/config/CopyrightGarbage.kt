@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model.config
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 /**
  * A class that defines which Copyright statements are to be considered as garbage instead of real findings.
  */
@@ -26,11 +28,13 @@ data class CopyrightGarbage(
     /**
      * A set of literal strings that identify garbage Copyright findings.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val items: Set<String> = emptySet(),
 
     /**
      * A set of [Regex] patterns that identify garbage Copyright findings.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val patterns: Set<String> = emptySet()
 ) {
     private val regexes by lazy { patterns.map { it.toRegex() } }
