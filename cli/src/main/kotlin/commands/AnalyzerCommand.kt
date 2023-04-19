@@ -24,6 +24,7 @@ import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.defaultLazy
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -112,6 +113,11 @@ class AnalyzerCommand : OrtCommand(
                 "times. For example: --label distribution=external"
     ).associate()
 
+    private val dryRun by option(
+        "--dry-run",
+        help = "Do not actually run the project analysis but only show the package managers that would be used."
+    ).flag()
+
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("analyzer-result.${format.fileExtension}")
@@ -181,7 +187,15 @@ class AnalyzerCommand : OrtCommand(
                 }
             }
 
-            println("Found $count definition file(s) from ${filesPerManager.size} package manager(s) in total.")
+            println(
+                "Found in total $count definition file(s) from the following ${filesPerManager.size} package " +
+                    "manager(s):\n\t${filesPerManager.keys.joinToString()}"
+            )
+        }
+
+        if (dryRun) {
+            println("Not performing the actual project analysis as this is a dry run.")
+            return
         }
 
         val ortResult = analyzer.analyze(info, enabledCurationProviders).mergeLabels(labels)
