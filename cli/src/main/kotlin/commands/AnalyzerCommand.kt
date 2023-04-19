@@ -19,13 +19,11 @@
 
 package org.ossreviewtoolkit.cli.commands
 
-import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.defaultLazy
-import com.github.ajalt.clikt.parameters.options.deprecated
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.options.split
@@ -114,34 +112,6 @@ class AnalyzerCommand : OrtCommand(
                 "times. For example: --label distribution=external"
     ).associate()
 
-    private val enabledPackageManagers by option(
-        "--package-managers", "-m",
-        help = "The comma-separated package managers to enable, any of ${PackageManager.ALL.keys}. Note that " +
-                "disabling overrides enabling. If set, the 'enabledPackageManagers' property from configuration " +
-                "files is ignored."
-    ).convert { name ->
-        PackageManager.ALL[name]
-            ?: throw BadParameterValue("Package managers must be one or more of ${PackageManager.ALL.keys}.")
-    }.split(",").deprecated(
-        message = "--package-managers is deprecated, use -P ort.analyzer.enabledPackageManagers=... on the ort " +
-                "command instead.",
-        tagValue = "use -P ort.analyzer.enabledPackageManagers=... on the ort command instead"
-    )
-
-    private val disabledPackageManagers by option(
-        "--not-package-managers", "-n",
-        help = "The comma-separated package managers to disable, any of ${PackageManager.ALL.keys}. Note that " +
-                "disabling overrides enabling. If set, the 'disabledPackageManagers' property from configuration " +
-                "files is ignored."
-    ).convert { name ->
-        PackageManager.ALL[name]
-            ?: throw BadParameterValue("Package managers must be one or more of ${PackageManager.ALL.keys}.")
-    }.split(",").deprecated(
-        message = "--not-package-managers is deprecated, use -P ort.analyzer.disabledPackageManagers=... on the ort " +
-                "command instead.",
-        tagValue = "use -P ort.analyzer.disabledPackageManagers=... on the ort command instead"
-    )
-
     override fun run() {
         val outputFiles = outputFormats.mapTo(mutableSetOf()) { format ->
             outputDir.resolve("analyzer-result.${format.fileExtension}")
@@ -161,12 +131,7 @@ class AnalyzerCommand : OrtCommand(
         println("Looking for analyzer-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
-        val enabledPackageManagers = if (enabledPackageManagers != null || disabledPackageManagers != null) {
-            (enabledPackageManagers ?: PackageManager.ENABLED_BY_DEFAULT).toSet() -
-                    disabledPackageManagers.orEmpty().toSet()
-        } else {
-            ortConfig.analyzer.determineEnabledPackageManagers()
-        }
+        val enabledPackageManagers = ortConfig.analyzer.determineEnabledPackageManagers()
 
         println("The following package managers are enabled:")
         println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
