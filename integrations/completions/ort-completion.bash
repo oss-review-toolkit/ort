@@ -319,18 +319,6 @@ _ort_analyze() {
           [[ ${i} -gt COMP_CWORD ]] && in_param='--label' || in_param=''
           continue
           ;;
-        --package-managers|-m)
-          __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--package-managers' || in_param=''
-          continue
-          ;;
-        --not-package-managers|-n)
-          __skip_opt_eq
-          (( i = i + 1 ))
-          [[ ${i} -gt COMP_CWORD ]] && in_param='--not-package-managers' || in_param=''
-          continue
-          ;;
         -h|--help)
           __skip_opt_eq
           in_param=''
@@ -348,7 +336,7 @@ _ort_analyze() {
   done
   local word="${COMP_WORDS[$COMP_CWORD]}"
   if [[ "${word}" =~ ^[-] ]]; then
-    COMPREPLY=($(compgen -W '--input-dir -i --output-dir -o --output-formats -f --repository-configuration-file --resolutions-file --label -l --package-managers -m --not-package-managers -n -h --help' -- "${word}"))
+    COMPREPLY=($(compgen -W '--input-dir -i --output-dir -o --output-formats -f --repository-configuration-file --resolutions-file --label -l -h --help' -- "${word}"))
     return
   fi
 
@@ -374,10 +362,6 @@ _ort_analyze() {
        COMPREPLY=($(compgen -o default -- "${word}"))
       ;;
     --label)
-      ;;
-    --package-managers)
-      ;;
-    --not-package-managers)
       ;;
     --help)
       ;;
