@@ -103,10 +103,8 @@ tasks {
         description = "Use Yarn to build the Node.js application."
         group = "Node"
 
-        dependsOn("yarnInstall")
-
         inputs.files(".rescriptsrc.js")
-        inputs.dir("node_modules")
+        inputs.files(project.tasks["yarnInstall"].outputs)
         inputs.dir("public")
         inputs.dir("src")
 
