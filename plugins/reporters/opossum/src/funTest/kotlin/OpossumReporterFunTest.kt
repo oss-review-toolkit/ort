@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
     "generateReport()" should {
-        val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+        val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
         val reportStr = generateReport(ortResult).normalizeLineBreaks()
 
         "create '.opossum' output containing an 'input.json' with expected string" {
