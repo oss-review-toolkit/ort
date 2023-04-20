@@ -43,6 +43,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.reporter.ReportTableModel
@@ -52,7 +53,6 @@ import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableIssue
 import org.ossreviewtoolkit.reporter.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.SCOPE_EXCLUDE_LIST_COMPARATOR
 import org.ossreviewtoolkit.reporter.containsUnresolved
 import org.ossreviewtoolkit.reporter.description
 import org.ossreviewtoolkit.utils.common.isValidUri
@@ -64,6 +64,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
+
+private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
+    { it.value.isNotEmpty() }, { it.key }
+)
 
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
