@@ -197,7 +197,7 @@ internal fun NuGetInspector.Result.toOrtProject(
     val nestedPackages = mutableListOf<NuGetInspector.PackageData>()
 
     packages.forEach { pkg ->
-        pkg.dependencies.forEach { dep -> nestedPackages.add(dep) }
+        pkg.dependencies.forEach { dep -> nestedPackages += dep }
     }
 
     val packageReferences = nestedPackages.toPackageReferences()
