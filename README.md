@@ -675,7 +675,6 @@ following formats are supported (reporter names are case-insensitive):
   [FOSS information](https://github.com/boschrexroth/json-schema/tree/master/ctrlx-automation/ctrlx-core/apps/fossinfo)
   (`-f CtrlXAutomation`)
 * [CycloneDX](https://cyclonedx.org/) BOM (`-f CycloneDx`)
-* [Excel](https://en.wikipedia.org/wiki/Microsoft_Excel) sheet (`-f Excel`)
 * FossID report download (HTML, SPDX, and Excel types)
 * [GitLabLicenseModel](https://docs.gitlab.com/ee/ci/pipelines/job_artifacts.html#artifactsreportslicense_scanning-ultimate)
   (`-f GitLabLicenseModel`)
