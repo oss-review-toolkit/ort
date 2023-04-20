@@ -100,6 +100,7 @@ internal object NuGetInspector : CommandLineTool {
         } else {
             emptyList()
         }
+
         return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
@@ -200,8 +201,8 @@ internal fun NuGetInspector.Result.toOrtProject(
     }
 
     val packageReferences = nestedPackages.toPackageReferences()
-
     val scopes = sortedSetOf(Scope(headers.first().projectFramework, packageReferences))
+
     return Project(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
@@ -244,6 +245,7 @@ internal fun Set<NuGetInspector.PackageData>.toOrtPackages(): Set<Package> =
         if (pkgDeclaredLicense.isNotBlank()) {
             val licenseData = yamlMapper.readValue<Map<String, String>>(pkgDeclaredLicense)
             val type = licenseData["LicenseType"].orEmpty()
+
             listOfNotNull(
                 licenseData["LicenseExpression"]?.takeIf { type.lowercase() == "expression" },
                 licenseData["LicenseUrl"]
