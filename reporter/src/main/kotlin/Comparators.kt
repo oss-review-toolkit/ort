@@ -19,15 +19,8 @@
 
 package org.ossreviewtoolkit.reporter
 
-import java.util.SortedMap
-
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.ScopeExclude
 
 internal val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
     { it.value.isNotEmpty() }, { it.key }
-)
-
-internal val SCOPE_EXCLUDE_MAP_COMPARATOR = compareBy<Map.Entry<Identifier, SortedMap<String, List<ScopeExclude>>>>(
-    { it.value.values.isNotEmpty() }, { it.key }
 )
