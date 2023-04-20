@@ -33,11 +33,13 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
@@ -177,10 +179,12 @@ internal fun NuGetInspector.Result.toOrtProject(
 }
 
 private fun List<NuGetInspector.PackageData>.toPackageReferences(): SortedSet<PackageReference> =
-    mapTo(sortedSetOf()) {
+    mapTo(sortedSetOf()) { data ->
         PackageReference(
-            id = Identifier(type = TYPE, namespace = "", name = it.name, version = it.version.orEmpty()),
-            dependencies = it.dependencies.toPackageReferences()
+            id = Identifier(type = TYPE, namespace = "", name = data.name, version = data.version.orEmpty()),
+            dependencies = data.dependencies.toPackageReferences(),
+            issues = data.errors.map { Issue(source = TYPE, message = it, severity = Severity.ERROR) }
+                    + data.warnings.map { Issue(source = TYPE, message = it, severity = Severity.WARNING) }
         )
     }
 

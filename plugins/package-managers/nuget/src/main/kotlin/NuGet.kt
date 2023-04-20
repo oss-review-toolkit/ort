@@ -90,6 +90,5 @@ private fun collectErrorMessage(result: NuGetInspector.Result): String {
     result.packages.first().errors.forEach {
         errorMessage += it + "\n"
     }
-    result.dependencies.forEach { dep -> dep.errors.forEach { errorMessage += it + "\n" } }
     return errorMessage
 }
