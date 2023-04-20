@@ -129,7 +129,7 @@ extensions.findByName("buildScan")?.withGroovyBuilder {
     setProperty("termsOfServiceAgree", "yes")
 }
 
-tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     gradleReleaseChannel = "current"
     outputFormatter = "json"
 
@@ -284,7 +284,7 @@ subprojects {
         }
     }
 
-    tasks.dokkaHtml.configure {
+    tasks.dokkaHtml {
         dokkaSourceSets {
             configureEach {
                 jdkVersion.set(17)
@@ -363,14 +363,14 @@ subprojects {
         }
     }
 
-    tasks.named<JacocoReport>("jacocoTestReport").configure {
+    tasks.named<JacocoReport>("jacocoTestReport") {
         reports {
             // Enable XML in addition to HTML for CI integration.
             xml.required.set(true)
         }
     }
 
-    tasks.register<JacocoReport>("jacocoFunTestReport").configure {
+    tasks.register<JacocoReport>("jacocoFunTestReport") {
         description = "Generates code coverage report for the funTest task."
         group = "Reporting"
 
@@ -383,14 +383,14 @@ subprojects {
         }
     }
 
-    tasks.register("jacocoReport").configure {
+    tasks.register("jacocoReport") {
         description = "Generates code coverage reports for all test tasks."
         group = "Reporting"
 
         dependsOn(tasks.withType<JacocoReport>())
     }
 
-    tasks.named("check").configure {
+    tasks.named("check") {
         dependsOn(tasks["funTest"])
     }
 
@@ -404,12 +404,12 @@ subprojects {
         }
     }
 
-    tasks.register<Jar>("sourcesJar").configure {
+    tasks.register<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
         from(sourceSets["main"].allSource)
     }
 
-    tasks.register<Jar>("dokkaHtmlJar").configure {
+    tasks.register<Jar>("dokkaHtmlJar") {
         dependsOn(tasks.dokkaHtml)
 
         description = "Assembles a jar archive containing the minimalistic HTML documentation."
@@ -419,7 +419,7 @@ subprojects {
         from(tasks.dokkaHtml)
     }
 
-    tasks.register<Jar>("dokkaJavadocJar").configure {
+    tasks.register<Jar>("dokkaJavadocJar") {
         dependsOn(tasks.dokkaJavadoc)
 
         description = "Assembles a jar archive containing the Javadoc documentation."
@@ -464,7 +464,7 @@ subprojects {
 // Gradle's "dependencies" task selector only executes on a single / the current project [1]. However, sometimes viewing
 // all dependencies at once is beneficial, e.g. for debugging version conflict resolution.
 // [1]: https://docs.gradle.org/current/userguide/viewing_debugging_dependencies.html#sec:listing_dependencies
-tasks.register("allDependencies").configure {
+tasks.register("allDependencies") {
     val dependenciesTasks = allprojects.map { it.tasks.named<DependencyReportTask>("dependencies") }
     dependsOn(dependenciesTasks)
 

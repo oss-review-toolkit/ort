@@ -48,7 +48,7 @@ tasks.addRule("Pattern: yarn<Command>") {
     if (taskName.startsWith("yarn")) {
         val command = taskName.removePrefix("yarn").replaceFirstChar { it.lowercase(Locale.ROOT) }
 
-        tasks.register<Exec>(taskName).configure {
+        tasks.register<Exec>(taskName) {
             // Execute the Yarn version downloaded by Gradle using the NodeJs version downloaded by Gradle.
             commandLine = listOf(nodeExecutable.path, yarnJs.path, command)
 
@@ -124,15 +124,15 @@ tasks {
  * Resemble the Java plugin tasks for convenience.
  */
 
-tasks.register("build").configure {
+tasks.register("build") {
     dependsOn(listOf("yarnBuild", "yarnLint"))
 }
 
-tasks.register("check").configure {
+tasks.register("check") {
     dependsOn("yarnLint")
 }
 
-tasks.register<Delete>("clean").configure {
+tasks.register<Delete>("clean") {
     delete("build")
     delete("node_modules")
     delete("yarn-error.log")

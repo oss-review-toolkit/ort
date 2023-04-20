@@ -33,7 +33,7 @@ dependencies {
     testImplementation(libs.detektTest)
 }
 
-tasks.named<Jar>("jar").configure {
+tasks.named<Jar>("jar") {
     doLast {
         val out = serviceOf<StyledTextOutputFactory>().create("detekt-rules")
         val message = "The detekt-rules have changed. You need to stop the Gradle daemon to allow the detekt plugin " +
