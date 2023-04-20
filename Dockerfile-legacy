@@ -70,7 +70,7 @@ ENV \
     SBT_VERSION=1.6.1 \
     YARN_VERSION=1.22.17 \
     # SDK versions.
-    ANDROID_SDK_VERSION=6858069 \
+    ANDROID_SDK_VERSION=9477386 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
     GOPATH=/tmp/go
