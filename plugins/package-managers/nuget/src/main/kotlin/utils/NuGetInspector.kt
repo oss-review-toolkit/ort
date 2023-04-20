@@ -53,7 +53,7 @@ private val json = Json { ignoreUnknownKeys = true }
 internal object NuGetInspector : CommandLineTool {
     override fun command(workingDir: File?) = "nuget-inspector"
 
-    private fun runNuGetInspector(definitionFile: File, nugetConfig: String?): Result {
+    private fun inspect(definitionFile: File, nugetConfig: String?): Result {
         val workingDir = definitionFile.parentFile
         val outputFile = createOrtTempFile(prefix = "nuget-inspector", suffix = ".json")
 
@@ -86,7 +86,7 @@ internal object NuGetInspector : CommandLineTool {
         analysisRoot: File,
         nugetConfig: String?
     ): List<ProjectAnalyzerResult> {
-        val result = runNuGetInspector(definitionFile, nugetConfig)
+        val result = inspect(definitionFile, nugetConfig)
         val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
         val packages = result.dependencies.toMutableSet().toOrtPackages()
         val errorMessage = collectErrorMessage(result)

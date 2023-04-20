@@ -108,7 +108,7 @@ class Pip(
 
         return runCatching {
             try {
-                PythonInspector.run(
+                PythonInspector.inspect(
                     workingDir = workingDir,
                     definitionFile = definitionFile,
                     pythonVersion = pythonVersionOption.replace(".", ""),

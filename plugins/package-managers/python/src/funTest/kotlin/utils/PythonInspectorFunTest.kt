@@ -34,7 +34,7 @@ class PythonInspectorFunTest : StringSpec({
         val workingDir = definitionFile.parentFile
 
         val result = try {
-            PythonInspector.run(
+            PythonInspector.inspect(
                 workingDir = workingDir,
                 definitionFile = definitionFile,
                 pythonVersion = "27"

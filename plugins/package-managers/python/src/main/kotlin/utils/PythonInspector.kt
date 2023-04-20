@@ -61,7 +61,7 @@ internal object PythonInspector : CommandLineTool, Logging {
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[0.9.2,)")
 
-    fun run(
+    fun inspect(
         workingDir: File,
         definitionFile: File,
         pythonVersion: String = "38",
