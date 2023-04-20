@@ -59,7 +59,7 @@ dependencies {
     funTestImplementation(testFixtures(project(":analyzer")))
 }
 
-val processResources = tasks.named<Copy>("processResources").configure {
+val processResources = tasks.named<Copy>("processResources") {
     val gradlePluginProject = project(":plugins:package-managers:gradle-plugin")
     val gradlePluginJarTask = gradlePluginProject.tasks.named<Jar>("fatJar")
     val gradlePluginJarFile = gradlePluginJarTask.get().outputs.files.singleFile
