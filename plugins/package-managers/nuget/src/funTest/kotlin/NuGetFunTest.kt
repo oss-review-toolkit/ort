@@ -34,6 +34,7 @@ class NuGetFunTest : StringSpec({
         val expectedResultFile = getAssetFile("dotnet-expected-output.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -42,6 +43,7 @@ class NuGetFunTest : StringSpec({
         val expectedResultFile = getAssetFile("dotnet-license-data-extraction.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -50,6 +52,7 @@ class NuGetFunTest : StringSpec({
         val expectedResultFile = getAssetFile("dotnet-expected-output-with-nuspec.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -58,6 +61,7 @@ class NuGetFunTest : StringSpec({
         val expectedResultFile = getAssetFile("dotnet-many-deps-resolution.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -66,6 +70,7 @@ class NuGetFunTest : StringSpec({
         val expectedResultFile = getAssetFile("nuget-expected-output.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
@@ -79,6 +84,7 @@ class NuGetFunTest : StringSpec({
                 "dotnet/subProjectTestWithNugetConfig/NugetConfig/nuget.config"
             ).absolutePath
         ).resolveSingleProject(definitionFile)
+
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 })
