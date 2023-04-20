@@ -76,3 +76,16 @@ val processResources = tasks.named<Copy>("processResources") {
 
 // Work around https://youtrack.jetbrains.com/issue/IDEA-173367.
 rootProject.idea.project.settings.taskTriggers.beforeBuild(processResources)
+
+tasks.named<JacocoReport>("jacocoFunTestReport") {
+    classDirectories.setFrom(
+        files(
+            classDirectories.files.map {
+                fileTree(it) {
+                    // Avoid JaCoCo to look at the JAR resource.
+                    exclude("**/gradle-plugin.jar/**")
+                }
+            }
+        )
+    )
+}
