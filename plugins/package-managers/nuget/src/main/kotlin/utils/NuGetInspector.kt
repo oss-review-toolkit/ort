@@ -192,7 +192,6 @@ internal fun NuGetInspector.Result.toOrtProject(
         name = definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath,
         version = ""
     )
-    val workingDir = definitionFile.parentFile
 
     val nestedPackages = mutableListOf<NuGetInspector.PackageData>()
 
@@ -208,7 +207,7 @@ internal fun NuGetInspector.Result.toOrtProject(
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         vcs = VcsInfo.EMPTY,
         authors = setOf(),
-        vcsProcessed = PackageManager.processProjectVcs(workingDir),
+        vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile),
         declaredLicenses = setOf(),
         homepageUrl = "",
         scopeDependencies = scopes
