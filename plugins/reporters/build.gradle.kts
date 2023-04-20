@@ -34,6 +34,7 @@ dependencies {
     api(project(":plugins:reporters:gitlab-reporter"))
     api(project(":plugins:reporters:opossum-reporter"))
     api(project(":plugins:reporters:spdx-reporter"))
+    api(project(":plugins:reporters:static-html-reporter"))
 }
 
 configure<PublishingExtension> {

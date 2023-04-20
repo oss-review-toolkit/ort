@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters
+package org.ossreviewtoolkit.plugins.reporters.statichtml
 
 import com.vladsch.flexmark.html.HtmlRenderer
 import com.vladsch.flexmark.parser.Parser
@@ -531,7 +531,7 @@ class StaticHtmlReporter : Reporter {
             td {
                 row.concludedLicense?.let {
                     em { +"Concluded License:" }
-                    dl { dd { div { licensesLink(row.concludedLicense) } } }
+                    dl { dd { div { licensesLink(it) } } }
                 }
 
                 if (row.declaredLicenses.isNotEmpty()) {
@@ -583,9 +583,9 @@ class StaticHtmlReporter : Reporter {
                     }
                 }
 
-                if (row.effectiveLicense != null) {
+                row.effectiveLicense?.let {
                     em { +"Effective License:" }
-                    dl { dd { div { licensesLink(row.effectiveLicense) } } }
+                    dl { dd { div { licensesLink(it) } } }
                 }
             }
 
