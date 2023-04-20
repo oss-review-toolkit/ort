@@ -57,9 +57,7 @@ dependencies {
     implementation(libs.freemarker)
     implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
     implementation(libs.kotlinxHtml)
-    implementation(libs.poiOoxml)
 
     // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise, the formatting of
     // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.

@@ -44,7 +44,6 @@ maven = "3.9.1"
 mavenResolver = "1.9.8"
 mockk = "1.13.5"
 okhttp = "4.10.0"
-poiOoxml = "5.2.3"
 postgres = "42.6.0"
 postgresEmbedded = "1.0.1"
 reflections = "0.10.2"
@@ -138,7 +137,6 @@ mavenResolverTransportHttp = { module = "org.apache.maven.resolver:maven-resolve
 mavenResolverTransportWagon = { module = "org.apache.maven.resolver:maven-resolver-transport-wagon", version.ref = "mavenResolver" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-poiOoxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poiOoxml" }
 postgres = { module = "org.postgresql:postgresql", version.ref = "postgres" }
 postgresEmbedded = { module = "com.opentable.components:otj-pg-embedded", version.ref = "postgresEmbedded" }
 reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
