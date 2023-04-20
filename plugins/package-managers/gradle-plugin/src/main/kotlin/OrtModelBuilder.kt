@@ -270,8 +270,8 @@ internal class OrtModelBuilder : ToolingModelBuilder {
                         }
                     }
 
-                    logger.warn(message)
-                    warnings += message
+                    logger.error(message)
+                    errors += message
 
                     null
                 }
