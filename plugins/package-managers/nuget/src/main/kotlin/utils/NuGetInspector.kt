@@ -44,11 +44,9 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 private val json = Json { ignoreUnknownKeys = true }
 
@@ -73,25 +71,12 @@ internal object NuGetInspector : CommandLineTool {
             }
         }
 
-        return runCatching<Result> {
-            try {
-                run(workingDir, *commandLineOptions.toTypedArray())
-                outputFile.inputStream().use { json.decodeFromStream(it) }
-            } finally {
-                workingDir.resolve(".cache").safeDeleteRecursively(force = true)
-                outputFile.delete()
-            }
-        }.onFailure { e ->
-            e.showStackTrace()
-            PackageManager.logger.error {
-                "Unable to determine dependencies for definition file '${definitionFile.absolutePath}': " +
-                        e.collectMessages()
-            }
+        return try {
+            run(workingDir, *commandLineOptions.toTypedArray())
+            outputFile.inputStream().use { json.decodeFromStream(it) }
+        } finally {
+            workingDir.resolve(".cache").safeDeleteRecursively(force = true)
             outputFile.delete()
-            throw e
-        }.getOrElse {
-            outputFile.delete()
-            throw it
         }
     }
 

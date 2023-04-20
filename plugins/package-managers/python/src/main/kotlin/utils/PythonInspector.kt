@@ -103,7 +103,6 @@ internal object PythonInspector : CommandLineTool, Logging {
 
         return try {
             run(workingDir, *commandLineOptions.toTypedArray())
-
             outputFile.inputStream().use { json.decodeFromStream(it) }
         } finally {
             outputFile.delete()
