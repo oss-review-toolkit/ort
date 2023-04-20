@@ -32,6 +32,7 @@ import com.github.ajalt.clikt.parameters.types.file
 import java.util.regex.Pattern
 
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
@@ -133,7 +134,12 @@ class SetDependencyRepresentationCommand : CliktCommand(
     ).flag("--no-placeholders", "-P")
 
     override fun run() {
-        val converters = sequenceOf(::convertOrtResult, ::convertAnalyzerResult, ::convertProjectAnalyzerResult)
+        val converters = sequenceOf(
+            ::convertOrtResult,
+            ::convertAnalyzerResult,
+            ::convertProjectAnalyzerResult,
+            ::convertPackageManagerResult
+        )
         converters.firstNotNullOfOrNull { it() }?.let { writeResult(it) }
             ?: throw UsageError("$ortFile does not contain a supported result.")
     }
@@ -172,6 +178,14 @@ class SetDependencyRepresentationCommand : CliktCommand(
 
             val analyzerResult = AnalyzerResultBuilder().addResult(result).build()
             convertToTarget(analyzerResult)
+        }
+
+    /**
+     * Convert a [PackageManagerResult]. The result file then contains an [AnalyzerResult].
+     */
+    private fun convertPackageManagerResult(): Any? =
+        convertResult<PackageManagerResult> { result ->
+            convertToTarget(result.toAnalyzerResult())
         }
 
     /**
@@ -262,3 +276,20 @@ private fun matchProperty(name: String, expectedValue: String): Regex =
  */
 private fun replacement(property: String, oldValue: String, newValue: String): Pair<Regex, String> =
     matchProperty(property, oldValue) to "$1$newValue"
+
+/**
+ * Convert this [PackageManagerResult] to an [AnalyzerResult].
+ */
+private fun PackageManagerResult.toAnalyzerResult(): AnalyzerResult {
+    val builder = AnalyzerResultBuilder()
+
+    val results = projectResults.values.flatten()
+    results.forEach { builder.addResult(it) }
+
+    val managerName = results.first().project.id.type
+    dependencyGraph?.let {
+        builder.addDependencyGraph(managerName, it).addPackages(sharedPackages)
+    }
+
+    return builder.build()
+}
