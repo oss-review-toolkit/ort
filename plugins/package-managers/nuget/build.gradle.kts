@@ -30,17 +30,20 @@ plugins {
 dependencies {
     api(project(":analyzer"))
     api(project(":model"))
-    api(project(":utils:common-utils"))
 
     api(libs.log4jApiKotlin)
-    api(libs.semver4j)
 
     implementation(project(":downloader"))
+    implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
     implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.jacksonCore)
+    implementation(libs.jacksonDatabind)
+    implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonModuleKotlin)
+    implementation(libs.semver4j)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 }
