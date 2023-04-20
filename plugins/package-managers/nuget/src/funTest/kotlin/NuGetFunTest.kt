@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class NuGetFunTest : StringSpec({
-    "Project dependencies are detected correctly" {
+    "DotNet project dependencies are detected correctly" {
         val definitionFile = getAssetFile("dotnet/subProjectTest/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-expected-output.yml")
 
@@ -61,7 +61,7 @@ class NuGetFunTest : StringSpec({
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Project dependencies are detected correctly" {
+    "NuGet project dependencies are detected correctly" {
         val definitionFile = getAssetFile("nuget/packages.config")
         val expectedResultFile = getAssetFile("nuget-expected-output.yml")
 
