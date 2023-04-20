@@ -24,6 +24,7 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
+import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
@@ -71,7 +72,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.withInvariantIssues().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly with a nuget.config present" {
