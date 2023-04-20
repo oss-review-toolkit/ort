@@ -88,7 +88,7 @@ internal object NuGetInspector : CommandLineTool {
     ): List<ProjectAnalyzerResult> {
         val result = inspect(definitionFile, nugetConfig)
         val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
-        val packages = result.dependencies.toMutableSet().toOrtPackages()
+        val packages = result.dependencies.toOrtPackages()
         val errorMessage = collectErrorMessage(result)
         val issues = if (errorMessage.isNotBlank()) {
             listOf(
@@ -224,7 +224,7 @@ private fun NuGetInspector.PackageData.toPackageReference() =
         dependencies = dependencies.toPackageReferences()
     )
 
-internal fun Set<NuGetInspector.PackageData>.toOrtPackages(): Set<Package> =
+internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(mutableSetOf()) { (_, packages) ->
         val pkg = packages.first()
 
