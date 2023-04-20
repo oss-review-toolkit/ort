@@ -69,6 +69,7 @@ include(":plugins:reporters:fossid")
 include(":plugins:reporters:gitlab")
 include(":plugins:reporters:opossum")
 include(":plugins:reporters:spdx")
+include(":plugins:reporters:static-html")
 include(":reporter")
 include(":reporter-web-app")
 include(":scanner")
@@ -114,6 +115,7 @@ project(":plugins:reporters:fossid").name = "fossid-reporter"
 project(":plugins:reporters:gitlab").name = "gitlab-reporter"
 project(":plugins:reporters:opossum").name = "opossum-reporter"
 project(":plugins:reporters:spdx").name = "spdx-reporter"
+project(":plugins:reporters:static-html").name = "static-html-reporter"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"

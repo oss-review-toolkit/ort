@@ -53,15 +53,9 @@ dependencies {
     implementation(libs.asciidoctorj)
     implementation(libs.asciidoctorjPdf)
     implementation(libs.commonsCompress)
-    implementation(libs.flexmark)
     implementation(libs.freemarker)
     implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxHtml)
-
-    // This is required to not depend on the version of Apache Xalan bundled with the JDK. Otherwise, the formatting of
-    // the HTML generated in StaticHtmlReporter is slightly different with different Java versions.
-    implementation(libs.saxonHe)
 
     testImplementation(libs.mockk)
 

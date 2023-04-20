@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.reporter.reporters.StaticHtmlReporter
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
 org.ossreviewtoolkit.reporter.reporters.freemarker.PlainTextTemplateReporter
