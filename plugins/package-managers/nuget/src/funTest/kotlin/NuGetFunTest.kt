@@ -75,13 +75,13 @@ class NuGetFunTest : StringSpec({
     }
 
     "Project dependencies are detected correctly with a nuget.config present" {
-        val definitionFile = getAssetFile("dotnet/subProjectTestWithNugetConfig/test.csproj")
+        val definitionFile = getAssetFile("dotnet/subProjectTestWithNuGetConfig/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-with-csproj-and-nuget-config-output.yml")
 
         val result = create(
             "NuGet",
             "nugetConfigFile" to getAssetFile(
-                "dotnet/subProjectTestWithNugetConfig/NugetConfig/nuget.config"
+                "dotnet/subProjectTestWithNuGetConfig/NuGetConfig/nuget.config"
             ).absolutePath
         ).resolveSingleProject(definitionFile)
 
