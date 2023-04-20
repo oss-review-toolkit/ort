@@ -219,7 +219,7 @@ private fun List<NuGetInspector.PackageData>.toPackageReferences(): SortedSet<Pa
 
 private fun NuGetInspector.PackageData.toPackageReference() =
     PackageReference(
-        id = Identifier(type = TYPE, namespace = "", name = name, version = version ?: ""),
+        id = Identifier(type = TYPE, namespace = "", name = name, version = version.orEmpty()),
         dependencies = dependencies.toPackageReferences()
     )
 
