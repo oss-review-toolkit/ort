@@ -54,7 +54,7 @@ class StaticHtmlReporterFunTest : WordSpec({
 
         "successfully export to a static HTML page" {
             val timeStampPattern = Regex("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?Z")
-            val ortResult = readOrtResult("src/funTest/assets/static-html-reporter-test-input.yml")
+            val ortResult = readOrtResult("src/funTest/assets/reporter-test-input.yml")
             val actualReport = generateReport(ortResult).replace(timeStampPattern, "<REPLACE_TIMESTAMP>")
 
             val expectedReport = patchExpectedResult(
