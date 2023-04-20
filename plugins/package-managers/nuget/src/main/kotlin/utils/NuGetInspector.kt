@@ -177,13 +177,12 @@ internal fun NuGetInspector.Result.toOrtProject(
 }
 
 private fun List<NuGetInspector.PackageData>.toPackageReferences(): SortedSet<PackageReference> =
-    mapTo(sortedSetOf()) { it.toPackageReference() }
-
-private fun NuGetInspector.PackageData.toPackageReference() =
-    PackageReference(
-        id = Identifier(type = TYPE, namespace = "", name = name, version = version.orEmpty()),
-        dependencies = dependencies.toPackageReferences()
-    )
+    mapTo(sortedSetOf()) {
+        PackageReference(
+            id = Identifier(type = TYPE, namespace = "", name = it.name, version = it.version.orEmpty()),
+            dependencies = it.dependencies.toPackageReferences()
+        )
+    }
 
 internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(mutableSetOf()) { (_, packages) ->
