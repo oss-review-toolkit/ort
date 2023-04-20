@@ -206,9 +206,9 @@ internal fun NuGetInspector.Result.toOrtProject(
         id = id,
         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
         vcs = VcsInfo.EMPTY,
-        authors = setOf(),
+        authors = emptySet(),
         vcsProcessed = PackageManager.processProjectVcs(definitionFile.parentFile),
-        declaredLicenses = setOf(),
+        declaredLicenses = emptySet(),
         homepageUrl = "",
         scopeDependencies = scopes
     )
