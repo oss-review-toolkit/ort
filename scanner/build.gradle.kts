@@ -65,7 +65,7 @@ dependencies {
     testImplementation(libs.wiremock)
 }
 
-tasks.named<KotlinCompile>("compileTestKotlin").configure {
+tasks.named<KotlinCompile>("compileTestKotlin") {
     val customCompilerArgs = listOf(
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )

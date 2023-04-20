@@ -69,7 +69,7 @@ graalvmNative {
     }
 }
 
-tasks.named<BuildNativeImageTask>("nativeCompile").configure {
+tasks.named<BuildNativeImageTask>("nativeCompile") {
     // Gradle's "Copy" task cannot handle symbolic links, see https://github.com/gradle/gradle/issues/3982. That is why
     // links contained in the GraalVM distribution archive get broken during provisioning and are replaced by empty
     // files. Address this by recreating the links in the toolchain directory.
@@ -99,7 +99,7 @@ tasks.named<BuildNativeImageTask>("nativeCompile").configure {
     }
 }
 
-tasks.named<CreateStartScripts>("startScripts").configure {
+tasks.named<CreateStartScripts>("startScripts") {
     doLast {
         // Work around the command line length limit on Windows when passing the classpath to Java, see
         // https://github.com/gradle/gradle/issues/1989#issuecomment-395001392.
