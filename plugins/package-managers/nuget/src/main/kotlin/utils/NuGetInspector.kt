@@ -246,7 +246,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
             val type = licenseData["LicenseType"].orEmpty()
 
             listOfNotNull(
-                licenseData["LicenseExpression"]?.takeIf { type.lowercase() == "expression" },
+                licenseData["LicenseExpression"]?.takeIf { type.equals("expression", ignoreCase = true) },
                 licenseData["LicenseUrl"]
             ).firstOrNull()?.also { declaredLicenses += it }
         }
