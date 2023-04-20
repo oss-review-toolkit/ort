@@ -38,7 +38,7 @@ class NuGetFunTest : StringSpec({
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "License Extraction is done correctly" {
+    "License extraction is done correctly" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithCsProj/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-license-data-extraction.yml")
 
@@ -47,7 +47,7 @@ class NuGetFunTest : StringSpec({
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "CsProj file with a .nuspec is detected correctly" {
+    "A .csproj file with an accompanying .nuspec file is detected correctly" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithNuspec/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-expected-output-with-nuspec.yml")
 
@@ -56,7 +56,7 @@ class NuGetFunTest : StringSpec({
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Many deps are resolved correctly at once in a .csproj file" {
+    "A large number of dependencies is resolved at once in a .csproj file" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithManyDepsCsProj/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-many-deps-resolution.yml")
 
@@ -74,7 +74,7 @@ class NuGetFunTest : StringSpec({
         result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
     }
 
-    "Project dependencies are detected correctly with nuget.config" {
+    "Project dependencies are detected correctly with a nuget.config present" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithNugetConfig/test.csproj")
         val expectedResultFile = getAssetFile("dotnet-with-csproj-and-nuget-config-output.yml")
 
