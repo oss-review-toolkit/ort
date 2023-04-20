@@ -22,10 +22,7 @@ package org.ossreviewtoolkit.reporter
 import java.io.File
 
 import org.ossreviewtoolkit.model.OrtResult
-import org.ossreviewtoolkit.model.config.PathExclude
-import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.utils.common.Plugin
-import org.ossreviewtoolkit.utils.common.joinNonBlank
 
 /**
  * A reporter that creates a human-readable report from a given [OrtResult].
@@ -49,7 +46,3 @@ interface Reporter : Plugin {
         options: Map<String, String> = emptyMap()
     ): List<File>
 }
-
-internal val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
-
-internal val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)

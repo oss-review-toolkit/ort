@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
+import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseLocation
@@ -54,8 +55,8 @@ import org.ossreviewtoolkit.reporter.ReportTableModelMapper
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.containsUnresolved
-import org.ossreviewtoolkit.reporter.description
 import org.ossreviewtoolkit.utils.common.isValidUri
+import org.ossreviewtoolkit.utils.common.joinNonBlank
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
@@ -68,6 +69,10 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 private val SCOPE_EXCLUDE_LIST_COMPARATOR = compareBy<Map.Entry<String, List<ScopeExclude>>>(
     { it.value.isNotEmpty() }, { it.key }
 )
+
+private val PathExclude.description: String get() = joinNonBlank(reason.toString(), comment)
+
+private val ScopeExclude.description: String get() = joinNonBlank(reason.toString(), comment)
 
 @Suppress("LargeClass", "TooManyFunctions")
 class StaticHtmlReporter : Reporter {
