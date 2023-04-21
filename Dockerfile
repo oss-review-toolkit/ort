@@ -238,7 +238,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 FROM ort-base-image AS gobuild
 
 ARG GO_DEP_VERSION=0.5.4
-ARG GO_VERSION=1.20
+ARG GO_VERSION=1.20.3
 ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
