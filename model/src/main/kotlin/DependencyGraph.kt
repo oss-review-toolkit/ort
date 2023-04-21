@@ -154,7 +154,7 @@ data class DependencyGraph(
      * Transform the data stored in this object to the classical layout of dependency information, which is a set of
      * [Scope]s referencing the packages they depend on.
      */
-    fun createScopes(): SortedSet<Scope> = createScopesFor(scopes, unqualify = false)
+    fun createScopes(): SortedSet<Scope> = createScopesFor(scopes, unqualify = true)
 
     /**
      * Transform a subset of the data stored in this object to the classical layout of dependency information. This is
