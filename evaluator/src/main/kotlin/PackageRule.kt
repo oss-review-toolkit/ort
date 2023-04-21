@@ -25,6 +25,8 @@ import org.ossreviewtoolkit.model.LicenseSource
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Vulnerability
+import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
@@ -77,7 +79,8 @@ open class PackageRule(
     }
 
     /**
-     * A [RuleMatcher] that checks whether any vulnerability for the [package][pkg] has a score that equals or is
+     * A [RuleMatcher] that checks whether any vulnerability for the [package][pkg] has a
+     * [reference][Vulnerability.references] with a [severity][VulnerabilityReference.severity] that equals or is
      * greater than [threshold] according to the [scoringSystem] and the belonging [severityComparator].
      */
     fun hasVulnerability(threshold: String, scoringSystem: String, severityComparator: (String, String) -> Boolean) =
