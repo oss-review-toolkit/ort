@@ -25,10 +25,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
+import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtPackages
+import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.toOrtProject
 
 /**
  * A package manager implementation for [.NET](https://docs.microsoft.com/en-us/dotnet/core/tools/) project files that
@@ -54,15 +57,39 @@ class NuGet(
         ) = NuGet(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val nugetConfigOption = options[OPTION_NUGET_CONFIG]
+    private val nugetConfig = options[OPTION_NUGET_CONFIG]
 
     override fun resolveDependencies(
         definitionFile: File,
         labels: Map<String, String>
-    ): List<ProjectAnalyzerResult> = NuGetInspector.resolveDependencies(
-        definitionFile = definitionFile,
-        managerName = managerName,
-        analysisRoot = analysisRoot,
-        nugetConfig = nugetConfigOption,
-    )
+    ): List<ProjectAnalyzerResult> {
+        val result = NuGetInspector.inspect(definitionFile, nugetConfig)
+        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
+        val packages = result.dependencies.toOrtPackages()
+        val errorMessage = collectErrorMessage(result)
+        val issues = if (errorMessage.isNotBlank()) {
+            listOf(
+                Issue(
+                    message = errorMessage,
+                    source = managerName
+                )
+            )
+        } else {
+            emptyList()
+        }
+
+        return listOf(ProjectAnalyzerResult(project, packages, issues))
+    }
+}
+
+private fun collectErrorMessage(result: NuGetInspector.Result): String {
+    var errorMessage = ""
+    result.headers.first().errors.forEach {
+        errorMessage += it + "\n"
+    }
+    result.packages.first().errors.forEach {
+        errorMessage += it + "\n"
+    }
+    result.dependencies.forEach { dep -> dep.errors.forEach { errorMessage += it + "\n" } }
+    return errorMessage
 }
