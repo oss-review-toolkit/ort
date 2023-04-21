@@ -33,11 +33,9 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
-import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
-import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
@@ -53,7 +51,7 @@ private val json = Json { ignoreUnknownKeys = true }
 internal object NuGetInspector : CommandLineTool {
     override fun command(workingDir: File?) = "nuget-inspector"
 
-    private fun inspect(definitionFile: File, nugetConfig: String?): Result {
+    fun inspect(definitionFile: File, nugetConfig: String?): Result {
         val workingDir = definitionFile.parentFile
         val outputFile = createOrtTempFile(prefix = "nuget-inspector", suffix = ".json")
 
@@ -78,30 +76,6 @@ internal object NuGetInspector : CommandLineTool {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
             outputFile.delete()
         }
-    }
-
-    fun resolveDependencies(
-        definitionFile: File,
-        managerName: String,
-        analysisRoot: File,
-        nugetConfig: String?
-    ): List<ProjectAnalyzerResult> {
-        val result = inspect(definitionFile, nugetConfig)
-        val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
-        val packages = result.dependencies.toOrtPackages()
-        val errorMessage = collectErrorMessage(result)
-        val issues = if (errorMessage.isNotBlank()) {
-            listOf(
-                Issue(
-                    message = errorMessage,
-                    source = managerName
-                )
-            )
-        } else {
-            emptyList()
-        }
-
-        return listOf(ProjectAnalyzerResult(project, packages, issues))
     }
 
     @Serializable
@@ -168,18 +142,6 @@ private fun List<NuGetInspector.Party>.toAuthors(): SortedSet<String> =
             }
         }.takeIf { it.isNotBlank() }
     }
-
-private fun collectErrorMessage(result: NuGetInspector.Result): String {
-    var errorMessage = ""
-    result.headers.first().errors.forEach {
-        errorMessage += it + "\n"
-    }
-    result.packages.first().errors.forEach {
-        errorMessage += it + "\n"
-    }
-    result.dependencies.forEach { dep -> dep.errors.forEach { errorMessage += it + "\n" } }
-    return errorMessage
-}
 
 internal fun NuGetInspector.Result.toOrtProject(
     managerName: String,
