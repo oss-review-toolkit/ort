@@ -39,17 +39,6 @@ open class LocalFileStorage(
 ) : FileStorage {
     private companion object : Logging
 
-    init {
-        if (!directory.exists()) {
-            logger.debug { "Creating directory '${directory.invariantSeparatorsPath}' for local file storage." }
-            directory.safeMkdirs()
-        } else {
-            require(directory.isDirectory) {
-                "Cannot use storage directory '${directory.invariantSeparatorsPath}' because it is not a directory."
-            }
-        }
-    }
-
     /**
      * Return the internally used path, which might differ from the provided [path] e.g. in case a suffix is added to
      * denote a compression scheme.
