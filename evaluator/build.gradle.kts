@@ -56,6 +56,9 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 tasks.register<Download>("updateOsadlMatrix") {
+    description = "Download the OSADL matrix in JSON format and add it as a resource."
+    group = "OSADL"
+
     src("https://www.osadl.org/fileadmin/checklists/matrixseqexpl.json")
     dest("src/main/resources/rules/matrixseqexpl.json")
 }
