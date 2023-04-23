@@ -1,7 +1,2 @@
 org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 org.ossreviewtoolkit.reporter.reporters.evaluatedmodel.EvaluatedModelReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.PlainTextTemplateReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.DocBookTemplateReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.HtmlTemplateReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.ManPageTemplateReporter
-org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc.PdfTemplateReporter
