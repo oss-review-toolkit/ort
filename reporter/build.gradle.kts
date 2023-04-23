@@ -50,7 +50,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
     implementation(libs.commonsCompress)
-    implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
 
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
