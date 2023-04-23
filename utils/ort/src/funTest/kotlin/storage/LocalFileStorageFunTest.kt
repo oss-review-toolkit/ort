@@ -30,6 +30,8 @@ import io.kotest.matchers.shouldNot
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
+import java.io.InputStream
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.test.createTestTempDir
@@ -54,7 +56,7 @@ class LocalFileStorageFunTest : WordSpec() {
                 val directory = createTestTempDir()
                 val storageDirectory = directory.resolve("create/storage")
 
-                LocalFileStorage(storageDirectory)
+                LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
 
                 storageDirectory.isDirectory shouldBe true
             }
@@ -62,8 +64,8 @@ class LocalFileStorageFunTest : WordSpec() {
             "fail if the directory is a file" {
                 val storageDirectory = createTestTempFile()
 
-                shouldThrow<IllegalArgumentException> {
-                    LocalFileStorage(storageDirectory)
+                shouldThrow<IOException> {
+                    LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
                 }
             }
         }
