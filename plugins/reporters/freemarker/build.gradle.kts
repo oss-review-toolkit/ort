@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,22 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
+plugins {
+    // Apply core plugins.
+    `java-library`
+}
 
-import org.ossreviewtoolkit.reporter.Reporter
+dependencies {
+    api(project(":model"))
+    api(project(":reporter"))
+    api(project(":utils:spdx-utils"))
 
-/**
- * A [Reporter] that creates HTML files from [Apache Freemarker][1] templates.
- *
- * [1]: https://freemarker.apache.org
- */
-class HtmlTemplateReporter : AsciiDocTemplateReporter("html", "HtmlTemplate")
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:ort-utils"))
+
+    implementation(libs.freemarker)
+
+    funTestImplementation(testFixtures(project(":reporter")))
+
+    testImplementation(libs.mockk)
+}

@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
+package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import org.ossreviewtoolkit.reporter.Reporter
 
 /**
- * A [Reporter] that creates man pages from [Apache Freemarker][1] templates.
+ * A [Reporter] that creates [DocBook][1] files from [Apache Freemarker][2] templates.
  *
- * [1]: https://freemarker.apache.org
+ * [1]: https://docbook.org
+ * [2]: https://freemarker.apache.org
  */
-class ManPageTemplateReporter : AsciiDocTemplateReporter("manpage", "ManPageTemplate")
+class DocBookTemplateReporter : AsciiDocTemplateReporter("docbook", "DocBookTemplate")

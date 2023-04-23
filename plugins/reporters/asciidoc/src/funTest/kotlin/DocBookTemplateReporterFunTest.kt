@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
+package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe

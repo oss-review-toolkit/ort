@@ -63,9 +63,11 @@ include(":plugins:package-managers:spdx")
 include(":plugins:package-managers:stack")
 include(":plugins:package-managers:unmanaged")
 include(":plugins:reporters")
+include(":plugins:reporters:asciidoc")
 include(":plugins:reporters:ctrlx")
 include(":plugins:reporters:cyclonedx")
 include(":plugins:reporters:fossid")
+include(":plugins:reporters:freemarker")
 include(":plugins:reporters:gitlab")
 include(":plugins:reporters:opossum")
 include(":plugins:reporters:spdx")
@@ -109,9 +111,11 @@ project(":plugins:package-managers:spdx").name = "spdx-package-manager"
 project(":plugins:package-managers:stack").name = "stack-package-manager"
 project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager"
 
+project(":plugins:reporters:asciidoc").name = "asciidoc-reporter"
 project(":plugins:reporters:ctrlx").name = "ctrlx-reporter"
 project(":plugins:reporters:cyclonedx").name = "cyclonedx-reporter"
 project(":plugins:reporters:fossid").name = "fossid-reporter"
+project(":plugins:reporters:freemarker").name = "freemarker-reporter"
 project(":plugins:reporters:gitlab").name = "gitlab-reporter"
 project(":plugins:reporters:opossum").name = "opossum-reporter"
 project(":plugins:reporters:spdx").name = "spdx-reporter"

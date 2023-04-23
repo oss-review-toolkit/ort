@@ -17,29 +17,32 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
+package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.shouldBe
 
-import java.time.LocalDate
-
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.getAssetAsString
 
-class ManPageTemplateReporterFunTest : StringSpec({
-    "ManPage report is created from default template" {
-        val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
+class HtmlTemplateReporterFunTest : StringSpec({
+    "HTML report is created from default template" {
+        val expectedText = getAssetAsString("html-template-reporter-expected-result.html")
 
         val reportContent =
-            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
+            HtmlTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
 
-        reportContent shouldBe patchExpectedResult(
-            expectedResultFile,
-            custom = mapOf("<REPLACE_DATE>" to "${LocalDate.now()}")
-        )
+        reportContent.patchAsciiDocTemplateResult() shouldBe expectedText
     }
 })
+
+private fun String.patchAsciiDocTemplateResult() =
+    // Asciidoctor renders the line breaks platform dependent.
+    replace("\r\n", "\n")
+        .replace("""\d{4}-\d{2}-\d{2}""".toRegex(), "1970-01-01")
+        .replace("""\d{2}:\d{2}:\d{2}""".toRegex(), "00:00:00")
+        // Asciidoctor renders time zones differently depending on the platform.
+        // For macOS the time is rendered as `00:00:00 +0000` while for Linux it is `00:00:00 UTC`.
+        .replace("""[+-]\d{4}""".toRegex(), "UTC")

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker
+package org.ossreviewtoolkit.plugins.reporters.freemarker
 
 import java.io.File
 

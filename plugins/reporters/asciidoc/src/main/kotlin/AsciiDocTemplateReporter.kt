@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.reporter.reporters.freemarker.asciidoc
+package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import java.io.File
 
@@ -26,9 +26,9 @@ import org.asciidoctor.Attributes
 import org.asciidoctor.Options
 import org.asciidoctor.SafeMode
 
+import org.ossreviewtoolkit.plugins.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.reporter.reporters.freemarker.FreemarkerTemplateProcessor
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 

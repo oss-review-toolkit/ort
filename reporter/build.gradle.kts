@@ -50,14 +50,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-common")
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
 
-    implementation(libs.asciidoctorj)
-    implementation(libs.asciidoctorjPdf)
     implementation(libs.commonsCompress)
-    implementation(libs.freemarker)
     implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
-
-    testImplementation(libs.mockk)
 
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))

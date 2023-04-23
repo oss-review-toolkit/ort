@@ -28,9 +28,11 @@ javaPlatform {
 }
 
 dependencies {
+    api(project(":plugins:reporters:asciidoc-reporter"))
     api(project(":plugins:reporters:ctrlx-reporter"))
     api(project(":plugins:reporters:cyclonedx-reporter"))
     api(project(":plugins:reporters:fossid-reporter"))
+    api(project(":plugins:reporters:freemarker-reporter"))
     api(project(":plugins:reporters:gitlab-reporter"))
     api(project(":plugins:reporters:opossum-reporter"))
     api(project(":plugins:reporters:spdx-reporter"))
