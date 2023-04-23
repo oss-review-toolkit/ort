@@ -70,9 +70,10 @@ open class LocalFileStorage(
     }
 
     /**
-     * Return the output stream to be used when writing to the provided [path].
+     * Ensure that [path] resolves to a file in [directory], create any parent directories if needed, and return an
+     * output stream for writing to the file.
      */
-    protected open fun getOutputStream(path: String): OutputStream {
+    protected open fun safeOutputStream(path: String): OutputStream {
         val file = directory.resolve(path)
 
         require(file.canonicalFile.startsWith(directory.canonicalFile)) {
@@ -86,7 +87,7 @@ open class LocalFileStorage(
 
     @Synchronized
     override fun write(path: String, inputStream: InputStream) {
-        getOutputStream(path).use { outputStream ->
+        safeOutputStream(path).use { outputStream ->
             inputStream.use { it.copyTo(outputStream) }
         }
     }

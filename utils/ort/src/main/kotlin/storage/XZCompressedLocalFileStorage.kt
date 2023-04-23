@@ -49,5 +49,5 @@ class XZCompressedLocalFileStorage(
             }
         }
 
-    override fun getOutputStream(path: String) = XZCompressorOutputStream(super.getOutputStream(transformPath(path)))
+    override fun safeOutputStream(path: String) = XZCompressorOutputStream(super.safeOutputStream(transformPath(path)))
 }
