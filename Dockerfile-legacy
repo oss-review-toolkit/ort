@@ -40,13 +40,16 @@ ARG SCANCODE_VERSION="31.2.4"
 
 FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS build
 
+# Repeat global arguments used in this stage.
+ARG CRT_FILES
+ARG ORT_VERSION
+
 COPY . /usr/local/src/ort
 COPY "$CRT_FILES" /tmp/certificates/
 
 WORKDIR /usr/local/src/ort
 
 # Gradle build.
-ARG ORT_VERSION
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/export_proxy_certificates.sh /tmp/certificates/ && \
@@ -55,6 +58,12 @@ RUN --mount=type=cache,target=/tmp/.gradle/ \
     ./gradlew --no-daemon --stacktrace -Pversion=$ORT_VERSION :cli:installDist :helper-cli:startScripts
 
 FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS run
+
+# Repeat global arguments used in this stage.
+ARG CRT_FILES
+ARG NUGET_INSPECTOR_VERSION
+ARG PYTHON_INSPECTOR_VERSION
+ARG SCANCODE_VERSION
 
 ENV \
     # Package manager versions.
@@ -134,8 +143,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
     rm -rf /var/lib/apt/lists/*
 
 COPY scripts/*.sh /opt/ort/bin/
-
-ARG CRT_FILES
 COPY "$CRT_FILES" /tmp/certificates/
 
 # Custom install commands.
@@ -171,12 +178,10 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     gem install cocoapods -v $COCOAPODS_VERSION
 
 # Add scanners (in versions known to work).
-ARG SCANCODE_VERSION
 RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt && \
     pip install --no-cache-dir --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION && \
     rm requirements.txt
 
-ARG PYTHON_INSPECTOR_VERSION
 RUN pip install --no-cache-dir python-inspector==$PYTHON_INSPECTOR_VERSION
 
 # nuget-inspector
@@ -192,16 +197,16 @@ RUN mkdir -p $NUGET_DOTNET_HOME \
     && curl --location https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
     | tar -C $NUGET_DOTNET_HOME -xz
 
-ARG NUGET_INSPECTOR_VERSION
 RUN mkdir -p $NUGET_INSPECTOR_HOME \
     && curl -L https://github.com/nexB/nuget-inspector/releases/download/v${NUGET_INSPECTOR_VERSION}/nuget-inspector-v${NUGET_INSPECTOR_VERSION}-linux-x64.tar.gz \
     | tar --strip-components=1 -C $NUGET_INSPECTOR_HOME -xz
 
 FROM run AS dist
 
-COPY --from=build --link /usr/local/src/ort/cli/build/install/ort /opt/ort
-
+# Repeat global arguments used in this stage.
 ARG ORT_VERSION
+
+COPY --from=build --link /usr/local/src/ort/cli/build/install/ort /opt/ort
 
 # Support to run the helper-cli like `docker run --entrypoint /opt/ort/bin/orth ort`.
 COPY --from=build --link /usr/local/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/
