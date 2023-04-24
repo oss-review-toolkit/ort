@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.mapperConfig
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.Statistics
-import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
 
 /**
  * The [EvaluatedModel] represents the outcome of the evaluation of a [ReporterInput]. This means that all additional
@@ -74,7 +73,7 @@ import org.ossreviewtoolkit.reporter.reporters.WebAppReporter
  *
  * Use cases for the [EvaluatedModel] are:
  *
- * * Input for the [WebAppReporter], so that it does not have to evaluate the model at runtime. Currently, the model is
+ * * Input for the web-app-reporter, so that it does not have to evaluate the model at runtime. Currently, the model is
  *   optimized for this use case.
  * * Input for [Reporter] implementations, so that they do not have to repeatedly implement the application of excludes,
  *   resolutions, and so on.
@@ -113,7 +112,7 @@ data class EvaluatedModel(
 
     /**
      * The repository configuration as YAML string. Required to be able to easily show the repository configuration in
-     * the web app reporter without any of the serialization optimizations.
+     * the web-app-reporter without any of the serialization optimizations.
      */
     val repositoryConfiguration: String,
 
