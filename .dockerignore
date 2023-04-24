@@ -22,7 +22,7 @@ integrations/jenkins/Jenkinsfile
 **/build/
 !docker/build
 **/out/
-reporter-web-app/node_modules/
+plugins/reporters/web-app-template/node_modules/
 
 # Ignore the logos as we do not need them to run ORT.
 logos/

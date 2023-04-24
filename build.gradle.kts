@@ -205,7 +205,7 @@ allprojects {
 subprojects {
     version = rootProject.version
 
-    val nonJavaProjects = listOf("reporter-web-app", "package-curation-providers", "package-managers", "reporters")
+    val nonJavaProjects = listOf("package-curation-providers", "package-managers", "reporters", "web-app-template")
     if (name in nonJavaProjects) return@subprojects
 
     // Apply core plugins.
@@ -512,8 +512,7 @@ val copyrightExcludedPaths = listOf(
     "plugins/reporters/asciidoc/src/main/resources/templates/freemarker_implicit.ftl",
     "plugins/reporters/freemarker/src/main/resources/templates/freemarker_implicit.ftl",
     "plugins/reporters/static-html/src/main/resources/prismjs/",
-    "reporter-web-app/yarn.lock",
-    "reporter/src/main/resources/META_INF/",
+    "plugins/reporters/web-app-template/yarn.lock",
     "resources/META-INF/",
     "resources/exceptions/",
     "resources/licenses/",

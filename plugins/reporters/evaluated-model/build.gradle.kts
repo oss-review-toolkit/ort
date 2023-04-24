@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +20,20 @@
 plugins {
     // Apply core plugins.
     `java-library`
-    `java-test-fixtures`
 }
 
 dependencies {
     api(project(":model"))
+    api(project(":reporter"))
+    api(project(":utils:spdx-utils"))
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+    api(libs.jacksonAnnotations)
+    api(libs.jacksonDatabind)
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
+    implementation(project(":utils:ort-utils"))
 
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
+    implementation(libs.jacksonCore)
+    implementation(libs.jacksonDataformatYaml)
 
-    funTestImplementation(libs.kotestAssertionsJson)
+    funTestImplementation(testFixtures(project(":reporter")))
 }
