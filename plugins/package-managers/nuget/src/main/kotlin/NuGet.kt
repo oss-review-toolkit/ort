@@ -27,6 +27,7 @@ import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils.NuGetInspector
@@ -64,31 +65,30 @@ class NuGet(
         labels: Map<String, String>
     ): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)
+
         val project = result.toOrtProject(managerName, analysisRoot, definitionFile)
         val packages = result.dependencies.toOrtPackages()
-        val errorMessage = collectErrorMessage(result)
-        val issues = if (errorMessage.isNotBlank()) {
-            listOf(
-                Issue(
-                    message = errorMessage,
-                    source = managerName
-                )
+
+        return listOf(ProjectAnalyzerResult(project, packages, collectTopLevelIssues(result)))
+    }
+
+    private fun collectTopLevelIssues(result: NuGetInspector.Result): List<Issue> {
+        val errors = (result.headers.flatMap { it.errors } + result.packages.flatMap { it.errors }).map { message ->
+            Issue(
+                source = managerName,
+                message = message,
+                severity = Severity.ERROR
             )
-        } else {
-            emptyList()
         }
 
-        return listOf(ProjectAnalyzerResult(project, packages, issues))
-    }
-}
+        val warnings = result.packages.flatMap { it.warnings }.map { message ->
+            Issue(
+                source = managerName,
+                message = message,
+                severity = Severity.WARNING
+            )
+        }
 
-private fun collectErrorMessage(result: NuGetInspector.Result): String {
-    var errorMessage = ""
-    result.headers.first().errors.forEach {
-        errorMessage += it + "\n"
+        return errors + warnings
     }
-    result.packages.first().errors.forEach {
-        errorMessage += it + "\n"
-    }
-    return errorMessage
 }
