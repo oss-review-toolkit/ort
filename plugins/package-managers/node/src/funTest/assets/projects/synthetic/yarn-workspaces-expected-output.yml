@@ -1,7 +1,7 @@
 ---
 project:
   id: "Yarn::workspace:1.0.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/package.json"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces/package.json"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -15,7 +15,7 @@ project:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces"
   homepage_url: ""
   scopes:
   - name: "dependencies"
@@ -79,12 +79,12 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg2"
 - id: "NPM:@here:harp-fetch:0.3.6"
   purl: "pkg:npm/%40here/harp-fetch@0.3.6"
   authors:
@@ -167,9 +167,9 @@ packages:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/yarn-workspaces/packages/pkg1"

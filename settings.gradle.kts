@@ -56,6 +56,7 @@ include(":plugins:package-managers:gradle")
 include(":plugins:package-managers:gradle-inspector")
 include(":plugins:package-managers:gradle-model")
 include(":plugins:package-managers:gradle-plugin")
+include(":plugins:package-managers:node")
 include(":plugins:package-managers:nuget")
 include(":plugins:package-managers:pub")
 include(":plugins:package-managers:python")
@@ -102,6 +103,7 @@ project(":plugins:package-managers:cocoapods").name = "cocoapods-package-manager
 project(":plugins:package-managers:composer").name = "composer-package-manager"
 project(":plugins:package-managers:conan").name = "conan-package-manager"
 project(":plugins:package-managers:gradle").name = "gradle-package-manager"
+project(":plugins:package-managers:node").name = "node-package-manager"
 project(":plugins:package-managers:nuget").name = "nuget-package-manager"
 project(":plugins:package-managers:pub").name = "pub-package-manager"
 project(":plugins:package-managers:python").name = "python-package-manager"

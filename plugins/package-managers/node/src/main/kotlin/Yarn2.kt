@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.MappingIterator
@@ -37,12 +37,6 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.analyzer.PackageManagerResult
-import org.ossreviewtoolkit.analyzer.managers.utils.fixNpmDownloadUrl
-import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForYarn2
-import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmAuthors
-import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmLicenses
-import org.ossreviewtoolkit.analyzer.managers.utils.parseNpmVcsInfo
-import org.ossreviewtoolkit.analyzer.managers.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.downloader.VcsHost
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -64,6 +58,12 @@ import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.model.utils.DependencyHandler
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.fixNpmDownloadUrl
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForYarn2
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmAuthors
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmLicenses
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.parseNpmVcsInfo
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.splitNpmNamespaceAndName
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
