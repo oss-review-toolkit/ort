@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -425,11 +426,11 @@ internal data class GemSpec(
                 dependency["name"]?.textValue()
             }?.toSet()
 
-            val vcs = when {
-                node.hasNonNull("source_code_uri") -> VcsHost.parseUrl(node["source_code_uri"].textValue())
-                node.hasNonNull("homepage_uri") -> VcsHost.parseUrl(node["homepage_uri"].textValue())
-                else -> VcsInfo.EMPTY
-            }
+            val vcs = sequenceOf(node["source_code_uri"], node["homepage_uri"]).mapNotNull { uri ->
+                uri?.textValue()?.takeIf { it.isNotEmpty() }
+            }.firstOrNull()?.let {
+                VcsHost.parseUrl(it)
+            }.orEmpty()
 
             val artifact = if (node.hasNonNull("gem_uri") && node.hasNonNull("sha")) {
                 val sha = node["sha"].textValue()
