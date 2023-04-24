@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.utils.ResolutionProvider
  * This class calculates [Statistics] for a given [OrtResult] and the applicable [IssueResolution]s and
  * [RuleViolationResolution]s.
  */
-internal object StatisticsCalculator {
+object StatisticsCalculator {
     /**
      * Return the [Statistics] for the given [ortResult].
      */
