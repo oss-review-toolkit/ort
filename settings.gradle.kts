@@ -144,5 +144,5 @@ pluginManagement {
 
 plugins {
     // Gradle cannot access the version catalog from here, so hard-code the dependency.
-    id("org.gradle.toolchains.foojay-resolver-convention").version("0.4.0")
+    id("org.gradle.toolchains.foojay-resolver-convention").version("0.5.0")
 }
