@@ -49,13 +49,13 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
  *
  * TODO: Remove this once https://youtrack.jetbrains.com/issue/KT-21599 is implemented.
  */
-object NpmSupport : Logging
+internal object NpmSupport : Logging
 
 /**
  * Expand an NPM shortcut [url] to a regular URL as used for dependencies, see
  * https://docs.npmjs.com/cli/v7/configuring-npm/package-json#urls-as-dependencies.
  */
-fun expandNpmShortcutUrl(url: String): String {
+internal fun expandNpmShortcutUrl(url: String): String {
     // A hierarchical URI looks like
     //     [scheme:][//authority][path][?query][#fragment]
     // where a server-based "authority" has the syntax
@@ -90,7 +90,7 @@ fun expandNpmShortcutUrl(url: String): String {
 /**
  * Do various replacements in [downloadUrl]. Return the transformed URL.
  */
-fun fixNpmDownloadUrl(downloadUrl: String): String {
+internal fun fixNpmDownloadUrl(downloadUrl: String): String {
     @Suppress("HttpUrlsUsage")
     return downloadUrl
         // Work around the issue described at
@@ -107,7 +107,7 @@ private val ARTIFACTORY_API_PATH_PATTERN = Regex("(.*artifactory.*)(?:/api/npm/)
 /**
  * Return whether the [directory] contains an NPM lock file.
  */
-fun hasNpmLockFile(directory: File) =
+internal fun hasNpmLockFile(directory: File) =
     NPM_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
@@ -117,7 +117,7 @@ private val NPM_LOCK_FILES = listOf("npm-shrinkwrap.json", "package-lock.json")
 /**
  * Return whether the [directory] contains a PNPM lock file.
  */
-fun hasPnpmLockFile(directory: File) =
+internal fun hasPnpmLockFile(directory: File) =
     PNPM_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
@@ -127,7 +127,7 @@ private val PNPM_LOCK_FILES = listOf("pnpm-lock.yaml")
 /**
  * Return whether the [directory] contains a Yarn lock file.
  */
-fun hasYarnLockFile(directory: File) =
+internal fun hasYarnLockFile(directory: File) =
     YARN_LOCK_FILES.any { lockfile ->
         File(directory, lockfile).isFile
     }
@@ -138,12 +138,12 @@ private val YARN_LOCK_FILES = listOf("yarn.lock")
  * Return whether the [directory] contains a Yarn resource file in YAML format, specific to Yarn 2+.
  * Yarn1 has a non-YAML `.yarnrc` configuration file.
  */
-fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOURCE_FILE).isFile
+internal fun hasYarn2ResourceFile(directory: File) = directory.resolve(Yarn2.YARN2_RESOURCE_FILE).isFile
 
 /**
  * Map [definitionFiles] to contain only files handled by NPM.
  */
-fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
+internal fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
         .filter { !it.isHandledByYarn && !it.isHandledByPnpm }
         .mapTo(mutableSetOf()) { it.definitionFile }
@@ -151,7 +151,7 @@ fun mapDefinitionFilesForNpm(definitionFiles: Collection<File>): Set<File> =
 /**
  * Map [definitionFiles] to contain only files handled by PNPM.
  */
-fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
+internal fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
         .filter { it.isHandledByPnpm && !it.isPnpmWorkspaceSubmodule }
         .mapTo(mutableSetOf()) { it.definitionFile }
@@ -159,7 +159,7 @@ fun mapDefinitionFilesForPnpm(definitionFiles: Collection<File>): Set<File> =
 /**
  * Map [definitionFiles] to contain only files handled by Yarn.
  */
-fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
+internal fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
         .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && !it.hasYarn2ResourceFile }
         .mapTo(mutableSetOf()) { it.definitionFile }
@@ -167,7 +167,7 @@ fun mapDefinitionFilesForYarn(definitionFiles: Collection<File>): Set<File> =
 /**
  * Map [definitionFiles] to contain only files handled by Yarn 2+.
  */
-fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
+internal fun mapDefinitionFilesForYarn2(definitionFiles: Collection<File>): Set<File> =
     getPackageJsonInfo(definitionFiles.toSet())
         .filter { it.isHandledByYarn && !it.isYarnWorkspaceSubmodule && it.hasYarn2ResourceFile }
         .mapTo(mutableSetOf()) { it.definitionFile }
@@ -323,7 +323,7 @@ private fun getYarnWorkspaceSubmodules(definitionFiles: Set<File>): Set<File> {
  * https://docs.npmjs.com/files/package.json#people-fields-author-contributors, there are two formats to
  * specify the author of a package: An object with multiple properties or a single string.
  */
-fun parseNpmAuthors(json: JsonNode): Set<String> =
+internal fun parseNpmAuthors(json: JsonNode): Set<String> =
     buildSet {
         json["author"]?.let { authorNode ->
             when {
@@ -337,7 +337,7 @@ fun parseNpmAuthors(json: JsonNode): Set<String> =
 /**
  * Parse information about licenses from the [package.json][json] file of a module.
  */
-fun parseNpmLicenses(json: JsonNode): Set<String> {
+internal fun parseNpmLicenses(json: JsonNode): Set<String> {
     val declaredLicenses = mutableListOf<String>()
 
     // See https://docs.npmjs.com/files/package.json#license. Some old packages use a "license" (singular) node
@@ -377,7 +377,7 @@ fun parseNpmLicenses(json: JsonNode): Set<String> {
 /**
  * Parse information about the VCS from the [package.json][node] file of a module.
  */
-fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
+internal fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
     // See https://github.com/npm/read-package-json/issues/7 for some background info.
     val head = node["gitHead"].textValueOrEmpty()
 
@@ -402,7 +402,7 @@ fun parseNpmVcsInfo(node: JsonNode): VcsInfo {
 /**
  * Split the given [rawName] of a module to a pair with namespace and name.
  */
-fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
+internal fun splitNpmNamespaceAndName(rawName: String): Pair<String, String> {
     val name = rawName.substringAfterLast("/")
     val namespace = rawName.removeSuffix(name).removeSuffix("/")
     return Pair(namespace, name)
