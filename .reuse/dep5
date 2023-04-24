@@ -84,7 +84,7 @@ Files: logos/*
 Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
-Files: reporter-web-app/*
+Files: plugins/reporters/web-app-template/*
 Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 

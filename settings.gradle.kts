@@ -66,14 +66,16 @@ include(":plugins:reporters")
 include(":plugins:reporters:asciidoc")
 include(":plugins:reporters:ctrlx")
 include(":plugins:reporters:cyclonedx")
+include(":plugins:reporters:evaluated-model")
 include(":plugins:reporters:fossid")
 include(":plugins:reporters:freemarker")
 include(":plugins:reporters:gitlab")
 include(":plugins:reporters:opossum")
 include(":plugins:reporters:spdx")
 include(":plugins:reporters:static-html")
+include(":plugins:reporters:web-app")
+include(":plugins:reporters:web-app-template")
 include(":reporter")
-include(":reporter-web-app")
 include(":scanner")
 include(":utils:common")
 include(":utils:ort")
@@ -114,12 +116,14 @@ project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager
 project(":plugins:reporters:asciidoc").name = "asciidoc-reporter"
 project(":plugins:reporters:ctrlx").name = "ctrlx-reporter"
 project(":plugins:reporters:cyclonedx").name = "cyclonedx-reporter"
+project(":plugins:reporters:evaluated-model").name = "evaluated-model-reporter"
 project(":plugins:reporters:fossid").name = "fossid-reporter"
 project(":plugins:reporters:freemarker").name = "freemarker-reporter"
 project(":plugins:reporters:gitlab").name = "gitlab-reporter"
 project(":plugins:reporters:opossum").name = "opossum-reporter"
 project(":plugins:reporters:spdx").name = "spdx-reporter"
 project(":plugins:reporters:static-html").name = "static-html-reporter"
+project(":plugins:reporters:web-app").name = "web-app-reporter"
 
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"

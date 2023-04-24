@@ -17,23 +17,26 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-    `java-test-fixtures`
-}
+package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
-dependencies {
-    api(project(":model"))
+import com.fasterxml.jackson.annotation.JsonInclude
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.config.PathExclude
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    funTestImplementation(libs.kotestAssertionsJson)
-}
+/**
+ * The evaluated form of a [LicenseFinding] used by the [EvaluatedModel].
+ */
+data class EvaluatedFinding(
+    val type: EvaluatedFindingType,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val license: LicenseId?,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    val copyright: CopyrightStatement?,
+    val path: String,
+    val startLine: Int,
+    val endLine: Int,
+    val scanResult: EvaluatedScanResult,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val pathExcludes: List<PathExclude>
+)

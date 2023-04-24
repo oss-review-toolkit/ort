@@ -17,23 +17,11 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-    `java-test-fixtures`
-}
+package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
-dependencies {
-    api(project(":model"))
-
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
-
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    funTestImplementation(libs.kotestAssertionsJson)
+/**
+ * The possible types of an [EvaluatedFinding].
+ */
+enum class EvaluatedFindingType {
+    COPYRIGHT, LICENSE
 }

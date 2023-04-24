@@ -17,23 +17,27 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply core plugins.
-    `java-library`
-    `java-test-fixtures`
-}
+package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
-dependencies {
-    api(project(":model"))
+import com.fasterxml.jackson.annotation.JsonInclude
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+import java.time.Instant
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ScanSummary
+import org.ossreviewtoolkit.model.ScannerDetails
 
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    funTestImplementation(libs.kotestAssertionsJson)
-}
+/**
+ * The evaluated form of a [ScanSummary] used by the [EvaluatedModel]. The findings are stored directly in
+ * [EvaluatedPackage].
+ */
+data class EvaluatedScanResult(
+    val provenance: Provenance,
+    val scanner: ScannerDetails,
+    val startTime: Instant,
+    val endTime: Instant,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val packageVerificationCode: String,
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val issues: List<EvaluatedIssue>
+)

@@ -20,20 +20,28 @@
 plugins {
     // Apply core plugins.
     `java-library`
-    `java-test-fixtures`
+}
+
+val generatedResourcesDir = file("$buildDir/generated-resources/main")
+val copyWebAppTemplate by tasks.registering(Copy::class) {
+    dependsOn(":plugins:reporters:web-app-template:yarnBuild")
+
+    from(project(":plugins:reporters:web-app-template").file("build")) {
+        include("scan-report-template.html")
+    }
+
+    into(generatedResourcesDir)
+    outputs.cacheIf { true }
+}
+
+sourceSets.named("main") {
+    output.dir(mapOf("builtBy" to copyWebAppTemplate), generatedResourcesDir)
 }
 
 dependencies {
-    api(project(":model"))
+    api(project(":reporter"))
 
-    implementation(project(":utils:scripting-utils"))
-    implementation(project(":utils:spdx-utils"))
+    implementation(project(":plugins:reporters:evaluated-model-reporter"))
 
-    implementation("org.jetbrains.kotlin:kotlin-scripting-common")
-    implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host")
-
-    // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
-    funTestImplementation(testFixtures(project))
-
-    funTestImplementation(libs.kotestAssertionsJson)
+    implementation(libs.commonsCompress)
 }
