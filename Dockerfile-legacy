@@ -20,20 +20,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-# Set this to the version ORT should report.
-ARG ORT_VERSION="DOCKER-SNAPSHOT"
-
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
 ARG CRT_FILES=""
 
 # Set this to the Java version to use in the base image (and to build and run ORT with).
 ARG JAVA_VERSION=17
 
-# Set this to the ScanCode version to use.
-ARG SCANCODE_VERSION="31.2.4"
+# Set this to the version ORT should report.
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
 
 # Set this to the Python Inspector version to use.
 ARG PYTHON_INSPECTOR_VERSION="0.9.6"
+
+# Set this to the ScanCode version to use.
+ARG SCANCODE_VERSION="31.2.4"
 
 FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy AS build
 
