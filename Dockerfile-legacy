@@ -49,7 +49,7 @@ COPY "$CRT_FILES" /tmp/certificates/
 
 WORKDIR /usr/local/src/ort
 
-# Gradle build.
+# Persist whatever gets written to the Gradle user home to speed up subsequent builds.
 RUN --mount=type=cache,target=/tmp/.gradle/ \
     export GRADLE_USER_HOME=/tmp/.gradle/ && \
     scripts/export_proxy_certificates.sh /tmp/certificates/ && \
