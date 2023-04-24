@@ -21,7 +21,7 @@
 # License-Filename: LICENSE
 
 # Set this to a directory containing CRT-files for custom certificates that ORT and all build tools should know about.
-ARG CRT_FILES=""
+ARG CRT_FILES="*.crt"
 
 # Set this to the Java version to use in the base image (and to build and run ORT with).
 ARG JAVA_VERSION=17
