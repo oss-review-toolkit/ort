@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.containExactly
@@ -26,11 +26,11 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.managers.Npm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.node.Npm
 import org.ossreviewtoolkit.utils.test.USER_DIR
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 

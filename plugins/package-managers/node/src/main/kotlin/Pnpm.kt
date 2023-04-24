@@ -17,15 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import java.io.File
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
-import org.ossreviewtoolkit.analyzer.managers.utils.hasPnpmLockFile
-import org.ossreviewtoolkit.analyzer.managers.utils.mapDefinitionFilesForPnpm
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.hasPnpmLockFile
+import org.ossreviewtoolkit.plugins.packagemanagers.node.utils.mapDefinitionFilesForPnpm
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.realFile
 

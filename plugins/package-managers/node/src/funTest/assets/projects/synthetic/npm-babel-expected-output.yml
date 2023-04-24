@@ -1,7 +1,7 @@
 ---
 project:
   id: "NPM::npm-project-that-depends-on-babel:1.0.0"
-  definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/npm-babel/package.json"
+  definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm-babel/package.json"
   declared_licenses:
   - "Apache-2.0"
   declared_licenses_processed:
@@ -15,7 +15,7 @@ project:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/npm-babel"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/npm-babel"
   homepage_url: ""
   scopes:
   - name: "dependencies"

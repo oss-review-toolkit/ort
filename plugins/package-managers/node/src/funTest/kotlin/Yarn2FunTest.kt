@@ -17,11 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.analyzer.managers
+package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.analyzer.managers.collateMultipleProjects
+import org.ossreviewtoolkit.analyzer.managers.create
+import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult

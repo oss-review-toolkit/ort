@@ -4,7 +4,7 @@ repository:
     type: "Git"
     url: "<REPLACE_URL>"
     revision: "<REPLACE_REVISION>"
-    path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
+    path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
@@ -28,7 +28,7 @@ analyzer:
   result:
     projects:
     - id: "PNPM::pnpm-workspaces:1.0.1"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/package.json"
+      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/package.json"
       authors:
       - "Marcel Bochtler"
       declared_licenses:
@@ -44,7 +44,7 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces"
       homepage_url: ""
       scopes:
       - name: "dependencies"
@@ -100,7 +100,7 @@ analyzer:
             - id: "NPM::callsites:0.2.0"
           - id: "NPM::resolve-from:1.0.1"
     - id: "PNPM::testing-pnpm-package-c:1.0.0"
-      definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/non-workspace/package-c/package.json"
+      definition_file_path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/non-workspace/package-c/package.json"
       authors:
       - "Marcel Bochtler"
       declared_licenses:
@@ -116,7 +116,7 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/non-workspace/package-c"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/non-workspace/package-c"
       homepage_url: ""
       scopes:
       - name: "dependencies"
@@ -627,12 +627,12 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces"
       vcs_processed:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces"
     - id: "NPM::require-uncached:2.0.0"
       purl: "pkg:npm/require-uncached@2.0.0"
       authors:
@@ -778,12 +778,12 @@ analyzer:
         type: "Git"
         url: "<REPLACE_URL>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
       vcs_processed:
         type: "Git"
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
-        path: "analyzer/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
+        path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
     has_issues: false
 scanner: null
 advisor: null

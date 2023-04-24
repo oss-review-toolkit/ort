@@ -38,6 +38,7 @@ dependencies {
     api(project(":plugins:package-managers:gradle-inspector"))
     api(project(":plugins:package-managers:gradle-model"))
     api(project(":plugins:package-managers:gradle-package-manager"))
+    api(project(":plugins:package-managers:node-package-manager"))
     api(project(":plugins:package-managers:nuget-package-manager"))
     api(project(":plugins:package-managers:pub-package-manager"))
     api(project(":plugins:package-managers:python-package-manager"))
