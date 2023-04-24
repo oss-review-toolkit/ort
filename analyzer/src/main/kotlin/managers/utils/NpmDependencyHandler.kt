@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.model.utils.DependencyHandler
  * contain all the information required to identify a module, construct a [Package] from it, and traverse its
  * dependency tree.
  */
-data class NpmModuleInfo(
+internal data class NpmModuleInfo(
     /** The identifier for the represented module. */
     val id: Identifier,
 
@@ -73,7 +73,7 @@ data class NpmModuleInfo(
 /**
  * A specialized [DependencyHandler] implementation for NPM.
  */
-class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleInfo> {
+internal class NpmDependencyHandler(private val npm: Npm) : DependencyHandler<NpmModuleInfo> {
     override fun identifierFor(dependency: NpmModuleInfo): Identifier = dependency.id
 
     override fun dependenciesFor(dependency: NpmModuleInfo): Collection<NpmModuleInfo> = dependency.dependencies
