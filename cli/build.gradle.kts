@@ -168,6 +168,7 @@ dependencies {
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
+    implementation(platform(project(":plugins:commands")))
     implementation(platform(project(":plugins:package-curation-providers")))
     implementation(platform(project(":plugins:package-managers")))
     implementation(platform(project(":plugins:reporters")))
