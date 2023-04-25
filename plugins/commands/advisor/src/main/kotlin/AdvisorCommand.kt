@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.commands
+package org.ossreviewtoolkit.plugins.commands.advisor
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
