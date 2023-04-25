@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -295,7 +296,7 @@ private fun resolveVcsInfo(importPath: String, revision: String, gopath: File): 
     // the "importPath" (which usually resembles a URL).
     val fallbackVcsInfo = VcsHost.parseUrl("https://$importPath").takeIf {
         it.type != VcsType.UNKNOWN
-    } ?: VcsInfo.EMPTY
+    }.orEmpty()
 
     // We want the revision recorded in Gopkg.lock contained in "vcs", not the one "go get" fetched.
     return PackageManager.processProjectVcs(repoRoot, fallbackVcsInfo).copy(revision = revision)

@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
@@ -349,7 +350,7 @@ private fun OrtDependency.toVcsInfo() =
 
             handleValidScmInfo(type, url, tag)
         } ?: handleInvalidScmInfo(connection, tag)
-    } ?: VcsInfo.EMPTY
+    }.orEmpty()
 
 private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: String) =
     when {
