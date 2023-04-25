@@ -130,7 +130,7 @@ class ReportTableModelMapper(
 
             val projectIssues = ortResult.dependencyNavigator.projectIssues(project)
             val tableRows = allIds.map { id ->
-                val scanResult = ortResult.getScanResultsForId(id)
+                val scanResults = ortResult.getScanResultsForId(id)
 
                 val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(id)
 
@@ -142,7 +142,7 @@ class ReportTableModelMapper(
 
                 val analyzerIssues = projectIssues[id].orEmpty() + analyzerResult.issues[id].orEmpty()
 
-                val scanIssues = scanResult.flatMapTo(mutableSetOf()) {
+                val scanIssues = scanResults.flatMapTo(mutableSetOf()) {
                     it.summary.issues
                 }
 
