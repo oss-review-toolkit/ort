@@ -74,6 +74,9 @@ private val GO_LEGACY_MANIFESTS = mapOf(
 
 /**
  * The [Dep](https://golang.github.io/dep/) package manager for Go.
+ *
+ * Note: Dep was an official experiment to implement a package manager for Go. As of 2020, Dep is deprecated and
+ * archived in favor of Go modules, which have had official support since Go 1.11.
  */
 class GoDep(
     name: String,
