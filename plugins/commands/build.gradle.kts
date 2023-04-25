@@ -28,7 +28,7 @@ javaPlatform {
 }
 
 dependencies {
-    // TODO: Add command plugin projects.
+    api(project(":plugins:commands:advisor-command"))
 }
 
 configure<PublishingExtension> {

@@ -157,7 +157,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":advisor"))
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
     implementation(project(":evaluator"))
