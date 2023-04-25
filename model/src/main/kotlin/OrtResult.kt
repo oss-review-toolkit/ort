@@ -407,6 +407,9 @@ data class OrtResult(
      */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
 
+    @JsonIgnore
+    fun getScanResults(): Map<Identifier, List<ScanResult>> = scanResultsById
+
     /**
      * Return an uncurated [Package] which represents either a [Package] if the given [id] corresponds to a [Package],
      * a [Project] if the given [id] corresponds to a [Project] or `null` otherwise.

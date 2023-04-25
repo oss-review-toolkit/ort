@@ -538,7 +538,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        ortResult.scanner?.scanResults.orEmpty().forEach { (id, results) ->
+        ortResult.getScanResults().forEach { (id, results) ->
             opossumInput.addScannerResults(id, results, maxDepth)
         }
 

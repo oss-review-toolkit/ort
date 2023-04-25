@@ -240,7 +240,7 @@ internal fun OrtResult.getProvenance(id: Identifier): Provenance? = getScanResul
 internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue> {
     val result = mutableListOf<Issue>()
 
-    scanner?.scanResults?.forEach { (id, results) ->
+    getScanResults().forEach { (id, results) ->
         if (!omitExcluded || !isExcluded(id)) {
             results.forEach { scanResult ->
                 result += scanResult.summary.issues
