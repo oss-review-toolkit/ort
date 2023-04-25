@@ -211,7 +211,14 @@ allprojects {
 subprojects {
     version = rootProject.version
 
-    val nonJavaProjects = listOf("package-curation-providers", "package-managers", "reporters", "web-app-template")
+    val nonJavaProjects = listOf(
+        "commands",
+        "package-curation-providers",
+        "package-managers",
+        "reporters",
+        "web-app-template"
+    )
+
     if (name in nonJavaProjects) return@subprojects
 
     // Apply core plugins.
