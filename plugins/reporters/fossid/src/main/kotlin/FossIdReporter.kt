@@ -93,7 +93,7 @@ class FossIdReporter : Reporter {
         val service = FossIdRestService.create(serverUrl)
 
         return runBlocking(Dispatchers.IO) {
-            input.ortResult.scanner?.scanResults?.values?.flatten()?.mapNotNull { result ->
+            input.ortResult.getScanResults().values.flatten().mapNotNull { result ->
                 result.additionalData[SCAN_CODE_KEY]?.let { scanCode ->
                     async {
                         logger.info { "Generating report for scan $scanCode." }
@@ -106,7 +106,7 @@ class FossIdReporter : Reporter {
                             }.getOrNull()
                     }
                 }
-            }?.awaitAll()?.filterNotNull().orEmpty()
+            }.awaitAll().filterNotNull()
         }
     }
 }
