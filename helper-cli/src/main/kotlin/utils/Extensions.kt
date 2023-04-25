@@ -189,7 +189,7 @@ internal fun OrtResult.getLicenseFindingsById(
             packageConfigurationProvider.getPackageConfigurations(id, provenance).flatMap { it.licenseFindingCurations }
         }
 
-    scanner?.scanResults?.get(id)?.forEach { scanResult ->
+    getScanResultsForId(id).forEach { scanResult ->
         val findingsForProvenance = result.getOrPut(scanResult.provenance) { mutableMapOf() }
 
         scanResult.summary.licenseFindings.let { findings ->
