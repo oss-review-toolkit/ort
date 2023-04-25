@@ -436,9 +436,11 @@ class PackageCurationTest : WordSpec({
         }
 
         "work for invalid semvers" {
-            packageCurationForVersion("3.0.3.jre11").isApplicable(identifierForVersion("3.0.3.jre11")) shouldBe true
-            packageCurationForVersion("3.0.3.jre11").isApplicable(identifierForVersion("3.0.3.jre8")) shouldBe false
-            packageCurationForVersion("1.2.3.4").isApplicable(identifierForVersion("1.2.3.9")) shouldBe false
+            assertSoftly {
+                packageCurationForVersion("3.0.3.jre11").isApplicable(identifierForVersion("3.0.3.jre11")) shouldBe true
+                packageCurationForVersion("3.0.3.jre11").isApplicable(identifierForVersion("3.0.3.jre8")) shouldBe false
+                packageCurationForVersion("1.2.3.4").isApplicable(identifierForVersion("1.2.3.9")) shouldBe false
+            }
         }
 
         "not apply for invalid version ranges" {
