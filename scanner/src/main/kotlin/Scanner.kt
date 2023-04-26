@@ -192,12 +192,7 @@ class Scanner(
                 }.onFailure {
                     controller.addProvenanceResolutionIssue(
                         pkg.id,
-                        Issue(
-                            source = TOOL_NAME,
-                            severity = Severity.ERROR,
-                            message = "Could not resolve provenance for package '${pkg.id.toCoordinates()}': " +
-                                    it.collectMessages()
-                        )
+                        Issue(source = TOOL_NAME, severity = Severity.ERROR, message = it.collectMessages())
                     )
                 }
             }

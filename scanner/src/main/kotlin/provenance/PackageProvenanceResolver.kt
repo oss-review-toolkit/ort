@@ -98,7 +98,7 @@ class DefaultPackageProvenanceResolver(
 
         val message = buildString {
             append(
-                "Could not resolve provenance for '${pkg.id.toCoordinates()}' for source code origins " +
+                "Could not resolve provenance for package '${pkg.id.toCoordinates()}' for source code origins " +
                         "$sourceCodeOriginPriority."
             )
 
