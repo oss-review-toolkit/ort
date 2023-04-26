@@ -80,9 +80,10 @@ internal class SubtractScanResultsCommand : CliktCommand(
             }
         }
 
-        val result = lhsOrtResult.copy(
+        val result = lhsOrtResult
+            .copy(
             scanner = lhsOrtResult.scanner!!.copy(
-                scanResults = scanResults
+                scanResults = scanResults.values.flatten() // FFIXME
             )
         )
 

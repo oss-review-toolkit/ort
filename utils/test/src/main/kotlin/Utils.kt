@@ -29,9 +29,14 @@ import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.NestedProvenanceResolutionResult
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -134,4 +139,25 @@ fun readOrtResult(file: String) = readOrtResult(File(file))
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
 
 fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun =
-    ScannerRun.EMPTY.copy(scanResults = scanResults.toMap())
+    ScannerRun.EMPTY.copy(
+        provenances = scanResults.map { (id, scanResultsForId) ->
+            val provenance = scanResultsForId.firstOrNull()?.provenance ?: UnknownProvenance
+            val issue = if (provenance is UnknownProvenance) {
+                Issue(source = "Scanner", message = "Could not resolve provenance.")
+            } else {
+                null
+            }
+
+            ProvenanceResolutionResult(id, provenance, issue)
+        },
+        nestedProvenances = scanResults.mapNotNull { (_, scanResultsForId) ->
+            val provenance = scanResultsForId.firstOrNull()?.provenance ?: UnknownProvenance
+
+            if (provenance is RepositoryProvenance) {
+                NestedProvenanceResolutionResult(provenance, emptyMap(), null)
+            } else {
+                null
+            }
+        },
+        scanResults = scanResults.flatMap { it.second }
+    )

@@ -34,16 +34,18 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.DownloadException
-import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.NestedProvenanceResolutionResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageType
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -113,7 +115,7 @@ class Scanner(
         } else {
             logger.info { "Skipping project scan as no project scanner is configured." }
 
-            emptyMap()
+            ScannerRun.EMPTY
         }
 
         val packageResults = if (packageScannerWrappers.isNotEmpty()) {
@@ -126,10 +128,8 @@ class Scanner(
         } else {
             logger.info { "Skipping package scan as no package scanner is configured." }
 
-            emptyMap()
+            ScannerRun.EMPTY
         }
-
-        val scanResults = projectResults + packageResults
 
         val endTime = Instant.now()
 
@@ -148,14 +148,23 @@ class Scanner(
         }
 
         val filteredScannerConfig = scannerConfig.copy(options = filteredScannerOptions)
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanResults)
+
+        val scannerRun = ScannerRun(
+            startTime = startTime,
+            endTime = endTime,
+            environment = Environment(),
+            config = filteredScannerConfig,
+            provenances = projectResults.provenances + packageResults.provenances,
+            nestedProvenances = projectResults.nestedProvenances + packageResults.nestedProvenances,
+            scanResults = projectResults.scanResults + packageResults.scanResults
+        )
 
         return ortResult.copy(scanner = scannerRun)
     }
 
-    suspend fun scan(packages: Set<Package>, context: ScanContext): Map<Identifier, List<ScanResult>> {
+    suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
         val scanners = scannerWrappers[context.packageType].orEmpty()
-        if (scanners.isEmpty()) return emptyMap()
+        if (scanners.isEmpty()) return ScannerRun.EMPTY
 
         val controller = ScanController(packages, scanners, scannerConfig)
 
@@ -171,13 +180,20 @@ class Scanner(
         createMissingFileLists(controller)
         createMissingArchives(controller)
 
-        val results = controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
-            it.key.id to it.value.merge()
-        }
+        return ScannerRun.EMPTY.copy(
+            config = scannerConfig,
+            provenances = packages.map { pkg ->
+                val provenance = controller.getPackageProvenance(pkg.id)
 
-        val issueResults = controller.getResultsForProvenanceResolutionIssues()
-
-        return results + issueResults
+                ProvenanceResolutionResult(
+                    id = pkg.id,
+                    provenance = provenance ?: UnknownProvenance,
+                    issue = if (provenance == null) controller.getPackageProvenanceResolutionIssue(pkg.id)!! else null
+                )
+            },
+            nestedProvenances = controller.getNestedProvenanceResolutionResults(),
+            scanResults = controller.getAllScanResults()
+        )
     }
 
     private suspend fun resolvePackageProvenances(controller: ScanController) {
@@ -715,4 +731,54 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
     }
 
     return NestedProvenanceScanResult(nestedProvenance, scanResultsByProvenance)
+}
+
+private fun ScanController.getNestedProvenanceResolutionResults(): List<NestedProvenanceResolutionResult> =
+    getNestedProvenancesByPackage().values.flatMap { nestedProvenance ->
+        val issue = getNestedProvenanceResolutionIssue(nestedProvenance.root)
+        nestedProvenance.toNestedProvenanceResolutionResult(issue)
+    }.distinct()
+
+private fun NestedProvenance.toNestedProvenanceResolutionResult(issue: Issue?): List<NestedProvenanceResolutionResult> {
+    val provenance = (root as? RepositoryProvenance) ?: return emptyList()
+
+    return if (issue != null) {
+        listOf(NestedProvenanceResolutionResult(provenance = provenance, nestedProvenance = emptyMap(), issue = issue))
+    } else {
+        val childrenForParent = buildMap<String, MutableSet<String>> {
+            subRepositories.keys.forEach { child ->
+                val ancestors = subRepositories.keys.filter { path ->
+                    path != child && File(child).startsWith(File(path))
+                }
+
+                val parent = ancestors.maxByOrNull { it.length } ?: ""
+
+                getOrPut(parent) { mutableSetOf() } += child
+            }
+        }
+
+        val provenanceByPath = subRepositories + ("" to provenance)
+
+        val result = mutableMapOf<String, NestedProvenanceResolutionResult>()
+
+        childrenForParent.entries.forEach { (parent, children) ->
+            result[parent] = NestedProvenanceResolutionResult(
+                provenance = provenanceByPath.getValue(parent),
+                nestedProvenance = children.associateWith { provenanceByPath.getValue(it) },
+                issue = null
+            )
+        }
+
+        (provenanceByPath.keys - result.keys).forEach { path ->
+            if (path !in result) {
+                result[path] = NestedProvenanceResolutionResult(
+                    provenance = provenanceByPath.getValue(path),
+                    nestedProvenance = emptyMap(),
+                    issue = null
+                )
+            }
+        }
+
+        return result.values.toList()
+    }
 }

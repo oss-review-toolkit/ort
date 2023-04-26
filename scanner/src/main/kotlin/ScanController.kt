@@ -158,6 +158,9 @@ class ScanController(
     fun getAllProvenances(): Set<KnownProvenance> =
         nestedProvenances.values.flatMapTo(mutableSetOf()) { it.getProvenances() }
 
+    fun getAllScanResults(): List<ScanResult> =
+        scanResults.values.flatMap { scanResultsByProvenance -> scanResultsByProvenance.values.flatten() }
+
     /**
      * Return all provenances including sub-repositories associated with the identifiers of the packages they belong to.
      */
@@ -253,6 +256,8 @@ class ScanController(
      */
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
         packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
+
+    fun getPackageProvenance(id: Identifier): KnownProvenance? = packageProvenances[id]
 
     /**
      * Return the package provenanceResolutionIssue associated with the given [id].
