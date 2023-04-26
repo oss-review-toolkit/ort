@@ -1,11 +1,9 @@
-# Ignore the Docker files themselves to avoid that all layers are invalidated if
-# the Docker files are changed during development.
+# Ignore Docker-related files to avoid the cache being invalidated if the files are changed during development.
 .dockerignore
 Dockerfile*
 scripts/docker_*.sh
 
-# Ignore the Jenkinsfile to avoid that all layers are invalidated if the
-# Jenkinsfile is changed during development.
+# Ignore the Jenkinsfile to avoid the cache being invalidated if the file is changed during development.
 integrations/jenkins/Jenkinsfile
 
 # Ignore Git entries.
