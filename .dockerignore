@@ -1,4 +1,5 @@
 # Ignore Docker-related files to avoid the cache being invalidated if the files are changed during development.
+.batect/
 .dockerignore
 Dockerfile*
 scripts/docker_*.sh
