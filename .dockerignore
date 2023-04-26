@@ -4,6 +4,9 @@
 Dockerfile*
 scripts/docker_*.sh
 
+# Ignore GitHub configuration to avoid the cache being invalidated if the files are changed during development.
+.github/
+
 # Ignore the Jenkinsfile to avoid the cache being invalidated if the file is changed during development.
 integrations/jenkins/Jenkinsfile
 
