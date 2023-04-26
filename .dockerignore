@@ -7,6 +7,18 @@ scripts/docker_*.sh
 # Ignore the Jenkinsfile to avoid the cache being invalidated if the file is changed during development.
 integrations/jenkins/Jenkinsfile
 
+# Ignore miscellaneous top-level configuration files that do not have an impact on ORT's build.
+.codecov.yml
+.commitlintrc.yml
+.editorconfig
+.jitpack.yml
+.lift.toml
+.mailmap
+.ort.yml
+mlc_config.json
+qodana.yml
+renovate.json
+
 # Ignore Git entries.
 .git/
 .gitignore
