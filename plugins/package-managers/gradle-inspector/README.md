@@ -30,14 +30,6 @@ credentials in Maven.
 
 Also, the `isModified` check which compares with artifacts of the same name in Maven Central is not implemented yet.
 
-## Building
-
-Due to some optimizations IntelliJ IDEA performs when building Gradle projects, it might be that bundling the fat-JAR
-for the [Gradle plugin] as a resource into the [GradleInspector] does not always work reliably. In that case ensure that
-IntelliJ IDEA has "Gradle" configured for the "Build and run using" and "Run tests using" settings, and / or try to
-run the `:plugins:package-managers:gradle-plugin:fatJar` and `:plugins:package-managers:gradle-inspector:jar` tasks
-manually once.
-
 ## Debugging
 
 Due to this setup of the [GradleInspector], the [OrtModelBuilder] can actually be debugged. To do so, create a run
