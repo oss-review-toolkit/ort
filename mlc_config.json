@@ -4,6 +4,9 @@
             "pattern": "^#.*$"
         },
         {
+            "pattern": "^https?://localhost.*$"
+        },
+        {
             "pattern": "^https://fpchat-invite.herokuapp.com/$"
         },
         {
