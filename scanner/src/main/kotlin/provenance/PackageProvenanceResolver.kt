@@ -76,7 +76,7 @@ class DefaultPackageProvenanceResolver(
                 when (sourceCodeOrigin) {
                     SourceCodeOrigin.ARTIFACT -> {
                         if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
-                            return resolveSourceArtifact(pkg)
+                            return runBlocking { resolveSourceArtifact(pkg) }
                         }
                     }
 
@@ -112,7 +112,7 @@ class DefaultPackageProvenanceResolver(
         throw IOException(message)
     }
 
-    private fun resolveSourceArtifact(pkg: Package): ArtifactProvenance {
+    private suspend fun resolveSourceArtifact(pkg: Package): ArtifactProvenance {
         when (val storedResult = storage.readProvenance(pkg.id, pkg.sourceArtifact)) {
             is ResolvedArtifactProvenance -> {
                 logger.info {
@@ -157,12 +157,12 @@ class DefaultPackageProvenanceResolver(
      * Execute an HTTP request with the given [method] for the source artifact URL of the given [package][pkg].
      * Return the response status code, from which the existence of the artifact can be concluded.
      */
-    private fun requestSourceArtifact(pkg: Package, method: String): Int {
+    private suspend fun requestSourceArtifact(pkg: Package, method: String): Int {
         logger.debug { "Request for source artifact: $method ${pkg.sourceArtifact.url}." }
 
         val request = Request.Builder().method(method, null).url(pkg.sourceArtifact.url).build()
 
-        return OkHttpClientHelper.execute(request).use { it.code }
+        return OkHttpClientHelper.await(request).use { it.code }
     }
 
     private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {
