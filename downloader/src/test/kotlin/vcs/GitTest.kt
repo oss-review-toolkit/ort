@@ -35,7 +35,7 @@ import io.mockk.verify
 
 import java.net.Authenticator
 import java.net.PasswordAuthentication
-import java.net.URL
+import java.net.URI
 
 import org.eclipse.jgit.errors.UnsupportedCredentialItem
 import org.eclipse.jgit.transport.CredentialItem
@@ -153,7 +153,7 @@ class GitTest : WordSpec({
     }
 })
 
-private val TestUri = URIish(URL("https://www.example.org:8080/foo"))
+private val TestUri = URIish(URI.create("https://www.example.org:8080/foo").toURL())
 
 /**
  * Mocks the utility function to query password authentication for the test URI. Return the [result] provided.

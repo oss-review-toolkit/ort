@@ -36,7 +36,7 @@ import io.mockk.verify
 
 import java.net.Authenticator
 import java.net.PasswordAuthentication
-import java.net.URL
+import java.net.URI
 import java.nio.file.Paths
 
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -444,7 +444,7 @@ class UtilsTest : WordSpec({
             val host = "www.example.org"
             val port = 442
             val scheme = "https"
-            val url = URL("https://foo:bar@www.example.org")
+            val url = URI.create("https://foo:bar@www.example.org").toURL()
 
             val auth = OrtAuthenticator().requestPasswordAuthenticationInstance(
                 host,
