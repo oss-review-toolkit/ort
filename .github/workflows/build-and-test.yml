@@ -94,8 +94,6 @@ jobs:
     steps:
     - name: Install required tools
       run: |
-          sudo apt-get install -y --no-install-recommends cvs
-
           # Uninstall mono-devel because it contains the "lc" command which conflicts with BoyterLc.
           sudo apt-get -qq remove mono-devel
 

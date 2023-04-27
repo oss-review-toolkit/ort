@@ -172,11 +172,6 @@ fun requestPasswordAuthentication(uri: URI): PasswordAuthentication? =
 fun normalizeVcsUrl(vcsUrl: String): String {
     var url = vcsUrl.trim().trimEnd('/')
 
-    if (url.startsWith(":pserver:") || url.startsWith(":ext:")) {
-        // Do not touch CVS URLs for now.
-        return url
-    }
-
     // Avoid using the unauthenticated Git protocol, which is blocked by many VCS hosts.
     if (url.startsWith("git://")) {
         url = "https://${url.removePrefix("git://")}"

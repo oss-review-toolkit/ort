@@ -414,7 +414,6 @@ control.
 
 Currently, the following Version Control Systems (VCS) are supported:
 
-* [CVS](https://en.wikipedia.org/wiki/Concurrent_Versions_System)
 * [Git](https://git-scm.com/)
 * [Git-Repo](https://source.android.com/setup/develop/repo)
 * [Mercurial](https://www.mercurial-scm.org/)

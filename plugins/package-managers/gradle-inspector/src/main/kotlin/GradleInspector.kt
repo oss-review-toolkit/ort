@@ -354,12 +354,6 @@ private fun OrtDependency.toVcsInfo() =
 
 private fun OrtDependency.handleValidScmInfo(type: String, url: String, tag: String) =
     when {
-        // CVS URLs usually start with ":pserver:" or ":ext:", but as ":" is also the delimiter used by the Maven SCM
-        // plugin, no double ":" is used in the connection string, and we need to fix it up here.
-        type == "cvs" && !url.startsWith(":") -> {
-            VcsInfo(type = VcsType.CVS, url = ":$url", revision = tag)
-        }
-
         // Maven does not officially support git-repo as an SCM, see http://maven.apache.org/scm/scms-overview.html, so
         // come up with the convention to use the "manifest" query parameter for the path to the manifest inside the
         // repository. An earlier version of this workaround expected the query string to be only the path to the

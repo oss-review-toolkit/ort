@@ -38,7 +38,6 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     ca-certificates \
     coreutils \
-    cvs \
     curl \
     dirmngr \
     gcc \
