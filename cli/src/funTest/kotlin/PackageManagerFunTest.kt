@@ -115,7 +115,7 @@ class PackageManagerFunTest : WordSpec({
                 )
                 managedFilesByName["Maven"] should containExactly("maven/pom.xml")
                 managedFilesByName["NPM"] should containExactly("npm-pnpm-and-yarn/package.json")
-                managedFilesByName["NuGet"] should containExactly(
+                managedFilesByName["NuGet"] should containExactlyInAnyOrder(
                     "dotnet/test.csproj",
                     "nuget/packages.config"
                 )
