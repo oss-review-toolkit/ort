@@ -207,11 +207,6 @@ class DownloaderCommand : OrtCommand(
     }
 
     private fun downloadFromOrtResult(ortFile: File, failureMessages: MutableList<String>) {
-        println(
-            "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
-                    "'${ortFile.canonicalPath}'..."
-        )
-
         val ortResult = readOrtResult(ortFile)
 
         if (ortResult.analyzer?.result == null) {
@@ -223,17 +218,24 @@ class DownloaderCommand : OrtCommand(
             throw ProgramResult(0)
         }
 
+        println(
+            "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
+                    "'${ortFile.canonicalPath}'..."
+        )
+
         val packages = mutableListOf<Package>().apply {
             if (PackageType.PROJECT in packageTypes) {
-                addAll(consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded)).keys)
+                val projects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded)).keys
+                println("Found ${projects.size} project(s) in the ORT result.")
+                addAll(projects)
             }
 
             if (PackageType.PACKAGE in packageTypes) {
-                addAll(ortResult.getPackages(skipExcluded).map { it.metadata })
+                val packages = ortResult.getPackages(skipExcluded).map { it.metadata }
+                println("Found ${packages.size} packages(s) the ORT result.")
+                addAll(packages)
             }
         }
-
-        logger.info { "Found ${packages.size} package(s)." }
 
         packageIds?.also {
             val originalCount = packages.size
@@ -243,7 +245,7 @@ class DownloaderCommand : OrtCommand(
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                logger.info { "Removed $diffCount package(s) which do not match the specified id pattern." }
+                println("Removed $diffCount package(s) which do not match the specified id pattern.")
             }
         }
 
@@ -268,11 +270,11 @@ class DownloaderCommand : OrtCommand(
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                logger.info { "Removed $diffCount package(s) which do not match the specified license classification." }
+                println("Removed $diffCount package(s) which do not match the specified license classification.")
             }
         }
 
-        logger.info { "Downloading ${packages.size} package(s)." }
+        println("Downloading ${packages.size} project(s) / package(s) in total.")
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
