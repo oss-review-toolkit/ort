@@ -69,32 +69,36 @@ graalvmNative {
     }
 }
 
-tasks.named<BuildNativeImageTask>("nativeCompile") {
-    // Gradle's "Copy" task cannot handle symbolic links, see https://github.com/gradle/gradle/issues/3982. That is why
-    // links contained in the GraalVM distribution archive get broken during provisioning and are replaced by empty
-    // files. Address this by recreating the links in the toolchain directory.
-    val toolchainDir = options.get().javaLauncher.get().executablePath.asFile.parentFile.run {
-        if (name == "bin") parentFile else this
-    }
-
-    val toolchainFiles = toolchainDir.walkTopDown().filter { it.isFile }
-    val emptyFiles = toolchainFiles.filter { it.length() == 0L }
-
-    // Find empty toolchain files that are named like other toolchain files and assume these should have been links.
-    val links = toolchainFiles.mapNotNull { file ->
-        emptyFiles.singleOrNull { it != file && it.name == file.name }?.let {
-            file to it
+// JDK 20 will only be supported starting with GraalVM 23, see
+// https://www.graalvm.org/release-notes/release-calendar/#planned-releases
+if (JavaVersion.current().majorVersion.toInt() <= 19) {
+    tasks.named<BuildNativeImageTask>("nativeCompile") {
+        // Gradle's "Copy" task cannot handle symbolic links, see https://github.com/gradle/gradle/issues/3982. That is
+        // why links contained in the GraalVM distribution archive get broken during provisioning and are replaced by
+        // empty files. Address this by recreating the links in the toolchain directory.
+        val toolchainDir = options.get().javaLauncher.get().executablePath.asFile.parentFile.run {
+            if (name == "bin") parentFile else this
         }
-    }
 
-    // Fix up symbolic links.
-    links.forEach { (target, link) ->
-        logger.quiet("Fixing up '$link' to link to '$target'.")
+        val toolchainFiles = toolchainDir.walkTopDown().filter { it.isFile }
+        val emptyFiles = toolchainFiles.filter { it.length() == 0L }
 
-        if (link.delete()) {
-            Files.createSymbolicLink(link.toPath(), target.toPath())
-        } else {
-            logger.warn("Unable to delete '$link'.")
+        // Find empty toolchain files that are named like other toolchain files and assume these should have been links.
+        val links = toolchainFiles.mapNotNull { file ->
+            emptyFiles.singleOrNull { it != file && it.name == file.name }?.let {
+                file to it
+            }
+        }
+
+        // Fix up symbolic links.
+        links.forEach { (target, link) ->
+            logger.quiet("Fixing up '$link' to link to '$target'.")
+
+            if (link.delete()) {
+                Files.createSymbolicLink(link.toPath(), target.toPath())
+            } else {
+                logger.warn("Unable to delete '$link'.")
+            }
         }
     }
 }

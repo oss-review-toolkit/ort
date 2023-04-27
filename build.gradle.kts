@@ -110,6 +110,9 @@ if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
     throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
 }
 
+// See https://kotlinlang.org/docs/compiler-reference.html#jvm-target-version.
+val maxKotlinJvmTarget = javaVersion.majorVersion.toInt().coerceAtMost(19)
+
 idea {
     project {
         settings {
@@ -179,6 +182,9 @@ allprojects {
     }
 
     tasks.withType<Detekt> detekt@{
+        // Detekt is not up to Kotlin yet in terms of JVM target support.
+        jvmTarget = maxKotlinJvmTarget.coerceAtMost(18).toString()
+
         dependsOn(":detekt-rules:assemble")
 
         reports {
@@ -269,6 +275,12 @@ subprojects {
         }
     }
 
+    tasks.withType<JavaCompile>().configureEach {
+        // Align this with Kotlin to avoid errors, see https://youtrack.jetbrains.com/issue/KT-48745.
+        sourceCompatibility = maxKotlinJvmTarget.toString()
+        targetCompatibility = maxKotlinJvmTarget.toString()
+    }
+
     tasks.withType<KotlinCompile>().configureEach {
         val customCompilerArgs = listOf(
             "-opt-in=kotlin.contracts.ExperimentalContracts",
@@ -280,7 +292,7 @@ subprojects {
             allWarningsAsErrors = true
             apiVersion = "1.8"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-            jvmTarget = javaVersion.majorVersion
+            jvmTarget = maxKotlinJvmTarget.toString()
         }
     }
 
