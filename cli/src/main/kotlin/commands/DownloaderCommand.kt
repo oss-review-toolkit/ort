@@ -38,6 +38,12 @@ import java.io.File
 
 import kotlin.time.measureTime
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
+
 import org.ossreviewtoolkit.cli.GroupTypes.FileType
 import org.ossreviewtoolkit.cli.GroupTypes.StringType
 import org.ossreviewtoolkit.cli.OrtCommand
@@ -278,9 +284,7 @@ class DownloaderCommand : OrtCommand(
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
-        packageDownloadDirs.forEach { (pkg, dir) ->
-            downloadPackage(pkg, dir, failureMessages)
-        }
+        runBlocking { downloadAllPackages(packageDownloadDirs, failureMessages) }
 
         if (archiveMode == ArchiveMode.BUNDLE) {
             val zipFile = outputDir.resolve("archive.zip")
@@ -295,6 +299,23 @@ class DownloaderCommand : OrtCommand(
             packageDownloadDirs.forEach { (_, dir) ->
                 dir.safeDeleteRecursively(baseDirectory = outputDir)
             }
+        }
+    }
+
+    private suspend fun downloadAllPackages(
+        packageDownloadDirs: Map<Package, File>,
+        failureMessages: MutableList<String>
+    ) {
+        withContext(Dispatchers.IO) {
+            packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
+                async {
+                    val progress = "${index + 1} of ${packageDownloadDirs.size}"
+                    println("Starting download for ${pkg.id.toCoordinates()} ($progress).")
+                    downloadPackage(pkg, dir, failureMessages).also {
+                        println("Finished download for ${pkg.id.toCoordinates()} ($progress).")
+                    }
+                }
+            }.awaitAll()
         }
     }
 
