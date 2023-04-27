@@ -21,6 +21,7 @@ import de.undercouch.gradle.tasks.download.Download
 
 import groovy.json.JsonSlurper
 
+import java.net.URI
 import java.net.URL
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -76,7 +77,7 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
 
     private val spdxIdToScanCodeKeyMap: Map<String, String> by lazy {
         val jsonSlurper = JsonSlurper()
-        val url = URL("https://scancode-licensedb.aboutcode.org/index.json")
+        val url = URI.create("https://scancode-licensedb.aboutcode.org/index.json").toURL()
 
         logger.quiet("Downloading ScanCode license index...")
 
@@ -92,7 +93,7 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
 
     override fun getLicenseUrl(info: LicenseInfo): URL? {
         val key = spdxIdToScanCodeKeyMap[info.id] ?: return null
-        return URL("$url/$key.LICENSE")
+        return URI("$url/$key.LICENSE").toURL()
     }
 }
 
@@ -101,7 +102,7 @@ class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
 
     override fun getLicenseUrl(info: LicenseInfo): URL? {
         val prefix = "deprecated_".takeIf { info.isDeprecated && !info.isException }.orEmpty()
-        return URL("$url/text/$prefix${info.id}.txt")
+        return URI("$url/text/$prefix${info.id}.txt").toURL()
     }
 }
 
@@ -157,7 +158,7 @@ fun getLicenseInfo(
     val jsonSlurper = JsonSlurper()
 
     @Suppress("UNCHECKED_CAST")
-    val json = jsonSlurper.parse(URL(jsonUrl), "UTF-8") as Map<String, Any>
+    val json = jsonSlurper.parse(URI(jsonUrl).toURL(), "UTF-8") as Map<String, Any>
 
     val licenseListVersion = json["licenseListVersion"] as String
     logger.quiet("Found SPDX $description list version $licenseListVersion.")

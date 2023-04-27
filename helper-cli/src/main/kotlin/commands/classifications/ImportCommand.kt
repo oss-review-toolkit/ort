@@ -28,7 +28,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.net.URL
+import java.net.URI
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -83,11 +83,11 @@ private data class EclipseLicenses(
 
 private enum class LicenseClassificationProvider(val url: String) : Logging {
     DOUBLE_OPEN("https://github.com/doubleopen-project/policy-configuration/raw/main/license-classifications.yml") {
-        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URL(url))
+        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI.create(url).toURL())
     },
     ECLIPSE("https://www.eclipse.org/legal/licenses.json") {
         override fun getClassifications(): LicenseClassifications {
-            val json = jsonMapper.readValue<EclipseLicenses>(URL(url))
+            val json = jsonMapper.readValue<EclipseLicenses>(URI.create(url).toURL())
 
             logger.info { "Importing Eclipse license classifications dated ${json.meta["updated"]}." }
 
@@ -110,7 +110,7 @@ private enum class LicenseClassificationProvider(val url: String) : Logging {
         }
     },
     LDB_COLLECTOR("https://github.com/maxhbr/LDBcollector/raw/generated/ort/license-classifications.yml") {
-        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URL(url))
+        override fun getClassifications(): LicenseClassifications = yamlMapper.readValue(URI.create(url).toURL())
     };
 
     abstract fun getClassifications(): LicenseClassifications

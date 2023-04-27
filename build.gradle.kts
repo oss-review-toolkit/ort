@@ -22,7 +22,7 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
-import java.net.URL
+import java.net.URI
 
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Config
@@ -306,28 +306,28 @@ subprojects {
 
                 externalDocumentationLink {
                     val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
-                    url.set(URL(baseUrl))
-                    packageListUrl.set(URL("$baseUrl/package-list"))
+                    url.set(URI.create(baseUrl).toURL())
+                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
                 }
 
                 externalDocumentationLink {
                     val majorMinorVersion = jacksonVersion.split('.').let { "${it[0]}.${it[1]}" }
                     val baseUrl = "https://fasterxml.github.io/jackson-databind/javadoc/$majorMinorVersion"
-                    url.set(URL(baseUrl))
-                    packageListUrl.set(URL("$baseUrl/package-list"))
+                    url.set(URI.create(baseUrl).toURL())
+                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
                 }
 
                 externalDocumentationLink {
                     val baseUrl = "https://jakewharton.github.io/DiskLruCache"
-                    url.set(URL(baseUrl))
-                    packageListUrl.set(URL("$baseUrl/package-list"))
+                    url.set(URI.create(baseUrl).toURL())
+                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
                 }
 
                 externalDocumentationLink {
                     val majorVersion = log4jApiVersion.substringBefore('.')
                     val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
-                    url.set(URL(baseUrl))
-                    packageListUrl.set(URL("$baseUrl/package-list"))
+                    url.set(URI.create(baseUrl).toURL())
+                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
                 }
             }
         }

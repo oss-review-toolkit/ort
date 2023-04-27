@@ -29,7 +29,7 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 
-import java.net.URL
+import java.net.URI
 
 import kotlin.time.measureTimedValue
 
@@ -82,7 +82,7 @@ class GitHubService private constructor(
 
             val httpClient = client?.config(clientConfig) ?: HttpClient(clientConfig)
 
-            return GitHubService(GraphQLKtorClient(URL(url), httpClient))
+            return GitHubService(GraphQLKtorClient(URI(url).toURL(), httpClient))
         }
     }
 
