@@ -32,6 +32,7 @@ val VCS_DIRECTORIES = listOf(
     ".hg",
     ".repo",
     ".svn",
+    // Keep CVS directories in here even if ORT itself does not support CVS anymore.
     "CVS",
     "CVSROOT"
 )

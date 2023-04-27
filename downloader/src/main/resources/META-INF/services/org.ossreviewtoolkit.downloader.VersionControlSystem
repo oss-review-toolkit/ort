@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.downloader.vcs.Cvs
 org.ossreviewtoolkit.downloader.vcs.Git
 org.ossreviewtoolkit.downloader.vcs.GitRepo
 org.ossreviewtoolkit.downloader.vcs.Mercurial

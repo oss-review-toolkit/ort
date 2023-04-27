@@ -115,7 +115,6 @@ RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/
         xz-utils \
         zlib1g-dev \
         # Install VCS tools (no specific versions required here).
-        cvs \
         git \
         mercurial \
         subversion \

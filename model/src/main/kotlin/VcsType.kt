@@ -57,17 +57,11 @@ data class VcsType private constructor(val aliases: List<String>) {
         val SUBVERSION = VcsType("Subversion", "svn")
 
         /**
-         * The [Concurrent Versions System](https://en.wikipedia.org/wiki/Concurrent_Versions_System), not actively
-         * developed anymore.
-         */
-        val CVS = VcsType("CVS")
-
-        /**
          * An unknown VCS type.
          */
         val UNKNOWN = VcsType("")
 
-        private val KNOWN_TYPES = setOf(GIT, GIT_REPO, MERCURIAL, SUBVERSION, CVS)
+        private val KNOWN_TYPES = setOf(GIT, GIT_REPO, MERCURIAL, SUBVERSION)
 
         /**
          * Search all [known VCS types][KNOWN_TYPES] for being associated with given [name] return the first matching

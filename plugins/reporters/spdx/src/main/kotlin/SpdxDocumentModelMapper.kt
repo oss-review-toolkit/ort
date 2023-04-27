@@ -305,7 +305,6 @@ private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
 
 private fun VcsInfo.toSpdxDownloadLocation(resolvedRevision: String?): String {
     val vcsTool = when (type) {
-        VcsType.CVS -> "cvs"
         VcsType.GIT -> "git"
         VcsType.GIT_REPO -> "repo"
         VcsType.MERCURIAL -> "hg"
