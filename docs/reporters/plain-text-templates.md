@@ -1,15 +1,15 @@
 # Notice Templates
 
-The [`PlainTextTemplateReporter`](../../reporter/src/main/kotlin/reporters/freemarker/PlainTextTemplateReporter.kt)
+The [`PlainTextTemplateReporter`](../../plugins/reporters/freemarker/src/main/kotlin/PlainTextTemplateReporter.kt)
 enables customization of the generated open source notices with [Apache Freemarker](https://freemarker.apache.org/)
 templates and producing any other arbitrary plain text files, such as `.adoc` files.
 
 ORT provides two templates that can be used as a base for creating your custom open source notices:
 
-* [default](../../reporter/src/main/resources/templates/plain-text/NOTICE_DEFAULT.ftl): Prints a summary of all licenses 
-  found in the project itself and lists licenses for all dependencies separately.
-* [summary](../../reporter/src/main/resources/templates/plain-text/NOTICE_SUMMARY.ftl): Prints a summary of all licenses
-  found in the project itself and all dependencies.
+* [default](../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_DEFAULT.ftl): Prints a
+  summary of all licenses found in the project itself and lists licenses for all dependencies separately.
+* [summary](../../plugins/reporters/freemarker/src/main/resources/templates/plain-text/NOTICE_SUMMARY.ftl): Prints a
+  summary of all licenses found in the project itself and all dependencies.
 
 See the code comments in the templates for how they work.
 
