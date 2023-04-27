@@ -8,8 +8,8 @@ In the `web-app-template` directory, you can run:
 ### `yarn build`
 
 Builds the `index.html` (used for debugging of the Web App) and `scan-report-template.html` in the `/build` directory.
-The [Kotlin report code](../reporter/src/main/kotlin/reporters/WebAppReporter.kt) uses `scan-report-template.html` as a
-template and injects scan results into it to create the final ORT Web App scan report.
+The [Kotlin report code](../web-app/src/main/kotlin/WebAppReporter.kt) uses `scan-report-template.html` as a template
+and injects scan results into it to create the final ORT Web App scan report.
 
 ### `yarn start`
 
