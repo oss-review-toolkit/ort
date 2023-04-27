@@ -279,35 +279,7 @@ class DownloaderCommand : OrtCommand(
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
         packageDownloadDirs.forEach { (pkg, dir) ->
-            try {
-                Downloader(ortConfig.downloader).download(pkg, dir)
-
-                if (archiveMode == ArchiveMode.ENTITY) {
-                    val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
-
-                    logger.info { "Archiving directory '$dir' to '$zipFile'." }
-                    val result = runCatching {
-                        dir.packZip(
-                            zipFile,
-                            "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
-                        )
-                    }
-
-                    result.exceptionOrNull()?.let {
-                        logger.error { "Could not archive '$dir': ${it.collectMessages()}" }
-                    }
-
-                    dir.safeDeleteRecursively(baseDirectory = outputDir)
-                }
-            } catch (e: DownloadException) {
-                e.showStackTrace()
-
-                val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
-                        e.collectMessages()
-                failureMessages += failureMessage
-
-                logger.error { failureMessage }
-            }
+            downloadPackage(pkg, dir, failureMessages)
         }
 
         if (archiveMode == ArchiveMode.BUNDLE) {
@@ -323,6 +295,38 @@ class DownloaderCommand : OrtCommand(
             packageDownloadDirs.forEach { (_, dir) ->
                 dir.safeDeleteRecursively(baseDirectory = outputDir)
             }
+        }
+    }
+
+    private fun downloadPackage(pkg: Package, dir: File, failureMessages: MutableList<String>) {
+        try {
+            Downloader(ortConfig.downloader).download(pkg, dir)
+
+            if (archiveMode == ArchiveMode.ENTITY) {
+                val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
+
+                logger.info { "Archiving directory '$dir' to '$zipFile'." }
+                val result = runCatching {
+                    dir.packZip(
+                        zipFile,
+                        "${pkg.id.name.encodeOrUnknown()}/${pkg.id.version.encodeOrUnknown()}/"
+                    )
+                }
+
+                result.exceptionOrNull()?.let {
+                    logger.error { "Could not archive '$dir': ${it.collectMessages()}" }
+                }
+
+                dir.safeDeleteRecursively(baseDirectory = outputDir)
+            }
+        } catch (e: DownloadException) {
+            e.showStackTrace()
+
+            val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
+                    e.collectMessages()
+            failureMessages += failureMessage
+
+            logger.error { failureMessage }
         }
     }
 
