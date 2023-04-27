@@ -240,8 +240,7 @@ scanner:
         issues:
         - timestamp: "1970-01-01T00:00:00Z"
           source: "scanner"
-          message: "Could not resolve provenance for package 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0':\
-            \ IOException: Could not resolve provenance for 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'\
+          message: "IOException: Could not resolve provenance for package 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'\
             \ for source code origins [VCS, ARTIFACT].\nResolution of VCS failed with:\n\
             URISyntaxException: Cannot parse Git URI-ish: The uri was empty or null"
           severity: "ERROR"
