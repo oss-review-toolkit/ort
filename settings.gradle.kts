@@ -38,6 +38,7 @@ include(":model")
 include(":notifier")
 include(":plugins:commands")
 include(":plugins:commands:advisor")
+include(":plugins:commands:analyzer")
 include(":plugins:commands:api")
 include(":plugins:commands:evaluator")
 include(":plugins:commands:requirements")
@@ -97,6 +98,7 @@ project(":clients:scanoss").name = "scanoss-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
 
 project(":plugins:commands:advisor").name = "advisor-command"
+project(":plugins:commands:analyzer").name = "analyzer-command"
 project(":plugins:commands:api").name = "command-api"
 project(":plugins:commands:evaluator").name = "evaluator-command"
 project(":plugins:commands:requirements").name = "requirements-command"
