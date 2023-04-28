@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,20 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.utils
+plugins {
+    // Apply core plugins.
+    `java-library`
+}
 
-const val OPTION_GROUP_CONFIGURATION = "Configuration Options"
-const val OPTION_GROUP_INPUT = "Input Options"
-const val OPTION_GROUP_OUTPUT = "Output Options"
-const val OPTION_GROUP_RULE = "Rule Options"
+dependencies {
+    api(project(":model"))
+    api(project(":utils:common-utils"))
+
+    api(libs.clikt)
+    api(libs.log4jApiKotlin)
+
+    implementation(project(":utils:ort-utils"))
+
+    implementation(libs.jacksonCore)
+    implementation(libs.jacksonDatabind)
+}

@@ -38,12 +38,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 
-import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.inputGroup
-import org.ossreviewtoolkit.cli.utils.logger
-import org.ossreviewtoolkit.cli.utils.outputGroup
-import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -59,6 +53,12 @@ import org.ossreviewtoolkit.model.utils.CompositePackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.logger
+import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter

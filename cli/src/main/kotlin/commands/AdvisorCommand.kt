@@ -38,15 +38,15 @@ import kotlin.time.toKotlinDuration
 import kotlinx.coroutines.runBlocking
 
 import org.ossreviewtoolkit.advisor.Advisor
-import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.SeverityStats
-import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.outputGroup
-import org.ossreviewtoolkit.cli.utils.readOrtResult
-import org.ossreviewtoolkit.cli.utils.writeOrtResult
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStats
+import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
+import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
