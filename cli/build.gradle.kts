@@ -174,9 +174,7 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.bundles.exposed)
-    implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.clikt)
-    implementation(libs.hikari)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
     implementation(libs.log4jApiToSlf4j)
