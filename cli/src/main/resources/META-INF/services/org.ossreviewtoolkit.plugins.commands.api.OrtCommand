@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.cli.commands.AnalyzerCommand
 org.ossreviewtoolkit.cli.commands.ConfigCommand
 org.ossreviewtoolkit.cli.commands.DownloaderCommand
 org.ossreviewtoolkit.cli.commands.NotifierCommand

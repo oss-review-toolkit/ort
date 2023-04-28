@@ -159,7 +159,6 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":analyzer"))
     implementation(project(":downloader"))
     implementation(project(":model"))
     implementation(project(":notifier"))
@@ -170,8 +169,6 @@ dependencies {
     implementation(project(":utils:spdx-utils"))
 
     implementation(platform(project(":plugins:commands")))
-    implementation(platform(project(":plugins:package-curation-providers")))
-    implementation(platform(project(":plugins:package-managers")))
     implementation(platform(project(":plugins:reporters")))
 
     implementation(libs.bundles.exposed)
