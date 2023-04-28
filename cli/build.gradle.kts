@@ -181,11 +181,12 @@ dependencies {
     implementation(libs.clikt)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jApiToSlf4j)
     implementation(libs.logbackClassic)
     implementation(libs.postgres)
     implementation(libs.reflections)
     implementation(libs.sw360Client)
+
+    runtimeOnly(libs.log4jApiToSlf4j)
 
     funTestImplementation(testFixtures(project(":analyzer")))
 
