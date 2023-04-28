@@ -29,9 +29,6 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.net.URI
 
-import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.inputGroup
-import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionInfo
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.ContributionPatch
@@ -51,6 +48,9 @@ import org.ossreviewtoolkit.model.PackageCurationData
 import org.ossreviewtoolkit.model.readValueOrDefault
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 

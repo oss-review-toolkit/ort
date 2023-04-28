@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.utils
+package org.ossreviewtoolkit.plugins.commands.api.utils
 
 import com.github.ajalt.clikt.core.ProgramResult
 
@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.Severity
 /**
  * Helper class to collect severity statistics.
  */
-internal sealed class SeverityStats(
+sealed class SeverityStats(
     private val resolvedCounts: Map<Severity, Int>,
     private val unresolvedCounts: Map<Severity, Int>
 ) {

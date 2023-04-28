@@ -37,13 +37,12 @@ import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
 
-import java.io.File
-
 import kotlin.system.exitProcess
 
-import org.ossreviewtoolkit.cli.utils.logger
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -58,14 +57,6 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.printStackTrace
 
 import org.slf4j.LoggerFactory
-
-/**
- * Helper class for mutually exclusive command line options of different types.
- */
-sealed interface GroupTypes {
-    data class FileType(val file: File) : GroupTypes
-    data class StringType(val string: String) : GroupTypes
-}
 
 /**
  * The entry point for the application with [args] being the list of arguments.

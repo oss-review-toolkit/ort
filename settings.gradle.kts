@@ -39,6 +39,7 @@ include(":helper-cli")
 include(":model")
 include(":notifier")
 include(":plugins:commands")
+include(":plugins:commands:api")
 include(":plugins:package-curation-providers")
 include(":plugins:package-curation-providers:api")
 include(":plugins:package-curation-providers:clearly-defined")
@@ -93,6 +94,8 @@ project(":clients:oss-index").name = "oss-index-client"
 project(":clients:osv").name = "osv-client"
 project(":clients:scanoss").name = "scanoss-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
+
+project(":plugins:commands:api").name = "command-api"
 
 project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
 project(":plugins:package-curation-providers:clearly-defined").name = "clearly-defined-package-curation-provider"

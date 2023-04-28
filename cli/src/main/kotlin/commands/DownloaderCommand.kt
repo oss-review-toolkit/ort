@@ -44,15 +44,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
-import org.ossreviewtoolkit.cli.GroupTypes.FileType
-import org.ossreviewtoolkit.cli.GroupTypes.StringType
-import org.ossreviewtoolkit.cli.OrtCommand
-import org.ossreviewtoolkit.cli.utils.OPTION_GROUP_INPUT
-import org.ossreviewtoolkit.cli.utils.configurationGroup
-import org.ossreviewtoolkit.cli.utils.inputGroup
-import org.ossreviewtoolkit.cli.utils.logger
-import org.ossreviewtoolkit.cli.utils.outputGroup
-import org.ossreviewtoolkit.cli.utils.readOrtResult
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -70,6 +61,15 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
+import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
+import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.FileType
+import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.StringType
+import org.ossreviewtoolkit.plugins.commands.api.utils.OPTION_GROUP_INPUT
+import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.logger
+import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
+import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.utils.common.ArchiveType
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.encodeOrUnknown
