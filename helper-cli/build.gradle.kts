@@ -56,8 +56,6 @@ tasks.named<CreateStartScripts>("startScripts") {
 }
 
 repositories {
-    // Need to repeat the analyzer's custom repository definition here, see
-    // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
         forRepository {
             maven("https://repo.gradle.org/gradle/libs-releases/")
