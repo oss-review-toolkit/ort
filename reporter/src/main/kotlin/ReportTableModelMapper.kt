@@ -70,7 +70,7 @@ private fun Project.getScopesForDependencies(
 /**
  * A mapper which converts an [Issue] to a [ReportTableModel] view model.
  */
-class ReportTableModelMapper {
+object ReportTableModelMapper {
     private fun Issue.toResolvableIssue(
         resolutionProvider: ResolutionProvider,
         howToFixTextProvider: HowToFixTextProvider
