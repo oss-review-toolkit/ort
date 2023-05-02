@@ -162,13 +162,11 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":model"))
     implementation(project(":plugins:commands:command-api"))
-    implementation(project(":reporter"))
     implementation(project(":scanner"))
     implementation(project(":utils:ort-utils"))
     implementation(project(":utils:spdx-utils"))
 
     implementation(platform(project(":plugins:commands")))
-    implementation(platform(project(":plugins:reporters")))
 
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)

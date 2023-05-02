@@ -34,6 +34,7 @@ dependencies {
     api(project(":plugins:commands:downloader-command"))
     api(project(":plugins:commands:evaluator-command"))
     api(project(":plugins:commands:notifier-command"))
+    api(project(":plugins:commands:reporter-command"))
     api(project(":plugins:commands:requirements-command"))
 }
 
