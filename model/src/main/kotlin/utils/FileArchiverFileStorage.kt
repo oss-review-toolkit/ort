@@ -40,9 +40,20 @@ class FileArchiverFileStorage(
     /**
      * The [FileStorage] to use for storing the files.
      */
-    private val storage: FileStorage
+    private val storage: FileStorage,
+
+    /**
+     * The filename of the archive.
+     */
+    private val archiveFilename: String,
 ) : FileArchiverStorage {
     private companion object : Logging
+
+    init {
+        require(archiveFilename.isNotEmpty()) {
+            "The archive filename must not be empty."
+        }
+    }
 
     override fun hasArchive(provenance: KnownProvenance): Boolean {
         val archivePath = getArchivePath(provenance)
@@ -73,6 +84,8 @@ class FileArchiverFileStorage(
             null
         }
     }
+
+    private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/$archiveFilename"
 }
 
 private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
@@ -88,5 +101,3 @@ private fun KnownProvenance.hash(): String {
 
     return SHA1_DIGEST.digest(key.toByteArray()).encodeHex()
 }
-
-private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/archive.zip"

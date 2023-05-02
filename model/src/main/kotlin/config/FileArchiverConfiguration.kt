@@ -47,7 +47,9 @@ data class FileArchiverConfiguration(
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
-    private companion object : Logging
+    companion object : Logging {
+        const val ARCHIVE_FILENAME = "archive.zip"
+    }
 
     init {
         if (fileStorage != null && postgresStorage != null) {
@@ -66,7 +68,10 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
     if (this?.enabled == false) return null
 
     val storage = when {
-        this?.fileStorage != null -> FileArchiverFileStorage(fileStorage.createFileStorage())
+        this?.fileStorage != null -> FileArchiverFileStorage(
+            storage = fileStorage.createFileStorage(),
+            archiveFilename = FileArchiverConfiguration.ARCHIVE_FILENAME
+        )
 
         this?.postgresStorage != null -> {
             val dataSource = DatabaseUtils.createHikariDataSource(
@@ -77,7 +82,10 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
             PostgresFileArchiverStorage(dataSource)
         }
 
-        else -> FileArchiverFileStorage(LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR))
+        else -> FileArchiverFileStorage(
+            storage = LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
+            archiveFilename = FileArchiverConfiguration.ARCHIVE_FILENAME
+        )
     }
 
     val patterns = LicenseFilePatterns.getInstance().allLicenseFilenames
