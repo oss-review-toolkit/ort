@@ -87,7 +87,7 @@ class PostgresProvenanceFileStorage(
             }.first()[table.provenance.count()].toInt()
         } == 1
 
-    override fun addFile(provenance: KnownProvenance, file: File) {
+    override fun putFile(provenance: KnownProvenance, file: File) {
         database.transaction {
             table.deleteWhere {
                 table.provenance eq provenance.storageKey()
