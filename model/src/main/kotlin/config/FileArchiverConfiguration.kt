@@ -49,6 +49,7 @@ data class FileArchiverConfiguration(
 ) {
     companion object : Logging {
         const val ARCHIVE_FILENAME = "archive.zip"
+        const val TABLE_NAME = "file_archives"
     }
 
     init {
@@ -79,7 +80,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
                 applicationNameSuffix = "file-archiver"
             )
 
-            PostgresFileArchiverStorage(dataSource)
+            PostgresFileArchiverStorage(dataSource, FileArchiverConfiguration.TABLE_NAME)
         }
 
         else -> FileArchiverFileStorage(

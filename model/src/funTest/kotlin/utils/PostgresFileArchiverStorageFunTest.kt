@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.test.PostgresListener
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -64,7 +65,7 @@ class PostgresFileArchiverStorageFunTest : WordSpec({
     register(postgresListener)
 
     beforeEach {
-        storage = PostgresFileArchiverStorage(postgresListener.dataSource)
+        storage = PostgresFileArchiverStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)
     }
 
     "hasArchive()" should {
