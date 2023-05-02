@@ -32,8 +32,10 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.count
-import org.jetbrains.exposed.sql.insertIgnore
+import org.jetbrains.exposed.sql.deleteWhere
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -87,7 +89,11 @@ class PostgresProvenanceFileStorage(
 
     override fun addFile(provenance: KnownProvenance, file: File) {
         database.transaction {
-            table.insertIgnore {
+            table.deleteWhere {
+                table.provenance eq provenance.storageKey()
+            }
+
+            table.insert {
                 it[this.provenance] = provenance.storageKey()
                 it[zipData] = file.readBytes()
             }

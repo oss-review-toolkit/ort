@@ -90,5 +90,14 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
                 readTextAndDelete() shouldBe "source artifact"
             }
         }
+
+        "return the overwritten file corresponding to the given provenance" {
+            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
+            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact updated"))
+
+            storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
+                readTextAndDelete() shouldBe "source artifact updated"
+            }
+        }
     }
 })
