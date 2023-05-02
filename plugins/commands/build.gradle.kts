@@ -39,6 +39,7 @@ dependencies {
     api(project(":plugins:commands:scanner-command"))
     api(project(":plugins:commands:upload-curations-command"))
     api(project(":plugins:commands:upload-result-to-postgres-command"))
+    api(project(":plugins:commands:upload-result-to-sw360-command"))
 }
 
 configure<PublishingExtension> {

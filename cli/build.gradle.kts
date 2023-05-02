@@ -159,20 +159,16 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":downloader"))
-    implementation(project(":model"))
-    implementation(project(":plugins:commands:command-api"))
-    implementation(project(":scanner"))
-    implementation(project(":utils:ort-utils"))
-    implementation(project(":utils:spdx-utils"))
-
     implementation(platform(project(":plugins:commands")))
 
+    implementation(project(":model"))
+    implementation(project(":plugins:commands:command-api"))
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:ort-utils"))
+
     implementation(libs.clikt)
-    implementation(libs.jacksonModuleKotlin)
     implementation(libs.log4jApiKotlin)
     implementation(libs.logbackClassic)
-    implementation(libs.sw360Client)
 
     runtimeOnly(libs.log4jApiToSlf4j)
 
