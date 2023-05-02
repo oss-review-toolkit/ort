@@ -45,46 +45,6 @@ import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
  * A mapper which converts an [OrtResult] to a [ReportTableModel].
  */
 object ReportTableModelMapper {
-    private fun Issue.toResolvableIssue(
-        resolutionProvider: ResolutionProvider,
-        howToFixTextProvider: HowToFixTextProvider
-    ): ResolvableIssue {
-        val resolutions = resolutionProvider.getIssueResolutionsFor(this)
-        return ResolvableIssue(
-            source = this@toResolvableIssue.source,
-            description = this@toResolvableIssue.toString(),
-            resolutionDescription = buildString {
-                if (resolutions.isNotEmpty()) {
-                    append(
-                        resolutions.joinToString(prefix = "\nResolved by: ") {
-                            "${it.reason} - ${it.comment}"
-                        }
-                    )
-                }
-            },
-            isResolved = resolutions.isNotEmpty(),
-            severity = severity,
-            howToFix = howToFixTextProvider.getHowToFixText(this).orEmpty()
-        )
-    }
-
-    private fun RuleViolation.toResolvableViolation(resolutionProvider: ResolutionProvider): ResolvableViolation {
-        val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
-        return ResolvableViolation(
-            violation = this,
-            resolutionDescription = buildString {
-                if (resolutions.isNotEmpty()) {
-                    append(
-                        resolutions.joinToString(prefix = "\nResolved by: ") {
-                            "${it.reason} - ${it.comment}"
-                        }
-                    )
-                }
-            },
-            isResolved = resolutions.isNotEmpty()
-        )
-    }
-
     fun map(
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver,
@@ -251,4 +211,44 @@ private fun Project.getScopesForDependencies(
     }
 
     return result
+}
+
+private fun Issue.toResolvableIssue(
+    resolutionProvider: ResolutionProvider,
+    howToFixTextProvider: HowToFixTextProvider
+): ResolvableIssue {
+    val resolutions = resolutionProvider.getIssueResolutionsFor(this)
+    return ResolvableIssue(
+        source = source,
+        description = toString(),
+        resolutionDescription = buildString {
+            if (resolutions.isNotEmpty()) {
+                append(
+                    resolutions.joinToString(prefix = "\nResolved by: ") {
+                        "${it.reason} - ${it.comment}"
+                    }
+                )
+            }
+        },
+        isResolved = resolutions.isNotEmpty(),
+        severity = severity,
+        howToFix = howToFixTextProvider.getHowToFixText(this).orEmpty()
+    )
+}
+
+private fun RuleViolation.toResolvableViolation(resolutionProvider: ResolutionProvider): ResolvableViolation {
+    val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
+    return ResolvableViolation(
+        violation = this,
+        resolutionDescription = buildString {
+            if (resolutions.isNotEmpty()) {
+                append(
+                    resolutions.joinToString(prefix = "\nResolved by: ") {
+                        "${it.reason} - ${it.comment}"
+                    }
+                )
+            }
+        },
+        isResolved = resolutions.isNotEmpty()
+    )
 }
