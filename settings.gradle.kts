@@ -46,6 +46,7 @@ include(":plugins:commands:evaluator")
 include(":plugins:commands:notifier")
 include(":plugins:commands:reporter")
 include(":plugins:commands:requirements")
+include(":plugins:commands:scanner")
 include(":plugins:package-curation-providers")
 include(":plugins:package-curation-providers:api")
 include(":plugins:package-curation-providers:clearly-defined")
@@ -110,6 +111,7 @@ project(":plugins:commands:evaluator").name = "evaluator-command"
 project(":plugins:commands:notifier").name = "notifier-command"
 project(":plugins:commands:reporter").name = "reporter-command"
 project(":plugins:commands:requirements").name = "requirements-command"
+project(":plugins:commands:scanner").name = "scanner-command"
 
 project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
 project(":plugins:package-curation-providers:clearly-defined").name = "clearly-defined-package-curation-provider"

@@ -36,6 +36,7 @@ dependencies {
     api(project(":plugins:commands:notifier-command"))
     api(project(":plugins:commands:reporter-command"))
     api(project(":plugins:commands:requirements-command"))
+    api(project(":plugins:commands:scanner-command"))
 }
 
 configure<PublishingExtension> {

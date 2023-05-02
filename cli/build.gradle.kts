@@ -171,7 +171,6 @@ dependencies {
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)
     implementation(libs.jacksonModuleKotlin)
-    implementation(libs.kotlinxCoroutines)
     implementation(libs.log4jApiKotlin)
     implementation(libs.logbackClassic)
     implementation(libs.postgres)
