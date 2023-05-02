@@ -59,7 +59,7 @@ integrations. It consists of the following tools which can be combined into a _h
 * [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
 * [_Notifier_](./notifier) - sends result notifications via different channels (like
-  [emails](./examples/notifications/src/main/resources/example.notifications.kts) and / or JIRA tickets).
+  [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
 Also see the [list of related tools](#related-tools) that help with running ORT. 
 
@@ -650,8 +650,7 @@ To enable this provider, pass `-a OSV` on the command line.
 
 The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
 implemented as Kotlin scripts with a dedicated DSL. See
-[example.rules.kts](./examples/evaluator-rules/src/main/resources/example.rules.kts) for an example rules script. The
-script is wrapped into a minimal [evaluator-rules](./examples/evaluator-rules) project which enables auto-completion.
+[example.rules.kts](./examples/example.rules.kts) for an example rules script.
 
 <a name="reporter">&nbsp;</a>
 

@@ -84,7 +84,7 @@ spec:
             cpu: 4
       - name: "evaluate"
         image: ort:latest
-        args: ["evaluate", "-i", "/workspace/shared/results/scanner/scan-result.yml", "-o", "/workspace/shared/results/evaluator", "--package-curations-file", "/workspace/shared/ort/examples/curations.yml", "--rules-file", "/workspace/shared/ort/examples/evaluator-rules/src/main/resources/example.rules.kts", "--license-classifications-file", "/workspace/shared/ort/examples/license-classifications.yml"]
+        args: ["evaluate", "-i", "/workspace/shared/results/scanner/scan-result.yml", "-o", "/workspace/shared/results/evaluator", "--package-curations-file", "/workspace/shared/ort/examples/curations.yml", "--rules-file", "/workspace/shared/ort/examples/example.rules.kts", "--license-classifications-file", "/workspace/shared/ort/examples/license-classifications.yml"]
         env:
           - name: "ORT_DATA_DIR"
             value: "/workspace/ort-data-dir/data"
