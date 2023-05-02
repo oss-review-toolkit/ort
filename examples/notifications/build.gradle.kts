@@ -32,8 +32,6 @@ repositories {
         }
     }
 
-    // Need to repeat several custom repository definitions of other submodules here, see
-    // https://github.com/gradle/gradle/issues/4106.
     exclusiveContent {
         forRepository {
             maven("https://packages.atlassian.com/maven-external")
