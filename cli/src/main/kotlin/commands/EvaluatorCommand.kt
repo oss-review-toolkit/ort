@@ -144,6 +144,7 @@ class EvaluatorCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .default(ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME))
+        .configurationGroup()
 
     private val packageCurationsFile by option(
         "--package-curations-file",
