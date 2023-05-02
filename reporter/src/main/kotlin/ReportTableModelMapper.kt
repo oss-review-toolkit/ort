@@ -68,7 +68,7 @@ private fun Project.getScopesForDependencies(
 }
 
 /**
- * A mapper which converts an [Issue] to a [ReportTableModel] view model.
+ * A mapper which converts an [OrtResult] to a [ReportTableModel].
  */
 object ReportTableModelMapper {
     private fun Issue.toResolvableIssue(
