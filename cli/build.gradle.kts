@@ -161,7 +161,6 @@ repositories {
 dependencies {
     implementation(project(":downloader"))
     implementation(project(":model"))
-    implementation(project(":notifier"))
     implementation(project(":plugins:commands:command-api"))
     implementation(project(":reporter"))
     implementation(project(":scanner"))

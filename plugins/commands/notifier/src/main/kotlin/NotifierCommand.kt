@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli.commands
+package org.ossreviewtoolkit.plugins.commands.notifier
 
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.parameters.options.associate

@@ -43,6 +43,7 @@ include(":plugins:commands:api")
 include(":plugins:commands:config")
 include(":plugins:commands:downloader")
 include(":plugins:commands:evaluator")
+include(":plugins:commands:notifier")
 include(":plugins:commands:requirements")
 include(":plugins:package-curation-providers")
 include(":plugins:package-curation-providers:api")
@@ -105,6 +106,7 @@ project(":plugins:commands:api").name = "command-api"
 project(":plugins:commands:config").name = "config-command"
 project(":plugins:commands:downloader").name = "downloader-command"
 project(":plugins:commands:evaluator").name = "evaluator-command"
+project(":plugins:commands:notifier").name = "notifier-command"
 project(":plugins:commands:requirements").name = "requirements-command"
 
 project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
