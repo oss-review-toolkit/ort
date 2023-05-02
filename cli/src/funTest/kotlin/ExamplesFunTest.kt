@@ -147,7 +147,7 @@ class ExamplesFunTest : StringSpec({
             licenseClassifications = licenseFile.readValue()
         )
 
-        val script = examplesDir.resolve("evaluator-rules/src/main/resources/example.rules.kts").readText()
+        val script = takeExampleFile("example.rules.kts").readText()
 
         val result = evaluator.run(script)
 
@@ -182,7 +182,7 @@ class ExamplesFunTest : StringSpec({
             )
         )
 
-        val script = examplesDir.resolve("notifications/src/main/resources/example.notifications.kts").readText()
+        val script = takeExampleFile("example.notifications.kts").readText()
 
         notifier.run(script)
 

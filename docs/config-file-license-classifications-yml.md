@@ -58,4 +58,4 @@ cli/build/install/ort/bin/ort evaluate
 [Rules]: file-rules-kts.md
 [Plain text templates]: reporters/plain-text-templates.md
 [license-classifications.yml example]: ../examples/license-classifications.yml
-[example.rules.kts]: ../examples/evaluator-rules/src/main/resources/example.rules.kts
+[example.rules.kts]: ../examples/example.rules.kts
