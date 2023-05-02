@@ -24,13 +24,14 @@ import com.github.ajalt.clikt.core.ProgramResult
 import java.io.File
 import java.lang.reflect.Modifier
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
-import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
@@ -43,6 +44,8 @@ class RequirementsCommand : OrtCommand(
     name = "requirements",
     help = "Check for the command line tools required by ORT."
 ) {
+    private companion object : Logging
+
     override fun run() {
         val reflections = Reflections("org.ossreviewtoolkit")
         val classes = reflections.getSubTypesOf(CommandLineTool::class.java)
