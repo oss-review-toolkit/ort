@@ -34,7 +34,7 @@ interface ProvenanceFileStorage {
     /**
      * Associate the [file] to [provenance]. Overwrites any existing file corresponding to [provenance].
      */
-    fun addFile(provenance: KnownProvenance, file: File)
+    fun putFile(provenance: KnownProvenance, file: File)
 
     /**
      * Return the file corresponding to [provenance] or null if no such file exists. The returned file is a

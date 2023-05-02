@@ -74,16 +74,16 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
         }
 
         "return true when a file for the given provenance has been added" {
-            storage.addFile(VCS_PROVENANCE, writeTempFile("content"))
+            storage.putFile(VCS_PROVENANCE, writeTempFile("content"))
 
             storage.hasFile(VCS_PROVENANCE) shouldBe true
         }
     }
 
-    "getFile()" should {
+    "putFile()" should {
         "return the file corresponding to the given provenance given such file has been added" {
-            storage.addFile(VCS_PROVENANCE, writeTempFile("VCS"))
-            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
+            storage.putFile(VCS_PROVENANCE, writeTempFile("VCS"))
+            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
 
             storage.getFile(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
             storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
@@ -92,8 +92,8 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
         }
 
         "return the overwritten file corresponding to the given provenance" {
-            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
-            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact updated"))
+            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
+            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact updated"))
 
             storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
                 readTextAndDelete() shouldBe "source artifact updated"
