@@ -26,16 +26,15 @@ import javax.sql.DataSource
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.jetbrains.exposed.dao.IntEntity
-import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.DatabaseConfig
 import org.jetbrains.exposed.sql.SchemaUtils.createMissingTablesAndColumns
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
+import org.jetbrains.exposed.sql.count
+import org.jetbrains.exposed.sql.insertIgnore
+import org.jetbrains.exposed.sql.select
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -56,14 +55,16 @@ class PostgresFileArchiverStorage(
 ) : FileArchiverStorage {
     private companion object : Logging
 
+    private val table = FileArchiveTable()
+
     /** Stores the database connection used by this object. */
     private val database by lazy {
         Database.connect(dataSource.value, databaseConfig = DatabaseConfig { defaultFetchSize = 1000 }).apply {
             transaction {
                 withDataBaseLock {
-                    if (!tableExists(FileArchiveTable.tableName)) {
+                    if (!tableExists(table.tableName)) {
                         checkDatabaseEncoding()
-                        createMissingTablesAndColumns(FileArchiveTable)
+                        createMissingTablesAndColumns(table)
                     }
                 }
 
@@ -74,35 +75,33 @@ class PostgresFileArchiverStorage(
 
     override fun hasArchive(provenance: KnownProvenance): Boolean =
         database.transaction {
-            queryFileArchive(provenance)
-        } != null
+            table.slice(table.provenance.count()).select {
+                table.provenance eq provenance.storageKey()
+            }.first()[table.provenance.count()].toInt()
+        } == 1
 
-    override fun addArchive(provenance: KnownProvenance, zipFile: File) =
+    override fun addArchive(provenance: KnownProvenance, zipFile: File) {
         database.transaction {
-            if (queryFileArchive(provenance) == null) {
-                try {
-                    FileArchive.new {
-                        this.provenance = provenance.storageKey()
-                        this.zipData = zipFile.readBytes()
-                    }
-                } catch (e: ExposedSQLException) {
-                    // The exception can happen when an archive with the same provenance has been inserted in parallel.
-                    // That race condition is possible because [java.sql.Connection.TRANSACTION_READ_COMMITTED] is used
-                    // as transaction isolation level (by default).
-                    logger.warn(e) { "Could not insert archive for '${provenance.storageKey()}'." }
-                }
+            table.insertIgnore {
+                it[this.provenance] = provenance.storageKey()
+                it[zipData] = zipFile.readBytes()
             }
         }
+    }
 
     override fun getArchive(provenance: KnownProvenance): File? {
-        val fileArchive = database.transaction {
-            queryFileArchive(provenance)
+        val bytes = database.transaction {
+            table.select {
+                table.provenance eq provenance.storageKey()
+            }.map {
+                it[table.zipData]
+            }.firstOrNull()
         } ?: return null
 
         val file = createOrtTempFile(suffix = ".zip")
 
         try {
-            file.writeBytes(fileArchive.zipData)
+            file.writeBytes(bytes)
         } catch (e: IOException) {
             file.delete()
             throw e
@@ -112,16 +111,9 @@ class PostgresFileArchiverStorage(
     }
 }
 
-private object FileArchiveTable : IntIdTable("file_archives") {
+private class FileArchiveTable : IntIdTable("file_archives") {
     val provenance: Column<String> = text("provenance").uniqueIndex()
     val zipData: Column<ByteArray> = binary("zip_data")
-}
-
-internal class FileArchive(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<FileArchive>(FileArchiveTable)
-
-    var provenance: String by FileArchiveTable.provenance
-    var zipData: ByteArray by FileArchiveTable.zipData
 }
 
 private fun KnownProvenance.storageKey(): String =
@@ -130,6 +122,3 @@ private fun KnownProvenance.storageKey(): String =
         // The trailing "|" is kept for backward compatibility because there used to be an additional parameter.
         is RepositoryProvenance -> "vcs|${vcsInfo.type}|${vcsInfo.url}|$resolvedRevision|"
     }
-
-private fun queryFileArchive(provenance: KnownProvenance): FileArchive? =
-    FileArchive.find { FileArchiveTable.provenance eq provenance.storageKey() }.singleOrNull()
