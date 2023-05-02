@@ -41,32 +41,6 @@ import org.ossreviewtoolkit.reporter.ReportTableModel.ResolvableViolation
 import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryRow
 import org.ossreviewtoolkit.reporter.ReportTableModel.SummaryTable
 
-private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolved }
-    .thenByDescending { it.violation.severity }
-    .thenBy { it.violation.rule }
-    .thenBy { it.violation.pkg }
-    .thenBy { it.violation.license.toString() }
-    .thenBy { it.violation.message }
-    .thenBy { it.resolutionDescription }
-
-private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
-
-private fun Project.getScopesForDependencies(
-    excludes: Excludes,
-    navigator: DependencyNavigator
-): Map<Identifier, Map<String, List<ScopeExclude>>> {
-    val result = mutableMapOf<Identifier, MutableMap<String, List<ScopeExclude>>>()
-
-    navigator.scopeDependencies(this).forEach { (scopeName, dependencies) ->
-        dependencies.forEach { dependency ->
-            result.getOrPut(dependency) { mutableMapOf() }
-                .getOrPut(scopeName) { excludes.findScopeExcludes(scopeName) }
-        }
-    }
-
-    return result
-}
-
 /**
  * A mapper which converts an [OrtResult] to a [ReportTableModel].
  */
@@ -251,4 +225,30 @@ object ReportTableModelMapper {
             labels
         )
     }
+}
+
+private val VIOLATION_COMPARATOR = compareBy<ResolvableViolation> { it.isResolved }
+    .thenByDescending { it.violation.severity }
+    .thenBy { it.violation.rule }
+    .thenBy { it.violation.pkg }
+    .thenBy { it.violation.license.toString() }
+    .thenBy { it.violation.message }
+    .thenBy { it.resolutionDescription }
+
+private fun Collection<ResolvableIssue>.filterUnresolved() = filter { !it.isResolved }
+
+private fun Project.getScopesForDependencies(
+    excludes: Excludes,
+    navigator: DependencyNavigator
+): Map<Identifier, Map<String, List<ScopeExclude>>> {
+    val result = mutableMapOf<Identifier, MutableMap<String, List<ScopeExclude>>>()
+
+    navigator.scopeDependencies(this).forEach { (scopeName, dependencies) ->
+        dependencies.forEach { dependency ->
+            result.getOrPut(dependency) { mutableMapOf() }
+                .getOrPut(scopeName) { excludes.findScopeExcludes(scopeName) }
+        }
+    }
+
+    return result
 }
