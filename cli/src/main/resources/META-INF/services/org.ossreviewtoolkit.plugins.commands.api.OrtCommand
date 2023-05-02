@@ -1,3 +1,2 @@
-org.ossreviewtoolkit.cli.commands.UploadCurationsCommand
 org.ossreviewtoolkit.cli.commands.UploadResultToPostgresCommand
 org.ossreviewtoolkit.cli.commands.UploadResultToSw360Command
