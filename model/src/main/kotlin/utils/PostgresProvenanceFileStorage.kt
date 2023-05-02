@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 /**
  * A PostgreSQL based implementation of [ProvenanceFileStorage].
  */
-class PostgresFileArchiverStorage(
+class PostgresProvenanceFileStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
@@ -60,7 +60,7 @@ class PostgresFileArchiverStorage(
 ) : ProvenanceFileStorage {
     private companion object : Logging
 
-    private val table = FileArchiveTable(tableName)
+    private val table = ProvenanceFileTable(tableName)
 
     /** Stores the database connection used by this object. */
     private val database by lazy {
@@ -116,8 +116,10 @@ class PostgresFileArchiverStorage(
     }
 }
 
-private class FileArchiveTable(tableName: String) : IntIdTable(tableName) {
+private class ProvenanceFileTable(tableName: String) : IntIdTable(tableName) {
     val provenance: Column<String> = text("provenance").uniqueIndex()
+
+    // TODO: Generalize the name of the 'zip_data' column for consistency.
     val zipData: Column<ByteArray> = binary("zip_data")
 }
 
