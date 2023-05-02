@@ -88,7 +88,7 @@ class StaticHtmlReporter : Reporter {
         options: Map<String, String>
     ): List<File> {
         val tabularScanRecord = ReportTableModelMapper(input.resolutionProvider, input.howToFixTextProvider)
-            .mapToReportTableModel(
+            .map(
                 input.ortResult,
                 input.licenseInfoResolver
             )

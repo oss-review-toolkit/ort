@@ -111,7 +111,7 @@ class ReportTableModelMapper(
         )
     }
 
-    fun mapToReportTableModel(
+    fun map(
         ortResult: OrtResult,
         licenseInfoResolver: LicenseInfoResolver
     ): ReportTableModel {
