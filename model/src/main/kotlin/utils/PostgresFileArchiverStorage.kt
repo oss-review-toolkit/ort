@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
- * A PostgreSQL based implementation of [FileArchiverFileStorage].
+ * A PostgreSQL based implementation of [ProvenanceFileStorage].
  */
 class PostgresFileArchiverStorage(
     /**
@@ -57,7 +57,7 @@ class PostgresFileArchiverStorage(
      * The name of the table used for storing package provenances.
      */
     tableName: String
-) : FileArchiverStorage {
+) : ProvenanceFileStorage {
     private companion object : Logging
 
     private val table = FileArchiveTable(tableName)
@@ -78,23 +78,23 @@ class PostgresFileArchiverStorage(
         }
     }
 
-    override fun hasArchive(provenance: KnownProvenance): Boolean =
+    override fun hasFile(provenance: KnownProvenance): Boolean =
         database.transaction {
             table.slice(table.provenance.count()).select {
                 table.provenance eq provenance.storageKey()
             }.first()[table.provenance.count()].toInt()
         } == 1
 
-    override fun addArchive(provenance: KnownProvenance, zipFile: File) {
+    override fun addFile(provenance: KnownProvenance, file: File) {
         database.transaction {
             table.insertIgnore {
                 it[this.provenance] = provenance.storageKey()
-                it[zipData] = zipFile.readBytes()
+                it[zipData] = file.readBytes()
             }
         }
     }
 
-    override fun getArchive(provenance: KnownProvenance): File? {
+    override fun getFile(provenance: KnownProvenance): File? {
         val bytes = database.transaction {
             table.select {
                 table.provenance eq provenance.storageKey()

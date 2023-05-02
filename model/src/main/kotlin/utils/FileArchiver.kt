@@ -47,9 +47,9 @@ class FileArchiver(
     patterns: Collection<String>,
 
     /**
-     * The [FileArchiverStorage] to use for archiving files.
+     * The [ProvenanceFileStorage] to use for archiving files.
      */
-    private val storage: FileArchiverStorage
+    private val storage: ProvenanceFileStorage
 ) {
     companion object : Logging {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
@@ -63,7 +63,7 @@ class FileArchiver(
     /**
      * Return whether an archive corresponding to [provenance] exists.
      */
-    fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasArchive(provenance)
+    fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasFile(provenance)
 
     /**
      * Archive all files in [directory] matching any of the configured patterns in the [storage].
@@ -91,7 +91,7 @@ class FileArchiver(
 
         logger.info { "Archived directory '$directory' in $zipDuration." }
 
-        val writeDuration = measureTime { storage.addArchive(provenance, zipFile) }
+        val writeDuration = measureTime { storage.addFile(provenance, zipFile) }
 
         logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
@@ -102,7 +102,7 @@ class FileArchiver(
      * Unarchive the archive corresponding to [provenance].
      */
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
-        val (zipFile, readDuration) = measureTimedValue { storage.getArchive(provenance) }
+        val (zipFile, readDuration) = measureTimedValue { storage.getFile(provenance) }
 
         logger.info { "Read archive of directory '$directory' from storage in $readDuration." }
 

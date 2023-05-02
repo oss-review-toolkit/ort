@@ -68,25 +68,25 @@ class PostgresFileArchiverStorageFunTest : WordSpec({
         storage = PostgresFileArchiverStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)
     }
 
-    "hasArchive()" should {
-        "return false when no archive for the given provenance has been added" {
-            storage.hasArchive(VCS_PROVENANCE) shouldBe false
+    "hasFile()" should {
+        "return false when no file for the given provenance has been added" {
+            storage.hasFile(VCS_PROVENANCE) shouldBe false
         }
 
-        "return true when an archive for the given provenance has been added" {
-            storage.addArchive(VCS_PROVENANCE, writeTempFile("content"))
+        "return true when a file for the given provenance has been added" {
+            storage.addFile(VCS_PROVENANCE, writeTempFile("content"))
 
-            storage.hasArchive(VCS_PROVENANCE) shouldBe true
+            storage.hasFile(VCS_PROVENANCE) shouldBe true
         }
     }
 
-    "getArchive()" should {
-        "return the archive corresponding to the given provenance given such archive has been added" {
-            storage.addArchive(VCS_PROVENANCE, writeTempFile("VCS"))
-            storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
+    "getFile()" should {
+        "return the file corresponding to the given provenance given such file has been added" {
+            storage.addFile(VCS_PROVENANCE, writeTempFile("VCS"))
+            storage.addFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
 
-            storage.getArchive(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
-            storage.getArchive(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
+            storage.getFile(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
+            storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
                 readTextAndDelete() shouldBe "source artifact"
             }
         }
