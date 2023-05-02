@@ -70,11 +70,11 @@ private fun Project.getScopesForDependencies(
 /**
  * A mapper which converts an [Issue] to a [ReportTableModel] view model.
  */
-class ReportTableModelMapper(
-    private val resolutionProvider: ResolutionProvider,
-    private val howToFixTextProvider: HowToFixTextProvider
-) {
-    private fun Issue.toResolvableIssue(): ResolvableIssue {
+class ReportTableModelMapper {
+    private fun Issue.toResolvableIssue(
+        resolutionProvider: ResolutionProvider,
+        howToFixTextProvider: HowToFixTextProvider
+    ): ResolvableIssue {
         val resolutions = resolutionProvider.getIssueResolutionsFor(this)
         return ResolvableIssue(
             source = this@toResolvableIssue.source,
@@ -94,7 +94,7 @@ class ReportTableModelMapper(
         )
     }
 
-    private fun RuleViolation.toResolvableViolation(): ResolvableViolation {
+    private fun RuleViolation.toResolvableViolation(resolutionProvider: ResolutionProvider): ResolvableViolation {
         val resolutions = resolutionProvider.getRuleViolationResolutionsFor(this)
         return ResolvableViolation(
             violation = this,
@@ -113,7 +113,9 @@ class ReportTableModelMapper(
 
     fun map(
         ortResult: OrtResult,
-        licenseInfoResolver: LicenseInfoResolver
+        licenseInfoResolver: LicenseInfoResolver,
+        resolutionProvider: ResolutionProvider,
+        howToFixTextProvider: HowToFixTextProvider
     ): ReportTableModel {
         val issueSummaryRows = mutableMapOf<Identifier, IssueRow>()
         val summaryRows = mutableMapOf<Identifier, SummaryRow>()
@@ -161,8 +163,10 @@ class ReportTableModelMapper(
                         ortResult.getPackageLicenseChoices(id),
                         ortResult.getRepositoryLicenseChoices()
                     )?.sorted(),
-                    analyzerIssues = analyzerIssues.map { it.toResolvableIssue() },
-                    scanIssues = scanIssues.map { it.toResolvableIssue() }
+                    analyzerIssues = analyzerIssues.map {
+                        it.toResolvableIssue(resolutionProvider, howToFixTextProvider)
+                    },
+                    scanIssues = scanIssues.map { it.toResolvableIssue(resolutionProvider, howToFixTextProvider) }
                 ).also { row ->
                     val isRowExcluded = pathExcludes.isNotEmpty()
                             || (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
@@ -234,7 +238,7 @@ class ReportTableModelMapper(
         val labels = ortResult.labels.mapKeys { it.key.substringAfter(".") }
 
         val ruleViolations = ortResult.getRuleViolations()
-            .map { it.toResolvableViolation() }
+            .map { it.toResolvableViolation(resolutionProvider) }
             .sortedWith(VIOLATION_COMPARATOR)
 
         return ReportTableModel(
