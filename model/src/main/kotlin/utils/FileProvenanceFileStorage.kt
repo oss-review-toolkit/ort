@@ -36,56 +36,56 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 /**
  * A [FileStorage] based implementation of [ProvenanceFileStorage].
  */
-class FileArchiverFileStorage(
+class FileProvenanceFileStorage(
     /**
      * The [FileStorage] to use for storing the files.
      */
     private val storage: FileStorage,
 
     /**
-     * The filename of the archive.
+     * The filename of the files.
      */
-    private val archiveFilename: String,
+    private val filename: String,
 ) : ProvenanceFileStorage {
     private companion object : Logging
 
     init {
-        require(archiveFilename.isNotEmpty()) {
-            "The archive filename must not be empty."
+        require(filename.isNotEmpty()) {
+            "The filename must not be empty."
         }
     }
 
     override fun hasFile(provenance: KnownProvenance): Boolean {
-        val archivePath = getArchivePath(provenance)
+        val filePath = getFilePath(provenance)
 
-        return storage.exists(archivePath)
+        return storage.exists(filePath)
     }
 
     override fun addFile(provenance: KnownProvenance, file: File) {
-        storage.write(getArchivePath(provenance), file.inputStream())
+        storage.write(getFilePath(provenance), file.inputStream())
     }
 
     override fun getFile(provenance: KnownProvenance): File? {
-        val archivePath = getArchivePath(provenance)
+        val filePath = getFilePath(provenance)
 
-        val zipFile = createOrtTempFile(suffix = ".zip")
+        val file = createOrtTempFile(suffix = File(filename).extension)
 
         return try {
-            storage.read(archivePath).use { inputStream ->
-                zipFile.outputStream().use { outputStream ->
+            storage.read(filePath).use { inputStream ->
+                file.outputStream().use { outputStream ->
                     inputStream.copyTo(outputStream)
                 }
             }
 
-            zipFile
+            file
         } catch (e: IOException) {
-            logger.error { "Could not unarchive from $archivePath: ${e.collectMessages()}" }
+            logger.error { "Could not read from $filePath: ${e.collectMessages()}" }
 
             null
         }
     }
 
-    private fun getArchivePath(provenance: KnownProvenance): String = "${provenance.hash()}/$archiveFilename"
+    private fun getFilePath(provenance: KnownProvenance): String = "${provenance.hash()}/$filename"
 }
 
 private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }

@@ -57,7 +57,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.licenses.TestUtils.containLicensesExactly
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
+import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
@@ -622,7 +622,7 @@ class LicenseInfoResolverTest : WordSpec({
             val archiveDir = File("src/test/assets/archive")
             val archiver = FileArchiver(
                 patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
-                storage = FileArchiverFileStorage(
+                storage = FileProvenanceFileStorage(
                     LocalFileStorage(archiveDir),
                     FileArchiverConfiguration.ARCHIVE_FILENAME
                 )
