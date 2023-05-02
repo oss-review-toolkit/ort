@@ -81,7 +81,7 @@ class PostgresFileArchiverStorageFunTest : WordSpec({
     }
 
     "getArchive()" should {
-        "return the archives corresponding to the given provenance given such archive has been added" {
+        "return the archive corresponding to the given provenance given such archive has been added" {
             storage.addArchive(VCS_PROVENANCE, writeTempFile("VCS"))
             storage.addArchive(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
 
