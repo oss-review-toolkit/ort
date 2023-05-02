@@ -37,6 +37,7 @@ dependencies {
     api(project(":plugins:commands:reporter-command"))
     api(project(":plugins:commands:requirements-command"))
     api(project(":plugins:commands:scanner-command"))
+    api(project(":plugins:commands:upload-curations-command"))
 }
 
 configure<PublishingExtension> {
