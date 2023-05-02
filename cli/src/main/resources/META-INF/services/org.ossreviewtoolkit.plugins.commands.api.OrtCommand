@@ -1,4 +1,3 @@
-org.ossreviewtoolkit.cli.commands.ReporterCommand
 org.ossreviewtoolkit.cli.commands.ScannerCommand
 org.ossreviewtoolkit.cli.commands.UploadCurationsCommand
 org.ossreviewtoolkit.cli.commands.UploadResultToPostgresCommand
