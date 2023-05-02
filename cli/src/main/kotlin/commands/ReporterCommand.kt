@@ -154,6 +154,7 @@ class ReporterCommand : OrtCommand(
                 "output but is useful when testing package configurations."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .configurationGroup()
 
     private val refreshResolutions by option(
         "--refresh-resolutions",
