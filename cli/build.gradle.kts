@@ -175,7 +175,6 @@ dependencies {
     implementation(platform(project(":plugins:package-managers")))
     implementation(platform(project(":plugins:reporters")))
 
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation(libs.bundles.exposed)
     implementation(libs.clikt)
     implementation(libs.jacksonModuleKotlin)
@@ -183,7 +182,6 @@ dependencies {
     implementation(libs.log4jApiKotlin)
     implementation(libs.logbackClassic)
     implementation(libs.postgres)
-    implementation(libs.reflections)
     implementation(libs.sw360Client)
 
     runtimeOnly(libs.log4jApiToSlf4j)

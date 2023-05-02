@@ -4,7 +4,6 @@ org.ossreviewtoolkit.cli.commands.DownloaderCommand
 org.ossreviewtoolkit.cli.commands.EvaluatorCommand
 org.ossreviewtoolkit.cli.commands.NotifierCommand
 org.ossreviewtoolkit.cli.commands.ReporterCommand
-org.ossreviewtoolkit.cli.commands.RequirementsCommand
 org.ossreviewtoolkit.cli.commands.ScannerCommand
 org.ossreviewtoolkit.cli.commands.UploadCurationsCommand
 org.ossreviewtoolkit.cli.commands.UploadResultToPostgresCommand
