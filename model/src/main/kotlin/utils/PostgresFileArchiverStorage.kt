@@ -51,11 +51,16 @@ class PostgresFileArchiverStorage(
     /**
      * The JDBC data source to obtain database connections.
      */
-    dataSource: Lazy<DataSource>
+    dataSource: Lazy<DataSource>,
+
+    /**
+     * The name of the table used for storing package provenances.
+     */
+    tableName: String
 ) : FileArchiverStorage {
     private companion object : Logging
 
-    private val table = FileArchiveTable()
+    private val table = FileArchiveTable(tableName)
 
     /** Stores the database connection used by this object. */
     private val database by lazy {
@@ -111,7 +116,7 @@ class PostgresFileArchiverStorage(
     }
 }
 
-private class FileArchiveTable : IntIdTable("file_archives") {
+private class FileArchiveTable(tableName: String) : IntIdTable(tableName) {
     val provenance: Column<String> = text("provenance").uniqueIndex()
     val zipData: Column<ByteArray> = binary("zip_data")
 }
