@@ -48,6 +48,7 @@ include(":plugins:commands:reporter")
 include(":plugins:commands:requirements")
 include(":plugins:commands:scanner")
 include(":plugins:commands:upload-curations")
+include(":plugins:commands:upload-result-to-postgres")
 include(":plugins:package-curation-providers")
 include(":plugins:package-curation-providers:api")
 include(":plugins:package-curation-providers:clearly-defined")
@@ -114,6 +115,7 @@ project(":plugins:commands:reporter").name = "reporter-command"
 project(":plugins:commands:requirements").name = "requirements-command"
 project(":plugins:commands:scanner").name = "scanner-command"
 project(":plugins:commands:upload-curations").name = "upload-curations-command"
+project(":plugins:commands:upload-result-to-postgres").name = "upload-result-to-postgres-command"
 
 project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
 project(":plugins:package-curation-providers:clearly-defined").name = "clearly-defined-package-curation-provider"

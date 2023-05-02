@@ -38,6 +38,7 @@ dependencies {
     api(project(":plugins:commands:requirements-command"))
     api(project(":plugins:commands:scanner-command"))
     api(project(":plugins:commands:upload-curations-command"))
+    api(project(":plugins:commands:upload-result-to-postgres-command"))
 }
 
 configure<PublishingExtension> {
