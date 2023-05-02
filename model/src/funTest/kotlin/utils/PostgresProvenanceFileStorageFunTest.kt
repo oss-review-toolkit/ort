@@ -58,14 +58,14 @@ private fun TestConfiguration.writeTempFile(content: String): File =
         writeText(content)
     }
 
-class PostgresFileArchiverStorageFunTest : WordSpec({
+class PostgresProvenanceFileStorageFunTest : WordSpec({
     val postgresListener = PostgresListener()
-    lateinit var storage: PostgresFileArchiverStorage
+    lateinit var storage: PostgresProvenanceFileStorage
 
     register(postgresListener)
 
     beforeEach {
-        storage = PostgresFileArchiverStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)
+        storage = PostgresProvenanceFileStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)
     }
 
     "hasFile()" should {
