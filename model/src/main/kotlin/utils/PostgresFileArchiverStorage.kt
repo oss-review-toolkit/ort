@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
- * A PostgreSQL based storage for archive files.
+ * A PostgreSQL based implementation of [FileArchiverFileStorage].
  */
 class PostgresFileArchiverStorage(
     /**
