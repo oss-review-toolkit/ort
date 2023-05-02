@@ -23,7 +23,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.utils.DatabaseUtils
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
+import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresFileArchiverStorage
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
@@ -69,9 +69,9 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
     if (this?.enabled == false) return null
 
     val storage = when {
-        this?.fileStorage != null -> FileArchiverFileStorage(
+        this?.fileStorage != null -> FileProvenanceFileStorage(
             storage = fileStorage.createFileStorage(),
-            archiveFilename = FileArchiverConfiguration.ARCHIVE_FILENAME
+            filename = FileArchiverConfiguration.ARCHIVE_FILENAME
         )
 
         this?.postgresStorage != null -> {
@@ -83,9 +83,9 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
             PostgresFileArchiverStorage(dataSource, FileArchiverConfiguration.TABLE_NAME)
         }
 
-        else -> FileArchiverFileStorage(
+        else -> FileProvenanceFileStorage(
             storage = LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
-            archiveFilename = FileArchiverConfiguration.ARCHIVE_FILENAME
+            filename = FileArchiverConfiguration.ARCHIVE_FILENAME
         )
     }
 

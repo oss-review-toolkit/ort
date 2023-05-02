@@ -31,7 +31,7 @@ import java.net.Proxy
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
-import org.ossreviewtoolkit.model.utils.FileArchiverFileStorage
+import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
@@ -51,7 +51,7 @@ infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
 fun FileArchiver.Companion.createDefault(): FileArchiver =
     FileArchiver(
         patterns = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
-        storage = FileArchiverFileStorage(
+        storage = FileProvenanceFileStorage(
             LocalFileStorage(DEFAULT_ARCHIVE_DIR),
             FileArchiverConfiguration.ARCHIVE_FILENAME
         )
