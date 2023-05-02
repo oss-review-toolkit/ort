@@ -44,6 +44,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.downloader.DownloadException
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.downloader.VersionControlSystem
@@ -67,7 +69,6 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.GroupTypes.StringType
 import org.ossreviewtoolkit.plugins.commands.api.utils.OPTION_GROUP_INPUT
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
-import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.utils.common.ArchiveType
@@ -86,6 +87,8 @@ class DownloaderCommand : OrtCommand(
     name = "download",
     help = "Fetch source code from a remote location."
 ) {
+    private companion object : Logging
+
     private val input by mutuallyExclusiveOptions(
         option(
             "--ort-file", "-i",

@@ -27,6 +27,8 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import java.sql.SQLException
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
@@ -52,6 +54,8 @@ class UploadResultToPostgresCommand : OrtCommand(
     name = "upload-result-to-postgres",
     help = "Upload an ORT result to a PostgreSQL database."
 ) {
+    private companion object : Logging
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

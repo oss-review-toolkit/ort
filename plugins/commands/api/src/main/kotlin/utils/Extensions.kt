@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.commands.api.utils
 
-import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.GroupableOption
 
 import java.io.File
@@ -27,7 +26,7 @@ import java.io.File
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
 
-import org.apache.logging.log4j.kotlin.cachedLoggerOf
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.OrtResult
@@ -44,15 +43,9 @@ fun <T : GroupableOption> T.outputGroup(): T = group(OPTION_GROUP_OUTPUT)
 fun <T : GroupableOption> T.configurationGroup(): T = group(OPTION_GROUP_CONFIGURATION)
 
 /**
- * An extension property for adding a logger property to any [CliktCommand].
- */
-val CliktCommand.logger
-    inline get() = cachedLoggerOf(javaClass)
-
-/**
  * Read [ortFile] into an [OrtResult] and return it.
  */
-fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
+fun Logging.readOrtResult(ortFile: File): OrtResult {
     logger.debug { "Input ORT result file has SHA-1 hash ${HashAlgorithm.SHA1.calculate(ortFile)}." }
 
     val (ortResult, duration) = measureTimedValue { ortFile.readValue<OrtResult>() }
@@ -65,7 +58,7 @@ fun CliktCommand.readOrtResult(ortFile: File): OrtResult {
 /**
  * Write the [ortResult] to all [outputFiles] for the given [resultName].
  */
-fun CliktCommand.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, resultName: String) {
+fun Logging.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, resultName: String) {
     outputFiles.forEach { file ->
         println("Writing $resultName result to '$file'.")
         val duration = measureTime { file.writeValue(ortResult) }

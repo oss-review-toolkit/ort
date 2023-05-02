@@ -27,6 +27,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.notifier.Notifier
@@ -43,6 +45,8 @@ class NotifierCommand : OrtCommand(
     name = "notify",
     help = "Create notifications based on an ORT result."
 ) {
+    private companion object : Logging
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

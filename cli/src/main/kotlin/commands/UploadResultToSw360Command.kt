@@ -25,6 +25,8 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
 import com.github.ajalt.clikt.parameters.types.file
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.eclipse.sw360.clients.adapter.AttachmentUploadRequest
 import org.eclipse.sw360.clients.adapter.SW360ProjectClientAdapter
 import org.eclipse.sw360.clients.adapter.SW360ReleaseClientAdapter
@@ -43,7 +45,6 @@ import org.ossreviewtoolkit.model.config.Sw360StorageConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
-import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.scanner.storages.Sw360Storage
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -56,6 +57,8 @@ class UploadResultToSw360Command : OrtCommand(
     name = "upload-result-to-sw360",
     help = "Upload an ORT result to SW360."
 ) {
+    private companion object : Logging
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

@@ -35,6 +35,8 @@ import java.time.Duration
 
 import kotlin.time.toKotlinDuration
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.evaluator.Evaluator
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
@@ -62,7 +64,6 @@ import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStats
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
-import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
@@ -80,6 +81,8 @@ class EvaluatorCommand : OrtCommand(
     name = "evaluate",
     help = "Evaluate ORT result files against policy rules."
 ) {
+    private companion object : Logging
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "The ORT result file to read as input."

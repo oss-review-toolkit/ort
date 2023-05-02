@@ -39,10 +39,11 @@ import com.github.ajalt.clikt.parameters.types.file
 
 import kotlin.system.exitProcess
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
-import org.ossreviewtoolkit.plugins.commands.api.utils.logger
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -68,6 +69,8 @@ fun main(args: Array<String>) {
 }
 
 class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
+    private companion object : Logging
+
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
         .convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)

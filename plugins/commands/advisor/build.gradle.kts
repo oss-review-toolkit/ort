@@ -32,4 +32,5 @@ dependencies {
 
     implementation(libs.clikt)
     implementation(libs.kotlinxCoroutines)
+    implementation(libs.log4jApiKotlin)
 }

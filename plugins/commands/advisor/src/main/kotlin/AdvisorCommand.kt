@@ -37,6 +37,8 @@ import kotlin.time.toKotlinDuration
 
 import kotlinx.coroutines.runBlocking
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.advisor.Advisor
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
@@ -56,6 +58,8 @@ class AdvisorCommand : OrtCommand(
     name = "advise",
     help = "Check dependencies for security vulnerabilities."
 ) {
+    private companion object : Logging
+
     private val ortFile by option(
         "--ort-file", "-i",
         help = "An ORT result file with an analyzer result to use."
