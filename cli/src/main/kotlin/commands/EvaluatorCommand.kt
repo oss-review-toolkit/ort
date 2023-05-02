@@ -143,6 +143,7 @@ class EvaluatorCommand : OrtCommand(
                 "contain a single package configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
+        .convert { it.absoluteFile.normalize() }
         .default(ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME))
         .configurationGroup()
 
