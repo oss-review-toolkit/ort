@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
- * A [FileStorage] based implementation of [FileArchiverFileStorage].
+ * A [FileStorage] based implementation of [ProvenanceFileStorage].
  */
 class FileArchiverFileStorage(
     /**
@@ -46,7 +46,7 @@ class FileArchiverFileStorage(
      * The filename of the archive.
      */
     private val archiveFilename: String,
-) : FileArchiverStorage {
+) : ProvenanceFileStorage {
     private companion object : Logging
 
     init {
@@ -55,17 +55,17 @@ class FileArchiverFileStorage(
         }
     }
 
-    override fun hasArchive(provenance: KnownProvenance): Boolean {
+    override fun hasFile(provenance: KnownProvenance): Boolean {
         val archivePath = getArchivePath(provenance)
 
         return storage.exists(archivePath)
     }
 
-    override fun addArchive(provenance: KnownProvenance, zipFile: File) {
-        storage.write(getArchivePath(provenance), zipFile.inputStream())
+    override fun addFile(provenance: KnownProvenance, file: File) {
+        storage.write(getArchivePath(provenance), file.inputStream())
     }
 
-    override fun getArchive(provenance: KnownProvenance): File? {
+    override fun getFile(provenance: KnownProvenance): File? {
         val archivePath = getArchivePath(provenance)
 
         val zipFile = createOrtTempFile(suffix = ".zip")

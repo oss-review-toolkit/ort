@@ -23,23 +23,22 @@ import java.io.File
 import org.ossreviewtoolkit.model.KnownProvenance
 
 /**
- * A storage for file archives.
+ * A storage which associates a file with a [KnownProvenance]
  */
-interface FileArchiverStorage {
+interface ProvenanceFileStorage {
     /**
-     * Return whether an archive corresponding to [provenance] exists.
+     * Return whether a file corresponding to [provenance] exists.
      */
-    fun hasArchive(provenance: KnownProvenance): Boolean
+    fun hasFile(provenance: KnownProvenance): Boolean
 
     /**
-     * Add the [archive][zipFile] corresponding to [provenance]. Overwrites any existing archive corresponding to
-     * [provenance].
+     * Associate the [file] to [provenance]. Overwrites any existing file corresponding to [provenance].
      */
-    fun addArchive(provenance: KnownProvenance, zipFile: File)
+    fun addFile(provenance: KnownProvenance, file: File)
 
     /**
-     * Return the archive corresponding to [provenance] or null if no such archive exists. The returned file is a
+     * Return the file corresponding to [provenance] or null if no such file exists. The returned file is a
      * temporary file.
      */
-    fun getArchive(provenance: KnownProvenance): File?
+    fun getFile(provenance: KnownProvenance): File?
 }
