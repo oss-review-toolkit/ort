@@ -39,6 +39,7 @@ include(":notifier")
 include(":plugins:commands")
 include(":plugins:commands:advisor")
 include(":plugins:commands:api")
+include(":plugins:commands:evaluator")
 include(":plugins:commands:requirements")
 include(":plugins:package-curation-providers")
 include(":plugins:package-curation-providers:api")
@@ -97,6 +98,7 @@ project(":clients:vulnerable-code").name = "vulnerable-code-client"
 
 project(":plugins:commands:advisor").name = "advisor-command"
 project(":plugins:commands:api").name = "command-api"
+project(":plugins:commands:evaluator").name = "evaluator-command"
 project(":plugins:commands:requirements").name = "requirements-command"
 
 project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
