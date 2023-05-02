@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
- * A [FileStorage] based storage for archive files.
+ * A [FileStorage] based implementation of [FileArchiverFileStorage].
  */
 class FileArchiverFileStorage(
     /**
