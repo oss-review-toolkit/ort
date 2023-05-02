@@ -32,6 +32,7 @@ import java.io.File
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
@@ -56,7 +57,7 @@ class FileArchiverTest : StringSpec() {
         workingDir = createTestTempDir("workingDir")
         storageDir = createTestTempDir("storageDir")
         targetDir = createTestTempDir("targetDir")
-        storage = FileArchiverFileStorage(LocalFileStorage(storageDir))
+        storage = FileArchiverFileStorage(LocalFileStorage(storageDir), FileArchiverConfiguration.ARCHIVE_FILENAME)
     }
 
     private fun createFile(path: String) {

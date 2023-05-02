@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
+import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.config.LicenseFindingCuration
 import org.ossreviewtoolkit.model.config.LicenseFindingCurationReason
@@ -621,7 +622,10 @@ class LicenseInfoResolverTest : WordSpec({
             val archiveDir = File("src/test/assets/archive")
             val archiver = FileArchiver(
                 patterns = LicenseFilePatterns.DEFAULT.licenseFilenames,
-                storage = FileArchiverFileStorage(LocalFileStorage(archiveDir))
+                storage = FileArchiverFileStorage(
+                    LocalFileStorage(archiveDir),
+                    FileArchiverConfiguration.ARCHIVE_FILENAME
+                )
             )
             val resolver = createResolver(licenseInfos, archiver = archiver)
 
