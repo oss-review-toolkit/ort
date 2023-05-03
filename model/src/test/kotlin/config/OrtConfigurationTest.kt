@@ -200,6 +200,30 @@ class OrtConfigurationTest : WordSpec({
                     "LicenseRef-scancode-generic-cla" to "NOASSERTION"
                 )
 
+                fileListingStorage shouldNotBeNull {
+                    fileStorage shouldNotBeNull {
+                        httpFileStorage should beNull()
+                        localFileStorage shouldNotBeNull {
+                            directory shouldBe File("~/.ort/scanner/provenance-file-listings")
+                        }
+                    }
+
+                    postgresStorage shouldNotBeNull {
+                        with(connection) {
+                            url shouldBe "jdbc:postgresql://your-postgresql-server:5444/your-database"
+                            schema shouldBe "public"
+                            username shouldBe "username"
+                            password shouldBe "password"
+                            sslmode shouldBe "required"
+                            sslcert shouldBe "/defaultdir/postgresql.crt"
+                            sslkey shouldBe "/defaultdir/postgresql.pk8"
+                            sslrootcert shouldBe "/defaultdir/root.crt"
+                        }
+
+                        type shouldBe StorageType.PROVENANCE_BASED
+                    }
+                }
+
                 options shouldNotBeNull {
                     get("ScanCode") shouldNotBeNull {
                         this shouldContainExactly mapOf(
