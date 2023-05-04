@@ -48,7 +48,7 @@ infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     block()
 }
 
-fun FileArchiver.Companion.createDefault(): FileArchiver =
+fun FileArchiver.Companion.createDefault() =
     FileArchiver(
         patterns = LicenseFilePatterns.DEFAULT.allLicenseFilenames.map { "**/$it" },
         storage = FileProvenanceFileStorage(
