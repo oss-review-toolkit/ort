@@ -72,7 +72,7 @@ const val ORT_PACKAGE_CURATIONS_FILENAME = "curations.yml"
 /**
  * The name of the ORT how to fix text provider script file.
  */
-const val ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME = "how-to-fix-text-provider.kts"
+const val ORT_HOW_TO_FIX_TEXT_PROVIDER_FILENAME = "reporter.how-to-fix-text-provider.kts"
 
 /**
  * The name of the ORT license classifications file.
