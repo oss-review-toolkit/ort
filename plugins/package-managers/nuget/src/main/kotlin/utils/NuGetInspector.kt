@@ -53,7 +53,11 @@ private val json = Json { ignoreUnknownKeys = true }
 internal object NuGetInspector : CommandLineTool {
     override fun command(workingDir: File?) = "nuget-inspector"
 
-    fun inspect(definitionFile: File, nugetConfig: String?): Result {
+    /**
+     * Run the nuget-inspector CLI tool on the project with the given [definitionFile]. The optional [nugetConfig] may
+     * point to a configuration file that is not at the default location.
+     */
+    fun inspect(definitionFile: File, nugetConfig: File? = null): Result {
         val workingDir = definitionFile.parentFile
         val outputFile = createOrtTempFile(prefix = "nuget-inspector", suffix = ".json")
 
@@ -67,7 +71,11 @@ internal object NuGetInspector : CommandLineTool {
 
             if (nugetConfig != null) {
                 add("--nuget-config")
-                add(workingDir.resolve(nugetConfig).absolutePath)
+                if (nugetConfig.isAbsolute) {
+                    add(nugetConfig.path)
+                } else {
+                    add(workingDir.resolve(nugetConfig).absolutePath)
+                }
             }
         }
 
