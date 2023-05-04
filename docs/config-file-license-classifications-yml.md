@@ -55,7 +55,7 @@ cli/build/install/ort/bin/ort evaluate
 [license-classifications.yml example]: ../examples/license-classifications.yml
 [generated license-classifications.yml]: https://github.com/maxhbr/LDBcollector/blob/generated/ort/license-classifications.yml
 [LDBcollector]: https://github.com/maxhbr/LDBcollector
-[Rules]: file-rules-kts.md
+[Rules]: scripts/rules-kts.md
 [Plain text templates]: reporters/plain-text-templates.md
 [license-classifications.yml example]: ../examples/license-classifications.yml
 [example.rules.kts]: ../examples/example.rules.kts

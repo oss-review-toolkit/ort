@@ -338,7 +338,7 @@ Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-dir]/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
 [plain-text-templates.md](reporters/plain-text-templates.md). To learn how to customize the how-to-fix texts for scanner
-and analyzer issues see [how-to-fix-text-provider-kts.md](how-to-fix-text-provider-kts.md).
+and analyzer issues see [how-to-fix-text-provider-kts.md](scripts/how-to-fix-text-provider-kts.md).
 
 ## 8. Curating Package Metadata or License Findings
 
