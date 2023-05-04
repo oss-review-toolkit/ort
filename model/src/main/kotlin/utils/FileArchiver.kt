@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.utils.common.unpackZip
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
  * A class to archive files matched by provided patterns in a ZIP file that is stored in a [FileStorage][storage].
@@ -52,19 +51,6 @@ class FileArchiver(
      */
     private val storage: FileArchiverStorage
 ) {
-    constructor(
-        /**
-         * A collection of globs to match the paths of files that shall be archived. For details about the glob patterns
-         * see [FileMatcher].
-         */
-        patterns: Collection<String>,
-
-        /**
-         * The [FileStorage] to use for archiving files.
-         */
-        storage: FileStorage
-    ) : this(patterns, FileArchiverFileStorage(storage))
-
     companion object : Logging {
         val DEFAULT_ARCHIVE_DIR by lazy { ortDataDirectory.resolve("scanner/archive") }
     }
