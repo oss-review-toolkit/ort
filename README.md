@@ -247,7 +247,7 @@ A directory that contains license texts which are not provided by ORT.
 |--------|--------|-----------------------------------------|
 | Text   | Global | `$ORT_CONFIG_DIR/custom-license-texts/` |
 
-#### [How to fix text provider script](./docs/how-to-fix-text-provider-kts.md)
+#### [How to fix text provider script](./docs/scripts/how-to-fix-text-provider-kts.md)
 
 A Kotlin script that enables the injection of how-to-fix texts in Markdown format for ORT issues into the reports.
 
@@ -292,7 +292,7 @@ can be used to populate a directory with template package configuration files.
 |-------------|----------------------|-------------------------------------------|
 | YAML / JSON | Package (dependency) | `$ORT_CONFIG_DIR/package-configurations/` |
 
-#### [Policy rules file](./docs/file-rules-kts.md)
+#### [Policy rules file](./docs/scripts/rules-kts.md)
 
 The file containing any policy rule implementations to be used with the _evaluator_.
 
