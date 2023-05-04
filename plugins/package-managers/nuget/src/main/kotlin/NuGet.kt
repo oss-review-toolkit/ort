@@ -58,7 +58,7 @@ class NuGet(
         ) = NuGet(type, analysisRoot, analyzerConfig, repoConfig)
     }
 
-    private val nugetConfig = options[OPTION_NUGET_CONFIG]
+    private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
 
     override fun resolveDependencies(
         definitionFile: File,
