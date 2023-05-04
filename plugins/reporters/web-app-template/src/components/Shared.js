@@ -64,12 +64,12 @@ const getColumnSearchProps = (dataIndex, filteredInfo, that) => ({
             </Space>
         </div>
     ),
-    filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />,
-    filteredValue: filteredInfo ? filteredInfo[dataIndex] : '',
+    filterIcon: (filtered) => (<SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />),
+    filteredValue: filteredInfo ? filteredInfo[dataIndex] : null,
     onFilter: (value, record) => (record[dataIndex]
         ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
         : false),
-    onFilterDropdownVisibleChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
         if (visible) {
             setTimeout(() => that.searchInput.select());
         }

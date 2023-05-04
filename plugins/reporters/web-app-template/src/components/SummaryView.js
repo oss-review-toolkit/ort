@@ -46,9 +46,6 @@ import {
 } from '../reducers/selectors';
 import store from '../store';
 
-const { Item } = Timeline;
-const { TabPane } = Tabs;
-
 class SummaryView extends React.Component {
     static onChangeDeclaredLicensesTable(pagination, filters, sorter, extra) {
         store.dispatch({
@@ -170,196 +167,233 @@ class SummaryView extends React.Component {
             <div className="ort-summary">
                 <Row>
                     <Col span={22} offset={1}>
-                        <Timeline className="ort-summary-timeline">
-                            <Item>
-                                Scanned revision
-                                {' '}
-                                <b>
-                                    {revision}
-                                </b>
-                                {' '}
-                                of
-                                {' '}
-                                {type}
-                                {' '}
-                                repository
-                                {' '}
-                                <b>
-                                    {url}
-                                </b>
-                            </Item>
-                            <Item>
-                                Found
-                                {' '}
-                                <b>
-                                    {projects.length}
-                                </b>
-                                {' '}
-                                files defining
-                                {' '}
-                                <b>
-                                    {packages.length}
-                                </b>
-                                {' '}
-                                unique dependencies within
-                                {' '}
-                                <b>
-                                    {scopes.length}
-                                </b>
-                                {' '}
-                                scopes
-                                {
-                                    scopes && scopes.length > 0
-                                    && (
-                                        <span>
-                                            {' '}
-                                            and
-                                            {' '}
-                                            <b>
-                                                {levels.length}
-                                            </b>
-                                            {' '}
-                                            dependency levels
-                                        </span>
-                                    )
-                                }
-                            </Item>
-                            <Item>
-                                {
-                                    detectedLicensesProcessed.length === 0
-                                    && (
-                                        <span>
-                                            {' '}
-                                            Detected
-                                            {' '}
-                                            <b>
-                                                {declaredLicensesProcessed.length}
-                                            </b>
-                                            {' '}
-                                            declared licenses
-                                        </span>
-                                    )
-                                }
-                                {
-                                    detectedLicensesProcessed.length !== 0
-                                    && (
-                                        <span>
-                                            Detected
-                                            {' '}
-                                            <b>
-                                                {detectedLicensesProcessed.length}
-                                            </b>
-                                            {' '}
-                                            licenses and
-                                            {' '}
-                                            <b>
-                                                {declaredLicensesProcessed.length}
-                                            </b>
-                                            {' '}
-                                            declared licenses
-                                        </span>
-                                    )
-                                }
-                            </Item>
-                            <Item
-                                dot={
-                                    (hasUnresolvedIssues || hasUnresolvedRuleViolations)
-                                        ? (<ExclamationCircleOutlined style={{ fontSize: 16 }} />)
-                                        : (<CheckCircleOutlined style={{ fontSize: 16 }} />)
-                                }
-                                color={(hasUnresolvedIssues || hasUnresolvedRuleViolations) ? 'red' : 'green'}
-                            >
-                                {
-                                    hasUnresolvedIssues && !hasUnresolvedRuleViolations
-                                    && (
-                                        <span className="ort-error">
-                                            <b>
-                                                Completed scan with
-                                                {' '}
-                                                {unresolvedIssues}
-                                                {' '}
-                                                unresolved issue
-                                                {unresolvedIssues > 1 && 's'}
+                        <Timeline
+                            className="ort-summary-timeline"
+                            items={ (
+                                () => {
+                                    var timelineItems = [
+                                        {
+                                            children: (
+                                                <span>
+                                                    Scanned revision
+                                                    {' '}
+                                                    <b>
+                                                        {revision}
+                                                    </b>
+                                                    {' '}
+                                                    of
+                                                    {' '}
+                                                    {type}
+                                                    {' '}
+                                                    repository
+                                                    {' '}
+                                                    <b>
+                                                        {url}
+                                                    </b>
+                                                </span>
+                                            )
+                                        },
+                                        {
+                                            children: (
+                                                <span>
+                                                    Found
+                                                    {' '}
+                                                    <b>
+                                                        {projects.length}
+                                                    </b>
+                                                    {' '}
+                                                    files defining
+                                                    {' '}
+                                                    <b>
+                                                        {packages.length}
+                                                    </b>
+                                                    {' '}
+                                                    unique dependencies within
+                                                    {' '}
+                                                    <b>
+                                                        {scopes.length}
+                                                    </b>
+                                                    {' '}
+                                                    scopes
+                                                    {
+                                                        scopes && scopes.length > 0
+                                                        && (
+                                                            <span>
+                                                                {' '}
+                                                                and
+                                                                {' '}
+                                                                <b>
+                                                                    {levels.length}
+                                                                </b>
+                                                                {' '}
+                                                                dependency levels
+                                                            </span>
+                                                        )
+                                                    }
+                                                </span>
+                                            )
+                                        }
+                                    ];
+
+                                    if (declaredLicensesProcessed.length !== 0 
+                                        && detectedLicensesProcessed.length === 0 ) {
+                                        timelineItems.push({
+                                                children: (
+                                                    <span>
+                                                        {' '}
+                                                        Detected
+                                                        {' '}
+                                                        <b>
+                                                            {declaredLicensesProcessed.length}
+                                                        </b>
+                                                        {' '}
+                                                        declared licenses
+                                                    </span>
+                                                )
+                                        });
+                                    } else if (declaredLicensesProcessed.length === 0
+                                        && detectedLicensesProcessed.length !== 0) {
+                                        timelineItems.push({
+                                            children: (
+                                                <span>
+                                                    {' '}
+                                                    Detected
+                                                    {' '}
+                                                    <b>
+                                                        {detectedLicensesProcessed.length}
+                                                    </b>
+                                                    {' '}
+                                                    licenses
+                                                </span>
+                                            )
+                                        });
+                                    } else if (declaredLicensesProcessed.length !== 0
+                                        && detectedLicensesProcessed.length !== 0) {
+                                        timelineItems.push({
+                                            children: (
+                                                <span>
+                                                    Detected
+                                                    {' '}
+                                                    <b>
+                                                        {detectedLicensesProcessed.length}
+                                                    </b>
+                                                    {' '}
+                                                    licenses and
+                                                    {' '}
+                                                    <b>
+                                                        {declaredLicensesProcessed.length}
+                                                    </b>
+                                                    {' '}
+                                                    declared licenses
+                                                </span>
+                                            )
+                                        });
+                                    }
+
+                                    timelineItems.push({
+                                        dot: (hasUnresolvedIssues || hasUnresolvedRuleViolations)
+                                            ? (<ExclamationCircleOutlined style={{ fontSize: 16 }} />)
+                                            : (<CheckCircleOutlined style={{ fontSize: 16 }} />),
+                                        children: (
+                                            <span>
                                                 {
-                                                    webAppOrtResult.hasExcludes()
+                                                    hasUnresolvedIssues && !hasUnresolvedRuleViolations
                                                     && (
-                                                        <span>
-                                                            {' '}
-                                                            in non-excluded source code or dependencies
+                                                        <span className="ort-error">
+                                                            <b>
+                                                                Completed scan with
+                                                                {' '}
+                                                                {unresolvedIssues}
+                                                                {' '}
+                                                                unresolved issue
+                                                                {unresolvedIssues > 1 && 's'}
+                                                                {
+                                                                    webAppOrtResult.hasExcludes()
+                                                                    && (
+                                                                        <span>
+                                                                            {' '}
+                                                                            in non-excluded source code or dependencies
+                                                                        </span>
+                                                                    )
+                                                                }
+                                                            </b>
                                                         </span>
                                                     )
                                                 }
-                                            </b>
-                                        </span>
-                                    )
-                                }
-                                {
-                                    !hasUnresolvedIssues && hasUnresolvedRuleViolations
-                                    && (
-                                        <span className="ort-error">
-                                            <b>
-                                                Completed scan with
-                                                {' '}
-                                                {unresolvedRuleViolations}
-                                                {' '}
-                                                unresolved policy violation
-                                                {unresolvedRuleViolations > 1 && 's'}
                                                 {
-                                                    webAppOrtResult.hasExcludes()
+                                                    !hasUnresolvedIssues && hasUnresolvedRuleViolations
                                                     && (
-                                                        <span>
-                                                            {' '}
-                                                            in non-excluded source code or dependencies
+                                                        <span className="ort-error">
+                                                            <b>
+                                                                Completed scan with
+                                                                {' '}
+                                                                {unresolvedRuleViolations}
+                                                                {' '}
+                                                                unresolved policy violation
+                                                                {unresolvedRuleViolations > 1 && 's'}
+                                                                {
+                                                                    webAppOrtResult.hasExcludes()
+                                                                    && (
+                                                                        <span>
+                                                                            {' '}
+                                                                            in non-excluded source code or dependencies
+                                                                        </span>
+                                                                    )
+                                                                }
+                                                            </b>
                                                         </span>
                                                     )
                                                 }
-                                            </b>
-                                        </span>
-                                    )
-                                }
-                                {
-                                    hasUnresolvedIssues && hasUnresolvedRuleViolations
-                                    && (
-                                        <span className="ort-error">
-                                            <b>
-                                                Completed scan with
-                                                {' '}
-                                                {unresolvedIssues}
-                                                {' '}
-                                                unresolved issue
-                                                {unresolvedIssues > 1 && 's'}
-                                                {' '}
-                                                and
-                                                {' '}
-                                                {unresolvedRuleViolations}
-                                                {' '}
-                                                unresolved policy violation
-                                                {unresolvedRuleViolations > 1 && 's'}
                                                 {
-                                                    webAppOrtResult.hasExcludes()
+                                                    hasUnresolvedIssues && hasUnresolvedRuleViolations
                                                     && (
-                                                        <span>
-                                                            {' '}
-                                                            in non-excluded source code or dependencies
+                                                        <span className="ort-error">
+                                                            <b>
+                                                                Completed scan with
+                                                                {' '}
+                                                                {unresolvedIssues}
+                                                                {' '}
+                                                                unresolved issue
+                                                                {unresolvedIssues > 1 && 's'}
+                                                                {' '}
+                                                                and
+                                                                {' '}
+                                                                {unresolvedRuleViolations}
+                                                                {' '}
+                                                                unresolved policy violation
+                                                                {unresolvedRuleViolations > 1 && 's'}
+                                                                {
+                                                                    webAppOrtResult.hasExcludes()
+                                                                    && (
+                                                                        <span>
+                                                                            {' '}
+                                                                            in non-excluded source code or dependencies
+                                                                        </span>
+                                                                    )
+                                                                }
+                                                            </b>
                                                         </span>
                                                     )
                                                 }
-                                            </b>
-                                        </span>
-                                    )
-                                }
-                                {
-                                    !hasUnresolvedIssues && !hasUnresolvedRuleViolations
-                                    && (
-                                        <span className="ort-ok">
-                                            <b>
-                                                Completed scan successfully
-                                            </b>
-                                        </span>
-                                    )
-                                }
-                            </Item>
-                        </Timeline>
+                                                {
+                                                    !hasUnresolvedIssues && !hasUnresolvedRuleViolations
+                                                    && (
+                                                        <span className="ort-ok">
+                                                            <b>
+                                                                Completed scan successfully
+                                                            </b>
+                                                        </span>
+                                                    )
+                                                }
+                                            </span>
+                                        ),
+                                        color: (hasUnresolvedIssues || hasUnresolvedRuleViolations) ? 'red' : 'green'
+                                    });
+                                    
+                                    return timelineItems;
+                                })()
+                            }
+                        />
                     </Col>
                 </Row>
                 {
@@ -371,155 +405,157 @@ class SummaryView extends React.Component {
                     && (
                         <Row>
                             <Col span={22} offset={1}>
-                                <Tabs tabPosition="top" className="ort-tabs-summary-overview">
-                                    {
-                                        webAppOrtResult.hasRuleViolations()
-                                        && (
-                                            <TabPane
-                                                tab={(
+                                <Tabs 
+                                    className="ort-tabs-summary-overview"
+                                    tabPosition="top" 
+                                    items={ (() => {
+                                        var tabItems = [];
+
+                                        if (webAppOrtResult.hasRuleViolations()) {
+                                            tabItems.push({
+                                                label: (
                                                     <span>
                                                         <ExceptionOutlined />
                                                         Rule Violations (
-                                                        {
-                                                            ruleViolations.length !== unresolvedRuleViolations
-                                                            && `${unresolvedRuleViolations}/`
-                                                        }
-                                                        {ruleViolations.length}
+                                                            {
+                                                                ruleViolations.length !== unresolvedRuleViolations
+                                                                && `${unresolvedRuleViolations}/`
+                                                            }
+                                                            {ruleViolations.length}
                                                         )
                                                     </span>
-                                                )}
-                                                key="ort-summary-rule-violations-table"
-                                            >
-                                                <RuleViolationsTable
-                                                    onChange={
-                                                        SummaryView.onChangeRuleViolationsTable
-                                                    }
-                                                    ruleViolations={webAppOrtResult.ruleViolations}
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.ruleViolations}
-                                                />
-                                            </TabPane>
-                                        )
-                                    }
-                                    {
-                                        webAppOrtResult.hasIssues()
-                                        && (
-                                            <TabPane
-                                                tab={(
+                                                ),
+                                                key: "ort-summary-rule-violations-table",
+                                                children: (
+                                                    <RuleViolationsTable
+                                                        onChange={
+                                                            SummaryView.onChangeRuleViolationsTable
+                                                        }
+                                                        ruleViolations={webAppOrtResult.ruleViolations}
+                                                        showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                        state={columns.ruleViolations}
+                                                    />
+                                                )
+                                            });
+                                        }
+
+                                        if (webAppOrtResult.hasIssues()) {
+                                            tabItems.push({
+                                                label: (
                                                     <span>
                                                         <BugOutlined />
                                                         Issues (
-                                                        {
-                                                            issues.length !== unresolvedIssues
-                                                            && `${unresolvedIssues}/`
-                                                        }
-                                                        {issues.length}
+                                                            {
+                                                                issues.length !== unresolvedIssues
+                                                                && `${unresolvedIssues}/`
+                                                            }
+                                                            {issues.length}
                                                         )
                                                     </span>
-                                                )}
-                                                key="ort-summary-issues-table"
-                                            >
-                                                <IssuesTable
-                                                    issues={webAppOrtResult.issues}
-                                                    onChange={
-                                                        SummaryView.onChangeIssuesTable
-                                                    }
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.issues}
-                                                />
-                                            </TabPane>
-                                        )
-                                    }
-                                    {
-                                        webAppOrtResult.hasVulnerabilities()
-                                        && (
-                                            <TabPane
-                                                tab={(
+                                                ),
+                                                key: "ort-summary-issues-table",
+                                                children: (
+                                                    <IssuesTable
+                                                        issues={webAppOrtResult.issues}
+                                                        onChange={
+                                                            SummaryView.onChangeIssuesTable
+                                                        }
+                                                        showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                        state={columns.issues}
+                                                    />
+                                                )
+                                            });
+                                        }
+
+                                        if (webAppOrtResult.hasVulnerabilities()) {
+                                            tabItems.push({
+                                                label: (
                                                     <span>
                                                         <SecurityScanOutlined />
                                                         Vulnerabilities (
-                                                        {vulnerabilities.length}
+                                                            {vulnerabilities.length}
                                                         )
                                                     </span>
-                                                )}
-                                                key="ort-summary-vulnerabilities-table"
-                                            >
-                                                <VulnerabilitiesTable
-                                                    onChange={
-                                                        SummaryView.onChangeVulnerabilitiesTable
-                                                    }
-                                                    vulnerabilities={webAppOrtResult.vulnerabilities}
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.vulnerabilities}
-                                                />
-                                            </TabPane>
-                                        )
-                                    }
-                                    {
-                                        webAppOrtResult.hasDeclaredLicensesProcessed()
-                                        && (
-                                            <TabPane
-                                                tab={(
+                                                ),
+                                                key: "ort-summary-vulnerabilities-table",
+                                                children: (
+                                                    <VulnerabilitiesTable
+                                                        onChange={
+                                                            SummaryView.onChangeVulnerabilitiesTable
+                                                        }
+                                                        vulnerabilities={webAppOrtResult.vulnerabilities}
+                                                        showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                        state={columns.vulnerabilities}
+                                                    />
+                                                )
+                                            });
+                                        }
+
+                                        if (webAppOrtResult.hasDeclaredLicensesProcessed()) {
+                                            tabItems.push({
+                                                label: (
                                                     <span>
                                                         <TagsOutlined />
                                                         Declared Licenses (
-                                                        {declaredLicensesProcessed.length}
+                                                            {declaredLicensesProcessed.length}
                                                         )
                                                     </span>
-                                                )}
-                                                key="ort-summary-declared-licenses-table"
-                                            >
-                                                <Row>
-                                                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
-                                                        <LicenseStatsTable
-                                                            emptyText="No declared licenses"
-                                                            filter={columns.declaredLicensesProcessed}
-                                                            licenses={declaredLicensesProcessed}
-                                                            licenseStats={stats.declaredLicensesProcessed}
-                                                            onChange={
-                                                                SummaryView.onChangeDeclaredLicensesTable
-                                                            }
-                                                        />
-                                                    </Col>
-                                                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                                                        <LicenseChart licenses={charts.declaredLicensesProcessed} />
-                                                    </Col>
-                                                </Row>
-                                            </TabPane>
-                                        )
-                                    }
-                                    {
-                                        webAppOrtResult.hasDetectedLicensesProcessed()
-                                        && (
-                                            <TabPane
-                                                tab={(
+                                                ),
+                                                key: "ort-summary-declared-licenses-table",
+                                                children: (
+                                                    <Row>
+                                                        <Col xs={24} sm={24} md={24} lg={24} xl={9}>
+                                                            <LicenseStatsTable
+                                                                emptyText="No declared licenses"
+                                                                filter={columns.declaredLicensesProcessed}
+                                                                licenses={declaredLicensesProcessed}
+                                                                licenseStats={stats.declaredLicensesProcessed}
+                                                                onChange={
+                                                                    SummaryView.onChangeDeclaredLicensesTable
+                                                                }
+                                                            />
+                                                        </Col>
+                                                        <Col xs={24} sm={24} md={24} lg={24} xl={15}>
+                                                            <LicenseChart licenses={charts.declaredLicensesProcessed} />
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            });
+                                        }
+
+                                        if (webAppOrtResult.hasDetectedLicensesProcessed()) {
+                                            tabItems.push({
+                                                label: (
                                                     <span>
                                                         <CodeOutlined />
                                                         Detected Licenses (
                                                         {detectedLicensesProcessed.length}
                                                         )
                                                     </span>
-                                                )}
-                                                key="ort-summary-detected-licenses-table"
-                                            >
-                                                <Row>
-                                                    <Col xs={24} sm={24} md={24} lg={24} xl={9}>
-                                                        <LicenseStatsTable
-                                                            emptyText="No detected licenses"
-                                                            filter={columns.detectedLicensesProcessed}
-                                                            licenses={detectedLicensesProcessed}
-                                                            licenseStats={stats.detectedLicensesProcessed}
-                                                            onChange={SummaryView.onChangeDetectedLicensesTable}
-                                                        />
-                                                    </Col>
-                                                    <Col xs={24} sm={24} md={24} lg={24} xl={15}>
-                                                        <LicenseChart licenses={charts.detectedLicensesProcessed} />
-                                                    </Col>
-                                                </Row>
-                                            </TabPane>
-                                        )
-                                    }
-                                </Tabs>
+                                                ),
+                                                key: "ort-summary-detected-licenses-table",
+                                                children: (
+                                                    <Row>
+                                                        <Col xs={24} sm={24} md={24} lg={24} xl={9}>
+                                                            <LicenseStatsTable
+                                                                emptyText="No detected licenses"
+                                                                filter={columns.detectedLicensesProcessed}
+                                                                licenses={detectedLicensesProcessed}
+                                                                licenseStats={stats.detectedLicensesProcessed}
+                                                                onChange={SummaryView.onChangeDetectedLicensesTable}
+                                                            />
+                                                        </Col>
+                                                        <Col xs={24} sm={24} md={24} lg={24} xl={15}>
+                                                            <LicenseChart licenses={charts.detectedLicensesProcessed} />
+                                                        </Col>
+                                                    </Row>
+                                                )
+                                            });
+                                        }
+
+                                        return tabItems;
+                                    })() }
+                                />
                             </Col>
                         </Row>
                     )

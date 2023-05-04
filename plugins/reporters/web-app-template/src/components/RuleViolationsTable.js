@@ -192,27 +192,27 @@ class RuleViolationsTable extends React.Component {
         }
 
         columns.push(
-            {
-                dataIndex: 'packageName',
-                ellipsis: true,
-                key: 'packageName',
-                responsive: ['md'],
-                sorter: (a, b) => a.packageName.localeCompare(b.packageName),
-                sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
-                title: 'Package',
-                width: '25%',
-                ...getColumnSearchProps('packageName', filteredInfo, this)
-            },
-            {
-                dataIndex: 'rule',
-                key: 'rule',
-                responsive: ['md'],
-                sorter: (a, b) => a.rule.localeCompare(b.rule),
-                sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
-                title: 'Rule',
-                width: '25%',
-                ...getColumnSearchProps('rule', filteredInfo, this)
-            },
+        //     {
+        //         dataIndex: 'packageName',
+        //         ellipsis: true,
+        //         key: 'packageName',
+        //         responsive: ['md'],
+        //         sorter: (a, b) => a.packageName.localeCompare(b.packageName),
+        //         sortOrder: sortedInfo.field === 'packageName' && sortedInfo.order,
+        //         title: 'Package',
+        //         width: '25%',
+        //         ...getColumnSearchProps('packageName', filteredInfo, this)
+        //     },
+        //     {
+        //         dataIndex: 'rule',
+        //         key: 'rule',
+        //         responsive: ['md'],
+        //         sorter: (a, b) => a.rule.localeCompare(b.rule),
+        //         sortOrder: sortedInfo.field === 'rule' && sortedInfo.order,
+        //         title: 'Rule',
+        //         width: '25%',
+        //         ...getColumnSearchProps('rule', filteredInfo, this)
+        //     },
             {
                 dataIndex: 'message',
                 key: 'message',

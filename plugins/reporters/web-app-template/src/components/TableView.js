@@ -20,9 +20,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
+    Col,
     Collapse,
     Dropdown,
-    Menu,
+    Row,
     Table,
     Tooltip
 } from 'antd';
@@ -385,21 +386,16 @@ class TableView extends React.Component {
 
         return (
             <div>
-                <div className="ort-table-buttons">
-                    <Dropdown.Button
-                        onClick={() => {
-                            store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
-                        }}
-                        overlay={(
-                            <Menu
-                                className="ort-table-toggle-columns"
-                                onClick={this.onClickToggleColumnsMenu}
-                                selectedKeys={showKeys}
-                            >
-                                {
-                                    toggleColumnMenuItems.map(
-                                        (item) => (
-                                            <Menu.Item key={item.value}>
+                <Row justify="end">
+                    <Col>
+                        <Dropdown.Button
+                            menu={{
+                                className: "ort-table-toggle-columns",
+                                items: toggleColumnMenuItems.map(
+                                    (item) => ({
+                                        key: item.value,
+                                        label: (
+                                            <span>
                                                 {
                                                     showKeys.includes(item.value)
                                                         ? <EyeOutlined />
@@ -407,17 +403,22 @@ class TableView extends React.Component {
                                                 }
                                                 {' '}
                                                 {item.text}
-                                            </Menu.Item>
+                                            </span>
                                         )
-                                    )
-                                }
-                            </Menu>
-                        )}
-                        size="small"
-                    >
-                        Clear filters
-                    </Dropdown.Button>
-                </div>
+                                    })
+                                ),
+                                onClick: this.onClickToggleColumnsMenu,
+                                selectedKeys: showKeys 
+                            }}
+                            onClick={() => {
+                                store.dispatch({ type: 'TABLE::RESET_COLUMNS_TABLE' });
+                            }}
+                            size="small"
+                        >
+                            Clear filters
+                        </Dropdown.Button>
+                    </Col>
+                </Row>
                 <Table
                     columns={columns}
                     expandedRowRender={

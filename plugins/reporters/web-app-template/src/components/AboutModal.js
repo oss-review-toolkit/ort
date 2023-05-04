@@ -39,7 +39,6 @@ import {
 import store from '../store';
 
 const { Item } = Descriptions;
-const { TabPane } = Tabs;
 
 SyntaxHighlighter.registerLanguage('yaml', yaml);
 
@@ -65,7 +64,7 @@ const AboutModal = (props) => {
     return (
         <Modal
             footer={null}
-            visible
+            open={true}
             height="90%"
             width="90%"
             onCancel={
@@ -74,120 +73,128 @@ const AboutModal = (props) => {
                 }
             }
         >
-            <Tabs animated={false}>
-                {
-                    webAppOrtResult.hasRepositoryConfiguration()
-                    && (
-                        <TabPane
-                            tab={(
+            <Tabs 
+                animated={false}
+                items={ (() => {
+                    var tabItems = [];
+
+                    if (webAppOrtResult.hasRepositoryConfiguration()) {
+                        tabItems.push({
+                            label: (
                                 <span>
                                     <FileTextOutlined />
                                     Excludes (.ort.yml)
                                 </span>
-                            )}
-                            key="ort-tabs-excludes"
-                        >
-                            <SyntaxHighlighter
-                                language="yaml"
-                                showLineNumbers
-                                style={lioshi}
-                            >
-                                {repositoryConfiguration}
-                            </SyntaxHighlighter>
-                        </TabPane>
-                    )
-                }
-                {
-                    webAppOrtResult.hasLabels()
-                    && (
-                        <TabPane
-                            tab={(
+                            ),
+                            key: "ort-tabs-excludes",
+                            children: (
+                                <SyntaxHighlighter
+                                    language="yaml"
+                                    showLineNumbers
+                                    style={lioshi}
+                                >
+                                    {repositoryConfiguration}
+                                </SyntaxHighlighter>
+                            )
+                        });
+                    }
+
+                    if (webAppOrtResult.hasLabels()) {
+                        tabItems.push({
+                            label: (
                                 <span>
                                     <TagsOutlined />
                                     Labels
                                 </span>
-                            )}
-                            key="ort-tabs-labels"
-                        >
-                            <Descriptions
-                                bordered
-                                column={1}
-                                size="small"
-                            >
-                                {
-                                    Object.entries(labels).map(([key, value]) => (
-                                        <Item
-                                            key={`ort-label-${key}`}
-                                            label={key}
-                                        >
-                                            {
-                                                value.startsWith('http')
-                                                    ? (
-                                                        <a
-                                                            href={value}
-                                                            rel="noopener noreferrer"
-                                                            target="_blank"
-                                                        >
-                                                            {value}
-                                                        </a>
-                                                    )
-                                                    : value
-                                            }
-                                        </Item>
-                                    ))
-                                }
-                            </Descriptions>
-                        </TabPane>
-                    )
-                }
-                <TabPane
-                    tab={(
-                        <span>
-                            <InfoCircleOutlined />
-                            About
-                        </span>
-                    )}
-                    key="ort-tabs-about"
-                >
-                    <a
-                        href="https://github.com/oss-review-toolkit/ort"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        <div
-                            className="ort-about-logo ort-logo"
-                        />
-                    </a>
-                    <p>
-                        For documentation on how to create this report please see
-                        {' '}
-                        <a
-                            href="https://github.com/oss-review-toolkit/ort"
-                            rel="noopener noreferrer"
-                            target="_blank"
-                        >
-                            https://oss-review-toolkit.org/
-                        </a>
-                        .
-                    </p>
-                    <p>
-                        Licensed under Apache License, Version 2.0 (SPDX: Apache-2.0) but also includes
-                        third-party software components under other open source licenses.
-                        See OSS Review Toolkit code repository for further details.
-                    </p>
-                    {
-                        !!analyzerStartDate
-                        && (
-                            <p>
-                                This ORT report is based on an analysis started on
-                                {' '}
-                                {analyzerStartDate}
-                                .
-                            </p>
-                        )
+                            ),
+                            key: "ort-tabs-labels",
+                            children: (
+                                <Descriptions
+                                    bordered
+                                    column={1}
+                                    size="small"
+                                >
+                                    {
+                                        Object.entries(labels).map(([key, value]) => (
+                                            <Item
+                                                key={`ort-label-${key}`}
+                                                label={key}
+                                            >
+                                                {
+                                                    value.startsWith('http')
+                                                        ? (
+                                                            <a
+                                                                href={value}
+                                                                rel="noopener noreferrer"
+                                                                target="_blank"
+                                                            >
+                                                                {value}
+                                                            </a>
+                                                        )
+                                                        : value
+                                                }
+                                            </Item>
+                                        ))
+                                    }
+                                </Descriptions>
+                            )
+                        });
                     }
-                </TabPane>
-            </Tabs>
+
+                    tabItems.push({
+                        label: (
+                            <span>
+                                <InfoCircleOutlined />
+                                About
+                            </span>
+                        ),
+                        key: "ort-tabs-about",
+                        children: (
+                            <span>
+                                <a
+                                    href="https://github.com/oss-review-toolkit/ort"
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    <div
+                                        className="ort-about-logo ort-logo"
+                                    />
+                                </a>
+                                <p>
+                                    For documentation on how to create this report please see
+                                    {' '}
+                                    <a
+                                        href="https://github.com/oss-review-toolkit/ort"
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        https://oss-review-toolkit.org/
+                                    </a>
+                                    .
+                                </p>
+                                <p>
+                                    Licensed under Apache License, Version 2.0 (SPDX: Apache-2.0) but also includes
+                                    third-party software components under other open source licenses.
+                                    See OSS Review Toolkit code repository for further details.
+                                </p>
+                                {
+                                    !!analyzerStartDate
+                                    && (
+                                        <p>
+                                            This ORT report is based on an analysis started on
+                                            {' '}
+                                            {analyzerStartDate}
+                                            .
+                                        </p>
+                                    )
+                                }
+                            </span>
+                        )
+                    });
+                    
+                    return tabItems;
+                })() }
+            />            
         </Modal>
     );
 };
