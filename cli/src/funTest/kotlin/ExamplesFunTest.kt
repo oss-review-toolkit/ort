@@ -197,7 +197,7 @@ class ExamplesFunTest : StringSpec({
     }
 
     "The how-to-fix-text script provides the expected texts" {
-        val script = takeExampleFile("how-to-fix-text-provider.kts").readText()
+        val script = takeExampleFile("example.how-to-fix-text-provider.kts").readText()
         val howToFixTextProvider = HowToFixTextProvider.fromKotlinScript(script, OrtResult.EMPTY)
         val issue = Issue(
             message = "ERROR: Timeout after 360 seconds while scanning file 'src/res/data.json'.",

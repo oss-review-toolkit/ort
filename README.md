@@ -251,9 +251,9 @@ A directory that contains license texts which are not provided by ORT.
 
 A Kotlin script that enables the injection of how-to-fix texts in Markdown format for ORT issues into the reports.
 
-| Format        | Scope  | Default location                               |
-|---------------|--------|------------------------------------------------|
-| Kotlin script | Global | `$ORT_CONFIG_DIR/how-to-fix-text-provider.kts` |
+| Format        | Scope  | Default location                                        |
+|---------------|--------|---------------------------------------------------------|
+| Kotlin script | Global | `$ORT_CONFIG_DIR/reporter.how-to-fix-text-provider.kts` |
 
 #### [License classifications file](docs/config-file-license-classifications-yml.md)
 
