@@ -50,13 +50,13 @@ class FileArchiverTest : StringSpec() {
     private lateinit var workingDir: File
     private lateinit var storageDir: File
     private lateinit var targetDir: File
-    private lateinit var storage: LocalFileStorage
+    private lateinit var storage: FileArchiverFileStorage
 
     override suspend fun beforeTest(testCase: TestCase) {
         workingDir = createTestTempDir("workingDir")
         storageDir = createTestTempDir("storageDir")
         targetDir = createTestTempDir("targetDir")
-        storage = LocalFileStorage(storageDir)
+        storage = FileArchiverFileStorage(LocalFileStorage(storageDir))
     }
 
     private fun createFile(path: String) {
