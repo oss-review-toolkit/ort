@@ -44,8 +44,8 @@ dependencies {
     implementation(project(":utils:common-utils"))
     implementation(project(":utils:spdx-utils"))
 
-    // Changing this to "runtimeOnly" triggers "Call uses reflection API which is not found in compilation classpath".
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    // Using "runtimeOnly" instead of "implementation" here triggers "Call uses reflection API which is not found in compilation classpath".
+    runtimeOnly("org.jetbrains.kotlin:kotlin-reflect")
 
     implementation(libs.clikt)
     implementation(libs.log4jApiKotlin)
