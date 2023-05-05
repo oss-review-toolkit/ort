@@ -31,6 +31,7 @@ dependencies {
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))
 
+    implementation(libs.diffUtils)
     implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotestExtensionsJunitXml)
     implementation(libs.kotestFrameworkEngine)
