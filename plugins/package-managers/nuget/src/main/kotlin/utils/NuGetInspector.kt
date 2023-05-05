@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 import java.util.SortedSet
 
@@ -42,7 +40,7 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -215,7 +213,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
         val pkgDeclaredLicense = pkg.declaredLicense.orEmpty()
 
         if (pkgDeclaredLicense.isNotBlank()) {
-            val licenseData = yamlMapper.readValue<Map<String, String>>(pkgDeclaredLicense)
+            val licenseData = pkgDeclaredLicense.fromYaml<Map<String, String>>()
             val type = licenseData["LicenseType"].orEmpty()
 
             listOfNotNull(
