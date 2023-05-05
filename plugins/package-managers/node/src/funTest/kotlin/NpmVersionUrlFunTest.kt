@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
-import org.ossreviewtoolkit.utils.test.fromYaml
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 

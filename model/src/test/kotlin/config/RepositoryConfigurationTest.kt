@@ -30,8 +30,8 @@ import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotContain
 
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class RepositoryConfigurationTest : WordSpec({

@@ -31,12 +31,12 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense.*
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException.*
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
-import org.ossreviewtoolkit.utils.test.fromYaml
 
 class SpdxExpressionTest : WordSpec({
     "toString()" should {

@@ -48,9 +48,9 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.yamlMapper
-import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerResultBuilderTest : WordSpec() {
