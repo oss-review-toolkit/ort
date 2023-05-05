@@ -127,6 +127,11 @@ enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boo
     fun calculate(file: File): String = file.inputStream().use { calculate(it, file.length()) }
 
     /**
+     * Return the hexadecimal digest of this hash for the given [bytes].
+     */
+    fun calculate(bytes: ByteArray): String = bytes.inputStream().use { calculate(it, bytes.size.toLong()) }
+
+    /**
      * Return the hexadecimal digest of this hash for the given [resourceName].
      */
     fun calculate(resourceName: String): String? {

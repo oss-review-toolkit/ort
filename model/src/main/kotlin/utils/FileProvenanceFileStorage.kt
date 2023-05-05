@@ -21,15 +21,14 @@ package org.ossreviewtoolkit.model.utils
 
 import java.io.File
 import java.io.IOException
-import java.security.MessageDigest
 
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
@@ -88,8 +87,6 @@ class FileProvenanceFileStorage(
     private fun getFilePath(provenance: KnownProvenance): String = "${provenance.hash()}/$filename"
 }
 
-private val SHA1_DIGEST by lazy { MessageDigest.getInstance("SHA-1") }
-
 /**
  * Calculate the SHA-1 hash of the storage key of this [KnownProvenance] instance.
  */
@@ -99,5 +96,5 @@ private fun KnownProvenance.hash(): String {
         is RepositoryProvenance -> "${vcsInfo.type}${vcsInfo.url}$resolvedRevision"
     }
 
-    return SHA1_DIGEST.digest(key.toByteArray()).encodeHex()
+    return HashAlgorithm.SHA1.calculate(key.toByteArray())
 }
