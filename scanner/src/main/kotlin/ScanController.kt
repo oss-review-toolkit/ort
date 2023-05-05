@@ -143,6 +143,18 @@ class ScanController(
         nestedProvenances.values.flatMapTo(mutableSetOf()) { it.getProvenances() }
 
     /**
+     * Return all provenances including sub-repositories associated with the identifiers of the packages they belong to.
+     */
+    fun getIdsByProvenance(): Map<KnownProvenance, Set<Identifier>> =
+        buildMap<_, MutableSet<Identifier>> {
+            getNestedProvenancesByPackage().forEach { (pkg, nestedProvenance) ->
+                nestedProvenance.getProvenances().forEach { provenance ->
+                    getOrPut(provenance) { mutableSetOf() } += pkg.id
+                }
+            }
+        }
+
+    /**
      * Get all provenances for which no scan result for the provided [scanner] is available.
      */
     private fun getMissingProvenanceScans(scanner: ScannerWrapper, nestedProvenance: NestedProvenance) =
