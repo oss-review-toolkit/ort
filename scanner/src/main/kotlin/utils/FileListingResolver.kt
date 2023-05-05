@@ -47,6 +47,8 @@ internal class FileListingResolver(
             createFileListing(dir).also { storage.putFileListing(provenance, it) }
         }
     }
+
+    fun has(provenance: KnownProvenance): Boolean = storage.hasFile(provenance)
 }
 
 private fun ProvenanceFileStorage.putFileListing(provenance: KnownProvenance, fileListing: FileListing) {
