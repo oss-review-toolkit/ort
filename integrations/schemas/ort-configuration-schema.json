@@ -292,6 +292,9 @@
                 "detectedLicenseMapping": {
                     "$ref": "#/definitions/DetectedLicenseMapping"
                 },
+                "fileListingStorage": {
+                    "$ref": "#/definitions/FileListingStorage"
+                },
                 "options": {
                     "$ref": "#/definitions/ScannerOptions"
                 },
@@ -328,6 +331,18 @@
                 "enabled": {
                     "type": "boolean"
                 },
+                "fileStorage": {
+                    "$ref": "#/definitions/FileStorage"
+                },
+                "postgresStorage": {
+                    "$ref": "#/definitions/PostgresConfig"
+                }
+            }
+        },
+        "FileListingStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
                 "fileStorage": {
                     "$ref": "#/definitions/FileStorage"
                 },
