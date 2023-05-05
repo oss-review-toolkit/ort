@@ -20,15 +20,15 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.analyze
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class PnpmFunTest : WordSpec({
     "Pnpm" should {
@@ -38,17 +38,17 @@ class PnpmFunTest : WordSpec({
 
             val result = create("PNPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly in a workspaces project" {
             val definitionFile = getAssetFile("projects/synthetic/pnpm-workspaces/packages.json")
             val expectedResultFile = getAssetFile("projects/synthetic/pnpm-workspaces-expected-output.yml")
-            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
 
             val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 
-            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
+                    matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

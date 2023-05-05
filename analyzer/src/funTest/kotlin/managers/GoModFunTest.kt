@@ -20,11 +20,11 @@
 package org.ossreviewtoolkit.analyzer.managers
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GoModFunTest : StringSpec({
     val testDir = getAssetFile("projects/synthetic")
@@ -35,7 +35,7 @@ class GoModFunTest : StringSpec({
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly if the main package does not contain any code" {
@@ -44,7 +44,7 @@ class GoModFunTest : StringSpec({
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly if there are no dependencies" {
@@ -53,7 +53,7 @@ class GoModFunTest : StringSpec({
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Unused dependencies are not contained in the result" {
@@ -62,6 +62,6 @@ class GoModFunTest : StringSpec({
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

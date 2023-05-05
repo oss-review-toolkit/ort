@@ -20,14 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.cocoapods
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class CocoaPodsFunTest : WordSpec({
     "resolveSingleProject()" should {
@@ -37,7 +37,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "determine dependencies from a Podfile with a dependency tree" {
@@ -46,7 +46,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "return no dependencies along with an issue if the lockfile is absent" {
@@ -55,7 +55,7 @@ class CocoaPodsFunTest : WordSpec({
 
             val result = create("CocoaPods").resolveSingleProject(definitionFile)
 
-            result.withInvariantIssues().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.python
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
@@ -31,7 +30,7 @@ import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.createTestTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class PipFunTest : WordSpec({
     "Python 2" should {
@@ -41,7 +40,7 @@ class PipFunTest : WordSpec({
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "capture metadata from setup.py even if requirements.txt is present" {
@@ -50,7 +49,7 @@ class PipFunTest : WordSpec({
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "2.7").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 
@@ -64,7 +63,7 @@ class PipFunTest : WordSpec({
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies correctly for a Django project" {
@@ -73,7 +72,7 @@ class PipFunTest : WordSpec({
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "capture metadata using python-inspector" {
@@ -82,7 +81,7 @@ class PipFunTest : WordSpec({
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "not fail if the requirements file is empty" {

@@ -25,14 +25,14 @@ import io.kotest.matchers.shouldBe
 import org.ossreviewtoolkit.downloader.vcs.Git
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class SbtFunTest : StringSpec({
     "Dependencies of the external 'sbt-multi-project-example' multi-project should be detected correctly" {
         val definitionFile = getAssetFile("projects/external/sbt-multi-project-example/build.sbt")
         val expectedResultFile = getAssetFile("projects/external/sbt-multi-project-example-expected-output.yml")
-        val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+        val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
         Git().run(definitionFile.parentFile, "clean", "-fd")
@@ -45,7 +45,7 @@ class SbtFunTest : StringSpec({
     "Dependencies of the synthetic 'http4s-template' project should be detected correctly" {
         val definitionFile = getAssetFile("projects/synthetic/sbt-http4s-template/build.sbt")
         val expectedResultFile = getAssetFile("projects/synthetic/sbt-http4s-template-expected-output.yml")
-        val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+        val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
         // Clean any previously generated POM files / target directories.
         Git().run(definitionFile.parentFile, "clean", "-fd")

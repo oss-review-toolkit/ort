@@ -26,7 +26,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -65,7 +64,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class SpdxDocumentReporterFunTest : WordSpec({
     "Reporting to JSON" should {
@@ -88,7 +87,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
-            jsonSpdxDocument shouldBe patchExpectedResult(
+            jsonSpdxDocument should matchExpectedResult(
                 expectedResultFile,
                 custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
             )
@@ -101,7 +100,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
-            yamlSpdxDocument shouldBe patchExpectedResult(
+            yamlSpdxDocument should matchExpectedResult(
                 expectedResultFile,
                 custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
             )

@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxDocumentFileFunTest : WordSpec({
@@ -51,7 +51,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            actualResult should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "succeed if a project with package references is provided" {
@@ -60,7 +60,7 @@ class SpdxDocumentFileFunTest : WordSpec({
 
             val actualResult = create("SpdxDocumentFile").resolveSingleProject(definitionFile).toYaml()
 
-            actualResult shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            actualResult should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "succeed if no project is provided" {

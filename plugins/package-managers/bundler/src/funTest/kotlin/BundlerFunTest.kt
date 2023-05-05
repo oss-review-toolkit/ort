@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class BundlerFunTest : WordSpec({
     "Bundler" should {
@@ -40,7 +40,7 @@ class BundlerFunTest : WordSpec({
 
             val actualResult = create("Bundler").resolveSingleProject(definitionFile)
 
-            actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show error if no lockfile is present" {
@@ -64,7 +64,7 @@ class BundlerFunTest : WordSpec({
 
             val actualResult = create("Bundler").resolveSingleProject(definitionFile)
 
-            actualResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            actualResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

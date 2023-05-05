@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import java.time.LocalDate
 
@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class DocBookTemplateReporterFunTest : StringSpec({
     "DocBook report is created from default template" {
@@ -37,7 +37,7 @@ class DocBookTemplateReporterFunTest : StringSpec({
         val reportContent =
             DocBookTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
 
-        reportContent shouldBe patchExpectedResult(
+        reportContent should matchExpectedResult(
             expectedResultFile,
             custom = mapOf("<REPLACE_DATE>" to "${LocalDate.now()}")
         )
