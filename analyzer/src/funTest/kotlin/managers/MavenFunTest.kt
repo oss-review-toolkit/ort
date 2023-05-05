@@ -23,14 +23,13 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class MavenFunTest : StringSpec({
     "Root project dependencies are detected correctly" {
@@ -39,7 +38,7 @@ class MavenFunTest : StringSpec({
 
         val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly" {
@@ -59,7 +58,7 @@ class MavenFunTest : StringSpec({
 
         result.shouldNotBeNull()
         result should haveSize(1)
-        managerResult.resolveScopes(result.single()).toYaml() shouldBe patchExpectedResult(
+        managerResult.resolveScopes(result.single()).toYaml() should matchExpectedResult(
             expectedResultFile, definitionFileApp
         )
     }
@@ -70,7 +69,7 @@ class MavenFunTest : StringSpec({
 
         val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Scopes can be excluded" {
@@ -80,7 +79,7 @@ class MavenFunTest : StringSpec({
         val result = create("Maven", excludedScopes = setOf("test.*"))
             .resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Parent POM from Maven central can be resolved" {
@@ -94,7 +93,7 @@ class MavenFunTest : StringSpec({
 
         val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Maven Wagon extensions can be loaded" {
@@ -103,7 +102,7 @@ class MavenFunTest : StringSpec({
 
         val result = create("Maven").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe patchExpectedResult(
+        patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(
             expectedResultFile, definitionFile
         )
     }

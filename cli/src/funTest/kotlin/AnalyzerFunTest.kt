@@ -21,7 +21,7 @@ package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.concurrent.shouldCompleteWithin
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import java.util.concurrent.TimeUnit
 
@@ -38,8 +38,8 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
@@ -56,7 +56,7 @@ class AnalyzerFunTest : WordSpec({
 
             val result = analyze(outputDir).toYaml()
 
-            patchActualResult(result, patchStartAndEndTime = true) shouldBe patchExpectedResult(expectedResultFile)
+            patchActualResult(result, patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
         }
 
         "resolve dependencies from other package managers" {
@@ -67,7 +67,7 @@ class AnalyzerFunTest : WordSpec({
 
             val result = analyze(definitionFile.parentFile, allowDynamicVersions = true).analyzer!!.result
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 

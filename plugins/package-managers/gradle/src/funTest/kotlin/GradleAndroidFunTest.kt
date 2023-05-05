@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.AndroidTag
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleAndroidFunTest : StringSpec({
     "Root project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -37,7 +37,7 @@ class GradleAndroidFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -46,7 +46,7 @@ class GradleAndroidFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "External dependencies are detected correctly".config(tags = setOf(AndroidTag)) {
@@ -55,7 +55,7 @@ class GradleAndroidFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Cyclic dependencies over multiple libraries can be handled".config(tags = setOf(AndroidTag, ExpensiveTag)) {
@@ -64,6 +64,6 @@ class GradleAndroidFunTest : StringSpec({
 
         val result = create("Gradle").resolveDependencies(listOf(definitionFile), emptyMap())
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

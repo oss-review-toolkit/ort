@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import java.io.File
 
@@ -45,14 +45,13 @@ import org.ossreviewtoolkit.scanner.provenance.DummyProvenanceStorage
 import org.ossreviewtoolkit.scanner.utils.DefaultWorkingTreeCache
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class ScannerIntegrationFunTest : StringSpec({
     "Gradle project scan results for a given analyzer result are correct".config(invocations = 3) {
         val analyzerResultFile = getAssetFile("analyzer-result.yml")
         val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
-        val expectedResult = patchExpectedResult(expectedResultFile)
 
         val downloaderConfiguration = DownloaderConfiguration()
         val workingTreeCache = DefaultWorkingTreeCache()
@@ -79,7 +78,7 @@ class ScannerIntegrationFunTest : StringSpec({
 
         val result = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
 
-        patchActualResult(result.toYaml(), patchStartAndEndTime = true) shouldBe expectedResult
+        patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
     }
 })
 

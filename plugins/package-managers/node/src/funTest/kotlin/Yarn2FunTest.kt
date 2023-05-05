@@ -20,14 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.collateMultipleProjects
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class Yarn2FunTest : WordSpec({
     "Yarn 2" should {
@@ -37,7 +37,7 @@ class Yarn2FunTest : WordSpec({
 
             val result = create("Yarn2").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "exclude scopes if configured" {
@@ -47,7 +47,7 @@ class Yarn2FunTest : WordSpec({
             val result = create("Yarn2", excludedScopes = setOf("devDependencies"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve workspace dependencies correctly" {
@@ -56,7 +56,7 @@ class Yarn2FunTest : WordSpec({
 
             val result = create("Yarn2").collateMultipleProjects(definitionFile).withResolvedScopes()
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

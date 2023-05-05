@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class GradleKotlinScriptFunTest : StringSpec({
     "root project dependencies are detected correctly" {
@@ -35,7 +35,7 @@ class GradleKotlinScriptFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "core project dependencies are detected correctly" {
@@ -44,7 +44,7 @@ class GradleKotlinScriptFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "cli project dependencies are detected correctly" {
@@ -53,6 +53,6 @@ class GradleKotlinScriptFunTest : StringSpec({
 
         val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

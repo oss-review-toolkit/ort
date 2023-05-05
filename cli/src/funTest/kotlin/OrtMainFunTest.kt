@@ -45,8 +45,8 @@ import org.ossreviewtoolkit.utils.common.redirectStdout
 import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 /**
@@ -196,7 +196,7 @@ class OrtMainFunTest : StringSpec() {
                 "../plugins/package-managers/gradle/src/funTest/assets/projects/synthetic/gradle/build.gradle"
             )
             val expectedResultFile = getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml")
-            val expectedResult = patchExpectedResult(expectedResultFile, definitionFile)
+            val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
             @Suppress("IgnoredReturnValue")
             runMain(

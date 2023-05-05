@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.conan
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
@@ -28,8 +28,8 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.conan.Conan.Companion.OPTION_LOCKFILE_NAME
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class ConanFunTest : StringSpec({
     "Project dependencies are detected correctly for conanfile.txt" {
@@ -38,7 +38,7 @@ class ConanFunTest : StringSpec({
 
         val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly for conanfile.py" {
@@ -47,7 +47,7 @@ class ConanFunTest : StringSpec({
 
         val result = create("Conan", allowDynamicVersions = true).resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     /**
@@ -60,6 +60,6 @@ class ConanFunTest : StringSpec({
 
         val result = create("Conan", OPTION_LOCKFILE_NAME to "lockfile.lock").resolveSingleProject(definitionFile)
 
-        patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -33,6 +34,7 @@ import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
@@ -44,7 +46,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
+            patchActualResult(result.toYaml()) should matchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(
@@ -61,7 +63,7 @@ class NpmFunTest : WordSpec({
             val result = create("NPM", excludedScopes = setOf("devDependencies"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve package-lock dependencies correctly" {
@@ -70,7 +72,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
+            patchActualResult(result.toYaml()) should matchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(
@@ -86,7 +88,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if the 'package.json' file is invalid" {
@@ -109,7 +111,7 @@ class NpmFunTest : WordSpec({
 
             val result = create("NPM").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(
+            patchActualResult(result.toYaml()) should matchExpectedResult(
                 expectedResultFile,
                 definitionFile,
                 custom = mapOf(

@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.python
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class PoetryFunTest : WordSpec({
     "Python 3" should {
@@ -36,7 +36,7 @@ class PoetryFunTest : WordSpec({
 
             val result = create("Poetry").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

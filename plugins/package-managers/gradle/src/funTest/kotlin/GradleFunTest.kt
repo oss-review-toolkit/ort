@@ -25,7 +25,7 @@ import io.kotest.data.forAll
 import io.kotest.data.headers
 import io.kotest.data.row
 import io.kotest.data.table
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
@@ -35,8 +35,8 @@ import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 import org.ossreviewtoolkit.utils.test.getAssetFile
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
 
 class GradleFunTest : StringSpec() {
     private val projectDir = getAssetFile("projects/synthetic/gradle")
@@ -71,7 +71,7 @@ class GradleFunTest : StringSpec() {
 
             val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Project dependencies are detected correctly" {
@@ -80,7 +80,7 @@ class GradleFunTest : StringSpec() {
 
             val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "External dependencies are detected correctly" {
@@ -89,7 +89,7 @@ class GradleFunTest : StringSpec() {
 
             val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Unresolved dependencies are detected correctly" {
@@ -98,7 +98,7 @@ class GradleFunTest : StringSpec() {
 
             val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            patchActualResult(result.toYaml()) shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            patchActualResult(result.toYaml()) should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "Scopes are correctly excluded from the dependency graph" {
@@ -108,7 +108,7 @@ class GradleFunTest : StringSpec() {
             val result = create("Gradle", excludedScopes = setOf("test.*"))
                 .resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         // Disabled because despite following the example at [1] Gradle says there is "No service of type
@@ -121,7 +121,7 @@ class GradleFunTest : StringSpec() {
 
             val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         // Disabled as it causes hangs and memory issues on CI.
@@ -173,7 +173,7 @@ class GradleFunTest : StringSpec() {
 
                 val result = create("Gradle").resolveSingleProject(definitionFile, resolveScopes = true)
 
-                result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
             }
         }
     }

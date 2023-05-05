@@ -20,14 +20,14 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.nuget
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.analyzer.managers.create
 import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class NuGetFunTest : StringSpec({
     "DotNet project dependencies are detected correctly" {
@@ -36,7 +36,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "License extraction is done correctly" {
@@ -45,7 +45,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "A .csproj file with an accompanying .nuspec file is detected correctly" {
@@ -54,7 +54,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "A large number of dependencies is resolved at once in a .csproj file" {
@@ -63,7 +63,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "NuGet project dependencies are detected correctly" {
@@ -72,7 +72,7 @@ class NuGetFunTest : StringSpec({
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
-        result.withInvariantIssues().toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies are detected correctly with a nuget.config present" {
@@ -86,6 +86,6 @@ class NuGetFunTest : StringSpec({
             ).absolutePath
         ).resolveSingleProject(definitionFile)
 
-        result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 })

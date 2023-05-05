@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
-import org.ossreviewtoolkit.utils.test.patchExpectedResult
+import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
 class PubFunTest : WordSpec({
     "Pub" should {
@@ -50,7 +50,7 @@ class PubFunTest : WordSpec({
                 lockFile.delete()
             }
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies for a project with dependencies without a static version" {
@@ -59,7 +59,7 @@ class PubFunTest : WordSpec({
 
             val result = create("Pub").resolveSingleProject(definitionFile)
 
-            result.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve multi-module dependencies correctly" {
@@ -68,7 +68,7 @@ class PubFunTest : WordSpec({
 
             val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
 
-            analyzerResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            analyzerResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "resolve dependencies for a project with Flutter, Android and Cocoapods" {
@@ -82,7 +82,7 @@ class PubFunTest : WordSpec({
             val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
                 .reduceToPubProjects()
 
-            analyzerResult.toYaml() shouldBe patchExpectedResult(expectedResultFile, definitionFile)
+            analyzerResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
         "show an error if no lockfile is present" {
