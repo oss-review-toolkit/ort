@@ -29,6 +29,7 @@ import java.util.EnumSet
  * not supported by ORT, because such directories should never be considered.
  */
 val VCS_DIRECTORIES = listOf(
+    ".bzr",
     ".git",
     ".hg",
     ".repo",
