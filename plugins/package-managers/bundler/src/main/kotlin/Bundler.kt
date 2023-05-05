@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.bundler
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -54,6 +53,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
@@ -295,7 +295,7 @@ class Bundler(
     }
 
     private fun getDependencyGroups(workingDir: File): Map<String, List<String>> =
-        yamlMapper.readValue(runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir))
+        runScriptResource(ROOT_DEPENDENCIES_SCRIPT, workingDir).fromYaml()
 
     private fun resolveGemsMetadata(workingDir: File): MutableMap<String, GemSpec> {
         val stdout = runScriptResource(RESOLVE_DEPENDENCIES_SCRIPT, workingDir)

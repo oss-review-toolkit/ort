@@ -36,11 +36,11 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.DependencyGraphConverter
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 /**
@@ -202,8 +202,7 @@ class SetDependencyRepresentationCommand : CliktCommand(
      */
     private inline fun <reified T : Any> readInput(): T =
         if (handlePlaceholders) {
-            val resultText = replacePlaceholders(ortFile.readText(), inputPlaceholderReplacements())
-            yamlMapper.readValue(resultText, T::class.java)
+            replacePlaceholders(ortFile.readText(), inputPlaceholderReplacements()).fromYaml()
         } else {
             ortFile.readValue()
         }

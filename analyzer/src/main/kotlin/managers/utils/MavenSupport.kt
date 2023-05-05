@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.analyzer.managers.utils
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
 import java.net.URI
 
@@ -83,9 +81,9 @@ import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.parseRepoManifestPath
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.DiskCache
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.gibibytes
@@ -518,7 +516,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
         remoteArtifactCache.read(cacheKey)?.let {
             logger.debug { "Reading remote artifact for '$artifact' from disk cache." }
-            return yamlMapper.readValue(it)
+            return it.fromYaml()
         }
 
         // Filter out local repositories, as remote artifacts should never point to files on the local disk.
