@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 /**
  * An interface that provides functionality to download source code.
  */
-interface ProvenanceDownloader {
+fun interface ProvenanceDownloader {
     /**
      * Download the source code specified by the provided [provenance] and return the path to the directory that
      * contains the downloaded source code.
