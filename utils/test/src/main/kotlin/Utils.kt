@@ -21,10 +21,6 @@ package org.ossreviewtoolkit.utils.test
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.neverNullMatcher
-
 import java.io.File
 import java.time.Instant
 
@@ -116,20 +112,3 @@ fun patchActualResult(
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
-
-/**
- * A helper function to create a custom matcher that compares an [expected] collection to a collection obtained by
- * [transform] using the provided [matcher].
- */
-fun <T, U> transformingCollectionMatcher(
-    expected: Collection<U>,
-    matcher: (Collection<U>) -> Matcher<Collection<U>>,
-    transform: (T) -> Collection<U>
-): Matcher<T?> = neverNullMatcher { value -> matcher(expected).test(transform(value)) }
-
-/**
- * A helper function to create custom matchers that assert that the collection obtained by [transform] is empty.
- */
-fun <T, U> transformingCollectionEmptyMatcher(
-    transform: (T) -> Collection<U>
-): Matcher<T?> = neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
