@@ -25,14 +25,14 @@ import java.security.MessageDigest
 import java.util.EnumSet
 
 /**
- * A list of directories used by version control systems to store metadata.
+ * A list of directories used by version control systems to store metadata. The list covers also version control systems
+ * not supported by ORT, because such directories should never be considered.
  */
 val VCS_DIRECTORIES = listOf(
     ".git",
     ".hg",
     ".repo",
     ".svn",
-    // Keep CVS directories in here even if ORT itself does not support CVS anymore.
     "CVS",
     "CVSROOT"
 )
