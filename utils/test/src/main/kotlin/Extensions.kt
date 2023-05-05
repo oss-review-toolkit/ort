@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
 
@@ -32,7 +30,6 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
-import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
@@ -40,8 +37,6 @@ import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 fun Proxy.toGenericString() =
     (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
-
-inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()

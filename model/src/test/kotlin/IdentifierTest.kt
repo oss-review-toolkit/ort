@@ -31,7 +31,6 @@ import io.kotest.matchers.string.shouldStartWith
 
 import org.ossreviewtoolkit.model.utils.createPurl
 import org.ossreviewtoolkit.model.utils.toPurl
-import org.ossreviewtoolkit.utils.test.fromYaml
 
 class IdentifierTest : WordSpec({
     "String representations" should {

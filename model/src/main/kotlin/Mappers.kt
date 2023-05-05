@@ -30,6 +30,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 
 import org.yaml.snakeyaml.LoaderOptions
@@ -68,5 +69,7 @@ val yamlMapper: YAMLMapper = YAMLMapper(
 ).apply(mapperConfig).enable(YAMLGenerator.Feature.ALLOW_LONG_KEYS)
 
 val EMPTY_JSON_NODE: JsonNode = MissingNode.getInstance()
+
+inline fun <reified T> String.fromYaml(): T = yamlMapper.readValue(this)
 
 fun Any?.toYaml(): String = yamlMapper.writeValueAsString(this)

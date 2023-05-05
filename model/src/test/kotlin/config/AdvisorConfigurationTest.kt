@@ -26,8 +26,8 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.fromYaml
 
 class AdvisorConfigurationTest : WordSpec({
     "Generic advisor options" should {

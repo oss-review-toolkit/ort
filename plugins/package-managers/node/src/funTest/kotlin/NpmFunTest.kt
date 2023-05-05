@@ -29,9 +29,9 @@ import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.analyzer.managers.withInvariantIssues
 import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.fromYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.patchActualResult
 import org.ossreviewtoolkit.utils.test.patchExpectedResult
