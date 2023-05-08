@@ -40,6 +40,8 @@ import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.VulnerableCodeConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
@@ -75,26 +77,36 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
     override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
-        return runCatching {
-            buildMap {
-                packages.chunked(BULK_REQUEST_SIZE).forEach { pkg ->
-                    val packageMap = pkg.filter { it.purl.isNotEmpty() }.associateBy { it.purl }
-                    val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
-                    val issues = mutableListOf<Issue>()
-                    val allVulnerabilities = packageVulnerabilities.filter { it.unresolvedVulnerabilities.isNotEmpty() }
-                        .mapNotNull { pv ->
-                            packageMap[pv.purl]?.let { pkg ->
-                                val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel(issues) }
-                                val summary = AdvisorSummary(startTime, Instant.now(), issues)
-                                pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
-                            }
-                        }.toMap()
-                    putAll(allVulnerabilities)
+        val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
+
+        val allVulnerabilities = mutableMapOf<String, List<VulnerableCodeService.Vulnerability>>()
+        val issues = mutableListOf<Issue>()
+
+        purls.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
+            runCatching {
+                val chunkVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(chunk)).filter {
+                    it.unresolvedVulnerabilities.isNotEmpty()
                 }
+
+                allVulnerabilities += chunkVulnerabilities.associate { it.purl to it.unresolvedVulnerabilities }
+            }.onFailure {
+                // Create dummy entries for all packages in the chunk as the current data model does not allow to return
+                // issues that are not associated to any package.
+                allVulnerabilities += chunk.associateWith { emptyList() }
+
+                issues += Issue(source = providerName, message = it.collectMessages())
             }
-        }.getOrElse {
-            createFailedResults(startTime, packages, it)
         }
+
+        val endTime = Instant.now()
+
+        return packages.mapNotNullTo(mutableListOf()) { pkg ->
+            allVulnerabilities[pkg.id.toPurl()]?.let { packageVulnerabilities ->
+                val vulnerabilities = packageVulnerabilities.map { it.toModel(issues) }
+                val summary = AdvisorSummary(startTime, endTime, issues)
+                pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
+            }
+        }.toMap()
     }
 
     /**
