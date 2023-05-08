@@ -33,12 +33,14 @@ import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorSummary
+import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.OssIndexConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
+import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 
@@ -71,35 +73,42 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
         val startTime = Instant.now()
 
         val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
+        val chunks = purls.chunked(BULK_REQUEST_SIZE)
 
-        return runCatching {
-            val componentReports = mutableMapOf<String, ComponentReport>()
+        val componentReports = mutableMapOf<String, ComponentReport>()
+        val issues = mutableListOf<Issue>()
 
-            val chunks = purls.chunked(BULK_REQUEST_SIZE)
-            chunks.forEachIndexed { index, chunk ->
-                logger.debug { "Getting report for ${chunk.size} components (chunk ${index + 1} of ${chunks.size})." }
+        chunks.forEachIndexed { index, chunk ->
+            logger.debug { "Getting report for ${chunk.size} components (chunk ${index + 1} of ${chunks.size})." }
 
+            runCatching {
                 val results = service.getComponentReport(ComponentReportRequest(chunk)).associateBy {
                     it.coordinates
                 }
 
                 componentReports += results.filterValues { it.vulnerabilities.isNotEmpty() }
-            }
-
-            val endTime = Instant.now()
-
-            packages.mapNotNullTo(mutableListOf()) { pkg ->
-                componentReports[pkg.id.toPurl()]?.let { report ->
-                    pkg to AdvisorResult(
-                        details,
-                        AdvisorSummary(startTime, endTime),
-                        vulnerabilities = report.vulnerabilities.map { it.toVulnerability() }
-                    )
+            }.onFailure {
+                // Create dummy reports for all components in the chunk as the current data model does not allow to
+                // return issues that are not associated to any package.
+                componentReports += chunk.associateWith { purl ->
+                    ComponentReport(purl, reference = "", vulnerabilities = emptyList())
                 }
-            }.toMap()
-        }.getOrElse {
-            createFailedResults(startTime, packages, it)
+
+                issues += Issue(source = providerName, message = it.collectMessages())
+            }
         }
+
+        val endTime = Instant.now()
+
+        return packages.mapNotNullTo(mutableListOf()) { pkg ->
+            componentReports[pkg.id.toPurl()]?.let { report ->
+                pkg to AdvisorResult(
+                    details,
+                    AdvisorSummary(startTime, endTime, issues),
+                    vulnerabilities = report.vulnerabilities.map { it.toVulnerability() }
+                )
+            }
+        }.toMap()
     }
 
     /**
