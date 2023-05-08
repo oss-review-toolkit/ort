@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerRun
-import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -192,7 +191,7 @@ class Scanner(
                 }.onFailure {
                     controller.addProvenanceResolutionIssue(
                         pkg.id,
-                        Issue(source = TOOL_NAME, severity = Severity.ERROR, message = it.collectMessages())
+                        Issue(source = TOOL_NAME, message = it.collectMessages())
                     )
                 }
             }
@@ -222,7 +221,6 @@ class Scanner(
                             id,
                             Issue(
                                 source = TOOL_NAME,
-                                severity = Severity.ERROR,
                                 message = "Could not resolve nested provenance for package " +
                                         "'${id.toCoordinates()}': ${it.collectMessages()}"
                             )
@@ -610,8 +608,7 @@ class Scanner(
                         Issue(
                             source = "Downloader",
                             message = "Could not create file archive for " +
-                                    "'${pkg.id.toCoordinates()}': ${it.collectMessages()}",
-                            severity = Severity.ERROR
+                                    "'${pkg.id.toCoordinates()}': ${it.collectMessages()}"
                         )
                     )
                 }
