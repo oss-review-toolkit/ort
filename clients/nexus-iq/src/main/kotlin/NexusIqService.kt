@@ -66,11 +66,11 @@ interface NexusIqService {
 
         /**
          * Create a NexusIQ service instance for communicating with a server running at the given [url], optionally
-         * using [user] and [password] for basic authentication, and / or a pre-built OkHttp [client].
+         * using [username] and [password] for basic authentication, and / or a pre-built OkHttp [client].
          */
         fun create(
             url: String,
-            user: String? = null,
+            username: String? = null,
             password: String? = null,
             client: OkHttpClient? = null
         ): NexusIqService {
@@ -81,8 +81,8 @@ interface NexusIqService {
                     .header("X-CSRF-TOKEN", token)
                     .header("Cookie", "CLM-CSRF-TOKEN=$token")
 
-                if (user != null && password != null) {
-                    requestBuilder.header("Authorization", Credentials.basic(user, password))
+                if (username != null && password != null) {
+                    requestBuilder.header("Authorization", Credentials.basic(username, password))
                 }
 
                 chain.proceed(requestBuilder.build())
