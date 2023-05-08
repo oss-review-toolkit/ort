@@ -28,8 +28,6 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import java.io.File
-
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -86,22 +84,26 @@ class SpdxDocumentReporterFunTest : WordSpec({
         }
 
         "create the expected document" {
+            val expectedResultFile = getAssetFile("spdx-document-reporter-expected-output.spdx.json")
+
             val jsonSpdxDocument = generateReport(ortResult, FileFormat.JSON)
 
             jsonSpdxDocument shouldBe patchExpectedResult(
-                "src/funTest/assets/spdx-document-reporter-expected-output.spdx.json",
-                fromJson(jsonSpdxDocument)
+                expectedResultFile,
+                custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
             )
         }
     }
 
     "Reporting to YAML" should {
         "create the expected document" {
+            val expectedResultFile = getAssetFile("spdx-document-reporter-expected-output.spdx.yml")
+
             val yamlSpdxDocument = generateReport(ortResult, FileFormat.YAML)
 
             yamlSpdxDocument shouldBe patchExpectedResult(
-                "src/funTest/assets/spdx-document-reporter-expected-output.spdx.yml",
-                fromYaml(yamlSpdxDocument)
+                expectedResultFile,
+                custom = fromYaml<SpdxDocument>(yamlSpdxDocument).getCustomReplacements()
             )
         }
     }
@@ -123,16 +125,12 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileF
         .normalizeLineBreaks()
 }
 
-private fun patchExpectedResult(expectedResultFile: String, actualSpdxDocument: SpdxDocument): String =
-    patchExpectedResult(
-        File(expectedResultFile),
-        custom = mapOf(
-            "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
-            "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
-            "<REPLACE_CREATION_DATE_AND_TIME>" to actualSpdxDocument.creationInfo.created.toString(),
-            "<REPLACE_DOCUMENT_NAMESPACE>" to actualSpdxDocument.documentNamespace
-        )
-    )
+private fun SpdxDocument.getCustomReplacements() = mapOf(
+    "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
+    "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
+    "<REPLACE_CREATION_DATE_AND_TIME>" to creationInfo.created.toString(),
+    "<REPLACE_DOCUMENT_NAMESPACE>" to documentNamespace
+)
 
 private val analyzedVcs = VcsInfo(
     type = VcsType.GIT,
