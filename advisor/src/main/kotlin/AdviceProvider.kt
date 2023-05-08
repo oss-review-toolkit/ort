@@ -19,17 +19,11 @@
 
 package org.ossreviewtoolkit.advisor
 
-import java.time.Instant
-
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
-import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
  * An abstract class that represents a service that can retrieve any kind of advice information
@@ -48,36 +42,4 @@ abstract class AdviceProvider(val providerName: String) {
      * An object with detail information about this [AdviceProvider].
      */
     abstract val details: AdvisorDetails
-
-    /**
-     * A generic method that creates a failed [AdvisorResult] for [Package]s if there was an issue constructing the
-     * provider-specific information.
-     */
-    protected fun createFailedResults(
-        startTime: Instant,
-        packages: Set<Package>,
-        t: Throwable
-    ): Map<Package, AdvisorResult> {
-        val endTime = Instant.now()
-
-        t.showStackTrace()
-
-        val failedResults = AdvisorResult(
-            vulnerabilities = emptyList(),
-            advisor = details,
-            summary = AdvisorSummary(
-                startTime = startTime,
-                endTime = endTime,
-                issues = listOf(
-                    createAndLogIssue(
-                        source = providerName,
-                        message = "Failed to retrieve findings from $providerName: " +
-                                t.collectMessages()
-                    )
-                )
-            )
-        )
-
-        return packages.associateWith { failedResults }
-    }
 }
