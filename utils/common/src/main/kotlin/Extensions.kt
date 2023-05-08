@@ -39,13 +39,13 @@ import java.util.Locale
 fun ByteArray.encodeHex(): String = joinToString("") { String.format(Locale.ROOT, "%02x", it) }
 
 /**
- * Return the duplicates as identified by [keySelector] of a collection.
+ * Return a map that associates duplicates as identified by [keySelector] with belonging lists of collection entries.
  */
 fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
     if (this is Set) emptyMap() else groupBy(keySelector).filter { it.value.size > 1 }
 
 /**
- * Return the duplicates of a collection.
+ * Return a set of duplicate entries of a collection.
  */
 fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }.keys
 
