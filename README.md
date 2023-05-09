@@ -745,9 +745,24 @@ created run configuration to your needs, e.g. by adding an argument and options 
 
 ## Testing
 
-For running tests and individual test cases from the IDE, the
-[kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterwards tests can be run
-via the green "Play" icon from the gutter as described above.
+ORT uses [Kotest](https://github.com/kotest/kotest) as the test framework. For running tests and individual test cases
+from the IDE, the [Kotest plugin](https://plugins.jetbrains.com/plugin/14080-kotest) needs to be installed. Afterwards,
+tests can be run via the green "Play" icon from the gutter as described above.
+
+When running functional tests (for package managers) from the command line, ORT supports the special value "unified" for
+Kotest's `kotest.assertions.multi-line-diff` system property. When set like
+
+    ./gradlew -Dkotest.assertions.multi-line-diff=unified -p plugins/package-managers funTest
+
+any failing tests will show the deviation from the expected result in a unified diff format that is compatible with
+`git apply`. If the actual result should be taken as the new expected result, simply copy the diff from the console to
+the clipboard and run
+
+* `wl-paste | col -bx | git apply` (Linux with Wayland)
+* `xsel -b | col -bx | git apply` (Linux with X)
+
+to apply the diff to the local Git working tree (this does not create a commit yet). After reviewing the changes, create
+a commit to accept the new expected result.
 
 # Related Tools
 
