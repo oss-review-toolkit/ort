@@ -57,23 +57,21 @@ class GoModFunTest : StringSpec({
     }
 
     "Project dependencies of a main module in a multi-module workspaces are detected correctly" {
-        // TODO: The expected result illustrates the issue: https://github.com/oss-review-toolkit/ort/issues/6979.
         val definitionFile = testDir.resolve("gomod-workspaces/go.mod")
         val expectedResultFile = testDir.resolve("gomod-workspaces-main-module-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Project dependencies of a submodule in a multi-module workspaces are detected correctly" {
-        // TODO: The expected result illustrates the issue: https://github.com/oss-review-toolkit/ort/issues/6979.
         val definitionFile = testDir.resolve("gomod-workspaces/other-module/go.mod")
         val expectedResultFile = testDir.resolve("gomod-workspaces-sub-module-expected-output.yml")
 
         val result = create("GoMod").resolveSingleProject(definitionFile)
 
-        result.withInvariantIssues().toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
     }
 
     "Unused dependencies are not contained in the result" {

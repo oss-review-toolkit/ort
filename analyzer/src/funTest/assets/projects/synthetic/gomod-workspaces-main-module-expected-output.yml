@@ -1,25 +1,85 @@
 ---
 project:
-  id: "GoMod::src/funTest/assets/projects/synthetic/gomod-workspaces/go.mod:"
+  id: "GoMod::github.com/oss-review-toolkit/ort/gomod-workspaces:<REPLACE_REVISION>"
   definition_file_path: "analyzer/src/funTest/assets/projects/synthetic/gomod-workspaces/go.mod"
   declared_licenses: []
   declared_licenses_processed: {}
   vcs:
-    type: ""
-    url: ""
-    revision: ""
-    path: ""
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
   vcs_processed:
     type: "Git"
     url: "<REPLACE_URL_PROCESSED>"
     revision: "<REPLACE_REVISION>"
     path: "<REPLACE_PATH>"
   homepage_url: ""
-  scope_names: []
-packages: []
-issues:
-- timestamp: "1970-01-01T00:00:00Z"
-  source: "GoMod"
-  message: "GoMod failed to resolve dependencies for path 'src/funTest/assets/projects/synthetic/gomod-workspaces/go.mod':\
-    \ IllegalArgumentException: Collection contains more than one matching element."
-  severity: "ERROR"
+  scopes:
+  - name: "main"
+    dependencies:
+    - id: "Go::github.com/pborman/uuid:1.2.1"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/google/uuid:1.0.0"
+        linkage: "PROJECT_STATIC"
+  - name: "vendor"
+    dependencies:
+    - id: "Go::github.com/pborman/uuid:1.2.1"
+      linkage: "PROJECT_STATIC"
+      dependencies:
+      - id: "Go::github.com/google/uuid:1.0.0"
+        linkage: "PROJECT_STATIC"
+packages:
+- id: "Go::github.com/google/uuid:1.0.0"
+  purl: "pkg:golang/github.com%2Fgoogle%2Fuuid@1.0.0"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/google/uuid"
+    revision: "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/google/uuid.git"
+    revision: "d460ce9f8df2e77fb1ba55ca87fafed96c607494"
+    path: ""
+- id: "Go::github.com/pborman/uuid:1.2.1"
+  purl: "pkg:golang/github.com%2Fpborman%2Fuuid@1.2.1"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: ""
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/pborman/uuid"
+    revision: "5b6091a6a160ee5ce12917b21ab96acec2a4fdc0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/pborman/uuid.git"
+    revision: "5b6091a6a160ee5ce12917b21ab96acec2a4fdc0"
+    path: ""
