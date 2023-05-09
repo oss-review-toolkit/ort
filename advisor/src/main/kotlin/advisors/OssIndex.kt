@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import java.io.IOException
 import java.net.URI
 import java.time.Instant
 
@@ -42,8 +41,6 @@ import org.ossreviewtoolkit.model.config.OssIndexConfiguration
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-import retrofit2.HttpException
 
 /**
  * The number of packages to request from Sonatype OSS Index in one request.
@@ -75,14 +72,14 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
 
         val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
 
-        return try {
+        return runCatching {
             val componentReports = mutableMapOf<String, ComponentReport>()
 
             val chunks = purls.chunked(BULK_REQUEST_SIZE)
             chunks.forEachIndexed { index, chunk ->
                 logger.debug { "Getting report for ${chunk.size} components (chunk ${index + 1} of ${chunks.size})." }
 
-                val results = getComponentReport(service, chunk).associateBy {
+                val results = service.getComponentReport(ComponentReportRequest(chunk)).associateBy {
                     it.coordinates
                 }
 
@@ -102,8 +99,8 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
                     )
                 }
             }.toMap()
-        } catch (e: IOException) {
-            createFailedResults(startTime, packages, e)
+        }.getOrElse {
+            createFailedResults(startTime, packages, it)
         }
     }
 
@@ -127,18 +124,4 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
             references = references
         )
     }
-
-    /**
-     * Invoke the [OSS Index service][service] to request detail information for the given [purls]. Catch HTTP
-     * exceptions thrown by the service and re-throw them as [IOException].
-     */
-    private suspend fun getComponentReport(
-        service: OssIndexService,
-        purls: List<String>
-    ): List<ComponentReport> =
-        try {
-            service.getComponentReport(ComponentReportRequest(purls))
-        } catch (e: HttpException) {
-            throw IOException(e)
-        }
 }
