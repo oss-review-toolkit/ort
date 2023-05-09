@@ -29,6 +29,11 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.Component
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentDetails
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentDetailsWrapper
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentsWrapper
+import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.SecurityIssue
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -93,11 +98,11 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
                 }
             }
 
-            NexusIqService.Component(packageUrl)
+            Component(packageUrl)
         }
 
         return try {
-            val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
+            val componentDetails = mutableMapOf<String, ComponentDetails>()
 
             components.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
                 val results = getComponentDetails(service, chunk).componentDetails.associateBy {
@@ -128,7 +133,7 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
     /**
      * Construct a [Vulnerability] from the data stored in this issue.
      */
-    private fun NexusIqService.SecurityIssue.toVulnerability(): Vulnerability {
+    private fun SecurityIssue.toVulnerability(): Vulnerability {
         val references = mutableListOf<VulnerabilityReference>()
 
         val browseUrl = URI("${config.browseUrl}/assets/index.html#/vulnerabilities/$reference")
@@ -146,11 +151,11 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
      */
     private suspend fun getComponentDetails(
         service: NexusIqService,
-        components: List<NexusIqService.Component>
-    ): NexusIqService.ComponentDetailsWrapper =
+        components: List<Component>
+    ): ComponentDetailsWrapper =
         try {
             logger.debug { "Querying component details from ${config.serverUrl}." }
-            service.getComponentDetails(NexusIqService.ComponentsWrapper(components))
+            service.getComponentDetails(ComponentsWrapper(components))
         } catch (e: HttpException) {
             throw IOException(e)
         }

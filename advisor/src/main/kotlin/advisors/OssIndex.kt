@@ -28,6 +28,8 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.advisor.AbstractAdviceProviderFactory
 import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.ossindex.OssIndexService
+import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReport
+import org.ossreviewtoolkit.clients.ossindex.OssIndexService.ComponentReportRequest
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
 import org.ossreviewtoolkit.model.AdvisorResult
@@ -74,7 +76,7 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
         val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
 
         return try {
-            val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
+            val componentReports = mutableMapOf<String, ComponentReport>()
 
             val chunks = purls.chunked(BULK_REQUEST_SIZE)
             chunks.forEachIndexed { index, chunk ->
@@ -133,9 +135,9 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
     private suspend fun getComponentReport(
         service: OssIndexService,
         purls: List<String>
-    ): List<OssIndexService.ComponentReport> =
+    ): List<ComponentReport> =
         try {
-            service.getComponentReport(OssIndexService.ComponentReportRequest(purls))
+            service.getComponentReport(ComponentReportRequest(purls))
         } catch (e: HttpException) {
             throw IOException(e)
         }
