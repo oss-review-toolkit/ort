@@ -100,11 +100,11 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
             val componentDetails = mutableMapOf<String, NexusIqService.ComponentDetails>()
 
             components.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
-                val requestResults = getComponentDetails(service, chunk).componentDetails.associateBy {
+                val results = getComponentDetails(service, chunk).componentDetails.associateBy {
                     it.component.packageUrl.substringBefore("?")
                 }
 
-                componentDetails += requestResults.filterValues { it.securityData.securityIssues.isNotEmpty() }
+                componentDetails += results.filterValues { it.securityData.securityIssues.isNotEmpty() }
             }
 
             val endTime = Instant.now()
