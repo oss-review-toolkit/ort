@@ -17,8 +17,8 @@ config_variables:
     default: rich
   kotest_diff:
     description: Kotest multi-line string assertion mode
-    # Supported values: "simple", "condensed" (or anything different from "simple")
-    default: simple
+    # Supported values: "simple", "unified", or anything different for "condensed" output
+    default: unified
 
 .common-container-config: &common-container-config
   run_as_current_user:
