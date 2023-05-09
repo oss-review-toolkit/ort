@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.advisor.advisors
 
-import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.time.Instant
@@ -31,7 +30,6 @@ import org.ossreviewtoolkit.advisor.AdviceProvider
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.Component
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentDetails
-import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentDetailsWrapper
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.ComponentsWrapper
 import org.ossreviewtoolkit.clients.nexusiq.NexusIqService.SecurityIssue
 import org.ossreviewtoolkit.model.AdvisorCapability
@@ -48,8 +46,6 @@ import org.ossreviewtoolkit.model.utils.getPurlType
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
-
-import retrofit2.HttpException
 
 /**
  * The number of packages to request from Nexus IQ in one request.
@@ -101,11 +97,13 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
             Component(packageUrl)
         }
 
-        return try {
+        logger.debug { "Querying component details from ${config.serverUrl}." }
+
+        return runCatching {
             val componentDetails = mutableMapOf<String, ComponentDetails>()
 
             components.chunked(BULK_REQUEST_SIZE).forEach { chunk ->
-                val results = getComponentDetails(service, chunk).componentDetails.associateBy {
+                val results = service.getComponentDetails(ComponentsWrapper(chunk)).componentDetails.associateBy {
                     it.component.packageUrl.substringBefore("?")
                 }
 
@@ -125,8 +123,8 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
                     )
                 }
             }.toMap()
-        } catch (e: IOException) {
-            createFailedResults(startTime, packages, e)
+        }.getOrElse {
+            createFailedResults(startTime, packages, it)
         }
     }
 
@@ -144,19 +142,4 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
 
         return Vulnerability(id = reference, references = references)
     }
-
-    /**
-     * Invoke the [NexusIQ service][service] to request detail information for the given [components]. Catch HTTP
-     * exceptions thrown by the service and re-throw them as [IOException].
-     */
-    private suspend fun getComponentDetails(
-        service: NexusIqService,
-        components: List<Component>
-    ): ComponentDetailsWrapper =
-        try {
-            logger.debug { "Querying component details from ${config.serverUrl}." }
-            service.getComponentDetails(ComponentsWrapper(components))
-        } catch (e: HttpException) {
-            throw IOException(e)
-        }
 }
