@@ -77,16 +77,14 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
             val componentReports = mutableMapOf<String, OssIndexService.ComponentReport>()
 
             val chunks = purls.chunked(BULK_REQUEST_SIZE)
-            chunks.forEachIndexed { index, chunkOfPurls ->
-                logger.debug {
-                    "Getting report for ${chunkOfPurls.size} components (chunk ${index + 1} of ${chunks.size})."
-                }
+            chunks.forEachIndexed { index, chunk ->
+                logger.debug { "Getting report for ${chunk.size} components (chunk ${index + 1} of ${chunks.size})." }
 
-                val requestResults = getComponentReport(service, chunkOfPurls).associateBy {
+                val results = getComponentReport(service, chunk).associateBy {
                     it.coordinates
                 }
 
-                componentReports += requestResults.filterValues { it.vulnerabilities.isNotEmpty() }
+                componentReports += results.filterValues { it.vulnerabilities.isNotEmpty() }
             }
 
             val endTime = Instant.now()
