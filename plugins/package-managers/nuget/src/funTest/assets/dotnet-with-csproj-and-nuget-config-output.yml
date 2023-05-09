@@ -23,17 +23,19 @@ packages:
 - id: "NuGet::xunit.analyzers:1.2.0-pre.7"
   purl: "pkg:nuget/xunit.analyzers@1.2.0-pre.7"
   authors:
-  - "jnewkirk, bradwilson, marcind"
-  declared_licenses: []
-  declared_licenses_processed: {}
+  - "jnewkirk,bradwilson,marcind"
+  declared_licenses:
+  - "Apache-2.0"
+  declared_licenses_processed:
+    spdx_expression: "Apache-2.0"
   description: "xUnit.net is a developer testing framework, built to support Test\
     \ Driven Development, with a design goal of extreme simplicity and alignment with\
     \ framework features."
   homepage_url: ""
   binary_artifact:
-    url: "https://www.myget.org/F/xunit/api/v2/package/xunit.analyzers/1.2.0-pre.7"
+    url: "https://api.nuget.org/v3-flatcontainer/xunit.analyzers/1.2.0-pre.7/xunit.analyzers.1.2.0-pre.7.nupkg"
     hash:
-      value: "d535a88253e464f9acc12edd01e76c2cd8bdb692305f4355e1898499dabcf1f5f7fc5fcf042cf6777ff3684a69ec71653623b2de14d1fad1759e4323471ae7f1"
+      value: "1f47f8e4e068ee24b672410ac46b8e09e6045471e2556484f056dcdc973463ba164ef3e2d5663f234b97da30538660c11bd15a5a6a3af7abefd392b8c6f28fcd"
       algorithm: "SHA-512"
   source_artifact:
     url: ""
