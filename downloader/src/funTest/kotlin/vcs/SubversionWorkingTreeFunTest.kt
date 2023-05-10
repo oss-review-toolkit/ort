@@ -77,59 +77,59 @@ class SubversionWorkingTreeFunTest : StringSpec({
     }
 
     "Subversion correctly lists remote branches" {
-        val expectedRemoteBranches = listOf(
-            "address-rendering",
-            "index-bug",
-            "lossless-rst-writer",
-            "nesting",
-            "plugins",
-            "rel-0.15",
-            "subdocs"
-        ).map { "branches/$it" }
-
         val remoteBranches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
 
         remoteBranches shouldContainAll expectedRemoteBranches
     }
 
     "Subversion correctly lists remote tags" {
-        val expectedRemoteTags = listOf(
-            "docutils-0.10",
-            "docutils-0.11",
-            "docutils-0.12",
-            "docutils-0.13.1",
-            "docutils-0.14",
-            "docutils-0.14.0a",
-            "docutils-0.14a0",
-            "docutils-0.14rc1",
-            "docutils-0.14rc2",
-            "docutils-0.15",
-            "docutils-0.16",
-            "docutils-0.17",
-            "docutils-0.17.1",
-            "docutils-0.18",
-            "docutils-0.18.1",
-            "docutils-0.19",
-            "docutils-0.20",
-            "docutils-0.3.7",
-            "docutils-0.3.9",
-            "docutils-0.4",
-            "docutils-0.5",
-            "docutils-0.6",
-            "docutils-0.7",
-            "docutils-0.8",
-            "docutils-0.8.1",
-            "docutils-0.9",
-            "docutils-0.9.1",
-            "initial",
-            "merged_to_nesting",
-            "prest-0.3.10",
-            "prest-0.3.11",
-            "start"
-        ).map { "tags/$it" }
-
         val remoteTags = svn.getWorkingTree(zipContentDir).listRemoteTags()
 
         remoteTags shouldContainAll expectedRemoteTags
     }
 })
+
+private val expectedRemoteBranches = listOf(
+    "address-rendering",
+    "index-bug",
+    "lossless-rst-writer",
+    "nesting",
+    "plugins",
+    "rel-0.15",
+    "subdocs"
+).map { "branches/$it" }
+
+private val expectedRemoteTags = listOf(
+    "docutils-0.10",
+    "docutils-0.11",
+    "docutils-0.12",
+    "docutils-0.13.1",
+    "docutils-0.14",
+    "docutils-0.14.0a",
+    "docutils-0.14a0",
+    "docutils-0.14rc1",
+    "docutils-0.14rc2",
+    "docutils-0.15",
+    "docutils-0.16",
+    "docutils-0.17",
+    "docutils-0.17.1",
+    "docutils-0.18",
+    "docutils-0.18.1",
+    "docutils-0.19",
+    "docutils-0.20",
+    "docutils-0.3.7",
+    "docutils-0.3.9",
+    "docutils-0.4",
+    "docutils-0.5",
+    "docutils-0.6",
+    "docutils-0.7",
+    "docutils-0.8",
+    "docutils-0.8.1",
+    "docutils-0.9",
+    "docutils-0.9.1",
+    "initial",
+    "merged_to_nesting",
+    "prest-0.3.10",
+    "prest-0.3.11",
+    "start"
+).map { "tags/$it" }
