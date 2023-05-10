@@ -102,7 +102,7 @@ data class SpdxFile(
      * The license information found in this file. To represent a not present value [SpdxConstants.NONE] or
      * [SpdxConstants.NOASSERTION] must be used.
      */
-    val licenseInfoInFiles: List<String>,
+    val licenseInfoInFiles: List<String> = listOf(SpdxConstants.NOASSERTION),
 
     /**
      * License notices or other such related notices found in the file. This may include copyright statements.
