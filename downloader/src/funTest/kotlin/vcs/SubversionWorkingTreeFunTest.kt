@@ -77,7 +77,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
     }
 
     "Subversion correctly lists remote branches" {
-        val expectedBranches = listOf(
+        val expectedRemoteBranches = listOf(
             "address-rendering",
             "index-bug",
             "lossless-rst-writer",
@@ -87,13 +87,13 @@ class SubversionWorkingTreeFunTest : StringSpec({
             "subdocs"
         ).map { "branches/$it" }
 
-        val branches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
+        val remoteBranches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
 
-        branches shouldContainAll expectedBranches
+        remoteBranches shouldContainAll expectedRemoteBranches
     }
 
     "Subversion correctly lists remote tags" {
-        val expectedTags = listOf(
+        val expectedRemoteTags = listOf(
             "docutils-0.10",
             "docutils-0.11",
             "docutils-0.12",
@@ -128,8 +128,8 @@ class SubversionWorkingTreeFunTest : StringSpec({
             "start"
         ).map { "tags/$it" }
 
-        val tags = svn.getWorkingTree(zipContentDir).listRemoteTags()
+        val remoteTags = svn.getWorkingTree(zipContentDir).listRemoteTags()
 
-        tags shouldContainAll expectedTags
+        remoteTags shouldContainAll expectedRemoteTags
     }
 })
