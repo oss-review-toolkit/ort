@@ -47,6 +47,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
     "Detected Subversion version is not empty" {
         val version = svn.getVersion()
         println("Subversion version $version detected.")
+
         version shouldNot beEmpty()
     }
 
@@ -86,6 +87,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
         ).map { "branches/$it" }
 
         val branches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
+
         branches.joinToString("\n") shouldBe expectedBranches.joinToString("\n")
     }
 
@@ -126,6 +128,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
         ).map { "tags/$it" }
 
         val tags = svn.getWorkingTree(zipContentDir).listRemoteTags()
+
         tags.joinToString("\n") shouldBe expectedTags.joinToString("\n")
     }
 })
