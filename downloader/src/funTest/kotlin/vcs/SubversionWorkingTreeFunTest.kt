@@ -85,8 +85,8 @@ class SubversionWorkingTreeFunTest : StringSpec({
             "subdocs"
         ).map { "branches/$it" }
 
-        val workingTree = svn.getWorkingTree(zipContentDir)
-        workingTree.listRemoteBranches().joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+        val branches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
+        branches.joinToString("\n") shouldBe expectedBranches.joinToString("\n")
     }
 
     "Subversion correctly lists remote tags" {
@@ -125,7 +125,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
             "start"
         ).map { "tags/$it" }
 
-        val workingTree = svn.getWorkingTree(zipContentDir)
-        workingTree.listRemoteTags().joinToString("\n") shouldBe expectedTags.joinToString("\n")
+        val tags = svn.getWorkingTree(zipContentDir).listRemoteTags()
+        tags.joinToString("\n") shouldBe expectedTags.joinToString("\n")
     }
 })
