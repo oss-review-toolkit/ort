@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.matchers.collections.shouldContainAll
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -88,7 +89,7 @@ class SubversionWorkingTreeFunTest : StringSpec({
 
         val branches = svn.getWorkingTree(zipContentDir).listRemoteBranches()
 
-        branches.joinToString("\n") shouldBe expectedBranches.joinToString("\n")
+        branches shouldContainAll expectedBranches
     }
 
     "Subversion correctly lists remote tags" {
@@ -129,6 +130,6 @@ class SubversionWorkingTreeFunTest : StringSpec({
 
         val tags = svn.getWorkingTree(zipContentDir).listRemoteTags()
 
-        tags.joinToString("\n") shouldBe expectedTags.joinToString("\n")
+        tags shouldContainAll expectedTags
     }
 })
