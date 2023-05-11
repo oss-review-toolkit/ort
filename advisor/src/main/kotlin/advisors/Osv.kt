@@ -158,7 +158,8 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
         return VulnerabilitiesForPackageRequest(
             pkg = org.ossreviewtoolkit.clients.osv.Package(
                 name = name,
-                ecosystem = ecosystem
+                ecosystem = ecosystem,
+                purl = pkg.purl.takeUnless { it.isEmpty() }
             ),
             version = pkg.id.version
         )
