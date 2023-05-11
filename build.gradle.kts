@@ -22,8 +22,6 @@ import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.report.ReportMergeTask
 
-import java.net.URI
-
 import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.lib.Config
 import org.eclipse.jgit.lib.Constants
@@ -45,7 +43,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     alias(libs.plugins.dependencyAnalysis)
     alias(libs.plugins.detekt)
-    alias(libs.plugins.dokka)
+    alias(libs.plugins.dokkatoo)
     alias(libs.plugins.ideaExt)
     alias(libs.plugins.kotlin)
     alias(libs.plugins.versionCatalogUpdate)
@@ -227,7 +225,7 @@ subprojects {
 
     // Apply third-party plugins.
     apply(plugin = "org.jetbrains.kotlin.jvm")
-    apply(plugin = "org.jetbrains.dokka")
+    apply(plugin = "dev.adamko.dokkatoo")
 
     testing {
         suites {
@@ -300,43 +298,6 @@ subprojects {
             apiVersion = "1.8"
             freeCompilerArgs = freeCompilerArgs + customCompilerArgs
             jvmTarget = maxKotlinJvmTarget.toString()
-        }
-    }
-
-    tasks.dokkaHtml {
-        dokkaSourceSets {
-            configureEach {
-                jdkVersion.set(17)
-
-                val jacksonVersion = libs.versions.jackson.get()
-                val log4jApiVersion = libs.versions.log4jApi.get()
-
-                externalDocumentationLink {
-                    val baseUrl = "https://codehaus-plexus.github.io/plexus-containers/plexus-container-default/apidocs"
-                    url.set(URI.create(baseUrl).toURL())
-                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
-                }
-
-                externalDocumentationLink {
-                    val majorMinorVersion = jacksonVersion.split('.').let { "${it[0]}.${it[1]}" }
-                    val baseUrl = "https://fasterxml.github.io/jackson-databind/javadoc/$majorMinorVersion"
-                    url.set(URI.create(baseUrl).toURL())
-                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
-                }
-
-                externalDocumentationLink {
-                    val baseUrl = "https://jakewharton.github.io/DiskLruCache"
-                    url.set(URI.create(baseUrl).toURL())
-                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
-                }
-
-                externalDocumentationLink {
-                    val majorVersion = log4jApiVersion.substringBefore('.')
-                    val baseUrl = "https://logging.apache.org/log4j/$majorVersion.x/log4j-api/apidocs"
-                    url.set(URI.create(baseUrl).toURL())
-                    packageListUrl.set(URI.create("$baseUrl/package-list").toURL())
-                }
-            }
         }
     }
 
@@ -430,24 +391,22 @@ subprojects {
         from(sourceSets["main"].allSource)
     }
 
-    tasks.register<Jar>("dokkaHtmlJar") {
-        dependsOn(tasks.dokkaHtml)
-
-        description = "Assembles a jar archive containing the minimalistic HTML documentation."
+    tasks.register<Jar>("docsHtmlJar") {
+        description = "Assembles a JAR containing the HTML documentation."
         group = "Documentation"
 
-        archiveClassifier.set("dokka")
-        from(tasks.dokkaHtml)
+        dependsOn(tasks.dokkatooGeneratePublicationHtml)
+        from(tasks.dokkatooGeneratePublicationHtml.flatMap { it.outputDirectory })
+        archiveClassifier.set("htmldoc")
     }
 
-    tasks.register<Jar>("dokkaJavadocJar") {
-        dependsOn(tasks.dokkaJavadoc)
-
-        description = "Assembles a jar archive containing the Javadoc documentation."
+    tasks.register<Jar>("docsJavadocJar") {
+        description = "Assembles a JAR containing the Javadoc documentation."
         group = "Documentation"
 
+        dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
+        from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
         archiveClassifier.set("javadoc")
-        from(tasks.dokkaJavadoc)
     }
 
     configure<PublishingExtension> {
@@ -460,7 +419,7 @@ subprojects {
 
                 from(components["java"])
                 artifact(tasks["sourcesJar"])
-                artifact(tasks["dokkaJavadocJar"])
+                artifact(tasks["docsJavadocJar"])
 
                 pom {
                     licenses {
