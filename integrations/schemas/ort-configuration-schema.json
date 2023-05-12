@@ -292,8 +292,8 @@
                 "detectedLicenseMapping": {
                     "$ref": "#/definitions/DetectedLicenseMapping"
                 },
-                "fileListingStorage": {
-                    "$ref": "#/definitions/FileListingStorage"
+                "fileListStorage": {
+                    "$ref": "#/definitions/FileListStorage"
                 },
                 "options": {
                     "$ref": "#/definitions/ScannerOptions"
@@ -339,7 +339,7 @@
                 }
             }
         },
-        "FileListingStorage": {
+        "FileListStorage": {
             "type": "object",
             "additionalProperties": false,
             "properties": {

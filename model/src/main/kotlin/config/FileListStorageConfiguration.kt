@@ -30,16 +30,16 @@ import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 private const val TABLE_NAME = "provenance_file_listings"
-private const val FILENAME = "file_listing.xz"
+private const val FILENAME = "file_list.xz"
 
-data class FileListingStorageConfiguration(
+data class FileListStorageConfiguration(
     /**
-     * Configuration of the [FileStorage] used for storing the file listings.
+     * Configuration of the [FileStorage] used for storing the file lists.
      */
     val fileStorage: FileStorageConfiguration? = null,
 
     /**
-     * Configuration of the [PostgresProvenanceFileStorage] used for storing the file listings.
+     * Configuration of the [PostgresProvenanceFileStorage] used for storing the file lists.
      */
     val postgresStorage: PostgresStorageConfiguration? = null
 ) {
@@ -47,7 +47,7 @@ data class FileListingStorageConfiguration(
 
     init {
         if (fileStorage != null && postgresStorage != null) {
-            FileListingStorageConfiguration.logger.warn {
+            FileListStorageConfiguration.logger.warn {
                 "'fileStorage' and 'postgresStorage' are both configured but only one storage can be used. " +
                         "Using 'fileStorage'."
             }
@@ -55,7 +55,7 @@ data class FileListingStorageConfiguration(
     }
 }
 
-fun FileListingStorageConfiguration?.createStorage(): ProvenanceFileStorage =
+fun FileListStorageConfiguration?.createStorage(): ProvenanceFileStorage =
     when {
         this?.fileStorage != null -> FileProvenanceFileStorage(
             storage = fileStorage.createFileStorage(),
@@ -64,12 +64,12 @@ fun FileListingStorageConfiguration?.createStorage(): ProvenanceFileStorage =
         this?.postgresStorage != null -> PostgresProvenanceFileStorage(
             dataSource = DatabaseUtils.createHikariDataSource(
                 config = postgresStorage.connection,
-                applicationNameSuffix = "file-listings"
+                applicationNameSuffix = "file-lists"
             ),
             tableName = TABLE_NAME
         )
         else -> FileProvenanceFileStorage(
-            storage = LocalFileStorage(ortDataDirectory.resolve("scanner/file-listings")),
+            storage = LocalFileStorage(ortDataDirectory.resolve("scanner/file-lists")),
             filename = FILENAME
         )
     }

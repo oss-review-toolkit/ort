@@ -32,9 +32,9 @@ import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createTestTempDir
 
-class FileListingResolverTest : StringSpec({
-    "resolve() should create the expected file listing" {
-        val resolver = FileListingResolver(
+class FileListResolverTest : StringSpec({
+    "resolve() should create the expected file list" {
+        val resolver = FileListResolver(
             storage = FileProvenanceFileStorage(
                 storage = LocalFileStorage(createTestTempDir()),
                 filename = "bytes",
@@ -48,9 +48,9 @@ class FileListingResolverTest : StringSpec({
             },
         )
 
-        val fileListing = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
+        val fileList = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))
 
-        fileListing.toYaml() shouldBe File("src/test/assets/expected-file-listing.yml").readText()
+        fileList.toYaml() shouldBe File("src/test/assets/expected-file-list.yml").readText()
     }
 })
 

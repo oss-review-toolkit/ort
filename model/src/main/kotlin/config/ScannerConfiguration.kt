@@ -75,9 +75,9 @@ data class ScannerConfiguration(
     ),
 
     /**
-     * The storage to store the file listings by provenance.
+     * The storage to store the file lists by provenance.
      */
-    val fileListingStorage: FileListingStorageConfiguration? = null,
+    val fileListStorage: FileListStorageConfiguration? = null,
 
     /**
      * Scanner specific configuration options. The key needs to match the name of the scanner class, e.g. "ScanCode"
