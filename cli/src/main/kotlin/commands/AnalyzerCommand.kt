@@ -140,16 +140,16 @@ class AnalyzerCommand : OrtCommand(
         println("Looking for analyzer-specific configuration in the following files and directories:")
         println("\t" + configurationInfo)
 
-        val enabledPackageManagers = ortConfig.analyzer.determineEnabledPackageManagers()
-
-        println("The following package managers are enabled:")
-        println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
-
         val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
 
-        val analyzerConfiguration =
-            repositoryConfiguration.analyzer?.let { ortConfig.analyzer.merge(it) } ?: ortConfig.analyzer
+        val analyzerConfiguration = repositoryConfiguration.analyzer?.let { ortConfig.analyzer.merge(it) }
+            ?: ortConfig.analyzer
+
+        val enabledPackageManagers = analyzerConfiguration.determineEnabledPackageManagers()
+
+        println("The following package managers are enabled:")
+        println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
