@@ -29,32 +29,32 @@ import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
-import org.ossreviewtoolkit.scanner.FileListing
-import org.ossreviewtoolkit.scanner.FileListing.FileEntry
+import org.ossreviewtoolkit.scanner.FileList
+import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
-internal class FileListingResolver(
+internal class FileListResolver(
     private val storage: ProvenanceFileStorage,
     private val provenanceDownloader: ProvenanceDownloader
 ) {
-    fun resolve(provenance: KnownProvenance): FileListing {
-        storage.getFileListing(provenance)?.let { return it }
+    fun resolve(provenance: KnownProvenance): FileList {
+        storage.getFileList(provenance)?.let { return it }
 
         return provenanceDownloader.download(provenance).let { dir ->
-            createFileListing(dir).also { storage.putFileListing(provenance, it) }
+            createFileList(dir).also { storage.putFileList(provenance, it) }
         }
     }
 
     fun has(provenance: KnownProvenance): Boolean = storage.hasFile(provenance)
 }
 
-private fun ProvenanceFileStorage.putFileListing(provenance: KnownProvenance, fileListing: FileListing) {
-    val tempFile = createOrtTempFile(prefix = "file-listing", suffix = ".yml.xz")
+private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
+    val tempFile = createOrtTempFile(prefix = "file-list", suffix = ".yml.xz")
 
-    fileListing.toYaml().byteInputStream().use { input ->
+    fileList.toYaml().byteInputStream().use { input ->
         XZCompressorOutputStream(tempFile.outputStream()).use { output ->
             input.copyTo(output)
         }
@@ -64,7 +64,7 @@ private fun ProvenanceFileStorage.putFileListing(provenance: KnownProvenance, fi
     tempFile.delete()
 }
 
-private fun ProvenanceFileStorage.getFileListing(provenance: KnownProvenance): FileListing? {
+private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
     val file = getFile(provenance) ?: return null
 
     val yaml = XZCompressorInputStream(file.inputStream()).use { input ->
@@ -78,7 +78,7 @@ private val IGNORED_DIRECTORY_MATCHER by lazy {
     FileMatcher(patterns = VCS_DIRECTORIES.map { "**/$it" })
 }
 
-private fun createFileListing(dir: File): FileListing {
+private fun createFileList(dir: File): FileList {
     val files = dir.walk().onEnter {
         !IGNORED_DIRECTORY_MATCHER.matches(it.relativeTo(dir).invariantSeparatorsPath)
     }.filter {
@@ -87,5 +87,5 @@ private fun createFileListing(dir: File): FileListing {
         FileEntry(path = it.relativeTo(dir).invariantSeparatorsPath, sha1 = HashAlgorithm.SHA1.calculate(it))
     }
 
-    return FileListing(ignorePatterns = IGNORED_DIRECTORY_MATCHER.patterns.toSet(), files = files)
+    return FileList(ignorePatterns = IGNORED_DIRECTORY_MATCHER.patterns.toSet(), files = files)
 }

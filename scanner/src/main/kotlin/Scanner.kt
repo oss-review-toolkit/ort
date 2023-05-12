@@ -56,7 +56,7 @@ import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
 import org.ossreviewtoolkit.scanner.provenance.PackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
-import org.ossreviewtoolkit.scanner.utils.FileListingResolver
+import org.ossreviewtoolkit.scanner.utils.FileListResolver
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -94,8 +94,8 @@ class Scanner(
 
     private val archiver = scannerConfig.archive.createFileArchiver()
 
-    private val fileListingResolver = FileListingResolver(
-        storage = scannerConfig.fileListingStorage.createStorage(),
+    private val fileListResolver = FileListResolver(
+        storage = scannerConfig.fileListStorage.createStorage(),
         provenanceDownloader = provenanceDownloader
     )
 
@@ -170,7 +170,7 @@ class Scanner(
         runProvenanceScanners(controller, context)
         runPathScanners(controller, context)
 
-        createMissingFileListings(controller)
+        createMissingFileLists(controller)
         createMissingArchives(controller)
 
         val results = controller.getNestedScanResultsByPackage().entries.associateTo(sortedMapOf()) {
@@ -584,29 +584,29 @@ class Scanner(
         }
     }
 
-    private suspend fun createMissingFileListings(controller: ScanController) {
+    private suspend fun createMissingFileLists(controller: ScanController) {
         val idsByProvenance = controller.getIdsByProvenance()
-        val provenancesMissingFileListings = idsByProvenance.keys.filterNot { fileListingResolver.has(it) }
+        val provenancesMissingFileLists = idsByProvenance.keys.filterNot { fileListResolver.has(it) }
 
-        logger.info { "Creating file listings for ${provenancesMissingFileListings.size} provenances." }
+        logger.info { "Creating file lists for ${provenancesMissingFileLists.size} provenances." }
 
         val duration = measureTime {
             withContext(Dispatchers.IO) {
-                provenancesMissingFileListings.mapIndexed { index, provenance ->
+                provenancesMissingFileLists.mapIndexed { index, provenance ->
                     async {
                         logger.info {
-                            "Creating file listing for provenance $index of ${provenancesMissingFileListings.size}."
+                            "Creating file list for provenance $index of ${provenancesMissingFileLists.size}."
                         }
 
                         runCatching {
-                            fileListingResolver.resolve(provenance)
+                            fileListResolver.resolve(provenance)
                         }.onFailure {
                             idsByProvenance.getValue(provenance).forEach { id ->
                                 controller.addIssue(
                                     id,
                                     Issue(
                                         source = "Downloader",
-                                        message = "Could not create file listing for " +
+                                        message = "Could not create file list for " +
                                                 "'${id.toCoordinates()}': ${it.collectMessages()}"
                                     )
                                 )
@@ -617,7 +617,7 @@ class Scanner(
             }
         }
 
-        logger.info { "Created file listing for ${provenancesMissingFileListings.size} provenances in $duration." }
+        logger.info { "Created file list for ${provenancesMissingFileLists.size} provenances in $duration." }
     }
 
     private fun createMissingArchives(controller: ScanController) {

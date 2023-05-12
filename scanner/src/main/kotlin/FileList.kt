@@ -24,16 +24,16 @@ import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.util.SortedSet
 
-import org.ossreviewtoolkit.scanner.FileListing.FileEntry
+import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.common.getDuplicates
 
 /**
- * The model to store a file listing for a resolved provenance.
+ * The model to store a file list for a resolved provenance.
  */
-internal data class FileListing(
+internal data class FileList(
     /**
-     * The set of glob expressions which have been used to match directories to be excluded from the file listing.
+     * The set of glob expressions which have been used to match directories to be excluded from the file list.
      */
     @JsonSerialize(converter = StringSortedSetConverter::class)
     val ignorePatterns: Set<String>,
@@ -54,7 +54,7 @@ internal data class FileListing(
         val duplicates = files.getDuplicates { it.path }.keys
 
         require(duplicates.isEmpty()) {
-            "The file listing contains duplicate paths which is not allowed: ${duplicates.joinToString()}."
+            "The file list contains duplicate paths which is not allowed: ${duplicates.joinToString()}."
         }
     }
 }

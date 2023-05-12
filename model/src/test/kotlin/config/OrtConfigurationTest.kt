@@ -200,11 +200,11 @@ class OrtConfigurationTest : WordSpec({
                     "LicenseRef-scancode-generic-cla" to "NOASSERTION"
                 )
 
-                fileListingStorage shouldNotBeNull {
+                fileListStorage shouldNotBeNull {
                     fileStorage shouldNotBeNull {
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {
-                            directory shouldBe File("~/.ort/scanner/provenance-file-listings")
+                            directory shouldBe File("~/.ort/scanner/file-lists")
                         }
                     }
 
