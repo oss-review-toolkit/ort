@@ -515,8 +515,6 @@ class Scanner(
                 startTime = Instant.now(),
                 endTime = Instant.now(),
                 packageVerificationCode = "",
-                licenseFindings = sortedSetOf(),
-                copyrightFindings = sortedSetOf(),
                 issues = listOf(issue)
             )
 

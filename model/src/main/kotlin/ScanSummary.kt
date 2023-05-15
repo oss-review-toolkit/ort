@@ -61,13 +61,13 @@ data class ScanSummary(
      * The detected license findings.
      */
     @JsonProperty("licenses")
-    val licenseFindings: SortedSet<LicenseFinding>,
+    val licenseFindings: SortedSet<LicenseFinding> = sortedSetOf(),
 
     /**
      * The detected copyright findings.
      */
     @JsonProperty("copyrights")
-    val copyrightFindings: SortedSet<CopyrightFinding>,
+    val copyrightFindings: SortedSet<CopyrightFinding> = sortedSetOf(),
 
     /**
      * The detected snippet findings.
@@ -92,9 +92,7 @@ data class ScanSummary(
         val EMPTY = ScanSummary(
             startTime = Instant.EPOCH,
             endTime = Instant.EPOCH,
-            packageVerificationCode = "",
-            licenseFindings = sortedSetOf(),
-            copyrightFindings = sortedSetOf(),
+            packageVerificationCode = ""
         )
     }
 
