@@ -266,8 +266,6 @@ class ScanController(
                         startTime = Instant.now(),
                         endTime = Instant.now(),
                         packageVerificationCode = "",
-                        licenseFindings = sortedSetOf(),
-                        copyrightFindings = sortedSetOf(),
                         issues = issues
                     )
                 )

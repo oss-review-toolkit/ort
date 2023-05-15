@@ -116,7 +116,6 @@ class BoyterLc internal constructor(
             endTime = endTime,
             packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
-            copyrightFindings = sortedSetOf(),
             issues = listOf(
                 Issue(
                     source = name,
