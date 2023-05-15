@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import java.time.Instant
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -107,12 +106,12 @@ data class NestedProvenanceScanResult(
         }
     }
 
-    private fun Map<KnownProvenance, List<ScanResult>>.mergeLicenseFindings(): SortedSet<LicenseFinding> {
+    private fun Map<KnownProvenance, List<ScanResult>>.mergeLicenseFindings(): Set<LicenseFinding> {
         val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
             scanResults.flatMap { it.summary.licenseFindings }
         }
 
-        val findings = findingsByPath.flatMapTo(sortedSetOf()) { (path, findings) ->
+        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
             val prefix = if (path.isEmpty()) path else "$path/"
             findings.map { it.copy(location = it.location.copy(path = "$prefix${it.location.path}")) }
         }
