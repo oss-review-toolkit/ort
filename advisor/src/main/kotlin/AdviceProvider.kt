@@ -40,10 +40,9 @@ abstract class AdviceProvider(val providerName: String) {
     private companion object : Logging
 
     /**
-     * For a given set of [Package]s, retrieve findings and return a map that associates each package with a list of
-     * [AdvisorResult]s. Needs to be implemented by child classes.
+     * For a given set of [Package]s, retrieve findings and return a map that associates packages with [AdvisorResult]s.
      */
-    abstract suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>>
+    abstract suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult>
 
     /**
      * An object with detail information about this [AdviceProvider].
@@ -58,24 +57,22 @@ abstract class AdviceProvider(val providerName: String) {
         startTime: Instant,
         packages: Set<Package>,
         t: Throwable
-    ): Map<Package, List<AdvisorResult>> {
+    ): Map<Package, AdvisorResult> {
         val endTime = Instant.now()
 
         t.showStackTrace()
 
-        val failedResults = listOf(
-            AdvisorResult(
-                vulnerabilities = emptyList(),
-                advisor = details,
-                summary = AdvisorSummary(
-                    startTime = startTime,
-                    endTime = endTime,
-                    issues = listOf(
-                        createAndLogIssue(
-                            source = providerName,
-                            message = "Failed to retrieve findings from $providerName: " +
-                                    t.collectMessages()
-                        )
+        val failedResults = AdvisorResult(
+            vulnerabilities = emptyList(),
+            advisor = details,
+            summary = AdvisorSummary(
+                startTime = startTime,
+                endTime = endTime,
+                issues = listOf(
+                    createAndLogIssue(
+                        source = providerName,
+                        message = "Failed to retrieve findings from $providerName: " +
+                                t.collectMessages()
                     )
                 )
             )

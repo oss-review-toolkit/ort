@@ -90,11 +90,11 @@ class Advisor(
                         val providerResults = provider.retrievePackageFindings(packages)
 
                         logger.info {
-                            "Found ${providerResults.values.flatten().distinct().size} distinct vulnerabilities via " +
+                            "Found ${providerResults.values.distinct().size} distinct vulnerabilities via " +
                                     "${provider.providerName}. "
                         }
 
-                        providerResults.filter { it.value.isNotEmpty() }.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
+                        providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
                             logger.debug {
                                 "Affected packages:\n\n${pkgs.joinToString("\n") { it.id.toCoordinates() }}\n"
                             }
@@ -104,7 +104,7 @@ class Advisor(
                     }
                 }.forEach { providerResults ->
                     providerResults.await().forEach { (pkg, advisorResults) ->
-                        results.merge(pkg.id, advisorResults) { oldResults, newResults ->
+                        results.merge(pkg.id, listOf(advisorResults)) { oldResults, newResults ->
                             oldResults + newResults
                         }
                     }

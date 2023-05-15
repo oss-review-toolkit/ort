@@ -68,25 +68,23 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
         httpClient = OkHttpClientHelper.buildClient()
     )
 
-    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
         val vulnerabilitiesForPackage = getVulnerabilitiesForPackage(packages)
 
-        return packages.associateWith { pkg ->
+        return packages.mapNotNull { pkg ->
             vulnerabilitiesForPackage[pkg.id]?.let { vulnerabilities ->
-                listOf(
-                    AdvisorResult(
-                        advisor = details,
-                        summary = AdvisorSummary(
-                            startTime = startTime,
-                            endTime = Instant.now()
-                        ),
-                        vulnerabilities = vulnerabilities.map { it.toOrtVulnerability() }
-                    )
+                pkg to AdvisorResult(
+                    advisor = details,
+                    summary = AdvisorSummary(
+                        startTime = startTime,
+                        endTime = Instant.now()
+                    ),
+                    vulnerabilities = vulnerabilities.map { it.toOrtVulnerability() }
                 )
-            }.orEmpty()
-        }
+            }
+        }.toMap()
     }
 
     private fun getVulnerabilitiesForPackage(packages: Set<Package>): Map<Identifier, List<Vulnerability>> {

@@ -24,6 +24,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.contain
@@ -60,7 +61,6 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.GitHubDefectsConfiguration
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class GitHubDefectsTest : WordSpec({
     afterTest {
@@ -75,10 +75,7 @@ class GitHubDefectsTest : WordSpec({
             val advisor = createAdvisor()
             val results = advisor.retrievePackageFindings(setOf(pkg))
 
-            results.keys should containExactly(pkg)
-            results[pkg] shouldNotBeNull {
-                this should beEmpty()
-            }
+            results should beEmptyMap()
         }
 
         "return an empty result for a package without issues" {
@@ -92,10 +89,7 @@ class GitHubDefectsTest : WordSpec({
             val advisor = createAdvisor()
             val results = advisor.retrievePackageFindings(setOf(pkg))
 
-            results.keys should containExactly(pkg)
-            results[pkg] shouldNotBeNull {
-                this should beEmpty()
-            }
+            results should beEmptyMap()
         }
 
         "return issues for a package" {
@@ -450,7 +444,7 @@ private suspend fun GitHubDefects.getSingleResult(pkg: Package): AdvisorResult {
     val results = retrievePackageFindings(setOf(pkg))
 
     results.keys should containExactly(pkg)
-    val result = results.getValue(pkg).single()
+    val result = results.getValue(pkg)
     result.advisor.name shouldBe "GitHubDefects"
     result.advisor.capabilities shouldBe enumSetOf(AdvisorCapability.DEFECTS)
 
