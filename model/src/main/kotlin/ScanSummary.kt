@@ -120,12 +120,9 @@ data class ScanSummary(
 
         fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
 
-        val licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
-        val copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
-
         return copy(
-            licenseFindings = licenseFindings,
-            copyrightFindings = copyrightFindings
+            licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPath() },
+            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
         )
     }
 
