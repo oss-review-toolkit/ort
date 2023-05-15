@@ -60,18 +60,21 @@ data class ScanSummary(
     /**
      * The detected license findings.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("licenses")
     val licenseFindings: SortedSet<LicenseFinding> = sortedSetOf(),
 
     /**
      * The detected copyright findings.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("copyrights")
     val copyrightFindings: SortedSet<CopyrightFinding> = sortedSetOf(),
 
     /**
      * The detected snippet findings.
      */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("snippets")
     @JsonSerialize(converter = SnippetFindingSortedSetConverter::class)
     val snippetFindings: Set<SnippetFinding> = emptySet(),
