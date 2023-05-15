@@ -92,7 +92,7 @@ class BoyterLc internal constructor(
     }
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
-        val licenseFindings = sortedSetOf<LicenseFinding>()
+        val licenseFindings = mutableSetOf<LicenseFinding>()
         val result = resultFile.readTree()
 
         result.flatMapTo(licenseFindings) { file ->

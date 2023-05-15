@@ -83,7 +83,7 @@ private fun scanResults(
     vcsInfo: VcsInfo,
     findingsPaths: Collection<String>
 ): List<ScanResult> {
-    val licenseFindings = findingsPaths.mapTo(sortedSetOf()) { LicenseFinding("MIT", TextLocation(it, 1)) }
+    val licenseFindings = findingsPaths.mapTo(mutableSetOf()) { LicenseFinding("MIT", TextLocation(it, 1)) }
     val copyrightFindings = findingsPaths.mapTo(mutableSetOf()) { CopyrightFinding("(c)", TextLocation(it, 1)) }
 
     return listOf(

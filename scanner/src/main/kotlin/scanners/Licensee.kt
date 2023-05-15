@@ -81,7 +81,7 @@ class Licensee internal constructor(
     }
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
-        val licenseFindings = sortedSetOf<LicenseFinding>()
+        val licenseFindings = mutableSetOf<LicenseFinding>()
 
         val json = jsonMapper.readTree(result)
         val matchedFiles = json["matched_files"]

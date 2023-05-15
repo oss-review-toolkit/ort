@@ -95,7 +95,7 @@ private operator fun ScanSummary.minus(other: ScanSummary?): ScanSummary {
     if (other == null) return this
 
     return copy(
-        licenseFindings = (licenseFindings - other.licenseFindings).toSortedSet(),
+        licenseFindings = licenseFindings - other.licenseFindings,
         copyrightFindings = copyrightFindings - other.copyrightFindings
     )
 }

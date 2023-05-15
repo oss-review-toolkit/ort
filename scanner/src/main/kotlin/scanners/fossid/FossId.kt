@@ -859,7 +859,7 @@ class FossId internal constructor(
             startTime = startTime,
             endTime = Instant.now(),
             packageVerificationCode = "",
-            licenseFindings = licenseFindings.toSortedSet(),
+            licenseFindings = licenseFindings,
             copyrightFindings = copyrightFindings,
             snippetFindings = snippetFindings,
             issues = issues

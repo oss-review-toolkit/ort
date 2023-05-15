@@ -87,7 +87,7 @@ private class DummyScanner : PathScannerWrapper {
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val licenseFindings = path.listFiles().orEmpty().mapTo(sortedSetOf()) { file ->
+        val licenseFindings = path.listFiles().orEmpty().mapTo(mutableSetOf()) { file ->
             LicenseFinding(
                 license = SpdxConstants.NONE,
                 location = TextLocation(file.relativeTo(path).invariantSeparatorsPath, TextLocation.UNKNOWN_LINE)

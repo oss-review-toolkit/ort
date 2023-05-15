@@ -201,7 +201,7 @@ private fun createOrtResult(
         url = "https://github.com/oss-review-toolkit/example.git",
         revision = "0000000000000000000000000000000000000000"
     )
-    val licenseFindings = detectedLicensesForFilePath.flatMapTo(sortedSetOf()) { (filePath, licenses) ->
+    val licenseFindings = detectedLicensesForFilePath.flatMapTo(mutableSetOf()) { (filePath, licenses) ->
         licenses.map { license ->
             LicenseFinding(license, TextLocation(filePath, startLine = 1, endLine = 2))
         }

@@ -24,6 +24,7 @@ import org.ossreviewtoolkit.model.CuratedPackage
 import org.ossreviewtoolkit.model.DependencyNode
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageLinkage
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Provenance
@@ -635,8 +636,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     ) {
         val pathExcludes = getPathExcludes(id, scanResult.provenance)
         val licenseFindingCurations = getLicenseFindingCurations(id, scanResult.provenance)
+        // Sort the curated findings here to avoid the need to sort in the web-app each time it is loaded.
         val curatedFindings = curationsMatcher.applyAll(scanResult.summary.licenseFindings, licenseFindingCurations)
-            .mapNotNullTo(mutableSetOf()) { it.curatedFinding }
+            .mapNotNull { it.curatedFinding }.toSortedSet(LicenseFinding.COMPARATOR)
         val matchResult = findingsMatcher.match(curatedFindings, scanResult.summary.copyrightFindings)
         val matchedFindings = matchResult.matchedFindings.entries.groupBy { it.key.license }.mapValues { entry ->
             val licenseFindings = entry.value.map { it.key }

@@ -96,7 +96,7 @@ internal fun generateSummary(
         startTime = startTime,
         endTime = endTime,
         packageVerificationCode = verificationCode,
-        licenseFindings = licenseFindings.toSortedSet(),
+        licenseFindings = licenseFindings,
         copyrightFindings = copyrightFindings,
         snippetFindings = snippetFindings
     )

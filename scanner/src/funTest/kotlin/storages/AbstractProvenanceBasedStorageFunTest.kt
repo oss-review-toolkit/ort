@@ -225,7 +225,7 @@ private fun createScanResult(
         provenance,
         scannerDetails,
         ScanSummary.EMPTY.copy(
-            licenseFindings = sortedSetOf(
+            licenseFindings = setOf(
                 LicenseFinding(license, TextLocation("file.txt", 1, 2))
             )
         )

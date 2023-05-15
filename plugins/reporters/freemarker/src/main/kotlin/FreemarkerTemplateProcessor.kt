@@ -469,7 +469,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
                 fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
 
                 val copyrightFindings = summary.copyrightFindings.filterTo(mutableSetOf()) { it.location.isExcluded() }
-                val licenseFindings = summary.licenseFindings.filterTo(sortedSetOf()) { it.location.isExcluded() }
+                val licenseFindings = summary.licenseFindings.filterTo(mutableSetOf()) { it.location.isExcluded() }
 
                 scanResult.copy(
                     summary = summary.copy(

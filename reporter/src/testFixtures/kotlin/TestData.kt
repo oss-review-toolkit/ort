@@ -227,7 +227,7 @@ val ORT_RESULT = OrtResult(
                     provenance = UnknownProvenance,
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation("project-with-findings/file", 1)
@@ -254,7 +254,7 @@ val ORT_RESULT = OrtResult(
                     provenance = UnknownProvenance,
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation("file", 1)
@@ -279,7 +279,7 @@ val ORT_RESULT = OrtResult(
                     ),
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation("LICENSE", 1)
@@ -312,7 +312,7 @@ val ORT_RESULT = OrtResult(
                     ),
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation("LICENSE", 1)
@@ -353,7 +353,7 @@ val ORT_RESULT = OrtResult(
                     ),
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "MIT",
                                 location = TextLocation("file1", 1)
@@ -386,7 +386,7 @@ val ORT_RESULT = OrtResult(
                     ),
                     scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "BSD-3-Clause",
                                 location = TextLocation("LICENSE", 1)
