@@ -46,8 +46,8 @@ internal data class RawResults(
  * A data class to hold FossID mapped results.
  */
 internal data class FindingsContainer(
-    val licenseFindings: MutableList<LicenseFinding>,
-    val copyrightFindings: MutableList<CopyrightFinding>
+    val licenseFindings: MutableSet<LicenseFinding>,
+    val copyrightFindings: MutableSet<CopyrightFinding>
 )
 
 /**
@@ -58,8 +58,8 @@ internal fun <T : Summarizable> List<T>.mapSummary(
     issues: MutableList<Issue>,
     detectedLicenseMapping: Map<String, String>
 ): FindingsContainer {
-    val licenseFindings = mutableListOf<LicenseFinding>()
-    val copyrightFindings = mutableListOf<CopyrightFinding>()
+    val licenseFindings = mutableSetOf<LicenseFinding>()
+    val copyrightFindings = mutableSetOf<CopyrightFinding>()
 
     val files = filterNot { it.getFileName() in ignoredFiles }
     files.forEach { summarizable ->
