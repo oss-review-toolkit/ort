@@ -72,7 +72,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
         return runCatching {
@@ -93,7 +93,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
     private suspend fun loadVulnerabilities(
         packages: List<Package>,
         startTime: Instant
-    ): Map<Package, List<AdvisorResult>> {
+    ): Map<Package, AdvisorResult> {
         val packageMap = packages.filter { it.purl.isNotEmpty() }.associateBy { it.purl }
         val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
         val issues = mutableListOf<Issue>()
@@ -102,7 +102,7 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
             packageMap[pv.purl]?.let { pkg ->
                 val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel(issues) }
                 val summary = AdvisorSummary(startTime, Instant.now(), issues)
-                pkg to listOf(AdvisorResult(details, summary, vulnerabilities = vulnerabilities))
+                pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
             }
         }.toMap()
     }

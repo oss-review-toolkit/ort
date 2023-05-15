@@ -30,7 +30,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
-import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
@@ -83,34 +82,31 @@ class OssIndexTest : WordSpec({
             result shouldNot beEmptyMap()
             result.keys should containExactly(ID_JUNIT)
             result[ID_JUNIT] shouldNotBeNull {
-                this should haveSize(1)
-                with(single()) {
-                    advisor shouldBe ossIndex.details
-                    vulnerabilities should containExactly(
-                        Vulnerability(
-                            id = "CVE-2020-15250",
-                            summary = "[CVE-2020-15250] In JUnit4 from version 4.7 and before 4.13.1,...",
-                            description = "In JUnit4 from version 4.7 and before 4.13.1, the test...",
-                            references = listOf(
-                                VulnerabilityReference(
-                                    url = URI(
-                                        "https://ossindex.sonatype.org/vulnerability/" +
-                                            "7ea56ad4-8a8b-4e51-8ed9-5aad83d8efb1?component-type=maven" +
-                                            "&component-name=junit.junit&utm_source=mozilla&utm_medium=integration" +
-                                            "&utm_content=5.0"
-                                    ),
-                                    scoringSystem = "CVSS:3.0",
-                                    severity = "5.5"
+                advisor shouldBe ossIndex.details
+                vulnerabilities should containExactly(
+                    Vulnerability(
+                        id = "CVE-2020-15250",
+                        summary = "[CVE-2020-15250] In JUnit4 from version 4.7 and before 4.13.1,...",
+                        description = "In JUnit4 from version 4.7 and before 4.13.1, the test...",
+                        references = listOf(
+                            VulnerabilityReference(
+                                url = URI(
+                                    "https://ossindex.sonatype.org/vulnerability/" +
+                                        "7ea56ad4-8a8b-4e51-8ed9-5aad83d8efb1?component-type=maven" +
+                                        "&component-name=junit.junit&utm_source=mozilla&utm_medium=integration" +
+                                        "&utm_content=5.0"
                                 ),
-                                VulnerabilityReference(
-                                    url = URI("https://nvd.nist.gov/vuln/detail/CVE-2020-15250"),
-                                    scoringSystem = "CVSS:3.0",
-                                    severity = "5.5"
-                                )
+                                scoringSystem = "CVSS:3.0",
+                                severity = "5.5"
+                            ),
+                            VulnerabilityReference(
+                                url = URI("https://nvd.nist.gov/vuln/detail/CVE-2020-15250"),
+                                scoringSystem = "CVSS:3.0",
+                                severity = "5.5"
                             )
                         )
                     )
-                }
+                )
             }
         }
 
@@ -132,9 +128,7 @@ class OssIndexTest : WordSpec({
                 keys should containExactly(COMPONENTS_REQUEST_IDS)
 
                 COMPONENTS_REQUEST_IDS.forEach { pkg ->
-                    val pkgResults = getValue(pkg)
-                    pkgResults shouldHaveSize 1
-                    val pkgResult = pkgResults.first()
+                    val pkgResult = getValue(pkg)
                     pkgResult.advisor shouldBe ossIndex.details
                     pkgResult.vulnerabilities should beEmpty()
                     pkgResult.summary.issues shouldHaveSize 1

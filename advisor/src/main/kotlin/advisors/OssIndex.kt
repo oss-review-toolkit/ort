@@ -67,7 +67,7 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
         val purls = packages.mapNotNull { pkg -> pkg.purl.takeUnless { it.isEmpty() } }
@@ -90,12 +90,10 @@ class OssIndex(name: String, config: OssIndexConfiguration) : AdviceProvider(nam
 
             packages.mapNotNullTo(mutableListOf()) { pkg ->
                 componentReports[pkg.id.toPurl()]?.let { report ->
-                    pkg to listOf(
-                        AdvisorResult(
-                            details,
-                            AdvisorSummary(startTime, endTime),
-                            vulnerabilities = report.vulnerabilities.map { it.toVulnerability() }
-                        )
+                    pkg to AdvisorResult(
+                        details,
+                        AdvisorSummary(startTime, endTime),
+                        vulnerabilities = report.vulnerabilities.map { it.toVulnerability() }
                     )
                 }
             }.toMap()

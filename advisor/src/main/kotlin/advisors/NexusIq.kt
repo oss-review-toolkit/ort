@@ -81,7 +81,7 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> {
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> {
         val startTime = Instant.now()
 
         val components = packages.filter { it.purl.isNotEmpty() }.map { pkg ->
@@ -114,12 +114,10 @@ class NexusIq(name: String, private val config: NexusIqConfiguration) : AdvicePr
 
             packages.mapNotNullTo(mutableListOf()) { pkg ->
                 componentDetails[pkg.id.toPurl()]?.let { pkgDetails ->
-                    pkg to listOf(
-                        AdvisorResult(
-                            details,
-                            AdvisorSummary(startTime, endTime),
-                            vulnerabilities = pkgDetails.securityData.securityIssues.map { it.toVulnerability() }
-                        )
+                    pkg to AdvisorResult(
+                        details,
+                        AdvisorSummary(startTime, endTime),
+                        vulnerabilities = pkgDetails.securityData.securityIssues.map { it.toVulnerability() }
                     )
                 }
             }.toMap()

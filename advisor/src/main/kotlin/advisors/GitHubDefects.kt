@@ -117,11 +117,14 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
         )
     }
 
-    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, List<AdvisorResult>> =
+    override suspend fun retrievePackageFindings(packages: Set<Package>): Map<Package, AdvisorResult> =
         Executors.newFixedThreadPool(parallelRequests).asCoroutineDispatcher().use { context ->
             withContext(context) {
-                packages.associateWith { async { findDefectsForPackage(it) } }
-                    .mapValues { entry -> entry.value.await() }
+                packages.associateWith {
+                    async { findDefectsForPackage(it) }
+                }.mapNotNull { (pkg, defects) ->
+                    defects.await()?.let { pkg to it }
+                }.toMap()
             }
         }
 
@@ -141,17 +144,17 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
      * Produce an [AdvisorResult] for the given [package][pkg]. Check whether this package is hosted on GitHub. If so,
      * query the GitHub API; otherwise, return an empty list.
      */
-    private suspend fun findDefectsForPackage(pkg: Package): List<AdvisorResult> =
+    private suspend fun findDefectsForPackage(pkg: Package): AdvisorResult? =
         REGEX_GITHUB.matchEntire(pkg.vcsProcessed.url)?.let { match ->
             val gitHubPkg = GitHubPackage(pkg, repoOwner = match.groupValues[1], repoName = match.groupValues[2])
             findDefectsForGitHubPackage(gitHubPkg)
-        }.orEmpty()
+        }
 
     /**
      * Produce an [AdvisorResult] for the given [package][pkg], which is assumed to be hosted on GitHub. Query the
      * GitHub repository for the necessary information.
      */
-    private suspend fun findDefectsForGitHubPackage(pkg: GitHubPackage): List<AdvisorResult> {
+    private suspend fun findDefectsForGitHubPackage(pkg: GitHubPackage): AdvisorResult? {
         logger.info { "Finding defects for package '${pkg.original.id.toCoordinates()}'." }
 
         val startTime = Instant.now()
@@ -192,14 +195,12 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
         }
 
         return defects.takeUnless { it.isEmpty() && ortIssues.isEmpty() }?.let {
-            listOf(
-                AdvisorResult(
-                    advisor = details,
-                    summary = AdvisorSummary(startTime, Instant.now(), ortIssues),
-                    defects = it
-                )
+            AdvisorResult(
+                advisor = details,
+                summary = AdvisorSummary(startTime, Instant.now(), ortIssues),
+                defects = it
             )
-        }.orEmpty()
+        }
     }
 
     /**

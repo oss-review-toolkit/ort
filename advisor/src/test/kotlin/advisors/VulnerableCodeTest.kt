@@ -84,9 +84,9 @@ class VulnerableCodeTest : WordSpec({
             result.shouldNotBeEmpty()
             result.keys should containExactlyInAnyOrder(idLang, idStruts)
 
-            val langResults = result.getValue(idLang)
-            langResults shouldHaveSize(1)
-            langResults.first().advisor shouldBe vulnerableCode.details
+            val langResult = result.getValue(idLang)
+            langResult.advisor shouldBe vulnerableCode.details
+
             val expLangVulnerability = Vulnerability(
                 id = "CVE-2014-8242",
                 references = listOf(
@@ -107,11 +107,11 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
+            langResult.vulnerabilities should containExactly(expLangVulnerability)
 
-            langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
+            val strutsResult = result.getValue(idStruts)
+            strutsResult.advisor shouldBe vulnerableCode.details
 
-            val strutsResults = result.getValue(idStruts)
-            strutsResults shouldHaveSize(1)
             val expStrutsVulnerabilities = listOf(
                 Vulnerability(
                     id = "CVE-2009-1382",
@@ -139,8 +139,7 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-
-            strutsResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expStrutsVulnerabilities)
+            strutsResult.vulnerabilities should containExactlyInAnyOrder(expStrutsVulnerabilities)
         }
 
         "handle invalid URIs in references gracefully" {
@@ -150,10 +149,8 @@ class VulnerableCodeTest : WordSpec({
 
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
 
-            val langResults = result.getValue(idLang)
-            langResults shouldHaveSize(1)
-
-            val issues = langResults.first().summary.issues
+            val langResult = result.getValue(idLang)
+            val issues = langResult.summary.issues
             issues shouldHaveSize 1
             with(issues.first()) {
                 severity shouldBe Severity.HINT
@@ -165,8 +162,7 @@ class VulnerableCodeTest : WordSpec({
                 id = "CVE-2014-8242",
                 references = emptyList()
             )
-
-            langResults.flatMap { it.vulnerabilities } should containExactly(expLangVulnerability)
+            langResult.vulnerabilities should containExactly(expLangVulnerability)
         }
 
         "extract the CVE ID from an alias" {
@@ -175,8 +171,6 @@ class VulnerableCodeTest : WordSpec({
             val packagesToAdvise = inputPackagesFromIdentifiers(idJUnit)
 
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
-
-            val junitResults = result.getValue(idJUnit)
 
             val expJunitVulnerability = Vulnerability(
                 id = "CVE-2020-15250",
@@ -193,8 +187,7 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-
-            junitResults.flatMap { it.vulnerabilities } should containExactly(expJunitVulnerability)
+            result.getValue(idJUnit).vulnerabilities should containExactly(expJunitVulnerability)
         }
 
         "extract other official identifiers from aliases" {
@@ -203,8 +196,6 @@ class VulnerableCodeTest : WordSpec({
             val packagesToAdvise = inputPackagesFromIdentifiers(idLog4j)
 
             val result = vulnerableCode.retrievePackageFindings(packagesToAdvise).mapKeys { it.key.id }
-
-            val log4jResults = result.getValue(idLog4j)
 
             val expLog4jVulnerabilities = listOf(
                 Vulnerability(
@@ -228,8 +219,7 @@ class VulnerableCodeTest : WordSpec({
                     )
                 )
             )
-
-            log4jResults.flatMap { it.vulnerabilities } should containExactlyInAnyOrder(expLog4jVulnerabilities)
+            result.getValue(idLog4j).vulnerabilities should containExactlyInAnyOrder(expLog4jVulnerabilities)
         }
 
         "handle a failure response from the server" {
@@ -248,9 +238,7 @@ class VulnerableCodeTest : WordSpec({
                 keys should containExactly(packageIdentifiers)
 
                 packageIdentifiers.forEach { pkg ->
-                    val pkgResults = getValue(pkg)
-                    pkgResults shouldHaveSize 1
-                    with(pkgResults.first()) {
+                    with(getValue(pkg)) {
                         advisor shouldBe vulnerableCode.details
                         vulnerabilities should beEmpty()
                         summary.issues shouldHaveSize 1

@@ -18,11 +18,8 @@
  */
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNot
 
 import java.time.Instant
 
@@ -54,14 +51,11 @@ class OsvFunTest : StringSpec({
         val packageFindings = osv.retrievePackageFindings(packages)
 
         packageFindings.keys shouldContainExactlyInAnyOrder packages
-        packageFindings.forAll { (_, advisorResult) ->
-            advisorResult shouldNot beEmpty()
-        }
     }
 
     "retrievePackageFindings() returns the expected result for the given package(s)" {
         val expectedResult = getAssetFile("retrieve-package-findings-expected-result.json")
-            .readValue<Map<Identifier, List<AdvisorResult>>>()
+            .readValue<Map<Identifier, AdvisorResult>>()
         val osv = createOsv()
         // The following packages have been chosen because they have only one vulnerability with the oldest possible
         // modified date from the current OSV database, in order to hopefully minimize the flakiness.
@@ -88,14 +82,12 @@ private fun identifierToPackage(id: String): Package =
 private fun createOsv(): Osv =
     Osv("OSV", OsvConfiguration(serverUrl = null))
 
-private fun Map<Identifier, List<AdvisorResult>>.patchTimes(): Map<Identifier, List<AdvisorResult>> =
-    mapValues { (_, advisorResults) ->
-        advisorResults.map { advisorResult ->
-            advisorResult.copy(
-                summary = advisorResult.summary.copy(
-                    startTime = Instant.EPOCH,
-                    endTime = Instant.EPOCH
-                )
+private fun Map<Identifier, AdvisorResult>.patchTimes(): Map<Identifier, AdvisorResult> =
+    mapValues { (_, advisorResult) ->
+        advisorResult.copy(
+            summary = advisorResult.summary.copy(
+                startTime = Instant.EPOCH,
+                endTime = Instant.EPOCH
             )
-        }
+        )
     }
