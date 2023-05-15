@@ -98,8 +98,7 @@ internal fun generateSummary(
         packageVerificationCode = verificationCode,
         licenseFindings = licenseFindings.toSortedSet(),
         copyrightFindings = copyrightFindings.toSortedSet(),
-        snippetFindings = snippetFindings,
-        issues = emptyList()
+        snippetFindings = snippetFindings
     )
 }
 
