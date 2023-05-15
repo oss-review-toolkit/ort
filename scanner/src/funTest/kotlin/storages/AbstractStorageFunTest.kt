@@ -107,7 +107,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
             LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
         ),
-        issues = mutableListOf(
+        issues = listOf(
             Issue(source = "source-1", message = "error-1"),
             Issue(source = "source-2", message = "error-2")
         )
