@@ -190,7 +190,7 @@ private fun getLicenseFindings(
     result: JsonNode,
     detectedLicenseMapping: Map<String, String>,
     parseExpressions: Boolean
-): List<LicenseFinding> {
+): Set<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
     val input = getInputPath(result)
@@ -227,7 +227,7 @@ private fun getLicenseFindings(
         }
     }
 
-    return associateLicensesWithExceptions(licenseFindings)
+    return associateLicensesWithExceptions(licenseFindings).toSet()
 }
 
 /**
@@ -265,8 +265,8 @@ internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collect
 /**
  * Get the copyright findings from the given [result].
  */
-private fun getCopyrightFindings(result: JsonNode): List<CopyrightFinding> {
-    val copyrightFindings = mutableListOf<CopyrightFinding>()
+private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
+    val copyrightFindings = mutableSetOf<CopyrightFinding>()
 
     val input = getInputPath(result)
 
