@@ -95,7 +95,7 @@ data class ScanSummary(
             packageVerificationCode = "",
             licenseFindings = sortedSetOf(),
             copyrightFindings = sortedSetOf(),
-            snippetFindings = sortedSetOf()
+            snippetFindings = emptySet()
         )
     }
 
