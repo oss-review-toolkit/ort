@@ -150,7 +150,7 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
 
     /**
      * Produce an [AdvisorResult] for the given [package][pkg], which is assumed to be hosted on GitHub. Query the
-     * GitHub repository  for the necessary information.
+     * GitHub repository for the necessary information.
      */
     private suspend fun findDefectsForGitHubPackage(pkg: GitHubPackage): List<AdvisorResult> {
         logger.info { "Finding defects for package '${pkg.original.id.toCoordinates()}'." }
