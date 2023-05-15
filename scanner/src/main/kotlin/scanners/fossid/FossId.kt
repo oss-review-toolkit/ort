@@ -229,8 +229,10 @@ class FossId internal constructor(
         startTime: Instant,
         endTime: Instant = Instant.now(),
         issue: Issue
-    ) = ScanSummary(
-        startTime, endTime, "", sortedSetOf(), sortedSetOf(), issues = listOf(issue)
+    ) = ScanSummary.EMPTY.copy(
+        startTime = startTime,
+        endTime = endTime,
+        issues = listOf(issue)
     )
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
