@@ -32,10 +32,8 @@ data class CopyrightFinding(
      * The text location where the copyright statement was found.
      */
     val location: TextLocation
-) : Comparable<CopyrightFinding> {
+) {
     companion object {
-        private val COMPARATOR = compareBy<CopyrightFinding>({ it.statement }, { it.location })
+        val COMPARATOR = compareBy<CopyrightFinding>({ it.statement }, { it.location })
     }
-
-    override fun compareTo(other: CopyrightFinding) = COMPARATOR.compare(this, other)
 }
