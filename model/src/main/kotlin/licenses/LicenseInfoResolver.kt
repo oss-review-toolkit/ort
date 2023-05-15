@@ -44,7 +44,7 @@ class LicenseInfoResolver(
     private val provider: LicenseInfoProvider,
     private val copyrightGarbage: CopyrightGarbage,
     val addAuthorsToCopyrights: Boolean,
-    val archiver: FileArchiver?,
+    val archiver: FileArchiver,
     val licenseFilePatterns: LicenseFilePatterns = LicenseFilePatterns.DEFAULT
 ) {
     private val resolvedLicenseInfo = ConcurrentHashMap<Identifier, ResolvedLicenseInfo>()
@@ -61,8 +61,7 @@ class LicenseInfoResolver(
         resolvedLicenseInfo.getOrPut(id) { createLicenseInfo(id) }
 
     /**
-     * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id]. Requires an [archiver] to be
-     * configured, otherwise always returns empty results.
+     * Get the [ResolvedLicenseFileInfo] for the project or package identified by [id].
      */
     fun resolveLicenseFiles(id: Identifier): ResolvedLicenseFileInfo =
         resolvedLicenseFiles.getOrPut(id) { createLicenseFileInfo(id) }
@@ -245,10 +244,6 @@ class LicenseInfoResolver(
         }
 
     private fun createLicenseFileInfo(id: Identifier): ResolvedLicenseFileInfo {
-        if (archiver == null) {
-            return ResolvedLicenseFileInfo(id, emptyList())
-        }
-
         val licenseInfo = resolveLicenseInfo(id)
         val licenseFiles = mutableListOf<ResolvedLicenseFile>()
 

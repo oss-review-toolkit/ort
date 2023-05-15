@@ -75,7 +75,7 @@ fun OrtResult.createLicenseInfoResolver(
     packageConfigurationProvider: PackageConfigurationProvider = PackageConfigurationProvider.EMPTY,
     copyrightGarbage: CopyrightGarbage = CopyrightGarbage(),
     addAuthorsToCopyrights: Boolean = false,
-    archiver: FileArchiver? = null
+    archiver: FileArchiver
 ) = LicenseInfoResolver(
         DefaultLicenseInfoProvider(this, packageConfigurationProvider),
         copyrightGarbage,
