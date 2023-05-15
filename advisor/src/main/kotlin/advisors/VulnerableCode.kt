@@ -78,33 +78,23 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         return runCatching {
             buildMap {
                 packages.chunked(BULK_REQUEST_SIZE).forEach { pkg ->
-                    putAll(loadVulnerabilities(pkg, startTime))
+                    val packageMap = pkg.filter { it.purl.isNotEmpty() }.associateBy { it.purl }
+                    val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
+                    val issues = mutableListOf<Issue>()
+                    val allVulnerabilities = packageVulnerabilities.filter { it.unresolvedVulnerabilities.isNotEmpty() }
+                        .mapNotNull { pv ->
+                            packageMap[pv.purl]?.let { pkg ->
+                                val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel(issues) }
+                                val summary = AdvisorSummary(startTime, Instant.now(), issues)
+                                pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
+                            }
+                        }.toMap()
+                    putAll(allVulnerabilities)
                 }
             }
         }.getOrElse {
             createFailedResults(startTime, packages, it)
         }
-    }
-
-    /**
-     * Load vulnerability information for the given [packages] and create a map with results per package using the
-     * [startTime].
-     */
-    private suspend fun loadVulnerabilities(
-        packages: List<Package>,
-        startTime: Instant
-    ): Map<Package, AdvisorResult> {
-        val packageMap = packages.filter { it.purl.isNotEmpty() }.associateBy { it.purl }
-        val packageVulnerabilities = service.getPackageVulnerabilities(PackagesWrapper(packageMap.keys))
-        val issues = mutableListOf<Issue>()
-
-        return packageVulnerabilities.filter { it.unresolvedVulnerabilities.isNotEmpty() }.mapNotNull { pv ->
-            packageMap[pv.purl]?.let { pkg ->
-                val vulnerabilities = pv.unresolvedVulnerabilities.map { it.toModel(issues) }
-                val summary = AdvisorSummary(startTime, Instant.now(), issues)
-                pkg to AdvisorResult(details, summary, vulnerabilities = vulnerabilities)
-            }
-        }.toMap()
     }
 
     /**
