@@ -283,7 +283,7 @@ private val ortResult = OrtResult(
                                 location = TextLocation("LICENSE", 1)
                             )
                         ),
-                        copyrightFindings = sortedSetOf(
+                        copyrightFindings = setOf(
                             CopyrightFinding(
                                 statement = "Copyright 2020 Some copyright holder in source artifact",
                                 location = TextLocation("some/file", 1)
@@ -314,7 +314,7 @@ private val ortResult = OrtResult(
                                 location = TextLocation("LICENSE", 1)
                             )
                         ),
-                        copyrightFindings = sortedSetOf(
+                        copyrightFindings = setOf(
                             CopyrightFinding(
                                 statement = "Copyright 2020 Some copyright holder in VCS",
                                 location = TextLocation("some/file", 1)
