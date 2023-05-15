@@ -120,12 +120,12 @@ data class NestedProvenanceScanResult(
         return findings
     }
 
-    private fun Map<KnownProvenance, List<ScanResult>>.mergeCopyrightFindings(): SortedSet<CopyrightFinding> {
+    private fun Map<KnownProvenance, List<ScanResult>>.mergeCopyrightFindings(): Set<CopyrightFinding> {
         val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
             scanResults.flatMap { it.summary.copyrightFindings }
         }
 
-        val findings = findingsByPath.flatMapTo(sortedSetOf()) { (path, findings) ->
+        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
             val prefix = if (path.isEmpty()) path else "$path/"
             findings.map { it.copy(location = it.location.copy(path = "$prefix${it.location.path}")) }
         }
