@@ -142,9 +142,8 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
      * query the GitHub API; otherwise, return an empty list.
      */
     private suspend fun findDefectsForPackage(pkg: Package): List<AdvisorResult> =
-        REGEX_GITHUB.matchEntire(pkg.vcsProcessed.url)?.let { matchResult ->
-            val gitHubPkg =
-                GitHubPackage(pkg, repoOwner = matchResult.groupValues[1], repoName = matchResult.groupValues[2])
+        REGEX_GITHUB.matchEntire(pkg.vcsProcessed.url)?.let { match ->
+            val gitHubPkg = GitHubPackage(pkg, repoOwner = match.groupValues[1], repoName = match.groupValues[2])
             findDefectsForGitHubPackage(gitHubPkg)
         }.orEmpty()
 
