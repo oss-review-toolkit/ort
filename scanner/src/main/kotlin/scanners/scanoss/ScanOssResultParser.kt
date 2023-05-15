@@ -68,8 +68,8 @@ internal fun generateSummary(
     result: FullScanResponse,
     detectedLicenseMapping: Map<String, String>
 ): ScanSummary {
-    val licenseFindings = mutableListOf<LicenseFinding>()
-    val copyrightFindings = mutableListOf<CopyrightFinding>()
+    val licenseFindings = mutableSetOf<LicenseFinding>()
+    val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()
 
     result.forEach { (_, scanResponses) ->
