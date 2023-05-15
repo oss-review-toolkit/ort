@@ -33,11 +33,6 @@ import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
  */
 data class FileArchiverConfiguration(
     /**
-     * Toggle to enable or disable the file archiver functionality altogether.
-     */
-    val enabled: Boolean = true,
-
-    /**
      * Configuration of the [FileStorage] used for archiving the files.
      */
     val fileStorage: FileStorageConfiguration? = null,
@@ -65,9 +60,7 @@ data class FileArchiverConfiguration(
 /**
  * Create a [FileArchiver] based on this configuration.
  */
-fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
-    if (this?.enabled == false) return null
-
+fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver {
     val storage = when {
         this?.fileStorage != null -> FileProvenanceFileStorage(
             storage = fileStorage.createFileStorage(),

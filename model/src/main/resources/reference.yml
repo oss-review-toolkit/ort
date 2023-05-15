@@ -141,8 +141,6 @@ ort:
     skipConcluded: true
 
     archive:
-      enabled: true
-
       fileStorage:
         localFileStorage:
           directory: ~/.ort/scanner/archive

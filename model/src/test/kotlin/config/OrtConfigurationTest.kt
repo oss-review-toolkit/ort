@@ -168,8 +168,6 @@ class OrtConfigurationTest : WordSpec({
                 skipConcluded shouldBe true
 
                 archive shouldNotBeNull {
-                    enabled shouldBe true
-
                     fileStorage shouldNotBeNull {
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {

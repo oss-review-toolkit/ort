@@ -925,7 +925,7 @@ private fun createScanner(
     projectScannerWrappers: List<ScannerWrapper> = emptyList()
 ) =
     Scanner(
-        ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
+        ScannerConfiguration(archive = FileArchiverConfiguration()),
         DownloaderConfiguration(),
         provenanceDownloader,
         storageReaders,

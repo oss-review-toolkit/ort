@@ -328,9 +328,6 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
-                "enabled": {
-                    "type": "boolean"
-                },
                 "fileStorage": {
                     "$ref": "#/definitions/FileStorage"
                 },

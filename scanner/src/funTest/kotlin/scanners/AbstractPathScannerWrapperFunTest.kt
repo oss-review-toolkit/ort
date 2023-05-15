@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val downloaderConfig = DownloaderConfiguration()
-    protected val scannerConfig = ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false))
+    protected val scannerConfig = ScannerConfiguration(archive = FileArchiverConfiguration())
 
     // This is loosely based on the patterns from
     // https://github.com/licensee/licensee/blob/6c0f803/lib/licensee/project_files/license_file.rb#L6-L43.
