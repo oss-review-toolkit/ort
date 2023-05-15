@@ -81,7 +81,7 @@ class Askalono internal constructor(
     }
 
     private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
-        val licenseFindings = sortedSetOf<LicenseFinding>()
+        val licenseFindings = mutableSetOf<LicenseFinding>()
 
         result.lines().forEach { line ->
             val root = jsonMapper.readTree(line)

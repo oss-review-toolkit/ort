@@ -48,9 +48,9 @@ data class LicenseFinding(
      * 100.0 means that the scanner is 100% confident that the finding is correct.
      */
     val score: Float? = null
-) : Comparable<LicenseFinding> {
+) {
     companion object {
-        private val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
+        val COMPARATOR = compareBy<LicenseFinding>({ it.license.toString() }, { it.location })
             .thenByDescending { it.score }
 
         /**
@@ -73,8 +73,6 @@ data class LicenseFinding(
     }
 
     constructor(license: String, location: TextLocation, score: Float? = null) : this(license.toSpdx(), location, score)
-
-    override fun compareTo(other: LicenseFinding) = COMPARATOR.compare(this, other)
 }
 
 /**

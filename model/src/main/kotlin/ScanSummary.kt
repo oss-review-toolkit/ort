@@ -26,10 +26,10 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.time.Instant
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.CopyrightFindingSortedSetConverter
+import org.ossreviewtoolkit.model.utils.LicenseFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
@@ -63,7 +63,8 @@ data class ScanSummary(
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonProperty("licenses")
-    val licenseFindings: SortedSet<LicenseFinding> = sortedSetOf(),
+    @JsonSerialize(converter = LicenseFindingSortedSetConverter::class)
+    val licenseFindings: Set<LicenseFinding> = emptySet(),
 
     /**
      * The detected copyright findings.
@@ -119,7 +120,7 @@ data class ScanSummary(
 
         fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
 
-        val licenseFindings = licenseFindings.filter { it.location.matchesPath() }.toSortedSet()
+        val licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
         val copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
 
         return copy(
@@ -136,7 +137,7 @@ data class ScanSummary(
         val matcher = FileMatcher(ignorePatterns)
 
         return copy(
-            licenseFindings = licenseFindings.filterTo(sortedSetOf()) { !matcher.matches(it.location.path) },
+            licenseFindings = licenseFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
             copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) }
         )
     }

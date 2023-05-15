@@ -277,7 +277,7 @@ private val ortResult = OrtResult(
                     scanner = ScannerDetails.EMPTY,
                     summary = ScanSummary.EMPTY.copy(
                         packageVerificationCode = "0000000000000000000000000000000000000000",
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "Apache-2.0",
                                 location = TextLocation("LICENSE", 1)
@@ -308,7 +308,7 @@ private val ortResult = OrtResult(
                     scanner = ScannerDetails.EMPTY,
                     summary = ScanSummary.EMPTY.copy(
                         packageVerificationCode = "0000000000000000000000000000000000000000",
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding(
                                 license = "BSD-2-Clause",
                                 location = TextLocation("LICENSE", 1)

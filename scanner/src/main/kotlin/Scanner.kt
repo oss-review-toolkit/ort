@@ -709,7 +709,7 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
             copy(
                 provenance = provenance,
                 summary = summary.copy(
-                    licenseFindings = licenseFindingsByProvenance[provenance].orEmpty().toSortedSet(),
+                    licenseFindings = licenseFindingsByProvenance[provenance].orEmpty().toSet(),
                     copyrightFindings = copyrightFindingsByProvenance[provenance].orEmpty().toSet()
                 )
             )

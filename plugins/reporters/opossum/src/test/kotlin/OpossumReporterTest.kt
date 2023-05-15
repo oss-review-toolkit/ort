@@ -454,7 +454,7 @@ private fun createOrtResult(): OrtResult {
                         ),
                         summary = ScanSummary.EMPTY.copy(
                             packageVerificationCode = "0000000000000000000000000000000000000000",
-                            licenseFindings = sortedSetOf(
+                            licenseFindings = setOf(
                                 LicenseFinding(
                                     license = "Apache-2.0",
                                     location = TextLocation("LICENSE", 1)
@@ -491,7 +491,7 @@ private fun createOrtResult(): OrtResult {
                             startTime = Instant.EPOCH,
                             endTime = Instant.EPOCH,
                             packageVerificationCode = "0000000000000000000000000000000000000000",
-                            licenseFindings = sortedSetOf(
+                            licenseFindings = setOf(
                                 LicenseFinding(
                                     license = "BSD-2-Clause",
                                     location = TextLocation("LICENSE", 1)

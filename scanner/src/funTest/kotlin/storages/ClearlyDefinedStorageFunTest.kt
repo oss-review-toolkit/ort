@@ -74,7 +74,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
                     endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
                     packageVerificationCode = SpdxConstants.NONE,
-                    licenseFindings = sortedSetOf(
+                    licenseFindings = setOf(
                         LicenseFinding(
                             license = "MIT",
                             location = TextLocation(

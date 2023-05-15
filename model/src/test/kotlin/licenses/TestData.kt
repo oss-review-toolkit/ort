@@ -49,7 +49,7 @@ val concludedLicense = "LicenseRef-a AND LicenseRef-b".toSpdx()
 val declaredLicenses = setOf("LicenseRef-a", "LicenseRef-b")
 val declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
 
-val licenseFindings = sortedSetOf(
+val licenseFindings = setOf(
     LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
     LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
 )

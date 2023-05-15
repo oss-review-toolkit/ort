@@ -259,7 +259,7 @@ val ortResult = OrtResult(
                     provenance = UnknownProvenance,
                     scanner = ScannerDetails.EMPTY,
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = sortedSetOf(
+                        licenseFindings = setOf(
                             LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
                             LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
                         )

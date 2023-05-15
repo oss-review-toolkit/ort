@@ -130,7 +130,7 @@ internal fun generateSummary(
         startTime = startTime,
         endTime = endTime,
         packageVerificationCode = verificationCode,
-        licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions).toSortedSet(),
+        licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions),
         copyrightFindings = getCopyrightFindings(result),
         issues = issues + getIssues(result)
     )
