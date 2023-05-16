@@ -98,6 +98,8 @@ fun File.safeDeleteRecursively(force: Boolean = false, baseDirectory: File? = nu
         }
     }
 
+    if (baseDirectory == this) return
+
     if (!delete() && force && setWritable(true)) {
         // Try again.
         delete()
