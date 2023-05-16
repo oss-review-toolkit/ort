@@ -86,7 +86,7 @@ class ProjectTest : WordSpec({
             shouldThrow<IllegalArgumentException> {
                 Project.EMPTY.copy(
                     scopeDependencies = setOf(mockk()),
-                    scopeNames = sortedSetOf("test", "compile", "other")
+                    scopeNames = setOf("test", "compile", "other")
                 )
             }
         }
@@ -127,7 +127,7 @@ class ProjectTest : WordSpec({
                 definitionFilePath = "/some/path",
                 homepageUrl = "https//www.test-project.org",
                 scopeDependencies = null,
-                scopeNames = sortedSetOf("partial")
+                scopeNames = setOf("partial")
             )
 
             val graph = createDependencyGraph(qualified = true)

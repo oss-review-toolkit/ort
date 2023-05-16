@@ -332,7 +332,7 @@ abstract class PackageManager(
                         definitionFilePath = VersionControlSystem.getPathInfo(definitionFile).path,
                         vcsProcessed = processProjectVcs(definitionFile.parentFile),
                         scopeDependencies = null,
-                        scopeNames = sortedSetOf()
+                        scopeNames = emptySet()
                     )
 
                     val issues = listOf(

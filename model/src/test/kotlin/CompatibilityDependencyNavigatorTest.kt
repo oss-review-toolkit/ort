@@ -27,11 +27,9 @@ import io.kotest.matchers.types.instanceOf
 import io.mockk.every
 import io.mockk.mockk
 
-import java.util.SortedSet
-
 class CompatibilityDependencyNavigatorTest : WordSpec() {
     private val treeProject = createProject("tree", scopes = setOf(createScope("scope")))
-    private val graphProject = createProject("graph", scopeNames = sortedSetOf("scope"))
+    private val graphProject = createProject("graph", scopeNames = setOf("scope"))
 
     init {
         "create" should {
@@ -46,8 +44,8 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
             }
 
             "return a DependencyGraphNavigator if all projects use the graph format" {
-                val project1 = createProject("test1", scopeNames = sortedSetOf("scope1"))
-                val project2 = createProject("test2", scopeNames = sortedSetOf("scope2", "scope3"))
+                val project1 = createProject("test1", scopeNames = setOf("scope1"))
+                val project2 = createProject("test2", scopeNames = setOf("scope2", "scope3"))
                 val result = createOrtResult(project1, project2)
 
                 val navigator = CompatibilityDependencyNavigator.create(result)
@@ -57,7 +55,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
 
             "return a CompatibilityGraphNavigator if mixed representations are used" {
                 val project1 = createProject("test1", scopes = setOf(createScope("scope1")))
-                val project2 = createProject("test2", scopeNames = sortedSetOf("scope2", "scope3"))
+                val project2 = createProject("test2", scopeNames = setOf("scope2", "scope3"))
                 val result = createOrtResult(project1, project2)
 
                 when (val navigator = CompatibilityDependencyNavigator.create(result)) {
@@ -77,7 +75,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
             }
 
             "return a DependencyTreeNavigator for a result that does not contain any dependency graphs" {
-                val project = createProject("dummy", scopeNames = sortedSetOf())
+                val project = createProject("dummy", scopeNames = setOf())
 
                 val analyzerResult = AnalyzerResult(
                     projects = setOf(project),
@@ -246,7 +244,7 @@ private fun createOrtResult(vararg projects: Project): OrtResult =
 private fun createProject(
     name: String,
     scopes: Set<Scope>? = null,
-    scopeNames: SortedSet<String>? = null
+    scopeNames: Set<String>? = null
 ): Project {
     val id = Identifier.EMPTY.copy(name = name)
     return Project.EMPTY.copy(id = id, scopeDependencies = scopes, scopeNames = scopeNames)

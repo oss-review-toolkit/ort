@@ -237,7 +237,7 @@ class Yarn2(
             logger.info { "Parsing packages..." }
 
             val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packagedDetails)
-            val scopeNames = YarnDependencyType.values().map { it.type }.toSortedSet()
+            val scopeNames = YarnDependencyType.values().mapTo(mutableSetOf()) { it.type }
             return allProjects.values.map { project ->
                 ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
             }.toList()

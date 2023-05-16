@@ -83,7 +83,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
     )
     private val project3 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-3", "project-1.2", "version-1"),
-        scopeNames = sortedSetOf("scope-2"),
+        scopeNames = setOf("scope-2"),
         scopeDependencies = null
     )
 
@@ -137,8 +137,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
 
             "be serialized and deserialized correctly with a dependency graph" {
-                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
-                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = setOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = setOf("scope3"))
                 val result = AnalyzerResult(
                     projects = setOf(p1, p2, project3),
                     packages = emptySet(),
@@ -154,8 +154,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
 
             "not change its representation when serialized again" {
-                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
-                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = setOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = setOf("scope3"))
                 val result = AnalyzerResult(
                     projects = setOf(p1, p2, project3),
                     packages = emptySet(),
@@ -188,8 +188,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
             "be serialized and deserialized correctly with an empty dependency graph" {
                 val emptyGraph = DependencyGraph(packages = emptyList(), scopes = emptyMap())
-                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope1"))
-                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope3"))
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = setOf("scope1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = setOf("scope3"))
                 val result = AnalyzerResult(
                     projects = setOf(p1, p2, project3),
                     packages = emptySet(),
@@ -234,8 +234,8 @@ class AnalyzerResultBuilderTest : WordSpec() {
             }
 
             "resolve the dependency information in affected projects" {
-                val p1 = project1.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-1"))
-                val p2 = project2.copy(scopeDependencies = null, scopeNames = sortedSetOf("scope-3"))
+                val p1 = project1.copy(scopeDependencies = null, scopeNames = setOf("scope-1"))
+                val p2 = project2.copy(scopeDependencies = null, scopeNames = setOf("scope-3"))
                 val analyzerResult = AnalyzerResultBuilder()
                     .addResult(ProjectAnalyzerResult(p1, emptySet()))
                     .addDependencyGraph(p1.id.type, graph1)

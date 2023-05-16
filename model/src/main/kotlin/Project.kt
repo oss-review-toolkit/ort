@@ -24,8 +24,6 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.model.utils.ScopeSortedSetConverter
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -108,7 +106,7 @@ data class Project(
      * graph.
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    val scopeNames: SortedSet<String>? = null
+    val scopeNames: Set<String>? = null
 ) {
     companion object {
         /**
