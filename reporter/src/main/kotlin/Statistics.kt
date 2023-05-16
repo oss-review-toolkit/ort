@@ -19,8 +19,8 @@
 
 package org.ossreviewtoolkit.reporter
 
-import java.util.SortedMap
-import java.util.SortedSet
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
@@ -37,6 +37,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
+import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 
 /**
  * A class containing statistics for an [OrtResult].
@@ -140,12 +141,14 @@ data class DependencyTreeStatistics(
     /**
      * The set of scope names which have at least one not excluded corresponding [Scope].
      */
-    val includedScopes: SortedSet<String>,
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val includedScopes: Set<String>,
 
     /**
      * The set of scope names which do not have a single not excluded corresponding [Scope].
      */
-    val excludedScopes: SortedSet<String>
+    @JsonSerialize(converter = StringSortedSetConverter::class)
+    val excludedScopes: Set<String>
 )
 
 /**
@@ -155,12 +158,14 @@ data class LicenseStatistics(
     /**
      * All declared licenses, mapped to the number of [Project]s and [Package]s they are declared in.
      */
-    val declared: SortedMap<String, Int>,
+    @JsonPropertyOrder(alphabetic = true)
+    val declared: Map<String, Int>,
 
     /**
      * All detected licenses, mapped to the number of [Project]s and [Package]s they were detected in.
      */
-    val detected: SortedMap<String, Int>
+    @JsonPropertyOrder(alphabetic = true)
+    val detected: Map<String, Int>
 )
 
 /**
