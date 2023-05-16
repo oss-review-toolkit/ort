@@ -218,6 +218,14 @@ fun OkHttpClient.download(url: String, acceptEncoding: String? = null): Result<P
     }
 
 /**
+ * Execute a HEAD-request against [url] to ping for its existence.
+ */
+fun OkHttpClient.ping(url: String): Response =
+    Request.Builder().head().url(url).build().let { request ->
+        execute(request)
+    }
+
+/**
  * Execute a [request] using the client.
  */
 fun OkHttpClient.execute(request: Request): Response =
