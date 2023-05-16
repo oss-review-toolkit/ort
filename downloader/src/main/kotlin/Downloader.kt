@@ -179,12 +179,6 @@ class Downloader(private val config: DownloaderConfiguration) {
         outputDirectory: File,
         recursive: Boolean = true
     ): Provenance {
-        verifyOutputDirectory(outputDirectory)
-
-        logger.info {
-            "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
-        }
-
         if (pkg.vcsProcessed.url.isBlank()) {
             val hint = when (pkg.id.type) {
                 "Bundler", "Gem" ->
@@ -210,6 +204,12 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
 
             throw DownloadException("No VCS URL provided for '${pkg.id.toCoordinates()}'.$hint")
+        }
+
+        verifyOutputDirectory(outputDirectory)
+
+        logger.info {
+            "Trying to download '${pkg.id.toCoordinates()}' sources to '${outputDirectory.absolutePath}' from VCS..."
         }
 
         if (pkg.vcsProcessed != pkg.vcs) {
