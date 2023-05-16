@@ -63,8 +63,9 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.common.unpack
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.downloadFile
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
@@ -178,7 +179,7 @@ class Pub(
 
         logger.info { "Downloading flutter-$flutterVersion from $url... " }
         flutterInstallDir.safeMkdirs()
-        val flutterArchive = OkHttpClientHelper.downloadFile(url, flutterInstallDir).getOrThrow()
+        val flutterArchive = okHttpClient.downloadFile(url, flutterInstallDir).getOrThrow()
 
         logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
         flutterArchive.unpack(flutterInstallDir)

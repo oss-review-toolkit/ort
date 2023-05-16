@@ -38,7 +38,8 @@ import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.scanner.utils.WorkingTreeCache
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.await
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -162,7 +163,7 @@ class DefaultPackageProvenanceResolver(
 
         val request = Request.Builder().method(method, null).url(pkg.sourceArtifact.url).build()
 
-        return OkHttpClientHelper.await(request).use { it.code }
+        return okHttpClient.await(request).use { it.code }
     }
 
     private suspend fun resolveVcs(pkg: Package): RepositoryProvenance {

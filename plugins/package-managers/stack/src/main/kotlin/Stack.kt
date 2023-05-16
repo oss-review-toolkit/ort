@@ -47,7 +47,8 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.ProcessCapture
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.downloadText
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
@@ -230,7 +231,7 @@ class Stack(
     private fun downloadCabalFile(pkgId: Identifier): String? {
         val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
 
-        return OkHttpClientHelper.downloadText(url).onFailure {
+        return okHttpClient.downloadText(url).onFailure {
             logger.warn { "Unable to retrieve Hackage metadata for package '${pkgId.toCoordinates()}'." }
         }.getOrNull()
     }

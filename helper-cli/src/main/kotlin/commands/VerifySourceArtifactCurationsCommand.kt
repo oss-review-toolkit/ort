@@ -32,8 +32,9 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.downloadFile
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 internal class VerifySourceArtifactCurationsCommand : CliktCommand(
     help = "Verifies that all curated source artifacts can be downloaded and that the hashes are correct."
@@ -57,7 +58,7 @@ internal class VerifySourceArtifactCurationsCommand : CliktCommand(
                 val tempDir = createOrtTempDir()
 
                 try {
-                    val file = OkHttpClientHelper.downloadFile(sourceArtifact.url, tempDir).getOrThrow()
+                    val file = okHttpClient.downloadFile(sourceArtifact.url, tempDir).getOrThrow()
                     val hash = sourceArtifact.hash.algorithm.calculate(file)
 
                     println("Expected hash: ${sourceArtifact.hash.algorithm} ${sourceArtifact.hash.value}")
