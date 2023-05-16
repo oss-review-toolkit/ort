@@ -120,7 +120,7 @@ object DependencyGraphConverter {
      */
     private fun Project.convertToScopeNames(excludes: Excludes): Project =
         takeIf { scopeNames != null } ?: copy(
-            scopeNames = scopes.filterNot { excludes.isScopeExcluded(it.name) }.mapTo(sortedSetOf()) { it.name },
+            scopeNames = scopes.filterNot { excludes.isScopeExcluded(it.name) }.mapTo(mutableSetOf()) { it.name },
             scopeDependencies = null
         )
 

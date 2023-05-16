@@ -208,7 +208,7 @@ open class Npm(
         val packages = parseInstalledModules(workingDir)
         graphBuilder.addPackages(packages.values)
 
-        val scopeNames = listOfNotNull(
+        val scopeNames = setOfNotNull(
             // Optional dependencies are just like regular dependencies except that NPM ignores failures when
             // installing them (see https://docs.npmjs.com/files/package.json#optionaldependencies), i.e. they are
             // not a separate scope in our semantics.
@@ -231,7 +231,7 @@ open class Npm(
 
         return listOf(
             ProjectAnalyzerResult(
-                project = project.copy(scopeNames = scopeNames.toSortedSet()),
+                project = project.copy(scopeNames = scopeNames),
                 // Packages are set later by createPackageManagerResult().
                 packages = emptySet(),
                 issues = issues
