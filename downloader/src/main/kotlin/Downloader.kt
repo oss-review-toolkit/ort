@@ -121,8 +121,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
 
             // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
-            outputDirectory.safeDeleteRecursively(force = true)
-            outputDirectory.safeMkdirs()
+            outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
 
             exception.addSuppressed(e)
         }
@@ -161,8 +160,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             }
 
             // Clean up any left-over files.
-            outputDirectory.safeDeleteRecursively()
-            outputDirectory.safeMkdirs()
+            outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
 
             exception.addSuppressed(e)
         }
@@ -257,8 +255,7 @@ class Downloader(private val config: DownloaderConfiguration) {
                 }
 
                 // Clean up any files left from the failed VCS download (i.e. a ".git" directory).
-                outputDirectory.safeDeleteRecursively(force = true)
-                outputDirectory.safeMkdirs()
+                outputDirectory.safeDeleteRecursively(force = true, baseDirectory = outputDirectory)
 
                 val fallbackPkg = pkg.copy(vcsProcessed = pkg.vcsProcessed.copy(url = vcsUrlNoCredentials))
                 applicableVcs.download(fallbackPkg, outputDirectory, config.allowMovingRevisions, recursive)
