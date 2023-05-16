@@ -299,7 +299,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             tempDir = createOrtTempDir()
             okHttpClient.downloadFile(sourceArtifact.url, tempDir).getOrElse {
                 tempDir.safeDeleteRecursively(force = true)
-                throw DownloadException("Failed to download source artifact.", it)
+                throw DownloadException("Failed to download source artifact from ${sourceArtifact.url}.", it)
             }
         }
 
