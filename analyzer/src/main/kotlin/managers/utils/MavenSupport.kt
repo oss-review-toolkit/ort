@@ -91,10 +91,11 @@ import org.ossreviewtoolkit.utils.common.searchUpwardsForSubdirectory
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.OrtAuthenticator
 import org.ossreviewtoolkit.utils.ort.OrtProxySelector
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.ort.downloadText
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
@@ -322,7 +323,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                     "https://repo.maven.apache.org/maven2/$group/$artifactId/$version/$name.$algorithm"
                 }
 
-                val checksum = OkHttpClientHelper.downloadText(mavenCentralUrl).getOrElse { return false }
+                val checksum = okHttpClient.downloadText(mavenCentralUrl).getOrElse { return false }
                 !hash.verify(parseChecksum(checksum, hash.algorithm.name))
             }
     }

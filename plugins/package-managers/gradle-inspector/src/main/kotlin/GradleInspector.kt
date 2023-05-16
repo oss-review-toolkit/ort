@@ -59,7 +59,8 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.splitOnWhitespace
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.downloadText
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.ortToolsDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
@@ -321,7 +322,7 @@ private fun createRemoteArtifact(
     }
 
     // TODO: How to handle authentication for private repositories here, or rely on Gradle for the download?
-    val checksum = OkHttpClientHelper.downloadText("$artifactUrl.$algorithm")
+    val checksum = okHttpClient.downloadText("$artifactUrl.$algorithm")
         .getOrElse { return RemoteArtifact.EMPTY }
 
     return RemoteArtifact(artifactUrl, parseChecksum(checksum, algorithm))

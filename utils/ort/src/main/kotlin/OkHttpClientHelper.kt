@@ -67,48 +67,7 @@ object OkHttpClientHelper : Logging {
      */
     const val HTTP_TOO_MANY_REQUESTS = 429
 
-    private const val CACHE_DIRECTORY = "cache/http"
-    private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
-    private const val READ_TIMEOUT_IN_SECONDS = 30L
-
     private val clients = ConcurrentHashMap<BuilderConfiguration, OkHttpClient>()
-
-    private val defaultClient by lazy {
-        OrtAuthenticator.install()
-        OrtProxySelector.install()
-
-        val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
-        val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
-        val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
-
-        // OkHttp uses Java's global ProxySelector by default, but the Authenticator for a proxy needs to be set
-        // explicitly. Also note that the (non-proxy) authenticator is set here and is primarily intended for "reactive"
-        // authentication, but most often "preemptive" authentication via headers is required. For proxy authentication,
-        // OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response to the reactive
-        // proxy authenticator.
-        OkHttpClient.Builder()
-            .addNetworkInterceptor { chain ->
-                val request = chain.request()
-                val requestWithUserAgent = request.takeUnless { it.header("User-Agent") == null }
-                    ?: request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
-
-                runCatching {
-                    chain.proceed(requestWithUserAgent)
-                }.onFailure {
-                    it.showStackTrace()
-
-                    logger.error {
-                        "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
-                    }
-                }.getOrThrow()
-            }
-            .cache(cache)
-            .connectionSpecs(specs)
-            .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
-            .authenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
-            .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
-            .build()
-    }
 
     /**
      * Build a preconfigured client that uses a cache directory inside the [ORT data directory][ortDataDirectory].
@@ -116,39 +75,52 @@ object OkHttpClientHelper : Logging {
      */
     fun buildClient(block: BuilderConfiguration? = null): OkHttpClient =
         block?.let {
-            clients.getOrPut(it) { defaultClient.newBuilder().apply(block).build() }
-        } ?: defaultClient
+            clients.getOrPut(it) { okHttpClient.newBuilder().apply(block).build() }
+        } ?: okHttpClient
+}
 
-    /**
-     * Execute a [request] using the default client.
-     */
-    fun execute(request: Request): Response = defaultClient.execute(request)
+private const val CACHE_DIRECTORY = "cache/http"
+private val MAX_CACHE_SIZE_IN_BYTES = 1.gibibytes
+private const val READ_TIMEOUT_IN_SECONDS = 30L
 
-    /**
-     * Asynchronously enqueue a [request] using the default client and await its response.
-     */
-    suspend fun await(request: Request): Response = defaultClient.await(request)
+/**
+ * The default [OkHttpClient] for ORT to use.
+ */
+val okHttpClient: OkHttpClient by lazy {
+    OrtAuthenticator.install()
+    OrtProxySelector.install()
 
-    /**
-     * Download from [url] using the default client with optional [acceptEncoding] and return a [Result] with the
-     * [Response] and non-nullable [ResponseBody] on success, or a [Result] wrapping an [IOException] (which might be a
-     * [HttpDownloadError]) on failure.
-     */
-    fun download(url: String, acceptEncoding: String? = null): Result<Pair<Response, ResponseBody>> =
-        defaultClient.download(url, acceptEncoding)
+    val cacheDirectory = ortDataDirectory.resolve(CACHE_DIRECTORY)
+    val cache = Cache(cacheDirectory, MAX_CACHE_SIZE_IN_BYTES)
+    val specs = listOf(ConnectionSpec.MODERN_TLS, ConnectionSpec.COMPATIBLE_TLS, ConnectionSpec.CLEARTEXT)
 
-    /**
-     * Download from [url] using the default client and return a [Result] with a string representing the response body
-     * content on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError]) on failure.
-     */
-    fun downloadText(url: String): Result<String> = defaultClient.downloadText(url)
+    // OkHttp uses Java's global ProxySelector by default, but the Authenticator for a proxy needs to be set
+    // explicitly. Also note that the (non-proxy) authenticator is set here and is primarily intended for "reactive"
+    // authentication, but most often "preemptive" authentication via headers is required. For proxy authentication,
+    // OkHttp emulates preemptive authentication by sending a fake "OkHttp-Preemptive" response to the reactive
+    // proxy authenticator.
+    OkHttpClient.Builder()
+        .addNetworkInterceptor { chain ->
+            val request = chain.request()
+            val requestWithUserAgent = request.takeUnless { it.header("User-Agent") == null }
+                ?: request.newBuilder().header("User-Agent", Environment.ORT_USER_AGENT).build()
 
-    /**
-     * Download from [url] using the default client and return a [Result] with a file inside [directory] that holds the
-     * response body content on success, or a [Result] wrapping an [IOException] (which might be a [HttpDownloadError])
-     * on failure.
-     */
-    fun downloadFile(url: String, directory: File): Result<File> = defaultClient.downloadFile(url, directory)
+            runCatching {
+                chain.proceed(requestWithUserAgent)
+            }.onFailure {
+                it.showStackTrace()
+
+                OkHttpClientHelper.logger.error {
+                    "HTTP request to '${request.url}' failed with an exception: ${it.collectMessages()}"
+                }
+            }.getOrThrow()
+        }
+        .cache(cache)
+        .connectionSpecs(specs)
+        .readTimeout(Duration.ofSeconds(READ_TIMEOUT_IN_SECONDS))
+        .authenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
+        .proxyAuthenticator(Authenticator.JAVA_NET_AUTHENTICATOR)
+        .build()
 }
 
 /**

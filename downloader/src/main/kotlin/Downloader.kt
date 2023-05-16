@@ -44,8 +44,9 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.common.unpackTryAllTypes
-import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.utils.ort.downloadFile
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 
 /**
  * The class to download source code. The signatures of public functions in this class define the library API.
@@ -296,7 +297,7 @@ class Downloader(private val config: DownloaderConfiguration) {
             File(URI(sourceArtifact.url))
         } else {
             tempDir = createOrtTempDir()
-            OkHttpClientHelper.downloadFile(sourceArtifact.url, tempDir).getOrElse {
+            okHttpClient.downloadFile(sourceArtifact.url, tempDir).getOrElse {
                 tempDir.safeDeleteRecursively(force = true)
                 throw DownloadException("Failed to download source artifact.", it)
             }

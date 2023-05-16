@@ -61,6 +61,8 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.ort.HttpDownloadError
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
+import org.ossreviewtoolkit.utils.ort.downloadText
+import org.ossreviewtoolkit.utils.ort.okHttpClient
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 
 /**
@@ -350,7 +352,7 @@ class Bundler(
         // See http://guides.rubygems.org/rubygems-org-api-v2/.
         val url = "https://rubygems.org/api/v2/rubygems/$name/versions/$version.yaml"
 
-        return OkHttpClientHelper.downloadText(url).mapCatching {
+        return okHttpClient.downloadText(url).mapCatching {
             GemSpec.createFromGem(yamlMapper.readTree(it))
         }.onFailure {
             val error = (it as? HttpDownloadError) ?: run {
