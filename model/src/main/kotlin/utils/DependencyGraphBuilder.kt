@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model.utils
 
 import java.util.LinkedList
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -219,10 +218,11 @@ class DependencyGraphBuilder<D>(
      * Return a set of all the scope names known to this builder that start with the given [prefix]. If [unqualify] is
      * *true*, remove this prefix from the returned scope names.
      */
-    fun scopesFor(prefix: String, unqualify: Boolean = true): SortedSet<String> {
-        val qualifiedScopes = scopeMapping.keys.filter { it.startsWith(prefix) }
-        val scopes = qualifiedScopes.takeUnless { unqualify } ?: qualifiedScopes.map { it.substring(prefix.length) }
-        return scopes.toSortedSet()
+    fun scopesFor(prefix: String, unqualify: Boolean = true): Set<String> {
+        val qualifiedScopes = scopeMapping.keys.filterTo(mutableSetOf()) { it.startsWith(prefix) }
+
+        return qualifiedScopes.takeUnless { unqualify }
+            ?: qualifiedScopes.mapTo(mutableSetOf()) { it.substring(prefix.length) }
     }
 
     /**
@@ -231,7 +231,7 @@ class DependencyGraphBuilder<D>(
      * shared between multiple projects, scope names are given a project-specific prefix to make them unique. Using
      * this function, the scope names of a specific project can be retrieved.
      */
-    fun scopesFor(projectId: Identifier, unqualify: Boolean = true): SortedSet<String> =
+    fun scopesFor(projectId: Identifier, unqualify: Boolean = true): Set<String> =
         scopesFor(DependencyGraph.qualifyScope(projectId, ""), unqualify)
 
     /**
