@@ -346,11 +346,7 @@ class DownloaderCommand : OrtCommand(
         } catch (e: DownloadException) {
             e.showStackTrace()
 
-            val failureMessage = "Could not download '${pkg.id.toCoordinates()}': " +
-                    e.collectMessages()
-            failureMessages += failureMessage
-
-            logger.error { failureMessage }
+            failureMessages += e.collectMessages()
         }
     }
 
@@ -415,7 +411,7 @@ class DownloaderCommand : OrtCommand(
         }.onFailure {
             it.showStackTrace()
 
-            failureMessages += "Could not download '${dummyId.toCoordinates()}': ${it.collectMessages()}"
+            failureMessages += it.collectMessages()
         }
     }
 }
