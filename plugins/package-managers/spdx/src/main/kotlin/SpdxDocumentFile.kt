@@ -503,7 +503,7 @@ class SpdxDocumentFile(
                     "'${projectPackage.name}'."
         }
 
-        scopes += SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(sortedSetOf()) { type ->
+        SPDX_SCOPE_RELATIONSHIPS.mapNotNullTo(scopes) { type ->
             createScope(transitiveDocument, projectPackage.spdxId, type, packages)
         }
 
