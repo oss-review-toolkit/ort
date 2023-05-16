@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 import java.time.Instant
-import java.util.SortedMap
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -56,7 +56,8 @@ data class ScannerRun(
     /**
      * The [ScanResult]s for all [Package]s.
      */
-    val scanResults: SortedMap<Identifier, List<ScanResult>>,
+    @JsonPropertyOrder(alphabetic = true)
+    val scanResults: Map<Identifier, List<ScanResult>>,
 
     /**
      * The [AccessStatistics] for the scan results storage.
@@ -73,7 +74,7 @@ data class ScannerRun(
             endTime = Instant.EPOCH,
             environment = Environment(),
             config = ScannerConfiguration(),
-            scanResults = sortedMapOf(),
+            scanResults = emptyMap(),
             storageStats = AccessStatistics()
         )
     }
