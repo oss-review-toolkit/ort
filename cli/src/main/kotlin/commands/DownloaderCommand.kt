@@ -194,6 +194,11 @@ class DownloaderCommand : OrtCommand(
         help = "Do not download excluded projects or packages. Works only with the '--ort-file' parameter."
     ).flag()
 
+    private val dryRun by option(
+        "--dry-run",
+        help = "Do not actually download anything but just verify that all source code locations are valid."
+    ).flag()
+
     override fun run() {
         val failureMessages = mutableListOf<String>()
 
@@ -204,7 +209,8 @@ class DownloaderCommand : OrtCommand(
             }
         }
 
-        println("The download took $duration.")
+        val verb = if (dryRun) "verification" else "download"
+        println("The $verb took $duration.")
 
         if (failureMessages.isNotEmpty()) {
             logger.error {
@@ -289,7 +295,7 @@ class DownloaderCommand : OrtCommand(
 
         runBlocking { downloadAllPackages(packageDownloadDirs, failureMessages) }
 
-        if (archiveMode == ArchiveMode.BUNDLE) {
+        if (archiveMode == ArchiveMode.BUNDLE && !dryRun) {
             val zipFile = outputDir.resolve("archive.zip")
 
             logger.info { "Archiving directory '$outputDir' to '$zipFile'." }
@@ -313,9 +319,12 @@ class DownloaderCommand : OrtCommand(
             packageDownloadDirs.entries.mapIndexed { index, (pkg, dir) ->
                 async {
                     val progress = "${index + 1} of ${packageDownloadDirs.size}"
-                    println("Starting download for ${pkg.id.toCoordinates()} ($progress).")
+
+                    val verb = if (dryRun) "Verifying" else "Starting"
+                    println("$verb download for '${pkg.id.toCoordinates()}' ($progress).")
+
                     downloadPackage(pkg, dir, failureMessages).also {
-                        println("Finished download for ${pkg.id.toCoordinates()} ($progress).")
+                        if (!dryRun) println("Finished download for ${pkg.id.toCoordinates()} ($progress).")
                     }
                 }
             }.awaitAll()
@@ -324,9 +333,9 @@ class DownloaderCommand : OrtCommand(
 
     private fun downloadPackage(pkg: Package, dir: File, failureMessages: MutableList<String>) {
         try {
-            Downloader(ortConfig.downloader).download(pkg, dir)
+            Downloader(ortConfig.downloader).download(pkg, dir, dryRun)
 
-            if (archiveMode == ArchiveMode.ENTITY) {
+            if (archiveMode == ArchiveMode.ENTITY && !dryRun) {
                 val zipFile = outputDir.resolve("${pkg.id.toPath("-")}.zip")
 
                 logger.info { "Archiving directory '$dir' to '$zipFile'." }
@@ -406,7 +415,8 @@ class DownloaderCommand : OrtCommand(
             // convenience as often the latest revision (referred to by some VCS-specific symbolic name) of a
             // project needs to be downloaded.
             val config = ortConfig.downloader.copy(allowMovingRevisions = true)
-            val provenance = Downloader(config).download(dummyPackage, outputDir)
+
+            val provenance = Downloader(config).download(dummyPackage, outputDir, dryRun)
             println("Successfully downloaded $provenance.")
         }.onFailure {
             it.showStackTrace()
