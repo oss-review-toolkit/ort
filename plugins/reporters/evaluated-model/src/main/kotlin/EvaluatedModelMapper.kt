@@ -203,7 +203,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun createScopes(project: Project) {
-        input.ortResult.dependencyNavigator.scopeNames(project).forEach { scope ->
+        input.ortResult.dependencyNavigator.scopeNames(project).sorted().forEach { scope ->
             scopes[scope] = EvaluatedScope(
                 name = scope,
                 excludes = scopeExcludes.addIfRequired(input.ortResult.getExcludes().findScopeExcludes(scope))
@@ -507,7 +507,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             return createDependencyNode(dependency, linkage, issues, children)
         }
 
-        val scopeTrees = input.ortResult.dependencyNavigator.scopeNames(project).map { scope ->
+        val scopeTrees = input.ortResult.dependencyNavigator.scopeNames(project).sorted().map { scope ->
             // Deduplication should not happen across scopes.
             visitedNodes.clear()
 
@@ -690,7 +690,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
     }
 
     private fun addShortestPaths(project: Project) {
-        input.ortResult.dependencyNavigator.getShortestPaths(project).forEach { (scopeName, scopePaths) ->
+        input.ortResult.dependencyNavigator.getShortestPaths(project).toSortedMap().forEach { (scopeName, scopePaths) ->
             scopePaths.forEach { (id, path) ->
                 val pkg = packages.getValue(id)
 
