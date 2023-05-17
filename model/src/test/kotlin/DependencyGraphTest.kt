@@ -242,7 +242,7 @@ private fun id(group: String, artifact: String, version: String): Identifier =
  */
 private fun scopeDependencies(scopes: Set<Scope>, name: String): String = buildString {
     scopes.find { it.name == name }?.let { scope ->
-        scope.dependencies.forEach { dumpDependencies(it) }
+        scope.dependencies.sorted().forEach { dumpDependencies(it) }
     }
 }
 
@@ -253,7 +253,7 @@ private fun StringBuilder.dumpDependencies(ref: PackageReference) {
     append(ref.id)
     if (ref.dependencies.isNotEmpty()) {
         append('<')
-        ref.dependencies.forEach { dumpDependencies(it) }
+        ref.dependencies.sorted().forEach { dumpDependencies(it) }
         append('>')
     }
 }
