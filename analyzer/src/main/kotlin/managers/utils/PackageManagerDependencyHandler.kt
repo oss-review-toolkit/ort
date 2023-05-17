@@ -107,7 +107,7 @@ class PackageManagerDependencyHandler(
                     id = project.id,
                     linkage = packageManagerDependency.linkage,
                     issues = emptyList(),
-                    dependencies = dependencies.map { it.getStableReference() }.toList().asSequence()
+                    dependencies = dependencies.map { it.getStableReference() }
                 )
             }
         } ?: listOf(DependencyNodeDelegate(dependency.getStableReference()))
