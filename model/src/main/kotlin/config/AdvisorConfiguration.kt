@@ -135,7 +135,20 @@ data class OssIndexConfiguration(
      * The base URL of the OSS Index REST API. If undefined, default base URL for the REST API of the public OSS Index
      * service.
      */
-    val serverUrl: String? = null
+    val serverUrl: String? = null,
+
+    /**
+     * The username to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
+     */
+    val username: String? = null,
+
+    /**
+     * The password to use for authentication. If not both [username] and [password] are provided, authentication is
+     * disabled.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    val password: String? = null
 )
 
 /**
