@@ -253,7 +253,8 @@ private fun createProject(
 /**
  * Create a [Scope] with the given [name] and a synthetic dependency.
  */
-private fun createScope(name: String): Scope {
-    val dependencies = sortedSetOf(PackageReference(Identifier.EMPTY.copy(name = "dep$name")))
-    return Scope(name, dependencies)
-}
+private fun createScope(name: String) =
+    Scope(
+        name = name,
+        dependencies = sortedSetOf(PackageReference(Identifier.EMPTY.copy(name = "dep$name")))
+    )
