@@ -2,5 +2,5 @@ jdk:
   - openjdk11
 
 install:
-  # Exclude dokkaJavadoc tasks to save build time.
-  - ./gradlew --no-daemon --stacktrace -x dokkaJavadoc publishToMavenLocal
+  # Exclude generation of docs artifacts to save build time.
+  - ./gradlew --no-daemon --stacktrace -x docsJavadocJar publishToMavenLocal
