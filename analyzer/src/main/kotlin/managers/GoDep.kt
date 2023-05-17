@@ -116,7 +116,7 @@ class GoDep(
 
         val projects = parseProjects(workingDir, gopath)
         val packages = mutableSetOf<Package>()
-        val packageRefs = mutableListOf<PackageReference>()
+        val packageRefs = mutableSetOf<PackageReference>()
 
         for (project in projects) {
             // parseProjects() made sure that all entries contain these keys
