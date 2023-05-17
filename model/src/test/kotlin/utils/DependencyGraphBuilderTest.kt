@@ -296,7 +296,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, createDependency("g1", "a1", "1"))
                 .addDependency("anotherScope", createDependency("g2", "a2", "2"))
 
-            builder.scopesFor(projectId) shouldBe sortedSetOf("compile", "test")
+            builder.scopesFor(projectId) should containExactlyInAnyOrder("compile", "test")
         }
 
         "collect information about qualified scopes of projects" {
@@ -310,7 +310,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 .addDependency(scope1, createDependency("g1", "a1", "1"))
                 .addDependency("anotherScope", createDependency("g2", "a2", "2"))
 
-            builder.scopesFor(projectId, unqualify = false) shouldBe sortedSetOf(scope2, scope1)
+            builder.scopesFor(projectId, unqualify = false) should containExactlyInAnyOrder(scope2, scope1)
         }
     }
 
