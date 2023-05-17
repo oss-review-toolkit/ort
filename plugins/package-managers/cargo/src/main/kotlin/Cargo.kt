@@ -208,7 +208,7 @@ class Cargo(
             return Scope(scope, transitiveDependencies)
         }
 
-        val scopes = listOfNotNull(
+        val scopes = setOfNotNull(
             getTransitiveDependencies(groupedDependencies[""], "dependencies"),
             getTransitiveDependencies(groupedDependencies["dev"], "dev-dependencies"),
             getTransitiveDependencies(groupedDependencies["build"], "build-dependencies")
@@ -231,7 +231,7 @@ class Cargo(
             vcs = projectPkg.vcs,
             vcsProcessed = processProjectVcs(workingDir, projectPkg.vcs, homepageUrl),
             homepageUrl = homepageUrl,
-            scopeDependencies = scopes.toSortedSet()
+            scopeDependencies = scopes
         )
 
         val nonProjectPackages = packages

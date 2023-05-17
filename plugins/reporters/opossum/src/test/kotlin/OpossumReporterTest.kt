@@ -263,7 +263,7 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = setOf("MIT"),
                         definitionFilePath = "pom.xml",
                         homepageUrl = "first project's homepage",
-                        scopeDependencies = sortedSetOf(
+                        scopeDependencies = setOf(
                             Scope(
                                 name = "compile",
                                 dependencies = sortedSetOf(
@@ -300,7 +300,7 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = setOf("BSD-3-Clause"),
                         definitionFilePath = "npm-project/package.json",
                         homepageUrl = "first project's homepage",
-                        scopeDependencies = sortedSetOf(
+                        scopeDependencies = setOf(
                             Scope(
                                 name = "devDependencies",
                                 dependencies = sortedSetOf(

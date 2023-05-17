@@ -85,7 +85,7 @@ class Carthage(
                     declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY),
-                    scopeDependencies = sortedSetOf(),
+                    scopeDependencies = emptySet(),
                     homepageUrl = ""
                 ),
                 packages = parseCarthageDependencies(definitionFile)

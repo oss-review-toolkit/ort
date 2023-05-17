@@ -488,7 +488,7 @@ class SpdxDocumentFile(
         val spdxDocument = transitiveDocument.rootDocument.document
 
         val packages = mutableSetOf<Package>()
-        val scopes = sortedSetOf<Scope>()
+        val scopes = mutableSetOf<Scope>()
 
         val projectPackage = if (!spdxDocument.isProject()) {
             spdxDocument.packages.first()

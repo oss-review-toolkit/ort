@@ -145,7 +145,7 @@ val scopeExcluded = Scope(
 val projectExcluded = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-excluded:1.0"),
     definitionFilePath = "excluded/pom.xml",
-    scopeDependencies = sortedSetOf(scopeExcluded)
+    scopeDependencies = setOf(scopeExcluded)
 )
 
 val packageRefDynamicallyLinked = packageDynamicallyLinked.toReference(PackageLinkage.DYNAMIC)
@@ -168,7 +168,7 @@ val scopeIncluded = Scope(
 val projectIncluded = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
-    scopeDependencies = sortedSetOf(scopeIncluded)
+    scopeDependencies = setOf(scopeIncluded)
 )
 
 val allProjects = setOf(

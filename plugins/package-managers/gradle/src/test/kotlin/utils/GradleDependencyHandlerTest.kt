@@ -41,7 +41,6 @@ import io.mockk.slot
 
 import java.io.IOException
 import java.lang.IllegalArgumentException
-import java.util.SortedSet
 
 import org.apache.maven.project.ProjectBuildingException
 
@@ -409,7 +408,7 @@ private fun OrtDependency.toId() = Identifier(type(), groupId, artifactId, versi
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
  */
 private fun scopeDependencies(
-    scopes: SortedSet<Scope>,
+    scopes: Set<Scope>,
     scopeName: String
 ): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()

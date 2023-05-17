@@ -74,12 +74,12 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val project1 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
-        scopeDependencies = sortedSetOf(scope1),
+        scopeDependencies = setOf(scope1),
         definitionFilePath = "project1"
     )
     private val project2 = Project.EMPTY.copy(
         id = Identifier("type-2", "namespace-2", "project-2", "version-2"),
-        scopeDependencies = sortedSetOf(scope1, scope2)
+        scopeDependencies = setOf(scope1, scope2)
     )
     private val project3 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-3", "project-1.2", "version-1"),
@@ -350,7 +350,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 val project = Project.EMPTY.copy(
                     id = Identifier("type", "namespace", "project", "version"),
-                    scopeDependencies = sortedSetOf(scope),
+                    scopeDependencies = setOf(scope),
                     definitionFilePath = "project"
                 )
 

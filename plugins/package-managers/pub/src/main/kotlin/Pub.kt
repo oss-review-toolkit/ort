@@ -245,7 +245,7 @@ class Pub(
         }
 
         val packages = mutableMapOf<Identifier, Package>()
-        val scopes = sortedSetOf<Scope>()
+        val scopes = mutableSetOf<Scope>()
         val issues = mutableListOf<Issue>()
         val projectAnalyzerResults = mutableListOf<ProjectAnalyzerResult>()
 
@@ -472,7 +472,7 @@ class Pub(
         return ProjectAnalyzerResult(Project.EMPTY, emptySet(), listOf(issue))
     }
 
-    private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: SortedSet<Scope>): Project {
+    private fun parseProject(definitionFile: File, pubspec: JsonNode, scopes: Set<Scope>): Project {
         // See https://dart.dev/tools/pub/pubspec for supported fields.
         val rawName = pubspec["name"]?.textValue() ?: definitionFile.parentFile.name
         val homepageUrl = pubspec["homepage"].textValueOrEmpty()

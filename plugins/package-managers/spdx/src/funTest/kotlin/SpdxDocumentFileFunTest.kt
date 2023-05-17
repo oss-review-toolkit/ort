@@ -95,7 +95,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         path = vcsDir.getPathToRoot(curlPackageFile.parentFile)
                     ),
                     homepageUrl = "https://curl.haxx.se/",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope("default")
                     )
                 ),
@@ -116,7 +116,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         path = vcsDir.getPathToRoot(opensslPackageFile.parentFile)
                     ),
                     homepageUrl = "https://www.openssl.org/",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope("default")
                     )
                 ),
@@ -137,7 +137,7 @@ class SpdxDocumentFileFunTest : WordSpec({
                         path = vcsDir.getPathToRoot(zlibPackageFile.parentFile)
                     ),
                     homepageUrl = "http://zlib.net",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope("default")
                     )
                 ),

@@ -85,7 +85,7 @@ class ProjectTest : WordSpec({
         "fail if both scopeDependencies and scopeNames are provided" {
             shouldThrow<IllegalArgumentException> {
                 Project.EMPTY.copy(
-                    scopeDependencies = sortedSetOf(mockk()),
+                    scopeDependencies = setOf(mockk()),
                     scopeNames = sortedSetOf("test", "compile", "other")
                 )
             }

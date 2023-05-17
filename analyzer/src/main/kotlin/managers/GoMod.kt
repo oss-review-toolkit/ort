@@ -124,7 +124,7 @@ class GoMod(
                 graph.nodes.filterTo(mutableSetOf()) { it.name in moduleNames }
             }
 
-            val scopes = sortedSetOf(
+            val scopes = setOf(
                 Scope(
                     name = "main",
                     dependencies = graph.subgraph(dependenciesScopePackageIds).toPackageReferenceForest(projectId)

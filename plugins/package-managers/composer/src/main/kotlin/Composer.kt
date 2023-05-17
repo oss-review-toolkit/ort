@@ -124,7 +124,7 @@ class Composer(
         }
 
         if (!hasDependencies) {
-            val project = parseProject(definitionFile, scopes = sortedSetOf())
+            val project = parseProject(definitionFile, scopes = emptySet())
             val result = ProjectAnalyzerResult(project, packages = emptySet())
 
             return listOf(result)
@@ -145,7 +145,7 @@ class Composer(
         // the "replacing" package.
         val virtualPackages = parseVirtualPackageNames(packages, manifest, json)
 
-        val scopes = sortedSetOf(
+        val scopes = setOf(
             parseScope("require", manifest, json, packages, virtualPackages),
             parseScope("require-dev", manifest, json, packages, virtualPackages)
         )
@@ -212,7 +212,7 @@ class Composer(
         return packageReferences.toSortedSet()
     }
 
-    private fun parseProject(definitionFile: File, scopes: SortedSet<Scope>): Project {
+    private fun parseProject(definitionFile: File, scopes: Set<Scope>): Project {
         logger.info { "Parsing project metadata from '$definitionFile'..." }
 
         val json = definitionFile.readTree()

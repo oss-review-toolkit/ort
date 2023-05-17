@@ -64,7 +64,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                     )
                 )
 
-                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
                 val paths = navigator.getShortestPaths(project).getValue(scope.name)
 
                 paths should containExactly(
@@ -84,7 +84,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
         "dependencyTreeDepth" should {
             "return 0 if the scope does not contain any package" {
                 val scope = Scope(name = "test", dependencies = sortedSetOf())
-                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
 
                 navigator.dependencyTreeDepth(project, scope.name) shouldBe 0
             }
@@ -97,7 +97,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                         PackageReference(id = Identifier("b"))
                     )
                 )
-                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
 
                 navigator.dependencyTreeDepth(project, scope.name) shouldBe 1
             }
@@ -111,7 +111,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                         }
                     )
                 )
-                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
 
                 navigator.dependencyTreeDepth(project, scope.name) shouldBe 2
             }
@@ -129,7 +129,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                         pkg("b")
                     )
                 )
-                val project = Project.EMPTY.copy(scopeDependencies = sortedSetOf(scope))
+                val project = Project.EMPTY.copy(scopeDependencies = setOf(scope))
 
                 navigator.dependencyTreeDepth(project, scope.name) shouldBe 3
             }

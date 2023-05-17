@@ -116,7 +116,7 @@ fun Collection<PackageReference>.withInvariantIssues(): SortedSet<PackageReferen
 
 fun ProjectAnalyzerResult.withInvariantIssues() = copy(
     project = project.copy(
-        scopeDependencies = project.scopeDependencies?.mapTo(sortedSetOf()) { scope ->
+        scopeDependencies = project.scopeDependencies?.mapTo(mutableSetOf()) { scope ->
             scope.copy(dependencies = scope.dependencies.withInvariantIssues())
         }
     ),

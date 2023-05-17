@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Scope
 
 class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
     override fun convert(value: Set<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)
@@ -44,6 +45,10 @@ class PackageSortedSetConverter : StdConverter<Set<Package>, SortedSet<Package>>
 
 class ProjectSortedSetConverter : StdConverter<Set<Project>, SortedSet<Project>>() {
     override fun convert(value: Set<Project>) = value.toSortedSet(compareBy { it.id })
+}
+
+class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {
+    override fun convert(value: Set<Scope>) = value.toSortedSet()
 }
 
 class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, SortedSet<SnippetFinding>>() {

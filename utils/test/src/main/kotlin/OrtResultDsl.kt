@@ -75,7 +75,7 @@ class OrtResultBuilder {
                 id = Identifier(id),
                 declaredLicenses = declaredLicenses,
                 declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses),
-                scopeDependencies = sortedSetOf(scope)
+                scopeDependencies = setOf(scope)
             )
         }
     }

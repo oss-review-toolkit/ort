@@ -185,7 +185,7 @@ class GoDep(
                     vcs = VcsInfo.EMPTY,
                     vcsProcessed = projectVcs,
                     homepageUrl = "",
-                    scopeDependencies = sortedSetOf(scope)
+                    scopeDependencies = setOf(scope)
                 ),
                 packages = packages
             )

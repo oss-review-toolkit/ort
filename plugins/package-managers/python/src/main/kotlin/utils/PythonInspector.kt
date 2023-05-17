@@ -197,7 +197,7 @@ internal fun PythonInspector.Result.toOrtProject(
     val projectData = setupProject?.packageData?.singleOrNull()
     val homepageUrl = projectData?.homepageUrl.orEmpty()
 
-    val scopes = sortedSetOf(Scope("install", resolvedDependenciesGraph.toPackageReferences()))
+    val scopes = setOf(Scope("install", resolvedDependenciesGraph.toPackageReferences()))
 
     return Project(
         id = id,

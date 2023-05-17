@@ -162,7 +162,7 @@ private val ortResult = OrtResult(
                     declaredLicenses = setOf("MIT"),
                     definitionFilePath = "",
                     homepageUrl = "first project's homepage",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope(
                             name = "compile",
                             dependencies = sortedSetOf(

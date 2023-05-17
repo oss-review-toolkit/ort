@@ -170,7 +170,7 @@ internal fun NuGetInspector.Result.toOrtProject(
     }
 
     val packageReferences = nestedPackages.toPackageReferences()
-    val scopes = sortedSetOf(Scope(headers.first().projectFramework, packageReferences))
+    val scopes = setOf(Scope(headers.first().projectFramework, packageReferences))
 
     return Project(
         id = id,

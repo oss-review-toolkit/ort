@@ -154,22 +154,22 @@ data class DependencyGraph(
      * Transform the data stored in this object to the classical layout of dependency information, which is a set of
      * [Scope]s referencing the packages they depend on.
      */
-    fun createScopes(): SortedSet<Scope> = createScopesFor(scopes, unqualify = true)
+    fun createScopes(): Set<Scope> = createScopesFor(scopes, unqualify = true)
 
     /**
      * Transform a subset of the data stored in this object to the classical layout of dependency information. This is
      * analogous to [createScopes], but only the provided [scopeNames] are taken into account. If [unqualify] is
      * *true*, remove qualifiers from scope names before constructing the [Scope]s.
      */
-    fun createScopes(scopeNames: Set<String>, unqualify: Boolean = true): SortedSet<Scope> =
+    fun createScopes(scopeNames: Set<String>, unqualify: Boolean = true): Set<Scope> =
         createScopesFor(scopes.filterKeys { it in scopeNames }, unqualify)
 
     /**
      * Convert the given [map] with scope information to a set of [Scope]s. [Optionally][unqualify] remove qualifiers
      * from scope names.
      */
-    private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>, unqualify: Boolean): SortedSet<Scope> =
-        map.mapTo(sortedSetOf()) { entry ->
+    private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>, unqualify: Boolean): Set<Scope> =
+        map.mapTo(mutableSetOf()) { entry ->
             val dependencies = entry.value.mapTo(sortedSetOf()) { index ->
                 referenceMapping[index.toKey()] ?: error("Could not resolve dependency index $index.")
             }
