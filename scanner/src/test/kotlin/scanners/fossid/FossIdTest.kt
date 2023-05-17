@@ -344,19 +344,9 @@ class FossIdTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
-            val pendingFilesIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
+            val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
                 Issue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
             }
-            val urlMappingIssues = (1..5).map {
-                Issue(
-                    Instant.EPOCH,
-                    "FossId",
-                    "Cannot determine PURL type for url 'url$it' and provider 'null'.",
-                    Severity.ERROR
-                )
-            }
-            // Add the mapping issues from the snippet fake URLs: 5 issues for each pending file.
-            val expectedIssues = pendingFilesIssues + urlMappingIssues + urlMappingIssues
 
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues
         }
