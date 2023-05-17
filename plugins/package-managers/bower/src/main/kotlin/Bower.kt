@@ -24,7 +24,6 @@ package org.ossreviewtoolkit.plugins.packagemanagers.bower
 import com.fasterxml.jackson.databind.JsonNode
 
 import java.io.File
-import java.util.SortedSet
 import java.util.Stack
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
@@ -241,7 +240,7 @@ private fun parseDependencyTree(
     node: JsonNode,
     scopeName: String,
     alternativeNodes: Map<String, JsonNode> = getNodesWithCompleteDependencies(node)
-): SortedSet<PackageReference> {
+): Set<PackageReference> {
     val result = mutableSetOf<PackageReference>()
 
     if (!hasCompleteDependencies(node, scopeName)) {
@@ -265,5 +264,5 @@ private fun parseDependencyTree(
         result += packageReference
     }
 
-    return result.toSortedSet()
+    return result
 }

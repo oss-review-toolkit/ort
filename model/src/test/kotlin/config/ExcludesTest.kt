@@ -56,9 +56,9 @@ class ExcludesTest : WordSpec() {
     private val pathExclude3 = PathExclude("**/*.ext", PathExcludeReason.BUILD_TOOL_OF, "")
     private val pathExclude4 = PathExclude("**/file.ext", PathExcludeReason.BUILD_TOOL_OF, "")
 
-    private val scope1 = Scope("scope1", sortedSetOf(PackageReference(id)))
-    private val scope2 = Scope("scope2", sortedSetOf(PackageReference(id)))
-    private val scopeProject1 = Scope("scopeProject1", sortedSetOf(PackageReference(project1.id)))
+    private val scope1 = Scope("scope1", setOf(PackageReference(id)))
+    private val scope2 = Scope("scope2", setOf(PackageReference(id)))
+    private val scopeProject1 = Scope("scopeProject1", setOf(PackageReference(project1.id)))
 
     private val scopeExclude1 = ScopeExclude("scope1", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")
     private val scopeExclude2 = ScopeExclude("scope2", ScopeExcludeReason.PROVIDED_DEPENDENCY_OF, "")

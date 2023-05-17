@@ -30,7 +30,7 @@ import io.kotest.matchers.string.endWith
 class PackageReferenceTest : WordSpec() {
     companion object {
         fun pkgRefFromIdStr(id: String, vararg dependencies: PackageReference) =
-            PackageReference(Identifier(id), dependencies = dependencies.toSortedSet())
+            PackageReference(Identifier(id), dependencies = dependencies.toSet())
     }
 
     private val node111 = pkgRefFromIdStr("::node1_1_1")

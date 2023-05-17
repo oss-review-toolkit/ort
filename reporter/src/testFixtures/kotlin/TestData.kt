@@ -96,7 +96,7 @@ val ORT_RESULT = OrtResult(
                     scopeDependencies = setOf(
                         Scope(
                             name = "dependencies",
-                            dependencies = sortedSetOf(
+                            dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("NPM:@ort:no-license-file:1.0")
                                 ),
@@ -116,7 +116,7 @@ val ORT_RESULT = OrtResult(
                         ),
                         Scope(
                             name = "devDependencies",
-                            dependencies = sortedSetOf(
+                            dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("NPM:@ort:declared-license:1.0")
                                 ),
@@ -133,7 +133,7 @@ val ORT_RESULT = OrtResult(
                     scopeDependencies = setOf(
                         Scope(
                             name = "dependencies",
-                            dependencies = sortedSetOf()
+                            dependencies = emptySet()
                         )
                     )
                 ),

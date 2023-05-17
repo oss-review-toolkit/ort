@@ -20,12 +20,13 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.Deque
 import java.util.LinkedList
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.utils.PackageLinkageValueFilter
+import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
 
 /**
  * A human-readable reference to a software [Package]. Each package reference itself refers to other package
@@ -51,7 +52,8 @@ data class PackageReference(
      * The set of [references to packages][PackageReference] this package depends on. Note that this list depends on the
      * [scope][Scope] in which this package is referenced.
      */
-    val dependencies: SortedSet<PackageReference> = sortedSetOf(),
+    @JsonSerialize(converter = PackageReferenceSortedSetConverter::class)
+    val dependencies: Set<PackageReference> = emptySet(),
 
     /**
      * A list of [Issue]s that occurred handling this [PackageReference].
@@ -116,10 +118,10 @@ data class PackageReference(
      * return the modified [PackageReference]. The tree is traversed depth-first (post-order).
      */
     fun traverse(transform: (PackageReference) -> PackageReference): PackageReference {
-        val transformedDependencies = dependencies.map {
+        val transformedDependencies = dependencies.mapTo(mutableSetOf()) {
             it.traverse(transform)
         }
-        return transform(copy(dependencies = transformedDependencies.toSortedSet()))
+        return transform(copy(dependencies = transformedDependencies))
     }
 
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = block(dependencies.asSequence())

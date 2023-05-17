@@ -121,10 +121,10 @@ class DependencyGraphBuilderTest : WordSpec({
                 "org.apache.commons",
                 "commons-configuration2",
                 "2.7",
-                dependencies = listOf(dep1, dep2)
+                dependencies = setOf(dep1, dep2)
             )
-            val dep4 = createDependency("org.apache.commons", "commons-csv", "1.5", dependencies = listOf(dep1))
-            val dep5 = createDependency("com.acme", "dep", "0.7", dependencies = listOf(dep3))
+            val dep4 = createDependency("org.apache.commons", "commons-csv", "1.5", dependencies = setOf(dep1))
+            val dep5 = createDependency("com.acme", "dep", "0.7", dependencies = setOf(dep3))
 
             val graph = createGraphBuilder()
                 .addDependency(scope1, dep1)
@@ -151,21 +151,21 @@ class DependencyGraphBuilderTest : WordSpec({
             val depLog = createDependency("commons-logging", "commons-logging", "1.2")
             val depConfig1 = createDependency(
                 "org.apache.commons", "commons-configuration2", "2.7",
-                dependencies = listOf(depLog, depLang)
+                dependencies = setOf(depLog, depLang)
             )
             val depConfig2 = createDependency(
                 "org.apache.commons", "commons-configuration2", "2.7",
-                dependencies = listOf(depLang)
+                dependencies = setOf(depLang)
             )
             val depAcme = createDependency(
                 "com.acme", "lib-full", "1.0",
-                dependencies = listOf(depConfig1, depLang)
+                dependencies = setOf(depConfig1, depLang)
             )
             val depAcmeExclude = createDependency(
                 "com.acme", "lib-exclude", "1.1",
-                dependencies = listOf(depConfig2)
+                dependencies = setOf(depConfig2)
             )
-            val depLib = createDependency("com.business", "lib", "1", dependencies = listOf(depConfig1, depAcmeExclude))
+            val depLib = createDependency("com.business", "lib", "1", dependencies = setOf(depConfig1, depAcmeExclude))
 
             val graph = createGraphBuilder()
                 .addDependency(scope, depAcme)
@@ -182,15 +182,15 @@ class DependencyGraphBuilderTest : WordSpec({
             val depLog = createDependency("commons-logging", "commons-logging", "1.2")
             val depConfig1 = createDependency(
                 "org.apache.commons", "commons-configuration2", "2.7",
-                dependencies = listOf(depLog, depLang)
+                dependencies = setOf(depLog, depLang)
             )
             val depConfig2 = createDependency(
                 "org.apache.commons", "commons-configuration2", "2.7",
-                dependencies = listOf(depLang)
+                dependencies = setOf(depLang)
             )
             val depAcmeExclude = createDependency(
                 "com.acme", "lib-exclude", "1.1",
-                dependencies = listOf(depConfig2)
+                dependencies = setOf(depConfig2)
             )
 
             val graph = createGraphBuilder()
@@ -207,8 +207,8 @@ class DependencyGraphBuilderTest : WordSpec({
         "deal with cycles in dependencies" {
             val scope = "CyclicScope"
             val depCyc1 = createDependency("org.cyclic", "cyclic", "77.7")
-            val depFoo = createDependency("org.foo", "foo", "1.2.0", dependencies = listOf(depCyc1))
-            val depCyc2 = createDependency("org.cyclic", "cyclic", "77.7", dependencies = listOf(depFoo))
+            val depFoo = createDependency("org.foo", "foo", "1.2.0", dependencies = setOf(depCyc1))
+            val depCyc2 = createDependency("org.cyclic", "cyclic", "77.7", dependencies = setOf(depFoo))
 
             val graph = createGraphBuilder()
                 .addDependency(scope, depCyc2)
@@ -225,7 +225,7 @@ class DependencyGraphBuilderTest : WordSpec({
         "check for illegal references when building the graph" {
             val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val depNoPkg = createDependency(NO_PACKAGE_NAMESPACE, "invalid", "1.2")
-            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depNoPkg))
+            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = setOf(depNoPkg))
 
             val exception = shouldThrow<IllegalArgumentException> {
                 createGraphBuilder()
@@ -243,7 +243,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 issues = listOf(Issue(source = "test", message = "test issue"))
             )
             val depLog =
-                createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depIssuesPkg))
+                createDependency("commons-logging", "commons-logging", "1.2", dependencies = setOf(depIssuesPkg))
 
             createGraphBuilder()
                 .addDependency("s", depLang)
@@ -263,7 +263,7 @@ class DependencyGraphBuilderTest : WordSpec({
                 "commons-logging",
                 "commons-logging",
                 "1.2",
-                dependencies = listOf(depProjectDynamicPkg, depProjectStaticPkg)
+                dependencies = setOf(depProjectDynamicPkg, depProjectStaticPkg)
             )
 
             createGraphBuilder()
@@ -275,7 +275,7 @@ class DependencyGraphBuilderTest : WordSpec({
         "allow disabling the check for illegal references" {
             val depLang = createDependency("org.apache.commons", "commons-lang3", "3.11")
             val depNoPkg = createDependency(NO_PACKAGE_NAMESPACE, "invalid", "1.2")
-            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = listOf(depNoPkg))
+            val depLog = createDependency("commons-logging", "commons-logging", "1.2", dependencies = setOf(depNoPkg))
 
             createGraphBuilder()
                 .addDependency("s", depLang)
@@ -383,11 +383,11 @@ private fun createDependency(
     group: String,
     artifact: String,
     version: String,
-    dependencies: List<PackageReference> = emptyList()
+    dependencies: Set<PackageReference> = emptySet()
 ) =
     PackageReference(
         id = Identifier("test", group, artifact, version),
-        dependencies = dependencies.toSortedSet()
+        dependencies = dependencies
     )
 
 /**

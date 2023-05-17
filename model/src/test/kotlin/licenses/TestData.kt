@@ -117,7 +117,7 @@ val allPackages = setOf(
 
 val scope = Scope(
     name = "compile",
-    dependencies = sortedSetOf(
+    dependencies = setOf(
         packageWithoutLicense.toReference(),
         packageWithConcludedLicense.toReference(),
         packageWithDeclaredLicense.toReference(),

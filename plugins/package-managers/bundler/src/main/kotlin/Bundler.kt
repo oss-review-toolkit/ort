@@ -250,7 +250,7 @@ class Bundler(
             parseDependency(workingDir, projectId, it, gemSpecs, scopeDependencies, issues)
         }
 
-        scopes += Scope(groupName, scopeDependencies.toSortedSet())
+        scopes += Scope(groupName, scopeDependencies)
     }
 
     private fun parseDependency(
@@ -281,7 +281,7 @@ class Bundler(
                     parseDependency(workingDir, projectId, it, gemSpecs, transitiveDependencies, issues)
                 }
 
-                scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies.toSortedSet())
+                scopeDependencies += PackageReference(gemId, dependencies = transitiveDependencies)
             }
         }.onFailure {
             it.showStackTrace()

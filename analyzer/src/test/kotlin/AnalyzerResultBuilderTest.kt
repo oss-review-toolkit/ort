@@ -66,11 +66,11 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
     private val pkgRef1 = package1.toReference(issues = listOf(issue1))
     private val pkgRef2 = package2.toReference(
-        dependencies = sortedSetOf(package3.toReference(issues = listOf(issue2)))
+        dependencies = setOf(package3.toReference(issues = listOf(issue2)))
     )
 
-    private val scope1 = Scope("scope-1", sortedSetOf(pkgRef1))
-    private val scope2 = Scope("scope-2", sortedSetOf(pkgRef2))
+    private val scope1 = Scope("scope-1", setOf(pkgRef1))
+    private val scope2 = Scope("scope-2", setOf(pkgRef2))
 
     private val project1 = Project.EMPTY.copy(
         id = Identifier("type-1", "namespace-1", "project-1", "version-1"),
@@ -339,11 +339,11 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 val scope = Scope(
                     name = "scope",
-                    dependencies = sortedSetOf(
+                    dependencies = setOf(
                         packageManagerDependency,
                         PackageReference(
                             id = pkgRef1.id,
-                            dependencies = sortedSetOf(packageManagerDependency)
+                            dependencies = setOf(packageManagerDependency)
                         )
                     )
                 )
@@ -370,19 +370,19 @@ class AnalyzerResultBuilderTest : WordSpec() {
                         project.scopes shouldContainExactly sortedSetOf(
                             Scope(
                                 name = "scope",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = project1.id,
-                                        dependencies = sortedSetOf(
+                                        dependencies = setOf(
                                             PackageReference(id = package1.id)
                                         )
                                     ),
                                     PackageReference(
                                         id = package1.id,
-                                        dependencies = sortedSetOf(
+                                        dependencies = setOf(
                                             PackageReference(
                                                 id = project1.id,
-                                                dependencies = sortedSetOf(
+                                                dependencies = setOf(
                                                     PackageReference(id = package1.id)
                                                 )
                                             )

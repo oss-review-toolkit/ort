@@ -22,7 +22,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.spdx
 
 import java.io.File
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -335,7 +334,7 @@ class SpdxDocumentFile(
         pkgId: String,
         doc: SpdxResolvedDocument,
         packages: MutableSet<Package>
-    ): SortedSet<PackageReference> =
+    ): Set<PackageReference> =
         getDependencies(pkgId, doc, packages, SpdxRelationship.Type.DEPENDENCY_OF) { target ->
             val issues = mutableListOf<Issue>()
             getPackageManagerDependency(target, doc) ?: doc.getSpdxPackageForId(target, issues)?.let { dependency ->
@@ -390,8 +389,8 @@ class SpdxDocumentFile(
         packages: MutableSet<Package>,
         dependencyOfRelation: SpdxRelationship.Type,
         dependsOnCase: (String) -> PackageReference? = { null }
-    ): SortedSet<PackageReference> =
-        doc.relationships.mapNotNullTo(sortedSetOf()) { (source, relation, target, _) ->
+    ): Set<PackageReference> =
+        doc.relationships.mapNotNullTo(mutableSetOf()) { (source, relation, target, _) ->
             val issues = mutableListOf<Issue>()
 
             val isDependsOnRelation = relation == SpdxRelationship.Type.DEPENDS_ON || hasDefaultScopeLinkage(

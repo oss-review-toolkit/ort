@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -171,7 +170,7 @@ class Composer(
         packages: Map<String, Package>,
         virtualPackages: Set<String>,
         dependencyBranch: List<String> = emptyList()
-    ): SortedSet<PackageReference> {
+    ): Set<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
 
         dependencies.filterNot { packageName ->
@@ -209,7 +208,7 @@ class Composer(
             }
         }
 
-        return packageReferences.toSortedSet()
+        return packageReferences
     }
 
     private fun parseProject(definitionFile: File, scopes: Set<Scope>): Project {

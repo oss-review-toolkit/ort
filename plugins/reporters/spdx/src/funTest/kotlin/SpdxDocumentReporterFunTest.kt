@@ -165,7 +165,7 @@ private val ortResult = OrtResult(
                     scopeDependencies = setOf(
                         Scope(
                             name = "compile",
-                            dependencies = sortedSetOf(
+                            dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("Maven:first-package-group:first-package:0.0.1")
                                 ),
@@ -185,7 +185,7 @@ private val ortResult = OrtResult(
                         ),
                         Scope(
                             name = "test",
-                            dependencies = sortedSetOf(
+                            dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
                                 )

@@ -35,7 +35,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
                 // various corner cases.
                 val scope = Scope(
                     name = "test",
-                    dependencies = sortedSetOf(
+                    dependencies = setOf(
                         pkg("A"),
                         pkg("B") {
                             pkg("A")
@@ -92,7 +92,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
             "return 1 if the scope contains only direct dependencies" {
                 val scope = Scope(
                     name = "test",
-                    dependencies = sortedSetOf(
+                    dependencies = setOf(
                         PackageReference(id = Identifier("a")),
                         PackageReference(id = Identifier("b"))
                     )
@@ -105,7 +105,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
             "return 2 if the scope contains a tree of height 2" {
                 val scope = Scope(
                     name = "test",
-                    dependencies = sortedSetOf(
+                    dependencies = setOf(
                         pkg("a") {
                             pkg("a1")
                         }
@@ -119,7 +119,7 @@ class DependencyTreeNavigatorTest : AbstractDependencyNavigatorTest() {
             "return 3 if it contains a tree of height 3" {
                 val scope = Scope(
                     name = "test",
-                    dependencies = sortedSetOf(
+                    dependencies = setOf(
                         pkg("a") {
                             pkg("a1") {
                                 pkg("a11")
@@ -146,7 +146,7 @@ private const val RESULT_WITH_ISSUES_FILE = "src/test/assets/result-with-issues-
 
 private class PackageRefBuilder(id: String) {
     private val id = Identifier(id)
-    private val dependencies = sortedSetOf<PackageReference>()
+    private val dependencies = mutableSetOf<PackageReference>()
 
     fun pkg(id: String, block: PackageRefBuilder.() -> Unit = {}) {
         dependencies += PackageRefBuilder(id).apply { block() }.build()

@@ -34,7 +34,6 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.beTheSameInstanceAs
 
 import java.io.File
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraphNode
@@ -221,8 +220,8 @@ private fun createIdentifier(managerName: String, index: Int, forProject: Boolea
  * Create a set of [PackageReference]s with the size of [count] simulating the dependencies of a project. Use
  * [managerName], [startIndex] to generate identifiers.
  */
-private fun createDependencies(managerName: String, startIndex: Int, count: Int): SortedSet<PackageReference> =
-    (startIndex..(startIndex + count)).mapTo(sortedSetOf()) { index ->
+private fun createDependencies(managerName: String, startIndex: Int, count: Int): Set<PackageReference> =
+    (startIndex..(startIndex + count)).mapTo(mutableSetOf()) { index ->
         PackageReference(createIdentifier(managerName, index, forProject = false), issues = createIssues(index))
     }
 

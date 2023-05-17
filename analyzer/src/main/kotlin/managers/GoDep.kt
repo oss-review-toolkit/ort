@@ -156,7 +156,7 @@ class GoDep(
             packageRefs += pkg.toReference(linkage = PackageLinkage.STATIC, issues = issues)
         }
 
-        val scope = Scope("default", packageRefs.toSortedSet())
+        val scope = Scope("default", packageRefs)
 
         val projectName = runCatching {
             val uri = URI(projectVcs.url)

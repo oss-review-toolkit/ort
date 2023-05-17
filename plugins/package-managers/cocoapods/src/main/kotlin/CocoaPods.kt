@@ -29,7 +29,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -232,7 +231,7 @@ private const val SCOPE_NAME = "dependencies"
 
 private val NAME_AND_VERSION_REGEX = "(\\S+)\\s+(.*)".toRegex()
 
-private fun getPackageReferences(podfileLock: File): SortedSet<PackageReference> {
+private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
     val versionForName = mutableMapOf<String, String>()
     val dependenciesForName = mutableMapOf<String, MutableSet<String>>()
     val root = yamlMapper.readTree(podfileLock)
@@ -255,10 +254,10 @@ private fun getPackageReferences(podfileLock: File): SortedSet<PackageReference>
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
             id = Identifier("Pod", "", name, versionForName.getValue(name)),
-            dependencies = dependenciesForName.getValue(name).mapTo(sortedSetOf()) { createPackageReference(it) }
+            dependencies = dependenciesForName.getValue(name).mapTo(mutableSetOf()) { createPackageReference(it) }
         )
 
-    return root.get("DEPENDENCIES").mapTo(sortedSetOf()) { node ->
+    return root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
         val name = node.textValue().substringBefore(" ")
         createPackageReference(name)
     }
