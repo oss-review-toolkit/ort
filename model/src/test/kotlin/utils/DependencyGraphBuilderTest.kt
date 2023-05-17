@@ -384,10 +384,11 @@ private fun createDependency(
     artifact: String,
     version: String,
     dependencies: List<PackageReference> = emptyList()
-): PackageReference {
-    val id = Identifier("test", group, artifact, version)
-    return PackageReference(id, dependencies = dependencies.toSortedSet())
-}
+) =
+    PackageReference(
+        id = Identifier("test", group, artifact, version),
+        dependencies = dependencies.toSortedSet()
+    )
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
