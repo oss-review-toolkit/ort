@@ -267,24 +267,21 @@ class Conan(
         pkg: JsonNode,
         scopeName: String,
         workingDir: File
-    ): Set<PackageReference> {
-        val result = mutableSetOf<PackageReference>()
+    ): Set<PackageReference> =
+        buildSet {
+            pkg[scopeName]?.forEach { childNode ->
+                val childRef = childNode.textValueOrEmpty()
+                pkgInfos.find { it["reference"].textValueOrEmpty() == childRef }?.let { pkgInfo ->
+                    logger.debug { "Found child '$childRef'." }
 
-        pkg[scopeName]?.forEach { childNode ->
-            val childRef = childNode.textValueOrEmpty()
-            pkgInfos.find { it["reference"].textValueOrEmpty() == childRef }?.let { pkgInfo ->
-                logger.debug { "Found child '$childRef'." }
+                    val id = parsePackageId(pkgInfo, workingDir)
+                    val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
+                            parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
 
-                val id = parsePackageId(pkgInfo, workingDir)
-                val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
-                        parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
-
-                result += PackageReference(id, dependencies = dependencies)
+                    this += PackageReference(id, dependencies = dependencies)
+                }
             }
         }
-
-        return result
-    }
 
     /**
      * Run through each package and parse the list of its dependencies (also transitive ones).
