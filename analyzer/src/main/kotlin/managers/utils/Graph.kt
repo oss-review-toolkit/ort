@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.analyzer.managers.utils
 
 import java.util.LinkedList
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -122,9 +121,9 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
      * Convert this [Graph] to a set of [PackageReference]s that spawn the dependency trees of the direct dependencies
      * of the given [root] package. The graph must not contain any cycles, so [breakCycles] should be called before.
      */
-    fun toPackageReferenceForest(root: Identifier): SortedSet<PackageReference> {
+    fun toPackageReferenceForest(root: Identifier): Set<PackageReference> {
         fun getPackageReference(id: Identifier): PackageReference {
-            val dependencies = nodeMap.getValue(id).mapTo(sortedSetOf()) {
+            val dependencies = nodeMap.getValue(id).mapTo(mutableSetOf()) {
                 getPackageReference(it)
             }
 
@@ -135,7 +134,7 @@ internal class Graph private constructor(private val nodeMap: MutableMap<Identif
             )
         }
 
-        return dependencies(root).mapTo(sortedSetOf()) { getPackageReference(it) }
+        return dependencies(root).mapTo(mutableSetOf()) { getPackageReference(it) }
     }
 
     /**

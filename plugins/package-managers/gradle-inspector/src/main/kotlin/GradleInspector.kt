@@ -24,7 +24,6 @@ import OrtDependencyTreeModel
 
 import java.io.ByteArrayOutputStream
 import java.io.File
-import java.util.SortedSet
 import java.util.concurrent.TimeUnit
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -291,8 +290,8 @@ class GradleInspector(
  */
 private fun Collection<OrtDependency>.toPackageRefs(
     packageDependencies: MutableCollection<OrtDependency>
-): SortedSet<PackageReference> =
-    mapTo(sortedSetOf()) { dep ->
+): Set<PackageReference> =
+    mapTo(mutableSetOf()) { dep ->
         val (id, linkage) = if (dep.localPath != null) {
             val id = Identifier("Gradle", dep.groupId, dep.artifactId, dep.version)
             id to PackageLinkage.PROJECT_DYNAMIC

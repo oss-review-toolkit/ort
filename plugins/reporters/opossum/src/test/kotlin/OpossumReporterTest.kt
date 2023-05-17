@@ -266,7 +266,7 @@ private fun createOrtResult(): OrtResult {
                         scopeDependencies = setOf(
                             Scope(
                                 name = "compile",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("Maven:first-package-group:first-package:0.0.1")
                                     ),
@@ -286,7 +286,7 @@ private fun createOrtResult(): OrtResult {
                             ),
                             Scope(
                                 name = "test",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("Maven:fifth-package-group:fifth-package:0.0.1")
                                     )
@@ -303,16 +303,16 @@ private fun createOrtResult(): OrtResult {
                         scopeDependencies = setOf(
                             Scope(
                                 name = "devDependencies",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("NPM:@something:somepackage:1.2.3"),
-                                        dependencies = sortedSetOf(
+                                        dependencies = setOf(
                                             PackageReference(
                                                 id = Identifier("NPM:@something:somepackage-dep:1.2.3"),
-                                                dependencies = sortedSetOf(
+                                                dependencies = setOf(
                                                     PackageReference(
                                                         id = Identifier("NPM:@something:somepackage-dep-dep:1.2.3"),
-                                                        dependencies = sortedSetOf(
+                                                        dependencies = setOf(
                                                             PackageReference(
                                                                 id = Identifier(
                                                                     "NPM:@something:" +

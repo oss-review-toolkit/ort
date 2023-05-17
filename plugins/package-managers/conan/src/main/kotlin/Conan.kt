@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -268,7 +267,7 @@ class Conan(
         pkg: JsonNode,
         scopeName: String,
         workingDir: File
-    ): SortedSet<PackageReference> {
+    ): Set<PackageReference> {
         val result = mutableSetOf<PackageReference>()
 
         pkg[scopeName]?.forEach { childNode ->
@@ -280,11 +279,11 @@ class Conan(
                 val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
                         parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
 
-                result += PackageReference(id, dependencies = dependencies.toSortedSet())
+                result += PackageReference(id, dependencies = dependencies)
             }
         }
 
-        return result.toSortedSet()
+        return result
     }
 
     /**
@@ -295,7 +294,7 @@ class Conan(
         definitionFileName: String,
         scopeName: String,
         workingDir: File
-    ): SortedSet<PackageReference> =
+    ): Set<PackageReference> =
         parseDependencyTree(pkgInfos, findProjectNode(pkgInfos, definitionFileName), scopeName, workingDir)
 
     /**

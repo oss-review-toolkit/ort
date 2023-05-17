@@ -137,7 +137,7 @@ val allPackages = setOf(
 
 val scopeExcluded = Scope(
     name = "compile",
-    dependencies = sortedSetOf(
+    dependencies = setOf(
         packageExcluded.toReference()
     )
 )
@@ -153,11 +153,11 @@ val packageRefStaticallyLinked = packageStaticallyLinked.toReference(PackageLink
 
 val scopeIncluded = Scope(
     name = "compile",
-    dependencies = sortedSetOf(
+    dependencies = setOf(
         packageWithoutLicense.toReference(),
         packageWithNotPresentLicense.toReference(),
         packageWithOnlyConcludedLicense.toReference(),
-        packageWithOnlyDeclaredLicense.toReference(dependencies = sortedSetOf(packageDependency.toReference())),
+        packageWithOnlyDeclaredLicense.toReference(dependencies = setOf(packageDependency.toReference())),
         packageWithConcludedAndDeclaredLicense.toReference(),
         packageRefDynamicallyLinked,
         packageRefStaticallyLinked,

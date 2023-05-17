@@ -24,7 +24,6 @@ import com.fasterxml.jackson.dataformat.yaml.JacksonYAMLParseException
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -267,14 +266,14 @@ class Pub(
                         .toList()
 
                     if (gradleDefinitionFiles.isNotEmpty()) {
-                        val gradleDependencies = gradleDefinitionFiles.map {
+                        val gradleDependencies = gradleDefinitionFiles.mapTo(mutableSetOf()) {
                             PackageManagerDependencyHandler.createPackageManagerDependency(
                                 packageManager = gradleFactory.type,
                                 definitionFile = VersionControlSystem.getPathInfo(it).path,
                                 scope = "releaseCompileClasspath",
                                 linkage = PackageLinkage.PROJECT_STATIC
                             )
-                        }.toSortedSet()
+                        }
 
                         scopes += Scope("android", gradleDependencies)
                     }
@@ -331,7 +330,7 @@ class Pub(
         labels: Map<String, String>,
         workingDir: File,
         processedPackages: Set<String> = emptySet()
-    ): SortedSet<PackageReference> {
+    ): Set<PackageReference> {
         val packageReferences = mutableSetOf<PackageReference>()
         val nameOfCurrentPackage = manifest["name"].textValue()
         val containsFlutter = "flutter" in dependencies
@@ -403,7 +402,7 @@ class Pub(
             }
         }
 
-        return packageReferences.toSortedSet()
+        return packageReferences
     }
 
     private val analyzerResultCacheAndroid = mutableMapOf<String, List<ProjectAnalyzerResult>>()

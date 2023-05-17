@@ -256,5 +256,5 @@ private fun createProject(
 private fun createScope(name: String) =
     Scope(
         name = name,
-        dependencies = sortedSetOf(PackageReference(Identifier.EMPTY.copy(name = "dep$name")))
+        dependencies = setOf(PackageReference(Identifier.EMPTY.copy(name = "dep$name")))
     )

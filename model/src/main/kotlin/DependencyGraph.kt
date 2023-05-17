@@ -170,7 +170,7 @@ data class DependencyGraph(
      */
     private fun createScopesFor(map: Map<String, List<RootDependencyIndex>>, unqualify: Boolean): Set<Scope> =
         map.mapTo(mutableSetOf()) { entry ->
-            val dependencies = entry.value.mapTo(sortedSetOf()) { index ->
+            val dependencies = entry.value.mapTo(mutableSetOf()) { index ->
                 referenceMapping[index.toKey()] ?: error("Could not resolve dependency index $index.")
             }
 
@@ -201,7 +201,7 @@ data class DependencyGraph(
     ): PackageReference {
         val indexKey = RootDependencyIndex.generateKey(node.pkg, node.fragment)
         return refMapping.getOrPut(indexKey) {
-            val refDependencies = dependencies[node].orEmpty().mapTo(sortedSetOf()) {
+            val refDependencies = dependencies[node].orEmpty().mapTo(mutableSetOf()) {
                 constructReferenceTree(it, refMapping)
             }
 

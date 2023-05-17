@@ -28,6 +28,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Scope
 
@@ -37,6 +38,10 @@ class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, S
 
 class LicenseFindingSortedSetConverter : StdConverter<Set<LicenseFinding>, SortedSet<LicenseFinding>>() {
     override fun convert(value: Set<LicenseFinding>) = value.toSortedSet(LicenseFinding.COMPARATOR)
+}
+
+class PackageReferenceSortedSetConverter : StdConverter<Set<PackageReference>, SortedSet<PackageReference>>() {
+    override fun convert(value: Set<PackageReference>) = value.toSortedSet(compareBy { it.id })
 }
 
 class PackageSortedSetConverter : StdConverter<Set<Package>, SortedSet<Package>>() {

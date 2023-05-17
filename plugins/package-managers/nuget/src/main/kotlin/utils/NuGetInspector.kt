@@ -184,8 +184,8 @@ internal fun NuGetInspector.Result.toOrtProject(
     )
 }
 
-private fun List<NuGetInspector.PackageData>.toPackageReferences(): SortedSet<PackageReference> =
-    mapTo(sortedSetOf()) { data ->
+private fun List<NuGetInspector.PackageData>.toPackageReferences(): Set<PackageReference> =
+    mapTo(mutableSetOf()) { data ->
         PackageReference(
             id = Identifier(type = TYPE, namespace = "", name = data.name, version = data.version.orEmpty()),
             dependencies = data.dependencies.toPackageReferences(),

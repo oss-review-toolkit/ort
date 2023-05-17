@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.model
 
-import java.util.SortedSet
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
+
+import org.ossreviewtoolkit.model.utils.PackageReferenceSortedSetConverter
 
 /**
  * The scope class puts package dependencies into context.
@@ -39,7 +41,8 @@ data class Scope(
      * dependencies would not be test dependencies of the test dependencies, but compile dependencies of test
      * dependencies.
      */
-    val dependencies: SortedSet<PackageReference> = sortedSetOf()
+    @JsonSerialize(converter = PackageReferenceSortedSetConverter::class)
+    val dependencies: Set<PackageReference> = emptySet()
 ) : Comparable<Scope> {
     /**
      * Return the set of package [Identifier]s in this [Scope], up to and including a depth of [maxDepth] where counting

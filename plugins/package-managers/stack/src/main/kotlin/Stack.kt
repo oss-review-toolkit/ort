@@ -24,7 +24,6 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 import java.io.IOException
-import java.util.SortedSet
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -190,8 +189,8 @@ class Stack(
             if (pkg != null && pkg.id.name != "ghc") dependencyPackageMap[dependency] = pkg
         }
 
-        fun List<String>.toPackageReferences(): SortedSet<PackageReference> =
-            mapNotNullTo(sortedSetOf()) { name ->
+        fun List<String>.toPackageReferences(): Set<PackageReference> =
+            mapNotNullTo(mutableSetOf()) { name ->
                 // TODO: Stack identifies dependencies only by name. Find out how dependencies with the same name but in
                 //       different namespaces should be handled.
                 dependencyPackageMap.entries.find { (dependency, _) -> dependency.name == name }?.let { entry ->

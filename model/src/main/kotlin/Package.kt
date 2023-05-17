@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -186,7 +184,7 @@ data class Package(
      */
     fun toReference(
         linkage: PackageLinkage? = null,
-        dependencies: SortedSet<PackageReference>? = null,
+        dependencies: Set<PackageReference>? = null,
         issues: List<Issue>? = null
     ): PackageReference {
         var ref = PackageReference(id)

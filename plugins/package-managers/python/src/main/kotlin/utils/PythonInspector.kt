@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.python.utils
 
 import java.io.File
-import java.util.SortedSet
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -344,8 +343,8 @@ private fun List<PythonInspector.Party>.toAuthors(): Set<String> =
         }.takeIf { it.isNotBlank() }
     }
 
-private fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): SortedSet<PackageReference> =
-    mapTo(sortedSetOf()) { it.toPackageReference() }
+private fun List<PythonInspector.ResolvedDependency>.toPackageReferences(): Set<PackageReference> =
+    mapTo(mutableSetOf()) { it.toPackageReference() }
 
 private fun PythonInspector.ResolvedDependency.toPackageReference() =
     PackageReference(

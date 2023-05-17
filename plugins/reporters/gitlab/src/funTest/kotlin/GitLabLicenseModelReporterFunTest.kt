@@ -95,7 +95,7 @@ private fun createOrtResult(): OrtResult {
                         scopeDependencies = setOf(
                             Scope(
                                 name = "compile",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("Maven:some-group:first-package:0.0.1")
                                     )
@@ -103,7 +103,7 @@ private fun createOrtResult(): OrtResult {
                             ),
                             Scope(
                                 name = "test",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("Maven:some-group:excluded-package:0.0.4")
                                     )
@@ -116,7 +116,7 @@ private fun createOrtResult(): OrtResult {
                         scopeDependencies = setOf(
                             Scope(
                                 name = "install",
-                                dependencies = sortedSetOf(
+                                dependencies = setOf(
                                     PackageReference(
                                         id = Identifier("PIP::second-package:0.0.2")
                                     )
