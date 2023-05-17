@@ -108,6 +108,10 @@ ort:
       username: username
       password: password
 
+    ossIndex:
+      username: username
+      password: password
+
     vulnerableCode:
       serverUrl: 'http://localhost:8000'
       apiKey: 0123456789012345678901234567890123456789

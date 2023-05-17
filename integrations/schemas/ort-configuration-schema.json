@@ -54,6 +54,9 @@
                 "nexusIq": {
                     "$ref": "#/definitions/NexusIq"
                 },
+                "ossIndex": {
+                    "$ref": "#/definitions/OssIndex"
+                },
                 "vulnerableCode": {
                     "$ref": "#/definitions/VulnerableCode"
                 },
@@ -114,6 +117,22 @@
             "required": [
                 "serverUrl"
             ]
+        },
+        "OssIndex": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "serverUrl": {
+                    "type": "string",
+                    "format": "uri"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
         },
         "AdvisorOptions": {
             "type": "object",
