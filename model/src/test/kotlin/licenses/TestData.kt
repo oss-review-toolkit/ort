@@ -129,7 +129,7 @@ val project = Project.EMPTY.copy(
     id = Identifier("Maven:org.ossreviewtoolkit:project-included:1.0"),
     definitionFilePath = "included/pom.xml",
     authors = projectAuthors,
-    scopeDependencies = sortedSetOf(scope)
+    scopeDependencies = setOf(scope)
 )
 
 val provenance = UnknownProvenance

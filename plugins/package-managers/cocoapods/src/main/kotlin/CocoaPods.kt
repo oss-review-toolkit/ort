@@ -123,7 +123,7 @@ class CocoaPods(
         val workingDir = definitionFile.parentFile
         val lockfile = workingDir.resolve(LOCKFILE_FILENAME)
 
-        val scopes = sortedSetOf<Scope>()
+        val scopes = mutableSetOf<Scope>()
         val packages = mutableSetOf<Package>()
         val issues = mutableListOf<Issue>()
 

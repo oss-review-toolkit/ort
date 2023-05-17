@@ -221,7 +221,7 @@ class Bundler(
                 vcs = VcsInfo.EMPTY,
                 vcsProcessed = processProjectVcs(workingDir, VcsInfo.EMPTY, homepageUrl),
                 homepageUrl = homepageUrl,
-                scopeDependencies = scopes.toSortedSet()
+                scopeDependencies = scopes
             )
 
             val allProjectDeps = groupedDeps.values.flatten().toSet()

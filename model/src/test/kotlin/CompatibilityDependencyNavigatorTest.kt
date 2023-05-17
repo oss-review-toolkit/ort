@@ -30,14 +30,14 @@ import io.mockk.mockk
 import java.util.SortedSet
 
 class CompatibilityDependencyNavigatorTest : WordSpec() {
-    private val treeProject = createProject("tree", scopes = sortedSetOf(createScope("scope")))
+    private val treeProject = createProject("tree", scopes = setOf(createScope("scope")))
     private val graphProject = createProject("graph", scopeNames = sortedSetOf("scope"))
 
     init {
         "create" should {
             "return a DependencyTreeNavigator if all projects use the tree format" {
-                val project1 = createProject("test1", scopes = sortedSetOf(createScope("scope1")))
-                val project2 = createProject("test2", scopes = sortedSetOf(createScope("scope2")))
+                val project1 = createProject("test1", scopes = setOf(createScope("scope1")))
+                val project2 = createProject("test2", scopes = setOf(createScope("scope2")))
                 val result = createOrtResult(project1, project2)
 
                 val navigator = CompatibilityDependencyNavigator.create(result)
@@ -56,7 +56,7 @@ class CompatibilityDependencyNavigatorTest : WordSpec() {
             }
 
             "return a CompatibilityGraphNavigator if mixed representations are used" {
-                val project1 = createProject("test1", scopes = sortedSetOf(createScope("scope1")))
+                val project1 = createProject("test1", scopes = setOf(createScope("scope1")))
                 val project2 = createProject("test2", scopeNames = sortedSetOf("scope2", "scope3"))
                 val result = createOrtResult(project1, project2)
 
@@ -245,7 +245,7 @@ private fun createOrtResult(vararg projects: Project): OrtResult =
  */
 private fun createProject(
     name: String,
-    scopes: SortedSet<Scope>? = null,
+    scopes: Set<Scope>? = null,
     scopeNames: SortedSet<String>? = null
 ): Project {
     val id = Identifier.EMPTY.copy(name = name)

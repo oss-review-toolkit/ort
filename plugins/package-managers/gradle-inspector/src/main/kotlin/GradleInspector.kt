@@ -208,7 +208,7 @@ class GradleInspector(
 
         val scopes = dependencyTreeModel.configurations.filterNot {
             excludes.isScopeExcluded(it.name)
-        }.mapTo(sortedSetOf()) {
+        }.mapTo(mutableSetOf()) {
             Scope(name = it.name, dependencies = it.dependencies.toPackageRefs(packageDependencies))
         }
 

@@ -93,7 +93,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope(
                             name = "dependencies",
                             dependencies = sortedSetOf(
@@ -130,7 +130,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = emptySet(),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                    scopeDependencies = sortedSetOf(
+                    scopeDependencies = setOf(
                         Scope(
                             name = "dependencies",
                             dependencies = sortedSetOf()
@@ -143,7 +143,7 @@ val ORT_RESULT = OrtResult(
                     declaredLicenses = setOf("BSD-2-Clause"),
                     vcs = VcsInfo.EMPTY,
                     homepageUrl = "https://github.com/oss-review-toolkit/ort",
-                    scopeDependencies = sortedSetOf()
+                    scopeDependencies = emptySet()
                 )
             ),
             packages = setOf(

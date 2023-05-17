@@ -197,7 +197,7 @@ class Conan(
                             projectPackage.homepageUrl
                         ),
                         homepageUrl = projectPackage.homepageUrl,
-                        scopeDependencies = sortedSetOf(dependenciesScope, devDependenciesScope)
+                        scopeDependencies = setOf(dependenciesScope, devDependenciesScope)
                     ),
                     packages = packages.values.toSet()
                 )

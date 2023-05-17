@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.utils.ScopeSortedSetConverter
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
@@ -98,7 +99,8 @@ data class Project(
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("scopes")
-    val scopeDependencies: SortedSet<Scope>? = null,
+    @JsonSerialize(converter = ScopeSortedSetConverter::class)
+    val scopeDependencies: Set<Scope>? = null,
 
     /**
      * Contains dependency information as a set of scope names in case a shared [DependencyGraph] is used. The scopes
@@ -122,7 +124,7 @@ data class Project(
             vcs = VcsInfo.EMPTY,
             vcsProcessed = VcsInfo.EMPTY,
             homepageUrl = "",
-            scopeDependencies = sortedSetOf()
+            scopeDependencies = emptySet()
         )
     }
 
@@ -138,7 +140,7 @@ data class Project(
      * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
      */
     @get:JsonIgnore
-    val scopes by lazy { scopeDependencies ?: sortedSetOf() }
+    val scopes by lazy { scopeDependencies.orEmpty() }
 
     /**
      * Return a [Project] instance that has its scope information directly available, resolved from the given [graph].

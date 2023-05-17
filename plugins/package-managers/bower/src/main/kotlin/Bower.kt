@@ -105,7 +105,7 @@ class Bower(
                 vcs = projectPackage.vcs,
                 vcsProcessed = processProjectVcs(workingDir, projectPackage.vcs, projectPackage.homepageUrl),
                 homepageUrl = projectPackage.homepageUrl,
-                scopeDependencies = sortedSetOf(dependenciesScope, devDependenciesScope)
+                scopeDependencies = setOf(dependenciesScope, devDependenciesScope)
             )
 
             return listOf(ProjectAnalyzerResult(project, packages.values.toSet()))

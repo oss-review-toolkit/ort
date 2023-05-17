@@ -168,7 +168,7 @@ class DependencyGraphConverterTest : WordSpec({
 
         "not override a dependency graph for an empty project" {
             val gradleProject = createProject("Gradle", index = 1)
-            val gradleEmptyProject = createProject("Gradle", index = 2).copy(scopeDependencies = sortedSetOf())
+            val gradleEmptyProject = createProject("Gradle", index = 2).copy(scopeDependencies = emptySet())
 
             val orgResult = createAnalyzerResult(gradleProject.createResult())
             val resultWithGraph = DependencyGraphConverter.convert(orgResult)
@@ -201,7 +201,7 @@ private fun createProject(managerName: String, index: Int): Project {
 
     return Project.EMPTY.copy(
         id = createIdentifier(managerName, index, forProject = true),
-        scopeDependencies = sortedSetOf(mainScope, testScope)
+        scopeDependencies = setOf(mainScope, testScope)
     )
 }
 

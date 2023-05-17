@@ -141,7 +141,7 @@ class ExcludesTest : WordSpec() {
         "isExcluded" should {
             "return false if the project is not found" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1))
+                    project1.copy(scopeDependencies = setOf(scope1))
                 )
 
                 ortResult.isExcluded(project2.id) shouldBe false
@@ -157,7 +157,7 @@ class ExcludesTest : WordSpec() {
 
             "return false if the package is not excluded" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1))
+                    project1.copy(scopeDependencies = setOf(scope1))
                 )
 
                 ortResult.isExcluded(id) shouldBe false
@@ -165,8 +165,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all projects depending on a package are excluded by path excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -178,8 +178,8 @@ class ExcludesTest : WordSpec() {
 
             "return false if only part of the projects depending on a package are excluded by path excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -191,8 +191,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all scopes containing the package are excluded by scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -204,8 +204,8 @@ class ExcludesTest : WordSpec() {
 
             "return false if only part of the scopes containing the package are excluded by scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -217,8 +217,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all dependencies on the package are excluded by path or scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -244,7 +244,7 @@ class ExcludesTest : WordSpec() {
             "return true if a project and all dependencies on the project are excluded by path excludes" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1))
+                    project2.copy(scopeDependencies = setOf(scopeProject1))
                 )
 
                 setExcludes(
@@ -257,7 +257,7 @@ class ExcludesTest : WordSpec() {
             "return true if a project is excluded by path excludes and all dependencies on the project are excluded by scope excludes" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1))
+                    project2.copy(scopeDependencies = setOf(scopeProject1))
                 )
 
                 setExcludes(
@@ -271,7 +271,7 @@ class ExcludesTest : WordSpec() {
             "return false if a project is excluded by path excludes but not all dependencies on the project are excluded" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1))
+                    project2.copy(scopeDependencies = setOf(scopeProject1))
                 )
 
                 setExcludes(
@@ -284,7 +284,7 @@ class ExcludesTest : WordSpec() {
             "return false if a project is not excluded but all dependencies on the project are excluded" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1))
+                    project2.copy(scopeDependencies = setOf(scopeProject1))
                 )
 
                 setExcludes(
@@ -306,7 +306,7 @@ class ExcludesTest : WordSpec() {
 
             "return false if the package is not excluded" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1))
+                    project1.copy(scopeDependencies = setOf(scope1))
                 )
 
                 ortResult.isPackageExcluded(id) shouldBe false
@@ -314,8 +314,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all projects depending on a package are excluded by path excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -327,8 +327,8 @@ class ExcludesTest : WordSpec() {
 
             "return false if only part of the projects depending on a package are excluded by path excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -340,8 +340,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all scopes containing the package are excluded by scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -353,8 +353,8 @@ class ExcludesTest : WordSpec() {
 
             "return false if only part of the scopes containing the package are excluded by scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -366,8 +366,8 @@ class ExcludesTest : WordSpec() {
 
             "return true if all dependencies on the package are excluded by path or scope excludes" {
                 setProjects(
-                    project1.copy(scopeDependencies = sortedSetOf(scope1)),
-                    project2.copy(scopeDependencies = sortedSetOf(scope2))
+                    project1.copy(scopeDependencies = setOf(scope1)),
+                    project2.copy(scopeDependencies = setOf(scope2))
                 )
 
                 setExcludes(
@@ -381,7 +381,7 @@ class ExcludesTest : WordSpec() {
             "return true if all dependencies on the project are excluded" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1, scopeProject1.copy(name = "scope")))
+                    project2.copy(scopeDependencies = setOf(scopeProject1, scopeProject1.copy(name = "scope")))
                 )
 
                 setExcludes(
@@ -394,7 +394,7 @@ class ExcludesTest : WordSpec() {
             "return false if not all dependencies on the project are excluded" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1, scopeProject1.copy(name = "scope")))
+                    project2.copy(scopeDependencies = setOf(scopeProject1, scopeProject1.copy(name = "scope")))
                 )
 
                 setExcludes(
@@ -407,7 +407,7 @@ class ExcludesTest : WordSpec() {
             "return false if no dependencies on the project are excluded" {
                 setProjects(
                     project1,
-                    project2.copy(scopeDependencies = sortedSetOf(scopeProject1))
+                    project2.copy(scopeDependencies = setOf(scopeProject1))
                 )
 
                 ortResult.isPackageExcluded(project1.id) shouldBe false

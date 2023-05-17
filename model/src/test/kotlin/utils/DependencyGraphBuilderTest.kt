@@ -31,8 +31,6 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.model.DependencyGraph
 import org.ossreviewtoolkit.model.DependencyGraphEdge
 import org.ossreviewtoolkit.model.Identifier
@@ -395,7 +393,7 @@ private fun createDependency(
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
  */
 private fun scopeDependencies(
-    scopes: SortedSet<Scope>,
+    scopes: Set<Scope>,
     scopeName: String
 ): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()
