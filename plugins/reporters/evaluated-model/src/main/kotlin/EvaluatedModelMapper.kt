@@ -89,10 +89,13 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
      */
     fun build(deduplicateDependencyTree: Boolean = false): EvaluatedModel {
         createExcludeInfo()
-        createScopes()
 
         val resultProjects = input.ortResult.getProjects().sortedBy { it.id }
         val resultPackages = input.ortResult.getPackages().sortedBy { it.metadata.id }
+
+        resultProjects.forEach { project ->
+            createScopes(project)
+        }
 
         resultProjects.forEach { project ->
             addProject(project)
@@ -199,10 +202,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
         }
     }
 
-    private fun createScopes() {
-        input.ortResult.getProjects().flatMap { project ->
-            input.ortResult.dependencyNavigator.scopeNames(project)
-        }.forEach { scope ->
+    private fun createScopes(project: Project) {
+        input.ortResult.dependencyNavigator.scopeNames(project).forEach { scope ->
             scopes[scope] = EvaluatedScope(
                 name = scope,
                 excludes = scopeExcludes.addIfRequired(input.ortResult.getExcludes().findScopeExcludes(scope))
