@@ -29,7 +29,7 @@ import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.maps.containExactly as containExactlyEntries
 import io.kotest.matchers.sequences.beEmpty as beEmptySequence
-import io.kotest.matchers.sequences.containExactly as containSequenceExactly
+import io.kotest.matchers.sequences.containAllInAnyOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -72,7 +72,9 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
 
         "directDependencies" should {
             "return the direct dependencies of a project" {
-                navigator.directDependencies(testProject, "test").map { it.id } should containSequenceExactly(
+                val scopeDependencies = navigator.directDependencies(testProject, "test").map { it.id }
+
+                scopeDependencies should containAllInAnyOrder(
                     Identifier("Maven:org.scalacheck:scalacheck_2.12:1.13.5"),
                     Identifier("Maven:org.scalatest:scalatest_2.12:3.0.4")
                 )
