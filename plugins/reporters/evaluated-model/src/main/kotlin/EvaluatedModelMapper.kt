@@ -492,7 +492,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             visitedNodes += getInternalId() to createDependencyNode(dependency, linkage, issues)
 
             val children = visitDependencies { dependencies ->
-                dependencies.map { node ->
+                dependencies.sortedBy { it.id }.map { node ->
                     val nodeId = node.getInternalId()
 
                     if (deduplicateDependencyTree && nodeId in visitedNodes) {
@@ -511,9 +511,8 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             // Deduplication should not happen across scopes.
             visitedNodes.clear()
 
-            val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope).map {
-                it.toEvaluatedTreeNode(scopes.getValue(scope), mutableListOf())
-            }.toList()
+            val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope).sortedBy { it.id }
+                .mapTo(mutableListOf()) { it.toEvaluatedTreeNode(scopes.getValue(scope), mutableListOf()) }
 
             val applicableScopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
             val evaluatedScopeExcludes = scopeExcludes.addIfRequired(applicableScopeExcludes)
