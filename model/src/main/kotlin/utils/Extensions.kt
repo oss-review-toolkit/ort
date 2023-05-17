@@ -143,6 +143,7 @@ enum class PurlType(private val value: String) {
     DEBIAN("deb"),
     DRUPAL("drupal"),
     GEM("gem"),
+    GENERIC("generic"),
     GITHUB("github"),
     GITLAB("gitlab"),
     GOLANG("golang"),
