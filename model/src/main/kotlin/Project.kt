@@ -138,7 +138,7 @@ data class Project(
      * matter whether this information has been initialized directly or has been encoded in a [DependencyGraph].
      */
     @get:JsonIgnore
-    val scopes by lazy { scopeDependencies.orEmpty() }
+    val scopes: Set<Scope> by lazy { scopeDependencies.orEmpty() }
 
     /**
      * Return a [Project] instance that has its scope information directly available, resolved from the given [graph].
