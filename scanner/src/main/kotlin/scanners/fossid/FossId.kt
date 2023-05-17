@@ -825,7 +825,7 @@ class FossId internal constructor(
                 val snippetProvenance = it.url?.let { url ->
                     ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
                 } ?: UnknownProvenance
-                val purlType = it.url?.let { url -> urlToPackageType(url, issues)?.toString() } ?: "generic"
+                val purlType = it.url?.let { url -> urlToPackageType(url).toString() }
 
                 // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
                 //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
@@ -874,10 +874,9 @@ class FossId internal constructor(
     }
 
     /**
-     * Return the [PurlType] as determined from the given [url], or null if there is no match, in which case an issue
-     * will be added to [issues].
+     * Return the [PurlType] as determined from the given [url], or [PurlType.GENERIC] if there is no match.
      */
-    private fun urlToPackageType(url: String, issues: MutableList<Issue>): PurlType? =
+    private fun urlToPackageType(url: String): PurlType =
         when (val provider = PackageProvider.get(url)) {
             PackageProvider.COCOAPODS -> PurlType.COCOAPODS
             PackageProvider.CRATES_IO -> PurlType.CARGO
@@ -893,11 +892,11 @@ class FossId internal constructor(
             PackageProvider.RUBYGEMS -> PurlType.GEM
 
             else -> {
-                issues += FossId.createAndLogIssue(
-                    source = "FossId",
-                    message = "Cannot determine PURL type for url '$url' and provider '$provider'."
-                )
-                null
+                PurlType.GENERIC.also {
+                    logger.warn {
+                        "Cannot determine PURL type for url '$url' and provider '$provider'. Falling back to '$it'."
+                    }
+                }
             }
         }
 }
