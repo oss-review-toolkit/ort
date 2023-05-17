@@ -22,8 +22,6 @@ package org.ossreviewtoolkit.model.licenses
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonInclude
 
-import java.util.SortedSet
-
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
@@ -69,9 +67,9 @@ data class LicenseClassifications(
         categorizations.associate { it.id to it.categories }
     }
 
-    /** A property allowing convenient access to the names of all categories defined. */
+    /** A property allowing convenient access to the names of all categories defined in alphabetical order. */
     @get:JsonIgnore
-    val categoryNames: SortedSet<String> by lazy {
+    val categoryNames: Set<String> by lazy {
         categories.mapTo(sortedSetOf()) { it.name }
     }
 
