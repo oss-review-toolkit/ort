@@ -823,7 +823,7 @@ class FossId internal constructor(
                 // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
                 // matched file in the remote artifact as part of the "match_file_id" property.
                 val snippetProvenance = ArtifactProvenance(RemoteArtifact(it.url, Hash.NONE))
-                val purlType = urlToPackageType(it.url).toString()
+                val purl = it.purl ?: "pkg:${urlToPackageType(it.url)}/${it.author}/${it.artifact}@${it.version}"
 
                 // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
                 //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
@@ -833,7 +833,7 @@ class FossId internal constructor(
                     it.score.toFloat(),
                     TextLocation(it.file, TextLocation.UNKNOWN_LINE),
                     snippetProvenance,
-                    "pkg:$purlType/${it.author}/${it.artifact}@${it.version}",
+                    purl,
                     license
                 )
             }
