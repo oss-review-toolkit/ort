@@ -31,8 +31,10 @@ data class Snippet(
     val author: String,
     val artifact: String,
     val version: String,
+    val purl: String? = null,
 
     val artifactLicense: String?,
+    val artifactLicenseCategory: LicenseCategory? = null,
     val releaseDate: String?,
     val mirror: String?,
 
