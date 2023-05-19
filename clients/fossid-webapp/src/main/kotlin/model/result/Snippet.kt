@@ -38,7 +38,7 @@ data class Snippet(
 
     val file: String,
     val fileLicense: String?,
-    val url: String?,
+    val url: String,
     val hits: String,
     val size: Int?,
 
