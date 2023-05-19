@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -38,7 +38,7 @@ data class Snippet(
     /**
      * The provenance of the snippet, either an artifact or a repository.
      */
-    val provenance: Provenance,
+    val provenance: KnownProvenance,
 
     /**
      * The purl representing the author/vendor, artifact, version of the code snippet. If the snippet scanner does not
