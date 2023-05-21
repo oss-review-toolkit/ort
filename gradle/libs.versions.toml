@@ -10,7 +10,7 @@ kotlinPlugin = "1.8.21"
 versionCatalogUpdatePlugin = "0.8.0"
 versionsPlugin = "0.46.0"
 
-antlr = "4.11.1"
+antlr = "4.13.0"
 asciidoctorj = "2.5.8"
 asciidoctorjPdf = "2.3.7"
 clikt = "3.5.2"
