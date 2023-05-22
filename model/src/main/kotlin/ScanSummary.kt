@@ -31,7 +31,6 @@ import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.CopyrightFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.LicenseFindingSortedSetConverter
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
-import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.model.utils.SnippetFindingSortedSetConverter
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression

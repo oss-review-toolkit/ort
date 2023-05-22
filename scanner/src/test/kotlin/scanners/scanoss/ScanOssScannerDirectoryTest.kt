@@ -37,13 +37,13 @@ import java.util.UUID
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.Snippet
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.utils.Snippet
-import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 

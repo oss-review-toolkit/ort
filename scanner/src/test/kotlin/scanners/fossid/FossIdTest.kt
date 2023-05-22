@@ -92,12 +92,12 @@ import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Snippet as OrtSnippet
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.utils.Snippet as OrtSnippet
-import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
@@ -1319,7 +1319,7 @@ private fun createSnippetFindings(index: Int): Set<SnippetFinding> = (1..5).map 
             TextLocation("file$snippetIndex", TextLocation.UNKNOWN_LINE),
             ArtifactProvenance(RemoteArtifact("url$snippetIndex", Hash.NONE)),
             "pkg:generic/author$snippetIndex/artifact$snippetIndex@version$snippetIndex",
-            SpdxExpression.Companion.parse("MIT")
+            SpdxExpression.parse("MIT")
         )
     )
 }.toSet()
