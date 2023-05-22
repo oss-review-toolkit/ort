@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import com.fasterxml.jackson.annotation.JsonInclude
+
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class Snippet(
@@ -47,5 +49,12 @@ data class Snippet(
     /**
      * The license of the component the code snippet is commit from.
      */
-    val licenses: SpdxExpression
+    val licenses: SpdxExpression,
+
+    /**
+     * A map for scanner specific snippet data that cannot be mapped into any generalized property, but still needs to
+     * be made available in the scan summary.
+     */
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    val additionalData: Map<String, String> = emptyMap()
 )
