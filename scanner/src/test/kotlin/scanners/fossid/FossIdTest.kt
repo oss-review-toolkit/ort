@@ -1319,7 +1319,13 @@ private fun createSnippetFindings(index: Int): Set<SnippetFinding> = (1..5).map 
             TextLocation("file$snippetIndex", TextLocation.UNKNOWN_LINE),
             ArtifactProvenance(RemoteArtifact("url$snippetIndex", Hash.NONE)),
             "pkg:generic/author$snippetIndex/artifact$snippetIndex@version$snippetIndex",
-            SpdxExpression.parse("MIT")
+            SpdxExpression.Companion.parse("MIT"),
+            mapOf(
+                FossId.SNIPPET_DATA_ID to "$snippetIndex",
+                FossId.SNIPPET_DATA_FILE to "file$snippetIndex",
+                FossId.SNIPPET_DATA_RELEASE_DATE to "releaseDate$snippetIndex",
+                FossId.SNIPPET_DATA_MATCH_TYPE to MatchType.PARTIAL.toString()
+            )
         )
     )
 }.toSet()
