@@ -56,7 +56,7 @@ class PackageManagerDependencyHandler(
                 id = Identifier(
                     type = TYPE,
                     namespace = packageManager,
-                    name = definitionFile.encode(),
+                    name = definitionFile.encodeColon(),
                     version = "$linkage@$scope"
                 )
             )
@@ -65,7 +65,7 @@ class PackageManagerDependencyHandler(
             node.id.type.takeIf { it == TYPE }?.let {
                 PackageManagerDependency(
                     packageManager = node.id.namespace,
-                    definitionFile = node.id.name.decode(),
+                    definitionFile = node.id.name.decodeColon(),
                     scope = node.id.version.substringAfter('@'),
                     linkage = PackageLinkage.valueOf(node.id.version.substringBefore('@'))
                 )
@@ -171,5 +171,5 @@ class DependencyNodeDelegate(private val node: DependencyNode) : ResolvableDepen
     override fun <T> visitDependencies(block: (Sequence<DependencyNode>) -> T): T = node.visitDependencies(block)
 }
 
-private fun String.encode() = replace(":", "__")
-private fun String.decode() = replace("__", ":")
+private fun String.encodeColon() = replace(':', '\u0000')
+private fun String.decodeColon() = replace('\u0000', ':')
