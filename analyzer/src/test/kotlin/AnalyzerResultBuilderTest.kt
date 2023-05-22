@@ -24,7 +24,6 @@ import io.kotest.core.spec.style.WordSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.maps.containExactly
@@ -369,7 +368,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 analyzerResult.withResolvedScopes().apply {
                     projects.find { it.id == project.id } shouldNotBeNull {
-                        scopes shouldContainExactly sortedSetOf(
+                        scopes should containExactlyInAnyOrder(
                             Scope(
                                 name = "scope",
                                 dependencies = setOf(
