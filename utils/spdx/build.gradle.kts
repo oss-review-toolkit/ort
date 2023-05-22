@@ -37,6 +37,28 @@ plugins {
 
 tasks.withType<AntlrTask>().configureEach {
     arguments = arguments + listOf("-visitor")
+
+    doLast {
+        // Work around https://github.com/antlr/antlr4/issues/4128.
+        outputDirectory.walk()
+            .filter { it.isFile && it.extension == "java" }
+            .forEach { javaFile ->
+                val lines = javaFile.readLines()
+
+                val text = buildString {
+                    lines.mapIndexed { index, line ->
+                        val patchedLine = when {
+                            index == 0 && line.startsWith("// Generated from ") -> line.replace('\\', '/')
+                            else -> line
+                        }
+
+                        appendLine(patchedLine)
+                    }
+                }
+
+                javaFile.writeText(text)
+            }
+    }
 }
 
 tasks.withType<KotlinCompile>().configureEach {
