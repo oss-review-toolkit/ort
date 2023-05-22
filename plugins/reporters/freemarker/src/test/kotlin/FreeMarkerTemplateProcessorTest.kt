@@ -223,13 +223,13 @@ private fun testProjects() = ORT_RESULT.getProjects().toList()
 /**
  * Create an [AdvisorRun] with the given [results].
  */
-private fun advisorRun(results: Map<Identifier, List<AdvisorResult>>): AdvisorRun =
+private fun advisorRun(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
     AdvisorRun(
         startTime = Instant.now(),
         endTime = Instant.now(),
         environment = Environment(),
         config = AdvisorConfiguration(),
-        results = AdvisorRecord(results)
+        results = AdvisorRecord(results.toMap())
     )
 
 /**
@@ -436,7 +436,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val issue = Issue(source = ADVISOR_DETAILS.name, message = "An error occurred")
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(mapOf(idSubProject to listOf(advisorResult)))
+            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -454,7 +454,8 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
 
             val advisorRun = advisorRun(
-                mapOf(idSubProject to listOf(advisorResult1), idNestedProject to listOf(advisorResult2))
+                idSubProject to listOf(advisorResult1),
+                idNestedProject to listOf(advisorResult2)
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
@@ -469,7 +470,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(mapOf(idSubProject to listOf(advisorResult)))
+            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -485,10 +486,8 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRun(
-                mapOf(
                     idSubProject to listOf(advisorResult),
                     idRootProject to listOf(advisorResult())
-                )
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
@@ -510,7 +509,8 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
 
             val advisorRun = advisorRun(
-                mapOf(idSubProject to listOf(advisorResult1), idNestedProject to listOf(advisorResult2))
+                idSubProject to listOf(advisorResult1),
+                idNestedProject to listOf(advisorResult2)
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
@@ -528,7 +528,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(mapOf(idSubProject to listOf(advisorResult)))
+            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -548,11 +548,9 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val otherResult = advisorResult()
 
             val advisorRun = advisorRun(
-                mapOf(
-                    idRootProject to emptyList(),
-                    idNestedProject to listOf(resultWithVulnerabilities1, otherResult),
-                    idSubProject to listOf(resultWithVulnerabilities2)
-                )
+                idRootProject to emptyList(),
+                idNestedProject to listOf(resultWithVulnerabilities1, otherResult),
+                idSubProject to listOf(resultWithVulnerabilities2)
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
@@ -586,11 +584,9 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val otherResult = advisorResult()
 
             val advisorRun = advisorRun(
-                mapOf(
-                    idRootProject to emptyList(),
-                    idNestedProject to listOf(resultWithDefects1, otherResult),
-                    idSubProject to listOf(resultWithDefects2)
-                )
+                idRootProject to emptyList(),
+                idNestedProject to listOf(resultWithDefects1, otherResult),
+                idSubProject to listOf(resultWithDefects2)
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
