@@ -223,7 +223,7 @@ private fun testProjects() = ORT_RESULT.getProjects().toList()
 /**
  * Create an [AdvisorRun] with the given [results].
  */
-private fun advisorRun(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
+private fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
     AdvisorRun(
         startTime = Instant.now(),
         endTime = Instant.now(),
@@ -436,7 +436,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val issue = Issue(source = ADVISOR_DETAILS.name, message = "An error occurred")
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
+            val advisorRun = advisorRunOf(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -453,7 +453,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val issue = Issue(source = details2.name, message = "Error when loading defects")
             val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
 
-            val advisorRun = advisorRun(
+            val advisorRun = advisorRunOf(
                 idSubProject to listOf(advisorResult1),
                 idNestedProject to listOf(advisorResult2)
             )
@@ -470,7 +470,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
+            val advisorRun = advisorRunOf(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -485,7 +485,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val issue = Issue(source = ADVISOR_DETAILS.name, message = "An error occurred")
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(
+            val advisorRun = advisorRunOf(
                     idSubProject to listOf(advisorResult),
                     idRootProject to listOf(advisorResult())
             )
@@ -508,7 +508,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult1 = advisorResult(vulnerabilities = listOf(vulnerability), issues = listOf(issue))
             val advisorResult2 = advisorResult(details = details2, issues = listOf(issue))
 
-            val advisorRun = advisorRun(
+            val advisorRun = advisorRunOf(
                 idSubProject to listOf(advisorResult1),
                 idNestedProject to listOf(advisorResult2)
             )
@@ -528,7 +528,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
                 Issue(source = ADVISOR_DETAILS.name, message = "A warning occurred", severity = Severity.WARNING)
             val advisorResult = advisorResult(issues = listOf(issue))
 
-            val advisorRun = advisorRun(idSubProject to listOf(advisorResult))
+            val advisorRun = advisorRunOf(idSubProject to listOf(advisorResult))
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)
 
@@ -547,7 +547,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             )
             val otherResult = advisorResult()
 
-            val advisorRun = advisorRun(
+            val advisorRun = advisorRunOf(
                 idRootProject to emptyList(),
                 idNestedProject to listOf(resultWithVulnerabilities1, otherResult),
                 idSubProject to listOf(resultWithVulnerabilities2)
@@ -583,7 +583,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             )
             val otherResult = advisorResult()
 
-            val advisorRun = advisorRun(
+            val advisorRun = advisorRunOf(
                 idRootProject to emptyList(),
                 idNestedProject to listOf(resultWithDefects1, otherResult),
                 idSubProject to listOf(resultWithDefects2)
