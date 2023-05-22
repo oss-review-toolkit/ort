@@ -21,8 +21,7 @@ package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-
-import java.util.SortedMap
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 /**
  * Type alias for a function that allows filtering of [AdvisorResult]s.
@@ -37,7 +36,8 @@ data class AdvisorRecord(
     /**
      * The [AdvisorResult]s for all [Package]s.
      */
-    val advisorResults: SortedMap<Identifier, List<AdvisorResult>>
+    @JsonPropertyOrder(alphabetic = true)
+    val advisorResults: Map<Identifier, List<AdvisorResult>>
 ) {
     companion object {
         /**

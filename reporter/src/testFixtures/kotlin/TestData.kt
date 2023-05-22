@@ -418,7 +418,7 @@ val ADVISOR_WITH_VULNERABILITIES = AdvisorRun(
     environment = Environment(),
     config = AdvisorConfiguration(),
     results = AdvisorRecord(
-        sortedMapOf(
+        mapOf(
             Identifier("NPM:@ort:declared-license:1.0") to listOf(
                 AdvisorResult(
                     advisor = AdvisorDetails("VulnerableCode", enumSetOf(AdvisorCapability.VULNERABILITIES)),

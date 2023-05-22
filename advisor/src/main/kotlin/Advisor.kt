@@ -78,7 +78,7 @@ class Advisor(
         withContext(Dispatchers.IO) {
             val startTime = Instant.now()
 
-            val results = sortedMapOf<Identifier, List<AdvisorResult>>()
+            val results = mutableMapOf<Identifier, List<AdvisorResult>>()
 
             if (packages.isEmpty()) {
                 logger.info { "There are no packages to give advice for." }

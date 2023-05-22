@@ -220,7 +220,7 @@ val ortResult = OrtResult(
         environment = Environment(),
         config = AdvisorConfiguration(),
         results = AdvisorRecord(
-            advisorResults = sortedMapOf(
+            advisorResults = mapOf(
                 packageWithVulnerabilities.id to listOf(
                     AdvisorResult(
                         advisor = AdvisorDetails.EMPTY,
