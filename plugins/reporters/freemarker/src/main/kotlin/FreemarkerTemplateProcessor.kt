@@ -26,7 +26,6 @@ import freemarker.template.DefaultObjectWrapper
 import freemarker.template.TemplateExceptionHandler
 
 import java.io.File
-import java.util.SortedMap
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -459,7 +458,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 
     val projectsToFilter = getProjects().mapTo(mutableSetOf()) { it.id } - targetProjects
 
-    val scanResults = getScanResults().mapValuesTo(sortedMapOf()) { (id, results) ->
+    val scanResults = getScanResults().mapValues { (id, results) ->
         if (id !in projectsToFilter) {
             results
         } else {
@@ -487,7 +486,7 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
 /**
  * Return a copy of this [OrtResult] with the scan results replaced by the given [scanResults].
  */
-private fun OrtResult.replaceScanResults(scanResults: SortedMap<Identifier, List<ScanResult>>): OrtResult =
+private fun OrtResult.replaceScanResults(scanResults: Map<Identifier, List<ScanResult>>): OrtResult =
     copy(
         scanner = scanner?.copy(
             scanResults = scanResults

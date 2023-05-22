@@ -71,7 +71,7 @@ internal class SubtractScanResultsCommand : CliktCommand(
             valueTransform = { it.summary }
         )
 
-        val scanResults = lhsOrtResult.getScanResults().mapValuesTo(sortedMapOf()) { (_, results) ->
+        val scanResults = lhsOrtResult.getScanResults().mapValues { (_, results) ->
             results.map { lhsScanResult ->
                 val lhsSummary = lhsScanResult.summary
                 val rhsSummary = rhsScanSummaries[lhsScanResult.provenance.key()]
