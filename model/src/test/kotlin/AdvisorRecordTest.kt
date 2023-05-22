@@ -355,7 +355,4 @@ private fun createResult(
     return AdvisorResult(details, summary, defects, vulnerabilities)
 }
 
-private fun advisorRecordOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRecord =
-    AdvisorRecord(
-        advisorResults = sortedMapOf(*results)
-    )
+private fun advisorRecordOf(vararg results: Pair<Identifier, List<AdvisorResult>>) = AdvisorRecord(results.toMap())
