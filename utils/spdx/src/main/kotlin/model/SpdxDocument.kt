@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdx.model
 
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.REF_PREFIX
@@ -127,6 +128,7 @@ data class SpdxDocument(
      * All relationships described in this [SpdxDocument].
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(converter = SpdxRelationshipSortedSetConverter::class)
     val relationships: List<SpdxRelationship> = emptyList()
 ) {
     init {
