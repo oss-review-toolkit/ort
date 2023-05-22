@@ -367,7 +367,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
 
                 analyzerResult.withResolvedScopes().apply {
                     projects.find { it.id == project.id } shouldNotBeNull {
-                        project.scopes shouldContainExactly sortedSetOf(
+                        scopes shouldContainExactly sortedSetOf(
                             Scope(
                                 name = "scope",
                                 dependencies = setOf(
