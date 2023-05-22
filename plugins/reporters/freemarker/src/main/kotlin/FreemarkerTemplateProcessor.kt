@@ -443,7 +443,6 @@ internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identif
     val excludePaths = mutableSetOf<String>()
 
     targetProjects.forEach { id ->
-
         getScanResultsForId(id).forEach { scanResult ->
             val provenance = scanResult.provenance as RepositoryProvenance
             val vcsPath = provenance.vcsInfo.path
