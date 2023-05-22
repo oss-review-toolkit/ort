@@ -101,11 +101,11 @@ class OrtProxySelector(private val fallback: ProxySelector? = null) : ProxySelec
             addProxy("properties", "https", it)
         }
 
-        determineProxyFromURL(Os.env["http_proxy"])?.let {
+        determineProxyFromUrl(Os.env["http_proxy"])?.let {
             addProxy("environment", "http", it)
         }
 
-        determineProxyFromURL(Os.env["https_proxy"])?.let {
+        determineProxyFromUrl(Os.env["https_proxy"])?.let {
             addProxy("environment", "https", it)
         }
     }
@@ -224,7 +224,7 @@ fun determineProxyFromProperties(protocol: String?): AuthenticatedProxy? {
  * Return a [proxy][Proxy] with optional [password authentication][PasswordAuthentication] as encoded in the [url], or
  * null if the string does not represent a URL with a supported [proxy type][Proxy.Type].
  */
-fun determineProxyFromURL(url: String?): AuthenticatedProxy? {
+fun determineProxyFromUrl(url: String?): AuthenticatedProxy? {
     if (url == null) return null
 
     val uri = runCatching {
