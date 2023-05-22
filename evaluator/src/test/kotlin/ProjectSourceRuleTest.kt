@@ -220,7 +220,7 @@ private fun createOrtResult(
             )
         ),
         scanner = ScannerRun.EMPTY.copy(
-            scanResults = sortedMapOf(
+            scanResults = mapOf(
                 id to listOf(
                     ScanResult(
                         provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),

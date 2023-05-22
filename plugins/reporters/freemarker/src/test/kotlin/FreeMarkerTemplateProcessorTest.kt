@@ -141,7 +141,7 @@ private val ORT_RESULT = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        scanResults = sortedMapOf(
+        scanResults = mapOf(
             idRootProject to scanResults(
                 vcsInfo = PROJECT_VCS_INFO,
                 findingsPaths = listOf(

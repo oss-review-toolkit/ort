@@ -221,7 +221,7 @@ val ORT_RESULT = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        scanResults = sortedMapOf(
+        scanResults = mapOf(
             Identifier("NPM:@ort:project-with-findings:1.0") to listOf(
                 ScanResult(
                     provenance = UnknownProvenance,

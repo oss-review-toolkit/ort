@@ -253,7 +253,7 @@ val ortResult = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        scanResults = sortedMapOf(
+        scanResults = mapOf(
             Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
                 ScanResult(
                     provenance = UnknownProvenance,

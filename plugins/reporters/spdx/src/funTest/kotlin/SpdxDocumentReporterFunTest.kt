@@ -265,7 +265,7 @@ private val ortResult = OrtResult(
         )
     ),
     scanner = ScannerRun.EMPTY.copy(
-        scanResults = sortedMapOf(
+        scanResults = mapOf(
             Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
                 ScanResult(
                     provenance = ArtifactProvenance(
