@@ -132,6 +132,18 @@ class FossId internal constructor(
         @JvmStatic
         internal val PROJECT_REVISION_LABEL = "projectVcsRevision"
 
+        @JvmStatic
+        internal val SNIPPET_DATA_ID = "id"
+
+        @JvmStatic
+        internal val SNIPPET_DATA_MATCH_TYPE = "matchType"
+
+        @JvmStatic
+        internal val SNIPPET_DATA_FILE = "file"
+
+        @JvmStatic
+        internal val SNIPPET_DATA_RELEASE_DATE = "releaseDate"
+
         /**
          * The scan states for which a scan can be triggered.
          */
@@ -825,6 +837,13 @@ class FossId internal constructor(
                 val snippetProvenance = ArtifactProvenance(RemoteArtifact(it.url, Hash.NONE))
                 val purl = it.purl ?: "pkg:${urlToPackageType(it.url)}/${it.author}/${it.artifact}@${it.version}"
 
+                val additionalSnippetData = mapOf(
+                    SNIPPET_DATA_ID to it.id.toString(),
+                    SNIPPET_DATA_FILE to it.file,
+                    SNIPPET_DATA_MATCH_TYPE to it.matchType.toString(),
+                    SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
+                )
+
                 // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
                 //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
                 //       call per snippet which is too expensive. When it is available for a batch of snippets, it can
@@ -834,7 +853,8 @@ class FossId internal constructor(
                     TextLocation(it.file, TextLocation.UNKNOWN_LINE),
                     snippetProvenance,
                     purl,
-                    license
+                    license,
+                    additionalSnippetData
                 )
             }
 
