@@ -81,6 +81,8 @@ dependencies {
     implementation(libs.jacksonDataformatYaml)
     implementation(libs.jacksonDatatypeJsr310)
     implementation(libs.jacksonModuleKotlin)
+
+    testImplementation(libs.kotestAssertionsJson)
 }
 
 data class LicenseInfo(

@@ -21,14 +21,16 @@ package org.ossreviewtoolkit.utils.spdx.model
 
 import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 
+import io.kotest.assertions.json.ArrayOrder
+import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
+import org.ossreviewtoolkit.utils.spdx.yamlMapper
 
 /**
  * This test uses the following test assets copied from the SPDX 2.2.1 specification examples.
@@ -52,13 +54,13 @@ class SpdxDocumentTest : WordSpec({
 
     "The official YAML example without ranges from the SPDX specification version 2.2" should {
         "have idempotent (de)-serialization" {
-            val yaml = spdxExamplesDir.resolve("SPDXYAMLExample-2.2-no-ranges.spdx.yaml")
-            val document = SpdxModelMapper.read<SpdxDocument>(yaml)
+            val yaml = spdxExamplesDir.resolve("SPDXYAMLExample-2.2-no-ranges.spdx.yaml").readText()
 
-            val serializedYaml = SpdxModelMapper.toYaml(document)
-            val deserializedYaml = SpdxModelMapper.fromYaml<SpdxDocument>(serializedYaml)
+            val reSerializedYaml = SpdxModelMapper.fromYaml<SpdxDocument>(yaml).let {
+                SpdxModelMapper.toYaml(it)
+            }
 
-            deserializedYaml shouldBe document
+            reSerializedYaml lenientShouldEqualYaml yaml
         }
     }
 
@@ -72,13 +74,13 @@ class SpdxDocumentTest : WordSpec({
 
     "The official JSON example without ranges from the SPDX specification version 2.2" should {
         "have idempotent (de-)serialization" {
-            val json = spdxExamplesDir.resolve("SPDXJSONExample-v2.2-no-ranges.spdx.json")
-            val document = SpdxModelMapper.read<SpdxDocument>(json)
+            val json = spdxExamplesDir.resolve("SPDXJSONExample-v2.2-no-ranges.spdx.json").readText()
 
-            val serializedJson = SpdxModelMapper.toJson(document)
-            val deserializedJson = SpdxModelMapper.fromJson<SpdxDocument>(serializedJson)
+            val reSerializedJson = SpdxModelMapper.fromJson<SpdxDocument>(json).let {
+                SpdxModelMapper.toJson(it)
+            }
 
-            deserializedJson shouldBe document
+            reSerializedJson lenientShouldEqualJson json
         }
     }
 
@@ -97,3 +99,16 @@ class SpdxDocumentTest : WordSpec({
         }
     }
 })
+
+private infix fun String.lenientShouldEqualJson(expected: String): String =
+    shouldEqualJson {
+        arrayOrder = ArrayOrder.Lenient
+        expected
+    }
+
+private infix fun String.lenientShouldEqualYaml(expected: String): String {
+    val json = yamlMapper.readTree(this).toString()
+    val expectedJson = yamlMapper.readTree(expected).toString()
+
+    return json.lenientShouldEqualJson(expectedJson)
+}
