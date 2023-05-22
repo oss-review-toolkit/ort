@@ -73,6 +73,8 @@ import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.Snippet
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
@@ -81,8 +83,6 @@ import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
-import org.ossreviewtoolkit.model.utils.Snippet
-import org.ossreviewtoolkit.model.utils.SnippetFinding
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper

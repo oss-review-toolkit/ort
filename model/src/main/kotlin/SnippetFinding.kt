@@ -17,9 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.utils
-
-import org.ossreviewtoolkit.model.TextLocation
+package org.ossreviewtoolkit.model
 
 /**
  * A class representing a snippet finding for a source file. A snippet finding is a code snippet from another origin,

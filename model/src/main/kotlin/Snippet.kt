@@ -17,10 +17,8 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.utils
+package org.ossreviewtoolkit.model
 
-import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 data class Snippet(

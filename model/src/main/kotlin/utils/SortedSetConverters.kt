@@ -30,6 +30,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.Scope
+import org.ossreviewtoolkit.model.SnippetFinding
 
 class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
     override fun convert(value: Set<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)

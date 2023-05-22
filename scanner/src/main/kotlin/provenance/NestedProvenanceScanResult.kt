@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.utils.SnippetFinding
+import org.ossreviewtoolkit.model.SnippetFinding
 
 /**
  * A class that contains all [ScanResult]s for a [NestedProvenance].
