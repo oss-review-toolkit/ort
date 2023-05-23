@@ -113,7 +113,7 @@ pipeline {
         booleanParam(
             name: 'USE_ORT_CONFIG_CURATIONS',
             description: 'Use package curation data from the ORT config repository.',
-            defaultValue: true
+            defaultValue: false
         )
 
         booleanParam(
