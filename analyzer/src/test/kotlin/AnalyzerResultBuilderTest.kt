@@ -32,6 +32,8 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.beTheSameInstanceAs
 
+import java.time.Instant
+
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.DependencyGraph
@@ -54,11 +56,11 @@ import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerResultBuilderTest : WordSpec() {
-    private val issue1 = Issue(source = "source-1", message = "message-1")
-    private val issue2 = Issue(source = "source-2", message = "message-2")
-    private val issue3 = Issue(source = "source-3", message = "message-3")
-    private val issue4 = Issue(source = "source-4", message = "message-4")
-    private val issue5 = Issue(source = "source-5", message = "message-5")
+    private val issue1 = Issue(timestamp = Instant.EPOCH, source = "source-1", message = "message-1")
+    private val issue2 = Issue(timestamp = Instant.EPOCH, source = "source-2", message = "message-2")
+    private val issue3 = Issue(timestamp = Instant.EPOCH, source = "source-3", message = "message-3")
+    private val issue4 = Issue(timestamp = Instant.EPOCH, source = "source-4", message = "message-4")
+    private val issue5 = Issue(timestamp = Instant.EPOCH, source = "source-5", message = "message-5")
 
     private val package1 = Package.EMPTY.copy(id = Identifier("type-1", "namespace-1", "package-1", "version-1"))
     private val package2 = Package.EMPTY.copy(id = Identifier("type-2", "namespace-2", "package-2", "version-2"))
