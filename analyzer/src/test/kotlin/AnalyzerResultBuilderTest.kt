@@ -375,18 +375,16 @@ class AnalyzerResultBuilderTest : WordSpec() {
                                 dependencies = setOf(
                                     PackageReference(
                                         id = project1.id,
-                                        dependencies = setOf(
-                                            PackageReference(id = package1.id)
-                                        )
+                                        linkage = PackageLinkage.PROJECT_DYNAMIC,
+                                        dependencies = setOf(pkgRef1)
                                     ),
                                     PackageReference(
                                         id = package1.id,
                                         dependencies = setOf(
                                             PackageReference(
                                                 id = project1.id,
-                                                dependencies = setOf(
-                                                    PackageReference(id = package1.id)
-                                                )
+                                                linkage = PackageLinkage.PROJECT_DYNAMIC,
+                                                dependencies = setOf(pkgRef1)
                                             )
                                         )
                                     )
