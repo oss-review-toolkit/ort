@@ -344,7 +344,7 @@ class AnalyzerResultBuilderTest : WordSpec() {
                     dependencies = setOf(
                         packageManagerDependency,
                         PackageReference(
-                            id = pkgRef1.id,
+                            id = package1.id,
                             dependencies = setOf(packageManagerDependency)
                         )
                     )
