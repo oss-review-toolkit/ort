@@ -89,3 +89,11 @@ tasks.named<JacocoReport>("jacocoFunTestReport") {
         )
     )
 }
+
+tasks.named<Test>("funTest") {
+    val gradlePackageManagerProject = project(":plugins:package-managers:gradle-package-manager")
+    val gradlePackageManagerFunTestTask = gradlePackageManagerProject.tasks.named<Test>("funTest")
+
+    // Enforce ordering to avoid conflicts e.g. during Android SDK component installation.
+    mustRunAfter(gradlePackageManagerFunTestTask)
+}
