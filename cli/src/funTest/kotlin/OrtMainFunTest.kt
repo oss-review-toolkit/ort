@@ -89,7 +89,7 @@ class OrtMainFunTest : StringSpec() {
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are enabled:") break
+                if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
@@ -97,6 +97,8 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
+            val expectedPackageManagers = PackageManager.ENABLED_BY_DEFAULT.filterNot { it.type == "Gradle" }
+            val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
             val stdout = runMain(
@@ -108,10 +110,8 @@ class OrtMainFunTest : StringSpec() {
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are enabled:") break
+                if (iterator.next() == markerLine) break
             }
-
-            val expectedPackageManagers = PackageManager.ENABLED_BY_DEFAULT.filterNot { it.type == "Gradle" }
 
             iterator.hasNext() shouldBe true
             iterator.next() shouldBe "\t${expectedPackageManagers.joinToString { it.type }}"
@@ -130,7 +130,7 @@ class OrtMainFunTest : StringSpec() {
             )
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
-                if (iterator.next() == "The following package managers are enabled:") break
+                if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
