@@ -26,7 +26,10 @@ import org.apache.maven.model.Scm
 import org.apache.maven.model.building.ModelBuildingResult
 
 fun Model.collectAuthors(): Set<String> =
-    // The SetBuilder returned by buildSet is not serializable by Java, so manually call toSet().
+    // The `SetBuilder` [1] returned by `buildSet {}` cannot be deserialized to a `(Linked)HashSet`, so manually call
+    // `toSet()`.
+    //
+    // [1]: https://github.com/JetBrains/kotlin/blob/00e8dc1/libraries/stdlib/jvm/src/kotlin/collections/builders/SetBuilder.kt
     buildList {
         organization?.let {
             if (!it.name.isNullOrEmpty()) add(it.name)
