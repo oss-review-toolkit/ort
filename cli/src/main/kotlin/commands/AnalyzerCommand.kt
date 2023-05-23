@@ -148,7 +148,7 @@ class AnalyzerCommand : OrtCommand(
 
         val enabledPackageManagers = analyzerConfiguration.determineEnabledPackageManagers()
 
-        println("The following package managers are enabled:")
+        println("The following ${enabledPackageManagers.size} package manager(s) are enabled:")
         println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
@@ -168,7 +168,7 @@ class AnalyzerCommand : OrtCommand(
             addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
         }
 
-        println("The following package curation providers are enabled:")
+        println("The following ${enabledCurationProviders.size} package curation provider(s) are enabled:")
         println("\t" + enabledCurationProviders.joinToString { it.first }.ifEmpty { "<None>" })
 
         println("Analyzing project path:\n\t$inputDir")
