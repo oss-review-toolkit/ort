@@ -30,7 +30,6 @@ import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.maps.containExactly
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
@@ -209,30 +208,6 @@ class ExtensionsTest : WordSpec({
             file shouldBe aFile()
             shouldThrow<IOException> { file.safeMkdirs() }
             file shouldBe aFile() // should still be a file afterwards
-        }
-    }
-
-    "File.searchUpwardsForFile" should {
-        "find the README.md file case insensitive" {
-            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", true)
-
-            readmeFile shouldNotBeNull {
-                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
-            }
-        }
-
-        "find the README.md file case sensitive" {
-            val readmeFile = File(".").searchUpwardsForFile("README.md", false)
-
-            readmeFile shouldNotBeNull {
-                this shouldBe File("../..").absoluteFile.normalize().resolve("README.md")
-            }
-        }
-
-        "not find the README.md with wrong cases" {
-            val readmeFile = File(".").searchUpwardsForFile("ReadMe.MD", false)
-
-            readmeFile should beNull()
         }
     }
 
