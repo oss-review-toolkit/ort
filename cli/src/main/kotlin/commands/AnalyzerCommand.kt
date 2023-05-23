@@ -222,7 +222,10 @@ class AnalyzerCommand : OrtCommand(
         )
 
         val curationCount = packages.sumOf { it.curations.size }
-        println("Applied $curationCount curation(s) from ${enabledCurationProviders.size} provider(s).")
+        val providerCount = ortResult.resolvedConfiguration.packageCurations.count { it.curations.isNotEmpty() }
+        println(
+            "Applied $curationCount curation(s) from $providerCount of ${enabledCurationProviders.size} provider(s)."
+        )
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
         val (resolvedIssues, unresolvedIssues) = analyzerRun.result.getAllIssues().flatMap { it.value }
