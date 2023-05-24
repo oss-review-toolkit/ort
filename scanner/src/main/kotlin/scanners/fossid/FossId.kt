@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -787,7 +788,7 @@ class FossId internal constructor(
                     }
                     logger.info { "${snippets.size} snippets." }
 
-                    it to snippets.toSet()
+                    it to snippets.filterNot { it.matchType == MatchType.IGNORED }.toSet()
                 }
             }.awaitAll().toMap()
         }
