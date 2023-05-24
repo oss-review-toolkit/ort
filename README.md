@@ -52,7 +52,7 @@ integrations. It consists of the following tools which can be combined into a _h
   Version Control System (VCS) or other means are used to retrieve the source code.
 * [_Scanner_](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
   the type of scanner.
-* [_Advisor_](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data 
+* [_Advisor_](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data
   services.
 * [_Evaluator_](#evaluator) - evaluates custom policy rules along with custom license classifications against the data
   gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
@@ -61,7 +61,7 @@ integrations. It consists of the following tools which can be combined into a _h
 * [_Notifier_](./notifier) - sends result notifications via different channels (like
   [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
-Also see the [list of related tools](#related-tools) that help with running ORT. 
+Also see the [list of related tools](#related-tools) that help with running ORT.
 
 # Installation
 
@@ -86,7 +86,7 @@ by running `git submodule update --init --recursive`.
 Install the following basic prerequisites:
 
 * Docker 18.09 or later (and ensure its daemon is running).
-* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for 
+* Enable [BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/#to-enable-buildkit-builds) for
   Docker.
 
 Change into the directory with ORT's source code and run `docker build -t ort .`. Alternatively, use the script at
@@ -194,10 +194,10 @@ While the file is rather static, there are means to override configuration optio
 customize the configuration to a specific environment. The following options are supported, in order of precedence:
 
 * Properties can be defined via environment variables by using the full property path as the variable name.
-  For instance, one can override the Postgres schema by setting 
+  For instance, one can override the Postgres schema by setting
   `ort.scanner.storages.postgres.connection.schema=test_schema`. The variable's name is case-sensitive.
   Some programs like Bash do not support dots in variable names. For this case, the dots can be
-  replaced by double underscores, i.e., the above example is turned into 
+  replaced by double underscores, i.e., the above example is turned into
   `ort__scanner__storages__postgres__connection__schema=test_schema`.
 * In addition to that, one can override the values of properties on the command line using the `-P` option. The option
   expects a key-value pair. Again, the key must define the full path to the property to be overridden, e.g.
@@ -521,7 +521,7 @@ ort:
             url: "https://artifactory.domain.com/artifactory/repository/scan-results"
             headers:
               X-JFrog-Art-Api: "api-token"
-              
+
     storageReaders: ["artifactoryStorage"]
     storageWriters: ["artifactoryStorage"]
 ```
@@ -773,13 +773,13 @@ A [repository](https://github.com/oss-review-toolkit/ort-config) with exemplary 
 ## ORT Workbench
 
 The [ORT Workbench](https://github.com/oss-review-toolkit/ort-workbench) is an ORT result file viewer developed by the
-ORT core team. It can be used as an alternative to creating a [report](#reporter) to review the ORT output. 
+ORT core team. It can be used as an alternative to creating a [report](#reporter) to review the ORT output.
 
 ![Screenshot](https://github.com/oss-review-toolkit/ort-workbench/raw/main/assets/screenshot.png)
 
 ## ORT GitHub Action
 
-A [GitHub Action](https://github.com/oss-review-toolkit/ort-ci-github-action) to run ORT for your GitHub repositories. 
+A [GitHub Action](https://github.com/oss-review-toolkit/ort-ci-github-action) to run ORT for your GitHub repositories.
 
 ## ORT GitLab Pipeline
 
