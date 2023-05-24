@@ -202,11 +202,11 @@ internal class DummyProvenanceStorage : PackageProvenanceStorage {
 
     override fun readProvenances(id: Identifier): List<PackageProvenanceResolutionResult> = emptyList()
 
-    override fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) { /** no-op */ }
+    override fun putProvenance(id: Identifier, vcs: VcsInfo, result: PackageProvenanceResolutionResult) { /* no-op */ }
 
     override fun putProvenance(
         id: Identifier,
         sourceArtifact: RemoteArtifact,
         result: PackageProvenanceResolutionResult
-    ) { /** no-op */ }
+    ) { /* no-op */ }
 }
