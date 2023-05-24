@@ -246,8 +246,9 @@ interface FossIdRestService {
     suspend fun listIdentifiedFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IdentifiedFile>
 
     @POST("api.php")
-    suspend fun listMarkedAsIdentifiedFiles(@Body body: PostRequestBody):
-            PolymorphicResponseBody<MarkedAsIdentifiedFile>
+    suspend fun listMarkedAsIdentifiedFiles(
+        @Body body: PostRequestBody
+    ): PolymorphicResponseBody<MarkedAsIdentifiedFile>
 
     @POST("api.php")
     suspend fun listIgnoredFiles(@Body body: PostRequestBody): PolymorphicResponseBody<IgnoredFile>
