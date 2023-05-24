@@ -151,6 +151,23 @@ class FossIdClientReturnTypeTest : StringSpec({
         }
     }
 
+    "Ignored snippets can be mapped" {
+        service.listSnippets(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Requirement.java"
+        ).shouldNotBeNull().run {
+            checkResponse("list snippets")
+            data.shouldNotBeNull().run {
+                this shouldNot beEmpty()
+                forEach {
+                    it.shouldBeTypeOf<Snippet>()
+                }
+            }
+        }
+    }
+
     "Matched lines can be listed" {
         service.listMatchedLines(
             "",
