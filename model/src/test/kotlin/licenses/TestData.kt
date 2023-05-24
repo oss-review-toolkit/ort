@@ -30,7 +30,6 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -41,6 +40,7 @@ import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 val authors = setOf("The Author", "The Other Author")
 val projectAuthors = setOf("The Project Author")
@@ -172,7 +172,5 @@ val ortResult = OrtResult(
             packages = allPackages
         )
     ),
-    scanner = ScannerRun.EMPTY.copy(
-        scanResults = scanResults
-    )
+    scanner = scannerRunOf(*scanResults.toList().toTypedArray())
 )

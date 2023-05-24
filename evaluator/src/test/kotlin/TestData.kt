@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
@@ -59,6 +58,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 val concludedLicense = "LicenseRef-a OR LicenseRef-b OR LicenseRef-c or LicenseRef-d".toSpdx()
 val declaredLicenses = setOf("Apache-2.0", "MIT")
@@ -252,17 +252,15 @@ val ortResult = OrtResult(
             )
         )
     ),
-    scanner = ScannerRun.EMPTY.copy(
-        scanResults = mapOf(
-            Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
-                ScanResult(
-                    provenance = UnknownProvenance,
-                    scanner = ScannerDetails.EMPTY,
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
-                            LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
-                        )
+    scanner = scannerRunOf(
+        Identifier("Maven:org.ossreviewtoolkit:package-with-only-detected-license:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails.EMPTY,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding("LicenseRef-a", TextLocation("LICENSE", 1)),
+                        LicenseFinding("LicenseRef-b", TextLocation("LICENSE", 2))
                     )
                 )
             )

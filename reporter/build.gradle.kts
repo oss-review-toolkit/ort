@@ -36,4 +36,5 @@ dependencies {
     funTestImplementation(testFixtures(project))
 
     funTestImplementation(libs.kotestAssertionsJson)
+    testFixturesImplementation(project(":utils:test-utils"))
 }
