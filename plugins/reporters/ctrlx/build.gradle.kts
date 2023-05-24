@@ -17,21 +17,34 @@
  * License-Filename: LICENSE
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     // Apply core plugins.
     `java-library`
+
+    // Apply third-party plugins.
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
     api(project(":reporter"))
     api(project(":utils:spdx-utils"))
 
-    api(libs.jacksonAnnotations)
-
     implementation(project(":model"))
     implementation(project(":utils:common-utils"))
 
-    implementation(libs.jacksonDatabind)
+    implementation(libs.bundles.kotlinxSerialization)
 
     funTestImplementation(testFixtures(project(":reporter")))
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
+    )
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+    }
 }

@@ -21,20 +21,23 @@ package org.ossreviewtoolkit.plugins.reporters.ctrlx
 
 import java.io.File
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToStream
+
 import org.ossreviewtoolkit.model.licenses.LicenseView
-import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class CtrlXAutomationReporter : Reporter {
     companion object {
         const val REPORT_FILENAME = "fossinfo.json"
 
+        val JSON = Json { encodeDefaults = false }
+
         private val LICENSE_NOASSERTION = License(
             name = SpdxConstants.NOASSERTION,
-            spdx = SpdxConstants.NOASSERTION.toSpdx(),
+            spdx = SpdxConstants.NOASSERTION,
             text = ""
         )
     }
@@ -67,7 +70,7 @@ class CtrlXAutomationReporter : Reporter {
             val licenses = effectiveLicense?.decompose()?.map {
                 val id = it.toString()
                 val text = input.licenseTextProvider.getLicenseText(id)
-                License(name = id, spdx = it, text = text.orEmpty())
+                License(name = id, spdx = id, text = text.orEmpty())
             }
 
             // The specification requires at least one license.
@@ -85,7 +88,7 @@ class CtrlXAutomationReporter : Reporter {
         }
 
         val info = FossInfo(components = components)
-        reportFile.writeValue(info)
+        reportFile.outputStream().use { JSON.encodeToStream(info, it) }
 
         return listOf(reportFile)
     }
