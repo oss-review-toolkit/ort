@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagecurationproviders.clearlydefined
 
-import com.fasterxml.jackson.databind.JsonMappingException
-
 import java.net.HttpURLConnection
 
 import okhttp3.OkHttpClient
@@ -125,11 +123,6 @@ class ClearlyDefinedPackageCurationProvider(
                             "Getting curations failed with code ${e.code()}: $message"
                         }
                     }
-                }
-
-                is JsonMappingException -> {
-                    e.showStackTrace()
-                    logger.warn { "Deserializing the curations failed: ${e.collectMessages()}" }
                 }
 
                 else -> {
