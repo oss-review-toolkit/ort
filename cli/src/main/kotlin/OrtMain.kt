@@ -195,7 +195,9 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
             |    |   | |    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
             \________/ |____|___/ |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
 
-        """.trimIndent().lines().mapTo(header) { it.trimEnd() }
+        """.trimIndent().lines().mapTo(header) {
+            it.trimEnd()
+        }
 
         if (variables.isNotEmpty()) {
             header += "Environment variables:"
