@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.model.Repository
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -56,6 +55,7 @@ import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 private const val SERVER_URL_SAMPLE = "https://fossid.example.com/instance/"
 private const val API_KEY_SAMPLE = "XYZ"
@@ -276,7 +276,7 @@ private fun createReporterInput(vararg scanCodes: String): ReporterInput {
                 vcs = analyzedVcs,
                 vcsProcessed = analyzedVcs
             ),
-            scanner = ScannerRun.EMPTY.copy(scanResults = results)
+            scanner = scannerRunOf(*results.toList().toTypedArray())
         )
     )
 }

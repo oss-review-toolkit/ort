@@ -25,7 +25,10 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -112,3 +115,6 @@ fun patchActualResult(
 fun readOrtResult(file: String) = readOrtResult(File(file))
 
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
+
+fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun =
+    ScannerRun.EMPTY.copy(scanResults = scanResults.toMap())

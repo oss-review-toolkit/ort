@@ -36,10 +36,10 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 class ProjectSourceRuleTest : WordSpec({
     "projectSourceHasFile()" should {
@@ -219,16 +219,14 @@ private fun createOrtResult(
                 )
             )
         ),
-        scanner = ScannerRun.EMPTY.copy(
-            scanResults = mapOf(
-                id to listOf(
-                    ScanResult(
-                        provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
-                        scanner = ScannerDetails.EMPTY,
-                        summary = ScanSummary.EMPTY.copy(
-                            licenseFindings = licenseFindings,
-                            packageVerificationCode = "0000000000000000000000000000000000000000"
-                        )
+        scanner = scannerRunOf(
+            id to listOf(
+                ScanResult(
+                    provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
+                    scanner = ScannerDetails.EMPTY,
+                    summary = ScanSummary.EMPTY.copy(
+                        licenseFindings = licenseFindings,
+                        packageVerificationCode = "0000000000000000000000000000000000000000"
                     )
                 )
             )

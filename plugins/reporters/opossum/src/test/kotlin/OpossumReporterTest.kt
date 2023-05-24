@@ -50,7 +50,6 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
@@ -59,6 +58,7 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OpossumReporterTest : WordSpec({
@@ -437,81 +437,79 @@ private fun createOrtResult(): OrtResult {
                 ),
             ),
         ),
-        scanner = ScannerRun.EMPTY.copy(
-            scanResults = mapOf(
-                Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
-                    ScanResult(
-                        provenance = ArtifactProvenance(
-                            sourceArtifact = RemoteArtifact(
-                                url = "https://some-host/first-package-sources.jar",
-                                hash = Hash.NONE
-                            )
-                        ),
-                        scanner = ScannerDetails(
-                            name = "SCANNER",
-                            version = "1.2.3",
-                            configuration = "configuration"
-                        ),
-                        summary = ScanSummary.EMPTY.copy(
-                            packageVerificationCode = "0000000000000000000000000000000000000000",
-                            licenseFindings = setOf(
-                                LicenseFinding(
-                                    license = "Apache-2.0",
-                                    location = TextLocation("LICENSE", 1)
-                                )
-                            ),
-                            copyrightFindings = setOf(
-                                CopyrightFinding(
-                                    statement = "Copyright 2020 Some copyright holder in source artifact",
-                                    location = TextLocation("some/file", 1)
-                                ),
-                                CopyrightFinding(
-                                    statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                    location = TextLocation("some/file", 7)
-                                )
-                            )
+        scanner = scannerRunOf(
+            Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
+                ScanResult(
+                    provenance = ArtifactProvenance(
+                        sourceArtifact = RemoteArtifact(
+                            url = "https://some-host/first-package-sources.jar",
+                            hash = Hash.NONE
                         )
                     ),
-                    ScanResult(
-                        provenance = RepositoryProvenance(
-                            vcsInfo = VcsInfo(
-                                type = VcsType.GIT,
-                                revision = "master",
-                                url = "ssh://git@github.com/path/first-package-repo.git",
-                                path = "project-path"
-                            ),
-                            resolvedRevision = "deadbeef"
+                    scanner = ScannerDetails(
+                        name = "SCANNER",
+                        version = "1.2.3",
+                        configuration = "configuration"
+                    ),
+                    summary = ScanSummary.EMPTY.copy(
+                        packageVerificationCode = "0000000000000000000000000000000000000000",
+                        licenseFindings = setOf(
+                            LicenseFinding(
+                                license = "Apache-2.0",
+                                location = TextLocation("LICENSE", 1)
+                            )
                         ),
-                        scanner = ScannerDetails(
-                            name = "otherSCANNER",
-                            version = "1.2.3",
-                            configuration = "otherConfiguration"
+                        copyrightFindings = setOf(
+                            CopyrightFinding(
+                                statement = "Copyright 2020 Some copyright holder in source artifact",
+                                location = TextLocation("some/file", 1)
+                            ),
+                            CopyrightFinding(
+                                statement = "Copyright 2020 Some other copyright holder in source artifact",
+                                location = TextLocation("some/file", 7)
+                            )
+                        )
+                    )
+                ),
+                ScanResult(
+                    provenance = RepositoryProvenance(
+                        vcsInfo = VcsInfo(
+                            type = VcsType.GIT,
+                            revision = "master",
+                            url = "ssh://git@github.com/path/first-package-repo.git",
+                            path = "project-path"
                         ),
-                        summary = ScanSummary.EMPTY.copy(
-                            startTime = Instant.EPOCH,
-                            endTime = Instant.EPOCH,
-                            packageVerificationCode = "0000000000000000000000000000000000000000",
-                            licenseFindings = setOf(
-                                LicenseFinding(
-                                    license = "BSD-2-Clause",
-                                    location = TextLocation("LICENSE", 1)
-                                )
+                        resolvedRevision = "deadbeef"
+                    ),
+                    scanner = ScannerDetails(
+                        name = "otherSCANNER",
+                        version = "1.2.3",
+                        configuration = "otherConfiguration"
+                    ),
+                    summary = ScanSummary.EMPTY.copy(
+                        startTime = Instant.EPOCH,
+                        endTime = Instant.EPOCH,
+                        packageVerificationCode = "0000000000000000000000000000000000000000",
+                        licenseFindings = setOf(
+                            LicenseFinding(
+                                license = "BSD-2-Clause",
+                                location = TextLocation("LICENSE", 1)
+                            )
+                        ),
+                        copyrightFindings = setOf(
+                            CopyrightFinding(
+                                statement = "Copyright 2020 Some copyright holder in VCS",
+                                location = TextLocation("some/file", 1)
+                            )
+                        ),
+                        issues = listOf(
+                            Issue(
+                                source = "Source-4",
+                                message = "Message-4"
                             ),
-                            copyrightFindings = setOf(
-                                CopyrightFinding(
-                                    statement = "Copyright 2020 Some copyright holder in VCS",
-                                    location = TextLocation("some/file", 1)
-                                )
-                            ),
-                            issues = listOf(
-                                Issue(
-                                    source = "Source-4",
-                                    message = "Message-4"
-                                ),
-                                Issue(
-                                    source = "Source-5",
-                                    message = "Message-5"
-                                )
+                            Issue(
+                                source = "Source-5",
+                                message = "Message-5"
                             )
                         )
                     )

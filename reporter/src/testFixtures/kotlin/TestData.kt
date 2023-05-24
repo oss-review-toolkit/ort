@@ -62,6 +62,7 @@ import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 // TODO: Create a way to reduce the code required to prepare an OrtResult for testing.
 val ORT_RESULT = OrtResult(
@@ -220,183 +221,181 @@ val ORT_RESULT = OrtResult(
             )
         )
     ),
-    scanner = ScannerRun.EMPTY.copy(
-        scanResults = mapOf(
-            Identifier("NPM:@ort:project-with-findings:1.0") to listOf(
-                ScanResult(
-                    provenance = UnknownProvenance,
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("project-with-findings/file", 1)
-                            )
-                        ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("project-with-findings/file", 1)
-                            )
-                        )
-                    )
-                )
-            ),
-            Identifier("NPM:@ort:project-without-findings:1.0") to listOf(
-                ScanResult(
-                    provenance = UnknownProvenance,
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY
-                )
-            ),
-            Identifier("NPM:@ort:no-license-file:1.0") to listOf(
-                ScanResult(
-                    provenance = UnknownProvenance,
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("file", 1)
-                            )
-                        ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("file", 1)
-                            )
-                        )
-                    )
-                )
-            ),
-            Identifier("NPM:@ort:license-file:1.0") to listOf(
-                ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/license-file-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+    scanner = scannerRunOf(
+        Identifier("NPM:@ort:project-with-findings:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("project-with-findings/file", 1)
                         )
                     ),
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("LICENSE", 1)
-                            ),
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("file", 1)
-                            )
-                        ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("LICENSE", 1)
-                            ),
-                            CopyrightFinding(
-                                statement = "Copyright 2",
-                                location = TextLocation("file", 1)
-                            )
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("project-with-findings/file", 1)
                         )
                     )
                 )
-            ),
-            Identifier("NPM:@ort:license-file-and-additional-licenses:1.0") to listOf(
-                ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+            )
+        ),
+        Identifier("NPM:@ort:project-without-findings:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY
+            )
+        ),
+        Identifier("NPM:@ort:no-license-file:1.0") to listOf(
+            ScanResult(
+                provenance = UnknownProvenance,
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
                         )
                     ),
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("LICENSE", 1)
-                            ),
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("file", 1)
-                            ),
-                            LicenseFinding(
-                                license = "BSD-3-Clause",
-                                location = TextLocation("file", 50)
-                            )
-                        ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("LICENSE", 1)
-                            ),
-                            CopyrightFinding(
-                                statement = "Copyright 2",
-                                location = TextLocation("file", 1)
-                            ),
-                            CopyrightFinding(
-                                statement = "Copyright 3",
-                                location = TextLocation("file", 50)
-                            )
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("file", 1)
                         )
                     )
                 )
-            ),
-            Identifier("NPM:@ort:concluded-license:1.0") to listOf(
-                ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/concluded-license-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+            )
+        ),
+        Identifier("NPM:@ort:license-file:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-1.0.tgz",
+                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
                         )
                     ),
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "MIT",
-                                location = TextLocation("file1", 1)
-                            ),
-                            LicenseFinding(
-                                license = "BSD-2-Clause",
-                                location = TextLocation("file2", 1)
-                            )
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
                         ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("file1", 1)
-                            ),
-                            CopyrightFinding(
-                                statement = "Copyright 2",
-                                location = TextLocation("file2", 1)
-                            )
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file", 1)
                         )
                     )
                 )
-            ),
-            Identifier("NPM:@ort:declared-license:1.0") to listOf(
-                ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://example.com/declared-license-1.0.tgz",
-                            hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+            )
+        ),
+        Identifier("NPM:@ort:license-file-and-additional-licenses:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/license-file-and-additional-licenses-1.0.tgz",
+                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("LICENSE", 1)
+                        ),
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file", 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("file", 50)
                         )
                     ),
-                    scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
-                    summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = setOf(
-                            LicenseFinding(
-                                license = "BSD-3-Clause",
-                                location = TextLocation("LICENSE", 1)
-                            )
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
                         ),
-                        copyrightFindings = setOf(
-                            CopyrightFinding(
-                                statement = "Copyright 1",
-                                location = TextLocation("LICENSE", 1)
-                            )
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 3",
+                            location = TextLocation("file", 50)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:concluded-license:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/concluded-license-1.0.tgz",
+                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "MIT",
+                            location = TextLocation("file1", 1)
+                        ),
+                        LicenseFinding(
+                            license = "BSD-2-Clause",
+                            location = TextLocation("file2", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("file1", 1)
+                        ),
+                        CopyrightFinding(
+                            statement = "Copyright 2",
+                            location = TextLocation("file2", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("NPM:@ort:declared-license:1.0") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://example.com/declared-license-1.0.tgz",
+                        hash = Hash(value = "", algorithm = HashAlgorithm.SHA1)
+                    )
+                ),
+                scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "BSD-3-Clause",
+                            location = TextLocation("LICENSE", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 1",
+                            location = TextLocation("LICENSE", 1)
                         )
                     )
                 )
