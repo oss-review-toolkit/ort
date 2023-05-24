@@ -164,7 +164,7 @@ data class SpdxFile(
         /**
          * The file is associated with a video file (MIME type of video, e.g. .avi, .mkv, .mp4)
          */
-        VIDEO;
+        VIDEO
     }
 
     init {

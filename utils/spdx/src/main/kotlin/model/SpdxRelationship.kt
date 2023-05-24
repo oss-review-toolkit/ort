@@ -252,7 +252,7 @@ data class SpdxRelationship(
         /**
          * Is to be used when SPDXRef-A is a variant of (same lineage but not clear which came first) SPDXRef-B.
          */
-        VARIANT_OF;
+        VARIANT_OF
     }
 
     init {
