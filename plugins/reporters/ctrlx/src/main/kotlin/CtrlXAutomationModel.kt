@@ -19,20 +19,21 @@
 
 package org.ossreviewtoolkit.plugins.reporters.ctrlx
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.annotation.JsonProperty
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 
 /**
  * The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class FossInfo(
     /**
      * The reference to the JSON schema in use.
      */
-    @JsonProperty("\$schema")
+    @SerialName("\$schema")
     val schema: String? = "https://github.com/boschrexroth/json-schema/blob/a84eab6/ctrlx-automation/ctrlx-core/apps/" +
             "fossinfo/fossinfo.v1.schema.json",
 
@@ -56,7 +57,7 @@ data class FossInfo(
 /**
  * An OSS component.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class Component(
     /**
      * The OSS component name.
@@ -97,7 +98,7 @@ data class Component(
     /**
      * A single OSS component integration.
      */
-    @JsonProperty("integrationMechanism")
+    @SerialName("integrationMechanism")
     val integrationMechanism: IntegrationMechanism? = null
 ) {
     init {
@@ -122,7 +123,7 @@ data class Component(
 /**
  * An OSS component's copyright information.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class CopyrightInformation(
     /**
      * The copyright text.
@@ -138,7 +139,7 @@ data class CopyrightInformation(
 /**
  * An OSS component's license.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
+@Serializable
 data class License(
     /**
      * The license name.
@@ -148,7 +149,7 @@ data class License(
     /**
      * The official identifier of the license, also see https://spdx.org/licenses.
      */
-    val spdx: SpdxExpression? = null,
+    val spdx: String? = null,
 
     /**
      * OSS component license text. Use "\n" as line separator.
@@ -165,7 +166,7 @@ data class License(
             "The '$name' value of the 'name' field must not contain any leading or trailing whitespaces."
         }
 
-        require(spdx?.isValid(SpdxExpression.Strictness.ALLOW_LICENSEREF_EXCEPTIONS) != false) {
+        require(spdx == null || SpdxExpression.parse(spdx, Strictness.ALLOW_LICENSEREF_EXCEPTIONS).isValid()) {
             "The '$spdx' value of the 'spdx' field must be a valid SPDX identifier."
         }
 
