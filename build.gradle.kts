@@ -172,7 +172,7 @@ allprojects {
     detekt {
         // Only configure differences to the default.
         buildUponDefaultConfig = true
-        config = files("$rootDir/.detekt.yml")
+        config.from(files("$rootDir/.detekt.yml"))
 
         source.from(fileTree(".") { include("*.gradle.kts") }, "src/funTest/kotlin")
 
