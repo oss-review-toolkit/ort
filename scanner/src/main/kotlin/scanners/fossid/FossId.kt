@@ -834,8 +834,11 @@ class FossId internal constructor(
 
                 // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
                 // matched file in the remote artifact as part of the "match_file_id" property.
-                val snippetProvenance = ArtifactProvenance(RemoteArtifact(it.url, Hash.NONE))
-                val purl = it.purl ?: "pkg:${urlToPackageType(it.url)}/${it.author}/${it.artifact}@${it.version}"
+                val url = checkNotNull(it.url) {
+                    "The URL of snippet ${it.id} must not be null."
+                }
+                val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
+                val purl = it.purl ?: "pkg:${urlToPackageType(url)}/${it.author}/${it.artifact}@${it.version}"
 
                 val additionalSnippetData = mapOf(
                     SNIPPET_DATA_ID to it.id.toString(),
