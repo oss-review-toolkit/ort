@@ -62,7 +62,7 @@ data class SpdxAnnotation(
          * A Review represents an audit and signoff by an individual, organization
          * or tool on the information for an SpdxElement.
          */
-        REVIEW;
+        REVIEW
     }
 
     init {

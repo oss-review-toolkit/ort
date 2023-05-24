@@ -46,7 +46,7 @@ data class SpdxChecksum(
         SHA224(56),
         SHA256(64),
         SHA384(96),
-        SHA512(128);
+        SHA512(128)
     }
 
     init {
