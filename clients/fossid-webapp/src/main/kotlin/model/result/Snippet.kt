@@ -28,9 +28,9 @@ data class Snippet(
     val matchType: MatchType,
 
     val reason: String?,
-    val author: String,
-    val artifact: String,
-    val version: String,
+    val author: String?,
+    val artifact: String?,
+    val version: String?,
     val purl: String? = null,
 
     val artifactLicense: String?,
@@ -40,14 +40,14 @@ data class Snippet(
 
     val file: String,
     val fileLicense: String?,
-    val url: String,
-    val hits: String,
+    val url: String?,
+    val hits: String?,
     val size: Int?,
 
     val updated: String?,
     val cpe: String?,
     val score: String,
-    val matchFileId: String,
+    val matchFileId: String?,
     val classification: String?,
     val highlighting: String?
 )
