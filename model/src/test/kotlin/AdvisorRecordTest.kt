@@ -25,7 +25,6 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldNotContain
 import io.kotest.matchers.should
-import io.kotest.matchers.shouldBe
 
 import java.net.URI
 import java.time.Instant
@@ -33,28 +32,6 @@ import java.time.Instant
 import org.ossreviewtoolkit.utils.common.enumSetOf
 
 class AdvisorRecordTest : WordSpec({
-    "hasIssues" should {
-        "return false given the record has no issues" {
-            val record = advisorRecordOf(
-                langId to listOf(createResult())
-            )
-
-            record.hasIssues shouldBe false
-        }
-
-        "return true given the record has issues" {
-            val record = advisorRecordOf(
-                queryId to listOf(
-                    createResult(
-                        issues = listOf(Issue(source = "Advisor", message = "Failure"))
-                    )
-                )
-            )
-
-            record.hasIssues shouldBe true
-        }
-    }
-
     "collectIssues" should {
         "return a map which does not contain entries for IDs without any issues" {
             val record = advisorRecordOf(
