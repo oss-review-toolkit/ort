@@ -101,4 +101,3 @@ packages:
     url: "https://github.com/dart-lang/typed_data.git"
     revision: ""
     path: ""
-has_issues: false

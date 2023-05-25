@@ -155,4 +155,3 @@ packages:
     url: "https://github.com/heremaps/harp.gl.git"
     revision: "ce42b2ce221de76b25ef8aea54f50ff007da2664"
     path: "@here/harp-fetch"
-has_issues: false

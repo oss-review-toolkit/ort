@@ -102,11 +102,6 @@ data class AnalyzerResult(
         }
 
     /**
-     * True if there were any issues during the analysis, false otherwise.
-     */
-    val hasIssues by lazy { getAllIssues().isNotEmpty() }
-
-    /**
      * Return a result, in which all contained [Project]s have their scope information resolved. If this result
      * has shared dependency graphs, the projects referring to one of these graphs are replaced by corresponding
      * instances that store their dependencies in the classic [Scope]-based format. Otherwise, this instance is

@@ -454,7 +454,6 @@ analyzer:
         url: "ssh://git@github.com/hamcrest/JavaHamcrest.git"
         revision: ""
         path: ""
-    has_issues: true
 scanner: null
 advisor: null
 evaluator: null

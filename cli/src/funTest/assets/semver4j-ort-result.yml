@@ -151,7 +151,6 @@ analyzer:
         url: ""
         revision: ""
         path: ""
-    has_issues: false
 scanner:
   start_time: "2020-10-26T20:00:50.163356Z"
   end_time: "2020-10-26T20:00:59.349366Z"

@@ -1306,7 +1306,6 @@ analyzer:
           - root: 19
           com.pbassiner:sbt-multi-project-example_2.12:0.1-SNAPSHOT:compile:
           - root: 15
-    has_issues: true
 scanner: null
 advisor: null
 evaluator: null

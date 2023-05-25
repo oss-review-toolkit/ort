@@ -180,7 +180,6 @@ analyzer:
         url: ""
         revision: ""
         path: ""
-    has_issues: false
 scanner: null
 advisor: null
 evaluator: null

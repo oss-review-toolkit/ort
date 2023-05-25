@@ -1717,7 +1717,6 @@ analyzer:
         url: "ssh://git@github.com/typelevel/simulacrum-scalafix.git"
         revision: ""
         path: ""
-    has_issues: false
 scanner: null
 advisor: null
 evaluator: null
