@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -30,12 +31,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class MercurialWorkingTreeFunTest : StringSpec({
     val hg = Mercurial()
-    val zipContentDir = createSpecTempDir()
+    val zipContentDir = tempdir()
 
     beforeSpec {
         val zipFile = getAssetFile("lz4revlog-2018-01-03-hg.zip")

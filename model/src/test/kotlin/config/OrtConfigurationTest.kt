@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.config
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.extensions.system.withEnvironment
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -40,7 +41,6 @@ import java.lang.IllegalArgumentException
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
@@ -536,6 +536,6 @@ class OrtConfigurationTest : WordSpec({
  * Create a test configuration with the [data] specified.
  */
 private fun TestConfiguration.createTestConfig(data: String): File =
-    createSpecTempFile(suffix = ".yml").apply {
+    tempfile(suffix = ".yml").apply {
         writeText(data)
     }

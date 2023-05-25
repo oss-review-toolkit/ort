@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.model.config
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.nulls.beNull
@@ -30,13 +31,12 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.writeValue
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
 
 class ScannerConfigurationTest : WordSpec({
     "ScannerConfiguration" should {
         "support a serialization round-trip via an ObjectMapper" {
             val ortConfig = OrtConfiguration.load(file = File("src/main/resources/$REFERENCE_CONFIG_FILENAME"))
-            val rereadOrtConfig = createSpecTempFile(null, ".yml").run {
+            val rereadOrtConfig = tempfile(null, ".yml").run {
                 writeValue(ortConfig)
                 readValue<OrtConfiguration>()
             }

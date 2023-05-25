@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.scanner.provenance
 
+import io.kotest.engine.spec.tempdir
+
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class FileBasedNestedProvenanceStorageFunTest : AbstractNestedProvenanceStorageFunTest() {
     override fun createStorage(): NestedProvenanceStorage =
-        FileBasedNestedProvenanceStorage(LocalFileStorage(createSpecTempDir()))
+        FileBasedNestedProvenanceStorage(LocalFileStorage(tempdir()))
 }

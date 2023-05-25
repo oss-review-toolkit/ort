@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -30,7 +31,6 @@ import org.ossreviewtoolkit.downloader.WorkingTree
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private const val REPO_URL = "https://github.com/oss-review-toolkit/ort-test-data-git-repo?manifest=manifest.xml"
 private const val REPO_REV = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
@@ -43,7 +43,7 @@ class GitRepoDownloadFunTest : StringSpec() {
     private lateinit var workingTree: WorkingTree
 
     override suspend fun beforeSpec(spec: Spec) {
-        outputDir = createSpecTempDir()
+        outputDir = tempdir()
         workingTree = GitRepo().download(pkg, outputDir)
     }
 

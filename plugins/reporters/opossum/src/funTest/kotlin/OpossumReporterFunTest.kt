@@ -23,6 +23,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.sequences.shouldContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
@@ -64,7 +64,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
         resolutionProvider = DefaultResolutionProvider(ortResult.getResolutions())
     )
 
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
     OpossumReporter().generateReport(input, outputDir, emptyMap()).single().unpackZip(outputDir)
 
     return outputDir.resolve("input.json").readText()

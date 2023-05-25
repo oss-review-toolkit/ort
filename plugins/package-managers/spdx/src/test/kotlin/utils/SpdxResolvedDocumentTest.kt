@@ -32,6 +32,7 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
@@ -54,7 +55,6 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxResolvedDocumentTest : WordSpec() {
@@ -72,7 +72,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
     }
 
     override suspend fun beforeTest(testCase: TestCase) {
-        tempDir = createSpecTempDir()
+        tempDir = tempdir()
 
         server.resetAll()
     }

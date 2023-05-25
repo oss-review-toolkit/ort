@@ -20,11 +20,11 @@
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class HtmlTemplateReporterFunTest : StringSpec({
@@ -32,7 +32,7 @@ class HtmlTemplateReporterFunTest : StringSpec({
         val expectedText = getAssetAsString("html-template-reporter-expected-result.html")
 
         val reportContent =
-            HtmlTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createSpecTempDir()).single().readText()
+            HtmlTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
 
         reportContent.patchAsciiDocTemplateResult() shouldBe expectedText
     }

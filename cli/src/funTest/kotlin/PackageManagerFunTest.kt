@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.cli
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -36,7 +37,6 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
@@ -73,7 +73,7 @@ class PackageManagerFunTest : WordSpec({
         "stack/stack.yaml"
     )
 
-    val projectDir = createSpecTempDir()
+    val projectDir = tempdir()
 
     beforeSpec {
         definitionFiles.writeFiles(projectDir)
@@ -171,7 +171,7 @@ class PackageManagerFunTest : WordSpec({
             val tempDir = "test/"
             val definitionFilesWithExcludes = definitionFiles +
                     listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
-            val rootDir = createSpecTempDir()
+            val rootDir = tempdir()
             definitionFilesWithExcludes.writeFiles(rootDir)
 
             val pathExclude = PathExclude("$tempDir**", PathExcludeReason.TEST_OF)

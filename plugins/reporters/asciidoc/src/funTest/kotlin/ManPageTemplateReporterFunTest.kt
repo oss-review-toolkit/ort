@@ -20,13 +20,13 @@
 package org.ossreviewtoolkit.plugins.reporters.asciidoc
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.should
 
 import java.time.LocalDate
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -35,7 +35,7 @@ class ManPageTemplateReporterFunTest : StringSpec({
         val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
 
         val reportContent =
-            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createSpecTempDir()).single().readText()
+            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), tempdir()).single().readText()
 
         reportContent should matchExpectedResult(
             expectedResultFile,

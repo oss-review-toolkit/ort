@@ -19,18 +19,12 @@
 
 package org.ossreviewtoolkit.utils.test
 
-import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
-
-import java.io.File
 
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
 import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
-import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
-import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
 infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
@@ -46,23 +40,3 @@ fun FileArchiver.Companion.createDefault() =
             FileArchiverConfiguration.ARCHIVE_FILENAME
         )
     )
-
-fun TestConfiguration.createSpecTempDir(vararg infixes: String): File {
-    val dir = createOrtTempDir(*infixes)
-
-    afterSpec {
-        dir.safeDeleteRecursively(force = true)
-    }
-
-    return dir
-}
-
-fun TestConfiguration.createSpecTempFile(prefix: String? = null, suffix: String? = null): File {
-    val file = createOrtTempFile(prefix, suffix)
-
-    afterSpec {
-        file.delete()
-    }
-
-    return file
-}

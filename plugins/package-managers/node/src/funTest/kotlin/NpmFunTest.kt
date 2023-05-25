@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -32,7 +33,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.fromYaml
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -92,7 +92,7 @@ class NpmFunTest : WordSpec({
         }
 
         "show an error if the 'package.json' file is invalid" {
-            val workingDir = createSpecTempDir()
+            val workingDir = tempdir()
             val definitionFile = workingDir.resolve("package.json").apply { writeText("<>") }
 
             val result = create("NPM", allowDynamicVersions = true).resolveSingleProject(definitionFile)

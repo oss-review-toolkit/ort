@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.downloader
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -42,14 +43,13 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderFunTest : WordSpec({
     lateinit var outputDir: File
 
     beforeTest {
-        outputDir = createSpecTempDir()
+        outputDir = tempdir()
     }
 
     "A source artifact download" should {

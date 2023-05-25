@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.pub.utils
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -27,7 +28,6 @@ import java.io.File
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private const val PACKAGE_NAME = "non-existing-package"
 private const val PACKAGE_VERSION = "0.0.0"
@@ -36,7 +36,7 @@ private const val RELATIVE_PATH = ".."
 private val ABSOLUTE_PATH = File(Os.env["PUB_CACHE"])
 
 class PubCacheReaderTest : WordSpec({
-    val tmpPubCacheDir = createSpecTempDir().also { Os.env["PUB_CACHE"] = it.absolutePath }
+    val tmpPubCacheDir = tempdir().also { Os.env["PUB_CACHE"] = it.absolutePath }
     val gitPackageCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF")
     val gitPackageWithPathCacheDir = tmpPubCacheDir.resolve("git/$PACKAGE_NAME-$RESOLVED_REF/$PACKAGE_NAME")
     val hostedPackageCacheDir = tmpPubCacheDir.resolve("hosted/oss-review-toolkit.org/$PACKAGE_NAME-$PACKAGE_VERSION")

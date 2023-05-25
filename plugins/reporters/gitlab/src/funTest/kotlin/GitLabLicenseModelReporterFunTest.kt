@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.gitlab
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.AnalyzerResult
@@ -41,7 +42,6 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class GitLabLicenseModelReporterFunTest : WordSpec({
@@ -67,7 +67,7 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, skipExcluded: Boolean): String =
     GitLabLicenseModelReporter().generateReport(
         input = ReporterInput(ortResult = ortResult),
-        outputDir = createSpecTempDir(),
+        outputDir = tempdir(),
         options = mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString())
     ).single().readText().normalizeLineBreaks()
 

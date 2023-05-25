@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.utils.ort.storage
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.shouldBe
@@ -34,12 +36,10 @@ import java.io.IOException
 import java.io.InputStream
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
 
 class LocalFileStorageFunTest : WordSpec() {
     private fun storage(block: (LocalFileStorage, File) -> Unit) {
-        val directory = createSpecTempDir()
+        val directory = tempdir()
         val storage = LocalFileStorage(directory)
         block(storage, directory)
     }
@@ -48,12 +48,12 @@ class LocalFileStorageFunTest : WordSpec() {
         "Creating the storage" should {
             "succeed if the directory exists" {
                 shouldNotThrowAny {
-                    LocalFileStorage(createSpecTempDir())
+                    LocalFileStorage(tempdir())
                 }
             }
 
             "succeed if the directory does not exist and must be created" {
-                val directory = createSpecTempDir()
+                val directory = tempdir()
                 val storageDirectory = directory.resolve("create/storage")
 
                 LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
@@ -62,7 +62,7 @@ class LocalFileStorageFunTest : WordSpec() {
             }
 
             "fail if the directory is a file" {
-                val storageDirectory = createSpecTempFile()
+                val storageDirectory = tempfile()
 
                 shouldThrow<IOException> {
                     LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())

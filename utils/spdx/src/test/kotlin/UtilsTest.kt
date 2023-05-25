@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.utils.spdx
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -33,13 +34,12 @@ import java.io.File
 
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.EMPTY_PACKAGE_VERIFICATION_CODE
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class UtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
-        tempDir = createSpecTempDir()
+        tempDir = tempdir()
     }
 
     private fun setupTempFile(filename: String, content: String) =

@@ -24,6 +24,7 @@ import com.networknt.schema.SpecVersion
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.should
 
@@ -62,7 +63,6 @@ import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -111,7 +111,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileFormat): String {
     val input = ReporterInput(ortResult)
 
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
 
     val reportOptions = mapOf(
         SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",

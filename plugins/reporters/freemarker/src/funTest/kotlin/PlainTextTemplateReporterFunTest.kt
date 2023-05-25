@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.freemarker
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.OrtResult
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
@@ -93,7 +93,7 @@ private fun TestConfiguration.generateReport(
         licenseClassifications = createLicenseClassifications()
     )
 
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
 
     return PlainTextTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }

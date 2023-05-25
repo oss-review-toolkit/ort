@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containAll
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
@@ -33,12 +34,11 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.unpack
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
 class GitWorkingTreeFunTest : StringSpec({
     val git = Git()
-    val zipContentDir = createSpecTempDir()
+    val zipContentDir = tempdir()
 
     beforeSpec {
         val zipFile = getAssetFile("pipdeptree-2018-01-03-git.zip")
