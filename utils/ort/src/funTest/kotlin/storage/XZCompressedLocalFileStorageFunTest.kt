@@ -25,11 +25,11 @@ import io.kotest.matchers.shouldBe
 import java.io.BufferedReader
 import java.io.File
 
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class XZCompressedLocalFileStorageFunTest : StringSpec() {
     private fun storage(block: (XZCompressedLocalFileStorage, File) -> Unit) {
-        val directory = createTestTempDir()
+        val directory = createSpecTempDir()
         val storage = XZCompressedLocalFileStorage(directory)
         block(storage, directory)
     }

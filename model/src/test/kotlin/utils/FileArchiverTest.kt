@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
@@ -54,9 +54,9 @@ class FileArchiverTest : StringSpec() {
     private lateinit var storage: FileProvenanceFileStorage
 
     override suspend fun beforeTest(testCase: TestCase) {
-        workingDir = createTestTempDir("workingDir")
-        storageDir = createTestTempDir("storageDir")
-        targetDir = createTestTempDir("targetDir")
+        workingDir = createSpecTempDir("workingDir")
+        storageDir = createSpecTempDir("storageDir")
+        targetDir = createSpecTempDir("targetDir")
         storage = FileProvenanceFileStorage(LocalFileStorage(storageDir), FileArchiverConfiguration.ARCHIVE_FILENAME)
     }
 

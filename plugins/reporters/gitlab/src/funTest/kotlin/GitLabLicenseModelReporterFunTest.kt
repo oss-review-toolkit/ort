@@ -41,7 +41,7 @@ import org.ossreviewtoolkit.model.config.ScopeExclude
 import org.ossreviewtoolkit.model.config.ScopeExcludeReason
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class GitLabLicenseModelReporterFunTest : WordSpec({
@@ -67,7 +67,7 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, skipExcluded: Boolean): String =
     GitLabLicenseModelReporter().generateReport(
         input = ReporterInput(ortResult = ortResult),
-        outputDir = createTestTempDir(),
+        outputDir = createSpecTempDir(),
         options = mapOf(GitLabLicenseModelReporter.OPTION_SKIP_EXCLUDED to skipExcluded.toString())
     ).single().readText().normalizeLineBreaks()
 

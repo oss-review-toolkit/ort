@@ -30,12 +30,12 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class BundlerTest : WordSpec({
     "parseBundlerVersionFromLockfile()" should {
         "correctly parse the Bundler version" {
-            val lockfile = createTestTempDir().resolve(BUNDLER_LOCKFILE_NAME).apply {
+            val lockfile = createSpecTempDir().resolve(BUNDLER_LOCKFILE_NAME).apply {
                 writeText(
                     """
                     GEM

@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.common.unpackZip
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
 class OpossumReporterFunTest : WordSpec({
@@ -64,7 +64,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
         resolutionProvider = DefaultResolutionProvider(ortResult.getResolutions())
     )
 
-    val outputDir = createTestTempDir()
+    val outputDir = createSpecTempDir()
     OpossumReporter().generateReport(input, outputDir, emptyMap()).single().unpackZip(outputDir)
 
     return outputDir.resolve("input.json").readText()

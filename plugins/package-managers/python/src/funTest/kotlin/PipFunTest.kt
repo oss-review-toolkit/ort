@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.analyzer.managers.resolveSingleProject
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.plugins.packagemanagers.python.Pip.Companion.OPTION_PYTHON_VERSION
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -85,7 +85,7 @@ class PipFunTest : WordSpec({
         }
 
         "not fail if the requirements file is empty" {
-            val definitionFile = createTestTempFile(prefix = "requirements", suffix = ".txt")
+            val definitionFile = createSpecTempFile("requirements", ".txt")
 
             val result = create("Pip", OPTION_PYTHON_VERSION to "3.10").resolveSingleProject(definitionFile)
 

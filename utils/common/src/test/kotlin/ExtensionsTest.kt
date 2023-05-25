@@ -42,8 +42,7 @@ import java.time.DayOfWeek
 import java.util.Locale
 
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class ExtensionsTest : WordSpec({
@@ -171,7 +170,7 @@ class ExtensionsTest : WordSpec({
 
     "File.safeMkDirs" should {
         "succeed if directory already exists" {
-            val directory = createTestTempDir()
+            val directory = createSpecTempDir()
 
             directory.isDirectory shouldBe true
             shouldNotThrow<IOException> { directory.safeMkdirs() }
@@ -179,7 +178,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "succeed if directory could be created" {
-            val parent = createTestTempDir()
+            val parent = createSpecTempDir()
             val child = File(parent, "child")
 
             parent.isDirectory shouldBe true
@@ -191,7 +190,7 @@ class ExtensionsTest : WordSpec({
             // Test case for an unexpected behaviour of File.mkdirs() which returns false for
             // File(File("parent1/parent2"), "/").mkdirs() if both "parent" directories do not exist, even when the
             // directory was successfully created.
-            val parent = createTestTempDir()
+            val parent = createSpecTempDir()
             val nonExistingParent = File(parent, "parent1/parent2")
             val child = File(nonExistingParent, "/")
 
@@ -203,7 +202,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "throw exception if file is not a directory" {
-            val file = createTestTempFile()
+            val file = createSpecTempFile(null, null)
 
             file shouldBe aFile()
             shouldThrow<IOException> { file.safeMkdirs() }
@@ -463,7 +462,7 @@ class ExtensionsTest : WordSpec({
         }
 
         "create a valid file name" {
-            val tempDir = createTestTempDir()
+            val tempDir = createSpecTempDir()
             val fileFromStr = tempDir.resolve(str.fileSystemEncode()).apply { writeText("dummy") }
 
             fileFromStr shouldBe aFile()

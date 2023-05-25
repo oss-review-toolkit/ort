@@ -24,7 +24,7 @@ import io.kotest.matchers.longs.beInRange
 import io.kotest.matchers.should
 
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -32,7 +32,7 @@ class WebAppReporterFunTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
             val ortResult = readOrtResult(getAssetFile("dummy-expected-output-for-analyzer-result.yml"))
-            val outputDir = createTestTempDir()
+            val outputDir = createSpecTempDir()
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
 

@@ -40,7 +40,7 @@ import java.lang.IllegalArgumentException
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SourceCodeOrigin
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class OrtConfigurationTest : WordSpec({
@@ -536,6 +536,6 @@ class OrtConfigurationTest : WordSpec({
  * Create a test configuration with the [data] specified.
  */
 private fun TestConfiguration.createTestConfig(data: String): File =
-    createTestTempFile(suffix = ".yml").apply {
+    createSpecTempFile(suffix = ".yml").apply {
         writeText(data)
     }

@@ -30,13 +30,13 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class FileListResolverTest : StringSpec({
     "resolve() should create the expected file list" {
         val resolver = FileListResolver(
             storage = FileProvenanceFileStorage(
-                storage = LocalFileStorage(createTestTempDir()),
+                storage = LocalFileStorage(createSpecTempDir()),
                 filename = "bytes",
             ),
             provenanceDownloader = {
@@ -55,7 +55,7 @@ class FileListResolverTest : StringSpec({
 })
 
 private fun Spec.createTestTempDirWithFiles(vararg paths: String) =
-    createTestTempDir().apply {
+    createSpecTempDir().apply {
         paths.forEachIndexed { index, path ->
             resolve(path).apply {
                 parentFile.mkdirs()

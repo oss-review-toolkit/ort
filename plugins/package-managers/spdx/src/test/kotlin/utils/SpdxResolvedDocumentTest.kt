@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalDocumentReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class SpdxResolvedDocumentTest : WordSpec() {
@@ -72,7 +72,7 @@ class SpdxResolvedDocumentTest : WordSpec() {
     }
 
     override suspend fun beforeTest(testCase: TestCase) {
-        tempDir = createTestTempDir()
+        tempDir = createSpecTempDir()
 
         server.resetAll()
     }

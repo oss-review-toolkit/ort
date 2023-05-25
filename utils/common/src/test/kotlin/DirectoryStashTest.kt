@@ -29,7 +29,7 @@ import io.kotest.matchers.shouldNot
 
 import java.io.File
 
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class DirectoryStashTest : StringSpec() {
     private lateinit var sandboxDir: File
@@ -39,7 +39,7 @@ class DirectoryStashTest : StringSpec() {
     private lateinit var b1: File
 
     override suspend fun beforeTest(testCase: TestCase) {
-        sandboxDir = createTestTempDir()
+        sandboxDir = createSpecTempDir()
         a = sandboxDir.resolve("a")
         a1 = a.resolve("a1")
         b = sandboxDir.resolve("b")

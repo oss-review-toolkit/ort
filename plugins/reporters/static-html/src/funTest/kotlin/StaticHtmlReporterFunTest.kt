@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -74,7 +74,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
-    val outputDir = createTestTempDir()
+    val outputDir = createSpecTempDir()
 
     return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
 }

@@ -33,13 +33,13 @@ import java.io.File
 
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.EMPTY_PACKAGE_VERIFICATION_CODE
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class UtilsTest : WordSpec() {
     private lateinit var tempDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
-        tempDir = createTestTempDir()
+        tempDir = createSpecTempDir()
     }
 
     private fun setupTempFile(filename: String, content: String) =

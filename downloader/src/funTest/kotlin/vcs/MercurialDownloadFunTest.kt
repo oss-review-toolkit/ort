@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private const val PKG_VERSION = "v1.0.0"
 
@@ -46,7 +46,7 @@ class MercurialDownloadFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeTest(testCase: TestCase) {
-        outputDir = createTestTempDir()
+        outputDir = createSpecTempDir()
     }
 
     init {

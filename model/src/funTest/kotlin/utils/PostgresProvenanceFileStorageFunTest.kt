@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.test.PostgresListener
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 private val SOURCE_ARTIFACT_PROVENANCE = ArtifactProvenance(sourceArtifact = RemoteArtifact("url", Hash.create("hash")))
@@ -54,7 +54,7 @@ private fun File.readTextAndDelete(): String {
 }
 
 private fun TestConfiguration.writeTempFile(content: String): File =
-    createTestTempFile().apply {
+    createSpecTempFile().apply {
         writeText(content)
     }
 

@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.getAssetFile
 
@@ -93,7 +93,7 @@ private fun TestConfiguration.generateReport(
         licenseClassifications = createLicenseClassifications()
     )
 
-    val outputDir = createTestTempDir()
+    val outputDir = createSpecTempDir()
 
     return PlainTextTemplateReporter().generateReport(input, outputDir, options).single().readText()
 }

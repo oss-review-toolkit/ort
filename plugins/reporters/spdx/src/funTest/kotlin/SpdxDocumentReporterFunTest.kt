@@ -62,7 +62,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -111,7 +111,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
 private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileFormat): String {
     val input = ReporterInput(ortResult)
 
-    val outputDir = createTestTempDir()
+    val outputDir = createSpecTempDir()
 
     val reportOptions = mapOf(
         SpdxDocumentReporter.OPTION_CREATION_INFO_COMMENT to "some creation info comment",
