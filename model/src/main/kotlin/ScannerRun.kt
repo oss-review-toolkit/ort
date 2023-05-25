@@ -93,9 +93,4 @@ data class ScannerRun(
                 }
             }
         }
-
-    /**
-     * True if any of the [scanResults] contain [Issue]s.
-     */
-    val hasIssues by lazy { getIssues().isNotEmpty() }
 }
