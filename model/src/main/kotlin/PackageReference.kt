@@ -109,11 +109,6 @@ data class PackageReference(
         dependencies.filter { it.id == id } + dependencies.flatMap { it.findReferences(id) }
 
     /**
-     * Return whether this package reference or any of its dependencies has issues.
-     */
-    fun hasIssues(): Boolean = issues.isNotEmpty() || dependencies.any { it.hasIssues() }
-
-    /**
      * Apply the provided [transform] to each node in the dependency tree represented by this [PackageReference] and
      * return the modified [PackageReference]. The tree is traversed depth-first (post-order).
      */
