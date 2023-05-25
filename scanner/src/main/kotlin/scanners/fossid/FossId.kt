@@ -140,9 +140,6 @@ class FossId internal constructor(
         internal val SNIPPET_DATA_MATCH_TYPE = "matchType"
 
         @JvmStatic
-        internal val SNIPPET_DATA_FILE = "file"
-
-        @JvmStatic
         internal val SNIPPET_DATA_RELEASE_DATE = "releaseDate"
 
         /**
@@ -843,7 +840,6 @@ class FossId internal constructor(
 
                 val additionalSnippetData = mapOf(
                     SNIPPET_DATA_ID to it.id.toString(),
-                    SNIPPET_DATA_FILE to it.file,
                     SNIPPET_DATA_MATCH_TYPE to it.matchType.toString(),
                     SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
                 )
