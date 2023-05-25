@@ -23,8 +23,6 @@ import io.kotest.core.TestConfiguration
 import io.kotest.matchers.nulls.shouldNotBeNull
 
 import java.io.File
-import java.net.InetSocketAddress
-import java.net.Proxy
 
 import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.LicenseFilePatterns
@@ -34,9 +32,6 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-
-fun Proxy.toGenericString() =
-    (address() as? InetSocketAddress)?.let { address -> "${type()} @ ${address.hostString}:${address.port}" }
 
 infix fun <T : Any> T?.shouldNotBeNull(block: T.() -> Unit) {
     this.shouldNotBeNull()
