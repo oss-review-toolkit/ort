@@ -188,6 +188,7 @@ dependencies {
 
     runtimeOnly(libs.log4jApiToSlf4j)
 
+    funTestImplementation(project(":downloader"))
     funTestImplementation(testFixtures(project(":analyzer")))
 
     funTestImplementation(libs.greenmail)
