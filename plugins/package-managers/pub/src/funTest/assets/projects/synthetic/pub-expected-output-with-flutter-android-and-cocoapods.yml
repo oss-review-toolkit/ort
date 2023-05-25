@@ -1474,4 +1474,3 @@ packages:
     url: "https://github.com/dart-lang/lints.git"
     revision: ""
     path: ""
-has_issues: false

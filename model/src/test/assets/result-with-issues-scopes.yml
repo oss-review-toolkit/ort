@@ -1302,7 +1302,6 @@ analyzer:
         url: "ssh://git@github.com/milessabin/macro-compat.git"
         revision: ""
         path: ""
-    has_issues: true
 scanner: null
 advisor: null
 evaluator: null

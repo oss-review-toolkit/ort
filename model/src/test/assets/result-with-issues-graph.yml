@@ -1335,7 +1335,6 @@ analyzer:
           to: 29
         - from: 28
           to: 30
-    has_issues: true
 scanner: null
 advisor: null
 evaluator: null

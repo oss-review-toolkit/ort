@@ -784,7 +784,6 @@ analyzer:
         url: "<REPLACE_URL_PROCESSED>"
         revision: "<REPLACE_REVISION>"
         path: "plugins/package-managers/node/src/funTest/assets/projects/synthetic/pnpm-workspaces/src/packages/package-a"
-    has_issues: false
 scanner: null
 advisor: null
 evaluator: null

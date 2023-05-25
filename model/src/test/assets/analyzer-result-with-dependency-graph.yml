@@ -171,7 +171,6 @@ analyzer:
           com.vdurmont:semver4j:3.1.0:test:
           - root: 0
           - root: 2
-    has_issues: false
 scanner: null
 advisor: null
 evaluator: null
