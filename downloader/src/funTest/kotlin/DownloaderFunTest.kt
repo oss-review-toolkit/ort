@@ -42,14 +42,14 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class DownloaderFunTest : WordSpec({
     lateinit var outputDir: File
 
     beforeTest {
-        outputDir = createTestTempDir()
+        outputDir = createSpecTempDir()
     }
 
     "A source artifact download" should {

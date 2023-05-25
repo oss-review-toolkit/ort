@@ -20,9 +20,9 @@
 package org.ossreviewtoolkit.scanner.provenance
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class FileBasedNestedProvenanceStorageFunTest : AbstractNestedProvenanceStorageFunTest() {
     override fun createStorage(): NestedProvenanceStorage =
-        FileBasedNestedProvenanceStorage(LocalFileStorage(createTestTempDir()))
+        FileBasedNestedProvenanceStorage(LocalFileStorage(createSpecTempDir()))
 }

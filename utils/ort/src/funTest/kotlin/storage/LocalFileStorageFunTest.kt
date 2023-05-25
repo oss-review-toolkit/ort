@@ -34,12 +34,12 @@ import java.io.IOException
 import java.io.InputStream
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.test.createTestTempDir
-import org.ossreviewtoolkit.utils.test.createTestTempFile
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempFile
 
 class LocalFileStorageFunTest : WordSpec() {
     private fun storage(block: (LocalFileStorage, File) -> Unit) {
-        val directory = createTestTempDir()
+        val directory = createSpecTempDir()
         val storage = LocalFileStorage(directory)
         block(storage, directory)
     }
@@ -48,12 +48,12 @@ class LocalFileStorageFunTest : WordSpec() {
         "Creating the storage" should {
             "succeed if the directory exists" {
                 shouldNotThrowAny {
-                    LocalFileStorage(createTestTempDir())
+                    LocalFileStorage(createSpecTempDir())
                 }
             }
 
             "succeed if the directory does not exist and must be created" {
-                val directory = createTestTempDir()
+                val directory = createSpecTempDir()
                 val storageDirectory = directory.resolve("create/storage")
 
                 LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())
@@ -62,7 +62,7 @@ class LocalFileStorageFunTest : WordSpec() {
             }
 
             "fail if the directory is a file" {
-                val storageDirectory = createTestTempFile()
+                val storageDirectory = createSpecTempFile()
 
                 shouldThrow<IOException> {
                     LocalFileStorage(storageDirectory).write("file", InputStream.nullInputStream())

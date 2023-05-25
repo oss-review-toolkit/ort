@@ -37,7 +37,6 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createTestTempDir
 
 class PackageManagerFunTest : WordSpec({
     val definitionFiles = listOf(
@@ -172,7 +171,7 @@ class PackageManagerFunTest : WordSpec({
             val tempDir = "test/"
             val definitionFilesWithExcludes = definitionFiles +
                     listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
-            val rootDir = createTestTempDir()
+            val rootDir = createSpecTempDir()
             definitionFilesWithExcludes.writeFiles(rootDir)
 
             val pathExclude = PathExclude("$tempDir**", PathExcludeReason.TEST_OF)

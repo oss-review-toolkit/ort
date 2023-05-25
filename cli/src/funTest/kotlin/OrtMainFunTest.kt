@@ -42,8 +42,8 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.redirectStdout
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.createSpecTempFile
-import org.ossreviewtoolkit.utils.test.createTestTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -73,12 +73,12 @@ class OrtMainFunTest : StringSpec() {
     }
 
     override suspend fun beforeTest(testCase: TestCase) {
-        outputDir = createTestTempDir()
+        outputDir = createSpecTempDir()
     }
 
     init {
         "Enabling only Gradle works" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -97,7 +97,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -118,7 +118,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling a package manager overrides enabling it" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -138,7 +138,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "An Unmanaged project is created if no definition files are found" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
             inputDir.resolve("test").writeText("test")
 
             runMain(
@@ -157,7 +157,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "No Unmanaged project is created if no definition files are found and Unmanaged is disabled" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
             inputDir.resolve("test").writeText("test")
 
             runMain(
@@ -176,7 +176,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Output formats are deduplicated" {
-            val inputDir = createTestTempDir()
+            val inputDir = createSpecTempDir()
 
             val stdout = runMain(
                 "-c", configFile.path,

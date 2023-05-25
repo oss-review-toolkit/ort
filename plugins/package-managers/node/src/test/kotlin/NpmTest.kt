@@ -38,11 +38,11 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class NpmTest : StringSpec({
     "The output of the npm command should be parsed correctly" {
-        val workingDir = createTestTempDir()
+        val workingDir = createSpecTempDir()
         val definitionFileSrc = File("src/test/assets/test-package-no-deps.json")
         val definitionFile = workingDir.resolve("package.json")
         definitionFileSrc.copyTo(definitionFile)

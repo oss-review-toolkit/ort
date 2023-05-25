@@ -32,7 +32,7 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class NpmSupportTest : WordSpec() {
     companion object {
@@ -231,7 +231,7 @@ class NpmSupportTest : WordSpec() {
     private val definitionFiles = mutableSetOf<File>()
 
     override suspend fun beforeEach(testCase: TestCase) {
-        tempDir = createTestTempDir()
+        tempDir = createSpecTempDir()
         definitionFiles.clear()
     }
 

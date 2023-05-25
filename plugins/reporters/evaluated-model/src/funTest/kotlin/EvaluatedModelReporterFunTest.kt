@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -69,7 +69,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
         howToFixTextProvider = { "Some how to fix text." }
     )
 
-    val outputDir = createTestTempDir()
+    val outputDir = createSpecTempDir()
 
     return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText().normalizeLineBreaks()
 }

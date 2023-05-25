@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.scanner.storages
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class FileBasedStorageFunTest : AbstractStorageFunTest() {
-    override fun createStorage() = FileBasedStorage(LocalFileStorage(createTestTempDir()))
+    override fun createStorage() = FileBasedStorage(LocalFileStorage(createSpecTempDir()))
 }

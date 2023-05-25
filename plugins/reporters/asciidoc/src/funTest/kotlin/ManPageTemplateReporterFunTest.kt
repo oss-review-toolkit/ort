@@ -26,7 +26,7 @@ import java.time.LocalDate
 
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 
@@ -35,7 +35,7 @@ class ManPageTemplateReporterFunTest : StringSpec({
         val expectedResultFile = getAssetFile("manpage-template-reporter-expected-result.1")
 
         val reportContent =
-            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createTestTempDir()).single().readText()
+            ManPageTemplateReporter().generateReport(ReporterInput(ORT_RESULT), createSpecTempDir()).single().readText()
 
         reportContent should matchExpectedResult(
             expectedResultFile,

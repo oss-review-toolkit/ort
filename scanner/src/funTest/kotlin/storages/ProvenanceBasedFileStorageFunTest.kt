@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.scanner.storages
 
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createTestTempDir
+import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class ProvenanceBasedFileStorageFunTest : AbstractProvenanceBasedStorageFunTest() {
-    override fun createStorage() = ProvenanceBasedFileStorage(LocalFileStorage(createTestTempDir()))
+    override fun createStorage() = ProvenanceBasedFileStorage(LocalFileStorage(createSpecTempDir()))
 }
