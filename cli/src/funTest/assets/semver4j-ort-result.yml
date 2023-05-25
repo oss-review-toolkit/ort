@@ -306,7 +306,6 @@ scanner:
   storage_stats:
     num_reads: 4
     num_hits: 4
-  has_issues: false
 advisor:
   start_time: "2021-04-29T14:54:16.562951Z"
   end_time: "2021-04-29T14:54:18.969210Z"

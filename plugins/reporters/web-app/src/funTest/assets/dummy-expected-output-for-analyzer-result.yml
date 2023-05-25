@@ -359,7 +359,6 @@ scanner:
   storage_stats:
     num_reads: 0
     num_hits: 0
-  has_issues: true
 advisor: null
 evaluator: null
 resolved_configuration:
