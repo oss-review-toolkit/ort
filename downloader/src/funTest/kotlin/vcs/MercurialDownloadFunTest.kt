@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.downloader.vcs
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -30,7 +31,6 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private const val PKG_VERSION = "v1.0.0"
 
@@ -46,7 +46,7 @@ class MercurialDownloadFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeTest(testCase: TestCase) {
-        outputDir = createSpecTempDir()
+        outputDir = tempdir()
     }
 
     init {

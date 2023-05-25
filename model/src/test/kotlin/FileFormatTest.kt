@@ -23,24 +23,23 @@ import com.fasterxml.jackson.core.JsonParseException
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.file.shouldHaveFileSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
-
 class FileFormatTest : WordSpec({
     "File.readTree()" should {
         "return and empty node for empty files" {
-            val file = createSpecTempFile(null, ".json")
+            val file = tempfile(null, ".json")
 
             file shouldHaveFileSize 0
             file.readTree() shouldBe EMPTY_JSON_NODE
         }
 
         "throw for invalid files" {
-            val file = createSpecTempFile(null, ".json").apply { writeText("foo") }
+            val file = tempfile(null, ".json").apply { writeText("foo") }
 
             shouldThrow<JsonParseException> {
                 file.readTree()
@@ -50,14 +49,14 @@ class FileFormatTest : WordSpec({
 
     "File.readValueOrNull()" should {
         "return null for empty files" {
-            val file = createSpecTempFile(null, ".json")
+            val file = tempfile(null, ".json")
 
             file shouldHaveFileSize 0
             file.readValueOrNull<Any>() should beNull()
         }
 
         "throw for invalid files" {
-            val file = createSpecTempFile(null, ".json").apply { writeText("foo") }
+            val file = tempfile(null, ".json").apply { writeText("foo") }
 
             shouldThrow<JsonParseException> {
                 file.readValueOrNull()

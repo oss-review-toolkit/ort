@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.statichtml
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import javax.xml.transform.TransformerFactory
@@ -30,7 +31,6 @@ import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.ort.Environment
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.readOrtResult
@@ -74,7 +74,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult): String {
         howToFixTextProvider = HOW_TO_FIX_TEXT_PROVIDER
     )
 
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
 
     return StaticHtmlReporter().generateReport(input, outputDir).single().readText()
 }

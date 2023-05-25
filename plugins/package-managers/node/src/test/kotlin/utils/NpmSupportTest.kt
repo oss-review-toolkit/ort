@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.plugins.packagemanagers.node.utils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
 import io.kotest.core.test.TestResult
+import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
@@ -32,7 +33,6 @@ import io.kotest.matchers.shouldBe
 import java.io.File
 
 import org.ossreviewtoolkit.utils.common.safeMkdirs
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class NpmSupportTest : WordSpec() {
     companion object {
@@ -231,7 +231,7 @@ class NpmSupportTest : WordSpec() {
     private val definitionFiles = mutableSetOf<File>()
 
     override suspend fun beforeEach(testCase: TestCase) {
-        tempDir = createSpecTempDir()
+        tempDir = tempdir()
         definitionFiles.clear()
     }
 

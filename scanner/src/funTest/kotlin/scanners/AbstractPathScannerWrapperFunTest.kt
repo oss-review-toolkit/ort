@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.scanner.scanners
 import io.kotest.core.Tag
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.file.shouldNotStartWithPath
@@ -35,7 +36,6 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()) : StringSpec() {
     protected val downloaderConfig = DownloaderConfiguration()
@@ -53,7 +53,7 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
     abstract val expectedDirectoryLicenses: List<LicenseFinding>
 
     override suspend fun beforeSpec(spec: Spec) {
-        inputDir = createSpecTempDir()
+        inputDir = tempdir()
 
         // Copy our own root license under different names to a temporary directory, so we have something to operate on.
         val ortLicense = File("../LICENSE")

@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner.utils
 
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import java.io.File
@@ -30,13 +31,12 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class FileListResolverTest : StringSpec({
     "resolve() should create the expected file list" {
         val resolver = FileListResolver(
             storage = FileProvenanceFileStorage(
-                storage = LocalFileStorage(createSpecTempDir()),
+                storage = LocalFileStorage(tempdir()),
                 filename = "bytes",
             ),
             provenanceDownloader = {
@@ -55,7 +55,7 @@ class FileListResolverTest : StringSpec({
 })
 
 private fun Spec.createTestTempDirWithFiles(vararg paths: String) =
-    createSpecTempDir().apply {
+    tempdir().apply {
         paths.forEachIndexed { index, path ->
             resolve(path).apply {
                 parentFile.mkdirs()

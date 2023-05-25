@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.model.utils
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.file.exist
 import io.kotest.matchers.file.shouldContainNFiles
@@ -36,7 +37,6 @@ import org.ossreviewtoolkit.model.config.FileArchiverConfiguration
 import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 import org.ossreviewtoolkit.utils.test.createDefault
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 private val PROVENANCE = RepositoryProvenance(
     vcsInfo = VcsInfo(
@@ -54,9 +54,9 @@ class FileArchiverTest : StringSpec() {
     private lateinit var storage: FileProvenanceFileStorage
 
     override suspend fun beforeTest(testCase: TestCase) {
-        workingDir = createSpecTempDir("workingDir")
-        storageDir = createSpecTempDir("storageDir")
-        targetDir = createSpecTempDir("targetDir")
+        workingDir = tempdir("workingDir")
+        storageDir = tempdir("storageDir")
+        targetDir = tempdir("targetDir")
         storage = FileProvenanceFileStorage(LocalFileStorage(storageDir), FileArchiverConfiguration.ARCHIVE_FILENAME)
     }
 

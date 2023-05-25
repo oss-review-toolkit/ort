@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
 import io.kotest.assertions.json.shouldEqualJson
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.file.aFile
@@ -35,12 +36,11 @@ import org.cyclonedx.parsers.XmlParser
 import org.ossreviewtoolkit.reporter.ORT_RESULT
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 
 class CycloneDxReporterFunTest : WordSpec({
     val defaultSchemaVersion = CycloneDxReporter.DEFAULT_SCHEMA_VERSION.versionString
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
 
     "BOM generation with single option" should {
         val optionSingle = mapOf("single.bom" to "true")

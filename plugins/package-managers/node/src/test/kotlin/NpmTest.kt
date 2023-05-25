@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.node
 
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
@@ -38,11 +39,10 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class NpmTest : StringSpec({
     "The output of the npm command should be parsed correctly" {
-        val workingDir = createSpecTempDir()
+        val workingDir = tempdir()
         val definitionFileSrc = File("src/test/assets/test-package-no-deps.json")
         val definitionFile = workingDir.resolve("package.json")
         definitionFileSrc.copyTo(definitionFile)

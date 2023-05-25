@@ -23,6 +23,8 @@ import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.file.aFile
 import io.kotest.matchers.shouldBe
@@ -38,14 +40,11 @@ import kotlinx.coroutines.withContext
 
 import org.apache.commons.compress.archivers.ArchiveEntry
 
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
-
 class ArchiveUtilsTest : WordSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
-        outputDir = createSpecTempDir()
+        outputDir = tempdir()
     }
 
     /**
@@ -54,7 +53,7 @@ class ArchiveUtilsTest : WordSpec() {
      */
     private fun copyTestArchive(sourceName: String): File {
         val sourcePath = File("src/test/assets/$sourceName")
-        val targetPath = createSpecTempDir().resolve("unknown.dat")
+        val targetPath = tempdir().resolve("unknown.dat")
 
         return sourcePath.copyTo(targetPath)
     }
@@ -230,7 +229,7 @@ class ArchiveUtilsTest : WordSpec() {
 
         "Debian deb archives" should {
             "unpack" {
-                val tempDir = createSpecTempDir()
+                val tempDir = tempdir()
                 val archiveDeb = File("src/test/assets/testpkg.deb")
                 val archiveUdepTemp = tempDir.resolve("testpkg.udeb")
                 val archiveUdep = archiveDeb.copyTo(archiveUdepTemp)
@@ -407,7 +406,7 @@ class ArchiveUtilsTest : WordSpec() {
             }
 
             "throw an exception if the archive cannot be unpacked" {
-                val noArchive = createSpecTempFile(suffix = ".abc")
+                val noArchive = tempfile(suffix = ".abc")
                 noArchive.writeText("This is not an archive.")
 
                 val exception = shouldThrow<IOException> {
@@ -420,7 +419,7 @@ class ArchiveUtilsTest : WordSpec() {
 
         "packZip" should {
             "be able to zip a single file" {
-                val file = createSpecTempFile().apply { writeText("Hello World!") }
+                val file = tempfile().apply { writeText("Hello World!") }
 
                 val zipFile = file.packZip(outputDir.resolve("archive.zip"))
 
@@ -432,7 +431,7 @@ class ArchiveUtilsTest : WordSpec() {
             }
 
             "not follow symbolic links".config(enabled = Os.isLinux) {
-                val inputDir = createSpecTempDir()
+                val inputDir = tempdir()
                 val parentDir = inputDir.resolve("parent").safeMkdirs()
                 val readmeFile = parentDir.resolve("readme.txt").apply { writeText("Hello World!") }
 

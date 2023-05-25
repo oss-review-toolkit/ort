@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.shouldBe
@@ -37,7 +38,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.common.ProcessCapture
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 
 class ScanCodeTest : WordSpec({
     val scanner = ScanCode("ScanCode", ScannerConfiguration())
@@ -106,7 +106,7 @@ class ScanCodeTest : WordSpec({
 
     "scanPath" should {
         "handle a ScanCode result with errors" {
-            val path = createSpecTempDir("scan-code")
+            val path = tempdir("scan-code")
 
             val process = mockk<ProcessCapture>()
             every { process.isError } returns true

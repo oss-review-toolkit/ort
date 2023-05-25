@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.cli
 
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.concurrent.shouldCompleteWithin
 import io.kotest.matchers.should
 
@@ -36,7 +37,6 @@ import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.PackageManagerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.toYaml
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -52,7 +52,7 @@ class AnalyzerFunTest : WordSpec({
                     revision = "31588aa8f8555474e1c3c66a359ec99e4cd4b1fa"
                 )
             )
-            val outputDir = createSpecTempDir().also { GitRepo().download(pkg, it) }
+            val outputDir = tempdir().also { GitRepo().download(pkg, it) }
 
             val result = analyze(outputDir).toYaml()
 
@@ -73,7 +73,7 @@ class AnalyzerFunTest : WordSpec({
 
     "A globally configured 'mustRunAfter'" should {
         "not block when depending on a package manager for which no definition files have been found" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
             val gradleDefinitionFile = inputDir.resolve("gradle.build").apply { writeText("// Dummy file") }
 
             val gradleConfig = PackageManagerConfiguration(mustRunAfter = listOf("NPM"))

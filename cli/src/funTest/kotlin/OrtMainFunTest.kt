@@ -24,6 +24,8 @@ import com.github.ajalt.clikt.core.ProgramResult
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.core.test.TestCase
+import io.kotest.engine.spec.tempdir
+import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
@@ -42,8 +44,6 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
 import org.ossreviewtoolkit.utils.common.redirectStdout
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
-import org.ossreviewtoolkit.utils.test.createSpecTempFile
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -57,7 +57,7 @@ class OrtMainFunTest : StringSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeSpec(spec: Spec) {
-        configFile = createSpecTempFile(suffix = ".yml")
+        configFile = tempfile(suffix = ".yml")
         configFile.writeValue(
             OrtConfigurationWrapper(
                 OrtConfiguration(
@@ -73,12 +73,12 @@ class OrtMainFunTest : StringSpec() {
     }
 
     override suspend fun beforeTest(testCase: TestCase) {
-        outputDir = createSpecTempDir()
+        outputDir = tempdir()
     }
 
     init {
         "Enabling only Gradle works" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -97,7 +97,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling only Gradle works" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -118,7 +118,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Disabling a package manager overrides enabling it" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
 
             val stdout = runMain(
                 "-c", configFile.path,
@@ -138,7 +138,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "An Unmanaged project is created if no definition files are found" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
             runMain(
@@ -157,7 +157,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "No Unmanaged project is created if no definition files are found and Unmanaged is disabled" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
             runMain(
@@ -176,7 +176,7 @@ class OrtMainFunTest : StringSpec() {
         }
 
         "Output formats are deduplicated" {
-            val inputDir = createSpecTempDir()
+            val inputDir = tempdir()
 
             val stdout = runMain(
                 "-c", configFile.path,

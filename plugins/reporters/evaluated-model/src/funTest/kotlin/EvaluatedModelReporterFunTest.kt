@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.evaluatedmodel
 
 import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.model.FileFormat
@@ -28,7 +29,6 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetAsString
 import org.ossreviewtoolkit.utils.test.readOrtResult
 
@@ -69,7 +69,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, options: Map<
         howToFixTextProvider = { "Some how to fix text." }
     )
 
-    val outputDir = createSpecTempDir()
+    val outputDir = tempdir()
 
     return EvaluatedModelReporter().generateReport(input, outputDir, options).single().readText().normalizeLineBreaks()
 }

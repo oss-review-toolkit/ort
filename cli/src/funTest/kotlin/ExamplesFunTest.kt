@@ -26,6 +26,7 @@ import com.icegreen.greenmail.util.ServerSetup
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.withClue
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
@@ -62,7 +63,6 @@ import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CURATIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_REPO_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.spdx.toSpdx
-import org.ossreviewtoolkit.utils.test.createSpecTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
@@ -125,7 +125,7 @@ class ExamplesFunTest : StringSpec({
 
     "The Asciidoctor PDF theme file is a valid" {
         val reporter = Reporter.ALL.getValue("PdfTemplate")
-        val outputDir = createSpecTempDir()
+        val outputDir = tempdir()
 
         takeExampleFile("asciidoctor-pdf-theme.yml")
 
