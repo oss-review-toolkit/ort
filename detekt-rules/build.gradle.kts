@@ -33,6 +33,14 @@ dependencies {
     testImplementation(libs.detektTest)
 }
 
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute(project(":utils:test-utils"))
+            .using(project(":utils:common-utils"))
+            .because("detekt 1.23.0 triggers an issue with logging in org.apache.sshd on Linux")
+    }
+}
+
 tasks.named<Jar>("jar") {
     doLast {
         val out = serviceOf<StyledTextOutputFactory>().create("detekt-rules")
