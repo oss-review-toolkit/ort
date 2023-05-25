@@ -341,7 +341,6 @@ advisor:
           - url: "http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-15250"
             scoring_system: "CVSS2"
             severity: "5.5"
-    has_issues: false
 evaluator: null
 resolved_configuration:
   package_curations:
