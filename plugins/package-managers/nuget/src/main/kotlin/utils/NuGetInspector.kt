@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils
 
 import java.io.File
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -45,7 +45,10 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
-private val json = Json { ignoreUnknownKeys = true }
+private val json = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 internal object NuGetInspector : CommandLineTool {
     override fun command(workingDir: File?) = "nuget-inspector"
@@ -94,7 +97,7 @@ internal object NuGetInspector : CommandLineTool {
 
     @Serializable
     internal data class Header(
-        @SerialName("project_framework") val projectFramework: String,
+        val projectFramework: String,
         val errors: List<String>
     )
 
@@ -106,22 +109,22 @@ internal object NuGetInspector : CommandLineTool {
         val version: String?,
         val description: String,
         val parties: List<Party>,
-        @SerialName("homepage_url") val homepageUrl: String?,
-        @SerialName("download_url") val downloadUrl: String,
+        val homepageUrl: String?,
+        val downloadUrl: String,
         val size: Long,
         val sha1: String?,
         val md5: String?,
         val sha256: String?,
         val sha512: String?,
-        @SerialName("code_view_url") val codeViewUrl: String?,
-        @SerialName("vcs_url") val vcsUrl: String?,
+        val codeViewUrl: String?,
+        val vcsUrl: String?,
         val copyright: String?,
-        @SerialName("license_expression") val licenseExpression: String?,
-        @SerialName("declared_license") val declaredLicense: String?,
-        @SerialName("source_packages") val sourcePackages: List<String>,
-        @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
-        @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
-        @SerialName("api_data_url") val apiDataUrl: String,
+        val licenseExpression: String?,
+        val declaredLicense: String?,
+        val sourcePackages: List<String>,
+        val repositoryHomepageUrl: String?,
+        val repositoryDownloadUrl: String?,
+        val apiDataUrl: String,
         val purl: String,
         val dependencies: List<PackageData>,
         val errors: List<String>,
