@@ -27,7 +27,6 @@ import io.kotest.matchers.should
 
 import java.io.File
 import java.time.Instant
-import java.util.SortedSet
 
 import org.ossreviewtoolkit.analyzer.Analyzer
 import org.ossreviewtoolkit.analyzer.AnalyzerResultBuilder
@@ -107,7 +106,7 @@ private fun Project.filterReferencedPackages(allPackages: Set<Package>): Set<Pac
     return allPackages.filterTo(mutableSetOf()) { it.id in projectDependencies }
 }
 
-fun Collection<PackageReference>.withInvariantIssues(): SortedSet<PackageReference> = mapTo(sortedSetOf()) { ref ->
+fun Collection<PackageReference>.withInvariantIssues(): Set<PackageReference> = mapTo(mutableSetOf()) { ref ->
     ref.copy(
         dependencies = ref.dependencies.withInvariantIssues(),
         issues = ref.issues.map { it.copy(timestamp = Instant.EPOCH) }
