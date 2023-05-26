@@ -94,7 +94,7 @@ class AdvisorTest : WordSpec({
                 pkg2 to advisorResult4
             )
 
-            val expectedResults = sortedMapOf(
+            val expectedResults = mapOf(
                 pkg1.id to listOf(advisorResult1, advisorResult2),
                 pkg2.id to listOf(advisorResult3, advisorResult4)
             )
