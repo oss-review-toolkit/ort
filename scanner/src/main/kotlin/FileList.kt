@@ -45,7 +45,7 @@ internal data class FileList(
     @JsonSerialize(converter = FileEntrySortedSetConverter::class)
     val files: Set<FileEntry>
 ) {
-    data class FileEntry constructor(
+    data class FileEntry(
         val path: String,
         val sha1: String
     )
