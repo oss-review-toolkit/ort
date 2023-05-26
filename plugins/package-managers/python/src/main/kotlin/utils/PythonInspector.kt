@@ -24,6 +24,7 @@ import java.io.File
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import kotlinx.serialization.json.decodeFromStream
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -51,7 +52,10 @@ import org.semver4j.RangesListFactory
 private const val GENERIC_BSD_LICENSE = "BSD License"
 private const val SHORT_STRING_MAX_CHARS = 200
 
-private val json = Json { ignoreUnknownKeys = true }
+private val json = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 internal object PythonInspector : CommandLineTool, Logging {
     override fun command(workingDir: File?) = "python-inspector"
@@ -111,14 +115,14 @@ internal object PythonInspector : CommandLineTool, Logging {
     @Serializable
     internal data class Result(
         @SerialName("files") val projects: List<Project>,
-        @SerialName("resolved_dependencies_graph") val resolvedDependenciesGraph: List<ResolvedDependency>,
+        val resolvedDependenciesGraph: List<ResolvedDependency>,
         val packages: List<Package>
     )
 
     @Serializable
     internal data class Project(
         val path: String,
-        @SerialName("package_data") val packageData: List<PackageData>
+        val packageData: List<PackageData>
     )
 
     @Serializable
@@ -128,8 +132,8 @@ internal object PythonInspector : CommandLineTool, Logging {
         val version: String?,
         val description: String?,
         val parties: List<Party>,
-        @SerialName("homepage_url") val homepageUrl: String?,
-        @SerialName("declared_license") val declaredLicense: DeclaredLicense?
+        val homepageUrl: String?,
+        val declaredLicense: DeclaredLicense?
     )
 
     @Serializable
@@ -141,8 +145,8 @@ internal object PythonInspector : CommandLineTool, Logging {
     @Serializable
     internal data class ResolvedDependency(
         val key: String,
-        @SerialName("package_name") val packageName: String,
-        @SerialName("installed_version") val installedVersion: String,
+        val packageName: String,
+        val installedVersion: String,
         val dependencies: List<ResolvedDependency>
     )
 
@@ -154,22 +158,22 @@ internal object PythonInspector : CommandLineTool, Logging {
         val version: String,
         val description: String,
         val parties: List<Party>,
-        @SerialName("homepage_url") val homepageUrl: String?,
-        @SerialName("download_url") val downloadUrl: String,
+        val homepageUrl: String?,
+        val downloadUrl: String,
         val size: Long,
         val sha1: String?,
         val md5: String?,
         val sha256: String?,
         val sha512: String?,
-        @SerialName("code_view_url") val codeViewUrl: String?,
-        @SerialName("vcs_url") val vcsUrl: String?,
+        val codeViewUrl: String?,
+        val vcsUrl: String?,
         val copyright: String?,
-        @SerialName("license_expression") val licenseExpression: String?,
-        @SerialName("declared_license") val declaredLicense: DeclaredLicense?,
-        @SerialName("source_packages") val sourcePackages: List<String>,
-        @SerialName("repository_homepage_url") val repositoryHomepageUrl: String?,
-        @SerialName("repository_download_url") val repositoryDownloadUrl: String?,
-        @SerialName("api_data_url") val apiDataUrl: String,
+        val licenseExpression: String?,
+        val declaredLicense: DeclaredLicense?,
+        val sourcePackages: List<String>,
+        val repositoryHomepageUrl: String?,
+        val repositoryDownloadUrl: String?,
+        val apiDataUrl: String,
         val purl: String
     )
 
