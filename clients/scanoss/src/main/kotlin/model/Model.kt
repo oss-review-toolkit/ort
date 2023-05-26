@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.clients.scanoss.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonNames
 
 /**
  * Information about the engine running on the server providing the response. Note that different engine versions may be
@@ -29,7 +30,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Server(
     val version: String,
-    @SerialName("kb_version")
     val kbVersion: KnowledgeBaseVersion? = null
 )
 
@@ -54,7 +54,6 @@ data class License(
     val source: Source,
 
     /** Are there patent hints for this license.*/
-    @SerialName("patent_hints")
     @Serializable(BooleanSerializer::class)
     val patentHints: Boolean? = null,
 
@@ -63,14 +62,11 @@ data class License(
     val copyleft: Boolean? = null,
 
     /** URL of the OSADL checklist for this license. */
-    @SerialName("checklist_url")
     val checklistUrl: String? = null,
 
-    @SerialName("incompatible_with")
     val incompatibleWith: String? = null,
 
     /** Date the OSADL data was last updated. */
-    @SerialName("osadl_updated")
     val osadlUpdated: String? = null
 )
 
@@ -129,11 +125,11 @@ enum class Source {
 @Serializable
 data class Vulnerability(
     /** Vulnerability identifier (i.e CVE or Github Advisory ID). */
-    @SerialName("ID")
+    @JsonNames("ID")
     val id: String,
 
     /** Published CVE Identifier. */
-    @SerialName("CVE")
+    @JsonNames("CVE")
     val cve: String,
 
     /** Source location for the vulnerability data. */

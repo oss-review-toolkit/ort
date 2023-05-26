@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.clients.scanoss.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -37,7 +36,6 @@ data class ScanResponse(
     val lines: String? = null,
 
     /** Matching line numbers for the snippet in the open source file. */
-    @SerialName("oss_lines")
     val ossLines: String? = null,
 
     /** Percentage of the source file that matches the open source file. */
@@ -62,22 +60,18 @@ data class ScanResponse(
     val url: String? = null,
 
     /** Release date of the component. */
-    @SerialName("release_date")
     val releaseDate: String? = null,
 
     /** Name of the matching OSS file. */
     val file: String? = null,
 
     /** MD5 hash of the project zip that was mined from. */
-    @SerialName("url_hash")
     val urlHash: String? = null,
 
     /** Unique hash for the matching OSS file stored in the KB. */
-    @SerialName("file_hash")
     val fileHash: String? = null,
 
     /** URL to download the matching OSS file from the KB. */
-    @SerialName("file_url")
     val fileUrl: String? = null,
 
     /** List of declared dependencies for the detected component. */
