@@ -19,12 +19,13 @@
 
 package org.ossreviewtoolkit.analyzer.managers
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.fasterxml.jackson.module.kotlin.readValues
-
 import java.io.File
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.decodeToSequence
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -44,7 +45,6 @@ import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.Os
@@ -70,6 +70,8 @@ class GoMod(
 ) : PackageManager(name, analysisRoot, analyzerConfig, repoConfig), CommandLineTool {
     companion object : Logging {
         const val DEFAULT_GO_PROXY = "https://proxy.golang.org"
+
+        val JSON = Json { ignoreUnknownKeys = true }
     }
 
     class Factory : AbstractPackageManagerFactory<GoMod>("GoMod") {
@@ -225,9 +227,7 @@ class GoMod(
     private fun getModuleInfos(projectDir: File): Map<String, ModuleInfo> {
         val list = runGo("list", "-m", "-json", "-buildvcs=false", "all", workingDir = projectDir)
 
-        val moduleInfos = jsonMapper.createParser(list.stdout).use { parser ->
-            jsonMapper.readValues<ModuleInfo>(parser).readAll()
-        }
+        val moduleInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<ModuleInfo>(it) }
 
         return buildMap {
             moduleInfos.forEach { moduleInfo ->
@@ -275,9 +275,9 @@ class GoMod(
         // See https://pkg.go.dev/text/template for the format syntax.
         val list = runGo("list", "-deps", "-json=Module", "-buildvcs=false", "./...", workingDir = projectDir)
 
-        return jsonMapper.createParser(list.stdout).use { parser ->
-            jsonMapper.readValues<DepInfo>(parser).readAll()
-        }.mapNotNullTo(mutableSetOf()) { depInfo ->
+        val depInfos = list.stdout.byteInputStream().use { JSON.decodeToSequence<DepInfo>(it) }
+
+        return depInfos.mapNotNullTo(mutableSetOf()) { depInfo ->
             depInfo.module?.path
         }
     }
@@ -338,52 +338,53 @@ private const val PACKAGE_SEPARATOR = "# "
  */
 private const val WHY_CHUNK_SIZE = 32
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 private data class ModuleInfo(
-    @JsonProperty("Path")
+    @SerialName("Path")
     val path: String,
 
-    @JsonProperty("Version")
+    @SerialName("Version")
     val version: String = "",
 
-    @JsonProperty("Replace")
-    val replace: ModuleInfo?,
+    @SerialName("Replace")
+    val replace: ModuleInfo? = null,
 
-    @JsonProperty("Indirect")
+    @SerialName("Indirect")
     val indirect: Boolean = false,
 
-    @JsonProperty("Main")
+    @SerialName("Main")
     val main: Boolean = false,
 
-    @JsonProperty("GoMod")
-    val goMod: String?
+    @SerialName("GoMod")
+    val goMod: String? = null
 )
 
+@Serializable
 private data class DepInfo(
-    @JsonProperty("Module")
-    val module: ModuleInfo?
+    @SerialName("Module")
+    val module: ModuleInfo? = null
 )
 
 /**
  * The format of `.info` the Go command line tools cache under '$GOPATH/pkg/mod'.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 private data class ModuleInfoFile(
-    @JsonProperty("Origin")
+    @SerialName("Origin")
     val origin: Origin
 ) {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class Origin(
-        @JsonProperty("VCS")
-        val vcs: String?,
-        @JsonProperty("URL")
-        val url: String?,
-        @JsonProperty("Ref")
-        val ref: String?,
-        @JsonProperty("Hash")
-        val hash: String?,
-        @JsonProperty("Subdir")
-        val subdir: String?
+        @SerialName("VCS")
+        val vcs: String? = null,
+        @SerialName("URL")
+        val url: String? = null,
+        @SerialName("Ref")
+        val ref: String? = null,
+        @SerialName("Hash")
+        val hash: String? = null,
+        @SerialName("Subdir")
+        val subdir: String? = null
     )
 }
 
@@ -402,7 +403,7 @@ private fun Graph.projectId(): Identifier =
 
 private fun ModuleInfo.toVcsInfo(): VcsInfo? {
     val infoFile = goMod?.let { File(it).resolveSibling("$version.info") } ?: return null
-    val info = jsonMapper.readValue<ModuleInfoFile>(infoFile)
+    val info = infoFile.inputStream().use { GoMod.JSON.decodeFromStream<ModuleInfoFile>(it) }
     val type = info.origin.vcs?.let { VcsType.forName(it) }.takeIf { it == VcsType.GIT } ?: return null
 
     return VcsInfo(
