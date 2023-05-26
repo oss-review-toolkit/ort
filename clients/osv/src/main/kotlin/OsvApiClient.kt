@@ -27,6 +27,7 @@ import java.util.concurrent.Executors
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 
 import okhttp3.Dispatcher
 import okhttp3.MediaType.Companion.toMediaType
@@ -46,7 +47,7 @@ interface OsvApiClient {
     companion object {
         const val BATCH_REQUEST_MAX_SIZE = 1000
 
-        val JSON = Json.Default
+        val JSON = Json { namingStrategy = JsonNamingStrategy.SnakeCase }
 
         /**
          * Create an OsvApiClient instance for communicating with the given [server], optionally using a pre-built

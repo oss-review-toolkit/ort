@@ -45,7 +45,6 @@ import kotlinx.serialization.json.JsonObject
  */
 @Serializable
 data class Vulnerability(
-    @SerialName("schema_version")
     val schemaVersion: String = "1.0.0",
     val id: String,
     @Serializable(InstantSerializer::class)
@@ -68,7 +67,6 @@ data class Vulnerability(
 
     val affected: Set<Affected> = emptySet(),
     val references: Set<Reference> = emptySet(),
-    @SerialName("database_specific")
     val databaseSpecific: JsonObject? = null,
     val credits: Set<Credit> = emptySet()
 )
@@ -80,9 +78,7 @@ data class Affected(
     val ranges: List<Range> = emptyList(),
     val severity: Set<Severity> = emptySet(),
     val versions: List<String> = emptyList(),
-    @SerialName("ecosystem_specific")
     val ecosystemSpecific: JsonObject? = null,
-    @SerialName("database_specific")
     val databaseSpecific: JsonObject? = null
 )
 
@@ -141,7 +137,6 @@ data class Range(
     val type: Type,
     val repo: String? = null,
     val events: List<Event>,
-    @SerialName("database_specific")
     val databaseSpecific: JsonObject? = null
 ) {
     enum class Type {
