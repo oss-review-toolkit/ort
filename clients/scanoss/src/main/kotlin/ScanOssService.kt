@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.clients.scanoss
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
@@ -46,7 +47,10 @@ interface ScanOssService {
         /**
          * The JSON (de-)serialization object used by this service.
          */
-        val JSON = Json { ignoreUnknownKeys = true }
+        val JSON = Json {
+            ignoreUnknownKeys = true
+            namingStrategy = JsonNamingStrategy.SnakeCase
+        }
 
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
