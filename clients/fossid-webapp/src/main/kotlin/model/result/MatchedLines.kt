@@ -19,7 +19,9 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.result
 
+import org.ossreviewtoolkit.clients.fossid.PolymorphicList
+
 data class MatchedLines(
-    val localFile: Map<String, String>,
-    val mirrorFile: Map<String, String>
+    val localFile: PolymorphicList<Int>,
+    val mirrorFile: PolymorphicList<Int>,
 )
