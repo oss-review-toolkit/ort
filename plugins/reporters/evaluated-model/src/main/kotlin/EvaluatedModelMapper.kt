@@ -492,15 +492,18 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             visitedNodes += getInternalId() to createDependencyNode(dependency, linkage, issues)
 
             val children = visitDependencies { dependencies ->
-                dependencies.sortedBy { it.id }.map { node ->
-                    val nodeId = node.getInternalId()
+                dependencies
+                    .map { it.getStableReference() } // Obtain stable reference to not lose node data when sorting.
+                    .sortedBy { it.id }
+                    .map { node ->
+                        val nodeId = node.getInternalId()
 
-                    if (deduplicateDependencyTree && nodeId in visitedNodes) {
-                        // Cut the duplicate subtree here and only return the node without its children.
-                        visitedNodes.getValue(nodeId).copy(children = emptyList())
-                    } else {
-                        node.toEvaluatedTreeNode(scope, path + dependency)
-                    }
+                        if (deduplicateDependencyTree && nodeId in visitedNodes) {
+                            // Cut the duplicate subtree here and only return the node without its children.
+                            visitedNodes.getValue(nodeId).copy(children = emptyList())
+                        } else {
+                            node.toEvaluatedTreeNode(scope, path + dependency)
+                        }
                 }.toList()
             }
 
@@ -511,7 +514,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             // Deduplication should not happen across scopes.
             visitedNodes.clear()
 
-            val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope).sortedBy { it.id }
+            val subTrees = input.ortResult.dependencyNavigator.directDependencies(project, scope)
+                .map { it.getStableReference() } // Obtain stable reference to not lose node data when sorting.
+                .sortedBy { it.id }
                 .mapTo(mutableListOf()) { it.toEvaluatedTreeNode(scopes.getValue(scope), mutableListOf()) }
 
             val applicableScopeExcludes = input.ortResult.getExcludes().findScopeExcludes(scope)
