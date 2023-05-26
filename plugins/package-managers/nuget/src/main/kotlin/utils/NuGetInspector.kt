@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.packagemanagers.nuget.utils
 
 import java.io.File
-import java.util.SortedSet
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -141,8 +140,8 @@ internal object NuGetInspector : CommandLineTool {
 
 private const val TYPE = "NuGet"
 
-private fun List<NuGetInspector.Party>.toAuthors(): SortedSet<String> =
-    filter { it.role == "author" }.mapNotNullTo(sortedSetOf()) { party ->
+private fun List<NuGetInspector.Party>.toAuthors(): Set<String> =
+    filter { it.role == "author" }.mapNotNullTo(mutableSetOf()) { party ->
         buildString {
             party.name?.let { append(it) }
             party.email?.let {
@@ -209,7 +208,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
             version = pkg.version.orEmpty()
         )
 
-        val declaredLicenses = sortedSetOf<String>()
+        val declaredLicenses = mutableSetOf<String>()
         val pkgDeclaredLicense = pkg.declaredLicense.orEmpty()
 
         if (pkgDeclaredLicense.isNotBlank()) {
