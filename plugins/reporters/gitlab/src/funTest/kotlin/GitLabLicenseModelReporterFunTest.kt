@@ -49,7 +49,7 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
         "create the expected JSON license model containing only non-excluded packages" {
             val ortResult = createOrtResult()
 
-            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = true) + "\n"
+            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = true)
 
             jsonLicenseModel shouldBe getAssetAsString("gitlab-license-model-test-skip-excluded-expected-output.json")
         }
@@ -57,7 +57,7 @@ class GitLabLicenseModelReporterFunTest : WordSpec({
         "create the expected JSON license model containing all packages referenced by any project " {
             val ortResult = createOrtResult()
 
-            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = false) + "\n"
+            val jsonLicenseModel = generateReport(ortResult = ortResult, skipExcluded = false)
 
             jsonLicenseModel shouldBe getAssetAsString("gitlab-license-model-test-expected-output.json")
         }
