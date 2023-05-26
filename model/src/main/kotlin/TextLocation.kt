@@ -43,6 +43,8 @@ data class TextLocation(
 ) : Comparable<TextLocation> {
     companion object {
         const val UNKNOWN_LINE = -1
+
+        // This comparator is consistent with `equals()` as all properties are taken into account.
         private val COMPARATOR = compareBy<TextLocation>({ it.path }, { it.startLine }, { it.endLine })
     }
 
