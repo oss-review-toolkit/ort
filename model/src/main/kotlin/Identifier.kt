@@ -63,6 +63,7 @@ data class Identifier(
             version = ""
         )
 
+        // This comparator is consistent with `equals()` as all properties are taken into account.
         private val COMPARATOR = compareBy<Identifier>({ it.type }, { it.namespace }, { it.name })
             .thenComparing({ it.version }, AlphaNumericComparator)
     }
