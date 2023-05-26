@@ -22,7 +22,6 @@ import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.maps.beEmpty as beEmptyMap
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -178,8 +177,8 @@ class FossIdClientReturnTypeTest : StringSpec({
         ).shouldNotBeNull().run {
             checkResponse("list matched lines")
             data.shouldNotBeNull().run {
-                localFile shouldNot beEmptyMap()
-                mirrorFile shouldNot beEmptyMap()
+                localFile shouldNot beEmpty()
+                mirrorFile shouldNot beEmpty()
             }
         }
     }
