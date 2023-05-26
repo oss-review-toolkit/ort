@@ -49,6 +49,8 @@ internal data class GitLabLicenseModel(
     /**
      * The list of all dependencies.
      */
+    @Serializable(SortedDependenciesCollectionSerializer::class)
+    @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
     val dependencies: List<Dependency>
 ) {
     @Serializable
@@ -99,6 +101,11 @@ internal data class GitLabLicenseModel(
         val licenses: Set<String>
     )
 }
+
+private class SortedDependenciesCollectionSerializer :
+    KSerializer<Collection<GitLabLicenseModel.Dependency>> by sortedCollectionSerializer(
+        compareBy({ it.packageManager }, { it.name }, { it.version })
+    )
 
 private class SortedLicenseCollectionSerializer :
     KSerializer<Collection<GitLabLicenseModel.License>> by sortedCollectionSerializer(compareBy { it.id })
