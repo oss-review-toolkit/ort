@@ -19,9 +19,10 @@
 
 package org.ossreviewtoolkit.plugins.reporters.gitlab
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-
-import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.serializer
 
 private const val GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR = "2.1"
 
@@ -31,6 +32,7 @@ private const val GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR = "2.1"
  * and to the examples under
  * https://gitlab.com/gitlab-org/security-products/license-management/-/tree/f4ec1f1bf826654ab963d32a2d4a2588ecb91c04/spec/fixtures/expected.
  */
+@Serializable
 internal data class GitLabLicenseModel(
     /**
      * The schema version of this model, must equal [GITLAB_LICENSE_SCANNING_SCHEMA_VERSION_MAJOR_MINOR].
@@ -40,7 +42,8 @@ internal data class GitLabLicenseModel(
     /**
      * The complete set of licenses referred to by [dependencies].
      */
-    @JsonSerialize(converter = LicenseSortedSetConverter::class)
+    @Serializable(SortedLicenseCollectionSerializer::class)
+    @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
     val licenses: Set<License>,
 
     /**
@@ -48,6 +51,7 @@ internal data class GitLabLicenseModel(
      */
     val dependencies: List<Dependency>
 ) {
+    @Serializable
     data class License(
         /**
          * The SPDX identifier of the license.
@@ -65,9 +69,7 @@ internal data class GitLabLicenseModel(
         val url: String
     )
 
-    /**
-     *
-     */
+    @Serializable
     data class Dependency(
         /**
          * The name of the dependency.
@@ -92,7 +94,22 @@ internal data class GitLabLicenseModel(
         /**
          * The declared licenses of this dependency.
          */
-        @JsonSerialize(converter = StringSortedSetConverter::class)
+        @Serializable(SortedStringCollectionSerializer::class)
+        @Suppress("SERIALIZER_TYPE_INCOMPATIBLE")
         val licenses: Set<String>
     )
+}
+
+private class SortedLicenseCollectionSerializer :
+    KSerializer<Collection<GitLabLicenseModel.License>> by sortedCollectionSerializer(compareBy { it.id })
+
+private class SortedStringCollectionSerializer :
+    KSerializer<Collection<String>> by sortedCollectionSerializer(compareBy { it })
+
+private inline fun <reified T> sortedCollectionSerializer(comparator: Comparator<in T>): KSerializer<Collection<T>> {
+    val delegate = serializer<Collection<T>>()
+    return object : KSerializer<Collection<T>> by delegate {
+        override fun serialize(encoder: Encoder, value: Collection<T>) =
+             delegate.serialize(encoder, value.sortedWith(comparator))
+    }
 }

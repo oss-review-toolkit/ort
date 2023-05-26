@@ -21,7 +21,10 @@ package org.ossreviewtoolkit.plugins.reporters.gitlab
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.jsonMapper
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isTrue
@@ -38,6 +41,13 @@ import org.ossreviewtoolkit.utils.common.isTrue
 class GitLabLicenseModelReporter : Reporter {
     companion object {
         const val OPTION_SKIP_EXCLUDED = "skip.excluded"
+
+        private val JSON = Json {
+            encodeDefaults = true
+            namingStrategy = JsonNamingStrategy.SnakeCase
+            prettyPrint = true
+            prettyPrintIndent = "  "
+        }
     }
 
     override val type = "GitLabLicenseModel"
@@ -52,7 +62,7 @@ class GitLabLicenseModelReporter : Reporter {
         val skipExcluded = options[OPTION_SKIP_EXCLUDED].isTrue()
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)
-        val licenseModelJson = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(licenseModel)
+        val licenseModelJson = JSON.encodeToString(licenseModel)
 
         val outputFile = outputDir.resolve(reportFilename)
         outputFile.bufferedWriter().use { it.write(licenseModelJson) }
