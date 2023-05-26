@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
 
-private const val TABLE_NAME = "provenance_file_listings"
+private const val TABLE_NAME = "provenance_file_lists"
 private const val FILENAME = "file_list.xz"
 
 data class FileListStorageConfiguration(
