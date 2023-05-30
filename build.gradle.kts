@@ -174,8 +174,7 @@ allprojects {
     }
 
     tasks.withType<Detekt> detekt@{
-        // Detekt is not up to Kotlin yet in terms of JVM target support.
-        jvmTarget = maxKotlinJvmTarget.coerceAtMost(18).toString()
+        jvmTarget = maxKotlinJvmTarget.toString()
 
         dependsOn(":detekt-rules:assemble")
 
