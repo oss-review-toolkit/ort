@@ -20,8 +20,8 @@
 import java.nio.charset.Charset
 
 plugins {
-    // Apply core plugins.
-    application
+    // Apply precompiled plugins.
+    id("ort-application-conventions")
 }
 
 application {

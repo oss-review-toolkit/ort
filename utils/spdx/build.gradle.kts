@@ -29,7 +29,9 @@ val spdxLicenseListVersion: String by project
 plugins {
     // Apply core plugins.
     antlr
-    `java-library`
+
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.download)

@@ -21,8 +21,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     // Apply core plugins.
-    `java-library`
     `java-test-fixtures`
+
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)

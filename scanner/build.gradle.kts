@@ -25,8 +25,8 @@ val licenseeVersion: String by project
 val scancodeVersion: String by project
 
 plugins {
-    // Apply core plugins.
-    `java-library`
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 }
 
 repositories {

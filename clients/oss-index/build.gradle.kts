@@ -18,8 +18,8 @@
  */
 
 plugins {
-    // Apply core plugins.
-    `java-library`
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.kotlinSerialization)

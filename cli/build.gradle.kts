@@ -23,8 +23,8 @@ import java.nio.file.Files
 import org.graalvm.buildtools.gradle.tasks.BuildNativeImageTask
 
 plugins {
-    // Apply core plugins.
-    application
+    // Apply precompiled plugins.
+    id("ort-application-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.graalVmNativeImage)

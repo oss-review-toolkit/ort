@@ -21,8 +21,8 @@ import org.jetbrains.gradle.ext.settings
 import org.jetbrains.gradle.ext.taskTriggers
 
 plugins {
-    // Apply core plugins.
-    `java-library`
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 
     // Apply third-party plugins.
     alias(libs.plugins.ideaExt)
