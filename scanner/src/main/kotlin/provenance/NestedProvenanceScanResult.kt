@@ -134,20 +134,14 @@ data class NestedProvenanceScanResult(
 
     private fun Map<KnownProvenance, List<ScanResult>>.mergeSnippetFindings(): Set<SnippetFinding> {
         val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
-            mutableSetOf<SnippetFinding>().also { acc ->
-                scanResults.forEach { acc += it.summary.snippetFindings }
-            }
+            scanResults.flatMap { it.summary.snippetFindings }
         }
 
-        val allFindings = mutableSetOf<SnippetFinding>()
-
-        findingsByPath.forEach { (path, findings) ->
-            allFindings += findings.map { finding ->
-                finding.copy(sourceLocation = finding.sourceLocation.prependPath(path))
-            }
+        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
+            findings.map { it.copy(sourceLocation = it.sourceLocation.prependPath(path)) }
         }
 
-        return allFindings
+        return findings
     }
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
