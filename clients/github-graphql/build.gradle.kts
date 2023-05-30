@@ -21,8 +21,10 @@ import com.expediagroup.graphql.plugin.gradle.config.GraphQLSerializer
 import com.expediagroup.graphql.plugin.gradle.graphql
 
 plugins {
+    // Apply core plugins.
     `java-library`
 
+    // Apply third-party plugins.
     alias(libs.plugins.graphQl)
     alias(libs.plugins.kotlinSerialization)
 }

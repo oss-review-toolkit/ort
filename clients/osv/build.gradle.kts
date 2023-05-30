@@ -20,6 +20,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    // Apply core plugins.
     `java-library`
 
     // Apply third-party plugins.

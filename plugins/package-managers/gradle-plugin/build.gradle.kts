@@ -18,6 +18,7 @@
  */
 
 plugins {
+    // Apply core plugins.
     `java-gradle-plugin`
 }
 
