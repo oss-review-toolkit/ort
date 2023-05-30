@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.utils.common.encodeHex
  * An enum of supported hash algorithms. Each algorithm has one or more [aliases] associated to it, where the first
  * alias is the definite name.
  */
-enum class HashAlgorithm(private vararg val aliases: String, val verifiable: Boolean = true) {
+enum class HashAlgorithm(vararg val aliases: String, val verifiable: Boolean = true) {
     /**
      * No hash algorithm.
      */
