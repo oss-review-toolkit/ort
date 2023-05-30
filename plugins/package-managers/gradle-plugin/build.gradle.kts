@@ -20,6 +20,9 @@
 plugins {
     // Apply core plugins.
     `java-gradle-plugin`
+
+    // Apply precompiled plugins.
+    id("ort-kotlin-conventions")
 }
 
 gradlePlugin {

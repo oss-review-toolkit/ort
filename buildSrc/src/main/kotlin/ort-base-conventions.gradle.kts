@@ -17,4 +17,18 @@
  * License-Filename: LICENSE
  */
 
-// TODO: Move common build logic to here.
+version = rootProject.version
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType<Jar>().configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+
+    manifest {
+        attributes["Implementation-Version"] = project.version
+    }
+}
