@@ -198,14 +198,20 @@ private val ortResult = OrtResult(
             packages = setOf(
                 Package(
                     id = Identifier("Maven:first-package-group:first-package:0.0.1"),
-                    binaryArtifact = RemoteArtifact("https://some-host/first-package.jar", Hash.NONE),
+                    binaryArtifact = RemoteArtifact(
+                        url = "https://some-host/first-package.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    ),
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                     declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                     description = "A package with all supported attributes set, with a VCS URL containing a user " +
                             "name, and with a scan result containing two copyright finding matched to a license " +
                             "finding.",
                     homepageUrl = "first package's homepage URL",
-                    sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://some-host/first-package-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    ),
                     vcs = VcsInfo(
                         type = VcsType.GIT,
                         revision = "master",
@@ -271,7 +277,7 @@ private val ortResult = OrtResult(
                     provenance = ArtifactProvenance(
                         sourceArtifact = RemoteArtifact(
                             url = "https://some-host/first-package-sources.jar",
-                            hash = Hash.NONE
+                            hash = Hash.create("0000000000000000000000000000000000000000")
                         )
                     ),
                     scanner = ScannerDetails.EMPTY,

@@ -17,8 +17,11 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
+import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
@@ -34,6 +37,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
@@ -41,6 +45,17 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
+
+/**
+ * Convert an ORT [Hash] to an [SpdxChecksum], or return null if a conversion is not possible.
+ */
+private fun Hash.toSpdxChecksum(): SpdxChecksum? =
+    SpdxChecksum.Algorithm.values().find { it.name in algorithm.aliases }?.let {
+        SpdxChecksum(
+            algorithm = it,
+            checksumValue = value
+        )
+    }
 
 /**
  * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix].
@@ -116,6 +131,11 @@ internal fun Package.toSpdxPackage(
     val packageVerificationCode = scanResult.toSpdxPackageVerificationCode()
     return SpdxPackage(
         spdxId = id.toSpdxId(type.infix, type.suffix),
+        checksums = when (type) {
+            SpdxPackageType.BINARY_PACKAGE -> listOfNotNull(binaryArtifact.hash.toSpdxChecksum())
+            SpdxPackageType.SOURCE_PACKAGE -> listOfNotNull(sourceArtifact.hash.toSpdxChecksum())
+            else -> emptyList()
+        },
         copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
         downloadLocation = when (type) {
             SpdxPackageType.PROJECT -> SpdxConstants.NONE

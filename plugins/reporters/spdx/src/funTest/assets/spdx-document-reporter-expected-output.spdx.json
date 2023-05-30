@@ -32,6 +32,10 @@
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0000000000000000000000000000000000000000"
+    } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package.jar",
     "externalRefs" : [ {
@@ -69,6 +73,10 @@
     "versionInfo" : "0.0.1"
   }, {
     "SPDXID" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0000000000000000000000000000000000000000"
+    } ],
     "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
     "downloadLocation" : "https://some-host/first-package-sources.jar",
     "externalRefs" : [ {
