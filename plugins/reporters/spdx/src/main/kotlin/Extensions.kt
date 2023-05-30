@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -91,18 +92,47 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
 }
 
 /**
- * Convert this ORT package to an SPDX package using the information from [licenseInfoResolver]. If [isProject] is
- * `true` then the package is treated as a project.
+ * An enum for the different types of SPDX packages an ORT package can represent.
  */
-internal fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isProject: Boolean = false) =
-    SpdxPackage(
-        spdxId = id.toSpdxId(if (isProject) "Project" else "Package"),
+internal enum class SpdxPackageType(val infix: String, val suffix: String = "") {
+    PROJECT("Project"),
+    BINARY_PACKAGE("Package"),
+    SOURCE_PACKAGE("Package", "source-artifact"),
+    VCS_PACKAGE("Package", "vcs")
+}
+
+/**
+ * Convert this ORT package to an SPDX package. As an ORT package can hold more metadata about its associated artifacts
+ * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from
+ * respective ORT package metadata. [licenseInfoResolver] is used for license and copyright information, and the
+ * optional [scanResult] and [provenance] are used for [type]-specific information.
+ */
+internal fun Package.toSpdxPackage(
+    type: SpdxPackageType,
+    licenseInfoResolver: LicenseInfoResolver,
+    scanResult: ScanResult? = null,
+    provenance: RepositoryProvenance? = null
+): SpdxPackage {
+    val packageVerificationCode = scanResult.toSpdxPackageVerificationCode()
+    return SpdxPackage(
+        spdxId = id.toSpdxId(type.infix, type.suffix),
         copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
-        downloadLocation = binaryArtifact.url.nullOrBlankToSpdxNone(),
-        externalRefs = if (isProject) emptyList() else toSpdxExternalReferences(),
-        filesAnalyzed = false,
+        downloadLocation = when (type) {
+            SpdxPackageType.PROJECT -> SpdxConstants.NONE
+            SpdxPackageType.BINARY_PACKAGE -> binaryArtifact.url.nullOrBlankToSpdxNone()
+            SpdxPackageType.SOURCE_PACKAGE -> sourceArtifact.url.nullOrBlankToSpdxNone()
+            SpdxPackageType.VCS_PACKAGE -> vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision)
+        },
+        externalRefs = if (type == SpdxPackageType.PROJECT) emptyList() else toSpdxExternalReferences(),
+        filesAnalyzed = packageVerificationCode != null,
         homepage = homepageUrl.nullOrBlankToSpdxNone(),
-        licenseConcluded = concludedLicense.nullOrBlankToSpdxNoassertionOrNone(),
+        licenseConcluded = when (type) {
+            // Clear the concluded license as it might need to be different for the source artifact.
+            SpdxPackageType.SOURCE_PACKAGE -> SpdxConstants.NOASSERTION
+            // Clear the concluded license as it might need to be different for the VCS location.
+            SpdxPackageType.VCS_PACKAGE -> SpdxConstants.NOASSERTION
+            else -> concludedLicense.nullOrBlankToSpdxNoassertionOrNone()
+        },
         licenseDeclared = declaredLicensesProcessed.toSpdxDeclaredLicense(),
         licenseInfoFromFiles = licenseInfoResolver.resolveLicenseInfo(id)
             .filterExcluded()
@@ -113,10 +143,12 @@ internal fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isP
             }
             .distinct()
             .sorted(),
+        packageVerificationCode = packageVerificationCode,
         name = id.name,
         summary = description.nullOrBlankToSpdxNone(),
         versionInfo = id.version
     )
+}
 
 /**
  * Convert processed declared licenses to SPDX. Unmapped licenses are represented as `NOASSERTION`.
