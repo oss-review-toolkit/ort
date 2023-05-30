@@ -101,15 +101,8 @@ if (version == Project.DEFAULT_VERSION) {
 
 logger.lifecycle("Building ORT version $version.")
 
-// Note that Gradle's Java toolchain mechanism cannot be used here as that only applies to the Java version used in
-// compile tasks. But already ORT's build scripts, like the compilation of this file itself, depend on Java 11 due to
-// the Java target used by some plugins, see e.g. https://github.com/martoe/gradle-svntools-plugin#version-compatibility.
-val javaVersion = JavaVersion.current()
-if (!javaVersion.isCompatibleWith(JavaVersion.VERSION_11)) {
-    throw GradleException("At least Java 11 is required, but Java $javaVersion is being used.")
-}
-
 // See https://kotlinlang.org/docs/compiler-reference.html#jvm-target-version.
+val javaVersion = JavaVersion.current()
 val maxKotlinJvmTarget = javaVersion.majorVersion.toInt().coerceAtMost(19)
 
 idea {
