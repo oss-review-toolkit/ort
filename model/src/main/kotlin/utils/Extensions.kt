@@ -36,6 +36,9 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 internal fun TextLocation.prependedPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
 
+fun TextLocation.prependPath(prefix: String): TextLocation =
+    if (prefix.isEmpty()) this else copy(path = prependedPath(prefix))
+
 /**
  * Map the [type][Identifier.type] of a [package identifier][Package.id] to a ClearlyDefined [ComponentType], or return
  * null if a mapping is not possible.

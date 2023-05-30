@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.SnippetFinding
+import org.ossreviewtoolkit.model.utils.prependPath
 
 /**
  * A class that contains all [ScanResult]s for a [NestedProvenance].
@@ -113,8 +114,7 @@ data class NestedProvenanceScanResult(
         }
 
         val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
-            val prefix = if (path.isEmpty()) path else "$path/"
-            findings.map { it.copy(location = it.location.copy(path = "$prefix${it.location.path}")) }
+            findings.map { it.copy(location = it.location.prependPath(path)) }
         }
 
         return findings
@@ -126,8 +126,7 @@ data class NestedProvenanceScanResult(
         }
 
         val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
-            val prefix = if (path.isEmpty()) path else "$path/"
-            findings.map { it.copy(location = it.location.copy(path = "$prefix${it.location.path}")) }
+            findings.map { it.copy(location = it.location.prependPath(path)) }
         }
 
         return findings
@@ -143,11 +142,8 @@ data class NestedProvenanceScanResult(
         val allFindings = mutableSetOf<SnippetFinding>()
 
         findingsByPath.forEach { (path, findings) ->
-            val prefix = if (path.isEmpty()) path else "$path/"
-
             allFindings += findings.map { finding ->
-                val newPath = "$prefix${finding.sourceLocation.path}"
-                finding.copy(sourceLocation = finding.sourceLocation.copy(path = newPath))
+                finding.copy(sourceLocation = finding.sourceLocation.prependPath(path))
             }
         }
 
