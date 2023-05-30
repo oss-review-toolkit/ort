@@ -7,7 +7,6 @@ graalVmNativeImagePlugin = "0.9.22"
 graphQlPlugin = "6.4.1"
 ideaExtPlugin = "1.1.7"
 kotlinPlugin = "1.8.21"
-versionCatalogUpdatePlugin = "0.8.0"
 versionsPlugin = "0.46.0"
 
 antlr = "4.13.0"
@@ -41,7 +40,6 @@ log4jApi = "2.20.0"
 log4jApiKotlin = "1.2.0"
 logback = "1.4.7"
 maven = "3.9.2"
-# @pin this version as it needs to be aligned with "maven".
 mavenResolver = "1.9.10"
 mockk = "1.13.5"
 okhttp = "4.11.0"
@@ -70,7 +68,6 @@ graphQl = { id = "com.expediagroup.graphql", version.ref = "graphQlPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlin = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlinPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
-versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version.ref = "versionCatalogUpdatePlugin" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin" }
 
 [libraries]
@@ -123,7 +120,6 @@ kotlinxSerializationCore = { module = "org.jetbrains.kotlinx:kotlinx-serializati
 kotlinxSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
-# @keep this library which is being used via force().
 log4jApi = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4jApi" }
 log4jApiKotlin = { module = "org.apache.logging.log4j:log4j-api-kotlin", version.ref = "log4jApiKotlin" }
 log4jApiToSlf4j = { module = "org.apache.logging.log4j:log4j-to-slf4j", version.ref = "log4jApi" }

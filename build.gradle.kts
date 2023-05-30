@@ -47,7 +47,6 @@ plugins {
     alias(libs.plugins.dokkatoo)
     alias(libs.plugins.ideaExt)
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.versionCatalogUpdate)
     alias(libs.plugins.versions)
 }
 
@@ -137,11 +136,6 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates") {
     rejectVersionIf {
         candidate.version.matches(nonFinalQualifiersRegex)
     }
-}
-
-versionCatalogUpdate {
-    // Keep the custom sorting / grouping.
-    sortByKey.set(false)
 }
 
 val mergeDetektReports by tasks.registering(ReportMergeTask::class) {
