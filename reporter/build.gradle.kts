@@ -19,8 +19,10 @@
 
 plugins {
     // Apply core plugins.
-    `java-library`
     `java-test-fixtures`
+
+    // Apply precompiled plugins.
+    id("ort-library-conventions")
 }
 
 dependencies {
