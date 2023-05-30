@@ -35,7 +35,7 @@ class FindingCurationMatcher {
         relativeFindingPath: String
     ): Boolean = FileMatcher.match(
         pattern = curation.path,
-        path = finding.location.prependPath(relativeFindingPath)
+        path = finding.location.prependedPath(relativeFindingPath)
     )
 
     private fun isStartLineMatching(finding: LicenseFinding, curation: LicenseFindingCuration): Boolean =
