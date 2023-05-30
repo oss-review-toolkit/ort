@@ -79,11 +79,12 @@ data class NestedProvenanceScanResult(
                 results.filter { it.scanner == scanner }
             }
 
-            val allScanResults = scanResults.values.flatten()
+            val scanResultsForScanner = scanResultsForScannerByProvenance.values.flatten()
 
-            val startTime = allScanResults.minByOrNull { it.summary.startTime }?.summary?.startTime ?: Instant.now()
-            val endTime = allScanResults.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
-            val issues = allScanResults.flatMap { it.summary.issues }.distinct()
+            val startTime = scanResultsForScanner.minByOrNull { it.summary.startTime }?.summary?.startTime
+                ?: Instant.now()
+            val endTime = scanResultsForScanner.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
+            val issues = scanResultsForScanner.flatMap { it.summary.issues }.distinct()
 
             val licenseFindings = scanResultsForScannerByProvenance.mergeLicenseFindings()
             val copyrightFindings = scanResultsForScannerByProvenance.mergeCopyrightFindings()
@@ -101,7 +102,7 @@ data class NestedProvenanceScanResult(
                     snippetFindings = snippetFindings,
                     issues = issues
                 ),
-                additionalData = allScanResults.map { it.additionalData }.reduce { acc, map -> acc + map }
+                additionalData = scanResultsForScanner.map { it.additionalData }.reduce { acc, map -> acc + map }
             )
         }
     }
