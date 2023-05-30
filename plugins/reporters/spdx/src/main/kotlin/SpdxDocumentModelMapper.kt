@@ -185,17 +185,10 @@ internal object SpdxDocumentModelMapper {
     }
 }
 
-private fun getSpdxCopyrightText(
-    licenseInfoResolver: LicenseInfoResolver,
-    id: Identifier
-): String {
-    val copyrightStatements = licenseInfoResolver.resolveLicenseInfo(id).flatMapTo(sortedSetOf()) { it.getCopyrights() }
-
-    return if (copyrightStatements.isNotEmpty()) {
-        copyrightStatements.joinToString("\n")
-    } else {
-        SpdxConstants.NONE
-    }
+private fun LicenseInfoResolver.getSpdxCopyrightText(id: Identifier): String {
+    val copyrightStatements = resolveLicenseInfo(id).flatMapTo(sortedSetOf()) { it.getCopyrights() }
+    if (copyrightStatements.isEmpty()) return SpdxConstants.NONE
+    return copyrightStatements.joinToString("\n")
 }
 
 /**
@@ -231,7 +224,7 @@ private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
 private fun Package.toSpdxPackage(licenseInfoResolver: LicenseInfoResolver, isProject: Boolean = false) =
     SpdxPackage(
         spdxId = id.toSpdxId(if (isProject) "Project" else "Package"),
-        copyrightText = getSpdxCopyrightText(licenseInfoResolver, id),
+        copyrightText = licenseInfoResolver.getSpdxCopyrightText(id),
         downloadLocation = binaryArtifact.url.nullOrBlankToSpdxNone(),
         externalRefs = if (isProject) emptyList() else toSpdxExternalReferences(),
         filesAnalyzed = false,
