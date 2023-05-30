@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.percentEncode
 
-internal fun TextLocation.prependPath(prefix: String): String =
+internal fun TextLocation.prependedPath(prefix: String): String =
     if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
 
 /**
