@@ -41,16 +41,16 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
+/**
+ * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix].
+ */
+internal fun Identifier.toSpdxId(infix: String) = "${SpdxConstants.REF_PREFIX}$infix-${toCoordinates()}".toSpdxId()
+
 private fun LicenseInfoResolver.getSpdxCopyrightText(id: Identifier): String {
     val copyrightStatements = resolveLicenseInfo(id).flatMapTo(sortedSetOf()) { it.getCopyrights() }
     if (copyrightStatements.isEmpty()) return SpdxConstants.NONE
     return copyrightStatements.joinToString("\n")
 }
-
-/**
- * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix].
- */
-internal fun Identifier.toSpdxId(infix: String) = "${SpdxConstants.REF_PREFIX}$infix-${toCoordinates()}".toSpdxId()
 
 private fun Package.toSpdxExternalReferences(): List<SpdxExternalReference> {
     val externalRefs = mutableListOf<SpdxExternalReference>()
@@ -117,8 +117,6 @@ private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
         else -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
     }
 
-internal fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
-
 internal fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
     SpdxPackageVerificationCode(
         packageVerificationCodeExcludedFiles = emptyList(),
@@ -151,6 +149,8 @@ private fun SpdxExpression?.nullOrBlankToSpdxNoassertionOrNone(): String =
         toString().isBlank() -> SpdxConstants.NONE
         else -> toString()
     }
+
+internal fun String?.nullOrBlankToSpdxNone(): String = if (isNullOrBlank()) SpdxConstants.NONE else this
 
 internal fun VcsInfo.toSpdxDownloadLocation(resolvedRevision: String?): String {
     val vcsTool = when (type) {
