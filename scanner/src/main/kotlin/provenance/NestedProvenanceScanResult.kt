@@ -76,20 +76,20 @@ data class NestedProvenanceScanResult(
         val allScanners = scanResults.values.flatMapTo(mutableSetOf()) { results -> results.map { it.scanner } }
 
         return allScanners.map { scanner ->
-            val scanResultsForScannerByProvenance = scanResults.mapValues { (_, results) ->
-                results.filter { it.scanner == scanner }
+            val scanResultsForScannerByPath = scanResults.entries.associate { (provenance, result) ->
+                getPath(provenance) to result.filter { it.scanner == scanner }
             }
 
-            val scanResultsForScanner = scanResultsForScannerByProvenance.values.flatten()
+            val scanResultsForScanner = scanResultsForScannerByPath.values.flatten()
 
             val startTime = scanResultsForScanner.minByOrNull { it.summary.startTime }?.summary?.startTime
                 ?: Instant.now()
             val endTime = scanResultsForScanner.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
             val issues = scanResultsForScanner.flatMap { it.summary.issues }.distinct()
 
-            val licenseFindings = scanResultsForScannerByProvenance.mergeLicenseFindings()
-            val copyrightFindings = scanResultsForScannerByProvenance.mergeCopyrightFindings()
-            val snippetFindings = scanResultsForScannerByProvenance.mergeSnippetFindings()
+            val licenseFindings = scanResultsForScannerByPath.mergeLicenseFindings()
+            val copyrightFindings = scanResultsForScannerByPath.mergeCopyrightFindings()
+            val snippetFindings = scanResultsForScannerByPath.mergeSnippetFindings()
 
             ScanResult(
                 provenance = nestedProvenance.root,
@@ -106,42 +106,6 @@ data class NestedProvenanceScanResult(
                 additionalData = scanResultsForScanner.map { it.additionalData }.reduce { acc, map -> acc + map }
             )
         }
-    }
-
-    private fun Map<KnownProvenance, List<ScanResult>>.mergeLicenseFindings(): Set<LicenseFinding> {
-        val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
-            scanResults.flatMap { it.summary.licenseFindings }
-        }
-
-        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
-            findings.map { it.copy(location = it.location.prependPath(path)) }
-        }
-
-        return findings
-    }
-
-    private fun Map<KnownProvenance, List<ScanResult>>.mergeCopyrightFindings(): Set<CopyrightFinding> {
-        val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
-            scanResults.flatMap { it.summary.copyrightFindings }
-        }
-
-        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
-            findings.map { it.copy(location = it.location.prependPath(path)) }
-        }
-
-        return findings
-    }
-
-    private fun Map<KnownProvenance, List<ScanResult>>.mergeSnippetFindings(): Set<SnippetFinding> {
-        val findingsByPath = mapKeys { getPath(it.key) }.mapValues { (_, scanResults) ->
-            scanResults.flatMap { it.summary.snippetFindings }
-        }
-
-        val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
-            findings.map { it.copy(sourceLocation = it.sourceLocation.prependPath(path)) }
-        }
-
-        return findings
     }
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
@@ -232,4 +196,40 @@ data class NestedProvenanceScanResult(
             scanResults = newScanResults
         )
     }
+}
+
+private fun Map<String, List<ScanResult>>.mergeLicenseFindings(): Set<LicenseFinding> {
+    val findingsByPath = mapValues { (_, scanResults) ->
+        scanResults.flatMap { it.summary.licenseFindings }
+    }
+
+    val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
+        findings.map { it.copy(location = it.location.prependPath(path)) }
+    }
+
+    return findings
+}
+
+private fun Map<String, List<ScanResult>>.mergeCopyrightFindings(): Set<CopyrightFinding> {
+    val findingsByPath = mapValues { (_, scanResults) ->
+        scanResults.flatMap { it.summary.copyrightFindings }
+    }
+
+    val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
+        findings.map { it.copy(location = it.location.prependPath(path)) }
+    }
+
+    return findings
+}
+
+private fun Map<String, List<ScanResult>>.mergeSnippetFindings(): Set<SnippetFinding> {
+    val findingsByPath = mapValues { (_, scanResults) ->
+        scanResults.flatMap { it.summary.snippetFindings }
+    }
+
+    val findings = findingsByPath.flatMapTo(mutableSetOf()) { (path, findings) ->
+        findings.map { it.copy(sourceLocation = it.sourceLocation.prependPath(path)) }
+    }
+
+    return findings
 }
