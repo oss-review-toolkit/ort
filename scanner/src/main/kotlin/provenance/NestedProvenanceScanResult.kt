@@ -73,39 +73,9 @@ data class NestedProvenanceScanResult(
      * of the individual files, no package verification code can be calculated.
      */
     fun merge(): List<ScanResult> {
-        val allScanners = scanResults.values.flatMapTo(mutableSetOf()) { results -> results.map { it.scanner } }
+        val scanResultsByPath = scanResults.mapKeys { (provenance, _) -> getPath(provenance) }
 
-        return allScanners.map { scanner ->
-            val scanResultsForScannerByPath = scanResults.entries.associate { (provenance, result) ->
-                getPath(provenance) to result.filter { it.scanner == scanner }
-            }
-
-            val scanResultsForScanner = scanResultsForScannerByPath.values.flatten()
-
-            val startTime = scanResultsForScanner.minByOrNull { it.summary.startTime }?.summary?.startTime
-                ?: Instant.now()
-            val endTime = scanResultsForScanner.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
-            val issues = scanResultsForScanner.flatMap { it.summary.issues }.distinct()
-
-            val licenseFindings = scanResultsForScannerByPath.mergeLicenseFindings()
-            val copyrightFindings = scanResultsForScannerByPath.mergeCopyrightFindings()
-            val snippetFindings = scanResultsForScannerByPath.mergeSnippetFindings()
-
-            ScanResult(
-                provenance = nestedProvenance.root,
-                scanner = scanner,
-                summary = ScanSummary(
-                    startTime = startTime,
-                    endTime = endTime,
-                    packageVerificationCode = "",
-                    licenseFindings = licenseFindings,
-                    copyrightFindings = copyrightFindings,
-                    snippetFindings = snippetFindings,
-                    issues = issues
-                ),
-                additionalData = scanResultsForScanner.map { it.additionalData }.reduce { acc, map -> acc + map }
-            )
-        }
+        return mergeScanResultsByScanner(scanResultsByPath)
     }
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
@@ -194,6 +164,53 @@ data class NestedProvenanceScanResult(
         return NestedProvenanceScanResult(
             nestedProvenance = newNestedProvenance,
             scanResults = newScanResults
+        )
+    }
+}
+
+/**
+ * Merge the nested [ScanResult]s into one [ScanResult] per used scanner, using the root of the [nestedProvenance]
+ * as provenance. This maps the given [scanResultsByPath] to the format currently used by [OrtResult]. When merging
+ * multiple [ScanSummary]s for a particular scanner the earliest start time and lasted end time will be used as the new
+ * values for the respective scanner. Because the [ScanSummary] does not contain the checksums of the individual files,
+ * no package verification code can be calculated.
+ */
+private fun mergeScanResultsByScanner(scanResultsByPath: Map<String, List<ScanResult>>): List<ScanResult> {
+    val rootProvenance = scanResultsByPath.getValue("").map { it.provenance }.distinct().also {
+        require(it.size == 1) { "There must be exactly one unique provenance associated with the empty path." }
+    }.first()
+
+    val allScanners = scanResultsByPath.values.flatMapTo(mutableSetOf()) { results -> results.map { it.scanner } }
+
+    return allScanners.map { scanner ->
+        val scanResultsForScannerByPath = scanResultsByPath.mapValues { (_, scanResults) ->
+            scanResults.filter { it.scanner == scanner }
+        }
+
+        val scanResultsForScanner = scanResultsForScannerByPath.values.flatten()
+
+        val startTime = scanResultsForScanner.minByOrNull { it.summary.startTime }?.summary?.startTime
+            ?: Instant.now()
+        val endTime = scanResultsForScanner.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
+        val issues = scanResultsForScanner.flatMap { it.summary.issues }.distinct()
+
+        val licenseFindings = scanResultsForScannerByPath.mergeLicenseFindings()
+        val copyrightFindings = scanResultsForScannerByPath.mergeCopyrightFindings()
+        val snippetFindings = scanResultsForScannerByPath.mergeSnippetFindings()
+
+        ScanResult(
+            provenance = rootProvenance,
+            scanner = scanner,
+            summary = ScanSummary(
+                startTime = startTime,
+                endTime = endTime,
+                packageVerificationCode = "",
+                licenseFindings = licenseFindings,
+                copyrightFindings = copyrightFindings,
+                snippetFindings = snippetFindings,
+                issues = issues
+            ),
+            additionalData = scanResultsForScanner.map { it.additionalData }.reduce { acc, map -> acc + map }
         )
     }
 }
