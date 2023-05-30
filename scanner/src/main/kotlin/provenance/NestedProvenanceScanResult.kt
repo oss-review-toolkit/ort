@@ -75,7 +75,7 @@ data class NestedProvenanceScanResult(
         val allScanners = scanResults.values.flatMapTo(mutableSetOf()) { results -> results.map { it.scanner } }
 
         return allScanners.map { scanner ->
-            val scanResultsForScanner = scanResults.mapValues { (_, results) ->
+            val scanResultsForScannerByProvenance = scanResults.mapValues { (_, results) ->
                 results.filter { it.scanner == scanner }
             }
 
@@ -85,9 +85,9 @@ data class NestedProvenanceScanResult(
             val endTime = allScanResults.maxByOrNull { it.summary.endTime }?.summary?.endTime ?: startTime
             val issues = allScanResults.flatMap { it.summary.issues }.distinct()
 
-            val licenseFindings = scanResultsForScanner.mergeLicenseFindings()
-            val copyrightFindings = scanResultsForScanner.mergeCopyrightFindings()
-            val snippetFindings = scanResultsForScanner.mergeSnippetFindings()
+            val licenseFindings = scanResultsForScannerByProvenance.mergeLicenseFindings()
+            val copyrightFindings = scanResultsForScannerByProvenance.mergeCopyrightFindings()
+            val snippetFindings = scanResultsForScannerByProvenance.mergeSnippetFindings()
 
             ScanResult(
                 provenance = nestedProvenance.root,
