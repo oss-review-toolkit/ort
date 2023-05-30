@@ -29,9 +29,11 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val spdxLicenseListVersion: String by project
 
 plugins {
+    // Apply core plugins.
     antlr
     `java-library`
 
+    // Apply third-party plugins.
     alias(libs.plugins.download)
 }
 

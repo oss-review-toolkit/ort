@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    // Apply third-party plugins.
     alias(libs.plugins.dependencyAnalysis)
     alias(libs.plugins.detekt)
     alias(libs.plugins.dokkatoo)
