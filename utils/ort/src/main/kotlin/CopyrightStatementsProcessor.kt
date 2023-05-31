@@ -24,7 +24,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import org.ossreviewtoolkit.utils.common.StringSortedSetConverter
+import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
+import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 
 private val INVALID_OWNER_START_CHARS = charArrayOf(' ', ';', '.', ',', '-', '+', '~', '&')
 private val INVALID_OWNER_KEY_CHARS = charArrayOf('<', '>', '(', ')', '[', ']') + INVALID_OWNER_START_CHARS
@@ -55,38 +57,6 @@ private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
 private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
 
 private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
-
-/**
- * Return a comma-separated string of sorted years or year-ranges that represent the [years].
- */
-private fun prettyPrintYears(years: Collection<Int>): String {
-    /**
-     * Collapse consecutive [years] to a list of pairs that each denote a year range. A single year is represented as a
-     * range whose first and last years are equal.
-     */
-    fun getYearRanges(years: Collection<Int>): List<Pair<Int, Int>> {
-        if (years.isEmpty()) return emptyList()
-
-        val yearRanges = mutableListOf<Pair<Int, Int>>()
-
-        val sortedYears = years.toSortedSet()
-        val rangeBreaks = sortedYears.zipWithNext { a, b -> (a to b).takeIf { b != a + 1 } }.filterNotNull()
-
-        var current = sortedYears.first()
-
-        rangeBreaks.mapTo(yearRanges) { (last, first) ->
-            (current to last).also { current = first }
-        }
-
-        yearRanges += current to sortedYears.last()
-
-        return yearRanges
-    }
-
-    return getYearRanges(years).joinToString { (fromYear, toYear) ->
-        if (fromYear == toYear) fromYear.toString() else "$fromYear-$toYear"
-    }
-}
 
 /**
  * Remove all found years from the [copyrightStatement] and replace them with the [YEAR_PLACEHOLDER]. The replacement is
@@ -194,7 +164,8 @@ object CopyrightStatementsProcessor {
         val originalStatements: List<String>
     ) : Comparable<Parts> {
         companion object {
-            private val COMPARATOR = compareBy<Parts>({ it.owner }, { prettyPrintYears(it.years) }, { it.prefix })
+            private val COMPARATOR =
+                compareBy<Parts>({ it.owner }, { it.years.collapseToRanges().prettyPrintRanges() }, { it.prefix })
         }
 
         override fun compareTo(other: Parts) = COMPARATOR.compare(this, other)
@@ -205,7 +176,7 @@ object CopyrightStatementsProcessor {
 
                 if (years.isNotEmpty()) {
                     append(" ")
-                    append(prettyPrintYears(years))
+                    append(years.collapseToRanges().prettyPrintRanges())
                 }
 
                 if (owner.isNotEmpty()) {
