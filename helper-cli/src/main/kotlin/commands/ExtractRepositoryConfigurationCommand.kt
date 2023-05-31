@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.write
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ExtractRepositoryConfigurationCommand : CliktCommand(
+internal class ExtractRepositoryConfigurationCommand : CliktCommand(
     help = "Extract the repository configuration from the given ORT result file."
 ) {
     private val ortFile by option(

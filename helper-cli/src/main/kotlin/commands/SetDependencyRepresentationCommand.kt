@@ -54,7 +54,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
  * files can contain placeholders, which make them invalid (e.g. a placeholder for a numeric value causes serialization
  * to fail). Therefore, a special mode can be enabled, in which well-known placeholders are handled.
  */
-class SetDependencyRepresentationCommand : CliktCommand(
+internal class SetDependencyRepresentationCommand : CliktCommand(
     help = "Set the dependency representation of an ORT result to a specific target format."
 ) {
     /**

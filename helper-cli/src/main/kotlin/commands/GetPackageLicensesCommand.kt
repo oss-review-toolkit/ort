@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-class GetPackageLicensesCommand : CliktCommand(
+internal class GetPackageLicensesCommand : CliktCommand(
     help = "Shows the root license and the detected license for a package denoted by the given package identifier."
 ) {
     private val configFile by option(

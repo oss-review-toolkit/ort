@@ -29,7 +29,7 @@ import org.ossreviewtoolkit.helper.utils.readOrtResult
 import org.ossreviewtoolkit.helper.utils.writeOrtResult
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ConvertOrtFileCommand : CliktCommand(
+internal class ConvertOrtFileCommand : CliktCommand(
     help = "Converts the given ORT file to a different format, e.g. '.json' to '.yml'."
 ) {
     private val inputOrtFile by option(

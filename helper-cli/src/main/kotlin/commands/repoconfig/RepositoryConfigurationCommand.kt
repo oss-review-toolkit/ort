@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.helper.commands.repoconfig
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-class RepositoryConfigurationCommand : NoOpCliktCommand(
+internal class RepositoryConfigurationCommand : NoOpCliktCommand(
     help = "Commands for working with package configurations."
 ) {
     init {

@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseClassifications
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ListLicenseCategoriesCommand : CliktCommand(
+internal class ListLicenseCategoriesCommand : CliktCommand(
     help = "Lists the license categories."
 ) {
     private val licenseClassificationsFile by option(

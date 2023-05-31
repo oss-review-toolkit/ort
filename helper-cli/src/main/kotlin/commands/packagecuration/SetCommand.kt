@@ -33,7 +33,7 @@ import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCu
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class SetCommand : CliktCommand(
+internal class SetCommand : CliktCommand(
     help = "(Re-)set all package curations for a given ORT file to the curations specified via package curations " +
             "file and directory. If no curations are given then all curations get removed."
 ) {

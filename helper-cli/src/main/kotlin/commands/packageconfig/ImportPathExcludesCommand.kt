@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ImportPathExcludesCommand : CliktCommand(
+internal class ImportPathExcludesCommand : CliktCommand(
     help = "Import path excludes by repository from a file into the given package configuration."
 ) {
     private val pathExcludesFile by option(

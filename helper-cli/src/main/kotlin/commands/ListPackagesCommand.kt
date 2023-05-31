@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.utils.createLicenseInfoResolver
 import org.ossreviewtoolkit.utils.common.expandTilde
 
-class ListPackagesCommand : CliktCommand(
+internal class ListPackagesCommand : CliktCommand(
     help = "Lists the packages and optionally also projects contained in the given ORT result file."
 ) {
     private val ortFile by option(
