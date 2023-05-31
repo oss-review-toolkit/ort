@@ -93,21 +93,22 @@ fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression
  */
 fun String.toSpdxId(allowPlusSuffix: Boolean = false): String {
     val hasPlusSuffix = endsWith('+')
-    val special = listOf('-', '.')
+    val specialValid = setOf('-', '.')
+    val specialInvalid = setOf(':', '_')
 
     val converted = buildString {
         var lastChar: Char? = null
 
         this@toSpdxId.forEach { c ->
-            when (c) {
+            when {
                 // Take allowed chars as-is.
-                in special, in '0'..'9', in 'A'..'Z', in 'a'..'z' -> c
+                c.isLetterOrDigit() || c in specialValid -> c
 
                 // Replace colons and underscores with dashes. Do not allow consecutive special chars for readability.
-                ':', '_' -> '-'.takeUnless { lastChar in special }
+                c in specialInvalid -> '-'.takeUnless { lastChar in specialValid }
 
                 // Replace anything else with dots. Do not allow consecutive special chars for readability.
-                else -> '.'.takeUnless { lastChar in special }
+                else -> '.'.takeUnless { lastChar in specialValid }
             }?.let {
                 append(it)
                 lastChar = it
@@ -116,7 +117,7 @@ fun String.toSpdxId(allowPlusSuffix: Boolean = false): String {
     }
 
     // Do not allow leading or trailing special chars for readability.
-    val trimmed = converted.trim { it in special }
+    val trimmed = converted.trim { it in specialValid }
 
     return trimmed.takeUnless { hasPlusSuffix && allowPlusSuffix } ?: "$trimmed+"
 }
