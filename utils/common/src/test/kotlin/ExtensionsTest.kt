@@ -27,6 +27,7 @@ import io.kotest.engine.spec.tempdir
 import io.kotest.engine.spec.tempfile
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.beEmpty
+import io.kotest.matchers.collections.containExactly as containExactlyCollection
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.file.aDirectory
 import io.kotest.matchers.file.aFile
@@ -494,6 +495,44 @@ class ExtensionsTest : WordSpec({
 
         "work with empty values" {
             URI("https://oss-review-toolkit.org?key=").getQueryParameters() shouldBe mapOf("key" to listOf(""))
+        }
+    }
+
+    "collapseValues" should {
+        "not modify a single value" {
+            val lines = listOf(255)
+            lines.collapseToRanges() should containExactlyCollection(255 to 255)
+        }
+
+        "collapse two elements in a single range" {
+            val lines = listOf(255, 256)
+            lines.collapseToRanges() should containExactlyCollection(255 to 256)
+        }
+
+        "collapse three elements in a single range" {
+            val lines = listOf(255, 256, 257)
+            lines.collapseToRanges() should containExactlyCollection(255 to 257)
+        }
+
+        "not include single element in a range" {
+            val lines = listOf(255, 257, 258)
+            lines.collapseToRanges() should containExactlyCollection(255 to 255, 257 to 258)
+        }
+
+        "collapse multiple ranges" {
+            val lines = listOf(255, 256, 258, 259)
+            lines.collapseToRanges() should containExactlyCollection(255 to 256, 258 to 259)
+        }
+
+        "collapse a mix of ranges and single values" {
+            val lines = listOf(253, 255, 256, 258, 260, 261, 263)
+            lines.collapseToRanges() should containExactlyCollection(
+                253 to 253,
+                255 to 256,
+                258 to 258,
+                260 to 261,
+                263 to 263,
+            )
         }
     }
 })

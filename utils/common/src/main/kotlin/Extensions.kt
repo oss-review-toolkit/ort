@@ -50,6 +50,36 @@ fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
 fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }.keys
 
 /**
+ * Collapse consecutive [values] to a list of pairs that each denote a range. A single value is represented as a
+ * range whose first and last elements are equal.
+ */
+fun Collection<Int>.collapseToRanges(): List<Pair<Int, Int>> {
+    if (isEmpty()) return emptyList()
+
+    val ranges = mutableListOf<Pair<Int, Int>>()
+
+    val sortedValues = toSortedSet()
+    val rangeBreaks = sortedValues.zipWithNext { a, b -> (a to b).takeIf { b != a + 1 } }.filterNotNull()
+
+    var current = sortedValues.first()
+
+    rangeBreaks.mapTo(ranges) { (last, first) ->
+        (current to last).also { current = first }
+    }
+
+    ranges += current to sortedValues.last()
+
+    return ranges
+}
+
+/**
+ * Return a string of common-separated ranges as denoted by the list of pairs.
+ */
+fun Collection<Pair<Int, Int>>.prettyPrintRanges(): String = joinToString { (startValue, endValue) ->
+    if (startValue == endValue) startValue.toString() else "$startValue-$endValue"
+}
+
+/**
  * Format this [Double] as a string with the provided number of [decimalPlaces].
  */
 fun Double.format(decimalPlaces: Int = 2) = "%.${decimalPlaces}f".format(this)
