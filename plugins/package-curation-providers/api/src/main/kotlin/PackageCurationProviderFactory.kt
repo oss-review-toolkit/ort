@@ -20,7 +20,7 @@
 package org.ossreviewtoolkit.plugins.packagecurationproviders.api
 
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
-import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
+import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.utils.PackageCurationProvider
 import org.ossreviewtoolkit.utils.common.ConfigurablePluginFactory
 import org.ossreviewtoolkit.utils.common.Plugin
@@ -35,11 +35,11 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
 
         /**
          * Return a new (identifier, provider instance) tuple for each
-         * [enabled][PackageCurationProviderConfiguration.enabled] provider configuration in [configurations] ordered
+         * [enabled][ProviderPluginConfiguration.enabled] provider configuration in [configurations] ordered
          * highest-priority first. The given [configurations] must be ordered highest-priority first as well.
          */
         fun create(
-            configurations: List<PackageCurationProviderConfiguration>
+            configurations: List<ProviderPluginConfiguration>
         ): List<Pair<String, PackageCurationProvider>> =
             configurations.filter {
                 it.enabled

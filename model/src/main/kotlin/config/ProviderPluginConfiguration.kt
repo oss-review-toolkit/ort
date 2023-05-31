@@ -23,25 +23,28 @@ import com.sksamuel.hoplite.ConfigAlias
 
 import org.ossreviewtoolkit.utils.common.Plugin
 
-data class PackageCurationProviderConfiguration(
+/**
+ * The configuration of provider plugins.
+ */
+data class ProviderPluginConfiguration(
     /**
-     * The [type][Plugin.type] of the package curation provider.
+     * The [type][Plugin.type] of the provider.
      */
     @ConfigAlias("name")
     val type: String,
 
     /**
-     * A unique identifier for the package curation provider.
+     * A unique identifier for the provider.
      */
     val id: String = type,
 
     /**
-     * Whether this curation provider is enabled.
+     * Whether this provider is enabled.
      */
     val enabled: Boolean = true,
 
     /**
-     * The configuration of the package curation provider. See the specific implementation for available configuration
+     * The configuration of the provider. See the specific implementation for available configuration
      * options.
      */
     val config: Map<String, String> = emptyMap()
