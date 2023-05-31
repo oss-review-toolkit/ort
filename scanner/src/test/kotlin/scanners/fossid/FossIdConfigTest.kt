@@ -54,7 +54,8 @@ class FossIdConfigTest : WordSpec({
                 "deltaScanLimit" to "42",
                 "detectLicenseDeclarations" to "true",
                 "detectCopyrightStatements" to "true",
-                "timeout" to "300"
+                "timeout" to "300",
+                "fetchSnippetMatchedLines" to "true"
             )
             val scannerConfig = options.toScannerConfig()
 
@@ -71,6 +72,7 @@ class FossIdConfigTest : WordSpec({
                 detectLicenseDeclarations = true,
                 detectCopyrightStatements = true,
                 timeout = 300,
+                fetchSnippetMatchedLines = true,
                 options = options
             )
         }
@@ -96,6 +98,7 @@ class FossIdConfigTest : WordSpec({
                 detectLicenseDeclarations = false,
                 detectCopyrightStatements = false,
                 timeout = 60,
+                fetchSnippetMatchedLines = false,
                 options = options
             )
         }

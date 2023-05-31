@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.scanner.scanners.fossid
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.summary.Summarizable
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -37,6 +39,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
+import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
@@ -49,7 +52,8 @@ internal data class RawResults(
     val markedAsIdentifiedFiles: List<MarkedAsIdentifiedFile>,
     val listIgnoredFiles: List<IgnoredFile>,
     val listPendingFiles: List<String>,
-    val listSnippets: Map<String, Set<Snippet>>
+    val listSnippets: Map<String, Set<Snippet>>,
+    val snippetMatchedLines: Map<Int, MatchedLines> = emptyMap()
 )
 
 /**
@@ -115,7 +119,7 @@ internal fun mapSnippetFindings(
     val fakeLocation = TextLocation(".", TextLocation.UNKNOWN_LINE)
 
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
-        val snippets = rawSnippets.map {
+        rawSnippets.map {
             val license = it.artifactLicense?.let {
                 runCatching {
                     LicenseFinding.createAndMap(
@@ -146,25 +150,32 @@ internal fun mapSnippetFindings(
                 FossId.SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
             )
 
-            // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
-            //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
-            //       call per snippet which is too expensive. When it is available for a batch of snippets, it can
-            //       be used here.
-            OrtSnippet(
+            var sourceLocation: TextLocation? = null
+            var snippetLocation: TextLocation? = null
+
+            if (it.matchType == MatchType.PARTIAL) {
+                val rawMatchedLines = rawResults.snippetMatchedLines[it.id]
+                val rawMatchedLinesSourceFile = rawMatchedLines?.localFile.orEmpty().collapseToRanges()
+                val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
+
+                sourceLocation = rawMatchedLinesSourceFile.firstOrNull()
+                    ?.let { (startLine, endLine) -> TextLocation(it.file, startLine, endLine) }
+                snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
+                    ?.let { (startLine, endLine) -> TextLocation(file, startLine, endLine) }
+            }
+
+            val snippet = OrtSnippet(
                 it.score.toFloat(),
-                TextLocation(it.file, TextLocation.UNKNOWN_LINE),
+                snippetLocation ?: TextLocation(it.file, TextLocation.UNKNOWN_LINE),
                 snippetProvenance,
                 purl,
                 license,
                 additionalSnippetData
             )
-        }
 
-        val sourceLocation = TextLocation(file, TextLocation.UNKNOWN_LINE)
-        snippets.map {
             SnippetFinding(
-                sourceLocation,
-                it
+                sourceLocation ?: TextLocation(file, TextLocation.UNKNOWN_LINE),
+                snippet
             )
         }
     }.toSet()

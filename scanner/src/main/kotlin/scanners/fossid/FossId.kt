@@ -49,12 +49,14 @@ import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listMatchedLines
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.listSnippets
 import org.ossreviewtoolkit.clients.fossid.model.Project
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
@@ -762,6 +764,7 @@ class FossId internal constructor(
             "${pendingFiles.size} pending files have been returned for scan '$scanCode'."
         }
 
+        val matchedLines = mutableMapOf<Int, MatchedLines>()
         val snippets = runBlocking(Dispatchers.IO) {
             pendingFiles.map {
                 async {
@@ -773,12 +776,33 @@ class FossId internal constructor(
                     }
                     logger.info { "${snippets.size} snippets." }
 
+                    if (config.fetchSnippetMatchedLines) {
+                        logger.info { "Listing snippet matched lines for $it..." }
+
+                        snippets.filter { it.matchType == MatchType.PARTIAL }.map { snippet ->
+                            val matchedLinesResponse =
+                                service.listMatchedLines(config.user, config.apiKey, scanCode, it, snippet.id)
+                                    .checkResponse("list snippets matched lines")
+                            val lines = checkNotNull(matchedLinesResponse.data) {
+                                "Matched lines could not be listed. Response was ${matchedLinesResponse.message}."
+                            }
+                            matchedLines[snippet.id] = lines
+                        }
+                    }
+
                     it to snippets.filterNot { it.matchType == MatchType.IGNORED }.toSet()
                 }
             }.awaitAll().toMap()
         }
 
-        return RawResults(identifiedFiles, markedAsIdentifiedFiles, listIgnoredFiles, pendingFiles, snippets)
+        return RawResults(
+            identifiedFiles,
+            markedAsIdentifiedFiles,
+            listIgnoredFiles,
+            pendingFiles,
+            snippets,
+            matchedLines
+        )
     }
 
     /**
