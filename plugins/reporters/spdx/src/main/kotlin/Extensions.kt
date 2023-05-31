@@ -140,11 +140,10 @@ private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
 /**
  * Wrap a scan summary's package verification code in a [SpdxPackageVerificationCode].
  */
-internal fun ScanResult.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode =
-    SpdxPackageVerificationCode(
-        packageVerificationCodeExcludedFiles = emptyList(),
-        packageVerificationCodeValue = summary.packageVerificationCode
-    )
+internal fun ScanResult?.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode? =
+    this?.summary?.packageVerificationCode?.takeUnless { it.isEmpty() }?.let {
+        SpdxPackageVerificationCode(packageVerificationCodeValue = it)
+    }
 
 /**
  * Use [licenseTextProvider] to add the license texts for all packages to the [SpdxDocument].

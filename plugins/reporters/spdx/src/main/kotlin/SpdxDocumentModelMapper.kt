@@ -91,12 +91,8 @@ internal object SpdxDocumentModelMapper {
                 }
                 val provenance = vcsScanResult?.provenance as? RepositoryProvenance
 
-                val (filesAnalyzed, packageVerificationCode) =
-                    if (vcsScanResult?.summary?.packageVerificationCode?.isNotEmpty() == true) {
-                        true to vcsScanResult.toSpdxPackageVerificationCode()
-                    } else {
-                        false to null
-                    }
+                val packageVerificationCode = vcsScanResult.toSpdxPackageVerificationCode()
+                val filesAnalyzed = packageVerificationCode != null
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = binaryPackage.copy(
@@ -123,12 +119,8 @@ internal object SpdxDocumentModelMapper {
                     it.provenance is ArtifactProvenance
                 }
 
-                val (filesAnalyzed, packageVerificationCode) =
-                    if (sourceArtifactScanResult?.summary?.packageVerificationCode?.isNotEmpty() == true) {
-                        true to sourceArtifactScanResult.toSpdxPackageVerificationCode()
-                    } else {
-                        false to null
-                    }
+                val packageVerificationCode = sourceArtifactScanResult.toSpdxPackageVerificationCode()
+                val filesAnalyzed = packageVerificationCode != null
 
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = binaryPackage.copy(
