@@ -60,6 +60,7 @@ import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
 import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
 import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
+import org.ossreviewtoolkit.clients.fossid.listMatchedLines
 import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.listSnippets
@@ -71,6 +72,7 @@ import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentifi
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.LicenseFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
+import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
@@ -104,6 +106,7 @@ import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SERVER_URL_KEY
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 @Suppress("LargeClass")
 class FossIdTest : WordSpec({
@@ -377,6 +380,35 @@ class FossIdTest : WordSpec({
             summary.snippetFindings shouldHaveSize expectedPendingFile.size * 5
             summary.snippetFindings.map { it.sourceLocation.path }.toSet() shouldBe expectedPendingFile
             summary.snippetFindings shouldBe expectedSnippetFindings
+        }
+
+        "list matched lines of snippets" {
+            val projectCode = projectCode(PROJECT)
+            val scanCode = scanCode(PROJECT, null)
+            val config = createConfig(deltaScans = false, fetchSnippetMatchedLines = true)
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, "${vcsInfo.revision}_other", scanCode)
+            val pkgId = createIdentifier(index = 42)
+
+            FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(scanCode, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo, "")
+                .expectDownload(scanCode)
+                .mockFiles(scanCode, pendingRange = 1..1, snippetRange = 1..1, matchedLinesFlag = true)
+
+            val fossId = createFossId(config)
+
+            val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
+
+            summary.snippetFindings shouldHaveSize 1
+            summary.snippetFindings.first() shouldNotBeNull {
+                sourceLocation.startLine shouldBe(1)
+                sourceLocation.endLine shouldBe(3)
+                snippet.location.startLine shouldBe 11
+                snippet.location.endLine shouldBe 12
+            }
         }
 
         "create a new project if none exists yet" {
@@ -1043,7 +1075,8 @@ private fun createFossId(config: FossIdConfig): FossId = FossId("FossId", Scanne
 private fun createConfig(
     waitForResult: Boolean = true,
     deltaScans: Boolean = true,
-    deltaScanLimit: Int = Int.MAX_VALUE
+    deltaScanLimit: Int = Int.MAX_VALUE,
+    fetchSnippetMatchedLines: Boolean = false
 ): FossIdConfig {
     val config = FossIdConfig(
         serverUrl = "https://www.example.org/fossid",
@@ -1056,6 +1089,7 @@ private fun createConfig(
         detectLicenseDeclarations = false,
         detectCopyrightStatements = false,
         timeout = 60,
+        fetchSnippetMatchedLines = fetchSnippetMatchedLines,
         options = emptyMap()
     )
 
@@ -1440,13 +1474,15 @@ private fun FossIdServiceWithVersion.mockFiles(
     markedRange: IntRange = IntRange.EMPTY,
     ignoredRange: IntRange = IntRange.EMPTY,
     pendingRange: IntRange = IntRange.EMPTY,
-    snippetRange: IntRange = IntRange.EMPTY
+    snippetRange: IntRange = IntRange.EMPTY,
+    matchedLinesFlag: Boolean = false,
 ): FossIdServiceWithVersion {
     val identifiedFiles = identifiedRange.map(::createIdentifiedFile)
     val markedFiles = markedRange.map(::createMarkedIdentifiedFile)
     val ignoredFiles = ignoredRange.map(::createIgnoredFile)
     val pendingFiles = pendingRange.map(::createPendingFile)
     val snippets = snippetRange.map(::createSnippet)
+    val matchedLines = MatchedLines(PolymorphicList(listOf(1, 2, 3, 21, 22, 36)), PolymorphicList(listOf(11, 12)))
 
     coEvery { listIdentifiedFiles(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(
@@ -1462,6 +1498,10 @@ private fun FossIdServiceWithVersion.mockFiles(
             PolymorphicResponseBody(status = 1, data = PolymorphicList(pendingFiles))
     coEvery { listSnippets(USER, API_KEY, scanCode, any()) } returns
             PolymorphicResponseBody(status = 1, data = PolymorphicList(snippets))
+    if (matchedLinesFlag) {
+        coEvery { listMatchedLines(USER, API_KEY, scanCode, any(), any()) } returns
+                EntityResponseBody(status = 1, data = matchedLines)
+    }
 
     return this
 }

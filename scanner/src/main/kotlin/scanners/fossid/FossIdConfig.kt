@@ -105,6 +105,9 @@ internal data class FossIdConfig(
     /** Timeout in minutes for communication with FossID. */
     val timeout: Int,
 
+    /** Whether matched lines of snippets are to be fetched. */
+    val fetchSnippetMatchedLines: Boolean,
+
     /** Stores the map with FossID-specific configuration options. */
     private val options: Map<String, String>
 ) {
@@ -143,6 +146,9 @@ internal data class FossIdConfig(
         /** Name of the configuration property defining the timeout in minutes for communication with FossID. */
         private const val TIMEOUT = "timeout"
 
+        /** Name of the configuration property controlling whether matched lines of snippets are to be fetched. */
+        private const val FETCH_SNIPPET_MATCHED_LINES = "fetchSnippetMatchedLines"
+
         /**
          * The scanner options beginning with this prefix will be used to parameterize project and scan names.
          */
@@ -179,6 +185,8 @@ internal data class FossIdConfig(
 
             val timeout = fossIdScannerOptions[TIMEOUT]?.toInt() ?: DEFAULT_TIMEOUT
 
+            val fetchSnippetMatchedLines = fossIdScannerOptions[FETCH_SNIPPET_MATCHED_LINES]?.toBoolean() ?: false
+
             require(deltaScanLimit > 0) {
                 "deltaScanLimit must be > 0, current value is $deltaScanLimit."
             }
@@ -196,6 +204,7 @@ internal data class FossIdConfig(
                 detectLicenseDeclarations = detectLicenseDeclarations,
                 detectCopyrightStatements = detectCopyrightStatements,
                 timeout = timeout,
+                fetchSnippetMatchedLines = fetchSnippetMatchedLines,
                 options = fossIdScannerOptions
             )
         }
