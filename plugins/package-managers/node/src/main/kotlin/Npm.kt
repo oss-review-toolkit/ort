@@ -633,13 +633,13 @@ private fun nodeModulesDirForPackageJson(packageJson: File): File? {
     return modulesDir.takeIf { it.name == "node_modules" }
 }
 
-private fun List<String>.groupLines(prefix: String): List<String> {
-    val ignorablePrefixes = setOf("code ", "errno ", "path ", "syscall ")
+private fun List<String>.groupLines(marker: String): List<String> {
+    val ignorableLinePrefixes = setOf("code ", "errno ", "path ", "syscall ")
     val singleLinePrefixes = setOf("deprecated ", "skipping integrity check for git dependency ")
-    val minSecondaryPrefixLength = 5
+    val minCommonPrefixLength = 5
 
     val issueLines = mapNotNull { line ->
-        line.withoutPrefix(prefix)?.takeUnless { ignorablePrefixes.any { prefix -> it.startsWith(prefix) } }
+        line.withoutPrefix(marker)?.takeUnless { ignorableLinePrefixes.any { prefix -> it.startsWith(prefix) } }
     }
 
     var commonPrefix: String
@@ -661,7 +661,7 @@ private fun List<String>.groupLines(prefix: String): List<String> {
                 }
             }
 
-            if (commonPrefix !in singleLinePrefixes && commonPrefix.length >= minSecondaryPrefixLength) {
+            if (commonPrefix !in singleLinePrefixes && commonPrefix.length >= minCommonPrefixLength) {
                 // Do not drop the whole prefix but keep the space when concatenating lines.
                 messages[messages.size - 1] += line.drop(commonPrefix.length - 1).trimEnd()
                 previousPrefix = commonPrefix
