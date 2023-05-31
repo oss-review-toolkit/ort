@@ -192,6 +192,10 @@ data class SpdxPackage(
             "The SPDX ID '$spdxId' has to start with '${SpdxConstants.REF_PREFIX}'."
         }
 
+        require(spdxId.all { it.isLetterOrDigit() || it == '.' || it == '-' }) {
+            "The SPDX ID '$spdxId' is only allowed to contain letters, numbers, '.', and '-'."
+        }
+
         require(copyrightText.isNotBlank()) { "The copyright text must not be blank." }
 
         require(downloadLocation.isNotBlank()) { "The download location must not be blank." }
