@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.helper.commands.scanstorage
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 
-class ScanStorageCommand : NoOpCliktCommand(
+internal class ScanStorageCommand : NoOpCliktCommand(
     help = "Commands for working with scan storages."
 ) {
     init {

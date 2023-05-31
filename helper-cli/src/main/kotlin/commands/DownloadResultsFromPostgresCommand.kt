@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
-class DownloadResultsFromPostgresCommand : CliktCommand(
+internal class DownloadResultsFromPostgresCommand : CliktCommand(
     name = "download-results-from-postgres",
     help = "Download an ORT result from a PostgreSQL database. The symmetric command to ORT's " +
             " upload-result-to-postgres command."

@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
  *
  * See https://github.com/schibsted/jslt.
  */
-class TransformResultCommand : CliktCommand(
+internal class TransformResultCommand : CliktCommand(
     name = "transform", help = "Implements a JSLT transformation on the given ORT result file."
 ) {
     private val ortFile by option(
