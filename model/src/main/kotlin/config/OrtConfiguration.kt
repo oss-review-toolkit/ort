@@ -85,9 +85,9 @@ data class OrtConfiguration(
      * providers: Providers that appear earlier in the list can overwrite curations for the same package from providers
      * that appear later in the list.
      */
-    val packageCurationProviders: List<PackageCurationProviderConfiguration> = listOf(
-        PackageCurationProviderConfiguration(type = "DefaultDir"),
-        PackageCurationProviderConfiguration(type = "DefaultFile")
+    val packageCurationProviders: List<ProviderPluginConfiguration> = listOf(
+        ProviderPluginConfiguration(type = "DefaultDir"),
+        ProviderPluginConfiguration(type = "DefaultFile")
     ),
 
     /**

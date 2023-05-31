@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
 import org.ossreviewtoolkit.model.config.OrtConfigurationWrapper
-import org.ossreviewtoolkit.model.config.PackageCurationProviderConfiguration
+import org.ossreviewtoolkit.model.config.ProviderPluginConfiguration
 import org.ossreviewtoolkit.model.config.REFERENCE_CONFIG_FILENAME
 import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
@@ -62,7 +62,7 @@ class OrtMainFunTest : StringSpec() {
             OrtConfigurationWrapper(
                 OrtConfiguration(
                     packageCurationProviders = listOf(
-                        PackageCurationProviderConfiguration(
+                        ProviderPluginConfiguration(
                             type = "File",
                             config = mapOf("path" to getAssetFile("gradle-curations.yml").path)
                         )
