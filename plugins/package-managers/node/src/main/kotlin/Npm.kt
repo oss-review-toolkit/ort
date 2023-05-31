@@ -572,67 +572,13 @@ open class Npm(
         val lines = process.stderr.lines()
         val issues = mutableListOf<Issue>()
 
-        fun mapLinesToIssues(prefix: String, severity: Severity) {
-            val ignorablePrefixes = setOf("code ", "errno ", "path ", "syscall ")
-            val singleLinePrefixes = setOf("deprecated ", "skipping integrity check for git dependency ")
-            val minSecondaryPrefixLength = 5
-
-            val issueLines = lines.mapNotNull { line ->
-                line.withoutPrefix(prefix)?.takeUnless { ignorablePrefixes.any { prefix -> it.startsWith(prefix) } }
-            }
-
-            var commonPrefix: String
-            var previousPrefix = ""
-
-            val collapsedLines = issueLines.distinct().fold(mutableListOf<String>()) { messages, line ->
-                if (messages.isEmpty()) {
-                    // The first line is always added including the prefix. The prefix will be removed later.
-                    messages += line
-                } else {
-                    // Find the longest common prefix that ends with space.
-                    commonPrefix = line.commonPrefixWith(messages.last())
-                    if (!commonPrefix.endsWith(' ')) {
-                        // Deal with prefixes being used on their own as separators.
-                        commonPrefix = if ("$commonPrefix " == previousPrefix) {
-                            "$commonPrefix "
-                        } else {
-                            commonPrefix.dropLastWhile { it != ' ' }
-                        }
-                    }
-
-                    if (commonPrefix !in singleLinePrefixes && commonPrefix.length >= minSecondaryPrefixLength) {
-                        // Do not drop the whole prefix but keep the space when concatenating lines.
-                        messages[messages.size - 1] += line.drop(commonPrefix.length - 1).trimEnd()
-                        previousPrefix = commonPrefix
-                    } else {
-                        // Remove the prefix from previously added message start.
-                        messages[messages.size - 1] = messages.last().removePrefix(previousPrefix).trimStart()
-                        messages += line
-                    }
-                }
-
-                messages
-            }
-
-            if (collapsedLines.isNotEmpty()) {
-                // Remove the prefix from the last added message start.
-                collapsedLines[collapsedLines.size - 1] = collapsedLines.last().removePrefix(previousPrefix).trimStart()
-            }
-
-            collapsedLines.forEach { line ->
-                // Skip any footer as a whole.
-                if (line == "A complete log of this run can be found in:") return
-
-                issues += Issue(
-                    source = managerName,
-                    message = line,
-                    severity = severity
-                )
-            }
+        lines.groupLines("npm WARN ").mapTo(issues) {
+            Issue(source = managerName, message = it, severity = Severity.WARNING)
         }
 
-        mapLinesToIssues("npm WARN ", Severity.WARNING)
-        mapLinesToIssues("npm ERR! ", Severity.ERROR)
+        lines.groupLines("npm ERR! ").mapTo(issues) {
+            Issue(source = managerName, message = it, severity = Severity.ERROR)
+        }
 
         return issues
     }
@@ -685,4 +631,57 @@ private fun nodeModulesDirForPackageJson(packageJson: File): File? {
     }
 
     return modulesDir.takeIf { it.name == "node_modules" }
+}
+
+private fun List<String>.groupLines(prefix: String): List<String> {
+    val ignorablePrefixes = setOf("code ", "errno ", "path ", "syscall ")
+    val singleLinePrefixes = setOf("deprecated ", "skipping integrity check for git dependency ")
+    val minSecondaryPrefixLength = 5
+
+    val issueLines = mapNotNull { line ->
+        line.withoutPrefix(prefix)?.takeUnless { ignorablePrefixes.any { prefix -> it.startsWith(prefix) } }
+    }
+
+    var commonPrefix: String
+    var previousPrefix = ""
+
+    val collapsedLines = issueLines.distinct().fold(mutableListOf<String>()) { messages, line ->
+        if (messages.isEmpty()) {
+            // The first line is always added including the prefix. The prefix will be removed later.
+            messages += line
+        } else {
+            // Find the longest common prefix that ends with space.
+            commonPrefix = line.commonPrefixWith(messages.last())
+            if (!commonPrefix.endsWith(' ')) {
+                // Deal with prefixes being used on their own as separators.
+                commonPrefix = if ("$commonPrefix " == previousPrefix) {
+                    "$commonPrefix "
+                } else {
+                    commonPrefix.dropLastWhile { it != ' ' }
+                }
+            }
+
+            if (commonPrefix !in singleLinePrefixes && commonPrefix.length >= minSecondaryPrefixLength) {
+                // Do not drop the whole prefix but keep the space when concatenating lines.
+                messages[messages.size - 1] += line.drop(commonPrefix.length - 1).trimEnd()
+                previousPrefix = commonPrefix
+            } else {
+                // Remove the prefix from previously added message start.
+                messages[messages.size - 1] = messages.last().removePrefix(previousPrefix).trimStart()
+                messages += line
+            }
+        }
+
+        messages
+    }
+
+    if (collapsedLines.isNotEmpty()) {
+        // Remove the prefix from the last added message start.
+        collapsedLines[collapsedLines.size - 1] = collapsedLines.last().removePrefix(previousPrefix).trimStart()
+    }
+
+    return collapsedLines.takeWhile {
+        // Skip any footer as a whole.
+        it != "A complete log of this run can be found in:"
+    }
 }
