@@ -61,40 +61,28 @@ import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 import org.ossreviewtoolkit.clients.fossid.runScan
 import org.ossreviewtoolkit.downloader.VersionControlSystem
-import org.ossreviewtoolkit.model.ArtifactProvenance
-import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Issue
-import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.Provenance
-import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.Snippet
-import org.ossreviewtoolkit.model.SnippetFinding
-import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.Options
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PackageScannerWrapper
 import org.ossreviewtoolkit.scanner.ProvenanceScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.enumSetOf
 import org.ossreviewtoolkit.utils.common.replaceCredentialsInUri
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
-import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 /**
  * A wrapper for [FossID](https://fossid.com/).
@@ -810,62 +798,7 @@ class FossId internal constructor(
             Issue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
         }
 
-        val snippetFindings = mutableSetOf<SnippetFinding>()
-        val fakeLocation = TextLocation(".", TextLocation.UNKNOWN_LINE)
-        snippetFindings += rawResults.listSnippets.flatMap { (file, rawSnippets) ->
-            val snippets = rawSnippets.map {
-                val license = it.artifactLicense?.let {
-                    runCatching {
-                        LicenseFinding.createAndMap(
-                            it,
-                            fakeLocation,
-                            detectedLicenseMapping = scannerConfig.detectedLicenseMapping
-                        ).license
-                    }.onFailure { spdxException ->
-                        issues += FossId.createAndLogIssue(
-                            source = "FossId",
-                            message = "Failed to parse license '$it' as an SPDX expression:" +
-                                    " ${spdxException.collectMessages()}"
-                        )
-                    }.getOrNull()
-                } ?: SpdxConstants.NOASSERTION.toSpdx()
-
-                // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
-                // matched file in the remote artifact as part of the "match_file_id" property.
-                val url = checkNotNull(it.url) {
-                    "The URL of snippet ${it.id} must not be null."
-                }
-                val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
-                val purl = it.purl ?: "pkg:${urlToPackageType(url)}/${it.author}/${it.artifact}@${it.version}"
-
-                val additionalSnippetData = mapOf(
-                    SNIPPET_DATA_ID to it.id.toString(),
-                    SNIPPET_DATA_MATCH_TYPE to it.matchType.toString(),
-                    SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
-                )
-
-                // TODO: FossID doesn't return the line numbers of the match, only the character range. One must use
-                //       another call "getMatchedLine" to retrieve the matched line numbers. Unfortunately, this is a
-                //       call per snippet which is too expensive. When it is available for a batch of snippets, it can
-                //       be used here.
-                Snippet(
-                    it.score.toFloat(),
-                    TextLocation(it.file, TextLocation.UNKNOWN_LINE),
-                    snippetProvenance,
-                    purl,
-                    license,
-                    additionalSnippetData
-                )
-            }
-
-            val sourceLocation = TextLocation(file, TextLocation.UNKNOWN_LINE)
-            snippets.map {
-                SnippetFinding(
-                    sourceLocation,
-                    it
-                )
-            }
-        }
+        val snippetFindings = mapSnippetFindings(rawResults, scannerConfig, issues)
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
@@ -890,31 +823,4 @@ class FossId internal constructor(
             mapOf(SCAN_CODE_KEY to scanCode, SCAN_ID_KEY to scanId, SERVER_URL_KEY to config.serverUrl)
         )
     }
-
-    /**
-     * Return the [PurlType] as determined from the given [url], or [PurlType.GENERIC] if there is no match.
-     */
-    private fun urlToPackageType(url: String): PurlType =
-        when (val provider = PackageProvider.get(url)) {
-            PackageProvider.COCOAPODS -> PurlType.COCOAPODS
-            PackageProvider.CRATES_IO -> PurlType.CARGO
-            PackageProvider.DEBIAN -> PurlType.DEBIAN
-            PackageProvider.GITHUB -> PurlType.GITHUB
-            PackageProvider.GITLAB -> PurlType.GITLAB
-            PackageProvider.GOLANG -> PurlType.GOLANG
-            PackageProvider.MAVEN_CENTRAL, PackageProvider.MAVEN_GOOGLE -> PurlType.MAVEN
-            PackageProvider.NPM_JS -> PurlType.NPM
-            PackageProvider.NUGET -> PurlType.NUGET
-            PackageProvider.PACKAGIST -> PurlType.COMPOSER
-            PackageProvider.PYPI -> PurlType.PYPI
-            PackageProvider.RUBYGEMS -> PurlType.GEM
-
-            else -> {
-                PurlType.GENERIC.also {
-                    logger.warn {
-                        "Cannot determine PURL type for url '$url' and provider '$provider'. Falling back to '$it'."
-                    }
-                }
-            }
-        }
 }
