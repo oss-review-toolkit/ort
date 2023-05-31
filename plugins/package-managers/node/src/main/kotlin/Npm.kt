@@ -261,33 +261,6 @@ open class Npm(
         }
     }
 
-    private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
-        if (modulesDir == null) return false
-
-        var currentDir: File = modulesDir
-        while (currentDir != rootModulesDir) {
-            if (currentDir.name != "node_modules") {
-                return false
-            }
-
-            currentDir = currentDir.parentFile.parentFile
-            if (currentDir.name.startsWith("@")) {
-                currentDir = currentDir.parentFile
-            }
-        }
-
-        return true
-    }
-
-    private fun nodeModulesDirForPackageJson(packageJson: File): File? {
-        var modulesDir = packageJson.parentFile.parentFile
-        if (modulesDir.name.startsWith("@")) {
-            modulesDir = modulesDir.parentFile
-        }
-
-        return modulesDir.takeIf { it.name == "node_modules" }
-    }
-
     /**
      * Construct a [Package] by parsing its _package.json_ file and - if applicable - querying additional
      * content via the `npm view` command. The result is a [Pair] with the raw identifier and the new package.
@@ -549,17 +522,6 @@ open class Npm(
             )
         }
 
-    private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: List<File>): List<File> {
-        searchModuleDirs.forEachIndexed { index, moduleDir ->
-            // Note: resolve() also works for scoped dependencies, e.g. dependencyName = "@x/y"
-            val dependencyModuleDir = moduleDir.resolve("node_modules/$dependencyName")
-            if (dependencyModuleDir.isDirectory) {
-                return listOf(dependencyModuleDir) + searchModuleDirs.subList(index, searchModuleDirs.size)
-            }
-        }
-        return emptyList()
-    }
-
     private fun parseProject(packageJson: File): Project {
         logger.debug { "Parsing project info from '$packageJson'." }
 
@@ -685,4 +647,42 @@ open class Npm(
         val subcommand = if (hasLockFile(workingDir)) "ci" else "install"
         return ProcessCapture(workingDir, command(workingDir), subcommand, *options.toTypedArray())
     }
+}
+
+private fun findDependencyModuleDir(dependencyName: String, searchModuleDirs: List<File>): List<File> {
+    searchModuleDirs.forEachIndexed { index, moduleDir ->
+        // Note: resolve() also works for scoped dependencies, e.g. dependencyName = "@x/y"
+        val dependencyModuleDir = moduleDir.resolve("node_modules/$dependencyName")
+        if (dependencyModuleDir.isDirectory) {
+            return listOf(dependencyModuleDir) + searchModuleDirs.subList(index, searchModuleDirs.size)
+        }
+    }
+    return emptyList()
+}
+
+private fun isValidNodeModulesDirectory(rootModulesDir: File, modulesDir: File?): Boolean {
+    if (modulesDir == null) return false
+
+    var currentDir: File = modulesDir
+    while (currentDir != rootModulesDir) {
+        if (currentDir.name != "node_modules") {
+            return false
+        }
+
+        currentDir = currentDir.parentFile.parentFile
+        if (currentDir.name.startsWith("@")) {
+            currentDir = currentDir.parentFile
+        }
+    }
+
+    return true
+}
+
+private fun nodeModulesDirForPackageJson(packageJson: File): File? {
+    var modulesDir = packageJson.parentFile.parentFile
+    if (modulesDir.name.startsWith("@")) {
+        modulesDir = modulesDir.parentFile
+    }
+
+    return modulesDir.takeIf { it.name == "node_modules" }
 }
