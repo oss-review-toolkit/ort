@@ -132,6 +132,12 @@ class FossId internal constructor(
         @JvmStatic
         internal val SNIPPET_DATA_RELEASE_DATE = "releaseDate"
 
+        @JvmStatic
+        internal val SNIPPET_DATA_MATCHED_LINE_SOURCE = "matchedLinesSource"
+
+        @JvmStatic
+        internal val SNIPPET_DATA_MATCHED_LINE_SNIPPET = "matchedLinesSnippet"
+
         /**
          * The scan states for which a scan can be triggered.
          */

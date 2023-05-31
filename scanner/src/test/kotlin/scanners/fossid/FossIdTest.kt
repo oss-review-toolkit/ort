@@ -408,6 +408,8 @@ class FossIdTest : WordSpec({
                 sourceLocation.endLine shouldBe(3)
                 snippet.location.startLine shouldBe 11
                 snippet.location.endLine shouldBe 12
+                snippet.additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] shouldBe "1-3, 21-22, 36"
+                snippet.additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
             }
         }
 
@@ -1357,6 +1359,7 @@ private fun createSnippetFindings(index: Int): Set<SnippetFinding> = (1..5).map 
             mapOf(
                 FossId.SNIPPET_DATA_ID to "$snippetIndex",
                 FossId.SNIPPET_DATA_RELEASE_DATE to "releaseDate$snippetIndex",
+                FossId.SNIPPET_DATA_MATCH_TYPE to MatchType.PARTIAL.toString(),
                 FossId.SNIPPET_DATA_MATCH_TYPE to MatchType.PARTIAL.toString()
             )
         )

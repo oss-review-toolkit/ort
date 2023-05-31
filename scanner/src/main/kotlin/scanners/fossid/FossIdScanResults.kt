@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.prettyPrintRanges
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
@@ -144,7 +145,7 @@ internal fun mapSnippetFindings(
             val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
             val purl = it.purl ?: "pkg:${urlToPackageType(url)}/${it.author}/${it.artifact}@${it.version}"
 
-            val additionalSnippetData = mapOf(
+            val additionalSnippetData = mutableMapOf(
                 FossId.SNIPPET_DATA_ID to it.id.toString(),
                 FossId.SNIPPET_DATA_MATCH_TYPE to it.matchType.toString(),
                 FossId.SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
@@ -162,6 +163,16 @@ internal fun mapSnippetFindings(
                     ?.let { (startLine, endLine) -> TextLocation(it.file, startLine, endLine) }
                 snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
                     ?.let { (startLine, endLine) -> TextLocation(file, startLine, endLine) }
+
+                if (rawMatchedLinesSourceFile.isNotEmpty()) {
+                    additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] =
+                        rawMatchedLinesSourceFile.prettyPrintRanges()
+                }
+
+                if (rawMatchedLinesSnippetFile.isNotEmpty()) {
+                    additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] =
+                        rawMatchedLinesSnippetFile.prettyPrintRanges()
+                }
             }
 
             val snippet = OrtSnippet(
