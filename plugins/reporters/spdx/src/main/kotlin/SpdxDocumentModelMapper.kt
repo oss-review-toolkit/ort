@@ -64,7 +64,7 @@ internal object SpdxDocumentModelMapper {
                 SpdxRelationship(
                     spdxElementId = spdxProjectPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.DEPENDS_ON,
-                    relatedSpdxElement = dependency.toSpdxId("Package")
+                    relatedSpdxElement = dependency.toSpdxId()
                 )
             }
 
@@ -79,7 +79,7 @@ internal object SpdxDocumentModelMapper {
                 SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.DEPENDS_ON,
-                    relatedSpdxElement = dependency.toSpdxId("Package")
+                    relatedSpdxElement = dependency.toSpdxId()
                 )
             }
 

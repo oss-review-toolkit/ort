@@ -42,9 +42,15 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 /**
- * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix].
+ * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix].
  */
-internal fun Identifier.toSpdxId(infix: String) = "${SpdxConstants.REF_PREFIX}$infix-${toCoordinates()}".toSpdxId()
+internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = "") =
+    buildString {
+        append(SpdxConstants.REF_PREFIX)
+        if (infix.isNotEmpty()) append("$infix-")
+        append(toCoordinates())
+        if (suffix.isNotEmpty()) append("-$suffix")
+    }.toSpdxId()
 
 /**
  * Get the text with all Copyright statements associated with the package of the given [id], or return `NONE` if there
