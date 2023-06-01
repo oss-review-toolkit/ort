@@ -177,6 +177,12 @@ class ScanController(
         nestedProvenance.getProvenances().filter { hasScanResult(scanner, it) }
 
     /**
+     * Return the nested provenance resolution issues associated with the given [provenance].
+     */
+    fun getNestedProvenanceResolutionIssue(provenance: KnownProvenance): Issue? =
+        nestedProvenanceResolutionIssues[provenance]
+
+    /**
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
      */
     fun getNestedProvenance(id: Identifier): NestedProvenance? =
@@ -247,6 +253,11 @@ class ScanController(
      */
     fun getPackagesForProvenanceWithoutVcsPath(provenance: KnownProvenance): Set<Identifier> =
         packageProvenancesWithoutVcsPath.filter { (_, packageProvenance) -> packageProvenance == provenance }.keys
+
+    /**
+     * Return the package provenanceResolutionIssue associated with the given [id].
+     */
+    fun getPackageProvenanceResolutionIssue(id: Identifier): Issue? = packageProvenanceResolutionIssues[id]
 
     /**
      * Return all [KnownProvenance]s for the [packages] with the VCS path removed.
