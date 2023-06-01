@@ -198,7 +198,7 @@ class Scanner(
                 result.onSuccess { provenance ->
                     controller.addPackageProvenance(pkg.id, provenance)
                 }.onFailure {
-                    controller.addProvenanceResolutionIssue(
+                    controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
                         Issue(source = TOOL_NAME, message = it.collectMessages())
                     )
@@ -226,8 +226,8 @@ class Scanner(
                     controller.addNestedProvenance(provenance, nestedProvenance)
                 }.onFailure {
                     controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
-                        controller.addProvenanceResolutionIssue(
-                            id,
+                        controller.putNestedProvenanceResolutionIssue(
+                            provenance,
                             Issue(
                                 source = TOOL_NAME,
                                 message = "Could not resolve nested provenance for package " +

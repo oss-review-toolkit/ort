@@ -58,7 +58,13 @@ class ScanController(
      * A map of package [Identifier]s to a list of [Issue]s that occurred during provenance resolution for the
      * respective package.
      */
-    private val provenanceResolutionIssues = mutableMapOf<Identifier, MutableList<Issue>>()
+    private val packageProvenanceResolutionIssues = mutableMapOf<Identifier, Issue>()
+
+    /**
+     * A map of package [KnownProvenance]s to a list of [Issue]s that occurred during provenance resolution for the
+     * respective package.
+     */
+    private val nestedProvenanceResolutionIssues = mutableMapOf<KnownProvenance, Issue>()
 
     /**
      * A map of [Identifier]s associated with a list of [Issue]s that occurred during a scan besides the issues
@@ -88,8 +94,18 @@ class ScanController(
      */
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
-    fun addProvenanceResolutionIssue(id: Identifier, issue: Issue) {
-        provenanceResolutionIssues.getOrPut(id) { mutableListOf() } += issue
+    /**
+     * Set the [issue] which failed package provenance resolution for the package denoted by [id].
+     */
+    fun putPackageProvenanceResolutionIssue(id: Identifier, issue: Issue) {
+        packageProvenanceResolutionIssues[id] = issue
+    }
+
+    /**
+     * Set the [issue] which failed nested provenance resolution for the given [provenance].
+     */
+    fun putNestedProvenanceResolutionIssue(provenance: KnownProvenance, issue: Issue) {
+        nestedProvenanceResolutionIssues[provenance] = issue
     }
 
     fun addIssue(id: Identifier, issue: Issue) {
@@ -189,7 +205,6 @@ class ScanController(
      * configured [ignore patterns][ScannerConfiguration.ignorePatterns].
      */
     fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
-        // TODO: Return map containing all packages with issues for packages that could not be completely scanned.
         packageProvenancesWithoutVcsPath.mapNotNull { (id, provenance) ->
             val issues = issues[id].orEmpty()
             buildNestedProvenanceScanResult(provenance, issues)?.let { scanResult ->
@@ -256,8 +271,22 @@ class ScanController(
     /**
      * Return scan results for provenance resolution issues.
      */
-    fun getResultsForProvenanceResolutionIssues(): Map<Identifier, List<ScanResult>> =
-        provenanceResolutionIssues.mapValues { (_, issues) ->
+    fun getResultsForProvenanceResolutionIssues(): Map<Identifier, List<ScanResult>> {
+        val idsForProvenance = packageProvenances.entries.groupBy({ (_, provenance) -> provenance }) { (id, _) -> id }
+
+        val issuesForId = buildMap<Identifier, MutableList<Issue>> {
+            packageProvenanceResolutionIssues.forEach { (id, issue) ->
+                getOrPut(id) { mutableListOf() } += issue
+            }
+
+            nestedProvenanceResolutionIssues.forEach { (provenance, issue) ->
+                idsForProvenance[provenance].orEmpty().forEach { id ->
+                    getOrPut(id) { mutableListOf() } += issue
+                }
+            }
+        }
+
+        return issuesForId.mapValues { (_, issues) ->
             scanners.map { scanner ->
                 ScanResult(
                     provenance = UnknownProvenance,
@@ -271,6 +300,7 @@ class ScanController(
                 )
             }
         }
+    }
 
     /**
      * Get all [ScanResult]s for the provided [provenance].
