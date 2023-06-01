@@ -18,3 +18,4 @@
 	path = plugins/package-managers/pub/src/funTest/assets/projects/external/dart-http
 	url = https://github.com/dart-lang/http.git
 	ignore = untracked
+	tag = 0.13.0
