@@ -68,9 +68,9 @@ data class NestedProvenanceScanResult(
     /**
      * Merge the nested [ScanResult]s into one [ScanResult] per used scanner, using the root of the [nestedProvenance]
      * as provenance. This is used to transform this class into the format currently used by [OrtResult].
-     * When merging multiple [ScanSummary]s the earliest start time will be used as the new start time, and the latest
-     * end time will be used as the end time. Because the [ScanSummary] does not contain the checksums of the individual
-     * files, no package verification code can be calculated.
+     * When merging multiple [ScanSummary]s for a particular scanner the earliest start time and lasted end time will
+     * be used as the new values for the respective scanner. Because the [ScanSummary] does not contain the checksums
+     * of the individual files, no package verification code can be calculated.
      */
     fun merge(): List<ScanResult> {
         val allScanners = scanResults.values.flatMapTo(mutableSetOf()) { results -> results.map { it.scanner } }
