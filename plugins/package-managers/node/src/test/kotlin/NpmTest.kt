@@ -52,6 +52,18 @@ class NpmTest : StringSpec({
 
         mockkConstructor(ProcessCapture::class)
         try {
+            val analyzerName = "test-npm"
+
+            val npmOptions = mapOf("legacyPeerDeps" to "true")
+            val npmConfig = PackageManagerConfiguration(options = npmOptions)
+
+            val analyzerConfig = AnalyzerConfiguration(
+                allowDynamicVersions = true,
+                packageManagers = mapOf(analyzerName to npmConfig)
+            )
+
+            val npm = Npm(analyzerName, workingDir, analyzerConfig, RepositoryConfiguration())
+
             every {
                 constructedWith<ProcessCapture>(
                     EqMatcher(workingDir),
@@ -59,7 +71,7 @@ class NpmTest : StringSpec({
                         all = true,
                         matcher = { true },
                         prefix = listOf(
-                            EqMatcher("npm"),
+                            EqMatcher(npm.command()),
                             EqMatcher("install"),
                             EqMatcher("--ignore-scripts"),
                             EqMatcher("--no-audit"),
@@ -68,13 +80,6 @@ class NpmTest : StringSpec({
                     )
                 ).stderr
             } returns errorText
-
-            val analyzerName = "test-npm"
-            val npmOptions = mapOf("legacyPeerDeps" to "true")
-            val npmConfig = PackageManagerConfiguration(options = npmOptions)
-            val analyzerConfig =
-                AnalyzerConfiguration(allowDynamicVersions = true, packageManagers = mapOf(analyzerName to npmConfig))
-            val npm = Npm(analyzerName, workingDir, analyzerConfig, RepositoryConfiguration())
 
             val results = npm.resolveDependencies(definitionFile, emptyMap())
 
