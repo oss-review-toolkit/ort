@@ -60,7 +60,7 @@ private fun Hash.toSpdxChecksum(): SpdxChecksum? =
 /**
  * Convert an [Identifier]'s coordinates to an SPDX reference ID with the specified [infix] and [suffix].
  */
-internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = "") =
+internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = ""): String =
     buildString {
         append(SpdxConstants.REF_PREFIX)
         if (infix.isNotEmpty()) append("$infix-")
