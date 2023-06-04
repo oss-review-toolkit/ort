@@ -10,7 +10,7 @@ kotlinPlugin = "1.8.21"
 versionsPlugin = "0.46.0"
 
 antlr = "4.13.0"
-asciidoctorj = "2.5.8"
+asciidoctorj = "2.5.10"
 asciidoctorjPdf = "2.3.7"
 clikt = "3.5.2"
 commonsCompress = "1.23.0"
