@@ -828,7 +828,7 @@ class FossId internal constructor(
             Issue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
         }
 
-        val snippetFindings = mapSnippetFindings(rawResults, scannerConfig, issues)
+        val snippetFindings = mapSnippetFindings(rawResults, issues)
 
         val ignoredFiles = rawResults.listIgnoredFiles.associateBy { it.path }
 
