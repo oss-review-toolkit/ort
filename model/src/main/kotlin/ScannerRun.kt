@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.ort.Environment
 /**
  * The summary of a single run of the scanner.
  */
-@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
+@JsonIgnoreProperties(value = ["has_issues", "storage_stats"], allowGetters = true)
 data class ScannerRun(
     /**
      * The [Instant] the scanner was started.
@@ -58,11 +58,6 @@ data class ScannerRun(
      */
     @JsonPropertyOrder(alphabetic = true)
     val scanResults: Map<Identifier, List<ScanResult>>,
-
-    /**
-     * The [AccessStatistics] for the scan results storage.
-     */
-    val storageStats: AccessStatistics
 ) {
     companion object {
         /**
@@ -74,8 +69,7 @@ data class ScannerRun(
             endTime = Instant.EPOCH,
             environment = Environment(),
             config = ScannerConfiguration(),
-            scanResults = emptyMap(),
-            storageStats = AccessStatistics()
+            scanResults = emptyMap()
         )
     }
 

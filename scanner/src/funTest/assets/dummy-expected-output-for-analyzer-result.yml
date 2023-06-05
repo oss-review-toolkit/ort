@@ -355,9 +355,6 @@ scanner:
             path: "org"
             start_line: -1
             end_line: -1
-  storage_stats:
-    num_reads: 0
-    num_hits: 0
 advisor: null
 evaluator: null
 resolved_configuration:

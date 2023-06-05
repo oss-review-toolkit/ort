@@ -34,7 +34,6 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.DownloadException
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -131,7 +130,6 @@ class Scanner(
         }
 
         val scanResults = projectResults + packageResults
-        val storageStats = AccessStatistics() // TODO: Record access statistics.
 
         val endTime = Instant.now()
 
@@ -150,7 +148,7 @@ class Scanner(
         }
 
         val filteredScannerConfig = scannerConfig.copy(options = filteredScannerOptions)
-        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanResults, storageStats)
+        val scannerRun = ScannerRun(startTime, endTime, Environment(), filteredScannerConfig, scanResults)
 
         return ortResult.copy(scanner = scannerRun)
     }

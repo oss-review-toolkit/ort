@@ -28,7 +28,6 @@ import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.Logging
 
-import org.ossreviewtoolkit.model.AccessStatistics
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.ScanResult
@@ -56,24 +55,13 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     open val name: String = javaClass.simpleName
 
     /**
-     * The access statistics for the scan result storage.
-     */
-    val stats = AccessStatistics()
-
-    /**
      * Return all [ScanResult]s contained in this [ScanResultsStorage] corresponding to the package denoted by the given
      * [id] wrapped in a [Result].
      */
     fun read(id: Identifier): Result<List<ScanResult>> {
         val (result, duration) = measureTimedValue { readInternal(id) }
 
-        stats.numReads.incrementAndGet()
-
         result.onSuccess { results ->
-            if (results.isNotEmpty()) {
-                stats.numHits.incrementAndGet()
-            }
-
             logger.info {
                 "Read ${results.size} scan result(s) for '${id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
@@ -94,13 +82,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     fun read(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> {
         val (result, duration) = measureTimedValue { readInternal(pkg, scannerCriteria) }
 
-        stats.numReads.incrementAndGet()
-
         result.onSuccess { results ->
-            if (results.isNotEmpty()) {
-                stats.numHits.incrementAndGet()
-            }
-
             logger.info {
                 "Read ${results.size} scan result(s) for '${pkg.id.toCoordinates()}' from ${javaClass.simpleName} in " +
                         "$duration."
@@ -124,11 +106,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     ): Result<Map<Identifier, List<ScanResult>>> {
         val (result, duration) = measureTimedValue { readInternal(packages, scannerCriteria) }
 
-        stats.numReads.addAndGet(packages.size)
-
         result.onSuccess { results ->
-            stats.numHits.addAndGet(results.count { (_, results) -> results.isNotEmpty() })
-
             logger.info {
                 "Read ${results.values.sumOf { it.size }} scan result(s) from ${javaClass.simpleName} in $duration."
             }
@@ -162,13 +140,13 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
     }
 
     /**
-     * Internal version of [read] that does not update the [access statistics][stats].
+     * Internal version of [read].
      */
     protected abstract fun readInternal(id: Identifier): Result<List<ScanResult>>
 
     /**
-     * Internal version of [read] that does not update the [access statistics][stats]. Implementations may want to
-     * override this function if they can filter for the wanted [scannerCriteria] in a more efficient way.
+     * Internal version of [read]. Implementations may want to override this function if they can filter for the wanted
+     * [scannerCriteria] in a more efficient way.
      */
     protected open fun readInternal(pkg: Package, scannerCriteria: ScannerCriteria): Result<List<ScanResult>> =
         readInternal(pkg.id).map { results ->
@@ -200,10 +178,9 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         }
 
     /**
-     * Internal version of [read] that does not update the [access statistics][stats]. The default implementation uses
-     * [Dispatchers.IO] to run requests for individual packages in parallel. Implementations may want to override this
-     * function if they can filter for the wanted [scannerCriteria] or fetch results for multiple packages in a more
-     * efficient way.
+     * Internal version of [read]. The default implementation uses [Dispatchers.IO] to run requests for individual
+     * packages in parallel. Implementations may want to override this function if they can filter for the wanted
+     * [scannerCriteria] or fetch results for multiple packages in a more efficient way.
      */
     protected open fun readInternal(
         packages: Collection<Package>,

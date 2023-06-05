@@ -303,9 +303,6 @@ scanner:
             path: "src/site/resources/scripts/hopscotch-0.1.2.min.js"
             start_line: 3
             end_line: 3
-  storage_stats:
-    num_reads: 4
-    num_hits: 4
 advisor:
   start_time: "2021-04-29T14:54:16.562951Z"
   end_time: "2021-04-29T14:54:18.969210Z"
