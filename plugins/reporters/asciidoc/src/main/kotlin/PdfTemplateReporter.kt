@@ -45,7 +45,6 @@ import org.ossreviewtoolkit.reporter.Reporter
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
  * - *pdf.theme.file*: A path to an AsciiDoc PDF theme file. Only used with the "pdf" backend.
  * - *pdf.fonts.dir*: A path to a directory containing custom fonts. Only used with the "pdf" backend.
- * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
  *
  * [1]: https://freemarker.apache.org
  * [2]: https://asciidoc.org/

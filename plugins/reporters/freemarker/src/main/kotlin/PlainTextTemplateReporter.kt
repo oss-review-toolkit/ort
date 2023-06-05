@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
  * - *template.id*: A comma-separated list of IDs of templates provided by ORT. Currently, only the "NOTICE_DEFAULT"
  *                  and "NOTICE_SUMMARY" templates are available.
  * - *template.path*: A comma-separated list of paths to template files provided by the user.
- * - *project-types-as-packages: A comma-separated list of project types to be handled as packages.
  *
  * [1]: https://freemarker.apache.org
  */
