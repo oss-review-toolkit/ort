@@ -36,7 +36,6 @@ import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.Snippet as OrtSnippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.utils.common.collapseToRanges
@@ -114,20 +113,13 @@ internal fun <T : Summarizable> List<T>.mapSummary(
  */
 internal fun mapSnippetFindings(
     rawResults: RawResults,
-    scannerConfig: ScannerConfiguration,
     issues: MutableList<Issue>
 ): Set<SnippetFinding> {
-    val fakeLocation = TextLocation(".", TextLocation.UNKNOWN_LINE)
-
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         rawSnippets.map { snippet ->
             val license = snippet.artifactLicense?.let {
                 runCatching {
-                    LicenseFinding.createAndMap(
-                        it,
-                        fakeLocation,
-                        detectedLicenseMapping = scannerConfig.detectedLicenseMapping
-                    ).license
+                    it.toSpdx()
                 }.onFailure { spdxException ->
                     issues += FossId.createAndLogIssue(
                         source = "FossId",
