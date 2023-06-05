@@ -120,8 +120,8 @@ internal fun mapSnippetFindings(
     val fakeLocation = TextLocation(".", TextLocation.UNKNOWN_LINE)
 
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
-        rawSnippets.map {
-            val license = it.artifactLicense?.let {
+        rawSnippets.map { snippet ->
+            val license = snippet.artifactLicense?.let {
                 runCatching {
                     LicenseFinding.createAndMap(
                         it,
@@ -139,28 +139,29 @@ internal fun mapSnippetFindings(
 
             // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
             // matched file in the remote artifact as part of the "match_file_id" property.
-            val url = checkNotNull(it.url) {
-                "The URL of snippet ${it.id} must not be null."
+            val url = checkNotNull(snippet.url) {
+                "The URL of snippet ${snippet.id} must not be null."
             }
             val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
-            val purl = it.purl ?: "pkg:${urlToPackageType(url)}/${it.author}/${it.artifact}@${it.version}"
+            val purl = snippet.purl
+                ?: "pkg:${urlToPackageType(url)}/${snippet.author}/${snippet.artifact}@${snippet.version}"
 
             val additionalSnippetData = mutableMapOf(
-                FossId.SNIPPET_DATA_ID to it.id.toString(),
-                FossId.SNIPPET_DATA_MATCH_TYPE to it.matchType.toString(),
-                FossId.SNIPPET_DATA_RELEASE_DATE to it.releaseDate.orEmpty()
+                FossId.SNIPPET_DATA_ID to snippet.id.toString(),
+                FossId.SNIPPET_DATA_MATCH_TYPE to snippet.matchType.toString(),
+                FossId.SNIPPET_DATA_RELEASE_DATE to snippet.releaseDate.orEmpty()
             )
 
             var sourceLocation: TextLocation? = null
             var snippetLocation: TextLocation? = null
 
-            if (it.matchType == MatchType.PARTIAL) {
-                val rawMatchedLines = rawResults.snippetMatchedLines[it.id]
+            if (snippet.matchType == MatchType.PARTIAL) {
+                val rawMatchedLines = rawResults.snippetMatchedLines[snippet.id]
                 val rawMatchedLinesSourceFile = rawMatchedLines?.localFile.orEmpty().collapseToRanges()
                 val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
 
                 sourceLocation = rawMatchedLinesSourceFile.firstOrNull()
-                    ?.let { (startLine, endLine) -> TextLocation(it.file, startLine, endLine) }
+                    ?.let { (startLine, endLine) -> TextLocation(snippet.file, startLine, endLine) }
                 snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
                     ?.let { (startLine, endLine) -> TextLocation(file, startLine, endLine) }
 
@@ -175,9 +176,9 @@ internal fun mapSnippetFindings(
                 }
             }
 
-            val snippet = OrtSnippet(
-                it.score.toFloat(),
-                snippetLocation ?: TextLocation(it.file, TextLocation.UNKNOWN_LINE),
+            val ortSnippet = OrtSnippet(
+                snippet.score.toFloat(),
+                snippetLocation ?: TextLocation(snippet.file, TextLocation.UNKNOWN_LINE),
                 snippetProvenance,
                 purl,
                 license,
@@ -186,7 +187,7 @@ internal fun mapSnippetFindings(
 
             SnippetFinding(
                 sourceLocation ?: TextLocation(file, TextLocation.UNKNOWN_LINE),
-                snippet
+                ortSnippet
             )
         }
     }.toSet()
