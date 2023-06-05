@@ -27,17 +27,13 @@ import java.net.URL
 import java.security.MessageDigest
 
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 import org.ossreviewtoolkit.utils.common.calculateHash
 import org.ossreviewtoolkit.utils.common.encodeHex
 import org.ossreviewtoolkit.utils.common.isSymbolicLink
 import org.ossreviewtoolkit.utils.common.realFile
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
-
-/**
- * A comparator that sorts parent paths before child paths.
- */
-internal val PATH_STRING_COMPARATOR = compareBy<String>({ path -> path.count { it == '/' } }, { it })
 
 /**
  * A mapper to read license mapping from YAML resource files.
