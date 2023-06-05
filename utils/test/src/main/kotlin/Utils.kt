@@ -25,11 +25,16 @@ import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.downloader.VersionControlSystem
+import org.ossreviewtoolkit.model.AdvisorRecord
+import org.ossreviewtoolkit.model.AdvisorResult
+import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
+import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
 val USER_DIR = File(System.getProperty("user.dir"))
@@ -40,6 +45,18 @@ private val ENV_VAR_REGEX = Regex("(\\s{4}variables:)\\n(?:\\s{6}.+)+")
 private val ENV_TOOL_REGEX = Regex("(\\s{4}tool_versions:)\\n(?:\\s{6}.+)+")
 private val START_AND_END_TIME_REGEX = Regex("((start|end)_time): \".*\"")
 private val TIMESTAMP_REGEX = Regex("(timestamp): \".*\"")
+
+/**
+ * Create an [AdvisorRun] with the given [results].
+ */
+fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
+    AdvisorRun(
+        startTime = Instant.now(),
+        endTime = Instant.now(),
+        environment = Environment(),
+        config = AdvisorConfiguration(),
+        results = AdvisorRecord(results.toMap())
+    )
 
 /**
  * Return the content of the fun test asset file located under [path] relative to the 'assets' directory as text.
