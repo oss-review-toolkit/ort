@@ -36,9 +36,7 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AdvisorCapability
 import org.ossreviewtoolkit.model.AdvisorDetails
-import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
-import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.AdvisorSummary
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
@@ -61,7 +59,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.Vulnerability
-import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.config.LicenseChoices
 import org.ossreviewtoolkit.model.config.PackageLicenseChoice
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
@@ -71,11 +68,11 @@ import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedOriginalExpression
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.enumSetOf
-import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 import org.ossreviewtoolkit.utils.spdx.model.SpdxLicenseChoice
 import org.ossreviewtoolkit.utils.spdx.toSpdx
+import org.ossreviewtoolkit.utils.test.advisorRunOf
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
 private fun scanResults(
@@ -217,18 +214,6 @@ private fun expectResolvedLicenseInfo(
  * a list, so that single projects can be accessed by index.
  */
 private fun testProjects() = ORT_RESULT.getProjects().toList()
-
-/**
- * Create an [AdvisorRun] with the given [results].
- */
-private fun advisorRunOf(vararg results: Pair<Identifier, List<AdvisorResult>>): AdvisorRun =
-    AdvisorRun(
-        startTime = Instant.now(),
-        endTime = Instant.now(),
-        environment = Environment(),
-        config = AdvisorConfiguration(),
-        results = AdvisorRecord(results.toMap())
-    )
 
 /**
  * Create an [AdvisorResult] with the given [details], [issues], and [vulnerabilities].
