@@ -55,17 +55,8 @@ internal data class NpmModuleInfo(
      * However, if these values differ the same dependencies are added as duplicates to the set which is used to create
      * the dependency graph. Therefore, remove them from the equals check.
      */
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as NpmModuleInfo
-
-        if (id != other.id) return false
-        if (dependencies != other.dependencies) return false
-
-        return true
-    }
+    override fun equals(other: Any?): Boolean =
+        (other === this) || (other is NpmModuleInfo && other.id == id && other.dependencies == dependencies)
 
     override fun hashCode() = 31 * id.hashCode() + dependencies.hashCode()
 }
