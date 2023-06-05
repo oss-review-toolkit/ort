@@ -85,7 +85,7 @@ private fun String.applyDetectedLicenseMapping(detectedLicenseMapping: Map<Strin
         val regex = """(^| |\()(${Regex.escape(from)})($| |\))""".toRegex()
 
         result = regex.replace(result) {
-            "${it.groupValues[1]}${to}${it.groupValues[3]}"
+            "${it.groupValues[1]}$to${it.groupValues[3]}"
         }
     }
 
