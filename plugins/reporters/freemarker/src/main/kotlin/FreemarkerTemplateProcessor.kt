@@ -37,23 +37,17 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
-import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.RuleViolation
-import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Severity
-import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
 import org.ossreviewtoolkit.model.config.VulnerabilityResolution
-import org.ossreviewtoolkit.model.licenses.DefaultLicenseInfoProvider
-import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.model.licenses.LicenseView
 import org.ossreviewtoolkit.model.licenses.ResolvedLicense
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseFileInfo
 import org.ossreviewtoolkit.model.licenses.ResolvedLicenseInfo
 import org.ossreviewtoolkit.model.licenses.filterExcluded
-import org.ossreviewtoolkit.model.utils.getRepositoryPath
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -74,7 +68,6 @@ class FreemarkerTemplateProcessor(
     companion object : Logging {
         const val OPTION_TEMPLATE_ID = "template.id"
         const val OPTION_TEMPLATE_PATH = "template.path"
-        const val OPTION_PROJECT_TYPES_AS_PACKAGES = "project-types-as-packages"
     }
 
     private val freemarkerConfig: Configuration by lazy {
@@ -98,22 +91,8 @@ class FreemarkerTemplateProcessor(
      * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
      * generated files.
      */
-    fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
-        val projectTypesAsPackages = options[OPTION_PROJECT_TYPES_AS_PACKAGES]?.split(',').orEmpty().toSet()
-        val projectsAsPackages = input.ortResult.getProjects().map { it.id }.filterTo(mutableSetOf()) {
-            it.type in projectTypesAsPackages
-        }
-
-        if (projectTypesAsPackages.isNotEmpty()) {
-            logger.info {
-                "Handling ${projectTypesAsPackages.size} projects of types $projectTypesAsPackages as packages."
-            }
-        }
-
-        val dataModel = createDataModel(input.deduplicateProjectScanResults(projectsAsPackages), projectsAsPackages)
-
-        return processTemplatesInternal(dataModel, outputDir, options)
-    }
+    fun processTemplates(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> =
+        processTemplatesInternal(createDataModel(input), outputDir, options)
 
     /**
      * Process all Freemarker templates referenced in "template.id" and "template.path" options and returns the
@@ -398,7 +377,7 @@ private fun enumModel(): Map<String, Any> {
     ).associate { it.simpleName to enumModels.get(it.name) }
 }
 
-private fun createDataModel(input: ReporterInput, projectsAsPackages: Set<Identifier>): Map<String, Any> {
+private fun createDataModel(input: ReporterInput): Map<String, Any> {
     val projects = input.ortResult.getProjects().sortedBy { it.id }.map { project ->
         FreemarkerTemplateProcessor.PackageModel(project.id, input)
     }
@@ -415,7 +394,6 @@ private fun createDataModel(input: ReporterInput, projectsAsPackages: Set<Identi
         "licenseTextProvider" to input.licenseTextProvider,
         "LicenseView" to LicenseView,
         "helper" to FreemarkerTemplateProcessor.TemplateHelper(input),
-        "projectsAsPackages" to projectsAsPackages,
         "statistics" to input.statistics,
         "vulnerabilityReference" to VulnerabilityReference
     ) + enumModel()
@@ -433,91 +411,6 @@ private fun List<ResolvedLicense>.merge(): ResolvedLicense {
         locations = flatMapTo(mutableSetOf()) { it.locations }
     )
 }
-
-/**
- * Return an [OrtResult] with all license and copyright findings associated with [targetProjects] removed from all other
- * projects not in [targetProjects]. This affects non-target projects which have a target project in a subdirectory.
- */
-internal fun OrtResult.deduplicateProjectScanResults(targetProjects: Set<Identifier>): OrtResult {
-    val excludePaths = mutableSetOf<String>()
-
-    targetProjects.forEach { id ->
-        getScanResultsForId(id).forEach { scanResult ->
-            val provenance = scanResult.provenance as RepositoryProvenance
-            val vcsPath = provenance.vcsInfo.path
-            val repositoryPath = getRepositoryPath(provenance)
-
-            val findingPaths = with(scanResult.summary) {
-                copyrightFindings.mapTo(mutableSetOf()) { it.location.path } + licenseFindings.map { it.location.path }
-            }
-
-            excludePaths += findingPaths.filter { it.startsWith(vcsPath) }.map { "$repositoryPath$it" }
-        }
-    }
-
-    val projectsToFilter = getProjects().mapTo(mutableSetOf()) { it.id } - targetProjects
-
-    val scanResults = getScanResults().mapValues { (id, results) ->
-        if (id !in projectsToFilter) {
-            results
-        } else {
-            results.map { scanResult ->
-                val summary = scanResult.summary
-                val repositoryPath = getRepositoryPath(scanResult.provenance as RepositoryProvenance)
-                fun TextLocation.isExcluded() = "$repositoryPath$path" !in excludePaths
-
-                val copyrightFindings = summary.copyrightFindings.filterTo(mutableSetOf()) { it.location.isExcluded() }
-                val licenseFindings = summary.licenseFindings.filterTo(mutableSetOf()) { it.location.isExcluded() }
-
-                scanResult.copy(
-                    summary = summary.copy(
-                        copyrightFindings = copyrightFindings,
-                        licenseFindings = licenseFindings
-                    )
-                )
-            }
-        }
-    }
-
-    return replaceScanResults(scanResults)
-}
-
-/**
- * Return a copy of this [OrtResult] with the scan results replaced by the given [scanResults].
- */
-private fun OrtResult.replaceScanResults(scanResults: Map<Identifier, List<ScanResult>>): OrtResult =
-    copy(
-        scanner = scanner?.copy(
-            scanResults = scanResults
-        )
-    )
-
-/**
- * Return an [ReporterInput] with all license and copyright findings associated with [projectIds] removed from all
- * other projects not in [projectIds].
- */
-private fun ReporterInput.deduplicateProjectScanResults(projectIds: Set<Identifier>): ReporterInput =
-    if (projectIds.isEmpty()) {
-        this
-    } else {
-        val ortResult = ortResult.deduplicateProjectScanResults(projectIds)
-        replaceOrtResult(ortResult)
-    }
-
-/**
- * Return a copy of this [ReporterInput] with the OrtResult replaced by the given [ortResult].
- */
-private fun ReporterInput.replaceOrtResult(ortResult: OrtResult): ReporterInput =
-    copy(
-        ortResult = ortResult,
-        licenseInfoResolver = LicenseInfoResolver(
-            provider = DefaultLicenseInfoProvider(ortResult, packageConfigurationProvider),
-            copyrightGarbage = copyrightGarbage,
-            addAuthorsToCopyrights = licenseInfoResolver.addAuthorsToCopyrights,
-            archiver = licenseInfoResolver.archiver,
-            licenseFilePatterns = licenseInfoResolver.licenseFilePatterns
-        )
-    )
 
 /**
  * Apply the given [filter] to the advisor results stored in this [ReporterInput]. Return an empty map if no advisor

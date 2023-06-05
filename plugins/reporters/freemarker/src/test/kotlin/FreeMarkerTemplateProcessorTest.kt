@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.plugins.reporters.freemarker
 
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.collections.haveSize
@@ -253,35 +252,6 @@ private fun advisorResult(
     )
 
 class FreeMarkerTemplateProcessorTest : WordSpec({
-    "deduplicateProjectScanResults" should {
-        val targetProjects = setOf(
-            idSubProject,
-            idNestedProject
-        )
-
-        val ortResult = ORT_RESULT.deduplicateProjectScanResults(targetProjects)
-
-        "keep the findings of all target projects" {
-            targetProjects.forAll { targetProject ->
-                ortResult.getScanResultsForId(targetProject) shouldBe ORT_RESULT.getScanResultsForId(targetProject)
-            }
-        }
-
-        "remove the findings of all target projects from the root project" {
-            val scanResult = ortResult.getScanResultsForId(idRootProject).single()
-
-            with(scanResult.summary) {
-                copyrightFindings.map { it.location.path } shouldContainExactlyInAnyOrder listOf(
-                    "src/main.js"
-                )
-
-                licenseFindings.map { it.location.path } shouldContainExactlyInAnyOrder listOf(
-                    "src/main.js"
-                )
-            }
-        }
-    }
-
     "mergeLicenses" should {
         "merge the expressions from packages by license sources" {
             val projects = testProjects()
