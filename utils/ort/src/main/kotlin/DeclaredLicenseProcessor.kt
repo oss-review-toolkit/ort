@@ -81,7 +81,7 @@ object DeclaredLicenseProcessor : Logging {
      * it as something that is not a license, like a copyright that was accidentally entered as a license. Return the
      * successfully mapped license expression, or null if the declared license could not be mapped.
      */
-    internal fun process(
+    fun process(
         declaredLicense: String,
         customLicenseMapping: Map<String, SpdxExpression> = emptyMap()
     ): SpdxExpression? {

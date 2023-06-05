@@ -41,6 +41,7 @@ import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.prettyPrintRanges
+import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
@@ -118,15 +119,14 @@ internal fun mapSnippetFindings(
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         rawSnippets.map { snippet ->
             val license = snippet.artifactLicense?.let {
-                runCatching {
-                    it.toSpdx()
-                }.onFailure { spdxException ->
-                    issues += FossId.createAndLogIssue(
-                        source = "FossId",
-                        message = "Failed to parse license '$it' as an SPDX expression:" +
-                                " ${spdxException.collectMessages()}"
-                    )
-                }.getOrNull()
+                DeclaredLicenseProcessor.process(it).also { expression ->
+                    if (expression == null) {
+                        issues += FossId.createAndLogIssue(
+                            source = "FossId",
+                            message = "Failed to map license '$it' as an SPDX expression."
+                        )
+                    }
+                }
             } ?: SpdxConstants.NOASSERTION.toSpdx()
 
             // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
