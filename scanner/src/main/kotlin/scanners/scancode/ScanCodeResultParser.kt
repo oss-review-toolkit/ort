@@ -36,6 +36,7 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.applyDetectedLicenseMapping
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -214,15 +215,14 @@ private fun getLicenseFindings(
         ).map { (licenseMatch, replacements) ->
             val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
 
-            LicenseFinding.createAndMap(
-                license = spdxLicenseExpression,
+            LicenseFinding(
+                license = spdxLicenseExpression.applyDetectedLicenseMapping(detectedLicenseMapping),
                 location = TextLocation(
                     path = file["path"].textValue().removePrefix(input),
                     startLine = licenseMatch.startLine,
                     endLine = licenseMatch.endLine
                 ),
-                score = licenseMatch.score,
-                detectedLicenseMapping = detectedLicenseMapping
+                score = licenseMatch.score
             )
         }
     }
