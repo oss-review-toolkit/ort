@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
+import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
 
 /**
  * A controller for the data related to a run of the [Scanner].
@@ -210,9 +211,14 @@ class ScanController(
     /**
      * Return a map of [KnownProvenance]s associated with all [packages] with the same provenance, ignoring any VCS
      * path. Packages without a resolved provenance are not included in the result.
+     * For a given provenance, the packages are sorted by the ascending amount of path separators '/' in their names,
+     * then by their identifiers. For instance, a package with name 'conanfile.txt' will come before one with name
+     * 'components/conanfile.txt'. This is because scanner interfaces receive packages as input, and this aims at
+     * providing a deterministic ordering when choosing a reference package for packages with the same provenance.
      */
     fun getPackagesConsolidatedByProvenance(): Map<KnownProvenance, List<Package>> {
-        val packagesByProvenance = mutableMapOf<KnownProvenance, MutableList<Package>>()
+        val packagesByProvenance = mutableMapOf<KnownProvenance, MutableSet<Package>>()
+        val comparator = compareBy<Package, String>(PATH_STRING_COMPARATOR) { it.id.name }.thenBy { it.id }
 
         packages.forEach { pkg ->
             val consolidatedProvenance = when (val provenance = packageProvenances[pkg.id]) {
@@ -221,10 +227,10 @@ class ScanController(
                 else -> provenance
             }
 
-            packagesByProvenance.getOrPut(consolidatedProvenance) { mutableListOf() } += pkg
+            packagesByProvenance.getOrPut(consolidatedProvenance) { sortedSetOf(comparator) } += pkg
         }
 
-        return packagesByProvenance
+        return packagesByProvenance.mapValues { it.value.toList() }
     }
 
     /**
