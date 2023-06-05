@@ -161,9 +161,9 @@ internal fun mapSnippetFindings(
                 val rawMatchedLinesSnippetFile = rawMatchedLines?.mirrorFile.orEmpty().collapseToRanges()
 
                 sourceLocation = rawMatchedLinesSourceFile.firstOrNull()
-                    ?.let { (startLine, endLine) -> TextLocation(snippet.file, startLine, endLine) }
-                snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
                     ?.let { (startLine, endLine) -> TextLocation(file, startLine, endLine) }
+                snippetLocation = rawMatchedLinesSnippetFile.firstOrNull()
+                    ?.let { (startLine, endLine) -> TextLocation(snippet.file, startLine, endLine) }
 
                 if (rawMatchedLinesSourceFile.isNotEmpty()) {
                     additionalSnippetData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] =
