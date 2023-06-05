@@ -34,7 +34,7 @@ internal class CurationsFilter {
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
 internal class ExcludesFilter {
     override fun equals(other: Any?): Boolean =
-        if (other is Excludes) other.paths.isEmpty() && other.scopes.isEmpty() else false
+        other is Excludes && other.paths.isEmpty() && other.scopes.isEmpty()
 }
 
 @Suppress("EqualsOrHashCode", "EqualsWithHashCodeExist") // The class is not supposed to be used with hashing.
