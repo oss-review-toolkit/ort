@@ -153,11 +153,13 @@ RUN pip install --no-cache-dir -U \
     python-inspector=="${PYTHON_INSPECTOR_VERSION}"
 
 RUN arch=$(arch | sed s/aarch64/arm64/) \
-    && if [ "$arch" != "arm64" ]; then \
-        curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-        pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
-        rm requirements.txt; \
-       fi
+    &&  if [ "$arch" == "arm64" ]; then \
+            pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+        else \
+            curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+            pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+            rm requirements.txt; \
+        fi
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
