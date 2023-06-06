@@ -154,10 +154,10 @@ RUN pip install --no-cache-dir -U \
 
 RUN arch=$(arch | sed s/aarch64/arm64/) \
     && if [ "$arch" != "arm64" ]; then \
-        curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-        pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
-        rm requirements.txt; \
-       fi
+    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+    rm requirements.txt; \
+    fi
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
@@ -216,17 +216,17 @@ RUN . $NVM_DIR/nvm.sh \
     && nvm use default \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
-FROM scratch AS node
+FROM scratch AS nodejs
 COPY --from=nodebuild ${NVM_DIR} ${NVM_DIR}
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
 FROM ort-base-image AS rustbuild
 
-ARG RUST_HOME=/opt/rust
-ARG CARGO_HOME=${RUST_HOME}/cargo
-ARG RUSTUP_HOME=${RUST_HOME}/rustup
 ARG RUST_VERSION=1.64.0
+ENV RUST_HOME=/opt/rust
+ENV RUSTUP_HOME=${RUST_HOME}/rustup
+ENV CARGO_HOME=${RUST_HOME}/cargo
 RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain ${RUST_VERSION}
 
 FROM scratch AS rust
@@ -291,8 +291,8 @@ RUN --mount=type=tmpfs,target=/android \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 
@@ -326,7 +326,7 @@ COPY --from=dartbuild ${DART_SDK} ${DART_SDK}
 # SBT
 FROM ort-base-image AS sbtbuild
 
-ARG SBT_VERSION=1.6.1
+ARG SBT_VERSION=1.9.0
 
 ENV SBT_HOME=/opt/sbt
 ENV PATH=$PATH:${SBT_HOME}/bin
@@ -334,7 +334,7 @@ ENV PATH=$PATH:${SBT_HOME}/bin
 RUN curl -L https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz | tar -C /opt -xz
 
 FROM scratch AS sbt
-COPY --from=sbtbuild ${DART_SDK} ${DART_SDK}
+COPY --from=sbtbuild ${SBT_HOME} ${SBT_HOME}
 
 #------------------------------------------------------------------------
 # ORT
@@ -352,9 +352,9 @@ RUN --mount=type=cache,target=/var/tmp/gradle \
     && sudo chown -R "$USER". ${HOME}/src/ort /var/tmp/gradle \
     && scripts/set_gradle_proxy.sh \
     && ./gradlew --no-daemon --stacktrace \
-        -Pversion=$ORT_VERSION \
-        :cli:installDist \
-        :helper-cli:startScripts \
+    -Pversion=$ORT_VERSION \
+    :cli:installDist \
+    :helper-cli:startScripts \
     && mkdir /opt/ort \
     && cp -a ${HOME}/src/ort/cli/build/install/ort /opt/ \
     && cp -a ${HOME}/src/ort/scripts/*.sh /opt/ort/bin/ \
@@ -376,19 +376,19 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     sudo apt-get update && \
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-        php \
-        subversion \
-        # dotnet requirements
-        libc6 \
-        libgcc1 \
-        libgcc-s1 \
-        libgssapi-krb5-2 \
-        libicu70 \
-        liblttng-ust1 \
-        libssl3 \
-        libstdc++6 \
-        libunwind8 \
-        zlib1g \
+    php \
+    subversion \
+    # dotnet requirements
+    libc6 \
+    libgcc1 \
+    libgcc-s1 \
+    libgssapi-krb5-2 \
+    libicu70 \
+    liblttng-ust1 \
+    libssl3 \
+    libstdc++6 \
+    libunwind8 \
+    zlib1g \
     && sudo rm -rf /var/lib/apt/lists/*
 
 # Python
@@ -406,7 +406,7 @@ COPY --from=ruby --chown=$USER:$USER ${RBENV_ROOT} ${RBENV_ROOT}
 ARG NODEJS_VERSION=18.14.2
 ENV NVM_DIR=/opt/nvm
 ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=node --chown=$USER:$USER ${NVM_DIR} ${NVM_DIR}
+COPY --from=nodejs --chown=$USER:$USER ${NVM_DIR} ${NVM_DIR}
 
 # Rust
 ENV RUST_HOME=/opt/rust
@@ -482,6 +482,6 @@ USER $USER
 WORKDIR $HOME
 
 # Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOMEDIR/.ort"
+RUN mkdir -p "$HOME/.ort"
 
 ENTRYPOINT ["/opt/ort/bin/ort"]
