@@ -58,11 +58,10 @@ data class LicenseFinding(
 }
 
 /**
- * Apply [detectedLicenseMapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license
- * String.
+ * Apply [mapping] from the [org.ossreviewtoolkit.model.config.ScannerConfiguration] to any license String.
  */
-fun String.applyDetectedLicenseMapping(detectedLicenseMapping: Map<String, String>): String =
-    detectedLicenseMapping.entries.fold(this) { result, (from, to) ->
+fun String.mapLicense(mapping: Map<String, String>): String =
+    mapping.entries.fold(this) { result, (from, to) ->
         val regex = """(^| |\()(${Regex.escape(from)})($| |\))""".toRegex()
 
         regex.replace(result) {

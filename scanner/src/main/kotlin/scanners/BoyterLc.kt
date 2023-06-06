@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.applyDetectedLicenseMapping
+import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
@@ -100,7 +100,7 @@ class BoyterLc internal constructor(
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
                 LicenseFinding(
-                    license = it["LicenseId"].textValue().applyDetectedLicenseMapping(scannerConfig.detectedLicenseMapping),
+                    license = it["LicenseId"].textValue().mapLicense(scannerConfig.detectedLicenseMapping),
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, filePath),
