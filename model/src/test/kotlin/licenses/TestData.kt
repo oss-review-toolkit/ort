@@ -132,8 +132,6 @@ val project = Project.EMPTY.copy(
     scopeDependencies = setOf(scope)
 )
 
-val provenance = UnknownProvenance
-
 val scanResults = listOf(
     packageWithDetectedLicense,
     packageWithConcludedAndDetectedLicense,
@@ -142,7 +140,7 @@ val scanResults = listOf(
 ).associateTo(sortedMapOf()) {
     it.id to listOf(
         ScanResult(
-            provenance = provenance,
+            provenance = UnknownProvenance,
             scanner = ScannerDetails.EMPTY,
             summary = ScanSummary.EMPTY.copy(
                 licenseFindings = licenseFindings,
