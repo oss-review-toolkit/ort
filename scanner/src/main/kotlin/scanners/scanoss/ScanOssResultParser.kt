@@ -34,7 +34,7 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.applyDetectedLicenseMapping
+import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
@@ -123,7 +123,7 @@ private fun getLicenseFindings(
         }
 
         LicenseFinding(
-            license = validatedLicense.applyDetectedLicenseMapping(detectedLicenseMappings),
+            license = validatedLicense.mapLicense(detectedLicenseMappings),
             location = TextLocation(
                 path = path,
                 startLine = TextLocation.UNKNOWN_LINE,
