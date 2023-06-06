@@ -72,7 +72,7 @@ tasks:
       A convenience task to build (but not run) ORT's functional tests.
     run:
       container: build
-      command: ./gradlew --stacktrace jar funTestClasses
+      command: ./gradlew --stacktrace -x :plugins:reporters:web-app-template:yarnBuild jar funTestClasses
   requirements:
     description: >-
       A task to check ORT's requirements against the runtime container.
@@ -88,5 +88,5 @@ tasks:
       - buildFunTest
     run:
       container: run
-      command: "'./gradlew funTest jacocoFunTestReport -Ptests.include=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
+      command: "'./gradlew -x :plugins:reporters:web-app-template:yarnBuild funTest jacocoFunTestReport -Ptests.include=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* $(sed \"s/true/--scan/;s/false//\" <<< \"$GRADLE_BUILD_SCAN\")'"
       entrypoint: /bin/bash --login -c
