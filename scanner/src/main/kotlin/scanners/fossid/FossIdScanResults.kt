@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.Snippet as OrtSnippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
@@ -124,7 +125,8 @@ internal fun mapSnippetFindings(
                     if (expression == null) {
                         issues += FossId.createAndLogIssue(
                             source = "FossId",
-                            message = "Failed to map license '$it' as an SPDX expression."
+                            message = "Failed to map license '$it' as an SPDX expression.",
+                            severity = Severity.HINT
                         )
                     }
                 }
