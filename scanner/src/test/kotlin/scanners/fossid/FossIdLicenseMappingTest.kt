@@ -35,6 +35,7 @@ import org.ossreviewtoolkit.clients.fossid.model.result.LicenseCategory
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchType
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
 import org.ossreviewtoolkit.model.Issue
+import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
@@ -91,7 +92,9 @@ class FossIdLicenseMappingTest : WordSpec({
 
             issues should haveSize(1)
             issues.first() shouldNotBeNull {
-                message shouldStartWith "Failed to map license 'invalid license' as an SPDX expression."
+                message shouldStartWith
+                        "Failed to map license 'invalid license' as an SPDX expression."
+                severity shouldBe Severity.HINT
             }
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
