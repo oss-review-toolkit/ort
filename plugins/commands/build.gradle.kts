@@ -30,6 +30,7 @@ javaPlatform {
 dependencies {
     api(project(":plugins:commands:advisor-command"))
     api(project(":plugins:commands:analyzer-command"))
+    api(project(":plugins:commands:compare-command"))
     api(project(":plugins:commands:config-command"))
     api(project(":plugins:commands:downloader-command"))
     api(project(":plugins:commands:evaluator-command"))
