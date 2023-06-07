@@ -29,11 +29,13 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.SnippetFinding
 
 /**
- * Merge the nested [ScanResult]s into one [ScanResult] per used scanner, using the root of the [nestedProvenance]
- * as provenance. This maps the given [scanResultsByPath] to the format currently used by [OrtResult]. When merging
- * multiple [ScanSummary]s for a particular scanner the earliest start time and lasted end time will be used as the new
- * values for the respective scanner. Because the [ScanSummary] does not contain the checksums of the individual files,
- * no package verification code can be calculated.
+ * Merge the nested [ScanResult]s into one [ScanResult] per used scanner. The given [scanResultsByPath] must contain at
+ * least one scan result associated with the empty string which defines the package provenance and is used as provenance
+ * for the result. All other entries in [scanResultsByPath] hold the scan results for each respective (recursive)
+ * sub-repository of the main repository. This maps the given [scanResultsByPath] to the format currently used by
+ * [OrtResult]. When merging multiple [ScanSummary]s for a particular scanner the earliest start time and lasted end
+ * time will be used as the new values for the respective scanner. Because the [ScanSummary] does not contain the
+ * checksums of the individual files, no package verification code can be calculated.
  */
 fun mergeScanResultsByScanner(scanResultsByPath: Map<String, List<ScanResult>>): List<ScanResult> {
     val rootProvenance = scanResultsByPath.getValue("").map { it.provenance }.distinct().also {
