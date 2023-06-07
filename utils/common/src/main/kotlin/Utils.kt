@@ -102,7 +102,7 @@ fun getCommonParentFile(files: Collection<File>): File =
     files.map {
         it.normalize().parent
     }.reduceOrNull { prefix, path ->
-        prefix?.commonPrefixWith(path.orEmpty())
+        prefix?.commonPrefixWith(path.orEmpty(), ignoreCase = Os.isWindows)
     }.orEmpty().let {
         File(it)
     }
