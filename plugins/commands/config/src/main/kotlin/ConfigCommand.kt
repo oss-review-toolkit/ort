@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 class ConfigCommand : OrtCommand(
     name = "config",
-    help = "Show different ORT configurations"
+    help = "Show different ORT configurations."
 ) {
     private val showDefault by option(
         "--show-default",
