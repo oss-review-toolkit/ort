@@ -63,6 +63,11 @@ class CompareCommand : OrtCommand(
         help = "Ignore time differences."
     ).flag()
 
+    private val ignoreEnvironment by option(
+        "--ignore-environment", "-e",
+        help = "Ignore environment differences."
+    ).flag()
+
     override fun run() {
         if (fileA == fileB) {
             println("The arguments point to the same file.")
@@ -74,6 +79,10 @@ class CompareCommand : OrtCommand(
                 val replacements = buildMap {
                     if (ignoreTime) {
                         put("""^(\s+(?:start|end)_time:) "[^"]+"$""", "$1 \"${Instant.EPOCH}\"")
+                    }
+
+                    if (ignoreEnvironment) {
+                        put("""^(\s{2}environment:)$\n(?:^\s{4,}.+\n?)+$""", "$1\n    ort_version: \"deadbeef\"")
                     }
                 }
 
