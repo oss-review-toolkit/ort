@@ -133,5 +133,8 @@ fun readOrtResult(file: String) = readOrtResult(File(file))
 
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
 
+/**
+ * Create a [ScannerRun] with the given [scanResults].
+ */
 fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun =
     ScannerRun.EMPTY.copy(scanResults = scanResults.toMap())

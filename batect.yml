@@ -47,6 +47,7 @@ containers:
     image: eclipse-temurin:17-jdk-jammy
     <<: *common-container-config
   run:
+    dockerfile: Dockerfile-legacy
     build_args:
       USER_ID: <{docker_build_user_id}
     build_directory: <{batect.project_directory}

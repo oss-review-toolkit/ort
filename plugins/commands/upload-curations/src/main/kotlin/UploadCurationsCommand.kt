@@ -72,7 +72,7 @@ class UploadCurationsCommand : OrtCommand(
 
     private val server by option(
         "--server", "-s",
-        help = "The ClearlyDefined server to upload to."
+        help = "The ClearlyDefined server to upload to. Must be one of ${enumValues<Server>().map { it.name }}."
     ).enum<Server>().default(Server.DEVELOPMENT)
 
     private val service by lazy { ClearlyDefinedService.create(server, OkHttpClientHelper.buildClient()) }

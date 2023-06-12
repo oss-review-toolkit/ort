@@ -40,6 +40,7 @@ include(":plugins:commands")
 include(":plugins:commands:advisor")
 include(":plugins:commands:analyzer")
 include(":plugins:commands:api")
+include(":plugins:commands:compare")
 include(":plugins:commands:config")
 include(":plugins:commands:downloader")
 include(":plugins:commands:evaluator")
@@ -108,6 +109,7 @@ project(":clients:vulnerable-code").name = "vulnerable-code-client"
 project(":plugins:commands:advisor").name = "advisor-command"
 project(":plugins:commands:analyzer").name = "analyzer-command"
 project(":plugins:commands:api").name = "command-api"
+project(":plugins:commands:compare").name = "compare-command"
 project(":plugins:commands:config").name = "config-command"
 project(":plugins:commands:downloader").name = "downloader-command"
 project(":plugins:commands:evaluator").name = "evaluator-command"

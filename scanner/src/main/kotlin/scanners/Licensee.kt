@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
+import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -88,15 +89,14 @@ class Licensee internal constructor(
 
         matchedFiles.mapTo(licenseFindings) {
             val filePath = File(it["filename"].textValue())
-            LicenseFinding.createAndMap(
-                license = it["matched_license"].textValue(),
+            LicenseFinding(
+                license = it["matched_license"].textValue().mapLicense(scannerConfig.detectedLicenseMapping),
                 location = TextLocation(
                     // The path is already relative.
                     filePath.path,
                     TextLocation.UNKNOWN_LINE
                 ),
-                score = it["matcher"]["confidence"].floatValue(),
-                detectedLicenseMapping = scannerConfig.detectedLicenseMapping
+                score = it["matcher"]["confidence"].floatValue()
             )
         }
 
