@@ -21,6 +21,37 @@ version = rootProject.version
 
 repositories {
     mavenCentral()
+
+    exclusiveContent {
+        forRepository {
+            maven("https://packages.atlassian.com/maven-external")
+        }
+
+        filter {
+            includeGroupByRegex("com\\.atlassian\\..*")
+            includeVersionByRegex("log4j", "log4j", ".*-atlassian-.*")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
+        }
+
+        filter {
+            includeGroup("org.eclipse.sw360")
+        }
+    }
+
+    exclusiveContent {
+        forRepository {
+            maven("https://repo.gradle.org/gradle/libs-releases/")
+        }
+
+        filter {
+            includeGroup("org.gradle")
+        }
+    }
 }
 
 tasks.withType<Jar>().configureEach {

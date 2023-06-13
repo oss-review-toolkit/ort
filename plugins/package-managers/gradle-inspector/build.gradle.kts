@@ -28,18 +28,6 @@ plugins {
     alias(libs.plugins.ideaExt)
 }
 
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
-        }
-
-        filter {
-            includeGroup("org.gradle")
-        }
-    }
-}
-
 dependencies {
     api(project(":analyzer"))
     api(project(":model"))
