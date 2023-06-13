@@ -94,13 +94,13 @@ fun calculatePackageVerificationCode(directory: File): String {
     val spdxFiles = allFiles.filter { it.extension == "spdx" }
     val files = allFiles.filter { it.extension != "spdx" }
 
-    // Sort the list of files to show the files in a directory before the files in its subdirectories. This can be
-    // omitted once breadth-first search is available in Kotlin: https://github.com/JetBrains/kotlin/pull/2232
     val filteredFiles = files.filter {
         val relativePath = it.relativeTo(directory).invariantSeparatorsPath
         VCS_DIRECTORIES.none { vcs -> relativePath.startsWith("$vcs/") }
     }
 
+    // Sort the list of files to show the files in a directory before the files in its subdirectories. This can be
+    // omitted once breadth-first search is available in Kotlin: https://youtrack.jetbrains.com/issue/KT-18629
     val sortedExcludes = spdxFiles.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
             .sortedWith(PATH_STRING_COMPARATOR)
 
