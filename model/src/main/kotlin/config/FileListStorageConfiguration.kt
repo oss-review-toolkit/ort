@@ -47,7 +47,7 @@ data class FileListStorageConfiguration(
 
     init {
         if (fileStorage != null && postgresStorage != null) {
-            FileListStorageConfiguration.logger.warn {
+            logger.warn {
                 "'fileStorage' and 'postgresStorage' are both configured but only one storage can be used. " +
                         "Using 'fileStorage'."
             }
