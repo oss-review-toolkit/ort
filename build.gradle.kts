@@ -51,6 +51,10 @@ plugins {
 }
 
 buildscript {
+    repositories {
+        mavenCentral()
+    }
+
     dependencies {
         classpath(libs.jgit)
     }
