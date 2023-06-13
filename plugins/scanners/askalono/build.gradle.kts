@@ -23,16 +23,8 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
+    api(project(":model"))
+    api(project(":scanner"))
 
-    implementation(platform(project(":plugins:scanners")))
-
-    implementation(project(":scanner"))
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-
-    implementation(libs.clikt)
-    implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jApiKotlin)
+    funTestApi(testFixtures(project(":scanner")))
 }

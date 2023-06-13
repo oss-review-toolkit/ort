@@ -17,12 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.plugins.scanners.boyterlc
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 
-class BoyterLcScannerFunTest : AbstractPathScannerWrapperFunTest() {
+class BoyterLcFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = BoyterLc("BoyterLc", scannerConfig)
 
     override val expectedFileLicenses = listOf(

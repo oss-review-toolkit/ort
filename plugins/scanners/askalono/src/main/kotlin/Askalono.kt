@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.plugins.scanners.askalono
 
 import java.io.File
 import java.time.Instant

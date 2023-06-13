@@ -17,12 +17,13 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.plugins.scanners.askalono
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 
-class AskalonoScannerFunTest : AbstractPathScannerWrapperFunTest() {
+class AskalonoFunTest : AbstractPathScannerWrapperFunTest() {
     override val scanner = Askalono("Askalono", scannerConfig)
 
     override val expectedFileLicenses = listOf(

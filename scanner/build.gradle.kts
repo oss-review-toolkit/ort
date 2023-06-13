@@ -20,6 +20,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
+    // Apply core plugins.
+    `java-test-fixtures`
+
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
@@ -42,10 +45,15 @@ dependencies {
     implementation(libs.scanoss)
     implementation(libs.sw360Client)
 
+    funTestApi(testFixtures(project(":scanner")))
+
     testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)
     testImplementation(libs.retrofitConverterKotlinxSerialization)
     testImplementation(libs.wiremock)
+
+    testFixturesImplementation(libs.kotestAssertionsCore)
+    testFixturesImplementation(libs.kotestRunnerJunit5)
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {
