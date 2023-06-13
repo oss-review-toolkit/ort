@@ -19,20 +19,5 @@
 
 plugins {
     // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
-
-dependencies {
-    api(project(":plugins:commands:command-api"))
-
-    implementation(platform(project(":plugins:scanners")))
-
-    implementation(project(":scanner"))
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-
-    implementation(libs.clikt)
-    implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jApiKotlin)
+    id("ort-plugins-conventions")
 }

@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.plugins.scanners.boyterlc
 
 import java.io.File
 import java.time.Instant
@@ -31,43 +31,52 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.mapLicense
+import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
+import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
-class Licensee internal constructor(
+class BoyterLc internal constructor(
     private val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {
-        val CONFIGURATION_OPTIONS = listOf("--json")
+        val CONFIGURATION_OPTIONS = listOf(
+            "--confidence", "0.95", // Cut-off value to only get most relevant matches.
+            "--format", "json"
+        )
     }
 
-    class Factory : AbstractScannerWrapperFactory<Licensee>("Licensee") {
+    class Factory : AbstractScannerWrapperFactory<BoyterLc>("BoyterLc") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            Licensee(type, scannerConfig)
+            BoyterLc(type, scannerConfig)
     }
 
     override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
 
     override fun command(workingDir: File?) =
-        listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
+        listOfNotNull(workingDir, if (Os.isWindows) "lc.exe" else "lc").joinToString(File.separator)
 
-    override fun getVersionArguments() = "version"
+    override fun transformVersion(output: String) =
+        // The version string can be something like:
+        // licensechecker version 1.1.1
+        output.removePrefix("licensechecker version ")
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
 
+        val resultFile = createOrtTempDir().resolve("result.json")
         val process = run(
-            "detect",
             *CONFIGURATION_OPTIONS.toTypedArray(),
+            "--output", resultFile.absolutePath,
             path.absolutePath
         )
 
@@ -77,27 +86,29 @@ class Licensee internal constructor(
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, stdout)
+            generateSummary(startTime, endTime, path, resultFile).also {
+                resultFile.parentFile.safeDeleteRecursively(force = true)
+            }
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
+        val result = resultFile.readTree()
 
-        val json = jsonMapper.readTree(result)
-        val matchedFiles = json["matched_files"]
-
-        matchedFiles.mapTo(licenseFindings) {
-            val filePath = File(it["filename"].textValue())
-            LicenseFinding(
-                license = it["matched_license"].textValue().mapLicense(scannerConfig.detectedLicenseMapping),
-                location = TextLocation(
-                    // The path is already relative.
-                    filePath.path,
-                    TextLocation.UNKNOWN_LINE
-                ),
-                score = it["matcher"]["confidence"].floatValue()
-            )
+        result.flatMapTo(licenseFindings) { file ->
+            val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
+            file["LicenseGuesses"].map {
+                LicenseFinding(
+                    license = it["LicenseId"].textValue().mapLicense(scannerConfig.detectedLicenseMapping),
+                    location = TextLocation(
+                        // Turn absolute paths in the native result into relative paths to not expose any information.
+                        relativizePath(scanPath, filePath),
+                        TextLocation.UNKNOWN_LINE
+                    ),
+                    score = it["Percentage"].floatValue()
+                )
+            }
         }
 
         return ScanSummary(

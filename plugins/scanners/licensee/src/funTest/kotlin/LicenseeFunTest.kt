@@ -17,13 +17,14 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners
+package org.ossreviewtoolkit.plugins.scanners.licensee
 
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.TextLocation
+import org.ossreviewtoolkit.scanner.scanners.AbstractPathScannerWrapperFunTest
 import org.ossreviewtoolkit.utils.test.ExpensiveTag
 
-class LicenseeScannerFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
+class LicenseeFunTest : AbstractPathScannerWrapperFunTest(setOf(ExpensiveTag)) {
     override val scanner = Licensee("Licensee", scannerConfig)
 
     override val expectedFileLicenses = listOf(
