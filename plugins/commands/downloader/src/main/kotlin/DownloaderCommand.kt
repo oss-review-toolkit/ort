@@ -371,7 +371,7 @@ class DownloaderCommand : OrtCommand(
     ): Set<String> {
         val resolvedLicenseInfo = licenseInfoResolver.resolveLicenseInfo(pkg.id)
         val effectiveLicenses = resolvedLicenseInfo.effectiveLicense(
-            LicenseView.ALL,
+            LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED,
             *licenseChoices
         )?.decompose().orEmpty()
 
