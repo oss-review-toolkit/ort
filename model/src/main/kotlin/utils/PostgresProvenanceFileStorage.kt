@@ -47,7 +47,8 @@ import org.ossreviewtoolkit.model.utils.DatabaseUtils.transaction
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 /**
- * A PostgreSQL based implementation of [ProvenanceFileStorage].
+ * A [DataSource]-based implementation of [ProvenanceFileStorage] that stores files associated by [KnownProvenance] in a
+ * (Postgres) database.
  */
 class PostgresProvenanceFileStorage(
     /**
@@ -56,7 +57,7 @@ class PostgresProvenanceFileStorage(
     dataSource: Lazy<DataSource>,
 
     /**
-     * The name of the table used for storing package provenances.
+     * The name of the table to use for storing the contents of the associated files.
      */
     tableName: String
 ) : ProvenanceFileStorage {
