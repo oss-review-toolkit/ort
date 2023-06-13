@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.utils.PostgresProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.ortDataDirectory
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 private const val TABLE_NAME = "provenance_file_lists"
 private const val FILENAME = "file_list"
@@ -69,7 +69,7 @@ fun FileListStorageConfiguration?.createStorage(): ProvenanceFileStorage =
             tableName = TABLE_NAME
         )
         else -> FileProvenanceFileStorage(
-            storage = LocalFileStorage(ortDataDirectory.resolve("scanner/file-lists")),
+            storage = XZCompressedLocalFileStorage(ortDataDirectory.resolve("scanner/file-lists")),
             filename = FILENAME
         )
     }
