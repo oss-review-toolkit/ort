@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.utils.FileArchiver
 import org.ossreviewtoolkit.model.utils.FileProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.PostgresProvenanceFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
-import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 /**
  * The configuration model for a [FileArchiver].
@@ -84,7 +84,7 @@ fun FileArchiverConfiguration?.createFileArchiver(): FileArchiver? {
         }
 
         else -> FileProvenanceFileStorage(
-            storage = LocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
+            storage = XZCompressedLocalFileStorage(FileArchiver.DEFAULT_ARCHIVE_DIR),
             filename = FileArchiverConfiguration.ARCHIVE_FILENAME
         )
     }
