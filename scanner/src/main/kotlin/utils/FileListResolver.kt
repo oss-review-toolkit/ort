@@ -19,16 +19,15 @@
 
 package org.ossreviewtoolkit.scanner.utils
 
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import java.io.File
 
-import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
-import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
-
+import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
-import org.ossreviewtoolkit.model.fromYaml
-import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
+import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.scanner.FileList
 import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
@@ -52,26 +51,19 @@ internal class FileListResolver(
 }
 
 private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
-    val tempFile = createOrtTempFile(prefix = "file-list", suffix = ".yml.xz")
+    val tempFile = createOrtTempFile(prefix = "file-list", suffix = ".yml")
 
-    fileList.toYaml().byteInputStream().use { input ->
-        XZCompressorOutputStream(tempFile.outputStream()).use { output ->
-            input.copyTo(output)
-        }
-    }
-
+    tempFile.writeValue(fileList)
     putFile(provenance, tempFile)
+
     tempFile.delete()
 }
 
 private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
     val file = getFile(provenance) ?: return null
 
-    val yaml = XZCompressorInputStream(file.inputStream()).use { input ->
-        input.bufferedReader().readText()
-    }
-
-    return yaml.fromYaml()
+    // Cannot rely on the extension of the file to reflect its type, so use YAML explicitly.
+    return FileFormat.YAML.mapper.readValue<FileList>(file).also { file.delete() }
 }
 
 private val IGNORED_DIRECTORY_MATCHER by lazy {
