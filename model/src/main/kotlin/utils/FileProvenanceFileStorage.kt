@@ -33,7 +33,8 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
- * A [FileStorage] based implementation of [ProvenanceFileStorage].
+ * A [FileStorage]-based implementation of [ProvenanceFileStorage] that stores files associated by [KnownProvenance]
+ * in files.
  */
 class FileProvenanceFileStorage(
     /**
@@ -42,7 +43,7 @@ class FileProvenanceFileStorage(
     private val storage: FileStorage,
 
     /**
-     * The filename of the files.
+     * The name of the files to use for storing the contents of the associated files.
      */
     private val filename: String,
 ) : ProvenanceFileStorage {
