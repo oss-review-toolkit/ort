@@ -80,7 +80,7 @@ abstract class PackageManager(
          */
         val ENABLED_BY_DEFAULT by lazy { ALL.values.filter { it.isEnabledByDefault } }
 
-        private val PACKAGE_MANAGER_DIRECTORIES = listOf(
+        private val PACKAGE_MANAGER_DIRECTORIES = setOf(
             // Ignore intermediate build system directories.
             ".gradle",
             ".yarn",
