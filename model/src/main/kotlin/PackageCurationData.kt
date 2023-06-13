@@ -24,7 +24,10 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 import org.ossreviewtoolkit.utils.common.zip
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxOperator
 
 /**
  * This class contains curation data for a package. It is used to amend the automatically detected metadata for a
@@ -121,10 +124,15 @@ data class PackageCurationData(
         } ?: original.vcsProcessed
 
         val declaredLicenseMapping = targetPackage.getDeclaredLicenseMapping() + declaredLicenseMapping
-        val declaredLicensesProcessed = DeclaredLicenseProcessor.process(
-            original.declaredLicenses,
-            declaredLicenseMapping
-        )
+        val originalDeclaredLicenseProcessed = original.declaredLicensesProcessed.spdxExpression
+        val declaredLicensesProcessed = if (originalDeclaredLicenseProcessed is SpdxCompoundExpression) {
+            processCompoundExpression(originalDeclaredLicenseProcessed, declaredLicenseMapping)
+        } else {
+            DeclaredLicenseProcessor.process(
+                original.declaredLicenses,
+                declaredLicenseMapping
+            )
+        }
 
         val pkg = Package(
             id = original.id,
@@ -182,4 +190,25 @@ data class PackageCurationData(
                 (value ?: otherValue)!!
             }
         )
+
+    /**
+     * Process a [SpdxCompoundExpression] recursively to preserve the expression's [SpdxOperator]s.
+     */
+    private fun processCompoundExpression(
+        license: SpdxExpression,
+        declaredLicenseMapping: Map<String, SpdxExpression>
+    ): ProcessedDeclaredLicense {
+        return if (license is SpdxCompoundExpression) {
+            val leftProcessed = processCompoundExpression(license.left, declaredLicenseMapping)
+            val rightProcessed = processCompoundExpression(license.right, declaredLicenseMapping)
+
+            DeclaredLicenseProcessor.process(
+                setOfNotNull(leftProcessed.spdxExpression?.toString(), rightProcessed.spdxExpression?.toString()),
+                declaredLicenseMapping,
+                license.operator
+            )
+        } else {
+            DeclaredLicenseProcessor.process(setOf(license.toString()), declaredLicenseMapping)
+        }
+    }
 }

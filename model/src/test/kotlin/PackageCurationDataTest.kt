@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 class PackageCurationDataTest : WordSpec({
@@ -138,6 +139,64 @@ class PackageCurationDataTest : WordSpec({
             val originalWithPartialVcsData = original.copy(vcs = original.vcs?.copy(path = null))
 
             originalWithPartialVcsData.merge(other).vcs shouldBe original.vcs?.copy(path = other.vcs?.path)
+        }
+    }
+
+    "Applying" should {
+        "preserve the original SPDX operator" {
+            val curatedPackage = CuratedPackage(
+                metadata = Package(
+                    id = Identifier("Maven", "namespace", "name", "0.0.1"),
+                    declaredLicenses = setOf("Apache-2.0", "LGPL-2.1-or-later"),
+                    declaredLicensesProcessed = ProcessedDeclaredLicense(
+                        spdxExpression = "Apache-2.0 OR LGPL-2.1-or-later".toSpdx(),
+                    ),
+                    description = "original",
+                    homepageUrl = "original",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
+                ),
+                curations = listOf(
+                    PackageCurationResult(
+                        base = PackageCurationData(),
+                        curation = PackageCurationData(
+                            concludedLicense = "Apache-2.0 OR LGPL-2.1-or-later".toSpdx()
+                        )
+                    )
+                )
+            )
+
+            val result = original.apply(curatedPackage)
+            result.metadata.declaredLicensesProcessed.spdxExpression shouldBe "Apache-2.0 OR LGPL-2.1-or-later".toSpdx()
+        }
+
+        "preserve the original operator for a complex SPDX compound expression" {
+            val curatedPackage = CuratedPackage(
+                metadata = Package(
+                    id = Identifier("Maven", "namespace", "name", "0.0.1"),
+                    declaredLicenses = setOf("Apache-2.0", "LGPL-2.1-or-later", "MIT"),
+                    declaredLicensesProcessed = ProcessedDeclaredLicense(
+                        spdxExpression = "(Apache-2.0 OR LGPL-2.1-or-later) AND MIT".toSpdx(),
+                    ),
+                    description = "original",
+                    homepageUrl = "original",
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    sourceArtifact = RemoteArtifact.EMPTY,
+                    vcs = VcsInfo.EMPTY
+                ),
+                curations = listOf(
+                    PackageCurationResult(
+                        base = PackageCurationData(),
+                        curation = PackageCurationData(
+                            concludedLicense = "(Apache-2.0 OR LGPL-2.1-or-later) AND MIT".toSpdx()
+                        )
+                    )
+                )
+            )
+            val result = original.apply(curatedPackage)
+            result.metadata.declaredLicensesProcessed.spdxExpression
+                .shouldBe("(Apache-2.0 OR LGPL-2.1-or-later) AND MIT".toSpdx())
         }
     }
 })
