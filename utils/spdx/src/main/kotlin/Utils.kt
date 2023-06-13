@@ -90,23 +90,20 @@ fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<S
  */
 @JvmName("calculatePackageVerificationCodeForDirectory")
 fun calculatePackageVerificationCode(directory: File): String {
-    val allFiles = directory.walk().onEnter { !it.isSymbolicLink() }.filter { !it.isSymbolicLink() && it.isFile }
+    val allFiles = directory.walk()
+        .onEnter { !it.isSymbolicLink() && it.name !in VCS_DIRECTORIES }
+        .filter { !it.isSymbolicLink() && it.isFile }
 
     // Filter twice instead of using "partition" as the latter does not return sequences.
     val spdxFiles = allFiles.filter { it.extension == "spdx" }
     val files = allFiles.filter { it.extension != "spdx" }
-
-    val filteredFiles = files.filter {
-        val relativePath = it.relativeTo(directory).invariantSeparatorsPath
-        VCS_DIRECTORIES.none { vcs -> relativePath.startsWith("$vcs/") }
-    }
 
     // Sort the list of files to show the files in a directory before the files in its subdirectories. This can be
     // omitted once breadth-first search is available in Kotlin: https://youtrack.jetbrains.com/issue/KT-18629
     val sortedExcludes = spdxFiles.map { "./${it.relativeTo(directory).invariantSeparatorsPath}" }
             .sortedWith(PATH_STRING_COMPARATOR)
 
-    return calculatePackageVerificationCode(filteredFiles, sortedExcludes)
+    return calculatePackageVerificationCode(files, sortedExcludes)
 }
 
 /**
