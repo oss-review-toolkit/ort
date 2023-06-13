@@ -239,10 +239,6 @@ subprojects {
         getByName("funTest").associateWith(getByName(KotlinCompilation.MAIN_COMPILATION_NAME))
     }
 
-    dependencies {
-        implementation("org.jetbrains.kotlin:kotlin-stdlib:${rootProject.libs.versions.kotlinPlugin.get()}")
-    }
-
     configurations.all {
         // Do not tamper with configurations related to the detekt plugin, for some background information
         // https://github.com/detekt/detekt/issues/2501.
