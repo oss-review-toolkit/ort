@@ -240,22 +240,18 @@ subprojects {
     }
 
     configurations.all {
-        // Do not tamper with configurations related to the detekt plugin, for some background information
-        // https://github.com/detekt/detekt/issues/2501.
-        if (!name.startsWith("detekt")) {
-            resolutionStrategy {
-                // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
-                force(rootProject.libs.okhttp)
+        resolutionStrategy {
+            // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
+            force(rootProject.libs.okhttp)
 
-                // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
-                force(rootProject.libs.jruby)
+            // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
+            force(rootProject.libs.jruby)
 
-                // Ensure all Log4j API versions match our version.
-                force(rootProject.libs.log4jApi)
+            // Ensure all Log4j API versions match our version.
+            force(rootProject.libs.log4jApi)
 
-                // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
-                force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
-            }
+            // Ensure that all transitive versions of Kotlin libraries match our version of Kotlin.
+            force("org.jetbrains.kotlin:kotlin-reflect:${rootProject.libs.versions.kotlinPlugin.get()}")
         }
     }
 
