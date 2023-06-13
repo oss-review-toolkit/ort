@@ -91,6 +91,8 @@ fun calculatePackageVerificationCode(files: Sequence<File>, excludes: Sequence<S
 @JvmName("calculatePackageVerificationCodeForDirectory")
 fun calculatePackageVerificationCode(directory: File): String {
     val allFiles = directory.walk().onEnter { !it.isSymbolicLink() }.filter { !it.isSymbolicLink() && it.isFile }
+
+    // Filter twice instead of using "partition" as the latter does not return sequences.
     val spdxFiles = allFiles.filter { it.extension == "spdx" }
     val files = allFiles.filter { it.extension != "spdx" }
 
