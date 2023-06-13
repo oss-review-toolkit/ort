@@ -125,39 +125,6 @@ tasks.named<CreateStartScripts>("startScripts") {
     }
 }
 
-repositories {
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.gradle.org/gradle/libs-releases/")
-        }
-
-        filter {
-            includeGroup("org.gradle")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://repo.eclipse.org/content/repositories/sw360-releases/")
-        }
-
-        filter {
-            includeGroup("org.eclipse.sw360")
-        }
-    }
-
-    exclusiveContent {
-        forRepository {
-            maven("https://packages.atlassian.com/maven-external")
-        }
-
-        filter {
-            includeGroupByRegex("com\\.atlassian\\..*")
-            includeVersionByRegex("log4j", "log4j", ".*-atlassian-.*")
-        }
-    }
-}
-
 dependencies {
     implementation(platform(project(":plugins:commands")))
 
