@@ -23,22 +23,22 @@ import java.io.File
 import org.ossreviewtoolkit.model.KnownProvenance
 
 /**
- * A storage which associates a file with a [KnownProvenance]
+ * A generic storage interface that associates a [KnownProvenance] with a file.
  */
 interface ProvenanceFileStorage {
     /**
-     * Return whether a file corresponding to [provenance] exists.
+     * Return whether a file is associated by [provenance].
      */
     fun hasFile(provenance: KnownProvenance): Boolean
 
     /**
-     * Associate the [file] to [provenance]. Overwrites any existing file corresponding to [provenance].
+     * Associate [provenance] with the given [file]. Overwrites any existing association by [provenance].
      */
     fun putFile(provenance: KnownProvenance, file: File)
 
     /**
-     * Return the file corresponding to [provenance] or null if no such file exists. The returned file is a
-     * temporary file.
+     * Return the file associated by [provenance], or null if there is no such file. Note that the returned file is a
+     * temporary file that the caller is responsible for.
      */
     fun getFile(provenance: KnownProvenance): File?
 }
