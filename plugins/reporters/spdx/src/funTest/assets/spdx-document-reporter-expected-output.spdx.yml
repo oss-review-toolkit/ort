@@ -61,8 +61,8 @@ packages:
   - "BSD-2-Clause"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright findings matched\
-    \ to a license finding."
+    \ a user name, and with two scan results for the VCS containing copyright findings\
+    \ matched to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
   copyrightText: "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some\
@@ -84,8 +84,8 @@ packages:
   packageVerificationCode:
     packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright findings matched\
-    \ to a license finding."
+    \ a user name, and with two scan results for the VCS containing copyright findings\
+    \ matched to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact"
   checksums:
@@ -99,7 +99,7 @@ packages:
   - referenceCategory: "PACKAGE_MANAGER"
     referenceType: "purl"
     referenceLocator: "pkg:maven/first-package-group/first-package@0.0.1"
-  filesAnalyzed: true
+  filesAnalyzed: false
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
@@ -107,11 +107,9 @@ packages:
   - "Apache-2.0"
   - "BSD-2-Clause"
   name: "first-package"
-  packageVerificationCode:
-    packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright findings matched\
-    \ to a license finding."
+    \ a user name, and with two scan results for the VCS containing copyright findings\
+    \ matched to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1"
   copyrightText: "NONE"

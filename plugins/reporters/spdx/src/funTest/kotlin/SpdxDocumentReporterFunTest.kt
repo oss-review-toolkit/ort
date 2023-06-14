@@ -205,8 +205,8 @@ private val ortResult = OrtResult(
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                     declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                     description = "A package with all supported attributes set, with a VCS URL containing a user " +
-                            "name, and with a scan result containing two copyright findings matched to a license " +
-                            "finding.",
+                            "name, and with two scan results for the VCS containing copyright findings matched to a " +
+                            "license finding.",
                     homepageUrl = "first package's homepage URL",
                     sourceArtifact = RemoteArtifact(
                         url = "https://some-host/first-package-sources.jar",
@@ -273,13 +273,16 @@ private val ortResult = OrtResult(
     scanner = scannerRunOf(
         Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
             ScanResult(
-                provenance = ArtifactProvenance(
-                    sourceArtifact = RemoteArtifact(
-                        url = "https://some-host/first-package-sources.jar",
-                        hash = Hash.create("0000000000000000000000000000000000000000")
-                    )
+                provenance = RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        revision = "master",
+                        url = "ssh://git@github.com/path/first-package-repo.git",
+                        path = "project-path"
+                    ),
+                    resolvedRevision = "deadbeef"
                 ),
-                scanner = ScannerDetails.EMPTY,
+                scanner = ScannerDetails.EMPTY.copy(name = "scanner1"),
                 summary = ScanSummary.EMPTY.copy(
                     packageVerificationCode = "0000000000000000000000000000000000000000",
                     licenseFindings = setOf(
@@ -310,7 +313,7 @@ private val ortResult = OrtResult(
                     ),
                     resolvedRevision = "deadbeef"
                 ),
-                scanner = ScannerDetails.EMPTY,
+                scanner = ScannerDetails.EMPTY.copy(name = "scanner2"),
                 summary = ScanSummary.EMPTY.copy(
                     packageVerificationCode = "0000000000000000000000000000000000000000",
                     licenseFindings = setOf(
