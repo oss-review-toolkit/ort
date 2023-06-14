@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.gradleplugin
 
-import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.attributes.AttributeContainer
 import org.gradle.internal.deprecation.DeprecatableConfiguration
@@ -51,9 +50,3 @@ internal fun Configuration.isRelevant(): Boolean {
 
     return canBeResolved && !isDeprecatedConfiguration && !isDependenciesMetadata
 }
-
-/**
- * Return whether the Android plugin for Gradle has been applied to the project.
- */
-internal fun Project.isAndroidProject(): Boolean =
-    plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")
