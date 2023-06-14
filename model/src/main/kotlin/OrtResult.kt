@@ -161,8 +161,6 @@ data class OrtResult(
         getProjects().associateBy({ it.id }, { repository.getRelativePath(it.vcsProcessed) })
     }
 
-    private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy { scanner?.scanResults.orEmpty() }
-
     /**
      * Return all [AdvisorResult]s contained in this [OrtResult] or only the non-excluded ones if [omitExcluded] is
      * true.
@@ -405,10 +403,10 @@ data class OrtResult(
     /**
      * Return the list of [ScanResult]s for the given [id].
      */
-    fun getScanResultsForId(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
+    fun getScanResultsForId(id: Identifier): List<ScanResult> = scanner?.getScanResults(id).orEmpty()
 
     @JsonIgnore
-    fun getScanResults(): Map<Identifier, List<ScanResult>> = scanResultsById
+    fun getScanResults(): Map<Identifier, List<ScanResult>> = scanner?.getAllScanResults().orEmpty()
 
     /**
      * Return an uncurated [Package] which represents either a [Package] if the given [id] corresponds to a [Package],

@@ -25,11 +25,15 @@ import com.fasterxml.jackson.databind.util.StdConverter
 
 import java.util.SortedSet
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
+import org.ossreviewtoolkit.model.RepositoryProvenance
+import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.SnippetFinding
 
@@ -51,6 +55,33 @@ class PackageSortedSetConverter : StdConverter<Set<Package>, SortedSet<Package>>
 
 class ProjectSortedSetConverter : StdConverter<Set<Project>, SortedSet<Project>>() {
     override fun convert(value: Set<Project>) = value.toSortedSet(compareBy { it.id })
+}
+
+class ProvenanceResolutionResultSortedSetConverter :
+    StdConverter<Set<ProvenanceResolutionResult>, SortedSet<ProvenanceResolutionResult>>() {
+    override fun convert(value: Set<ProvenanceResolutionResult>) = value.toSortedSet(compareBy { it.id })
+}
+
+/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
+class ScanResultSortedSetConverter : StdConverter<Set<ScanResult>, Set<ScanResult>>() {
+    override fun convert(value: Set<ScanResult>) = value.sortedBy {
+        buildList<String> {
+            this += it.provenance.javaClass.canonicalName
+
+            when (it.provenance) {
+                is RepositoryProvenance -> {
+                    this += it.provenance.vcsInfo.type.toString()
+                    this += it.provenance.vcsInfo.url
+                }
+                is ArtifactProvenance -> {
+                    this += it.provenance.sourceArtifact.url
+                }
+                else -> {
+                    // Cannot happen as ScanResults in ScannerRun
+                }
+            }
+        }.joinToString()
+    }.toSet()
 }
 
 class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {

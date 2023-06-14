@@ -58,7 +58,7 @@ class ScannerIntegrationFunTest : StringSpec({
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
     }
 
-    "scan() returns the expected scan results for a given analyzer result".config(invocations = 3) {
+    "scan() returns the expected (merged) scan results for a given analyzer result".config(invocations = 3) {
         val analyzerResultFile = getAssetFile("analyzer-result.yml")
         val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
 
