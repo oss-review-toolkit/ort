@@ -125,6 +125,44 @@
     "summary" : "A package with minimal attributes set.",
     "versionInfo" : "0.0.1"
   }, {
+    "SPDXID" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1",
+    "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
+    "downloadLocation" : "NONE",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE_MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/seventh-package-group/seventh-package@0.0.1"
+    } ],
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "NOASSERTION",
+    "licenseInfoFromFiles" : [ "GPL-3.0-only" ],
+    "name" : "seventh-package",
+    "summary" : "A package with a source artifact scan result.",
+    "versionInfo" : "0.0.1"
+  }, {
+    "SPDXID" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0000000000000000000000000000000000000000"
+    } ],
+    "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
+    "downloadLocation" : "https://some-host/seventh-package-sources.jar",
+    "externalRefs" : [ {
+      "referenceCategory" : "PACKAGE_MANAGER",
+      "referenceType" : "purl",
+      "referenceLocator" : "pkg:maven/seventh-package-group/seventh-package@0.0.1"
+    } ],
+    "filesAnalyzed" : false,
+    "homepage" : "NONE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseDeclared" : "NOASSERTION",
+    "licenseInfoFromFiles" : [ "GPL-3.0-only" ],
+    "name" : "seventh-package",
+    "summary" : "A package with a source artifact scan result.",
+    "versionInfo" : "0.0.1"
+  }, {
     "SPDXID" : "SPDXRef-Package-Maven-sixth-package-group-sixth-package-0.0.1",
     "copyrightText" : "NONE",
     "downloadLocation" : "NONE",
@@ -166,6 +204,10 @@
     "relationshipType" : "GENERATED_FROM",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
   }, {
+    "spdxElementId" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1",
+    "relationshipType" : "GENERATED_FROM",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact"
+  }, {
     "spdxElementId" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "relationshipType" : "DEPENDS_ON",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-fifth-package-group-fifth-package-0.0.1"
@@ -181,6 +223,10 @@
     "spdxElementId" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "relationshipType" : "DEPENDS_ON",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-second-package-group-second-package-0.0.1"
+  }, {
+    "spdxElementId" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
+    "relationshipType" : "DEPENDS_ON",
+    "relatedSpdxElement" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1"
   }, {
     "spdxElementId" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "relationshipType" : "DEPENDS_ON",

@@ -180,6 +180,9 @@ private val ortResult = OrtResult(
                                 ),
                                 PackageReference(
                                     id = Identifier("Maven:sixth-package-group:sixth-package:0.0.1")
+                                ),
+                                PackageReference(
+                                    id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1")
                                 )
                             )
                         ),
@@ -266,6 +269,18 @@ private val ortResult = OrtResult(
                     homepageUrl = "",
                     sourceArtifact = RemoteArtifact.EMPTY,
                     vcs = VcsInfo.EMPTY
+                ),
+                Package(
+                    id = Identifier("Maven:seventh-package-group:seventh-package:0.0.1"),
+                    binaryArtifact = RemoteArtifact.EMPTY,
+                    declaredLicenses = setOf(),
+                    description = "A package with a source artifact scan result.",
+                    homepageUrl = "",
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://some-host/seventh-package-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    ),
+                    vcs = VcsInfo.EMPTY,
                 )
             )
         )
@@ -325,6 +340,31 @@ private val ortResult = OrtResult(
                     copyrightFindings = setOf(
                         CopyrightFinding(
                             statement = "Copyright 2020 Some copyright holder in VCS",
+                            location = TextLocation("some/file", 1)
+                        )
+                    )
+                )
+            )
+        ),
+        Identifier("Maven:seventh-package-group:seventh-package:0.0.1") to listOf(
+            ScanResult(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = "https://some-host/seventh-package-sources.jar",
+                        hash = Hash.create("0000000000000000000000000000000000000000")
+                    )
+                ),
+                scanner = ScannerDetails.EMPTY,
+                summary = ScanSummary.EMPTY.copy(
+                    licenseFindings = setOf(
+                        LicenseFinding(
+                            license = "GPL-3.0-only",
+                            location = TextLocation("LICENSE", 1)
+                        )
+                    ),
+                    copyrightFindings = setOf(
+                        CopyrightFinding(
+                            statement = "Copyright 2020 Some copyright holder in source artifact",
                             location = TextLocation("some/file", 1)
                         )
                     )
