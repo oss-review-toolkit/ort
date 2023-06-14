@@ -62,7 +62,7 @@ internal class ImportCopyrightGarbageCommand : CliktCommand(
         val existingCopyrightGarbage = if (outputCopyrightGarbageFile.isFile) {
             outputCopyrightGarbageFile.readValue<CopyrightGarbage>().items
         } else {
-            emptySet<String>()
+            emptySet()
         }
 
         val locale = Locale.Builder().setLanguage("en").setRegion("US").setVariant("POSIX").build()
