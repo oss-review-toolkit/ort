@@ -24,7 +24,6 @@ import io.kotest.matchers.shouldBe
 
 import java.time.Instant
 
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.JsonObject
 
 import org.ossreviewtoolkit.clients.osv.OsvApiClient
