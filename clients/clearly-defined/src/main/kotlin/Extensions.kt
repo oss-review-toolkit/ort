@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.clients.clearlydefined
 
-import java.util.Locale
-
 import okhttp3.RequestBody
 
 import okio.Buffer
@@ -34,9 +32,3 @@ fun RequestBody.string() = Buffer().also { writeTo(it) }.readUtf8()
  * Convert a [SourceLocation] to a [Coordinates] object.
  */
 fun SourceLocation.toCoordinates(): Coordinates = Coordinates(type, provider, namespace, name, revision)
-
-/**
- * Return this string lower-cased except for the first character which is upper-cased.
- */
-fun String.titlecase() =
-    lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
