@@ -19,8 +19,7 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import java.io.File
-import java.io.IOException
+import java.io.InputStream
 
 import org.apache.logging.log4j.kotlin.Logging
 
@@ -29,7 +28,6 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.utils.common.collectMessages
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 
 /**
@@ -55,34 +53,24 @@ class FileProvenanceFileStorage(
         }
     }
 
-    override fun hasFile(provenance: KnownProvenance): Boolean {
+    override fun hasData(provenance: KnownProvenance): Boolean {
         val filePath = getFilePath(provenance)
 
         return storage.exists(filePath)
     }
 
-    override fun putFile(provenance: KnownProvenance, file: File) {
-        storage.write(getFilePath(provenance), file.inputStream())
+    override fun putData(provenance: KnownProvenance, data: InputStream) {
+        storage.write(getFilePath(provenance), data)
     }
 
-    override fun getFile(provenance: KnownProvenance): File? {
+    override fun getData(provenance: KnownProvenance): InputStream? {
         val filePath = getFilePath(provenance)
 
-        val file = createOrtTempFile(suffix = File(filename).extension)
-
-        return try {
-            storage.read(filePath).use { inputStream ->
-                file.outputStream().use { outputStream ->
-                    inputStream.copyTo(outputStream)
-                }
-            }
-
-            file
-        } catch (e: IOException) {
-            logger.error { "Could not read from $filePath: ${e.collectMessages()}" }
-
-            null
-        }
+        return runCatching {
+            storage.read(filePath)
+        }.onFailure {
+            logger.error { "Could not read from $filePath: ${it.collectMessages()}" }
+        }.getOrNull()
     }
 
     private fun getFilePath(provenance: KnownProvenance): String = "${provenance.hash()}/$filename"
