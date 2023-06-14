@@ -61,7 +61,7 @@ packages:
   - "BSD-2-Clause"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright finding matched\
+    \ a user name, and with a scan result containing two copyright findings matched\
     \ to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
@@ -84,7 +84,7 @@ packages:
   packageVerificationCode:
     packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright finding matched\
+    \ a user name, and with a scan result containing two copyright findings matched\
     \ to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-source-artifact"
@@ -110,7 +110,7 @@ packages:
   packageVerificationCode:
     packageVerificationCodeValue: "0000000000000000000000000000000000000000"
   summary: "A package with all supported attributes set, with a VCS URL containing\
-    \ a user name, and with a scan result containing two copyright finding matched\
+    \ a user name, and with a scan result containing two copyright findings matched\
     \ to a license finding."
   versionInfo: "0.0.1"
 - SPDXID: "SPDXRef-Package-Maven-fourth-package-group-fourth-package-0.0.1"

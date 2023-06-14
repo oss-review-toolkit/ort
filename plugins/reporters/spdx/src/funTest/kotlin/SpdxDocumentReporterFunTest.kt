@@ -205,7 +205,7 @@ private val ortResult = OrtResult(
                     concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                     declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                     description = "A package with all supported attributes set, with a VCS URL containing a user " +
-                            "name, and with a scan result containing two copyright finding matched to a license " +
+                            "name, and with a scan result containing two copyright findings matched to a license " +
                             "finding.",
                     homepageUrl = "first package's homepage URL",
                     sourceArtifact = RemoteArtifact(
