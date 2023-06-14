@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+@file:Suppress("TooManyFunctions")
+
 package org.ossreviewtoolkit.model.utils
 
 import java.net.URI
@@ -29,6 +31,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageProvider
 import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.percentEncode
@@ -232,6 +235,18 @@ fun createPurl(
         append(value)
     }
 }
+
+/**
+ * Return a copy of this [RepositoryProvenance] with an empty VCS path.
+ */
+fun RepositoryProvenance.clearVcsPath() = copy(vcsInfo = vcsInfo.copy(path = ""))
+
+/**
+ * Return a copy of this [RepositoryProvenance] with [VcsInfo] revision set to the resolved revision of this
+ * [RepositoryProvenance].
+ */
+fun RepositoryProvenance.alignRevisions(): RepositoryProvenance =
+    copy(vcsInfo = vcsInfo.copy(revision = resolvedRevision))
 
 /**
  * Return the repo manifest path parsed from this string. The string is interpreted as a URL and the manifest path is

@@ -28,12 +28,22 @@ import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
+import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
+import org.ossreviewtoolkit.model.RemoteArtifact
+import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScannerRun
 import org.ossreviewtoolkit.model.config.AdvisorConfiguration
 import org.ossreviewtoolkit.model.mapper
+import org.ossreviewtoolkit.model.utils.alignRevisions
+import org.ossreviewtoolkit.model.utils.clearVcsPath
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
 
@@ -136,5 +146,38 @@ fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpected
 /**
  * Create a [ScannerRun] with the given [scanResults].
  */
-fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun =
-    ScannerRun.EMPTY.copy(scanResults = scanResults.toMap())
+fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
+    val scanResultsWithKnownProvenance = scanResults.associate { (id, scanResultsForId) ->
+        id to scanResultsForId.map { scanResult ->
+            scanResult.takeIf { scanResult.provenance is KnownProvenance } ?: scanResult.copy(
+                provenance = ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = id.toPurl(),
+                        hash = Hash(value = "", algorithm = HashAlgorithm.NONE)
+                    )
+                )
+            )
+        }
+    }
+
+    return ScannerRun.EMPTY.copy(
+        provenances = scanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
+            val packageProvenance = scanResultsForId.firstOrNull()?.provenance as KnownProvenance
+
+            ProvenanceResolutionResult(
+                id = id,
+                packageProvenance = packageProvenance,
+                subRepositories = emptyMap(),
+                packageProvenanceResolutionIssue = null,
+                nestedProvenanceResolutionIssue = null
+            )
+        },
+        scanResults = scanResultsWithKnownProvenance.values.flatten().mapTo(mutableSetOf()) { scanResult ->
+            scanResult.copy(
+                provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
+                    ?: scanResult.provenance,
+                summary = scanResult.summary.copy(packageVerificationCode = "")
+            )
+        }
+    )
+}

@@ -2,8 +2,8 @@
 Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:
 - provenance: {}
   scanner:
-    name: "Dummy"
-    version: "1.0.0"
+    name: "ProvenanceResolver"
+    version: ""
     configuration: ""
   summary:
     start_time: "1970-01-01T00:00:00Z"

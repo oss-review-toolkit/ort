@@ -94,7 +94,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
   issues:
   - 0
 - _id: 1
@@ -111,7 +110,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 - _id: 2
   provenance:
     source_artifact:
@@ -125,7 +123,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 - _id: 3
   provenance:
     source_artifact:
@@ -139,7 +136,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 - _id: 4
   provenance:
     source_artifact:
@@ -153,7 +149,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 - _id: 5
   provenance:
     source_artifact:
@@ -167,7 +162,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 - _id: 6
   provenance:
     source_artifact:
@@ -181,7 +175,6 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
-  package_verification_code: "0000000000000000000000000000000000000000"
 packages:
 - _id: 0
   id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"
