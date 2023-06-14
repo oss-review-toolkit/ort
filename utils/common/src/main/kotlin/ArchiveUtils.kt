@@ -53,10 +53,10 @@ enum class ArchiveType(extension: String, vararg aliases: String) {
     SEVENZIP(".7z"),
     ZIP(".zip", ".aar", ".egg", ".jar", ".war", ".whl"),
 
-    TAR(".tar", ".gem"),
     TAR_BZIP2(".tar.bz2", ".tbz2"),
     TAR_GZIP(".tar.gz", ".tgz", ".crate"),
     TAR_XZ(".tar.xz", ".txz"),
+    TAR(".tar", ".gem"),
 
     DEB(".deb", ".udeb"),
 
@@ -305,7 +305,9 @@ private fun ArchiveInputStream.unpack(
             copyExecutableModeBit(target, mode(entry))
         }
 
-        if (!processed) throw IOException("Unsupported archive format or empty archive.")
+        if (this is TarArchiveInputStream && !processed) {
+            throw IOException("Unsupported archive type or empty archive.")
+        }
     }
 
 /**
