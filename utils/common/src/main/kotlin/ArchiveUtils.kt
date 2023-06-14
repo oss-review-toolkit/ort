@@ -49,13 +49,13 @@ import org.apache.logging.log4j.kotlin.Logging
 
 object ArchiveUtils : Logging
 
-enum class ArchiveType(vararg val extensions: String) {
+enum class ArchiveType(extension: String, vararg aliases: String) {
     SEVENZIP(".7z"),
-    ZIP(".aar", ".egg", ".jar", ".war", ".whl", ".zip"),
+    ZIP(".zip", ".aar", ".egg", ".jar", ".war", ".whl"),
 
-    TAR(".gem", ".tar"),
+    TAR(".tar", ".gem"),
     TAR_BZIP2(".tar.bz2", ".tbz2"),
-    TAR_GZIP(".crate", ".tar.gz", ".tgz"),
+    TAR_GZIP(".tar.gz", ".tgz", ".crate"),
     TAR_XZ(".tar.xz", ".txz"),
 
     DEB(".deb", ".udeb"),
@@ -70,6 +70,8 @@ enum class ArchiveType(vararg val extensions: String) {
             } ?: NONE
         }
     }
+
+    val extensions = listOf(extension, *aliases)
 }
 
 /**
