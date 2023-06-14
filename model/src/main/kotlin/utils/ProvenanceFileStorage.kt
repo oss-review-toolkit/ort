@@ -18,27 +18,28 @@
  */
 package org.ossreviewtoolkit.model.utils
 
-import java.io.File
+import java.io.InputStream
 
 import org.ossreviewtoolkit.model.KnownProvenance
 
 /**
- * A generic storage interface that associates a [KnownProvenance] with a file.
+ * A generic storage interface that associates a [KnownProvenance] with a stream of data.
  */
 interface ProvenanceFileStorage {
     /**
-     * Return whether a file is associated by [provenance].
+     * Return whether any data is associated by [provenance].
      */
-    fun hasFile(provenance: KnownProvenance): Boolean
+    fun hasData(provenance: KnownProvenance): Boolean
 
     /**
-     * Associate [provenance] with the given [file]. Overwrites any existing association by [provenance].
+     * Associate [provenance] with the given [data]. Replaces any existing association by [provenance]. The function
+     * implementation is responsible for closing the stream.
      */
-    fun putFile(provenance: KnownProvenance, file: File)
+    fun putData(provenance: KnownProvenance, data: InputStream)
 
     /**
-     * Return the file associated by [provenance], or null if there is no such file. Note that the returned file is a
-     * temporary file that the caller is responsible for.
+     * Return the data associated by [provenance], or null if there is no such data. Note that it is the responsibility
+     * of the caller to close the stream.
      */
-    fun getFile(provenance: KnownProvenance): File?
+    fun getData(provenance: KnownProvenance): InputStream?
 }

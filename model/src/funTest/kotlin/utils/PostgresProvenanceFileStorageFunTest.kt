@@ -19,12 +19,10 @@
 
 package org.ossreviewtoolkit.model.utils
 
-import io.kotest.core.TestConfiguration
 import io.kotest.core.spec.style.WordSpec
-import io.kotest.engine.spec.tempfile
 import io.kotest.matchers.shouldBe
 
-import java.io.File
+import java.io.InputStream
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
@@ -46,18 +44,6 @@ private val VCS_PROVENANCE = RepositoryProvenance(
     resolvedRevision = "0000000000000000000000000000000000000000"
 )
 
-private fun File.readTextAndDelete(): String {
-    val text = readText()
-    delete()
-
-    return text
-}
-
-private fun TestConfiguration.writeTempFile(content: String): File =
-    tempfile().apply {
-        writeText(content)
-    }
-
 class PostgresProvenanceFileStorageFunTest : WordSpec({
     val postgresListener = PostgresListener()
     lateinit var storage: PostgresProvenanceFileStorage
@@ -68,35 +54,35 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
         storage = PostgresProvenanceFileStorage(postgresListener.dataSource, FileArchiverConfiguration.TABLE_NAME)
     }
 
-    "hasFile()" should {
-        "return false when no file for the given provenance has been added" {
-            storage.hasFile(VCS_PROVENANCE) shouldBe false
+    "hasData()" should {
+        "return false when no data for the given provenance has been added" {
+            storage.hasData(VCS_PROVENANCE) shouldBe false
         }
 
-        "return true when a file for the given provenance has been added" {
-            storage.putFile(VCS_PROVENANCE, writeTempFile("content"))
+        "return true when data for the given provenance has been added" {
+            storage.putData(VCS_PROVENANCE, InputStream.nullInputStream())
 
-            storage.hasFile(VCS_PROVENANCE) shouldBe true
+            storage.hasData(VCS_PROVENANCE) shouldBe true
         }
     }
 
-    "putFile()" should {
-        "return the file corresponding to the given provenance given such file has been added" {
-            storage.putFile(VCS_PROVENANCE, writeTempFile("VCS"))
-            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
+    "putData()" should {
+        "return the data corresponding to the given provenance given such data has been added" {
+            storage.putData(VCS_PROVENANCE, "VCS".byteInputStream())
+            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact".byteInputStream())
 
-            storage.getFile(VCS_PROVENANCE) shouldNotBeNull { readTextAndDelete() shouldBe "VCS" }
-            storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
-                readTextAndDelete() shouldBe "source artifact"
+            storage.getData(VCS_PROVENANCE) shouldNotBeNull { String(use { readBytes() }) shouldBe "VCS" }
+            storage.getData(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
+                String(use { readBytes() }) shouldBe "source artifact"
             }
         }
 
         "return the overwritten file corresponding to the given provenance" {
-            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact"))
-            storage.putFile(SOURCE_ARTIFACT_PROVENANCE, writeTempFile("source artifact updated"))
+            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact".byteInputStream())
+            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact updated".byteInputStream())
 
-            storage.getFile(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
-                readTextAndDelete() shouldBe "source artifact updated"
+            storage.getData(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
+                String(use { readBytes() }) shouldBe "source artifact updated"
             }
         }
     }

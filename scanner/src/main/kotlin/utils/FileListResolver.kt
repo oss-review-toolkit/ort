@@ -23,17 +23,16 @@ import com.fasterxml.jackson.module.kotlin.readValue
 
 import java.io.File
 
-import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.KnownProvenance
+import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
-import org.ossreviewtoolkit.model.writeValue
+import org.ossreviewtoolkit.model.yamlMapper
 import org.ossreviewtoolkit.scanner.FileList
 import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
-import org.ossreviewtoolkit.utils.ort.createOrtTempFile
 
 internal class FileListResolver(
     private val storage: ProvenanceFileStorage,
@@ -47,23 +46,16 @@ internal class FileListResolver(
         }
     }
 
-    fun has(provenance: KnownProvenance): Boolean = storage.hasFile(provenance)
+    fun has(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 }
 
 private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
-    val tempFile = createOrtTempFile(prefix = "file-list", suffix = ".yml")
-
-    tempFile.writeValue(fileList)
-    putFile(provenance, tempFile)
-
-    tempFile.delete()
+    putData(provenance, fileList.toYaml().byteInputStream())
 }
 
 private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
-    val file = getFile(provenance) ?: return null
-
-    // Cannot rely on the extension of the file to reflect its type, so use YAML explicitly.
-    return FileFormat.YAML.mapper.readValue<FileList>(file).also { file.delete() }
+    val data = getData(provenance) ?: return null
+    return data.use { yamlMapper.readValue<FileList>(it) }
 }
 
 private val IGNORED_DIRECTORY_MATCHER by lazy {

@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model.utils
 
 import java.io.File
-import java.io.IOException
 
 import kotlin.time.measureTime
 import kotlin.time.measureTimedValue
@@ -63,7 +62,7 @@ class FileArchiver(
     /**
      * Return whether an archive corresponding to [provenance] exists.
      */
-    fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasFile(provenance)
+    fun hasArchive(provenance: KnownProvenance): Boolean = storage.hasData(provenance)
 
     /**
      * Archive all files in [directory] matching any of the configured patterns in the [storage].
@@ -91,7 +90,7 @@ class FileArchiver(
 
         logger.info { "Archived directory '$directory' in $zipDuration." }
 
-        val writeDuration = measureTime { storage.putFile(provenance, zipFile) }
+        val writeDuration = measureTime { storage.putData(provenance, zipFile.inputStream()) }
 
         logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 
@@ -102,26 +101,22 @@ class FileArchiver(
      * Unarchive the archive corresponding to [provenance].
      */
     fun unarchive(directory: File, provenance: KnownProvenance): Boolean {
-        val (zipFile, readDuration) = measureTimedValue { storage.getFile(provenance) }
+        val (zipInputStream, readDuration) = measureTimedValue { storage.getData(provenance) }
 
         logger.info { "Read archive of directory '$directory' from storage in $readDuration." }
 
-        if (zipFile == null) return false
+        if (zipInputStream == null) return false
 
-        return try {
-            val unzipDuration = measureTime { zipFile.unpackZip(directory) }
+        return runCatching {
+            val unzipDuration = measureTime { zipInputStream.unpackZip(directory) }
 
-            logger.info { "Unarchived directory '$directory' in $unzipDuration." }
+            logger.info { "Unarchived data for $provenance to '$directory' in $unzipDuration." }
 
             true
-        } catch (e: IOException) {
-            e.showStackTrace()
+        }.onFailure {
+            it.showStackTrace()
 
-            logger.error { "Could not extract ${zipFile.absolutePath}: ${e.collectMessages()}" }
-
-            false
-        } finally {
-            zipFile.delete()
-        }
+            logger.error { "Failed to unarchive data for $provenance: ${it.collectMessages()}" }
+        }.isSuccess
     }
 }
