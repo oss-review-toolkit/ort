@@ -114,6 +114,8 @@ fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Bool
     }.find { archiveType ->
         runCatching {
             unpack(targetDirectory, forceArchiveType = archiveType, filter)
+        }.onSuccess {
+            ArchiveUtils.logger.debug { "Unpacked stream as $archiveType to '$targetDirectory'." }
         }.onFailure {
             suppressedExceptions += IOException("Unpacking '$this' as $archiveType failed.", it)
         }.isSuccess

@@ -44,7 +44,7 @@ class ArchiveUtilsTest : WordSpec() {
     private lateinit var outputDir: File
 
     override suspend fun beforeEach(testCase: TestCase) {
-        outputDir = tempdir()
+        outputDir = tempdir(testCase.name.testName.replace(' ', '-'))
     }
 
     /**
