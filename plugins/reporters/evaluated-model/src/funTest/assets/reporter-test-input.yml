@@ -411,33 +411,33 @@ scanner:
         licenses:
         - license: "Apache-2.0"
           location:
-            path: "file.java"
+            path: "project/file.java"
             start_line: 1
             end_line: 2
         - license: "Apache-2.0"
           location:
-            path: "file.kt"
+            path: "project/file.kt"
             start_line: 1
             end_line: 2
         - license: "MIT"
           location:
-            path: "file1.java"
+            path: "project/file1.java"
             start_line: 1
             end_line: 2
         - license: "MIT"
           location:
-            path: "file2.java"
+            path: "project/file2.java"
             start_line: 1
             end_line: 2
         copyrights:
         - statement: "Copyright (c) example authors."
           location:
-            path: "file.java"
+            path: "project/file.java"
             start_line: 1
             end_line: 1
         - statement: "Copyright (c) example authors."
           location:
-            path: "file1.java"
+            path: "project/file1.java"
             start_line: 1
             end_line: 1
     Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:

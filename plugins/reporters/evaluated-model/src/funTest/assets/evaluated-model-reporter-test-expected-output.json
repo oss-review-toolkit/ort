@@ -405,7 +405,7 @@
     "findings" : [ {
       "type" : "COPYRIGHT",
       "copyright" : 0,
-      "path" : "file.java",
+      "path" : "project/file.java",
       "start_line" : 1,
       "end_line" : 1,
       "scan_result" : 1,
@@ -413,7 +413,7 @@
     }, {
       "type" : "LICENSE",
       "license" : 3,
-      "path" : "file.java",
+      "path" : "project/file.java",
       "start_line" : 1,
       "end_line" : 2,
       "scan_result" : 1,
@@ -421,14 +421,14 @@
     }, {
       "type" : "LICENSE",
       "license" : 3,
-      "path" : "file.kt",
+      "path" : "project/file.kt",
       "start_line" : 1,
       "end_line" : 2,
       "scan_result" : 1
     }, {
       "type" : "COPYRIGHT",
       "copyright" : 0,
-      "path" : "file1.java",
+      "path" : "project/file1.java",
       "start_line" : 1,
       "end_line" : 1,
       "scan_result" : 1,
@@ -436,7 +436,7 @@
     }, {
       "type" : "LICENSE",
       "license" : 4,
-      "path" : "file1.java",
+      "path" : "project/file1.java",
       "start_line" : 1,
       "end_line" : 2,
       "scan_result" : 1,
@@ -444,7 +444,7 @@
     }, {
       "type" : "LICENSE",
       "license" : 4,
-      "path" : "file2.java",
+      "path" : "project/file2.java",
       "start_line" : 1,
       "end_line" : 2,
       "scan_result" : 1,
