@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 
 /**
@@ -31,7 +30,6 @@ typealias AdvisorResultFilter = (AdvisorResult) -> Boolean
 /**
  * A record of a single run of the advisor tool, containing the input and the [Vulnerability] for every checked package.
  */
-@JsonIgnoreProperties(value = ["has_issues"], allowGetters = true)
 data class AdvisorRecord(
     /**
      * The [AdvisorResult]s for all [Package]s.

@@ -20,7 +20,6 @@
 package org.ossreviewtoolkit.model
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
 import java.time.Instant
@@ -37,7 +36,6 @@ import org.ossreviewtoolkit.utils.ort.Environment
 /**
  * The summary of a single run of the scanner.
  */
-@JsonIgnoreProperties(value = ["has_issues", "storage_stats"], allowGetters = true)
 data class ScannerRun(
     /**
      * The [Instant] the scanner was started.
