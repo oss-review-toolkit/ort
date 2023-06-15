@@ -95,7 +95,6 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
             ScanStorageCommand(),
             SetDependencyRepresentationCommand(),
             SetLabelsCommand(),
-            SubtractScanResultsCommand(),
             TransformResultCommand(),
             VerifySourceArtifactCurationsCommand()
         )
