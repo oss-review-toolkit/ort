@@ -336,7 +336,7 @@ subprojects {
         group = "Reporting"
 
         executionData(tasks["funTest"])
-        sourceSets(sourceSets["main"])
+        sourceSets(sourceSets.main.get())
 
         reports {
             // Enable XML in addition to HTML for CI integration.
@@ -367,7 +367,7 @@ subprojects {
 
     tasks.register<Jar>("sourcesJar") {
         archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
+        from(sourceSets.main.get().allSource)
     }
 
     tasks.register<Jar>("docsHtmlJar") {
