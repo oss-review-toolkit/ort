@@ -157,8 +157,10 @@ class OpossumReporterTest : WordSpec({
         }
 
         "create a signal with copyright if some file is added by SCANNER report" {
-            val signals =
-                opossumInput.getSignalsForFile("/pom.xml/compile/first-package-group/first-package@0.0.1/some/file")
+            val signals = opossumInput.getSignalsForFile(
+                "/pom.xml/compile/first-package-group/first-package@0.0.1/project-path/some/file"
+            )
+
             signals.size shouldBe 2
             signals.find { it.source == "ORT-Scanner-SCANNER@1.2.3" } shouldNotBeNull {
                 copyright shouldContain "Copyright 2020 Some copyright holder in source artifact"
@@ -464,11 +466,11 @@ private fun createOrtResult(): OrtResult {
                         copyrightFindings = setOf(
                             CopyrightFinding(
                                 statement = "Copyright 2020 Some copyright holder in source artifact",
-                                location = TextLocation("some/file", 1)
+                                location = TextLocation("project-path/some/file", 1)
                             ),
                             CopyrightFinding(
                                 statement = "Copyright 2020 Some other copyright holder in source artifact",
-                                location = TextLocation("some/file", 7)
+                                location = TextLocation("project-path/some/file", 7)
                             )
                         )
                     )
@@ -501,7 +503,7 @@ private fun createOrtResult(): OrtResult {
                         copyrightFindings = setOf(
                             CopyrightFinding(
                                 statement = "Copyright 2020 Some copyright holder in VCS",
-                                location = TextLocation("some/file", 1)
+                                location = TextLocation("project-path/some/file", 1)
                             )
                         ),
                         issues = listOf(
