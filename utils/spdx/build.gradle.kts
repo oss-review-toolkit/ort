@@ -24,8 +24,6 @@ import groovy.json.JsonSlurper
 import java.net.URI
 import java.net.URL
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 val spdxLicenseListVersion: String by project
 
 plugins {
@@ -63,15 +61,8 @@ tasks.withType<AntlrTask>().configureEach {
     }
 }
 
-tasks.withType<KotlinCompile>().configureEach {
-    // Ensure "generateGrammarSource" is called before "compileKotlin".
-    dependsOn(tasks.withType<AntlrTask>())
-}
-
-tasks.withType<Jar>().configureEach {
-    // Ensure "generateGrammarSource" is called before "sourcesJar".
-    dependsOn(tasks.withType<AntlrTask>())
-}
+private val generateGrammarSource by tasks.existing
+sourceSets.main.get().java.srcDir(generateGrammarSource.map { files() })
 
 dependencies {
     antlr(libs.antlr)
