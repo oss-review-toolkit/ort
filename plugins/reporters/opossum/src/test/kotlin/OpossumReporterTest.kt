@@ -34,7 +34,6 @@ import java.time.Instant
 
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
-import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
@@ -440,11 +439,14 @@ private fun createOrtResult(): OrtResult {
         scanner = scannerRunOf(
             Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(
                 ScanResult(
-                    provenance = ArtifactProvenance(
-                        sourceArtifact = RemoteArtifact(
-                            url = "https://some-host/first-package-sources.jar",
-                            hash = Hash.NONE
-                        )
+                    provenance = RepositoryProvenance(
+                        vcsInfo = VcsInfo(
+                            type = VcsType.GIT,
+                            revision = "master",
+                            url = "ssh://git@github.com/path/first-package-repo.git",
+                            path = "project-path"
+                        ),
+                        resolvedRevision = "deadbeef"
                     ),
                     scanner = ScannerDetails(
                         name = "SCANNER",
