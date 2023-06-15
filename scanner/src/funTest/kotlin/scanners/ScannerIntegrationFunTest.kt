@@ -53,34 +53,36 @@ class ScannerIntegrationFunTest : StringSpec({
         val analyzerResultFile = getAssetFile("analyzer-result.yml")
         val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
 
-        val downloaderConfiguration = DownloaderConfiguration()
-        val workingTreeCache = DefaultWorkingTreeCache()
-        val provenanceDownloader = DefaultProvenanceDownloader(downloaderConfiguration, workingTreeCache)
-        val packageProvenanceStorage = DummyProvenanceStorage()
-        val nestedProvenanceStorage = DummyNestedProvenanceStorage()
-        val packageProvenanceResolver = DefaultPackageProvenanceResolver(packageProvenanceStorage, workingTreeCache)
-        val nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache)
-        val dummyScanner = DummyScanner()
-
-        val scanner = Scanner(
-            scannerConfig = ScannerConfiguration(),
-            downloaderConfig = downloaderConfiguration,
-            provenanceDownloader = provenanceDownloader,
-            storageReaders = emptyList(),
-            storageWriters = emptyList(),
-            packageProvenanceResolver = packageProvenanceResolver,
-            nestedProvenanceResolver = nestedProvenanceResolver,
-            scannerWrappers = mapOf(
-                PackageType.PROJECT to listOf(dummyScanner),
-                PackageType.PACKAGE to listOf(dummyScanner)
-            )
-        )
-
-        val result = scanner.scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
+        val result = createScanner().scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
 
         patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
     }
 })
+
+private fun createScanner(): Scanner {
+    val downloaderConfiguration = DownloaderConfiguration()
+    val workingTreeCache = DefaultWorkingTreeCache()
+    val provenanceDownloader = DefaultProvenanceDownloader(downloaderConfiguration, workingTreeCache)
+    val packageProvenanceStorage = DummyProvenanceStorage()
+    val nestedProvenanceStorage = DummyNestedProvenanceStorage()
+    val packageProvenanceResolver = DefaultPackageProvenanceResolver(packageProvenanceStorage, workingTreeCache)
+    val nestedProvenanceResolver = DefaultNestedProvenanceResolver(nestedProvenanceStorage, workingTreeCache)
+    val dummyScanner = DummyScanner()
+
+    return Scanner(
+        scannerConfig = ScannerConfiguration(),
+        downloaderConfig = downloaderConfiguration,
+        provenanceDownloader = provenanceDownloader,
+        storageReaders = emptyList(),
+        storageWriters = emptyList(),
+        packageProvenanceResolver = packageProvenanceResolver,
+        nestedProvenanceResolver = nestedProvenanceResolver,
+        scannerWrappers = mapOf(
+            PackageType.PROJECT to listOf(dummyScanner),
+            PackageType.PACKAGE to listOf(dummyScanner)
+        )
+    )
+}
 
 private class DummyScanner : PathScannerWrapper {
     override val details = ScannerDetails(name = "Dummy", version = "1.0.0", configuration = "")
