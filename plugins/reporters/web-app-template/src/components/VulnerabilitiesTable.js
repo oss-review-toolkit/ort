@@ -355,7 +355,7 @@ class VulnerabilitiesTable extends React.Component {
                     {
                         defaultPageSize: 25,
                         hideOnSinglePage: true,
-                        pageSizeOptions: ['50', '100', '250', '500'],
+                        pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                         position: 'bottom',
                         showQuickJumper: true,
                         showSizeChanger: true,

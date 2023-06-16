@@ -501,7 +501,7 @@ class TableView extends React.Component {
                         {
                             defaultPageSize: 100,
                             hideOnSinglePage: true,
-                            pageSizeOptions: ['50', '100', '250', '500'],
+                            pageSizeOptions: ['50', '100', '250', '500', '1000', '5000'],
                             position: 'both',
                             showSizeChanger: true
                         }
