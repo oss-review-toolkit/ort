@@ -96,7 +96,7 @@ fun matchExpectedResult(
                     Then copy the following lines to the clipboard and run the previously pasted commands.
                 """.trimIndent() + diff.joinToString(separator, separator)
             },
-            { "Expected and actual results should differ, but they match." },
+            { "Expected and actual results should differ, but they match." }
         )
     }
 }

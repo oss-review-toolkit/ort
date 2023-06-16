@@ -207,7 +207,7 @@ private fun Vulnerability.toOrtVulnerability(): org.ossreviewtoolkit.model.Vulne
             VulnerabilityReference(
                 url = it,
                 scoringSystem = scoringSystem,
-                severity = severity,
+                severity = severity
             )
         }.getOrNull()
     }

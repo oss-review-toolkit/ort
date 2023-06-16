@@ -50,5 +50,5 @@ data class File(
 
     val path: String?,
     val sha1: String?,
-    val sha256: String?,
+    val sha256: String?
 )

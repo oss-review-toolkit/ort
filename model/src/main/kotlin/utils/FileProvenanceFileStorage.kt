@@ -45,7 +45,7 @@ class FileProvenanceFileStorage(
     /**
      * The name of the files to use for storing the contents of the associated files.
      */
-    private val filename: String,
+    private val filename: String
 ) : ProvenanceFileStorage {
     private companion object : Logging
 

@@ -143,7 +143,7 @@ val scanResults = listOf(
             provenance = UnknownProvenance,
             scanner = ScannerDetails.EMPTY,
             summary = ScanSummary.EMPTY.copy(
-                licenseFindings = licenseFindings,
+                licenseFindings = licenseFindings
             )
         )
     )

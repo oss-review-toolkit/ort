@@ -38,7 +38,7 @@ data class NestedProvenanceScanResult(
     /**
      * A map of [KnownProvenance]s from [nestedProvenance] associated with lists of [ScanResult]s.
      */
-    val scanResults: Map<KnownProvenance, List<ScanResult>>,
+    val scanResults: Map<KnownProvenance, List<ScanResult>>
 ) {
     /**
      * Return a set of all [KnownProvenance]s contained in [nestedProvenance].

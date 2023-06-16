@@ -41,5 +41,5 @@ data class Component(
 
     val licenseName: String?,
     val name: String?,
-    val version: String?,
+    val version: String?
 )

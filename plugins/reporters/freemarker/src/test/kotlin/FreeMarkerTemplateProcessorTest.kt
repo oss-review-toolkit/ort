@@ -87,7 +87,7 @@ private fun scanResults(
             scanner = ScannerDetails(name = "scanner", version = "1.0", configuration = ""),
             summary = ScanSummary.EMPTY.copy(
                 licenseFindings = licenseFindings,
-                copyrightFindings = copyrightFindings,
+                copyrightFindings = copyrightFindings
             )
         )
     )

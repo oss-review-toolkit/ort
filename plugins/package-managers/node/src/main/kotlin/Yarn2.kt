@@ -488,7 +488,7 @@ class Yarn2(
                     hash = hash
                 ),
                 vcs = vcsFromPackage,
-                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl),
+                vcsProcessed = processPackageVcs(vcsFromPackage, homepageUrl)
             )
 
             require(pkg.id.name.isNotEmpty()) {
@@ -527,7 +527,7 @@ class Yarn2(
      */
     private fun Package.collectDependencies(
         allDependencies: Map<Identifier, List<Identifier>>,
-        ancestorPackageIds: Set<Identifier> = emptySet(),
+        ancestorPackageIds: Set<Identifier> = emptySet()
     ): Set<YarnModuleInfo> {
         val dependenciesIds = allDependencies[id]
         return dependenciesIds?.mapNotNull { dependencyId ->

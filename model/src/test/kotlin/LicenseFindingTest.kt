@@ -52,7 +52,7 @@ class LicenseFindingTest : WordSpec({
 
         "apply the license mapping only to full SPDX expressions" {
             val mapping = mapOf(
-                "GPL-1.0-or-later" to "GPL-1.0-only",
+                "GPL-1.0-or-later" to "GPL-1.0-only"
             )
 
             "AGPL-1.0-or-later".mapLicense(mapping) shouldBe "AGPL-1.0-or-later"
@@ -60,7 +60,7 @@ class LicenseFindingTest : WordSpec({
 
         "apply the license mapping only on word boundaries" {
             val mapping = mapOf(
-                "LicenseRef-scancode-unknown" to SpdxConstants.NOASSERTION,
+                "LicenseRef-scancode-unknown" to SpdxConstants.NOASSERTION
             )
 
             "LicenseRef-scancode-unknown-license-reference".mapLicense(mapping) shouldBe
@@ -95,7 +95,7 @@ class LicenseFindingTest : WordSpec({
 
         "apply the license mapping to complex SPDX expressions" {
             val mapping = mapOf(
-                "BSD (3-Clause)" to "BSD-3-Clause",
+                "BSD (3-Clause)" to "BSD-3-Clause"
             )
 
             "(AGPL-1.0-or-later AND BSD (3-Clause)) OR MIT".mapLicense(mapping) shouldBe
@@ -104,7 +104,7 @@ class LicenseFindingTest : WordSpec({
 
         "apply the license mapping without removing necessary parentheses" {
             val mapping = mapOf(
-                "a" to "d",
+                "a" to "d"
             )
 
             "(a OR b) AND c".mapLicense(mapping) shouldBe "(d OR b) AND c"
@@ -113,7 +113,7 @@ class LicenseFindingTest : WordSpec({
         "apply the license mapping to multiple SPDX expressions" {
             val mapping = mapOf(
                 "BSD (3-Clause)" to "BSD-3-Clause",
-                "BSD (2-Clause)" to "BSD-2-Clause",
+                "BSD (2-Clause)" to "BSD-2-Clause"
             )
 
             "AGPL-1.0-or-later OR BSD (3-Clause) OR BSD (2-Clause)".mapLicense(mapping) shouldBe

@@ -531,7 +531,7 @@ class ExtensionsTest : WordSpec({
                 255 to 256,
                 258 to 258,
                 260 to 261,
-                263 to 263,
+                263 to 263
             )
         }
     }

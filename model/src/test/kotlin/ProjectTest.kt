@@ -105,7 +105,7 @@ class ProjectTest : WordSpec({
                 definitionFilePath = "/some/path",
                 declaredLicenses = emptySet(),
                 vcs = VcsInfo.EMPTY,
-                homepageUrl = "https//www.test-project.org",
+                homepageUrl = "https//www.test-project.org"
             )
 
             project.scopes.shouldBeEmpty()

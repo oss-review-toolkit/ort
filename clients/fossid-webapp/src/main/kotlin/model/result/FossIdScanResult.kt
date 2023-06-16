@@ -44,5 +44,5 @@ data class FossIdScanResult(
     val url: String?,
     val hits: String?,
     val size: Int?,
-    val updated: String?,
+    val updated: String?
 )

@@ -119,7 +119,7 @@ val ORT_RESULT = OrtResult(
                             dependencies = setOf(
                                 PackageReference(
                                     id = Identifier("NPM:@ort:declared-license:1.0")
-                                ),
+                                )
                             )
                         )
                     )

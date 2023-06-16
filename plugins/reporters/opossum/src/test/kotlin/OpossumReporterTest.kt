@@ -318,7 +318,7 @@ private fun createOrtResult(): OrtResult {
                                                                 id = Identifier(
                                                                     "NPM:@something:" +
                                                                             "somepackage-dep-dep-dep:1.2.3"
-                                                                ),
+                                                                )
                                                             )
                                                         )
                                                     )
@@ -405,7 +405,7 @@ private fun createOrtResult(): OrtResult {
                         Identifier("NPM:@something:somepackage:1.2.3"),
                         Identifier("NPM:@something:somepackage-dep:1.2.3"),
                         Identifier("NPM:@something:somepackage-dep-dep:1.2.3"),
-                        Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3"),
+                        Identifier("NPM:@something:somepackage-dep-dep-dep:1.2.3")
                     ).map {
                         Package(
                             id = it,
@@ -435,8 +435,8 @@ private fun createOrtResult(): OrtResult {
                             message = "Message-3"
                         )
                     )
-                ),
-            ),
+                )
+            )
         ),
         scanner = scannerRunOf(
             Identifier("Maven:first-package-group:first-package:0.0.1") to listOf(

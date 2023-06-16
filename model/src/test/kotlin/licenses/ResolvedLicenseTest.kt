@@ -45,7 +45,7 @@ class ResolvedLicenseTest : WordSpec({
                         line = 2
                     ),
                     matchingPathExcludes = emptyList()
-                ),
+                )
             )
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = false)
@@ -75,7 +75,7 @@ class ResolvedLicenseTest : WordSpec({
                         line = 2
                     ),
                     matchingPathExcludes = emptyList()
-                ),
+                )
             )
 
             val resolvedCopyrights = originalFindings.toResolvedCopyrights(process = true)

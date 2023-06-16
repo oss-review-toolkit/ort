@@ -27,7 +27,7 @@ import org.ossreviewtoolkit.model.Severity
  */
 open class OrtResultRule(
     ruleSet: RuleSet,
-    name: String,
+    name: String
 ) : Rule(ruleSet, name) {
     /**
      * The [OrtResult] to check.
