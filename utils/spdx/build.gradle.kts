@@ -61,8 +61,10 @@ tasks.withType<AntlrTask>().configureEach {
     }
 }
 
-private val generateGrammarSource by tasks.existing
-sourceSets.main.get().java.srcDir(generateGrammarSource.map { files() })
+sourceSets.configureEach {
+    val generateGrammarSource by tasks.existing
+    sourceSets.main.get().java.srcDir(generateGrammarSource.map { files() })
+}
 
 dependencies {
     antlr(libs.antlr)
