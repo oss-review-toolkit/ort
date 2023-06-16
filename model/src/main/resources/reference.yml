@@ -193,7 +193,13 @@ ort:
     options:
       # A map of maps from scanner class names to scanner-specific key-value pairs.
       ScanCode:
+        # Command line options that affect the ScanCode output. If changed, stored scan results that were created with
+        # different options are not reused.
         commandLine: '--copyright --license --info --strip-root --timeout 300'
+
+        # Command line options that do not affect the ScanCode output.
+        commandLineNonConfig: '--processes 4'
+
         parseLicenseExpressions: true
 
         # Criteria for matching stored scan results. These can be configured for any scanner that uses semantic
