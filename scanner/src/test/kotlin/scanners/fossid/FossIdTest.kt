@@ -1478,7 +1478,7 @@ private fun FossIdServiceWithVersion.mockFiles(
     ignoredRange: IntRange = IntRange.EMPTY,
     pendingRange: IntRange = IntRange.EMPTY,
     snippetRange: IntRange = IntRange.EMPTY,
-    matchedLinesFlag: Boolean = false,
+    matchedLinesFlag: Boolean = false
 ): FossIdServiceWithVersion {
     val identifiedFiles = identifiedRange.map(::createIdentifiedFile)
     val markedFiles = markedRange.map(::createMarkedIdentifiedFile)

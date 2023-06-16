@@ -194,7 +194,7 @@ class OpossumReporter : Reporter {
 
     internal data class OpossumExternalAttributionSource(
         val name: String,
-        val priority: Int,
+        val priority: Int
     )
 
     internal data class OpossumInput(

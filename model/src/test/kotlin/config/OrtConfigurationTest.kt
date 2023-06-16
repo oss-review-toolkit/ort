@@ -92,7 +92,7 @@ class OrtConfigurationTest : WordSpec({
                         "clientPassword" to "clientPassword",
                         "token" to "token"
                     )
-                ),
+                )
             )
 
             ortConfig.severeIssueThreshold shouldBe Severity.ERROR

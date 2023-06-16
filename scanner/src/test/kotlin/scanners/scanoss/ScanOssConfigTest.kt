@@ -38,7 +38,7 @@ class ScanOssConfigTest : StringSpec({
     "Default values can be overridden" {
         val scanOssOptions = mapOf(
             ScanOssConfig.API_URL_PROPERTY to "url",
-            ScanOssConfig.API_KEY_PROPERTY to "key",
+            ScanOssConfig.API_KEY_PROPERTY to "key"
         )
 
         val config = ScannerConfiguration(options = mapOf("ScanOss" to scanOssOptions))

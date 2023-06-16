@@ -37,7 +37,7 @@ class FileListResolverTest : StringSpec({
         val resolver = FileListResolver(
             storage = FileProvenanceFileStorage(
                 storage = LocalFileStorage(tempdir()),
-                filename = "bytes",
+                filename = "bytes"
             ),
             provenanceDownloader = {
                 createTestTempDirWithFiles(
@@ -45,7 +45,7 @@ class FileListResolverTest : StringSpec({
                     "LICENSE",
                     "src/cli/main.cpp"
                 )
-            },
+            }
         )
 
         val fileList = resolver.resolve(ArtifactProvenance(sourceArtifact = RemoteArtifact.EMPTY))

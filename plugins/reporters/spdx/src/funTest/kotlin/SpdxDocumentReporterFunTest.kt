@@ -280,7 +280,7 @@ private val ortResult = OrtResult(
                         url = "https://some-host/seventh-package-sources.jar",
                         hash = Hash.create("0000000000000000000000000000000000000000")
                     ),
-                    vcs = VcsInfo.EMPTY,
+                    vcs = VcsInfo.EMPTY
                 )
             )
         )

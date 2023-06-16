@@ -57,7 +57,7 @@ data class ScannerRun(
      * The [ScanResult]s for all [Package]s.
      */
     @JsonPropertyOrder(alphabetic = true)
-    val scanResults: Map<Identifier, List<ScanResult>>,
+    val scanResults: Map<Identifier, List<ScanResult>>
 ) {
     companion object {
         /**

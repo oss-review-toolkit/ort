@@ -53,7 +53,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
  */
 data class SpdxLicenseChoice(
     val given: SpdxExpression?,
-    val choice: SpdxExpression,
+    val choice: SpdxExpression
 ) {
     init {
         if (given?.isValidChoice(choice) == false) {

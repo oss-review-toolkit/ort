@@ -281,7 +281,7 @@ suspend fun FossIdRestService.listMatchedLines(
     apiKey: String,
     scanCode: String,
     path: String,
-    snippetId: Int,
+    snippetId: Int
 ): EntityResponseBody<MatchedLines> {
     val base64Path = base64Encoder.encodeToString(path.toByteArray())
     return listMatchedLines(

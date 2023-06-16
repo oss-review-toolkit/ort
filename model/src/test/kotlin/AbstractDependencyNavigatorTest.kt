@@ -279,7 +279,7 @@ abstract class AbstractDependencyNavigatorTest : WordSpec() {
                         Identifier("Maven:org.slf4j:jcl-over-slf4j:1.7.25") to emptyList(),
                         Identifier("Maven:org.slf4j:slf4j-api:1.7.25") to listOf(
                             Identifier("Maven:ch.qos.logback:logback-classic:1.2.3")
-                        ),
+                        )
                     )
                 }
             }

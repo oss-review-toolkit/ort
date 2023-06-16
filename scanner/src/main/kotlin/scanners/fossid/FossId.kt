@@ -395,7 +395,7 @@ class FossId internal constructor(
         url: String,
         revision: String? = null,
         projectRevision: String? = null,
-        defaultBranch: String? = null,
+        defaultBranch: String? = null
     ): List<Scan> {
         val scans = filter {
             val isArchived = it.isArchived ?: false

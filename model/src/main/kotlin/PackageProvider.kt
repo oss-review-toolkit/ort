@@ -28,7 +28,7 @@ enum class PackageProvider(
     /**
      * The regular expression patterns that match all URLs for a specific provider.
      */
-    vararg urlPatterns: String,
+    vararg urlPatterns: String
 ) {
     COCOAPODS(
         "^https?://cocoapods\\.org/pods/"

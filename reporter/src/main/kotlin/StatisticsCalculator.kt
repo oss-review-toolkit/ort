@@ -152,7 +152,7 @@ object StatisticsCalculator {
                 analyzer?.let { secondsBetween(it.startTime, it.endTime) },
                 scanner?.let { secondsBetween(it.startTime, it.endTime) },
                 advisor?.let { secondsBetween(it.startTime, it.endTime) },
-                evaluator?.let { secondsBetween(it.startTime, it.endTime) },
+                evaluator?.let { secondsBetween(it.startTime, it.endTime) }
             ).sum()
         }
 

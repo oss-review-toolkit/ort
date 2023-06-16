@@ -48,7 +48,7 @@ internal fun generateSummary(
     endTime: Instant,
     scanPath: File,
     result: FullScanResponse,
-    detectedLicenseMapping: Map<String, String>,
+    detectedLicenseMapping: Map<String, String>
 ) =
     generateSummary(
         startTime,

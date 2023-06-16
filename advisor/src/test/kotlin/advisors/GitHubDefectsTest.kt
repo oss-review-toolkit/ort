@@ -81,7 +81,7 @@ class GitHubDefectsTest : WordSpec({
         "return an empty result for a package without issues" {
             val pkg = createPackage()
             val releases = listOf(
-                Release("https://release1", "rHit", time(2, 20), GIT_TAG, Commit(commitUrl("0987654321"))),
+                Release("https://release1", "rHit", time(2, 20), GIT_TAG, Commit(commitUrl("0987654321")))
             )
 
             createGitHubServiceMock().configureResults(emptyList(), releases)

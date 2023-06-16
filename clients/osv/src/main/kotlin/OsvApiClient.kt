@@ -128,7 +128,7 @@ data class VulnerabilitiesForPackageBatchRequest(
 
 @Serializable
 data class VulnerabilitiesForPackageBatchResponse(
-    val results: List<IdList>,
+    val results: List<IdList>
 ) {
     @Serializable
     data class IdList(

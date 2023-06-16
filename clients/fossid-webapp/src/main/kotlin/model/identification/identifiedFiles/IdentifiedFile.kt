@@ -40,7 +40,7 @@ data class IdentifiedFile(
 
     val userSurname: String?,
 
-    val userUsername: String?,
+    val userUsername: String?
 ) : Summarizable {
     @JsonUnwrapped(prefix = "component_")
     lateinit var component: Component // TODO: How to get the additional components? Only one is returned

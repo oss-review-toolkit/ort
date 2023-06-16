@@ -88,7 +88,7 @@ private val REPLACE_PATTERN_REPLACEMENTS = listOf(
     "<REPLACE_URL>" to "http://replace/url/non/processed",
     "<REPLACE_REVISION>" to "33445507",
     "<REPLACE_PATH>" to "replace/path",
-    "<REPLACE_URL_PROCESSED>" to "http://replace/url/processed",
+    "<REPLACE_URL_PROCESSED>" to "http://replace/url/processed"
 )
 
 private val TARGET_CLASSES = setOf(

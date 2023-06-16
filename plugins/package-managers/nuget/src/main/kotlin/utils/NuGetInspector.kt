@@ -156,7 +156,7 @@ private fun List<NuGetInspector.Party>.toAuthors(): Set<String> =
 internal fun NuGetInspector.Result.toOrtProject(
     managerName: String,
     analysisRoot: File,
-    definitionFile: File,
+    definitionFile: File
 ): Project {
     val id = Identifier(
         type = managerName,
