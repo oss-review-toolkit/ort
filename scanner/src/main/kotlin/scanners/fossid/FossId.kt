@@ -796,7 +796,8 @@ class FossId internal constructor(
                         }
                     }
 
-                    it to snippets.filterNot { it.matchType == MatchType.IGNORED }.toSet()
+                    val excludedMatchTypes = enumSetOf(MatchType.IGNORED, MatchType.NONE)
+                    it to snippets.filterNotTo(mutableSetOf()) { it.matchType in excludedMatchTypes }
                 }
             }.awaitAll().toMap()
         }
