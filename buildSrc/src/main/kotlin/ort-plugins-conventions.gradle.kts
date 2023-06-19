@@ -25,3 +25,29 @@ plugins {
     // Apply precompiled plugins.
     id("ort-base-conventions")
 }
+
+configure<PublishingExtension> {
+    publications {
+        create<MavenPublication>(name) {
+            groupId = "org.ossreviewtoolkit.plugins"
+
+            from(components["javaPlatform"])
+
+            pom {
+                licenses {
+                    license {
+                        name.set("Apache-2.0")
+                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:https://github.com/oss-review-toolkit/ort.git")
+                    developerConnection.set("scm:git:git@github.com:oss-review-toolkit/ort.git")
+                    tag.set(version.toString())
+                    url.set("https://github.com/oss-review-toolkit/ort")
+                }
+            }
+        }
+    }
+}
