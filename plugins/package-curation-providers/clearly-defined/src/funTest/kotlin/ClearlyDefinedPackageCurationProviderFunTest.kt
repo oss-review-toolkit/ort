@@ -130,8 +130,9 @@ private fun createPackagesFromIds(vararg ids: String) =
 
 private suspend fun <T> withRetry(f: suspend () -> T): T =
     retry(
-        maxRetry = 3,
-        timeout = 9.seconds,
-        delay = 3.seconds,
+        maxRetry = 5,
+        timeout = (10 + 20 + 40 + 80 + 160).seconds,
+        delay = 10.seconds,
+        multiplier = 2,
         f = f
     )
