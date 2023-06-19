@@ -103,18 +103,14 @@ class HttpFileStorage(
 
         logger.debug { "Reading file from storage: ${request.url}" }
 
-        val response = httpClient.execute(request)
-        if (response.isSuccessful) {
-            response.body?.let { body ->
-                return body.byteStream()
+        return httpClient.execute(request).use { response ->
+            if (!response.isSuccessful) {
+                throw IOException("Could not read from '${request.url}': ${response.code} - ${response.message}")
             }
 
-            response.close()
-            throw IOException("The response body must not be null.")
+            val body = response.body ?: throw IOException("The response body must not be null.")
+            body.byteStream()
         }
-
-        response.close()
-        throw IOException("Could not read from '${request.url}': ${response.code} - ${response.message}")
     }
 
     override fun write(path: String, inputStream: InputStream) {
