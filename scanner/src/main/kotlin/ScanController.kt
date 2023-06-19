@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import java.time.Instant
-
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -29,7 +27,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
@@ -214,18 +211,6 @@ class ScanController(
         buildNestedProvenanceScanResult(packageProvenancesWithoutVcsPath.getValue(id), emptyList())
 
     /**
-     * Get the [NestedProvenanceScanResult] for each [Package], filtered by the VCS path for each package and the
-     * configured [ignore patterns][ScannerConfiguration.ignorePatterns].
-     */
-    fun getNestedScanResultsByPackage(): Map<Package, NestedProvenanceScanResult> =
-        packageProvenancesWithoutVcsPath.mapNotNull { (id, provenance) ->
-            val issues = issues[id].orEmpty()
-            buildNestedProvenanceScanResult(provenance, issues)?.let { scanResult ->
-                packages.first { it.id == id } to scanResult
-            }
-        }.toMap().filterByVcsPath().filterByIgnorePatterns()
-
-    /**
      * Return all [Package]s for which adding a scan result for [scanner] and [provenance] would complete the scan of
      * their [NestedProvenance] by the respective [scanner].
      */
@@ -294,40 +279,6 @@ class ScanController(
     fun getProvenanceScanners(): List<ProvenanceScannerWrapper> = scanners.filterIsInstance<ProvenanceScannerWrapper>()
 
     /**
-     * Return scan results for provenance resolution issues.
-     */
-    fun getResultsForProvenanceResolutionIssues(): Map<Identifier, List<ScanResult>> {
-        val idsForProvenance = packageProvenances.entries.groupBy({ (_, provenance) -> provenance }) { (id, _) -> id }
-
-        val issuesForId = buildMap<Identifier, MutableList<Issue>> {
-            packageProvenanceResolutionIssues.forEach { (id, issue) ->
-                getOrPut(id) { mutableListOf() } += issue
-            }
-
-            nestedProvenanceResolutionIssues.forEach { (provenance, issue) ->
-                idsForProvenance[provenance].orEmpty().forEach { id ->
-                    getOrPut(id) { mutableListOf() } += issue
-                }
-            }
-        }
-
-        return issuesForId.mapValues { (_, issues) ->
-            scanners.map { scanner ->
-                ScanResult(
-                    provenance = UnknownProvenance,
-                    scanner = scanner.details,
-                    summary = ScanSummary(
-                        startTime = Instant.now(),
-                        endTime = Instant.now(),
-                        packageVerificationCode = "",
-                        issues = issues
-                    )
-                )
-            }
-        }
-    }
-
-    /**
      * Get all [ScanResult]s for the provided [provenance].
      */
     private fun getScanResults(provenance: KnownProvenance): List<ScanResult> =
@@ -362,16 +313,4 @@ class ScanController(
 
         return NestedProvenanceScanResult(nestedProvenance, scanResults)
     }
-
-    private fun Map<Package, NestedProvenanceScanResult>.filterByIgnorePatterns():
-            Map<Package, NestedProvenanceScanResult> =
-        mapValues { (_, nestedProvenanceScanResult) ->
-            nestedProvenanceScanResult.filterByIgnorePatterns(config.ignorePatterns)
-        }
-
-    private fun Map<Package, NestedProvenanceScanResult>.filterByVcsPath(): Map<Package, NestedProvenanceScanResult> =
-        mapValues { (pkg, nestedProvenanceScanResult) ->
-            val path = (packageProvenances.getValue(pkg.id) as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
-            nestedProvenanceScanResult.filterByVcsPath(path)
-        }
 }
