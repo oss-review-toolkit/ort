@@ -135,7 +135,7 @@ internal fun mapSnippetFindings(
             // FossID does not return the hash of the remote artifact. Instead, it returns the MD5 hash of the
             // matched file in the remote artifact as part of the "match_file_id" property.
             val url = checkNotNull(snippet.url) {
-                "The URL of snippet ${snippet.id} must not be null."
+                "The URL of snippet ${snippet.id} for file '$file' must not be null."
             }
             val snippetProvenance = ArtifactProvenance(RemoteArtifact(url, Hash.NONE))
             val purl = snippet.purl
