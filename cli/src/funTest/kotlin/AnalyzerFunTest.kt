@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class AnalyzerFunTest : WordSpec({
     "An analysis" should {
@@ -65,9 +66,11 @@ class AnalyzerFunTest : WordSpec({
                 "projects/synthetic/spdx-project-xyz-expected-output-subproject-conan.yml"
             )
 
-            val result = analyze(definitionFile.parentFile, allowDynamicVersions = true).analyzer!!.result
+            val ortResult = analyze(definitionFile.parentFile, allowDynamicVersions = true)
 
-            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            ortResult.analyzer.shouldNotBeNull {
+                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            }
         }
     }
 
