@@ -141,6 +141,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
+            @Suppress("IgnoredReturnValue")
             runMain(
                 "-c", configFile.path,
                 "analyze",
@@ -160,6 +161,7 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
+            @Suppress("IgnoredReturnValue")
             runMain(
                 "-c", configFile.path,
                 "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
@@ -214,6 +216,8 @@ class OrtMainFunTest : StringSpec() {
 
         "EnvironmentVariableFilter is correctly initialized" {
             val referenceConfigFile = File("../model/src/main/resources/$REFERENCE_CONFIG_FILENAME").absolutePath
+
+            @Suppress("IgnoredReturnValue")
             runMain(
                 "-c", referenceConfigFile,
                 "config"
