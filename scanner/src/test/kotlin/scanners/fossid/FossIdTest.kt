@@ -100,6 +100,8 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.Excludes
+import org.ossreviewtoolkit.model.config.PathExclude
+import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
@@ -801,7 +803,7 @@ class FossIdTest : WordSpec({
             }
         }
 
-        "carry exclusion rules to a delta scan from an existing scan" {
+        "carry exclusion rules to a delta scan from an existing scan (legacy behavior)" {
             val projectCode = projectCode(PROJECT)
             val originCode = "originalScanCode"
             val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
@@ -826,6 +828,60 @@ class FossIdTest : WordSpec({
             fossId.scan(
                 createPackage(createIdentifier(index = 1), vcsInfo),
                 mapOf(FossId.PROJECT_REVISION_LABEL to "master")
+            )
+
+            coVerify {
+                service.createScan(USER, API_KEY, projectCode, scanCode, vcsInfo.url, vcsInfo.revision, "master")
+                service.downloadFromGit(USER, API_KEY, scanCode)
+                service.checkDownloadStatus(USER, API_KEY, scanCode)
+                service.runScan(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    mapOf(
+                        *FossId.deltaScanRunParameters(originCode),
+                        "auto_identification_detect_declaration" to "0",
+                        "auto_identification_detect_copyright" to "0"
+                    )
+                )
+                service.listIgnoreRules(USER, API_KEY, originCode)
+                service.createIgnoreRule(
+                    USER,
+                    API_KEY,
+                    scanCode,
+                    IGNORE_RULE.type,
+                    IGNORE_RULE.value,
+                    DEFAULT_IGNORE_RULE_SCOPE
+                )
+            }
+        }
+
+        "carry exclusion rules to a delta scan from path excludes" {
+            val projectCode = projectCode(PROJECT)
+            val originCode = "originalScanCode"
+            val scanCode = scanCode(PROJECT, FossId.DeltaTag.DELTA)
+            val config = createConfig()
+            val vcsInfo = createVcsInfo()
+            val scan = createScan(vcsInfo.url, vcsInfo.revision, originCode)
+
+            val service = FossIdRestService.create(config.serverUrl)
+                .expectProjectRequest(projectCode)
+                .expectListScans(projectCode, listOf(scan))
+                .expectCheckScanStatus(originCode, ScanStatus.FINISHED)
+                .expectCheckScanStatus(scanCode, ScanStatus.NOT_STARTED, ScanStatus.FINISHED)
+                .expectCreateScan(projectCode, scanCode, vcsInfo)
+                .expectDownload(scanCode)
+                .expectListIgnoreRules(originCode, emptyList())
+                .expectCreateIgnoreRule(scanCode, IGNORE_RULE.type, IGNORE_RULE.value, DEFAULT_IGNORE_RULE_SCOPE)
+                .mockFiles(scanCode)
+            coEvery { service.runScan(any()) } returns EntityResponseBody(status = 1)
+
+            val fossId = createFossId(config)
+
+            fossId.scan(
+                createPackage(createIdentifier(index = 1), vcsInfo),
+                mapOf(FossId.PROJECT_REVISION_LABEL to "master"),
+                Excludes(listOf(PathExclude("*.docx", PathExcludeReason.OTHER)))
             )
 
             coVerify {
@@ -1517,5 +1573,8 @@ private fun FossIdServiceWithVersion.mockFiles(
 /**
  * Trigger a FossID scan of the given [package][pkg].
  */
-private fun FossId.scan(pkg: Package, labels: Map<String, String> = emptyMap()): ScanResult =
-scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE, Excludes()))
+private fun FossId.scan(
+    pkg: Package,
+    labels: Map<String, String> = emptyMap(),
+    excludes: Excludes = Excludes()
+): ScanResult = scanPackage(pkg, ScanContext(labels = labels, packageType = PackageType.PACKAGE, excludes))

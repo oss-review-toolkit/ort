@@ -303,15 +303,17 @@ class FossId internal constructor(
                         .checkResponse("list scans for project").data
                     checkNotNull(scans)
 
+                    val issues = mutableListOf<Issue>()
+
                     val (scanCode, scanId) = if (config.deltaScans) {
-                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context)
+                        checkAndCreateDeltaScan(scans, url, revision, projectCode, projectName, context, issues)
                     } else {
                         checkAndCreateScan(scans, url, revision, projectCode, projectName)
                     }
 
                     if (config.waitForResult) {
                         val rawResults = getRawResults(scanCode)
-                        createResultSummary(startTime, provenance, rawResults, scanCode, scanId)
+                        createResultSummary(startTime, provenance, rawResults, scanCode, scanId, issues)
                     } else {
                         val issue = createAndLogIssue(
                             source = name,
@@ -468,7 +470,8 @@ class FossId internal constructor(
         revision: String,
         projectCode: String,
         projectName: String,
-        context: ScanContext
+        context: ScanContext,
+        issues: MutableList<Issue>
     ): Pair<String, String> {
         val projectRevision = context.labels[PROJECT_REVISION_LABEL]
 
@@ -535,19 +538,35 @@ class FossId internal constructor(
 
             logger.info { "Loading ignore rules from '$existingScanCode'." }
 
+            // TODO: This is the old way of carrying the rules to the new delta scan, by querying the previous scan.
+            //       With the introduction of support for the ORT excludes, this old behavior can be dropped.
             val ignoreRules = service.listIgnoreRules(config.user, config.apiKey, existingScanCode)
                 .checkResponse("list ignore rules")
             ignoreRules.data?.let { rules ->
                 logger.info { "${rules.size} ignore rule(s) have been found." }
 
+                val excludesRules = context.excludes?.let {
+                    convertRules(it, issues).also {
+                        logger.info { "${it.size} rules from ORT excludes have been found." }
+                    }
+                }.orEmpty()
+
+                // Create an issue for each legacy rule existing.
+                val legacyRules = excludesRules.filterLegacyRules(rules, issues)
+                if (legacyRules.isNotEmpty()) {
+                    logger.warn { "${legacyRules.size} legacy rules have been found." }
+                }
+
+                val allRules = excludesRules + legacyRules
+
                 // When a scan is created with the optional property 'git_repo_url', the server automatically creates
                 // an 'ignore rule' to exclude the '.git' directory.
                 // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
-                rules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }.forEach {
+                allRules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }.forEach {
                     service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
                         .checkResponse("create ignore rules", false)
                     logger.info {
-                        "Ignore rule of type '${it.type}' and value '${it.value}' has been carried to the new scan."
+                        "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
                     }
                 }
             }
@@ -820,7 +839,8 @@ class FossId internal constructor(
         provenance: Provenance,
         rawResults: RawResults,
         scanCode: String,
-        scanId: String
+        scanId: String,
+        additionalIssues: MutableList<Issue>
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
@@ -844,7 +864,7 @@ class FossId internal constructor(
             licenseFindings = licenseFindings,
             copyrightFindings = copyrightFindings,
             snippetFindings = snippetFindings,
-            issues = issues
+            issues = issues + additionalIssues
         )
 
         return ScanResult(
