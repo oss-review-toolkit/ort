@@ -49,7 +49,7 @@ jobs:
     - name: Check for Detekt Issues
       uses: gradle/gradle-build-action@v2
       with:
-        arguments: detekt detektTest
+        arguments: detekt detektTest detektFunTest
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@v2
       if: ${{ always() }} # Upload even if the previous step failed.
