@@ -61,7 +61,6 @@ xz = "1.9"
 [plugins]
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysisPlugin" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
-graalVmNativeImage = { id = "org.graalvm.buildtools.native", version.ref = "graalVmNativeImagePlugin" }
 graphQl = { id = "com.expediagroup.graphql", version.ref = "graphQlPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
@@ -87,6 +86,7 @@ exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.
 exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
+graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
 graphQlKtorClient = { module = "com.expediagroup:graphql-kotlin-ktor-client", version.ref = "graphQlPlugin" }
 greenmail = { module = "com.icegreen:greenmail", version.ref = "greenmail" }
 hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }

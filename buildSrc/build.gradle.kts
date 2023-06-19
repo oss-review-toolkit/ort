@@ -37,5 +37,6 @@ dependencies {
 
     implementation(libs.detekt)
     implementation(libs.dokkatoo)
+    implementation(libs.graalVmNativeImage)
     implementation(libs.kotlin)
 }
