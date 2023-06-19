@@ -34,6 +34,7 @@ import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
+import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 class PubFunTest : WordSpec({
     "Pub" should {
@@ -66,9 +67,11 @@ class PubFunTest : WordSpec({
             val definitionFile = getAssetFile("projects/synthetic/multi-module/pubspec.yaml")
             val expectedResultFile = getAssetFile("projects/synthetic/pub-expected-output-multi-module.yml")
 
-            val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
+            val ortResult = analyze(definitionFile.parentFile)
 
-            analyzerResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            ortResult.analyzer.shouldNotBeNull {
+                result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            }
         }
 
         "resolve dependencies for a project with Flutter, Android and Cocoapods" {
@@ -79,10 +82,12 @@ class PubFunTest : WordSpec({
                 "projects/synthetic/pub-expected-output-with-flutter-android-and-cocoapods.yml"
             )
 
-            val analyzerResult = analyze(definitionFile.parentFile).analyzer!!.result.patchPackages()
-                .reduceToPubProjects()
+            val ortResult = analyze(definitionFile.parentFile)
 
-            analyzerResult.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+            ortResult.analyzer.shouldNotBeNull {
+                result.patchPackages().reduceToPubProjects().toYaml() should
+                        matchExpectedResult(expectedResultFile, definitionFile)
+            }
         }
 
         "show an error if no lockfile is present" {
