@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.Project
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -64,24 +65,7 @@ class ProvenanceResolutionResultSortedSetConverter :
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */
 class ScanResultSortedSetConverter : StdConverter<Set<ScanResult>, Set<ScanResult>>() {
-    override fun convert(value: Set<ScanResult>) = value.sortedBy {
-        buildList<String> {
-            this += it.provenance.javaClass.canonicalName
-
-            when (it.provenance) {
-                is RepositoryProvenance -> {
-                    this += it.provenance.vcsInfo.type.toString()
-                    this += it.provenance.vcsInfo.url
-                }
-                is ArtifactProvenance -> {
-                    this += it.provenance.sourceArtifact.url
-                }
-                else -> {
-                    // Do not add anything, because unknown provenance does not have any properties.
-                }
-            }
-        }.joinToString()
-    }.toSet()
+    override fun convert(value: Set<ScanResult>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
 }
 
 class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {
@@ -92,5 +76,23 @@ class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, Sorte
     override fun convert(value: Set<SnippetFinding>) =
         value.toSortedSet(compareBy<SnippetFinding> { it.sourceLocation.path }.thenByDescending { it.snippet.purl })
 }
+
+private fun Provenance.getSortKey(): String =
+    buildList {
+        this += javaClass.canonicalName
+
+        when (this@getSortKey) {
+            is RepositoryProvenance -> {
+                this += vcsInfo.type.toString()
+                this += vcsInfo.url
+            }
+            is ArtifactProvenance -> {
+                this += sourceArtifact.url
+            }
+            else -> {
+                // Do not add anything, because unknown provenance does not have any properties.
+            }
+        }
+    }.joinToString()
 
 // TODO: Add more converters to get rid of Comparable implementations that just serve sorted output.
