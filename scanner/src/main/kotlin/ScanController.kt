@@ -53,14 +53,14 @@ class ScanController(
     val config: ScannerConfiguration
 ) {
     /**
-     * A map of package [Identifier]s to a list of [Issue]s that occurred during provenance resolution for the
-     * respective package.
+     * A map of package [Identifier]s to an [Issue] that occurred during provenance resolution for the respective
+     * package.
      */
     private val packageProvenanceResolutionIssues = mutableMapOf<Identifier, Issue>()
 
     /**
-     * A map of package [KnownProvenance]s to a list of [Issue]s that occurred during provenance resolution for the
-     * respective package.
+     * A map of package [KnownProvenance]s to an [Issue] that occurred during provenance resolution for the respective
+     * package.
      */
     private val nestedProvenanceResolutionIssues = mutableMapOf<KnownProvenance, Issue>()
 
