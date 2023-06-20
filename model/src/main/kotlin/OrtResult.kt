@@ -405,6 +405,9 @@ data class OrtResult(
      */
     fun getScanResultsForId(id: Identifier): List<ScanResult> = scanner?.getScanResults(id).orEmpty()
 
+    /**
+     * Return the scan results associated with the respective identifiers.
+     */
     @JsonIgnore
     fun getScanResults(): Map<Identifier, List<ScanResult>> = scanner?.getAllScanResults().orEmpty()
 
