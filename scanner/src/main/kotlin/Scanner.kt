@@ -196,10 +196,7 @@ class Scanner(
                 val packageProvenance = controller.getPackageProvenance(id)
                 val packageProvenanceResolutionIssue = controller.getPackageProvenanceResolutionIssue(id)
                 val subRepositories = controller.getSubRepositories(id)
-                // TODO: Make getNestedProvenanceResolutionIssue() take an ID.
-                val nestedProvenanceResolutionIssue = packageProvenance?.let {
-                    controller.getNestedProvenanceResolutionIssue(it)
-                }
+                val nestedProvenanceResolutionIssue = controller.getNestedProvenanceResolutionIssue(id)
 
                 ProvenanceResolutionResult(
                     id,
@@ -263,7 +260,7 @@ class Scanner(
                 }.onFailure {
                     controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
                         controller.putNestedProvenanceResolutionIssue(
-                            provenance,
+                            id,
                             Issue(
                                 source = TOOL_NAME,
                                 message = "Could not resolve nested provenance for package " +
