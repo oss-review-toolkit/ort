@@ -19,11 +19,6 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-val askalonoVersion: String by project
-val boyterLcVersion: String by project
-val licenseeVersion: String by project
-val scancodeVersion: String by project
-
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
