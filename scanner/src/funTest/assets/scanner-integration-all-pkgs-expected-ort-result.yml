@@ -406,6 +406,7 @@ scanner:
           path: "pkg4/pkg4.txt"
           start_line: -1
           end_line: -1
+  files: []
 advisor: null
 evaluator: null
 resolved_configuration: {}

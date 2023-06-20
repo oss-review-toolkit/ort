@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.model.utils.FileListSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ProvenanceResolutionResultSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ScanResultSortedSetConverter
 import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
@@ -67,7 +68,13 @@ data class ScannerRun(
      * The scan results for each resolved provenance.
      */
     @JsonSerialize(converter = ScanResultSortedSetConverter::class)
-    val scanResults: Set<ScanResult>
+    val scanResults: Set<ScanResult>,
+
+    /**
+     * The list of files for each resolved provenance.
+     */
+    @JsonSerialize(converter = FileListSortedSetConverter::class)
+    val files: Set<FileList>
 ) {
     companion object {
         /**
@@ -80,7 +87,8 @@ data class ScannerRun(
             environment = Environment(),
             config = ScannerConfiguration(),
             provenances = emptySet(),
-            scanResults = emptySet()
+            scanResults = emptySet(),
+            files = emptySet()
         )
     }
 
@@ -121,6 +129,26 @@ data class ScannerRun(
             require(it.isEmpty()) {
                 "Found scan results which do not correspond to any resolved provenances, which is not allowed: \n" +
                         it.toYaml()
+            }
+        }
+
+        val fileListProvenances = files.mapTo(mutableSetOf()) { it.provenance }
+        (fileListProvenances - resolvedProvenances).let {
+            require(it.isEmpty()) {
+                "Found a file lists which do not correspond to any resolved provenances, which is not allowed: \n" +
+                        it.toYaml()
+            }
+        }
+
+        files.forEach { fileList ->
+            (fileList.provenance as? RepositoryProvenance)?.let {
+                require(it.vcsInfo.path.isEmpty()) {
+                    "Found a file list with a non-empty VCS path, which is not allowed."
+                }
+
+                require(it.vcsInfo.revision == it.resolvedRevision) {
+                    "The revision and resolved revision of a file list are not equal, which is not allowed."
+                }
             }
         }
     }

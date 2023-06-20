@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2022 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import java.util.SortedSet
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
+import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -40,6 +41,16 @@ import org.ossreviewtoolkit.model.SnippetFinding
 
 class CopyrightFindingSortedSetConverter : StdConverter<Set<CopyrightFinding>, SortedSet<CopyrightFinding>>() {
     override fun convert(value: Set<CopyrightFinding>) = value.toSortedSet(CopyrightFinding.COMPARATOR)
+}
+
+/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
+class FileListSortedSetConverter : StdConverter<Set<FileList>, Set<FileList>>() {
+    override fun convert(value: Set<FileList>) = value.sortedBy { it.provenance.getSortKey() }.toSet()
+}
+
+/** Do not convert to SortedSet in order to not require a comparator consistent with equals */
+class FileListEntrySortedSetConverter : StdConverter<Set<FileList.Entry>, Set<FileList.Entry>>() {
+    override fun convert(value: Set<FileList.Entry>) = value.sortedBy { it.path }.toSet()
 }
 
 class LicenseFindingSortedSetConverter : StdConverter<Set<LicenseFinding>, SortedSet<LicenseFinding>>() {
