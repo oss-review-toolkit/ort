@@ -111,9 +111,9 @@ class ScanController(
     }
 
     /**
-     * Add an entry to [packageProvenances] and [packageProvenancesWithoutVcsPath], overwriting any existing values.
+     * Set the [provenance] for the package denoted by [id], overwriting any existing values.
      */
-    fun addPackageProvenance(id: Identifier, provenance: KnownProvenance) {
+    fun putPackageProvenance(id: Identifier, provenance: KnownProvenance) {
         packageProvenances[id] = provenance
         packageProvenancesWithoutVcsPath[id] = when (provenance) {
             is RepositoryProvenance -> provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = ""))
@@ -122,9 +122,10 @@ class ScanController(
     }
 
     /**
-     * Add an entry to [nestedProvenances], overwriting any existing values.
+     * Set the [nestedProvenance] corresponding to the given [package provenance][root], overwriting any existing
+     * values.
      */
-    fun addNestedProvenance(root: KnownProvenance, nestedProvenance: NestedProvenance) {
+    fun putNestedProvenance(root: KnownProvenance, nestedProvenance: NestedProvenance) {
         nestedProvenances[root] = nestedProvenance
     }
 

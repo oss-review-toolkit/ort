@@ -223,7 +223,7 @@ class Scanner(
                 }.awaitAll()
             }.forEach { (pkg, result) ->
                 result.onSuccess { provenance ->
-                    controller.addPackageProvenance(pkg.id, provenance)
+                    controller.putPackageProvenance(pkg.id, provenance)
                 }.onFailure {
                     controller.putPackageProvenanceResolutionIssue(
                         pkg.id,
@@ -250,7 +250,7 @@ class Scanner(
                 }.awaitAll()
             }.forEach { (provenance, result) ->
                 result.onSuccess { nestedProvenance ->
-                    controller.addNestedProvenance(provenance, nestedProvenance)
+                    controller.putNestedProvenance(provenance, nestedProvenance)
                 }.onFailure {
                     controller.getPackagesForProvenanceWithoutVcsPath(provenance).forEach { id ->
                         controller.putNestedProvenanceResolutionIssue(
