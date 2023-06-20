@@ -22,10 +22,6 @@ plugins {
     id("ort-plugins-conventions")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     api(project(":plugins:reporters:asciidoc-reporter"))
     api(project(":plugins:reporters:ctrlx-reporter"))

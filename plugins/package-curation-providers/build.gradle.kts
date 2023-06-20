@@ -22,10 +22,6 @@ plugins {
     id("ort-plugins-conventions")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     api(project(":plugins:package-curation-providers:clearly-defined-package-curation-provider"))
     api(project(":plugins:package-curation-providers:file-package-curation-provider"))

@@ -22,10 +22,6 @@ plugins {
     id("ort-plugins-conventions")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     api(project(":plugins:commands:advisor-command"))
     api(project(":plugins:commands:analyzer-command"))
