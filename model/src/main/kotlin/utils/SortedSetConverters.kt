@@ -77,7 +77,7 @@ class ScanResultSortedSetConverter : StdConverter<Set<ScanResult>, Set<ScanResul
                     this += it.provenance.sourceArtifact.url
                 }
                 else -> {
-                    // Cannot happen as ScanResults in ScannerRun
+                    // Do not add anything, because unknown provenance does not have any properties.
                 }
             }
         }.joinToString()
