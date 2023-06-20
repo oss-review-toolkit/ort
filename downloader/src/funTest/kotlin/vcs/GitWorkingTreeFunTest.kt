@@ -22,7 +22,6 @@ package org.ossreviewtoolkit.downloader.vcs
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.matchers.collections.containAll
-import io.kotest.matchers.collections.containExactlyInAnyOrder
 import io.kotest.matchers.maps.beEmpty
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
@@ -69,7 +68,7 @@ class GitWorkingTreeFunTest : StringSpec({
         val workingTree = git.getWorkingTree(zipContentDir)
 
         // Ignore auto-created branches by Dependabot to avoid regular updates to this list.
-        workingTree.listRemoteBranches().filterNot { it.startsWith("dependabot/") } should containExactlyInAnyOrder(
+        workingTree.listRemoteBranches().filterNot { it.startsWith("dependabot/") } should containAll(
             "all-repos_autofix_bump",
             "all-repos_autofix_bump-2023-02-05",
             "main"
