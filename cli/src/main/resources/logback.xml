@@ -34,6 +34,7 @@
     <logger name="org.ossreviewtoolkit.analyzer.managers.Yarn2" level="INFO" />
     <logger name="org.ossreviewtoolkit.clients.fossid.FossIdRestService" level="INFO" />
     <logger name="org.ossreviewtoolkit.plugins.reporters.fossid.FossIdReporter" level="INFO" />
+    <logger name="org.ossreviewtoolkit.plugins.reporters.fossid.FossIdSnippetReporter" level="INFO" />
     <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossId" level="INFO" />
     <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdConfig" level="INFO" />
     <logger name="org.ossreviewtoolkit.scanner.scanners.fossid.FossIdUrlProvider" level="INFO" />
