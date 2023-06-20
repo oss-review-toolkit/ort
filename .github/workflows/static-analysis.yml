@@ -77,6 +77,7 @@ jobs:
     - name: Qodana Scan
       uses: JetBrains/qodana-action@v2023.1.4
       with:
+        post-pr-comment: false
         use-caches: false
     - uses: github/codeql-action/upload-sarif@v2
       with:
