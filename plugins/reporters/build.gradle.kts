@@ -21,17 +21,3 @@ plugins {
     // Apply precompiled plugins.
     id("ort-plugins-conventions")
 }
-
-dependencies {
-    api(project(":plugins:reporters:asciidoc-reporter"))
-    api(project(":plugins:reporters:ctrlx-reporter"))
-    api(project(":plugins:reporters:cyclonedx-reporter"))
-    api(project(":plugins:reporters:evaluated-model-reporter"))
-    api(project(":plugins:reporters:fossid-reporter"))
-    api(project(":plugins:reporters:freemarker-reporter"))
-    api(project(":plugins:reporters:gitlab-reporter"))
-    api(project(":plugins:reporters:opossum-reporter"))
-    api(project(":plugins:reporters:spdx-reporter"))
-    api(project(":plugins:reporters:static-html-reporter"))
-    api(project(":plugins:reporters:web-app-reporter"))
-}

@@ -30,6 +30,18 @@ javaPlatform {
     allowDependencies()
 }
 
+dependencies {
+    // Accompanying projects that are embedded into the artifacts of other projects, and thus should not be published on
+    // their own.
+    val embeddedProjects = setOf("gradle-plugin", "web-app-template")
+
+    project.subprojects.filter {
+        it.name !in embeddedProjects
+    }.forEach {
+        api(it)
+    }
+}
+
 configure<PublishingExtension> {
     publications {
         create<MavenPublication>(name) {

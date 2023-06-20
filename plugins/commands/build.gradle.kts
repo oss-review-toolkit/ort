@@ -21,19 +21,3 @@ plugins {
     // Apply precompiled plugins.
     id("ort-plugins-conventions")
 }
-
-dependencies {
-    api(project(":plugins:commands:advisor-command"))
-    api(project(":plugins:commands:analyzer-command"))
-    api(project(":plugins:commands:compare-command"))
-    api(project(":plugins:commands:config-command"))
-    api(project(":plugins:commands:downloader-command"))
-    api(project(":plugins:commands:evaluator-command"))
-    api(project(":plugins:commands:notifier-command"))
-    api(project(":plugins:commands:reporter-command"))
-    api(project(":plugins:commands:requirements-command"))
-    api(project(":plugins:commands:scanner-command"))
-    api(project(":plugins:commands:upload-curations-command"))
-    api(project(":plugins:commands:upload-result-to-postgres-command"))
-    api(project(":plugins:commands:upload-result-to-sw360-command"))
-}
