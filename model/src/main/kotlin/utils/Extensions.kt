@@ -36,11 +36,14 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.common.percentEncode
 
+fun String.prependPath(prefix: String): String =
+    if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
+
 internal fun TextLocation.prependedPath(prefix: String): String =
-    if (prefix.isBlank()) path else "${prefix.removeSuffix("/")}/$path"
+    path.prependPath(prefix)
 
 fun TextLocation.prependPath(prefix: String): TextLocation =
-    if (prefix.isEmpty()) this else copy(path = prependedPath(prefix))
+    if (prefix.isEmpty()) this else copy(path = path.prependPath(prefix))
 
 /**
  * Map the [type][Identifier.type] of a [package identifier][Package.id] to a ClearlyDefined [ComponentType], or return
