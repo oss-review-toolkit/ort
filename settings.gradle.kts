@@ -36,59 +36,6 @@ include(":evaluator")
 include(":helper-cli")
 include(":model")
 include(":notifier")
-include(":plugins:commands")
-include(":plugins:commands:advisor")
-include(":plugins:commands:analyzer")
-include(":plugins:commands:api")
-include(":plugins:commands:compare")
-include(":plugins:commands:config")
-include(":plugins:commands:downloader")
-include(":plugins:commands:evaluator")
-include(":plugins:commands:notifier")
-include(":plugins:commands:reporter")
-include(":plugins:commands:requirements")
-include(":plugins:commands:scanner")
-include(":plugins:commands:upload-curations")
-include(":plugins:commands:upload-result-to-postgres")
-include(":plugins:commands:upload-result-to-sw360")
-include(":plugins:package-curation-providers")
-include(":plugins:package-curation-providers:api")
-include(":plugins:package-curation-providers:clearly-defined")
-include(":plugins:package-curation-providers:file")
-include(":plugins:package-curation-providers:ort-config")
-include(":plugins:package-curation-providers:sw360")
-include(":plugins:package-managers")
-include(":plugins:package-managers:bower")
-include(":plugins:package-managers:bundler")
-include(":plugins:package-managers:cargo")
-include(":plugins:package-managers:carthage")
-include(":plugins:package-managers:cocoapods")
-include(":plugins:package-managers:composer")
-include(":plugins:package-managers:conan")
-include(":plugins:package-managers:gradle")
-include(":plugins:package-managers:gradle-inspector")
-include(":plugins:package-managers:gradle-model")
-include(":plugins:package-managers:gradle-plugin")
-include(":plugins:package-managers:node")
-include(":plugins:package-managers:nuget")
-include(":plugins:package-managers:pub")
-include(":plugins:package-managers:python")
-include(":plugins:package-managers:spdx")
-include(":plugins:package-managers:stack")
-include(":plugins:package-managers:unmanaged")
-include(":plugins:reporters")
-include(":plugins:reporters:asciidoc")
-include(":plugins:reporters:ctrlx")
-include(":plugins:reporters:cyclonedx")
-include(":plugins:reporters:evaluated-model")
-include(":plugins:reporters:fossid")
-include(":plugins:reporters:freemarker")
-include(":plugins:reporters:gitlab")
-include(":plugins:reporters:opossum")
-include(":plugins:reporters:spdx")
-include(":plugins:reporters:static-html")
-include(":plugins:reporters:web-app")
-include(":plugins:reporters:web-app-template")
 include(":reporter")
 include(":scanner")
 include(":utils:common")
@@ -106,60 +53,34 @@ project(":clients:osv").name = "osv-client"
 project(":clients:scanoss").name = "scanoss-client"
 project(":clients:vulnerable-code").name = "vulnerable-code-client"
 
-project(":plugins:commands:advisor").name = "advisor-command"
-project(":plugins:commands:analyzer").name = "analyzer-command"
-project(":plugins:commands:api").name = "command-api"
-project(":plugins:commands:compare").name = "compare-command"
-project(":plugins:commands:config").name = "config-command"
-project(":plugins:commands:downloader").name = "downloader-command"
-project(":plugins:commands:evaluator").name = "evaluator-command"
-project(":plugins:commands:notifier").name = "notifier-command"
-project(":plugins:commands:reporter").name = "reporter-command"
-project(":plugins:commands:requirements").name = "requirements-command"
-project(":plugins:commands:scanner").name = "scanner-command"
-project(":plugins:commands:upload-curations").name = "upload-curations-command"
-project(":plugins:commands:upload-result-to-postgres").name = "upload-result-to-postgres-command"
-project(":plugins:commands:upload-result-to-sw360").name = "upload-result-to-sw360-command"
-
-project(":plugins:package-curation-providers:api").name = "package-curation-provider-api"
-project(":plugins:package-curation-providers:clearly-defined").name = "clearly-defined-package-curation-provider"
-project(":plugins:package-curation-providers:file").name = "file-package-curation-provider"
-project(":plugins:package-curation-providers:ort-config").name = "ort-config-package-curation-provider"
-project(":plugins:package-curation-providers:sw360").name = "sw360-package-curation-provider"
-
-project(":plugins:package-managers:bower").name = "bower-package-manager"
-project(":plugins:package-managers:bundler").name = "bundler-package-manager"
-project(":plugins:package-managers:cargo").name = "cargo-package-manager"
-project(":plugins:package-managers:carthage").name = "carthage-package-manager"
-project(":plugins:package-managers:cocoapods").name = "cocoapods-package-manager"
-project(":plugins:package-managers:composer").name = "composer-package-manager"
-project(":plugins:package-managers:conan").name = "conan-package-manager"
-project(":plugins:package-managers:gradle").name = "gradle-package-manager"
-project(":plugins:package-managers:node").name = "node-package-manager"
-project(":plugins:package-managers:nuget").name = "nuget-package-manager"
-project(":plugins:package-managers:pub").name = "pub-package-manager"
-project(":plugins:package-managers:python").name = "python-package-manager"
-project(":plugins:package-managers:spdx").name = "spdx-package-manager"
-project(":plugins:package-managers:stack").name = "stack-package-manager"
-project(":plugins:package-managers:unmanaged").name = "unmanaged-package-manager"
-
-project(":plugins:reporters:asciidoc").name = "asciidoc-reporter"
-project(":plugins:reporters:ctrlx").name = "ctrlx-reporter"
-project(":plugins:reporters:cyclonedx").name = "cyclonedx-reporter"
-project(":plugins:reporters:evaluated-model").name = "evaluated-model-reporter"
-project(":plugins:reporters:fossid").name = "fossid-reporter"
-project(":plugins:reporters:freemarker").name = "freemarker-reporter"
-project(":plugins:reporters:gitlab").name = "gitlab-reporter"
-project(":plugins:reporters:opossum").name = "opossum-reporter"
-project(":plugins:reporters:spdx").name = "spdx-reporter"
-project(":plugins:reporters:static-html").name = "static-html-reporter"
-project(":plugins:reporters:web-app").name = "web-app-reporter"
-
 project(":utils:common").name = "common-utils"
 project(":utils:ort").name = "ort-utils"
 project(":utils:scripting").name = "scripting-utils"
 project(":utils:spdx").name = "spdx-utils"
 project(":utils:test").name = "test-utils"
+
+file("plugins").walk().maxDepth(3).filter {
+    it.isFile && it.name == "build.gradle.kts"
+}.mapTo(mutableListOf()) {
+    it.parentFile.toRelativeString(rootDir).replace(File.separatorChar, ':')
+}.forEach { projectPath ->
+    include(":$projectPath")
+
+    // Give API and package-manager projects a dedicated name that includes the type of plugin, but keep the names of
+    // accompanying project as-is.
+    val accompanyingProjects = setOf("gradle-inspector", "gradle-model", "gradle-plugin", "web-app-template")
+
+    val parts = projectPath.split(':')
+    if (parts.size == 3 && parts[2] !in accompanyingProjects) {
+        // Convert the plural name for the type of plugin to singular.
+        val singularTypeName = parts[1].removeSuffix("s")
+
+        project(":$projectPath").name = when(parts[2]) {
+            "api" -> "$singularTypeName-api"
+            else -> "${parts[2]}-$singularTypeName"
+        }
+    }
+}
 
 val buildCacheRetentionDays: String by settings
 
