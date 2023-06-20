@@ -318,6 +318,7 @@ scanner:
           path: "LICENSE.md"
           start_line: 3
           end_line: 3
+  files: []
 advisor:
   start_time: "2021-04-29T14:54:16.562951Z"
   end_time: "2021-04-29T14:54:18.969210Z"

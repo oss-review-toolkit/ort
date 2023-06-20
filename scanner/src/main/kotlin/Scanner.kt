@@ -167,7 +167,8 @@ class Scanner(
             provenances = projectResults.provenances + packageResults.provenances,
             scanResults = (projectResults.scanResults + packageResults.scanResults).mapTo(mutableSetOf()) {
                 it.clearPackageVerificationCode()
-            }
+            },
+            files = projectResults.files + packageResults.files
         )
 
         return ortResult.copy(scanner = scannerRun)
@@ -229,7 +230,9 @@ class Scanner(
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
-            scanResults = scanResults
+            scanResults = scanResults,
+            // TODO: Set the file lists.
+            files = emptySet()
         )
     }
 
