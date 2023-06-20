@@ -27,6 +27,8 @@ dependencies {
 
     implementation(project(":clients:fossid-webapp-client"))
     implementation(project(":model"))
+    implementation(project(":plugins:reporters:asciidoc-reporter"))
+    implementation(project(":plugins:reporters:freemarker-reporter"))
     implementation(project(":utils:common-utils"))
     implementation(project(":utils:ort-utils"))
 

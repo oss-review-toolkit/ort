@@ -39,6 +39,7 @@ import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
+import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -309,6 +310,20 @@ class FreemarkerTemplateProcessor(
         @Suppress("UNUSED") // This function is used in the templates.
         fun filterForUnresolvedVulnerabilities(vulnerabilities: List<Vulnerability>): List<Vulnerability> =
             vulnerabilities.filterNot { input.resolutionProvider.isResolved(it) }
+
+        /**
+         * Return a list of [SnippetFinding]s grouped by the source file being matched by those snippets.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun groupSnippetsByFile(snippetFindings: Collection<SnippetFinding>): Map<String, List<SnippetFinding>> =
+            snippetFindings.groupBy { it.sourceLocation.path }
+
+        /**
+         * Collect all the licenses present in a collection of [SnippetFinding]s.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun collectLicenses(snippetFindings: Collection<SnippetFinding>): Set<String> =
+            snippetFindings.mapTo(mutableSetOf()) { it.snippet.licenses.toString() }
 
         /**
          * Return a flag indicating that issues have been encountered during the run of an advisor with the given
