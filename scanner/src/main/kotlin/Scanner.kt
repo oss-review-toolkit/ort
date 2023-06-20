@@ -192,18 +192,12 @@ class Scanner(
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = packages.mapTo(mutableSetOf()) { pkg ->
-                val id = pkg.id
-                val packageProvenance = controller.getPackageProvenance(id)
-                val packageProvenanceResolutionIssue = controller.getPackageProvenanceResolutionIssue(id)
-                val subRepositories = controller.getSubRepositories(id)
-                val nestedProvenanceResolutionIssue = controller.getNestedProvenanceResolutionIssue(id)
-
                 ProvenanceResolutionResult(
-                    id,
-                    packageProvenance,
-                    subRepositories,
-                    packageProvenanceResolutionIssue,
-                    nestedProvenanceResolutionIssue
+                    id = pkg.id,
+                    packageProvenance = controller.getPackageProvenance(pkg.id),
+                    subRepositories = controller.getSubRepositories(pkg.id),
+                    packageProvenanceResolutionIssue = controller.getPackageProvenanceResolutionIssue(pkg.id),
+                    nestedProvenanceResolutionIssue = controller.getNestedProvenanceResolutionIssue(pkg.id)
                 )
             },
             scanResults = controller.getAllScanResults().mapTo(mutableSetOf()) { scanResult ->
