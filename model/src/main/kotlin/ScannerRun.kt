@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 
+import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -30,6 +31,7 @@ import org.ossreviewtoolkit.model.utils.ProvenanceResolutionResultSortedSetConve
 import org.ossreviewtoolkit.model.utils.ScanResultSortedSetConverter
 import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.mergeScanResultsByScanner
+import org.ossreviewtoolkit.model.utils.prependPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -165,6 +167,18 @@ data class ScannerRun(
         provenances.map { it.id }.associateWith { id -> getMergedResultsForId(id) }
     }
 
+    private val fileListByProvenance: Map<KnownProvenance, FileList> by lazy {
+        files.associateBy { it.provenance }
+    }
+
+    private val fileListById: Map<Identifier, FileList> by lazy {
+        provenances.mapNotNull {
+            getMergedFileListForId(it.id)?.let { fileList ->
+                it.id to fileList
+            }
+        }.toMap()
+    }
+
     /**
      * Return all scan results related to [id] with the internal sub-repository scan results merged into the root
      * repository scan results. ScanResults for different scanners are not merged, so that the output contains exactly
@@ -207,10 +221,33 @@ data class ScannerRun(
             }.orEmpty()
     }
 
+    private fun getMergedFileListForId(id: Identifier): FileList? {
+        val resolutionResult = provenancesById[id]?.takeIf {
+            it.packageProvenanceResolutionIssue == null && it.nestedProvenanceResolutionIssue == null
+        } ?: return null
+
+        val packageProvenance = resolutionResult.packageProvenance!!
+
+        val fileListsByPath = resolutionResult.getKnownProvenancesWithoutVcsPath().mapValues { (_, provenance) ->
+            // If there was an issue creating at least one file list, then return null instead of an incomplete file
+            // list.
+            fileListByProvenance[provenance] ?: return null
+        }
+
+        return mergeFileLists(fileListsByPath)
+            .filterByVcsPath(packageProvenance.vcsPath)
+            .copy(provenance = packageProvenance)
+    }
+
     @JsonIgnore
     fun getAllScanResults(): Map<Identifier, List<ScanResult>> = scanResultsById
 
     fun getScanResults(id: Identifier): List<ScanResult> = scanResultsById[id].orEmpty()
+
+    @JsonIgnore
+    fun getAllFileLists(): Map<Identifier, FileList> = fileListById
+
+    fun getFileList(id: Identifier): FileList? = fileListById[id]
 
     @JsonIgnore
     fun getIssues(): Map<Identifier, Set<Issue>> =
@@ -230,3 +267,34 @@ private fun scanResultForProvenanceResolutionIssue(packageProvenance: KnownProve
 
 private fun ScanSummary.addIssue(issue: Issue?): ScanSummary =
     if (issue == null) this else copy(issues = (issues + issue).distinct())
+
+private fun mergeFileLists(fileListByPath: Map<String, FileList>): FileList {
+    val provenance = requireNotNull(fileListByPath[""]) {
+        "There must be a file list associated with the root path."
+    }.provenance
+
+    val files = fileListByPath.flatMapTo(mutableSetOf()) { (path, fileList) ->
+        fileList.files.map { fileEntry ->
+            fileEntry.copy(path = fileEntry.path.prependPath(path))
+        }
+    }
+
+    return FileList(provenance, files)
+}
+
+private fun FileList.filterByVcsPath(path: String): FileList {
+    if (path.isBlank()) return this
+
+    require(provenance is RepositoryProvenance) {
+        "Expected a repository provenance but got a ${provenance.javaClass.simpleName}."
+    }
+
+    val provenance = provenance.copy(vcsInfo = provenance.vcsInfo.copy(path = path))
+
+    // Do not keep files outside the VCS path in contrast to ScanSummary.filterByVcsPath().
+    val files = files.filterTo(mutableSetOf()) { fileEntry ->
+        File(fileEntry.path).startsWith(path)
+    }
+
+    return FileList(provenance, files)
+}
