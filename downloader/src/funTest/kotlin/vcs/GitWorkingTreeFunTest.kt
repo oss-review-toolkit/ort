@@ -72,8 +72,7 @@ class GitWorkingTreeFunTest : StringSpec({
         workingTree.listRemoteBranches().filterNot { it.startsWith("dependabot/") } should containExactlyInAnyOrder(
             "all-repos_autofix_bump",
             "all-repos_autofix_bump-2023-02-05",
-            "main",
-            "pre-commit-ci-update-config"
+            "main"
         )
     }
 
