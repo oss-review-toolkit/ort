@@ -62,7 +62,7 @@ class ScanController(
      * A map of package [KnownProvenance]s to an [Issue] that occurred during provenance resolution for the respective
      * package.
      */
-    private val nestedProvenanceResolutionIssues = mutableMapOf<KnownProvenance, Issue>()
+    private val nestedProvenanceResolutionIssues = mutableMapOf<Identifier, Issue>()
 
     /**
      * A map of [Identifier]s associated with a list of [Issue]s that occurred during a scan besides the issues
@@ -100,10 +100,10 @@ class ScanController(
     }
 
     /**
-     * Set the [issue] which failed nested provenance resolution for the given [provenance].
+     * Set the [issue] which failed nested provenance resolution for the package denoted by [id].
      */
-    fun putNestedProvenanceResolutionIssue(provenance: KnownProvenance, issue: Issue) {
-        nestedProvenanceResolutionIssues[provenance] = issue
+    fun putNestedProvenanceResolutionIssue(id: Identifier, issue: Issue) {
+        nestedProvenanceResolutionIssues[id] = issue
     }
 
     fun addIssue(id: Identifier, issue: Issue) {
@@ -183,8 +183,8 @@ class ScanController(
     /**
      * Return the nested provenance resolution issues associated with the given [provenance].
      */
-    fun getNestedProvenanceResolutionIssue(provenance: KnownProvenance): Issue? =
-        nestedProvenanceResolutionIssues[provenance]
+    fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? =
+        nestedProvenanceResolutionIssues[id]
 
     /**
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.
