@@ -21,23 +21,3 @@ plugins {
     // Apply precompiled plugins.
     id("ort-plugins-conventions")
 }
-
-dependencies {
-    api(project(":plugins:package-managers:bower-package-manager"))
-    api(project(":plugins:package-managers:bundler-package-manager"))
-    api(project(":plugins:package-managers:cargo-package-manager"))
-    api(project(":plugins:package-managers:carthage-package-manager"))
-    api(project(":plugins:package-managers:cocoapods-package-manager"))
-    api(project(":plugins:package-managers:composer-package-manager"))
-    api(project(":plugins:package-managers:conan-package-manager"))
-    api(project(":plugins:package-managers:gradle-inspector"))
-    api(project(":plugins:package-managers:gradle-model"))
-    api(project(":plugins:package-managers:gradle-package-manager"))
-    api(project(":plugins:package-managers:node-package-manager"))
-    api(project(":plugins:package-managers:nuget-package-manager"))
-    api(project(":plugins:package-managers:pub-package-manager"))
-    api(project(":plugins:package-managers:python-package-manager"))
-    api(project(":plugins:package-managers:spdx-package-manager"))
-    api(project(":plugins:package-managers:stack-package-manager"))
-    api(project(":plugins:package-managers:unmanaged-package-manager"))
-}

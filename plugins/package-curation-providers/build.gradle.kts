@@ -21,10 +21,3 @@ plugins {
     // Apply precompiled plugins.
     id("ort-plugins-conventions")
 }
-
-dependencies {
-    api(project(":plugins:package-curation-providers:clearly-defined-package-curation-provider"))
-    api(project(":plugins:package-curation-providers:file-package-curation-provider"))
-    api(project(":plugins:package-curation-providers:ort-config-package-curation-provider"))
-    api(project(":plugins:package-curation-providers:sw360-package-curation-provider"))
-}
