@@ -412,6 +412,17 @@ data class OrtResult(
     fun getScanResults(): Map<Identifier, List<ScanResult>> = scanner?.getAllScanResults().orEmpty()
 
     /**
+     * Return the [FileList] for the given [id].
+     */
+    fun getFileListForId(id: Identifier): FileList? = scanner?.getFileList(id)
+
+    /**
+     * Return the [FileList] associated with the respective identifier.
+     */
+    @JsonIgnore
+    fun getFileLists(): Map<Identifier, FileList> = scanner?.getAllFileLists().orEmpty()
+
+    /**
      * Return an uncurated [Package] which represents either a [Package] if the given [id] corresponds to a [Package],
      * a [Project] if the given [id] corresponds to a [Project] or `null` otherwise.
      */
