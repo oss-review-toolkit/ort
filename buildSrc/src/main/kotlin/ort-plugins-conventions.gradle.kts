@@ -26,6 +26,10 @@ plugins {
     id("ort-base-conventions")
 }
 
+javaPlatform {
+    allowDependencies()
+}
+
 configure<PublishingExtension> {
     publications {
         create<MavenPublication>(name) {

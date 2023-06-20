@@ -22,10 +22,6 @@ plugins {
     id("ort-plugins-conventions")
 }
 
-javaPlatform {
-    allowDependencies()
-}
-
 dependencies {
     api(project(":plugins:package-managers:bower-package-manager"))
     api(project(":plugins:package-managers:bundler-package-manager"))
