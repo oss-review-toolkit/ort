@@ -373,87 +373,78 @@ class SummaryView extends React.Component {
                             <Col span={22} offset={1}>
                                 <Tabs tabPosition="top" className="ort-tabs-summary-overview">
                                     {
-                                        webAppOrtResult.hasRuleViolations()
-                                        && (
-                                            <TabPane
-                                                tab={(
-                                                    <span>
-                                                        <ExceptionOutlined />
-                                                        Rule Violations (
-                                                        {
-                                                            ruleViolations.length !== unresolvedRuleViolations
-                                                            && `${unresolvedRuleViolations}/`
-                                                        }
-                                                        {ruleViolations.length}
-                                                        )
-                                                    </span>
-                                                )}
-                                                key="ort-summary-rule-violations-table"
-                                            >
-                                                <RuleViolationsTable
-                                                    onChange={
-                                                        SummaryView.onChangeRuleViolationsTable
+                                        <TabPane
+                                            tab={(
+                                                <span>
+                                                    <ExceptionOutlined />
+                                                    Rule Violations (
+                                                    {
+                                                        ruleViolations.length !== unresolvedRuleViolations
+                                                        && `${unresolvedRuleViolations}/`
                                                     }
-                                                    ruleViolations={webAppOrtResult.ruleViolations}
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.ruleViolations}
-                                                />
-                                            </TabPane>
-                                        )
+                                                    {ruleViolations.length}
+                                                    )
+                                                </span>
+                                            )}
+                                            key="ort-summary-rule-violations-table"
+                                        >
+                                            <RuleViolationsTable
+                                                onChange={
+                                                    SummaryView.onChangeRuleViolationsTable
+                                                }
+                                                ruleViolations={webAppOrtResult.ruleViolations}
+                                                showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                state={columns.ruleViolations}
+                                            />
+                                        </TabPane>
                                     }
                                     {
-                                        webAppOrtResult.hasIssues()
-                                        && (
-                                            <TabPane
-                                                tab={(
-                                                    <span>
-                                                        <BugOutlined />
-                                                        Issues (
-                                                        {
-                                                            issues.length !== unresolvedIssues
-                                                            && `${unresolvedIssues}/`
-                                                        }
-                                                        {issues.length}
-                                                        )
-                                                    </span>
-                                                )}
-                                                key="ort-summary-issues-table"
-                                            >
-                                                <IssuesTable
-                                                    issues={webAppOrtResult.issues}
-                                                    onChange={
-                                                        SummaryView.onChangeIssuesTable
+                                        <TabPane
+                                            tab={(
+                                                <span>
+                                                    <BugOutlined />
+                                                    Issues (
+                                                    {
+                                                        issues.length !== unresolvedIssues
+                                                        && `${unresolvedIssues}/`
                                                     }
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.issues}
-                                                />
-                                            </TabPane>
-                                        )
+                                                    {issues.length}
+                                                    )
+                                                </span>
+                                            )}
+                                            key="ort-summary-issues-table"
+                                        >
+                                            <IssuesTable
+                                                issues={webAppOrtResult.issues}
+                                                onChange={
+                                                    SummaryView.onChangeIssuesTable
+                                                }
+                                                showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                state={columns.issues}
+                                            />
+                                        </TabPane>
                                     }
                                     {
-                                        webAppOrtResult.hasVulnerabilities()
-                                        && (
-                                            <TabPane
-                                                tab={(
-                                                    <span>
-                                                        <SecurityScanOutlined />
-                                                        Vulnerabilities (
-                                                        {vulnerabilities.length}
-                                                        )
-                                                    </span>
-                                                )}
-                                                key="ort-summary-vulnerabilities-table"
-                                            >
-                                                <VulnerabilitiesTable
-                                                    onChange={
-                                                        SummaryView.onChangeVulnerabilitiesTable
-                                                    }
-                                                    vulnerabilities={webAppOrtResult.vulnerabilities}
-                                                    showExcludesColumn={webAppOrtResult.hasExcludes()}
-                                                    state={columns.vulnerabilities}
-                                                />
-                                            </TabPane>
-                                        )
+                                        <TabPane
+                                            tab={(
+                                                <span>
+                                                    <SecurityScanOutlined />
+                                                    Vulnerabilities (
+                                                    {vulnerabilities.length}
+                                                    )
+                                                </span>
+                                            )}
+                                            key="ort-summary-vulnerabilities-table"
+                                        >
+                                            <VulnerabilitiesTable
+                                                onChange={
+                                                    SummaryView.onChangeVulnerabilitiesTable
+                                                }
+                                                vulnerabilities={webAppOrtResult.vulnerabilities}
+                                                showExcludesColumn={webAppOrtResult.hasExcludes()}
+                                                state={columns.vulnerabilities}
+                                            />
+                                        </TabPane>
                                     }
                                     {
                                         webAppOrtResult.hasDeclaredLicensesProcessed()
