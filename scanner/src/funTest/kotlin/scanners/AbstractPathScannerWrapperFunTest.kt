@@ -46,9 +46,9 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
 
     private lateinit var inputDir: File
 
-    abstract val scanner: PathScannerWrapper
-    abstract val expectedFileLicenses: List<LicenseFinding>
-    abstract val expectedDirectoryLicenses: List<LicenseFinding>
+    protected abstract val scanner: PathScannerWrapper
+    protected abstract val expectedFileLicenses: List<LicenseFinding>
+    protected abstract val expectedDirectoryLicenses: List<LicenseFinding>
 
     override suspend fun beforeSpec(spec: Spec) {
         inputDir = tempdir()
