@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,37 +20,26 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    // Apply core plugins.
-    `java-test-fixtures`
-
     // Apply precompiled plugins.
     id("ort-library-conventions")
 }
 
 dependencies {
     api(project(":model"))
+    api(project(":scanner"))
 
-    implementation(project(":clients:clearly-defined-client"))
-    implementation(project(":downloader"))
-    implementation(project(":utils:ort-utils"))
+    implementation(project(":clients:scanoss-client"))
+    implementation(project(":utils:common-utils"))
+    implementation(project(":utils:spdx-utils"))
 
-    implementation(libs.bundles.exposed)
-    implementation(libs.hikari)
-    implementation(libs.jacksonModuleKotlin)
     implementation(libs.kotlinxCoroutines)
-    implementation(libs.postgres)
-    implementation(libs.retrofitConverterJackson)
-    implementation(libs.sw360Client)
+    implementation(libs.scanoss)
 
     funTestApi(testFixtures(project(":scanner")))
 
     testImplementation(libs.bundles.kotlinxSerialization)
     testImplementation(libs.mockk)
-    testImplementation(libs.retrofitConverterKotlinxSerialization)
     testImplementation(libs.wiremock)
-
-    testFixturesImplementation(libs.kotestAssertionsCore)
-    testFixturesImplementation(libs.kotestRunnerJunit5)
 }
 
 tasks.named<KotlinCompile>("compileTestKotlin") {

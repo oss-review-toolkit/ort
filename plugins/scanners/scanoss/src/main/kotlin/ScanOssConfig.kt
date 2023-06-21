@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.scanoss
+package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
