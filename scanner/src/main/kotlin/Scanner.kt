@@ -34,6 +34,7 @@ import kotlinx.coroutines.withContext
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.downloader.DownloadException
+import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.KnownProvenance
@@ -189,7 +190,7 @@ class Scanner(
         runProvenanceScanners(controller, context)
         runPathScanners(controller, context)
 
-        createMissingFileLists(controller)
+        createFileLists(controller)
         createMissingArchives(controller)
 
         val provenances = packages.mapTo(mutableSetOf()) { pkg ->
@@ -227,12 +228,24 @@ class Scanner(
             }
         }
 
+        val files = controller.getAllFileLists().mapTo(mutableSetOf()) { (provenance, fileList) ->
+            FileList(
+                provenance = provenance.alignRevisions() as KnownProvenance,
+                files = fileList.files.mapTo(mutableSetOf()) { (path, sha1) ->
+                    FileList.Entry(path, sha1)
+                }
+            )
+        }.mapNotNullTo(mutableSetOf()) { fileList ->
+            vcsPathsForProvenances[fileList.provenance]?.let {
+                fileList.filterByVcsPaths(it)
+            }
+        }
+
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
-            // TODO: Set the file lists.
-            files = emptySet()
+            files = files
         )
     }
 
@@ -642,22 +655,23 @@ class Scanner(
         }
     }
 
-    private suspend fun createMissingFileLists(controller: ScanController) {
+    private suspend fun createFileLists(controller: ScanController) {
         val idsByProvenance = controller.getIdsByProvenance()
-        val provenancesMissingFileLists = idsByProvenance.keys.filterNot { fileListResolver.has(it) }
+        val provenances = idsByProvenance.keys
 
-        logger.info { "Creating file lists for ${provenancesMissingFileLists.size} provenances." }
+        logger.info { "Creating file lists for ${provenances.size} provenances." }
 
         val duration = measureTime {
             withContext(Dispatchers.IO) {
-                provenancesMissingFileLists.mapIndexed { index, provenance ->
+                provenances.mapIndexed { index, provenance ->
                     async {
                         logger.info {
-                            "Creating file list for provenance $index of ${provenancesMissingFileLists.size}."
+                            "Creating file list for provenance $index of ${provenances.size}."
                         }
 
                         runCatching {
-                            fileListResolver.resolve(provenance)
+                            val fileList = fileListResolver.resolve(provenance)
+                            controller.putFileList(provenance, fileList)
                         }.onFailure {
                             idsByProvenance.getValue(provenance).forEach { id ->
                                 controller.addIssue(
@@ -675,7 +689,7 @@ class Scanner(
             }
         }
 
-        logger.info { "Created file lists for ${provenancesMissingFileLists.size} provenances in $duration." }
+        logger.info { "Created file lists for ${provenances.size} provenances in $duration." }
     }
 
     private fun createMissingArchives(controller: ScanController) {
@@ -816,3 +830,16 @@ private fun getVcsPathForRepositoryOrNull(vcsPath: String, repositoryPath: Strin
         runCatching { vcsPathFile.toRelativeString(repoPathFile) }.getOrNull()
     }
 }
+
+private fun FileList.filterByVcsPaths(paths: Collection<String>): FileList =
+    if (paths.any { it.isBlank() }) {
+        this
+    } else {
+        copy(
+            files = files.filterTo(mutableSetOf()) { file ->
+                paths.any { filterPath ->
+                    file.path.startsWith("$filterPath/")
+                }
+            }
+        )
+    }
