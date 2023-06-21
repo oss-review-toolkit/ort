@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.scanoss
+package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
-private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/scanoss/filesToScan")
+private val TEST_DIRECTORY_TO_SCAN = File("src/test/assets/filesToScan")
 
 /**
  * A test for scanning a directory with the [ScanOss] scanner.
@@ -58,7 +58,7 @@ class ScanOssScannerDirectoryTest : StringSpec({
     val server = WireMockServer(
         WireMockConfiguration.options()
             .dynamicPort()
-            .usingFilesUnderDirectory("src/test/assets/scanoss/scanMulti")
+            .usingFilesUnderDirectory("src/test/assets/scanMulti")
     )
 
     beforeSpec {
