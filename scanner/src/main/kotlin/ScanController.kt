@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.PATH_STRING_COMPARATOR
  * A controller for the data related to a run of the [Scanner].
  */
 @Suppress("TooManyFunctions")
-class ScanController(
+internal class ScanController(
     /**
      * The set of [Package]s to be scanned.
      */
