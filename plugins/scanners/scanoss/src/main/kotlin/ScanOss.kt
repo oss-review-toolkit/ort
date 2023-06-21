@@ -112,7 +112,7 @@ class ScanOss internal constructor(
             val uuid = UUID.fromString(entry.key)
 
             val fileName = fileNamesAnonymizationMapping[uuid] ?: throw IllegalArgumentException(
-                "The $name server returned an UUID not present in the mapping."
+                "The $name server returned UUID '$uuid' which is not present in the mapping."
             )
 
             fileName to entry.value
