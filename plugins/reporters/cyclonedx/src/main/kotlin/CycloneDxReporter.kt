@@ -60,7 +60,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  */
 class CycloneDxReporter : Reporter {
     companion object {
-        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_13
+        val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_14
 
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
 
