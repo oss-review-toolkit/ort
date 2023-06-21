@@ -52,6 +52,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * each [Project] contained in the ORT result a separate SBOM is created.
  *
  * This reporter supports the following options:
+ * - *schema.version*: The CycloneDX schema version to use. Defaults to [DEFAULT_SCHEMA_VERSION].
  * - *single.bom*: If true (the default), a single SBOM for all projects is created; if set to false, separate SBOMs are
  *                 created for each project.
  * - *output.file.formats*: A comma-separated list of (case-insensitive) output formats to export to. Supported are XML
