@@ -648,7 +648,7 @@ class Scanner(
             }
         }
 
-        logger.info { "Created file list for ${provenancesMissingFileLists.size} provenances in $duration." }
+        logger.info { "Created file lists for ${provenancesMissingFileLists.size} provenances in $duration." }
     }
 
     private fun createMissingArchives(controller: ScanController) {
