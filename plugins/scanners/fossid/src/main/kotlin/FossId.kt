@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.fossid
+package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import java.io.IOException
 import java.time.Instant

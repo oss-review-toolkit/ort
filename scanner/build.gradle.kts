@@ -31,7 +31,6 @@ dependencies {
     api(project(":model"))
 
     implementation(project(":clients:clearly-defined-client"))
-    implementation(project(":clients:fossid-webapp-client"))
     implementation(project(":clients:scanoss-client"))
     implementation(project(":downloader"))
     implementation(project(":utils:ort-utils"))

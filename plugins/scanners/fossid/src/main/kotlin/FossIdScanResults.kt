@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.fossid
+package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile

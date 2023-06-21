@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.fossid
+package org.ossreviewtoolkit.plugins.scanners.fossid
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
@@ -103,11 +103,11 @@ import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SCAN_ID_KEY
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_KEY
+import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_CODE_KEY
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SCAN_ID_KEY
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.SERVER_URL_KEY
-import org.ossreviewtoolkit.scanner.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
