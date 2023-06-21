@@ -233,7 +233,33 @@ scanner:
           path: "pkg3/pkg3.txt"
           start_line: -1
           end_line: -1
-  files: []
+  files:
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      resolved_revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+    files:
+    - path: "LICENSE"
+      sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+    - path: "README"
+      sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+    - path: "pkg-s1/pkg-s1.txt"
+      sha1: "e5fb17f8f4f4ef0748bb5ba137fd0e091dd5a1f6"
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    files:
+    - path: "pkg1/pkg1.txt"
+      sha1: "22eb73bd30d47540a4e05781f0f6e07640857cae"
+    - path: "pkg3/pkg3.txt"
+      sha1: "859d66be2d153968cdaa8ec7265270c241eea024"
 advisor: null
 evaluator: null
 resolved_configuration: {}

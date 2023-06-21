@@ -93,6 +93,11 @@ internal class ScanController(
     private val scanResults = mutableMapOf<ScannerWrapper, MutableMap<KnownProvenance, MutableList<ScanResult>>>()
 
     /**
+     * The [FileList] for each [KnownProvenance].
+     */
+    private val fileLists = mutableMapOf<KnownProvenance, FileList>()
+
+    /**
      * Set the [issue] which failed package provenance resolution for the package denoted by [id].
      */
     fun putPackageProvenanceResolutionIssue(id: Identifier, issue: Issue) {
@@ -105,6 +110,18 @@ internal class ScanController(
     fun putNestedProvenanceResolutionIssue(id: Identifier, issue: Issue) {
         nestedProvenanceResolutionIssues[id] = issue
     }
+
+    /**
+     * Set the [fileList] corresponding to [provenance], overwriting any existing value.
+     */
+    fun putFileList(provenance: KnownProvenance, fileList: FileList) {
+        fileLists[provenance] = fileList
+    }
+
+    /**
+     * Return all [FileList] by their corresponding [provenance].
+     */
+    fun getAllFileLists(): Map<KnownProvenance, FileList> = fileLists
 
     fun addIssue(id: Identifier, issue: Issue) {
         issues.getOrPut(id) { mutableListOf() } += issue

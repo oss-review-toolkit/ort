@@ -1,0 +1,92 @@
+---
+Dummy::pkg0:1.0.0:
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: ""
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  files:
+  - path: ".gitmodules"
+    sha1: "d7f070ddbe0b6dd8a173714d565a1240dd96eacd"
+  - path: "LICENSE"
+    sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+  - path: "README"
+    sha1: "82cfc115138054ce5b5e6839f38687c9d7186710"
+  - path: "pkg1/pkg1.txt"
+    sha1: "22eb73bd30d47540a4e05781f0f6e07640857cae"
+  - path: "pkg2/pkg2.txt"
+    sha1: "cc8f97cebe1dc0ed889a31f504bcf491d5241aaa"
+  - path: "pkg3/pkg3.txt"
+    sha1: "859d66be2d153968cdaa8ec7265270c241eea024"
+  - path: "pkg3/subrepo/LICENSE"
+    sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+  - path: "pkg3/subrepo/README"
+    sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+  - path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
+    sha1: "e5fb17f8f4f4ef0748bb5ba137fd0e091dd5a1f6"
+  - path: "pkg4/pkg4.txt"
+    sha1: "3cba29011be2b9d59f6204d6fa0a386b1b2dbd90"
+  - path: "pkg4/subrepo/LICENSE"
+    sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+  - path: "pkg4/subrepo/README"
+    sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+  - path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
+    sha1: "37996d13eceb6b29db43a381ce8df375b5eee8e9"
+Dummy::pkg1:1.0.0:
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: "pkg1"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  files:
+  - path: "pkg1/pkg1.txt"
+    sha1: "22eb73bd30d47540a4e05781f0f6e07640857cae"
+Dummy::pkg2:1.0.0:
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: "pkg2"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  files:
+  - path: "pkg2/pkg2.txt"
+    sha1: "cc8f97cebe1dc0ed889a31f504bcf491d5241aaa"
+Dummy::pkg3:1.0.0:
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: "pkg3"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  files:
+  - path: "pkg3/pkg3.txt"
+    sha1: "859d66be2d153968cdaa8ec7265270c241eea024"
+  - path: "pkg3/subrepo/LICENSE"
+    sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+  - path: "pkg3/subrepo/README"
+    sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+  - path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
+    sha1: "e5fb17f8f4f4ef0748bb5ba137fd0e091dd5a1f6"
+Dummy::pkg4:1.0.0:
+  provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: "pkg4"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  files:
+  - path: "pkg4/pkg4.txt"
+    sha1: "3cba29011be2b9d59f6204d6fa0a386b1b2dbd90"
+  - path: "pkg4/subrepo/LICENSE"
+    sha1: "7df059597099bb7dcf25d2a9aedfaf4465f72d8d"
+  - path: "pkg4/subrepo/README"
+    sha1: "ae8044f7fce7ee914a853c30c3085895e9be8b9c"
+  - path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
+    sha1: "37996d13eceb6b29db43a381ce8df375b5eee8e9"

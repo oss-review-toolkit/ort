@@ -78,6 +78,14 @@ class ScannerIntegrationFunTest : WordSpec({
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
         }
+
+        "return the expected (merged) file lists" {
+            val expectedResultFile = getAssetFile("scanner-integration-expected-file-lists.yml")
+
+            val fileLists = ortResult.getFileLists().toSortedMap()
+
+            fileLists.toYaml() should matchExpectedResult(expectedResultFile)
+        }
     }
 
     "Scanning a subset of the packages corresponding to a single VCS" should {
