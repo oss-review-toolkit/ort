@@ -94,5 +94,5 @@ jobs:
         cache: pip
     - name: Check REUSE Compliance
       run: |
-        pip install --user reuse
+        pip install --user reuse==1.1.2
         ~/.local/bin/reuse lint
