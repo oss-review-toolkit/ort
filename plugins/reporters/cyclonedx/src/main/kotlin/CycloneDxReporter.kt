@@ -48,15 +48,14 @@ import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
 /**
- * A [Reporter] that creates software bills of materials (SBOM) in the [CycloneDX][1] format. For each [Project]
- * contained in the ORT result a separate SBOM is created.
+ * A [Reporter] that creates software bills of materials (SBOM) in the [CycloneDX](https://cyclonedx.org) format. For
+ * each [Project] contained in the ORT result a separate SBOM is created.
  *
  * This reporter supports the following options:
  * - *single.bom*: If true (the default), a single SBOM for all projects is created; if set to false, separate SBOMs are
  *                 created for each project.
  * - *output.file.formats*: A comma-separated list of (case-insensitive) output formats to export to. Supported are XML
  *                          and JSON.
- * [1]: https://cyclonedx.org
  */
 class CycloneDxReporter : Reporter {
     companion object {
