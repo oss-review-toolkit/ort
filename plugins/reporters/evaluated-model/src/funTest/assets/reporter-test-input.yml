@@ -30,6 +30,10 @@ repository:
         reason: "TEST_DEPENDENCY_OF"
         comment: "The scope only contains test dependencies."
     resolutions:
+      issues:
+      - message: "A test issue\\."
+        reason: "CANT_FIX_ISSUE"
+        comment: "A comment explaining why the issue can be ignored."
       rule_violations:
       - message: "Apache-2.0 hint"
         reason: "CANT_FIX_EXCEPTION"

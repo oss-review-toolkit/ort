@@ -58,7 +58,11 @@ scopes:
   name: "testCompile"
   excludes:
   - 0
-issue_resolutions: []
+issue_resolutions:
+- _id: 0
+  message: "A test issue\\."
+  reason: "CANT_FIX_ISSUE"
+  comment: "A comment explaining why the issue can be ignored."
 issues:
 - _id: 0
   timestamp: "1970-01-01T00:00:00Z"
@@ -77,6 +81,8 @@ issues:
   source: "VulnerableCode"
   message: "A test issue."
   severity: "ERROR"
+  resolutions:
+  - 0
   pkg: 1
   how_to_fix: "Some how to fix text."
 scan_results:
@@ -871,14 +877,14 @@ statistics:
     scope_excludes: 1
     license_choices: 2
     license_finding_curations: 0
-    issue_resolutions: 0
+    issue_resolutions: 1
     rule_violation_resolutions: 1
     vulnerability_resolutions: 0
   open_issues:
-    errors: 2
+    errors: 1
     warnings: 0
     hints: 0
-    severe: 2
+    severe: 1
   open_rule_violations:
     errors: 1
     warnings: 1
@@ -939,6 +945,8 @@ repository:
       scopes:
       - 0
     resolutions:
+      issues:
+      - 0
       rule_violations:
       - 0
     license_choices:
@@ -956,8 +964,10 @@ repository_configuration: "---\nexcludes:\n  paths:\n  - pattern: \"sub/module/p
   \n    reason: \"EXAMPLE_OF\"\n    comment: \"The project is an example.\"\n  - pattern:\
   \ \"**/*.java\"\n    reason: \"EXAMPLE_OF\"\n    comment: \"These are example files.\"\
   \n  scopes:\n  - pattern: \"testCompile\"\n    reason: \"TEST_DEPENDENCY_OF\"\n\
-  \    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  rule_violations:\n\
-  \  - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment:\
+  \    comment: \"The scope only contains test dependencies.\"\nresolutions:\n  issues:\n\
+  \  - message: \"A test issue\\\\.\"\n    reason: \"CANT_FIX_ISSUE\"\n    comment:\
+  \ \"A comment explaining why the issue can be ignored.\"\n  rule_violations:\n \
+  \ - message: \"Apache-2.0 hint\"\n    reason: \"CANT_FIX_EXCEPTION\"\n    comment:\
   \ \"Apache-2 is not an issue.\"\nlicense_choices:\n  repository_license_choices:\n\
   \  - given: \"GPL-2.0-only OR MIT\"\n    choice: \"MIT\"\n  package_license_choices:\n\
   \  - package_id: \"Maven:com.h2database:h2:1.4.200\"\n    license_choices:\n   \
