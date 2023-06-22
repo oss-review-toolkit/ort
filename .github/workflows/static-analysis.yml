@@ -33,6 +33,7 @@ jobs:
     - name: Check copyright and license information
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: checkCopyrightsInNoticeFile checkLicenseHeaders
   detekt-issues:
     runs-on: ubuntu-22.04
@@ -49,6 +50,7 @@ jobs:
     - name: Check for Detekt Issues
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: detekt detektTest detektFunTest
     - name: Upload SARIF File
       uses: github/codeql-action/upload-sarif@v2
