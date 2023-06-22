@@ -140,6 +140,21 @@ class MapIgnoreRulesTest : WordSpec({
             issues should beEmpty()
         }
 
+        "map rule with files (with '-' in their names)" {
+            val exclude = Excludes(listOf(PathExclude("package-lock.json", PathExcludeReason.OTHER)))
+            val issues = mutableListOf<Issue>()
+
+            val ignoreRules = convertRules(exclude, issues)
+
+            ignoreRules shouldHaveSize 1
+            ignoreRules.first().shouldNotBeNull {
+                value shouldBe "package-lock.json"
+                type shouldBe RuleType.FILE
+            }
+
+            issues should beEmpty()
+        }
+
         "add an issue when the pattern cannot be mapped" {
             val exclude = Excludes(listOf(PathExclude("directory/**/test/*", PathExcludeReason.OTHER)))
             val issues = mutableListOf<Issue>()

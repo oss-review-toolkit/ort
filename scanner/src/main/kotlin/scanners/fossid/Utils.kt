@@ -28,7 +28,7 @@ import org.ossreviewtoolkit.model.config.PathExclude
 
 private val DIRECTORY_REGEX = "(?<directory>(?:\\w+/)*\\w+)/?(?<starstar>\\*\\*)?".toRegex()
 private val EXTENSION_REGEX = "\\*\\.(?<extension>\\w+)".toRegex()
-private val FILE_REGEX = "(?<file>[\\w.]+)".toRegex()
+private val FILE_REGEX = "(?<file>[^/]+)".toRegex()
 
 /**
  * Convert the ORT [path excludes][Excludes.paths] in [excludes] to FossID [IgnoreRule]s.. If an error is encountered
