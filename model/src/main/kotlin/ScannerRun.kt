@@ -60,7 +60,6 @@ data class ScannerRun(
     /**
      * The results of the provenance resolution for all projects and packages.
      */
-
     @JsonSerialize(converter = ProvenanceResolutionResultSortedSetConverter::class)
     val provenances: Set<ProvenanceResolutionResult>,
 
