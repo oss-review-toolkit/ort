@@ -125,7 +125,7 @@ class MapIgnoreRulesTest : WordSpec({
             issues should beEmpty()
         }
 
-        "map rule with files (with '.' in the names" {
+        "map rule with files (with '.' in their names)" {
             val exclude = Excludes(listOf(PathExclude("file.old.txt", PathExcludeReason.OTHER)))
             val issues = mutableListOf<Issue>()
 
