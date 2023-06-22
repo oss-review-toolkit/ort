@@ -29,6 +29,7 @@ jobs:
     - name: Build all classes
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: --scan classes -x :plugins:reporters:web-app-template:yarnBuild
   build-web-app-reporter:
     needs: build
@@ -44,6 +45,7 @@ jobs:
     - name: Build the web-app-reporter
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: --scan :plugins:reporters:web-app-template:yarnBuild
   codeql-analysis:
     needs: build
@@ -66,6 +68,7 @@ jobs:
     - name: Build all classes
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: -Dorg.gradle.jvmargs=-Xmx1g classes -x :plugins:reporters:web-app-template:yarnBuild
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
@@ -83,6 +86,7 @@ jobs:
     - name: Run unit tests
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: --scan test jacocoTestReport -x :plugins:reporters:web-app-template:yarnBuild
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
@@ -129,6 +133,7 @@ jobs:
     - name: Run functional tests that do not require external tools
       uses: gradle/gradle-build-action@v2
       with:
+        gradle-home-cache-cleanup: true
         arguments: --scan -Ptests.exclude=org.ossreviewtoolkit.cli.*,org.ossreviewtoolkit.analyzer.*,org.ossreviewtoolkit.plugins.packagemanagers.* funTest jacocoFunTestReport
     - name: Upload code coverage data
       uses: codecov/codecov-action@v3
