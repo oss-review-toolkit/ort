@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.scanners
 
-import io.kotest.core.spec.style.StringSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.should
 
 import java.io.File
@@ -48,28 +48,31 @@ import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
-class ScannerIntegrationFunTest : StringSpec({
-    "scan() returns the expected ORT result for a given analyzer result".config(invocations = 3) {
-        val analyzerResultFile = getAssetFile("analyzer-result.yml")
-        val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
+class ScannerIntegrationFunTest : WordSpec({
+    "scan()" should {
+        "return the expected ORT result for a given analyzer result".config(invocations = 3) {
+            val analyzerResultFile = getAssetFile("analyzer-result.yml")
+            val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
 
-        val result = createScanner().scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
+            val result = createScanner().scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
 
-        patchActualResult(result.toYaml(), patchStartAndEndTime = true) should matchExpectedResult(expectedResultFile)
-    }
+            patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
+                    matchExpectedResult(expectedResultFile)
+        }
 
-    "scan() returns the expected (merged) scan results for a given analyzer result".config(invocations = 3) {
-        val analyzerResultFile = getAssetFile("analyzer-result.yml")
-        val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
+        "return the expected (merged) scan results for a given analyzer result".config(invocations = 3) {
+            val analyzerResultFile = getAssetFile("analyzer-result.yml")
+            val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
 
-        val scanResults = createScanner().scan(
-            analyzerResultFile.readValue(),
-            skipExcluded = false,
-            emptyMap()
-        ).getScanResults().toSortedMap()
+            val scanResults = createScanner().scan(
+                analyzerResultFile.readValue(),
+                skipExcluded = false,
+                emptyMap()
+            ).getScanResults().toSortedMap()
 
-        patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
-                matchExpectedResult(expectedResultFile)
+            patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
+                    matchExpectedResult(expectedResultFile)
+        }
     }
 })
 
