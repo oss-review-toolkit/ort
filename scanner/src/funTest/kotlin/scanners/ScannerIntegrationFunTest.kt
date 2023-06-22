@@ -50,7 +50,7 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class ScannerIntegrationFunTest : WordSpec({
     "scan()" should {
-        "return the expected ORT result for a given analyzer result".config(invocations = 3) {
+        "return the expected ORT result for a given analyzer result" {
             val analyzerResultFile = getAssetFile("analyzer-result.yml")
             val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
 
@@ -60,7 +60,7 @@ class ScannerIntegrationFunTest : WordSpec({
                     matchExpectedResult(expectedResultFile)
         }
 
-        "return the expected (merged) scan results for a given analyzer result".config(invocations = 3) {
+        "return the expected (merged) scan results for a given analyzer result" {
             val analyzerResultFile = getAssetFile("analyzer-result.yml")
             val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
 
