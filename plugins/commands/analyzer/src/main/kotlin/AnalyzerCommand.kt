@@ -38,11 +38,9 @@ import kotlin.time.toKotlinDuration
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.analyzer.Analyzer
-import org.ossreviewtoolkit.analyzer.PackageManager
-import org.ossreviewtoolkit.analyzer.PackageManagerFactory
+import org.ossreviewtoolkit.analyzer.determineEnabledPackageManagers
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.ResolvedPackageCurations.Companion.REPOSITORY_CONFIGURATION_PROVIDER_ID
-import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
 import org.ossreviewtoolkit.model.readValueOrNull
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
@@ -234,11 +232,4 @@ class AnalyzerCommand : OrtCommand(
 
         severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
     }
-}
-
-private fun AnalyzerConfiguration.determineEnabledPackageManagers(): Set<PackageManagerFactory> {
-    val enabled = enabledPackageManagers?.mapNotNull { PackageManager.ALL[it] } ?: PackageManager.ENABLED_BY_DEFAULT
-    val disabled = disabledPackageManagers?.mapNotNull { PackageManager.ALL[it] }.orEmpty()
-
-    return enabled.toSet() - disabled.toSet()
 }
