@@ -329,8 +329,7 @@ class FossIdTest : WordSpec({
             summary.licenseFindings shouldContainExactlyInAnyOrder expectedLicenseFindings
         }
 
-        // TODO: Deprecation: Remove the pending files in issues. This is a breaking change.
-        "report pending files as issues" {
+        "create an issue if there are files pending identification" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
@@ -350,9 +349,14 @@ class FossIdTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
-            val expectedIssues = listOf(createPendingFile(4), createPendingFile(5)).map {
-                Issue(Instant.EPOCH, "FossId", "Pending identification for '$it'.", Severity.HINT)
-            }
+            val expectedIssues = listOf(
+                Issue(
+                    timestamp = Instant.EPOCH,
+                    source = "FossId",
+                    message = "This scan has 2 file(s) pending identification in FossID.",
+                    severity = Severity.HINT
+                )
+            )
 
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues
         }

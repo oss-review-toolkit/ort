@@ -846,10 +846,13 @@ class FossId internal constructor(
     ): ScanResult {
         // TODO: Maybe get issues from FossID (see has_failed_scan_files, get_failed_files and maybe get_scan_log).
 
-        // TODO: Deprecation: Remove the pending files in issues. This is a breaking change.
-        val issues = rawResults.listPendingFiles.mapTo(mutableListOf()) {
-            Issue(source = name, message = "Pending identification for '$it'.", severity = Severity.HINT)
-        }
+        val issues = mutableListOf(
+            Issue(
+                source = name,
+                message = "This scan has ${rawResults.listPendingFiles.size} file(s) pending identification in FossID.",
+                severity = Severity.HINT
+            )
+        )
 
         val snippetFindings = mapSnippetFindings(rawResults, issues)
 
