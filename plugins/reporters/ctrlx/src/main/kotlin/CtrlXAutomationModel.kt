@@ -23,7 +23,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.SpdxExpression.Strictness
 
 /**
  * The root element of "fossinfo.json" files, see https://github.com/boschrexroth/json-schema.
@@ -166,7 +165,7 @@ data class License(
             "The '$name' value of the 'name' field must not contain any leading or trailing whitespaces."
         }
 
-        require(spdx == null || SpdxExpression.parse(spdx, Strictness.ALLOW_LICENSEREF_EXCEPTIONS).isValid()) {
+        require(spdx == null || SpdxExpression.parse(spdx).isValid()) {
             "The '$spdx' value of the 'spdx' field must be a valid SPDX identifier."
         }
 
