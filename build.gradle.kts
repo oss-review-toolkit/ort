@@ -20,6 +20,7 @@
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 import org.eclipse.jgit.api.Git
+import org.eclipse.jgit.ignore.FastIgnoreRule
 import org.eclipse.jgit.lib.Config
 import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.revwalk.RevWalk
@@ -335,5 +336,56 @@ val checkLicenseHeaders by tasks.registering {
         }
 
         if (hasErrors) throw GradleException("There were errors in license headers.")
+    }
+}
+
+val checkGitAttributes by tasks.registering {
+    val files = getCommittedFilePaths(rootDir)
+
+    inputs.files(files)
+
+    doLast {
+        var hasErrors = false
+
+        val gitAttributesFiles = files.filter { it.endsWith(".gitattributes") }
+        val commentChars = setOf('#', '/')
+
+        gitAttributesFiles.forEach { gitAttributes ->
+            logger.lifecycle("Checking file '$gitAttributes'...")
+
+            val gitAttributesFile = file(gitAttributes)
+            val ignoreRules = gitAttributesFile.readLines()
+                // Skip empty and comment lines.
+                .map { it.trim() }
+                .filter { it.isNotEmpty() && it.first() !in commentChars }
+                // The patterns is the part before the first whitespace.
+                .mapTo(mutableSetOf()) { line -> line.takeWhile { !it.isWhitespace() } }
+                // Create ignore rules from valid patterns.
+                .mapIndexedNotNull { index, pattern ->
+                    runCatching {
+                        FastIgnoreRule(pattern)
+                    }.onFailure {
+                        logger.warn("File '$gitAttributes' contains an invalid pattern in line ${index + 1}: $it")
+                    }.getOrNull()
+                }
+
+            // Check only those files that are in scope of this ".gitattributes" file.
+            val gitAttributesDir = gitAttributesFile.parentFile
+            val filesInScope = files.filter { rootDir.resolve(it).startsWith(gitAttributesDir) }
+
+            ignoreRules.forEach { rule ->
+                val matchesAnything = filesInScope.any { file ->
+                    val relativeFile = file(file).relativeTo(gitAttributesDir)
+                    rule.isMatch(relativeFile.invariantSeparatorsPath, /* directory = */ false)
+                }
+
+                if (!matchesAnything) {
+                    hasErrors = true
+                    logger.error("Rule '$rule' does not match anything.")
+                }
+            }
+        }
+
+        if (hasErrors) throw GradleException("There were stale '.gitattribute' entries.")
     }
 }

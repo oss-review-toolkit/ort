@@ -30,11 +30,11 @@ jobs:
       with:
         distribution: temurin
         java-version: 17
-    - name: Check copyright and license information
+    - name: Check copyrights, license headers, and .gitattributes
       uses: gradle/gradle-build-action@v2
       with:
         gradle-home-cache-cleanup: true
-        arguments: checkCopyrightsInNoticeFile checkLicenseHeaders
+        arguments: checkCopyrightsInNoticeFile checkLicenseHeaders checkGitAttributes
   detekt-issues:
     runs-on: ubuntu-22.04
     env:
