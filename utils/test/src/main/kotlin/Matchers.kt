@@ -90,6 +90,7 @@ fun matchExpectedResult(
                     yet:
                     - `wl-paste | col -bx | git apply` (Linux with Wayland)
                     - `xsel -b | col -bx | git apply` (Linux with X)
+                    - `cat /dev/clipboard | dos2unix | cut -d ' ' -f 5- | git apply` (Windows with Git Bash)
                     Then copy the following lines to the clipboard and run the previously pasted commands.
                 """.trimIndent() + diff.joinToString("\n", "\n")
             },
