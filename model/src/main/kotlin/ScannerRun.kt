@@ -27,9 +27,9 @@ import java.time.Instant
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.ProvenanceResolutionResultSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ScanResultSortedSetConverter
-import org.ossreviewtoolkit.model.utils.alignRevisions
-import org.ossreviewtoolkit.model.utils.clearVcsPath
+import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.mergeScanResultsByScanner
+import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.utils.common.getDuplicates
 import org.ossreviewtoolkit.utils.ort.Environment
 
@@ -190,22 +190,6 @@ data class ScannerRun(
             scanResults.flatMapTo(mutableSetOf()) { it.summary.issues }
         }
 }
-
-private fun ProvenanceResolutionResult.getKnownProvenancesWithoutVcsPath(): Map<String, KnownProvenance> =
-    buildMap {
-        when (packageProvenance) {
-            is RepositoryProvenance -> put("", packageProvenance.clearVcsPath().alignRevisions())
-            is ArtifactProvenance -> put("", packageProvenance)
-            else -> { }
-        }
-
-        subRepositories.mapValuesTo(this) { (_, vcsInfo) ->
-            RepositoryProvenance(vcsInfo = vcsInfo, resolvedRevision = vcsInfo.revision)
-        }
-    }
-
-private val Provenance.vcsPath: String
-    get() = (this as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
 
 private fun scanResultForProvenanceResolutionIssue(packageProvenance: KnownProvenance?, issue: Issue): ScanResult =
     ScanResult(
