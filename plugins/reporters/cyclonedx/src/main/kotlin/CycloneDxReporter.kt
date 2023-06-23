@@ -103,8 +103,8 @@ class CycloneDxReporter : Reporter {
     private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
         enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
-    private fun mapLicenseNamesToObjects(licenseNames: Collection<String>, origin: String, input: ReporterInput) =
-        licenseNames.map { licenseName ->
+    private fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
+        map { licenseName ->
             val spdxId = SpdxLicense.forId(licenseName)?.id
             val licenseText = input.licenseTextProvider.getLicenseText(licenseName)
 
@@ -239,9 +239,9 @@ class CycloneDxReporter : Reporter {
         val detectedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DETECTED)
 
         // Get all licenses, but note down their origins inside an extensible type.
-        val licenseObjects = mapLicenseNamesToObjects(concludedLicenseNames, "concluded license", input) +
-                mapLicenseNamesToObjects(declaredLicenseNames, "declared license", input) +
-                mapLicenseNamesToObjects(detectedLicenseNames, "detected license", input)
+        val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
+                declaredLicenseNames.mapNamesToLicenses("declared license", input) +
+                detectedLicenseNames.mapNamesToLicenses("detected license", input)
 
         val binaryHash = mapHash(pkg.binaryArtifact.hash)
         val sourceHash = mapHash(pkg.sourceArtifact.hash)
