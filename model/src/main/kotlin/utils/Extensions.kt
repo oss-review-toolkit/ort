@@ -27,9 +27,13 @@ import org.ossreviewtoolkit.clients.clearlydefined.ComponentType
 import org.ossreviewtoolkit.clients.clearlydefined.Coordinates
 import org.ossreviewtoolkit.clients.clearlydefined.Provider
 import org.ossreviewtoolkit.clients.clearlydefined.SourceLocation
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.KnownProvenance
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageProvider
+import org.ossreviewtoolkit.model.Provenance
+import org.ossreviewtoolkit.model.ProvenanceResolutionResult
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
@@ -135,6 +139,29 @@ fun Package.toClearlyDefinedSourceLocation(): SourceLocation? {
         else -> null
     }
 }
+
+/**
+ * Return the VCS path if this is a [RepositoryProvenance] or else an empty string.
+ */
+val Provenance.vcsPath: String
+    get() = (this as? RepositoryProvenance)?.vcsInfo?.path.orEmpty()
+
+/**
+ * Return all provenances contained in this [ProvenanceResolutionResult], with each having empty VCS path and the
+ * revision of the VcsInfo equal to the resolved revision in case of a repository provenance.
+ */
+fun ProvenanceResolutionResult.getKnownProvenancesWithoutVcsPath(): Map<String, KnownProvenance> =
+    buildMap {
+        when (packageProvenance) {
+            is RepositoryProvenance -> put("", packageProvenance.clearVcsPath().alignRevisions())
+            is ArtifactProvenance -> put("", packageProvenance)
+            else -> { }
+        }
+
+        subRepositories.mapValuesTo(this) { (_, vcsInfo) ->
+            RepositoryProvenance(vcsInfo = vcsInfo, resolvedRevision = vcsInfo.revision)
+        }
+    }
 
 /**
  * A subset of the Package URL types defined at https://github.com/package-url/purl-spec/blob/ad8a673/PURL-TYPES.rst.
