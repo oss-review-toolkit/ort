@@ -62,7 +62,7 @@ class ScannerIntegrationFunTest : WordSpec({
     "scan()" should {
         "return the expected ORT result for a given analyzer result" {
             val analyzerResult = createAnalyzerResult()
-            val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
+            val expectedResultFile = getAssetFile("scanner-integration-expected-ort-result.yml")
 
             val result = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
@@ -72,7 +72,7 @@ class ScannerIntegrationFunTest : WordSpec({
 
         "return the expected (merged) scan results for a given analyzer result" {
             val analyzerResult = createAnalyzerResult()
-            val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
+            val expectedResultFile = getAssetFile("scanner-integration-expected-scan-results.yml")
 
             val scanResults = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
                 .getScanResults().toSortedMap()
