@@ -312,10 +312,16 @@ class CycloneDxReporter : Reporter {
                     // [1] https://github.com/CycloneDX/cyclonedx-core-java/issues/99.
                     val bomWithoutExtensibleTypes = bom.apply {
                         components.forEach { component ->
+                            // Clear the "dependencyType".
                             component.extensibleTypes = null
+
                             component.licenseChoice.licenses.forEach { license ->
+                                // Clear the "origin".
                                 license.extensibleTypes = null
                             }
+
+                            // Remove duplicates that may occur due to clearing the distingushing extensive type.
+                            component.licenseChoice.licenses = component.licenseChoice.licenses.distinct()
                         }
                     }
 
