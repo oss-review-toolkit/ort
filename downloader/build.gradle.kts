@@ -29,7 +29,12 @@ dependencies {
 
     implementation(libs.jgit)
     implementation(libs.jgitSshApacheAgent)
-    implementation(libs.svnkit)
+    implementation(libs.svnkit) {
+        exclude(group = "org.apache.sshd", module = "sshd-core")
+            .because("it is included in JGit's sshd-osgi dependency")
+        exclude(group = "org.apache.sshd", module = "sshd-common")
+            .because("it is included in JGit's sshd-osgi dependency")
+    }
 
     testImplementation(libs.mockk)
 }
