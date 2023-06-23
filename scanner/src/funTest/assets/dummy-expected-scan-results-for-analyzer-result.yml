@@ -1,5 +1,101 @@
 ---
-Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:
+Dummy::pkg1:1.0.0:
+- provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      path: "pkg1"
+    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+  scanner:
+    name: "Dummy"
+    version: "1.0.0"
+    configuration: ""
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+    package_verification_code: ""
+    licenses:
+    - license: "NONE"
+      location:
+        path: "LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg1/pkg1.txt"
+        start_line: -1
+        end_line: -1
+Dummy::pkg2:1.0.0:
+- provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      path: "pkg2"
+    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+  scanner:
+    name: "Dummy"
+    version: "1.0.0"
+    configuration: ""
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+    package_verification_code: ""
+    licenses:
+    - license: "NONE"
+      location:
+        path: "LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg2/pkg2.txt"
+        start_line: -1
+        end_line: -1
+Dummy::pkg3:1.0.0:
+- provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      path: "pkg3"
+    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+  scanner:
+    name: "Dummy"
+    version: "1.0.0"
+    configuration: ""
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+    package_verification_code: ""
+    licenses:
+    - license: "NONE"
+      location:
+        path: "LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/pkg3.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/README"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
+        start_line: -1
+        end_line: -1
+Dummy::project:1.0.0:
 - provenance: {}
   scanner:
     name: "ProvenanceResolver"
@@ -12,121 +108,6 @@ Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0:
     issues:
     - timestamp: "1970-01-01T00:00:00Z"
       source: "scanner"
-      message: "IOException: Could not resolve provenance for package 'Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0'\
-        \ for source code origins [VCS, ARTIFACT].\nResolution of VCS failed with:\n\
-        URISyntaxException: Cannot parse Git URI-ish: The uri was empty or null"
+      message: "IOException: Could not resolve provenance for package 'Dummy::project:1.0.0'\
+        \ for source code origins [VCS, ARTIFACT]."
       severity: "ERROR"
-Maven:junit:junit:4.12:
-- provenance:
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
-      hash:
-        value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
-        algorithm: "SHA-1"
-  scanner:
-    name: "Dummy"
-    version: "1.0.0"
-    configuration: ""
-  summary:
-    start_time: "1970-01-01T00:00:00Z"
-    end_time: "1970-01-01T00:00:00Z"
-    package_verification_code: ""
-    licenses:
-    - license: "NONE"
-      location:
-        path: "LICENSE-junit.txt"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "META-INF"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "junit"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "org"
-        start_line: -1
-        end_line: -1
-Maven:org.apache.commons:commons-lang3:3.5:
-- provenance:
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
-      hash:
-        value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
-        algorithm: "SHA-1"
-  scanner:
-    name: "Dummy"
-    version: "1.0.0"
-    configuration: ""
-  summary:
-    start_time: "1970-01-01T00:00:00Z"
-    end_time: "1970-01-01T00:00:00Z"
-    package_verification_code: ""
-    licenses:
-    - license: "NONE"
-      location:
-        path: "META-INF"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "org"
-        start_line: -1
-        end_line: -1
-Maven:org.apache.commons:commons-text:1.1:
-- provenance:
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
-      hash:
-        value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
-        algorithm: "SHA-1"
-  scanner:
-    name: "Dummy"
-    version: "1.0.0"
-    configuration: ""
-  summary:
-    start_time: "1970-01-01T00:00:00Z"
-    end_time: "1970-01-01T00:00:00Z"
-    package_verification_code: ""
-    licenses:
-    - license: "NONE"
-      location:
-        path: "META-INF"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "org"
-        start_line: -1
-        end_line: -1
-Maven:org.hamcrest:hamcrest-core:1.3:
-- provenance:
-    source_artifact:
-      url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
-      hash:
-        value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
-        algorithm: "SHA-1"
-  scanner:
-    name: "Dummy"
-    version: "1.0.0"
-    configuration: ""
-  summary:
-    start_time: "1970-01-01T00:00:00Z"
-    end_time: "1970-01-01T00:00:00Z"
-    package_verification_code: ""
-    licenses:
-    - license: "NONE"
-      location:
-        path: "META-INF"
-        start_line: -1
-        end_line: -1
-    - license: "NONE"
-      location:
-        path: "org"
-        start_line: -1
-        end_line: -1
