@@ -317,23 +317,23 @@ val checkLicenseHeaders by tasks.registering {
     mustRunAfter(checkCopyrightsInNoticeFile)
 
     doLast {
-        var hasViolations = false
+        var hasErrors = false
 
         files.forEach { file ->
             val headerLines = extractLicenseHeader(file)
 
             val holders = extractCopyrightHolders(headerLines)
             if (holders.singleOrNull() != expectedCopyrightHolder) {
-                hasViolations = true
+                hasErrors = true
                 logger.error("Unexpected copyright holder(s) in file '$file': $holders")
             }
 
             if (!headerLines.joinToString("\n").endsWith(expectedLicenseHeader)) {
-                hasViolations = true
+                hasErrors = true
                 logger.error("Unexpected license header in file '$file'.")
             }
         }
 
-        if (hasViolations) throw GradleException("There were errors in license headers.")
+        if (hasErrors) throw GradleException("There were errors in license headers.")
     }
 }
