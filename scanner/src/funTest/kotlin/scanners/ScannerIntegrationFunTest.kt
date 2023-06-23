@@ -25,6 +25,7 @@ import io.kotest.matchers.should
 import java.io.File
 
 import org.ossreviewtoolkit.model.LicenseFinding
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -51,24 +52,21 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 class ScannerIntegrationFunTest : WordSpec({
     "scan()" should {
         "return the expected ORT result for a given analyzer result" {
-            val analyzerResultFile = getAssetFile("analyzer-result.yml")
+            val analyzerResult = createAnalyzerResult()
             val expectedResultFile = getAssetFile("dummy-expected-output-for-analyzer-result.yml")
 
-            val result = createScanner().scan(analyzerResultFile.readValue(), skipExcluded = false, emptyMap())
+            val result = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
             patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
         }
 
         "return the expected (merged) scan results for a given analyzer result" {
-            val analyzerResultFile = getAssetFile("analyzer-result.yml")
+            val analyzerResult = createAnalyzerResult()
             val expectedResultFile = getAssetFile("dummy-expected-scan-results-for-analyzer-result.yml")
 
-            val scanResults = createScanner().scan(
-                analyzerResultFile.readValue(),
-                skipExcluded = false,
-                emptyMap()
-            ).getScanResults().toSortedMap()
+            val scanResults = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+                .getScanResults().toSortedMap()
 
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
@@ -100,6 +98,9 @@ private fun createScanner(): Scanner {
         )
     )
 }
+
+private fun createAnalyzerResult(): OrtResult =
+    getAssetFile("analyzer-result.yml").readValue()
 
 private class DummyScanner : PathScannerWrapper {
     override val details = ScannerDetails(name = "Dummy", version = "1.0.0", configuration = "")
