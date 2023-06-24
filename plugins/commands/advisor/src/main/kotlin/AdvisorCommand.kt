@@ -140,12 +140,16 @@ class AdvisorCommand : OrtCommand(
         println("The advice took $duration.")
 
         with(advisorRun.results.getVulnerabilities()) {
-            val totalPackageCount = ortResultOutput.getPackages(omitExcluded = true).size
+            val includedPackages = ortResultOutput.getPackages(omitExcluded = true).map { it.metadata.id }
+            val totalPackageCount = includedPackages.size
+            val vulnerablePackageCount = count { (id, vulnerabilities) ->
+                id in includedPackages && vulnerabilities.isNotEmpty()
+            }
             val vulnerabilityCount = values.sumOf { it.size }
 
             println(
-                "$size of $totalPackageCount package(s) (not counting excluded ones) are vulnerable, with " +
-                        "$vulnerabilityCount vulnerabilities in total."
+                "$vulnerablePackageCount of $totalPackageCount package(s) (not counting excluded ones) are " +
+                        "vulnerable, with $vulnerabilityCount vulnerabilities in total."
             )
         }
 
