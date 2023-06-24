@@ -186,7 +186,7 @@ project:
         - id: "Pub:stack_trace:stack_trace:1.11.0"
           dependencies:
           - id: "Pub:path:path:1.8.3"
-        - id: "Pub:vm_service:vm_service:11.7.1"
+        - id: "Pub:vm_service:vm_service:11.7.2"
       - id: "Pub:http_multi_server:http_multi_server:3.2.1"
         dependencies:
         - id: "Pub:async:async:2.11.0"
@@ -702,7 +702,7 @@ project:
           - id: "Pub:stack_trace:stack_trace:1.11.0"
             dependencies:
             - id: "Pub:path:path:1.8.3"
-          - id: "Pub:vm_service:vm_service:11.7.1"
+          - id: "Pub:vm_service:vm_service:11.7.2"
         - id: "Pub:frontend_server_client:frontend_server_client:3.2.0"
           dependencies:
           - id: "Pub:async:async:2.11.0"
@@ -832,7 +832,7 @@ project:
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
-        - id: "Pub:vm_service:vm_service:11.7.1"
+        - id: "Pub:vm_service:vm_service:11.7.2"
         - id: "Pub:yaml:yaml:3.1.2"
           dependencies:
           - id: "Pub:collection:collection:1.17.2"
@@ -1975,8 +1975,8 @@ packages:
     url: "https://github.com/dart-lang/typed_data.git"
     revision: ""
     path: ""
-- id: "Pub:vm_service:vm_service:11.7.1"
-  purl: "pkg:pub/vm_service/vm_service@11.7.1"
+- id: "Pub:vm_service:vm_service:11.7.2"
+  purl: "pkg:pub/vm_service/vm_service@11.7.2"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A library to communicate with a service implementing the Dart VM service\
