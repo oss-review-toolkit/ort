@@ -21,8 +21,6 @@ package org.ossreviewtoolkit.model
 
 import java.util.EnumSet
 
-import org.ossreviewtoolkit.utils.common.enumSetOf
-
 /**
  * Details about the used provider of vulnerability information.
  */
@@ -36,5 +34,11 @@ data class AdvisorDetails(
      * The capabilities of the used advisor. This property indicates, which kind of findings are retrieved by the
      * advisor.
      */
-    val capabilities: EnumSet<AdvisorCapability> = enumSetOf()
-)
+    val capabilities: EnumSet<AdvisorCapability>
+) {
+    init {
+        require(capabilities.isNotEmpty()) {
+            "An advisor must have at least one capability."
+        }
+    }
+}

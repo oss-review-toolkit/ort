@@ -495,7 +495,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
         "return the correct results" {
             val resultWithVulnerabilities1 = advisorResult(vulnerabilities = listOf(mockk()))
             val resultWithVulnerabilities2 = advisorResult(
-                details = AdvisorDetails("otherVulnerabilityProvider"),
+                details = AdvisorDetails("otherVulnerabilityProvider", enumSetOf(AdvisorCapability.VULNERABILITIES)),
                 vulnerabilities = listOf(mockk())
             )
             val otherResult = advisorResult()
@@ -531,7 +531,7 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
         "return the correct results" {
             val resultWithDefects1 = advisorResult(defects = listOf(mockk()))
             val resultWithDefects2 = advisorResult(
-                details = AdvisorDetails("otherDefectProvider"),
+                details = AdvisorDetails("otherDefectProvider", enumSetOf(AdvisorCapability.DEFECTS)),
                 defects = listOf(mockk())
             )
             val otherResult = advisorResult()
