@@ -9,7 +9,7 @@ If you need a license text that is not provided by ORT you can put it in the cus
 it is located at `$ORT_CONFIG_DIR/custom-license-texts`. Alternatively, you can pass a different location to the
 `--custom-license-texts-dir` option of the *reporter*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]

@@ -17,7 +17,7 @@ See the code comments in the templates for how they work.
 
 To use one or both of the provided templates pass the `template.id`s to the *PlainTextTemplate* reporter_
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-path]/evaluation-result.yml
   -o [reporter-output-path]
@@ -29,7 +29,7 @@ To use one or more custom templates pass the `template.path`s to the *PlainTextT
 The filename of the template is used as the output filename with the `.ftl` suffix removed. For example, the following
 command would produce a `.md` and an `.adoc`:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-path]/evaluation-result.yml
   -o [reporter-output-path]

@@ -90,7 +90,7 @@ Where the list of available options for curations is defined in
 To make ORT use the `curations.yml` file, put it to the default location of `$ORT_CONFIG_DIR/curations.yml` and then run
 the *analyzer*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
@@ -106,7 +106,7 @@ in `$ORT_CONFIG_DIR/config.yml`. Similarly, ORT can use [ClearlyDefined](https:/
 To override curations, e.g. for testing them locally, you can also pass a `curations.yml` file or a curations directory
 via the `--package-curations-file` / `--package-curations-dir` options of the *evaluator*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]

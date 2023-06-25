@@ -45,7 +45,7 @@ Uploading to SW360 is a stand-alone
 2. Creates components/releases in SW360 for the packages and ...
 3. Creates the projects and links the created releases to the respective project.
 
-```bash
+```shell
 cli/build/install/ort/bin/ort upload-result-to-sw360
   -i [analyzer-output-dir]/analyzer-result.yml
 ```
@@ -87,7 +87,7 @@ ort:
 
 To use SW360 curation, pass it to the `--sw360-curations` option of the *analyzer*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort analyze
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]
@@ -131,7 +131,7 @@ Note the [SW360 attachment type][sw360-attachment-type] of the uploaded scan res
 Apart from configuring your `config.yml` to use SW360 to store scan results, no specific option needs to be passed to
 the *scanner*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort scan 
   -i [source-code-of-project-dir]
   -o [analyzer-output-dir]

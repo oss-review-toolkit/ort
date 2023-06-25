@@ -16,7 +16,7 @@ that this example depends on the license categorizations defined in the
 To use a `*.rules.kts` file, put it to `$ORT_CONFIG_DIR/evaluator.rules.kts` or pass it via the `--rules-file` option
 to the *evaluator*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort evaluate \
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir] \

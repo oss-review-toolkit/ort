@@ -30,13 +30,13 @@ For the full list of supported package managers and Version Control Systems see 
 In the future, we will provide binaries of the ORT tools, but currently you have to build the tools on your own. First
 download the source code (including Git submodules) from GitHub:
 
-```bash
+```shell
 git clone --recurse-submodules https://github.com/oss-review-toolkit/ort.git
 ```
 
 To build the command line interface run:
 
-```bash
+```shell
 cd ort
 ./gradlew installDist
 ```
@@ -44,7 +44,7 @@ cd ort
 This will create the script to run ORT at `cli/build/install/ort/bin/ort`. To get the general command line help run it
 with the `--help` option:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort --help
 ```
 
@@ -53,7 +53,7 @@ cli/build/install/ort/bin/ort --help
 Before scanning `mime-types` its source code has to be downloaded. For reliable results we use version 2.1.18 (replace
 `[mime-types-dir]` with the directory you want to clone `mime-types` to):
 
-```bash
+```shell
 git clone https://github.com/jshttp/mime-types.git [mime-types-dir]
 cd [mime-types-dir]
 git checkout 2.1.18
@@ -64,7 +64,7 @@ git checkout 2.1.18
 The next step is to run the *analyzer*. It will create a JSON or YAML output file containing the full dependency tree of
 `mime-types` including the metadata of `mime-types` and its dependencies.
 
-```bash
+```shell
 # Command line help specific to the analyzer.
 cli/build/install/ort/bin/ort analyze --help
 
@@ -82,7 +82,7 @@ The *analyzer* will search for build files of all supported package managers. In
 `package.json` file and write the results of the dependency analysis to the output file `analyzer-result.yml`. On the
 first attempt of running the analyzer on the `mime-types` package it will fail with an error message:
 
-```bash
+```shell
 The following package managers are activated:
         Bower, Bundler, Cargo, Composer, DotNet, GoDep, Gradle, Maven, NPM, NuGet, PIP, SBT, Stack, Yarn
 Analyzing project path:
@@ -95,7 +95,7 @@ This happens because `mime-types` does not have `package-lock.json` file. Withou
 dependencies that are defined with version ranges could change at any time, leading to different results of the
 analyzer. To override this check, use the global `-P ort.analyzer.allowDynamicVersions=true` option:
 
-```bash
+```shell
 $ cli/build/install/ort/bin/ort -P ort.analyzer.allowDynamicVersions=true analyze -i [mime-types-dir] -o [analyzer-output-dir]
 The following package managers are activated:
         Bundler, Composer, GoDep, Gradle, Maven, NPM, PIP, SBT, Stack, Yarn
@@ -259,7 +259,7 @@ to [these instructions](https://github.com/nexB/scancode-toolkit/#installation) 
 
 As for the *analyzer* you can get the command line options for the `scanner` using the `--help` option:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort scan --help
 ```
 
@@ -271,7 +271,7 @@ advised to configure a [scan storage](../README.md#storage-backends) for the sca
 As during the *analyzer* step an `.ort.yml` configuration file was provided to exclude `devDependencies`,
 the `--skip-excluded` option can be used to avoid the download and scanning of that scope.
 
-```bash
+```shell
 $ cli/build/install/ort/bin/ort scan -i [analyzer-output-dir]/analyzer-result.yml -o [scanner-output-dir] --skip-excluded
 Using scanner 'ScanCode'.
 Limiting scan to scopes: [dependencies]
@@ -302,7 +302,7 @@ package curations ([curations.yml](../examples/curations.yml)) that can be used 
 
 To run the example rules use:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort evaluate
   --package-curations-file curations.yml
   --rules-file evaluator.rules.kts
@@ -326,7 +326,7 @@ source notices.
 
 For example, to generate a static HTML report, WebApp report, and an open source notice by package, use:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -f PlainTextTemplate,StaticHtml,WebApp
   -i [evaluator-output-dir]/evaluation-result.yml
