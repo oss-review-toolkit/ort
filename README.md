@@ -107,17 +107,23 @@ Depending on how ORT was installed, it can be run in the following ways:
 
 * If the Docker image was built, use
 
-      docker run ort --help
+  ```shell
+  docker run ort --help
+  ```
 
   You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
 
 * If the ORT distribution was built from sources, use
 
-      ./cli/build/install/ort/bin/ort --help
+  ```shell
+  ./cli/build/install/ort/bin/ort --help
+  ```
 
 * If running directly from sources via Gradle, use
 
-      ./gradlew cli:run --args="--help"
+  ```shell
+  ./gradlew cli:run --args="--help"
+  ```
 
   Note that in this case the working directory used by ORT is that of the `cli` project, not the directory `gradlew` is
   located in (see https://github.com/gradle/gradle/issues/6074).
@@ -131,13 +137,17 @@ parsing the output of some external tools.
 
 Then, let ORT check whether all required external tools are available by running
 
-    ort requirements
+```shell
+ort requirements
+```
 
 and install any missing tools or add compatible versions as indicated.
 
 Finally, ORT tools like the *analyzer* can be run like
 
-    ort --info analyze -f JSON -i /project -o /project/ort/analyzer
+```shell
+ort --info analyze -f JSON -i /project -o /project/ort/analyzer
+```
 
 Just the like top-level `ort` command, the subcommands for all tools provide a `--help` option for detailed usage help.
 Use it like `ort analyze --help`.
@@ -759,7 +769,9 @@ tests can be run via the green "Play" icon from the gutter as described above.
 When running functional tests (for package managers) from the command line, ORT supports the special value "unified" for
 Kotest's `kotest.assertions.multi-line-diff` system property. When set like
 
-    ./gradlew -Dkotest.assertions.multi-line-diff=unified -p plugins/package-managers funTest
+```shell
+./gradlew -Dkotest.assertions.multi-line-diff=unified -p plugins/package-managers funTest
+```
 
 any failing tests will show the deviation from the expected result in a unified diff format that is compatible with
 `git apply`. If the actual result should be taken as the new expected result, simply copy the diff from the console to
