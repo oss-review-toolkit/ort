@@ -36,7 +36,7 @@ Also, the `isModified` check which compares with artifacts of the same name in M
 
 Due to this setup of the [GradleInspector], the [OrtModelBuilder] can actually be debugged. To do so, create a run
 configuration in IntelliJ IDEA that runs `ort analyze` and sets the *VM options* to `-Dorg.gradle.debug=true`. Also,
-create another *Remote JVm Debug* run configuration with default settings. Now, when debugging the first run
+create another *Remote JVM Debug* run configuration with default settings. Now, when debugging the first run
 configuration, it will block execution of the Gradle plugin until the remote debugger is attached by debugging the
 second run configuration, and any breakpoints in the [OrtModelBuilder] will be hit.
 
