@@ -5,10 +5,10 @@ The `license-classifications.yml` file holds a user-defined categorization of li
 You can use the [license-classifications.yml example] as the base configuration
 file for your scans.
 
-The file consists of two sections: The first one, _categories_, allows defining arbitrary categories for grouping
+The file consists of two sections: The first one, *categories*, allows defining arbitrary categories for grouping
 licenses. Categories have a name and an optional description; the names must be unique.
 
-The second section, _categorizations_, assigns licenses to the categories defined before. Licenses are identified
+The second section, *categorizations*, assigns licenses to the categories defined before. Licenses are identified
 using SPDX identifiers. Each license can be assigned an arbitrary number of categories by listing the names of these
 categories. Note that only names can be used that reference one of the categories from the first section.
 
@@ -41,7 +41,7 @@ multiple orthogonal, partly overlapping sets of categories with different meanin
 ## Command Line
 
 To use the `license-classifications.yml` file put it to `$ORT_CONFIG_DIR/license-classifications.yml` or pass it to the
-`--license-classifications-file` option of the _evaluator_:
+`--license-classifications-file` option of the *evaluator*:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate

@@ -44,21 +44,21 @@ your own copy as nothing on the internet is forever
 * Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
 ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI
-integrations. It consists of the following tools which can be combined into a _highly customizable_ pipeline:
+integrations. It consists of the following tools which can be combined into a *highly customizable* pipeline:
 
-* [_Analyzer_](#analyzer) - determines the dependencies of projects and their metadata, abstracting which package
+* [*Analyzer*](#analyzer) - determines the dependencies of projects and their metadata, abstracting which package
   managers or build systems are actually being used.
-* [_Downloader_](#downloader) - fetches all source code of the projects and their dependencies, abstracting which
+* [*Downloader*](#downloader) - fetches all source code of the projects and their dependencies, abstracting which
   Version Control System (VCS) or other means are used to retrieve the source code.
-* [_Scanner_](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
+* [*Scanner*](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
   the type of scanner.
-* [_Advisor_](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data
+* [*Advisor*](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data
   services.
-* [_Evaluator_](#evaluator) - evaluates custom policy rules along with custom license classifications against the data
+* [*Evaluator*](#evaluator) - evaluates custom policy rules along with custom license classifications against the data
   gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
-* [_Reporter_](#reporter) - presents results in various formats such as visual reports, Open Source notices or
+* [*Reporter*](#reporter) - presents results in various formats such as visual reports, Open Source notices or
   Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
-* [_Notifier_](./notifier) - sends result notifications via different channels (like
+* [*Notifier*](./notifier) - sends result notifications via different channels (like
   [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
 Also see the [list of related tools](#related-tools) that help with running ORT.
@@ -135,7 +135,7 @@ Then, let ORT check whether all required external tools are available by running
 
 and install any missing tools or add compatible versions as indicated.
 
-Finally, ORT tools like the _analyzer_ can be run like
+Finally, ORT tools like the *analyzer* can be run like
 
     ort --info analyze -f JSON -i /project -o /project/ort/analyzer
 
@@ -146,7 +146,7 @@ Please see [Getting Started](./docs/getting-started.md) for an introduction to t
 
 ## Running on CI
 
-A basic ORT pipeline (using the _analyzer_, _scanner_ and _reporter_) can easily be run on
+A basic ORT pipeline (using the *analyzer*, *scanner* and *reporter*) can easily be run on
 [Jenkins CI](https://jenkins.io/) by using the [Jenkinsfile](./integrations/jenkins/Jenkinsfile) in a (declarative)
 [pipeline](https://jenkins.io/doc/book/pipeline/) job. Please see the [Jenkinsfile](./integrations/jenkins/Jenkinsfile)
 itself for documentation of the required Jenkins plugins. The job accepts various parameters that are translated to ORT
@@ -294,7 +294,7 @@ can be used to populate a directory with template package configuration files.
 
 #### [Policy rules file](./docs/scripts/rules-kts.md)
 
-The file containing any policy rule implementations to be used with the _evaluator_.
+The file containing any policy rule implementations to be used with the *evaluator*.
 
 | Format              | Scope     | Default location                      |
 |---------------------|-----------|---------------------------------------|
@@ -335,7 +335,7 @@ defined:
 
 [![Analyzer](./logos/analyzer.png)](./analyzer/src/main/kotlin)
 
-The _analyzer_ is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects
+The *analyzer* is a Software Composition Analysis (SCA) tool that determines the dependencies of software projects
 inside the specified input directory (`-i`). It does so by querying the detected package managers; **no modifications**
 to your existing project source code, like applying build system plugins, are necessary for that to work. The tree of
 transitive dependencies per project is written out as part of an
@@ -411,8 +411,8 @@ or [packages](./plugins/package-managers/spdx/src/funTest/assets/projects/synthe
 
 [![Downloader](./logos/downloader.png)](./downloader/src/main/kotlin)
 
-Taking an ORT result file with an _analyzer_ result as the input (`-i`), the _downloader_ retrieves the source code of
-all contained packages to the specified output directory (`-o`). The _downloader_ takes care of things like normalizing
+Taking an ORT result file with an *analyzer* result as the input (`-i`), the *downloader* retrieves the source code of
+all contained packages to the specified output directory (`-o`). The *downloader* takes care of things like normalizing
 URLs and using the [appropriate VCS tool](./downloader/src/main/kotlin/vcs) to check out source code from version
 control.
 
@@ -429,7 +429,7 @@ Currently, the following Version Control Systems (VCS) are supported:
 
 This tool wraps underlying license / copyright scanners with a common API so all supported scanners can be used in the
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
-_scanner_ will automatically download the sources of the dependencies via the _downloader_ and scan them afterwards.
+*scanner* will automatically download the sources of the dependencies via the *downloader* and scan them afterwards.
 
 We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
 alphabetical order):
@@ -450,7 +450,7 @@ For a comparison of some of these, see this
 ## Storage Backends
 
 In order to not download or scan any previously scanned sources again, or to reuse scan results generated via other
-services, the _scanner_ can be configured to use so-called storage backends. Before processing a package, it checks
+services, the *scanner* can be configured to use so-called storage backends. Before processing a package, it checks
 whether compatible scan results are already available in one of the storages declared; if this is the case, they
 are fetched and reused. Otherwise, the package's source code is downloaded and scanned. Afterwards, the new scan
 results can be put into a storage for later reuse.
@@ -474,14 +474,14 @@ operation is considered successful if all writer storages could successfully per
 
 The configuration of storage backends is located in the [ORT configuration file](#ort-configuration-file). (For the
 general structure of this file and the set of options available refer to the
-[reference configuration](./model/src/main/resources/reference.yml).) The file has a section named _storages_ that
+[reference configuration](./model/src/main/resources/reference.yml).) The file has a section named *storages* that
 lists all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be
 configured with type-specific properties. The different types of storage backends supported by ORT are described below.
 
 After the declaration of the storage backends, the configuration file has to specify which ones of them the
 scanner should use for looking up existing scan results or to store new results. This is done in two list properties
-named _storageReaders_ and _storageWriters_. The lists reference the names of the storage backends declared in the
-_storages_ section. The scanner invokes the storage backends in the order they appear in the lists; so for readers,
+named *storageReaders* and *storageWriters*. The lists reference the names of the storage backends declared in the
+*storages* section. The scanner invokes the storage backends in the order they appear in the lists; so for readers,
 this defines a priority for look-up operations. Each storage backend can act as a reader; however, some types do not
 support updates and thus cannot serve as writers. If a storage backend is referenced both as reader and writer, the
 scanner creates only a single instance of this storage class.
@@ -492,7 +492,7 @@ a storage entry (like `fileBasedStorage`) can be freely chosen. That name is the
 
 ### Local File Storage
 
-By default, the _scanner_ stores scan results on the local file system in the current user's home directory (i.e.
+By default, the *scanner* stores scan results on the local file system in the current user's home directory (i.e.
 `~/.ort/scanner/scan-results`) for later reuse. Settings like the storage directory and the compression flag can be
 customized in the ORT configuration file (`-c`) with a respective storage configuration:
 
@@ -554,7 +554,7 @@ ort:
 The database needs to exist. If the schema is set to something else than the default of `public`, it needs to exist and
 be accessible by the configured username.
 
-The _scanner_ will itself create a table called `scan_results` and
+The *scanner* will itself create a table called `scan_results` and
 store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-json.html) column.
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the
@@ -564,7 +564,7 @@ configuration options see [ScanStorageConfiguration.kt](./model/src/main/kotlin/
 ### ClearlyDefined Storage
 
 [ClearlyDefined](https://clearlydefined.io) is a service offering curated metadata for Open Source components. This
-includes scan results that can be used by ORT's _scanner_ tool (if they have been generated by a compatible scanner
+includes scan results that can be used by ORT's *scanner* tool (if they have been generated by a compatible scanner
 version with a suitable configuration). This storage backend queries the ClearlyDefined service for scan results of the
 packages to be processed. It is read-only; so it will not upload any new scan results to ClearlyDefined. In the
 configuration the URL of the ClearlyDefined service needs to be set:
@@ -583,13 +583,13 @@ ort:
 
 [![Advisor](./logos/advisor.png)](./advisor/src/main/kotlin)
 
-The _advisor_ retrieves security advisories from configured services. It requires the analyzer result as an input. For
+The *advisor* retrieves security advisories from configured services. It requires the analyzer result as an input. For
 all the packages identified by the analyzer, it queries the services configured for known security vulnerabilities. The
 vulnerabilities returned by these services are then stored in the output result file together with additional
 information like the source of the data and a severity (if available).
 
 Multiple providers for security advisories are available. The providers require specific configuration in the
-[ORT configuration file](./model/src/main/resources/reference.yml), which needs to be placed in the _advisor_
+[ORT configuration file](./model/src/main/resources/reference.yml), which needs to be placed in the *advisor*
 section. When executing the advisor the providers to enable are selected with the `--advisors` option (or its short
 alias `-a`); here a comma-separated list with provider IDs is expected. The following sections describe the providers
 supported by the advisor:
@@ -652,7 +652,7 @@ To enable this provider, pass `-a OSV` on the command line.
 
 [![Evaluator](./logos/evaluator.png)](./evaluator/src/main/kotlin)
 
-The _evaluator_ is used to perform custom license policy checks on scan results. The rules to check against are
+The *evaluator* is used to perform custom license policy checks on scan results. The rules to check against are
 implemented as Kotlin scripts with a dedicated DSL. See
 [example.rules.kts](./examples/example.rules.kts) for an example rules script.
 
@@ -660,7 +660,7 @@ implemented as Kotlin scripts with a dedicated DSL. See
 
 [![Reporter](./logos/reporter.png)](./reporter/src/main/kotlin)
 
-The _reporter_ generates a wide variety of documents in different formats from ORT result files. Currently, the
+The *reporter* generates a wide variety of documents in different formats from ORT result files. Currently, the
 following formats are supported (reporter names are case-insensitive):
 
 * [AsciiDoc Template](docs/reporters/asciidoc-templates.md) (`-f AsciiDocTemplate`)

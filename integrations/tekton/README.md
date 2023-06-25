@@ -42,8 +42,8 @@ Next, you need to create a `PipelineRun` resource. In order to trigger a run, e.
 ## Next Steps
 
 You probably do not want to trigger each execution via `kubectl`. Check out the
-[Tekton documentation](https://tekton.dev/docs/triggers/) to learn how you can trigger a _PipelineRun_ via
-_EventListeneres_.
+[Tekton documentation](https://tekton.dev/docs/triggers/) to learn how you can trigger a *PipelineRun* via
+*EventListeneres*.
 
 If you are not working on a public GitHub repository, you should also check out how to work with a
 [private repo](https://hub.tekton.dev/tekton/task/git-clone).

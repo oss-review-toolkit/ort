@@ -5,7 +5,7 @@ This tutorial gives a brief introduction to how the tools work together at the e
 ORT:
 
 * Install ORT.
-* Analyze the dependencies of `mime-types` using the _analyzer_.
+* Analyze the dependencies of `mime-types` using the *analyzer*.
 * Scan the source code of `mime-types` and its dependencies using the `scanner`.
 * Run the evaluator to find any rule violations.
 * Generate reports to show the results.
@@ -61,7 +61,7 @@ git checkout 2.1.18
 
 ## 4. Run the analyzer on `mime-types`
 
-The next step is to run the _analyzer_. It will create a JSON or YAML output file containing the full dependency tree of
+The next step is to run the *analyzer*. It will create a JSON or YAML output file containing the full dependency tree of
 `mime-types` including the metadata of `mime-types` and its dependencies.
 
 ```bash
@@ -78,7 +78,7 @@ cli/build/install/ort/bin/ort analyze -i [mime-types-dir] -o [analyzer-output-di
 cli/build/install/ort/bin/ort --debug --stacktrace analyze -i [mime-types-dir] -o [analyzer-output-dir]
 ```
 
-The _analyzer_ will search for build files of all supported package managers. In case of `mime-types` it will find the
+The *analyzer* will search for build files of all supported package managers. In case of `mime-types` it will find the
 `package.json` file and write the results of the dependency analysis to the output file `analyzer-result.yml`. On the
 first attempt of running the analyzer on the `mime-types` package it will fail with an error message:
 
@@ -110,9 +110,9 @@ information about each dependency. The scope names come from the package manager
 
 Note that the `analyzer-result.yml` is supposed to capture all known information about a project, which can then be
 "filtered" in later steps. For example, scopes which are not relevant for the distribution will still be listed,
-but can be configured to get excluded so that they e.g. do not get downloaded and scanned by the _scanner_ step.
+but can be configured to get excluded so that they e.g. do not get downloaded and scanned by the *scanner* step.
 To specify which scopes should be excluded, add an `.ort.yml` configuration file to the input directory of the
-_analyzer_. For more details see [Configuration File](config-file-ort-yml.md).
+*analyzer*. For more details see [Configuration File](config-file-ort-yml.md).
 
 For this guide, `[mime-types-dir]/.ort.yml` can be created with following content:
 
@@ -243,10 +243,10 @@ analyzer:
 ## 5. Run the scanner
 
 To scan the source code of `mime-types` and its dependencies the source code of `mime-types` and all its dependencies
-needs to be downloaded. The _downloader_ tool could be used for this, but it is also integrated in the `scanner` tool,
+needs to be downloaded. The *downloader* tool could be used for this, but it is also integrated in the `scanner` tool,
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
-Note that if _downloader_ is unable to download the source code due to say a missing source code location in the package
+Note that if *downloader* is unable to download the source code due to say a missing source code location in the package
 metadata then you can use [curations](config-file-curations-yml.md) to fix up the package's metadata.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
@@ -257,7 +257,7 @@ will perform the actual scanning remotely.
 For this tutorial [ScanCode](https://github.com/nexB/scancode-toolkit) is used as a scanner. Please install it according
 to [these instructions](https://github.com/nexB/scancode-toolkit/#installation) first.
 
-As for the _analyzer_ you can get the command line options for the `scanner` using the `--help` option:
+As for the *analyzer* you can get the command line options for the `scanner` using the `--help` option:
 
 ```bash
 cli/build/install/ort/bin/ort scan --help
@@ -268,7 +268,7 @@ The `mime-types` package has only one dependency in the `dependencies` scope, bu
 scanner on the `dependencies` scope in this tutorial. If you also want to scan the `devDependencies` it is strongly
 advised to configure a [scan storage](../README.md#storage-backends) for the scan results to speed up repeated scans.
 
-As during the _analyzer_ step an `.ort.yml` configuration file was provided to exclude `devDependencies`,
+As during the *analyzer* step an `.ort.yml` configuration file was provided to exclude `devDependencies`,
 the `--skip-excluded` option can be used to avoid the download and scanning of that scope.
 
 ```bash
@@ -298,7 +298,7 @@ on a bigger project you will see that `ScanCode` often finds more licenses than 
 The evaluator can apply a set of rules against the scan result created above.
 ORT provides examples for the policy rules file ([example.rules.kts](../examples/example.rules.kts)), user-defined
 categorization of licenses ([license-classifications.yml](../examples/license-classifications.yml)) and user-defined
-package curations ([curations.yml](../examples/curations.yml)) that can be used for testing the _evaluator_.
+package curations ([curations.yml](../examples/curations.yml)) that can be used for testing the *evaluator*.
 
 To run the example rules use:
 
@@ -316,7 +316,7 @@ invalid or missing package metadata and the
 [license-classifications.yml documentation](config-file-license-classifications-yml.md) on how you can classify licenses
 to simplify writing the policy rules.
 
-It is possible to write your own evaluator rules as a Kotlin script and pass it to the _evaluator_ using `--rules-file`.
+It is possible to write your own evaluator rules as a Kotlin script and pass it to the *evaluator* using `--rules-file`.
 Note that detailed documentation for writing custom rules is not yet available.
 
 ## 7. Generate a report
@@ -336,7 +336,7 @@ Created 'WebApp' report: [reporter-output-dir]/scan-report-web-app.html
 Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 ```
 
-If you do not want to run the _evaluator_ you can pass the _scanner_ result e.g. `[scanner-output-dir]/scan-result.yml`
+If you do not want to run the *evaluator* you can pass the *scanner* result e.g. `[scanner-output-dir]/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
 [plain-text-templates.md](reporters/plain-text-templates.md). To learn how to customize the how-to-fix texts for scanner
 and analyzer issues see [how-to-fix-text-provider-kts.md](scripts/how-to-fix-text-provider-kts.md).

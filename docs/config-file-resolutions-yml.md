@@ -10,10 +10,10 @@ You can use the [resolutions.yml example](../examples/resolutions.yml) as the ba
 Resolutions should be used when it is impossible to solve an issue or a fix is planned for a later time.
 
 The sections below explain how to create resolutions in the `resolutions.yml` file which, if passed as an argument to
-the _reporter_, applies to each scan made. If a resolution is project-specific, then add it in the
+the *reporter*, applies to each scan made. If a resolution is project-specific, then add it in the
 [.ort.yml](config-file-ort-yml.md) file for the project.
 
-Resolutions are only taken into account by the _reporter_, while the _analyzer_ and _scanner_ ignore them.
+Resolutions are only taken into account by the *reporter*, while the *analyzer* and *scanner* ignore them.
 
 ## Resolution Basics
 
@@ -111,7 +111,7 @@ vulnerabilities:
 ## Command Line
 
 To use the `resolutions.yml` file put it to `$ORT_CONFIG_DIR/resolutions.yml` or pass it to the `--resolutions-file`
-option of the _reporter_:
+option of the *reporter*:
 
 ```bash
 cli/build/install/ort/bin/ort report
