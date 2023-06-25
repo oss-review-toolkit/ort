@@ -18,8 +18,8 @@ Curations can be used to:
   * concluded license is the license applicable to a package dependency defined as an SPDX license expression.
 * set the *is_metadata_only* flag:
   * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
-  *downloader* just skips the download and the *scanner* skips the scan. Also, any *evaluator rule* may optionally skip
-  its execution.
+    *downloader* just skips the download and the *scanner* skips the scan. Also, any *evaluator rule* may optionally
+    skip its execution.
 * set the *is_modified* flag:
   * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork
     of an upstream Open Source project, or a copy of the code in this project's repository.
