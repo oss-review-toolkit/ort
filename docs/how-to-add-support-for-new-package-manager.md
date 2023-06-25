@@ -54,4 +54,3 @@ Coming soon...
 ## 4. Testing a new Analyzer Module
 
 ## 5. Updating Documentation
-
