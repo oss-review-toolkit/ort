@@ -342,7 +342,8 @@ advisor:
       Maven:junit:junit:4.12:
       - advisor:
           name: "NexusIQ"
-          capabilities: []
+          capabilities:
+            - "VULNERABILITIES"
         summary:
           start_time: "2021-04-29T14:54:17.322191Z"
           end_time: "2021-04-29T14:54:18.966672Z"
