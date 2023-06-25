@@ -322,7 +322,7 @@ Note that detailed documentation for writing custom rules is not yet available.
 ## 7. Generate a report
 
 The `evaluation-result.yml` file can now be used as input for the reporter to generate human-readable reports and open
-source notices. 
+source notices.
 
 For example, to generate a static HTML report, WebApp report, and an open source notice by package, use:
 

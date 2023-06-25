@@ -7,7 +7,7 @@ The sections below outline the steps needed to add support for a new package man
 Before you start any implementation work, determine whether the package manager meets the minimal requirements to
 provide the data needed for OSS Review Toolkit to work.
 
-Answers to the questions below should help you. 
+Answers to the questions below should help you.
 
 1. How can you detect a project uses this specific package manager?
 2. How can you get the declared license for a package?
@@ -20,7 +20,7 @@ Answers to the questions below should help you.
 
 __1. How can you detect a project is using pnpm?__
 
-The presence of a [pnpm-lock.yaml](https://github.com/pnpm/pnpm/blob/master/pnpm-lock.yaml) file 
+The presence of a [pnpm-lock.yaml](https://github.com/pnpm/pnpm/blob/master/pnpm-lock.yaml) file
 can uniquely identify that a project is using pnpm.
 You can't say the same for `package.json` as there are multiple package managers using a `package.json`.
 
@@ -39,7 +39,7 @@ Same as npm, pnpm queries registry.npmjs.com?
 
 __5. How can one separate code dependencies from build/test ones in pnpm?__
 
-Npmne.com has same scopes as `npm` and `yarn` - `dependencies` amd `devDependencies` 
+Npmne.com has same scopes as `npm` and `yarn` - `dependencies` amd `devDependencies`
 
 __6. Can you provide some pnpm projects to test implementation?__
 
