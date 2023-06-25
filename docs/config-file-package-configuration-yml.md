@@ -72,7 +72,7 @@ package configuration for any package/provenance combination within that directo
 `$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configurations-dir`
 option of the *evaluator*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]
@@ -84,7 +84,7 @@ cli/build/install/ort/bin/ort evaluate
 
 Or to the *reporter*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]

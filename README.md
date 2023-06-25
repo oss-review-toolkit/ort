@@ -228,7 +228,7 @@ customize the configuration to a specific environment. The following options are
 
 To print the active configuration use:
 
-```bash
+```shell
 ort config --show-active
 ```
 

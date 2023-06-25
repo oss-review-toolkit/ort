@@ -26,7 +26,7 @@ The path to this theme can be set in the options as described below.
 Note that only one theme can be set that is used for all given templates. If no theme is given, or the given path to
 the theme file does not exist, an in-built theme of AsciidoctorJ PDF is used.
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
@@ -53,7 +53,7 @@ where `path/to/fonts` is the relative path to the font directory from the base e
 
 Create an HTML report from the Freemarker template using [Asciidoctor's HTML converter][7].
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
@@ -65,7 +65,7 @@ cli/build/install/ort/bin/ort report
 
 Create a [DocBook][8] report from the Freemarker template using [Asciidoctor's DocBook converter][9].
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]
@@ -77,7 +77,7 @@ cli/build/install/ort/bin/ort report
 
 Create a ManPage report from the Freemarker template using [Asciidoctor's ManPage converter][10].
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [scanner-output-dir]/scanner-result.yml
   -o [reporter-output-dir]

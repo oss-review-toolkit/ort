@@ -43,7 +43,7 @@ multiple orthogonal, partly overlapping sets of categories with different meanin
 To use the `license-classifications.yml` file put it to `$ORT_CONFIG_DIR/license-classifications.yml` or pass it to the
 `--license-classifications-file` option of the *evaluator*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort evaluate
   -i [scanner-output-dir]/scan-result.yml
   -o [evaluator-output-dir]

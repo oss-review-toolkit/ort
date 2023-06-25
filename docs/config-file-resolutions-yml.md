@@ -114,7 +114,7 @@ vulnerabilities:
 To use the `resolutions.yml` file put it to `$ORT_CONFIG_DIR/resolutions.yml` or pass it to the `--resolutions-file`
 option of the *reporter*:
 
-```bash
+```shell
 cli/build/install/ort/bin/ort report
   -i [evaluator-output-dir]/evaluation-result.yml
   -o [reporter-output-dir]
