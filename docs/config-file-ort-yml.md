@@ -156,6 +156,7 @@ As an example, the following curation would replace similar findings of `GPL-2.0
 files in the `src` directory:
 
 e.g.:
+
 ```yaml
 curations:
   license_findings:
@@ -171,6 +172,7 @@ curations:
 To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings.
 Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
 [config.yml](../README.md#ort-configuration-file).
+
 ```yaml
 package_configurations:
 - id: 'Maven:com.example:package:1.2.3'
@@ -199,6 +201,7 @@ Note that this feature requires `enableRepositoryPackageCurations` to be enabled
 [config.yml](../README.md#ort-configuration-file).
 
 e.g.:
+
 ```yaml
 curations:
   packages:
@@ -251,6 +254,7 @@ resolutions:
     reason: "One of IssueResolutionReason e.g BUILD_TOOL_ISSUE,CANT_FIX_ISSUE."
     comment: "A comment further explaining why the reason above is acceptable."
 ```
+
 Where the list of available options for `reason` is defined in
 [IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt)
 
@@ -338,6 +342,7 @@ The `choice` is either applied to the whole effective SPDX expression of the pac
 expression that can represent only a sub-expression of the whole effective SPDX expression.
 
 e.g.
+
 ```yaml
 license_choices:
   package_license_choices:
@@ -371,6 +376,7 @@ The license choices for a project can be overwritten by applying a
 [license choice to a package](#license-choice-by-package).
 
 e.g.
+
 ```yaml
 license_choices:
   repository_license_choices:
@@ -386,6 +392,7 @@ The choice will be applied to the WHOLE `given` license.
 If the choice does not provide a valid result, an exception will be thrown upon deserialization.
 
 e.g. invalid configuration:
+
 ```yaml
 # This is invalid, as 'E' must be in the resulting license.
 - given: (C OR D) AND E
