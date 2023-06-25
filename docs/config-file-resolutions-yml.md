@@ -43,6 +43,7 @@ issues:
   reason: "One of IssueResolutionReason e.g. BUILD_TOOL_ISSUE,CANT_FIX_ISSUE,SCANNER_ISSUE."
   comment: "A comment further explaining why the reason above is acceptable."
 ```
+
 Where the list of available options for `reason` is defined in
 [IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt).
 
