@@ -5,7 +5,7 @@ acceptable and can be ignored.
 
 You can use the [resolutions.yml example](../examples/resolutions.yml) as the base configuration file for your scans.
 
-### When to Use Resolutions
+## When to Use Resolutions
 
 Resolutions should be used when it is impossible to solve an issue or a fix is planned for a later time.
 
@@ -84,7 +84,7 @@ rule_violations:
   comment: "Org-wide commercial Qt license was purchased, for details see https://jira.example.com/issues/SOURCING-1234"
 ```
 
-### Resolving Vulnerabilities
+## Resolving Vulnerabilities
 
 The code below shows the structure of a vulnerability resolution in the `resolutions.yml` file:
 
