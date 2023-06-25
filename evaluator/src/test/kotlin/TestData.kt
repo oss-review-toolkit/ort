@@ -223,7 +223,7 @@ val ortResult = OrtResult(
             advisorResults = mapOf(
                 packageWithVulnerabilities.id to listOf(
                     AdvisorResult(
-                        advisor = AdvisorDetails.EMPTY,
+                        advisor = AdvisorDetails("Advisor"),
                         summary = AdvisorSummary(startTime = Instant.EPOCH, endTime = Instant.EPOCH),
                         vulnerabilities = listOf(
                             Vulnerability(
