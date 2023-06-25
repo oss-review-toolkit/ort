@@ -20,14 +20,14 @@ Answers to the questions below should help you.
 
 __1. How can you detect a project is using pnpm?__
 
-The presence of a [pnpm-lock.yaml](https://github.com/pnpm/pnpm/blob/master/pnpm-lock.yaml) file
-can uniquely identify that a project is using pnpm.
-You can't say the same for `package.json` as there are multiple package managers using a `package.json`.
+The presence of a [pnpm-lock.yaml](https://github.com/pnpm/pnpm/blob/master/pnpm-lock.yaml) file  can uniquely identify
+that a project is using pnpm. You can't say the same for `package.json` as there are multiple package managers using a
+`package.json`.
 
 __2. How can you get the declared license for a pnpm package?__
 
-The pnpm package manager is part of Node.js ecosystem, so it has package.json and
-uses npmjs.com as its central package repository.
+The pnpm package manager is part of Node.js ecosystem, so it has package.json and uses npmjs.com as its central package
+repository.
 
 __3. How can one get the dependency tree including package names, versions?__
 
@@ -39,7 +39,7 @@ Same as npm, pnpm queries registry.npmjs.com?
 
 __5. How can one separate code dependencies from build/test ones in pnpm?__
 
-Npmne.com has same scopes as `npm` and `yarn` - `dependencies` amd `devDependencies`
+Npmne.com has same scopes as `npm` and `yarn` - `dependencies` and `devDependencies`.
 
 __6. Can you provide some pnpm projects to test implementation?__
 
