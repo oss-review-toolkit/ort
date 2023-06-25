@@ -7,7 +7,7 @@ texts will be used when generating open source notices using the
 
 If you need a license text that is not provided by ORT you can put it in the custom license texts directory. By default,
 it is located at `$ORT_CONFIG_DIR/custom-license-texts`. Alternatively, you can pass a different location to the
-`--custom-license-texts-dir` option of the _reporter_:
+`--custom-license-texts-dir` option of the *reporter*:
 
 ```bash
 cli/build/install/ort/bin/ort report

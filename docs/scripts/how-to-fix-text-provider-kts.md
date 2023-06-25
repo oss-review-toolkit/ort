@@ -9,7 +9,7 @@ script file to create your custom how-to-fix messages in the generated reports.
 ## Command Line
 
 To use a `*.how-to-fix-text-provider.kts` file, put it to `$ORT_CONFIG_DIR/reporter.how-to-fix-text-provider.kts` or
-pass it via the `--how-to-fix-text-provider-script` option to the _reporter_:
+pass it via the `--how-to-fix-text-provider-script` option to the *reporter*:
 
 ```bash
 cli/build/install/ort/bin/ort report

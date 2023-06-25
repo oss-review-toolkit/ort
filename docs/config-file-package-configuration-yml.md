@@ -70,7 +70,7 @@ ORT consumes package configuration from a so-called "package configuration direc
 for `.yml` files. Each such file must contain exactly one package configuration and there must not be more than one
 package configuration for any package/provenance combination within that directory. The default location is
 `$ORT_CONFIG_DIR/package-configurations/`. To use a custom location you can pass it to the `--package-configurations-dir`
-option of the _evaluator_:
+option of the *evaluator*:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate
@@ -82,7 +82,7 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
-Or to the _reporter_:
+Or to the *reporter*:
 
 ```bash
 cli/build/install/ort/bin/ort report

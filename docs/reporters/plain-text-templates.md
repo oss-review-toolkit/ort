@@ -15,7 +15,7 @@ See the code comments in the templates for how they work.
 
 ## Command Line
 
-To use one or both of the provided templates pass the `template.id`s to the _PlainTextTemplate_ reporter_
+To use one or both of the provided templates pass the `template.id`s to the *PlainTextTemplate* reporter_
 
 ```bash
 cli/build/install/ort/bin/ort report
@@ -25,7 +25,7 @@ cli/build/install/ort/bin/ort report
   -O PlainTextTemplate=template.id=NOTICE_DEFAULT,NOTICE_SUMMARY
 ```
 
-To use one or more custom templates pass the `template.path`s to the _PlainTextTemplate_ reporter.
+To use one or more custom templates pass the `template.path`s to the *PlainTextTemplate* reporter.
 The filename of the template is used as the output filename with the `.ftl` suffix removed. For example, the following
 command would produce a `.md` and an `.adoc`:
 

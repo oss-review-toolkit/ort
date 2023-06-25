@@ -14,7 +14,7 @@ that this example depends on the license categorizations defined in the
 ## Command Line
 
 To use a `*.rules.kts` file, put it to `$ORT_CONFIG_DIR/evaluator.rules.kts` or pass it via the `--rules-file` option
-to the _evaluator_:
+to the *evaluator*:
 
 ```bash
 cli/build/install/ort/bin/ort evaluate \
