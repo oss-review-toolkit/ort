@@ -9,7 +9,9 @@ address [several][] [shortcomings][] of the "legacy" [Gradle] analyzer, but in o
 As the [GradleInspector] is disabled by default, it needs to be enabled explicitly (along with any other package
 managers that should be enabled):
 
-    ort analyze -P ort.analyzer.enabledPackageManagers=GradleInspector[,...]
+```shell
+ort analyze -P ort.analyzer.enabledPackageManagers=GradleInspector[,...]
+```
 
 It is recommended to *not* also enable the "legacy" [Gradle] analyzer at the same time, as both analyzers would find the
 same definition files.

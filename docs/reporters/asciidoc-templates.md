@@ -38,7 +38,9 @@ cli/build/install/ort/bin/ort report
 If you want to add your own custom fonts in the AsciiDoc PDF theme file using a [relative path][6],
 you need to add the directory in which the fonts are located as a report-specific option like
 
-    --report-option PdfTemplate=pdf.fonts.dir=path/to/fonts/
+```
+--report-option PdfTemplate=pdf.fonts.dir=path/to/fonts/
+```
 
 where `path/to/fonts` is the relative path to the font directory from the base execution directory.
 
