@@ -6,7 +6,7 @@ A package configuration file allows you to define path excludes and license find
 packages included via a package manager as project dependencies, and not for the project's own source code repository to
 be scanned.
 
-### When To Use
+## When To Use
 
 Use a package configuration file to:
 

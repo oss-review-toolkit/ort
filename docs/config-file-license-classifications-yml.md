@@ -15,7 +15,7 @@ categories. Note that only names can be used that reference one of the categorie
 For a more sophisticated example of a license classification for ORT, see the [generated license-classifications.yml]
 from the [LDBcollector] project.
 
-### When to Use
+## When to Use
 
 The mechanism of assigning categories to licenses is rather generic and can be customized for specific use cases.
 The information from the `license-classifications.yml` is evaluated by the following components:
