@@ -18,7 +18,7 @@ OSS Review Toolkit itself.
 ### When to Use Excludes
 
 Excludes are used to define which OSS is distributed to third parties and which code is only used internally, e.g. for
-building, documenting or testing the code. 
+building, documenting or testing the code.
 
 Exclusions apply to paths (files/directories) or scopes. Examples of currently supported exclusions:
 
@@ -42,7 +42,7 @@ generates:
 * The reason for the exclusion is shown next to the result.
 
 This is a rather safe option, since the reports still display elements marked as excluded and thus allow the user to
-verify the correctness of the declared exclusions. If it is clear that the excluded projects or scopes are irrelevant 
+verify the correctness of the declared exclusions. If it is clear that the excluded projects or scopes are irrelevant
 from a compliance point of view, ORT can be configured to skip them completely during the analysis phase. The affected
 elements are then not processed any further and do not occur in generated reports. Especially for larger projects with
 many excluded elements, this can significantly reduce resource usage and analysis time. To enable this mode, add the
@@ -143,7 +143,7 @@ scopes defined in the examples below match the scopes in your project.
 ### When to Use Curations
 
 License finding curations should be used when you want to correct the licenses detected in the source code of the
-project. To define curations on global level for third-party packages, please use 
+project. To define curations on global level for third-party packages, please use
 [curations](config-file-curations-yml.md) or [package configurations](config-file-package-configuration-yml.md).
 
 ### Curating Project License Findings
@@ -185,7 +185,7 @@ package_configurations:
     concluded_license: "Apache-2.0"
 ```
 
-For details of the specification, see 
+For details of the specification, see
 [LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
 The list of available options for `reason` are defined in
 [LicenseFindingCurationReason.kt](../model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
@@ -230,7 +230,7 @@ resolution.
 To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
 of:
 
-* `reason` -- an identifier selected from a predefined list of options. 
+* `reason` -- an identifier selected from a predefined list of options.
 * `comment` -- free text, providing an explanation and optionally a link to further information.
 
 ### Resolving Issues
@@ -334,8 +334,8 @@ by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
 
 To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice`
 must be provided.
-The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX 
-expression that can represent only a sub-expression of the whole effective SPDX expression. 
+The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX
+expression that can represent only a sub-expression of the whole effective SPDX expression.
 
 e.g.
 ```yaml
@@ -364,10 +364,10 @@ license_choices:
 To globally select a license from an SPDX expression, that offers a choice, an SPDX expression for a `given` and a
 `choice` must be provided.
 The `choice` is applied to the whole `given` SPDX expression.
-With a repository license choice, the license choice is applied to each package that offers this license as a choice. 
+With a repository license choice, the license choice is applied to each package that offers this license as a choice.
 Not allowing `given` to be null helps only applying the choice to a wanted `given` as opposed to all licenses with that
 choice, which could lead to unwanted choices.
-The license choices for a project can be overwritten by applying a 
+The license choices for a project can be overwritten by applying a
 [license choice to a package](#license-choice-by-package).
 
 e.g.

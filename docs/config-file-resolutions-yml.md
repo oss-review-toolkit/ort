@@ -23,7 +23,7 @@ resolution.
 To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
 of:
 
-* `reason` -- an identifier selected from a predefined list of options. 
+* `reason` -- an identifier selected from a predefined list of options.
 * `comment` -- free text, providing an explanation and optionally a link to further information.
 
 ## Resolving Issues

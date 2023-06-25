@@ -18,7 +18,7 @@ If only a subproject shall be analyzed, change the input path `-i /project` to `
 the projects root directory needs to be mounted to Docker for ORT to detect VCS information.
 
 **Note:** The single forward slash `/` between the environment variable `$PWD` and the `:` is required for PowerShell
-compatibility, as PowerShell otherwise interprets `:` as part of the environment variable. 
+compatibility, as PowerShell otherwise interprets `:` as part of the environment variable.
 
 ### Setting custom certificates to Docker image keystore
 
@@ -34,7 +34,7 @@ directory the Dockerfile resides in). Otherwise, the directories cannot be copie
 Some web proxies, such as from Blue Coat (Symantec)
 [do not support TLSv1.3](https://en.wikipedia.org/wiki/Transport_Layer_Security#TLS_1.3), which leads to errors when
 Docker tries to establish a connection through them. The following steps allow to force a specific TLS version to be
-used: 
+used:
 
 1. Insert `ENV JAVA_OPTS="-Djdk.tls.client.protocols=TLSv1.2"` in the Dockerfile, below the `FROM` line to force a
    specific TLS version.
@@ -46,7 +46,7 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
 `.netrc` can be used with Docker.
 
 1. Create a `.netrc` file:
-   
+
    ```
    machine <hostname> login <username> password <password>
    ```
@@ -65,8 +65,8 @@ To authenticate with a private Git repository, ORT uses the (semi)standardized `
    properties separated by newlines does **not** work with Docker images for ORT, as not all included third-party tools
    support this format.
 
-2. Mount the `.netrc` into the home directory of the ORT Docker container. By default, that is the `/root` directory: 
-   
+2. Mount the `.netrc` into the home directory of the ORT Docker container. By default, that is the `/root` directory:
+
    ```shell
    docker run -v <workspace_path>:/project -v <netrc_folder_path>/.netrc:/root/.netrc ort --info scan (...)
    ```
