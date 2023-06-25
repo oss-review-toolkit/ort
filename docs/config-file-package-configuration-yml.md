@@ -15,7 +15,7 @@ Use a package configuration file to:
   your project.
 * Overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
 
-# Package Configuration File Basics
+## Package Configuration File Basics
 
 Each package configuration applies exactly to one *package id* and *provenance* which must be specified. The
 *provenance* can be specified as either a *source artifact* or a *VCS location* with an optional revision.
