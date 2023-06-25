@@ -379,7 +379,8 @@ license_choices:
 ```
 
 ---
-**NOTE**
+
+### NOTE
 
 The choice will be applied to the WHOLE `given` license.
 If the choice does not provide a valid result, an exception will be thrown upon deserialization.
