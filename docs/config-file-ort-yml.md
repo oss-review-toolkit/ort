@@ -1,7 +1,7 @@
 # The `.ort.yml` file
 
-The items below can be configured by adding an `.ort.yml` file to the root of the source code repository.
-All configurations in this file apply only to this Project's context. Usually the global context is preferred for an
+The items below can be configured by adding an `.ort.yml` file to the root of the source code repository. All
+configurations in this file apply only to this Project's context. Usually the global context is preferred for an
 increased degree of automation and local configurations should only be done if there are good reasons.
 
 * [excludes](#excludes) - Mark [files, directories](#excluding-paths) or [package manager scopes](#excluding-scopes) as
@@ -75,8 +75,8 @@ excludes:
 ```
 
 Where the list of available options for `reason` is defined in
-[PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt).
-For how to write a glob pattern, please see the
+[PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt). For how to write a glob pattern, please
+see the
 [AntPathMatcher documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html).
 
 The path exclude above has the following effects:
@@ -169,8 +169,8 @@ curations:
     concluded_license: "Apache-2.0"
  ```
 
-To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings.
-Note that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
+To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings. Note
+that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
 [config.yml](../README.md#ort-configuration-file).
 
 ```yaml
@@ -196,8 +196,8 @@ The list of available options for `reason` are defined in
 
 Package curations can be added if you want to correct metadata of third-party dependencies.
 
-The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.
-Note that this feature requires `enableRepositoryPackageCurations` to be enabled in the
+The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.  Note
+that this feature requires `enableRepositoryPackageCurations` to be enabled in the
 [config.yml](../README.md#ort-configuration-file).
 
 e.g.:
@@ -328,18 +328,16 @@ resolutions:
 
 ### When to Use License Choices
 
-For multi-licensed dependencies a specific license can be selected.
-The license choice can be applied to a package or globally to an SPDX expression in the project.
-A choice is only valid for licenses combined with the SPDX operator `OR`.
-The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated
-by the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
+For multi-licensed dependencies a specific license can be selected. The license choice can be applied to a package or
+globally to an SPDX expression in the project. A choice is only valid for licenses combined with the SPDX operator `OR`.
+The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated by
+the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
 
 ### License Choice by Package
 
 To select a license from a multi-licensed dependency, specified by its `packageId`, an SPDX expression for a `choice`
-must be provided.
-The `choice` is either applied to the whole effective SPDX expression of the package or to an optional `given` SPDX
-expression that can represent only a sub-expression of the whole effective SPDX expression.
+must be provided. The `choice` is either applied to the whole effective SPDX expression of the package or to an optional
+`given` SPDX expression that can represent only a sub-expression of the whole effective SPDX expression.
 
 e.g.
 
@@ -367,12 +365,10 @@ license_choices:
 ### License Choice for the Project
 
 To globally select a license from an SPDX expression, that offers a choice, an SPDX expression for a `given` and a
-`choice` must be provided.
-The `choice` is applied to the whole `given` SPDX expression.
-With a repository license choice, the license choice is applied to each package that offers this license as a choice.
-Not allowing `given` to be null helps only applying the choice to a wanted `given` as opposed to all licenses with that
-choice, which could lead to unwanted choices.
-The license choices for a project can be overwritten by applying a
+`choice` must be provided. The `choice` is applied to the whole `given` SPDX expression. With a repository license
+choice, the license choice is applied to each package that offers this license as a choice. Not allowing `given` to be
+null helps only applying the choice to a wanted `given` as opposed to all licenses with that choice, which could lead to
+unwanted choices. The license choices for a project can be overwritten by applying a
 [license choice to a package](#license-choice-by-package).
 
 e.g.
@@ -388,8 +384,8 @@ license_choices:
 
 ### NOTE
 
-The choice will be applied to the WHOLE `given` license.
-If the choice does not provide a valid result, an exception will be thrown upon deserialization.
+The choice will be applied to the WHOLE `given` license. If the choice does not provide a valid result, an exception
+will be thrown upon deserialization.
 
 e.g. invalid configuration:
 
