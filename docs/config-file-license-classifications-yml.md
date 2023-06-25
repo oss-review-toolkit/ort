@@ -57,5 +57,4 @@ cli/build/install/ort/bin/ort evaluate
 [LDBcollector]: https://github.com/maxhbr/LDBcollector
 [Rules]: scripts/rules-kts.md
 [Plain text templates]: reporters/plain-text-templates.md
-[license-classifications.yml example]: ../examples/license-classifications.yml
 [example.rules.kts]: ../examples/example.rules.kts
