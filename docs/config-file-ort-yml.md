@@ -8,7 +8,7 @@ increased degree of automation and local configurations should only be done if t
   not included in released artifacts.
 * [curations](#curations) - Overwrite package metadata, set a concluded license or correct license findings.
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
-* [license choices](#License-Choices) - Select a license for packages which offer a license choice.
+* [license choices](#license-choices) - Select a license for packages which offer a license choice.
 
 The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml) for the
 OSS Review Toolkit itself.
