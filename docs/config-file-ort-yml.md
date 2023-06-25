@@ -223,8 +223,9 @@ applied to each scan.
 
 ### Resolution Basics
 
-Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by marking them as acceptable. A resolution is
-applied to specific issues or violations via the regular expression specified in the `message` of a resolution.
+Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by marking them as acceptable. A
+resolution is applied to specific issues or violations via the regular expression specified in the `message` of a
+resolution.
 
 To be able to show why a resolution is acceptable, each resolution must include an explanation. The explanation consists
 of:
@@ -308,7 +309,8 @@ resolutions:
 Where the list of available options for `reason` is defined in
 [VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
 
-For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your `.ort.yml` could include:
+For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your `.ort.yml`
+could include:
 
 ```yaml
 resolutions:

@@ -322,8 +322,12 @@ This mechanism offers a certain level of security without enforcing an excessive
 be needed for instance to define an explicit allow list. With the two configuration properties even corner cases can be
 defined:
 
-* In order to disable filtering of environment variables completely, set the `deniedProcessEnvironmentVariablesSubstrings` property to a single string that is certainly not contained in any environment variable, such as "This is for sure not contained in a variable name".
-* To prevent that any environment variable is passed to a child process, substrings can be configured in `deniedProcessEnvironmentVariablesSubstrings` that match all variables, for instance one string for each letter of the alphabet.
+* In order to disable filtering of environment variables completely, set the
+  `deniedProcessEnvironmentVariablesSubstrings` property to a single string that is certainly not contained in any
+  environment variable, such as "This is for sure not contained in a variable name".
+* To prevent that any environment variable is passed to a child process, substrings can be configured in
+  `deniedProcessEnvironmentVariablesSubstrings` that match all variables, for instance one string for each letter of the
+  alphabet.
 
 # Details on the tools
 
@@ -707,7 +711,10 @@ external tools to be installed.
 # Development
 
 ORT is written in [Kotlin](https://kotlinlang.org/) and uses [Gradle](https://gradle.org/) as the build system, with
-[Kotlin script](https://docs.gradle.org/current/userguide/kotlin_dsl.html) instead of Groovy as the DSL. Please ensure to have Gradle's incubating [configuration on demand](https://docs.gradle.org/current/userguide/multi_project_configuration_and_execution.html#sec:configuration_on_demand) feature disabled as it is currently [incompatible with ORT](https://github.com/gradle/gradle/issues/4823).
+[Kotlin script](https://docs.gradle.org/current/userguide/kotlin_dsl.html) instead of Groovy as the DSL. Please ensure
+to have Gradle's incubating
+[configuration on demand](https://docs.gradle.org/current/userguide/multi_project_configuration_and_execution.html#sec:configuration_on_demand)
+feature disabled as it is currently [incompatible with ORT](https://github.com/gradle/gradle/issues/4823).
 
 When developing on the command line, use the committed
 [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) to bootstrap Gradle in the configured
