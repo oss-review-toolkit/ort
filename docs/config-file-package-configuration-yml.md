@@ -10,10 +10,10 @@ be scanned.
 
 Use a package configuration file to:
 
-- Mark files and directories as not included in released artifacts -- use it to make clear that license findings in
+* Mark files and directories as not included in released artifacts -- use it to make clear that license findings in
   documentation or tests in a package sources do not apply to the release (binary) artifact which is a dependency in
   your project.
-- Overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
+* Overwrite scanner findings to correct identified licenses in a dependency for a specific file(s).
 
 # Package Configuration File Basics
 

@@ -36,12 +36,12 @@ The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolk
 
 You can use it to:
 
-- Generate CycloneDX, SPDX SBOMs, or custom FOSS attribution documentation for your software project
-- Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource
+* Generate CycloneDX, SPDX SBOMs, or custom FOSS attribution documentation for your software project
+* Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource
 and engineering standards checks for your software project and its dependencies
-- Create a source code archive for your software project and its dependencies to comply with certain licenses or have
+* Create a source code archive for your software project and its dependencies to comply with certain licenses or have
 your own copy as nothing on the internet is forever
-- Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
+* Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
 ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI
 integrations. It consists of the following tools which can be combined into a _highly customizable_ pipeline:
@@ -105,17 +105,17 @@ Gradle and download all required dependencies).
 
 Depending on how ORT was installed, it can be run in the following ways:
 
-- If the Docker image was built, use
+* If the Docker image was built, use
 
       docker run ort --help
 
   You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
 
-- If the ORT distribution was built from sources, use
+* If the ORT distribution was built from sources, use
 
       ./cli/build/install/ort/bin/ort --help
 
-- If running directly from sources via Gradle, use
+* If running directly from sources via Gradle, use
 
       ./gradlew cli:run --args="--help"
 

@@ -3,9 +3,9 @@
 OSS Review Toolkit (ORT) offers several ways to integrate with the software component catalog application
 [Eclipse SW360][sw360]:
 
-- Upload ORT results to SW360
-- Use SW360 package metadata curations as input for the ORT _analyzer_
-- Store ORT _scanner_ results in SW360 for re-use in future scans
+* Upload ORT results to SW360
+* Use SW360 package metadata curations as input for the ORT _analyzer_
+* Store ORT _scanner_ results in SW360 for re-use in future scans
 
 Each of these integration options is explained in detail below.
 
