@@ -155,8 +155,6 @@ license-Id of any `LicenseFinding` or eliminates the `LicenseFinding` in case th
 As an example, the following curation would replace similar findings of `GPL-2.0-only` with `Apache-2.0` in all `.cpp`
 files in the `src` directory:
 
-e.g.:
-
 ```yaml
 curations:
   license_findings:
@@ -199,8 +197,6 @@ Package curations can be added if you want to correct metadata of third-party de
 The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.  Note
 that this feature requires `enableRepositoryPackageCurations` to be enabled in the
 [config.yml](../README.md#ort-configuration-file).
-
-e.g.:
 
 ```yaml
 curations:
@@ -339,8 +335,6 @@ To select a license from a multi-licensed dependency, specified by its `packageI
 must be provided. The `choice` is either applied to the whole effective SPDX expression of the package or to an optional
 `given` SPDX expression that can represent only a sub-expression of the whole effective SPDX expression.
 
-e.g.
-
 ```yaml
 license_choices:
   package_license_choices:
@@ -371,8 +365,6 @@ null helps only applying the choice to a wanted `given` as opposed to all licens
 unwanted choices. The license choices for a project can be overwritten by applying a
 [license choice to a package](#license-choice-by-package).
 
-e.g.
-
 ```yaml
 license_choices:
   repository_license_choices:
@@ -387,7 +379,7 @@ license_choices:
 The choice will be applied to the WHOLE `given` license. If the choice does not provide a valid result, an exception
 will be thrown upon deserialization.
 
-e.g. invalid configuration:
+Example for an invalid configuration:
 
 ```yaml
 # This is invalid, as 'E' must be in the resulting license.
