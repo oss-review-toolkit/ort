@@ -372,8 +372,6 @@ license_choices:
     choice: "B"
 ```
 
----
-
 ### NOTE
 
 The choice will be applied to the WHOLE `given` license. If the choice does not provide a valid result, an exception
@@ -386,5 +384,3 @@ Example for an invalid configuration:
 - given: (C OR D) AND E
   choice: C
 ```
-
----
