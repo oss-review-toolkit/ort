@@ -246,8 +246,8 @@ To scan the source code of `mime-types` and its dependencies the source code of 
 needs to be downloaded. The *downloader* tool could be used for this, but it is also integrated in the `scanner` tool,
 so the scanner will automatically download the source code if the required VCS metadata could be obtained.
 
-Note that if *downloader* is unable to download the source code due to say a missing source code location in the package
-metadata then you can use [curations](config-file-curations-yml.md) to fix up the package's metadata.
+Note that if the *downloader* is unable to download the source code due to say a missing source code location in the
+package metadata then you can use [curations](config-file-curations-yml.md) to fix up the package's metadata.
 
 ORT is designed to integrate lots of different scanners and is not limited to license scanners, technically any tool
 that explores the source code of a software package could be integrated. The actual scanner does not have to run on the
