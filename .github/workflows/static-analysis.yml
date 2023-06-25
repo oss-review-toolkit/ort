@@ -69,6 +69,15 @@ jobs:
         check-modified-files-only: yes
         max-depth: 2
         use-quiet-mode: yes
+  markdownlint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check for Markdown issues
+        uses: DavidAnson/markdownlint-cli2-action@v11
   qodana-scan:
     runs-on: ubuntu-22.04
     steps:
