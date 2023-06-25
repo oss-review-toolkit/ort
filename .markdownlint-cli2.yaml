@@ -1,0 +1,11 @@
+#  Configuration for the markdownlint-cli2, see:
+#  https://github.com/DavidAnson/markdownlint-cli2/blob/main/test/markdownlint-cli2-yaml-example/.markdownlint-cli2.yaml
+
+globs:
+  - "**/*.md"
+ignores:
+  - "**/node_modules/**"
+  - "**/projects/external/**"
+  - "**/multi-kotlin-project/**"
+  - "**/sbt-http4s-template/**"
+  - "**/stack-yesodweb-simple/**"
