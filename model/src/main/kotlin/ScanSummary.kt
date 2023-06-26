@@ -108,21 +108,30 @@ data class ScanSummary(
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
      * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
-    fun filterByPath(path: String): ScanSummary {
-        if (path.isBlank()) return this
+    fun filterByPath(path: String): ScanSummary =
+        filterByPaths(listOf(path))
+
+    /**
+     * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath the given [paths].
+     * Findings which [RootLicenseMatcher] assigns as root license files for path in [paths] are also kept.
+     */
+    fun filterByPaths(paths: Collection<String>): ScanSummary {
+        if (paths.any { it.isBlank() }) return this
 
         val rootLicenseMatcher = RootLicenseMatcher(LicenseFilePatterns.getInstance())
         val applicableLicenseFiles = rootLicenseMatcher.getApplicableRootLicenseFindingsForDirectories(
             licenseFindings = licenseFindings,
-            directories = listOf(path)
+            directories = paths
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
 
-        fun TextLocation.matchesPath() = this.path.startsWith("$path/") || this.path in applicableLicenseFiles
+        fun TextLocation.matchesPaths() = paths.any { filterPath ->
+            this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
+        }
 
         return copy(
-            licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPath() },
-            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() },
-            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPath() }
+            licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
+            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPaths() }
         )
     }
 
