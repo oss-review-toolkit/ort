@@ -59,23 +59,35 @@ import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class ScannerIntegrationFunTest : WordSpec({
-    "scan()" should {
-        val analyzerResult = createAnalyzerResult()
+    "Scanning all packages corresponding to a single VCS" should {
+        val analyzerResult = createAnalyzerResult(pkg0, pkg1, pkg2, pkg3, pkg4)
         val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
-        "return the expected ORT result for a given analyzer result" {
-            val expectedResultFile = getAssetFile("scanner-integration-expected-ort-result.yml")
+        "return the expected ORT result" {
+            val expectedResultFile = getAssetFile("scanner-integration-all-pkgs-expected-ort-result.yml")
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
         }
 
-        "return the expected (merged) scan results for a given analyzer result" {
+        "return the expected (merged) scan results" {
             val expectedResultFile = getAssetFile("scanner-integration-expected-scan-results.yml")
 
             val scanResults = ortResult.getScanResults().toSortedMap()
 
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
+                    matchExpectedResult(expectedResultFile)
+        }
+    }
+
+    "Scanning a subset of the packages corresponding to a single VCS" should {
+        "return the expected ORT result" {
+            val analyzerResult = createAnalyzerResult(pkg1, pkg3)
+            val expectedResultFile = getAssetFile("scanner-integration-subset-pkgs-expected-ort-result.yml")
+
+            val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
         }
     }
@@ -106,9 +118,7 @@ private fun createScanner(): Scanner {
     )
 }
 
-private fun createAnalyzerResult(): OrtResult {
-    val packages = setOf(pkg0, pkg1, pkg2, pkg3, pkg4)
-
+private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     val scope = Scope(
         name = "deps",
         dependencies = packages.mapTo(mutableSetOf()) { PackageReference(it.id) }
