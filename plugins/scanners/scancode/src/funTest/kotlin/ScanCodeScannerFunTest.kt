@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.scancode
+package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
