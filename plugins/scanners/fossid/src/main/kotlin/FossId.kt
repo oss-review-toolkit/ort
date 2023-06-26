@@ -545,6 +545,11 @@ class FossId internal constructor(
             ignoreRules.data?.let { rules ->
                 logger.info { "${rules.size} ignore rule(s) have been found." }
 
+                // When a scan is created with the optional property 'git_repo_url', the server automatically creates
+                // an 'ignore rule' to exclude the '.git' directory.
+                // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
+                val filteredRules = rules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }
+
                 val excludesRules = context.excludes?.let {
                     convertRules(it, issues).also {
                         logger.info { "${it.size} rules from ORT excludes have been found." }
@@ -552,17 +557,13 @@ class FossId internal constructor(
                 }.orEmpty()
 
                 // Create an issue for each legacy rule existing.
-                val legacyRules = excludesRules.filterLegacyRules(rules, issues)
+                val legacyRules = excludesRules.filterLegacyRules(filteredRules, issues)
                 if (legacyRules.isNotEmpty()) {
                     logger.warn { "${legacyRules.size} legacy rules have been found." }
                 }
 
                 val allRules = excludesRules + legacyRules
-
-                // When a scan is created with the optional property 'git_repo_url', the server automatically creates
-                // an 'ignore rule' to exclude the '.git' directory.
-                // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
-                allRules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }.forEach {
+                allRules.forEach {
                     service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
                         .checkResponse("create ignore rules", false)
                     logger.info {
