@@ -121,7 +121,8 @@ data class ScanSummary(
 
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPath() },
-            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() }
+            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { it.location.matchesPath() },
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { it.sourceLocation.matchesPath() }
         )
     }
 
@@ -134,7 +135,8 @@ data class ScanSummary(
 
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
-            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) }
+            copyrightFindings = copyrightFindings.filterTo(mutableSetOf()) { !matcher.matches(it.location.path) },
+            snippetFindings = snippetFindings.filterTo(mutableSetOf()) { !matcher.matches(it.sourceLocation.path) }
         )
     }
 }
