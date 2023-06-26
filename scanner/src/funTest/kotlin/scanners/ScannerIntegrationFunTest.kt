@@ -107,7 +107,7 @@ private fun createScanner(): Scanner {
 }
 
 private fun createAnalyzerResult(): OrtResult {
-    val packages = setOf(pkg1, pkg2, pkg3)
+    val packages = setOf(pkg0, pkg1, pkg2, pkg3, pkg4)
 
     val scope = Scope(
         name = "deps",
@@ -138,33 +138,58 @@ private fun createPackage(name: String, vcs: VcsInfo): Package =
         vcsProcessed = vcs.normalize()
     )
 
+// A package with an empty VCS path.
+private val pkg0 = createPackage(
+    name = "pkg0",
+    vcs = VcsInfo(
+        type = VcsType.GIT,
+        url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
+        path = ""
+    )
+)
+
+// A package within a VCS path.
 private val pkg1 = createPackage(
     name = "pkg1",
     vcs = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
-        revision = "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
         path = "pkg1"
     )
 )
 
+// A package within a VCS path.
 private val pkg2 = createPackage(
     name = "pkg2",
     vcs = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
-        revision = "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
         path = "pkg2"
     )
 )
 
+// A package within a VCS path, containing sub-repository.
 private val pkg3 = createPackage(
     name = "pkg3",
     vcs = VcsInfo(
         type = VcsType.GIT,
         url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
-        revision = "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
         path = "pkg3"
+    )
+)
+
+// A package within a VCS path, containing sub-repository.
+private val pkg4 = createPackage(
+    name = "pkg4",
+    vcs = VcsInfo(
+        type = VcsType.GIT,
+        url = "https://github.com/oss-review-toolkit/ort-test-data-scanner.git",
+        revision = "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec",
+        path = "pkg4"
     )
 )
 
