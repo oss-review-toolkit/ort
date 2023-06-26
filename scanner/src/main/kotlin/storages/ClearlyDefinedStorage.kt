@@ -52,24 +52,14 @@ import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
+import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
+import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 import retrofit2.HttpException
-
-/** The name used by ClearlyDefined for the ScanCode tool. */
-private const val TOOL_SCAN_CODE = "scancode"
-
-/**
- * Given a list of [tools], return the version of ScanCode that was used to scan the package with the given
- * [coordinates], or return null if no such tool entry is found.
- */
-private fun findScanCodeVersion(tools: List<String>, coordinates: Coordinates): String? {
-    val toolUrl = "$coordinates/$TOOL_SCAN_CODE/"
-    return tools.find { it.startsWith(toolUrl) }?.substring(toolUrl.length)
-}
 
 /**
  * A storage implementation that tries to download ScanCode results from ClearlyDefined.
@@ -122,13 +112,30 @@ class ClearlyDefinedStorage(
                 coordinates.revision.orEmpty()
             )
 
-            val version = findScanCodeVersion(tools, coordinates)
-            if (version != null) {
-                listOfNotNull(loadScanCodeResult(coordinates, version))
-            } else {
-                logger.debug { "$coordinates was not scanned with any version of ScanCode." }
+            val toolVersionsByName = tools.mapNotNull { it.withoutPrefix("$coordinates/") }
+                .groupBy({ it.substringBefore('/') }, { it.substringAfter('/') })
+                .mapValues { (_, versions) -> versions.sortedWith(AlphaNumericComparator) }
 
-                emptyList()
+            toolVersionsByName.mapNotNull { (name, versions) ->
+                // See https://github.com/clearlydefined/service#tool-name-registry.
+                when (name) {
+                    "scancode" -> {
+                        loadToolData(coordinates, name, versions.last())?.let { result ->
+                            val summary = generateSummary(SpdxConstants.NONE, result)
+                            val details = generateScannerDetails(result)
+
+                            val provenance = getProvenance(coordinates)
+
+                            ScanResult(provenance, details, summary)
+                        }
+                    }
+
+                    else -> {
+                        logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
+
+                        null
+                    }
+                }
             }
         }.recoverCatching { e ->
             e.showStackTrace()
@@ -205,19 +212,5 @@ class ClearlyDefinedStorage(
                 )
             }
         }
-    }
-
-    /**
-     * Load the result file produced by ScanCode of the given [version] for the package with the given [coordinates]
-     * and parse it into a [ScanResult], or return null if no result is available.
-     */
-    private suspend fun loadScanCodeResult(coordinates: Coordinates, version: String): ScanResult? {
-        val result = loadToolData(coordinates, TOOL_SCAN_CODE, version) ?: return null
-        val provenance = getProvenance(coordinates)
-
-        val summary = generateSummary(SpdxConstants.NONE, result)
-        val details = generateScannerDetails(result)
-
-        return ScanResult(provenance, details, summary)
     }
 }
