@@ -121,7 +121,7 @@ class ClearlyDefinedStorage(
 
             val version = findScanCodeVersion(tools, coordinates)
             if (version != null) {
-                loadScanCodeResults(coordinates, version)
+                listOfNotNull(loadScanCodeResult(coordinates, version))
             } else {
                 logger.debug { "$coordinates was not scanned with any version of ScanCode." }
 
@@ -146,10 +146,10 @@ class ClearlyDefinedStorage(
     }
 
     /**
-     * Load the ScanCode results file for the package with the given [coordinates] from ClearlyDefined.
-     * The results have been produced by ScanCode in the given [version].
+     * Load the result file produced by ScanCode of the given [version] for the package with the given [coordinates]
+     * and parse it into a [ScanResult], or return null if no result is available.
      */
-    private suspend fun loadScanCodeResults(coordinates: Coordinates, version: String): List<ScanResult> {
+    private suspend fun loadScanCodeResult(coordinates: Coordinates, version: String): ScanResult? {
         val toolResponse = service.harvestToolData(
             coordinates.type,
             coordinates.provider,
@@ -194,8 +194,8 @@ class ClearlyDefinedStorage(
                 val summary = generateSummary(SpdxConstants.NONE, result)
                 val details = generateScannerDetails(result)
 
-                listOf(ScanResult(provenance, details, summary))
-            }.orEmpty()
+                ScanResult(provenance, details, summary)
+            }
         }
     }
 }
