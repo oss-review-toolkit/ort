@@ -77,10 +77,10 @@ class AdvisorTest : WordSpec({
             val packages = setOf(pkg1, pkg2)
             val originResult = createOrtResultWithPackages(packages)
 
-            val advisorResult1 = mockk<AdvisorResult>()
-            val advisorResult2 = mockk<AdvisorResult>()
-            val advisorResult3 = mockk<AdvisorResult>()
-            val advisorResult4 = mockk<AdvisorResult>()
+            val advisorResult1 = mockkAdvisorResult()
+            val advisorResult2 = mockkAdvisorResult()
+            val advisorResult3 = mockkAdvisorResult()
+            val advisorResult4 = mockkAdvisorResult()
 
             val provider1 = mockkAdviceProvider()
             val provider2 = mockkAdviceProvider()
@@ -147,4 +147,9 @@ private fun createPackage(index: Int): Package =
 private fun mockkAdviceProvider(): AdviceProvider =
     mockk<AdviceProvider>().apply {
         every { providerName } returns "provider"
+    }
+
+private fun mockkAdvisorResult(): AdvisorResult =
+    mockk<AdvisorResult>().apply {
+        every { vulnerabilities } returns emptyList()
     }
