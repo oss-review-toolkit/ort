@@ -233,6 +233,8 @@ class CycloneDxReporter : Reporter {
 
     private fun addPackageToBom(input: ReporterInput, pkg: Package, bom: Bom, dependencyType: String) {
         val resolvedLicenseInfo = input.licenseInfoResolver.resolveLicenseInfo(pkg.id).filterExcluded()
+            .applyChoices(input.ortResult.getPackageLicenseChoices(pkg.id))
+            .applyChoices(input.ortResult.getRepositoryLicenseChoices())
 
         val concludedLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.CONCLUDED)
         val declaredLicenseNames = resolvedLicenseInfo.getLicenseNames(LicenseSource.DECLARED)
