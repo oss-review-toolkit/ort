@@ -1,12 +1,94 @@
 ---
+Dummy::pkg0:1.0.0:
+- provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: ""
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  scanner:
+    name: "Dummy"
+    version: "1.0.0"
+    configuration: ""
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+    package_verification_code: ""
+    licenses:
+    - license: "NONE"
+      location:
+        path: ".gitmodules"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "README"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg1/pkg1.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg2/pkg2.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/pkg3.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/README"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/pkg4.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/README"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
+        start_line: -1
+        end_line: -1
 Dummy::pkg1:1.0.0:
 - provenance:
     vcs_info:
       type: "Git"
       url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
       path: "pkg1"
-    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
   scanner:
     name: "Dummy"
     version: "1.0.0"
@@ -31,9 +113,9 @@ Dummy::pkg2:1.0.0:
     vcs_info:
       type: "Git"
       url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
       path: "pkg2"
-    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
   scanner:
     name: "Dummy"
     version: "1.0.0"
@@ -58,9 +140,9 @@ Dummy::pkg3:1.0.0:
     vcs_info:
       type: "Git"
       url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-      revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
       path: "pkg3"
-    resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
   scanner:
     name: "Dummy"
     version: "1.0.0"
@@ -93,6 +175,48 @@ Dummy::pkg3:1.0.0:
     - license: "NONE"
       location:
         path: "pkg3/subrepo/pkg-s1/pkg-s1.txt"
+        start_line: -1
+        end_line: -1
+Dummy::pkg4:1.0.0:
+- provenance:
+    vcs_info:
+      type: "Git"
+      url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+      revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+      path: "pkg4"
+    resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+  scanner:
+    name: "Dummy"
+    version: "1.0.0"
+    configuration: ""
+  summary:
+    start_time: "1970-01-01T00:00:00Z"
+    end_time: "1970-01-01T00:00:00Z"
+    package_verification_code: ""
+    licenses:
+    - license: "NONE"
+      location:
+        path: "LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/pkg4.txt"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/LICENSE"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/README"
+        start_line: -1
+        end_line: -1
+    - license: "NONE"
+      location:
+        path: "pkg4/subrepo/pkg-s2/pkg-s2.txt"
         start_line: -1
         end_line: -1
 Dummy::project:1.0.0:

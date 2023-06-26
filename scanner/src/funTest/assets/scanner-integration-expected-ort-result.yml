@@ -45,10 +45,38 @@ analyzer:
       scopes:
       - name: "deps"
         dependencies:
+        - id: "Dummy::pkg0:1.0.0"
         - id: "Dummy::pkg1:1.0.0"
         - id: "Dummy::pkg2:1.0.0"
         - id: "Dummy::pkg3:1.0.0"
+        - id: "Dummy::pkg4:1.0.0"
     packages:
+    - id: "Dummy::pkg0:1.0.0"
+      purl: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
     - id: "Dummy::pkg1:1.0.0"
       purl: ""
       declared_licenses: []
@@ -68,12 +96,12 @@ analyzer:
       vcs:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg1"
       vcs_processed:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg1"
     - id: "Dummy::pkg2:1.0.0"
       purl: ""
@@ -94,12 +122,12 @@ analyzer:
       vcs:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg2"
       vcs_processed:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg2"
     - id: "Dummy::pkg3:1.0.0"
       purl: ""
@@ -120,13 +148,39 @@ analyzer:
       vcs:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg3"
       vcs_processed:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg3"
+    - id: "Dummy::pkg4:1.0.0"
+      purl: ""
+      declared_licenses: []
+      declared_licenses_processed: {}
+      description: ""
+      homepage_url: ""
+      binary_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      source_artifact:
+        url: ""
+        hash:
+          value: ""
+          algorithm: ""
+      vcs:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: "pkg4"
+      vcs_processed:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: "pkg4"
 scanner:
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
@@ -168,47 +222,100 @@ scanner:
     - "**/META-INF/NOTICE"
     - "**/META-INF/NOTICE.txt"
   provenances:
-  - id: "Dummy::pkg1:1.0.0"
+  - id: "Dummy::pkg0:1.0.0"
     package_provenance:
       vcs_info:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
-        path: "pkg1"
-      resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     sub_repositories:
       pkg3/subrepo:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+  - id: "Dummy::pkg1:1.0.0"
+    package_provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: "pkg1"
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    sub_repositories:
+      pkg3/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
         path: ""
   - id: "Dummy::pkg2:1.0.0"
     package_provenance:
       vcs_info:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg2"
-      resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     sub_repositories:
       pkg3/subrepo:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
         path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
   - id: "Dummy::pkg3:1.0.0"
     package_provenance:
       vcs_info:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg3"
-      resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     sub_repositories:
       pkg3/subrepo:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+        path: ""
+  - id: "Dummy::pkg4:1.0.0"
+    package_provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: "pkg4"
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+    sub_repositories:
+      pkg3/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
+        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
+        path: ""
+      pkg4/subrepo:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
         path: ""
   - id: "Dummy::project:1.0.0"
     package_provenance_resolution_issue:
@@ -252,10 +359,41 @@ scanner:
   - provenance:
       vcs_info:
         type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
-        revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
+        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
         path: ""
-      resolved_revision: "f6d8b9b73d8dedbe5cf1212b797e09e4f8ea290c"
+      resolved_revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
+    scanner:
+      name: "Dummy"
+      version: "1.0.0"
+      configuration: ""
+    summary:
+      start_time: "1970-01-01T00:00:00Z"
+      end_time: "1970-01-01T00:00:00Z"
+      package_verification_code: ""
+      licenses:
+      - license: "NONE"
+        location:
+          path: "LICENSE"
+          start_line: -1
+          end_line: -1
+      - license: "NONE"
+        location:
+          path: "README"
+          start_line: -1
+          end_line: -1
+      - license: "NONE"
+        location:
+          path: "pkg-s2/pkg-s2.txt"
+          start_line: -1
+          end_line: -1
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner.git"
+        revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
+        path: ""
+      resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     scanner:
       name: "Dummy"
       version: "1.0.0"
@@ -293,6 +431,11 @@ scanner:
       - license: "NONE"
         location:
           path: "pkg3/pkg3.txt"
+          start_line: -1
+          end_line: -1
+      - license: "NONE"
+        location:
+          path: "pkg4/pkg4.txt"
           start_line: -1
           end_line: -1
 advisor: null
