@@ -60,22 +60,20 @@ import org.ossreviewtoolkit.utils.test.patchActualResult
 
 class ScannerIntegrationFunTest : WordSpec({
     "scan()" should {
+        val analyzerResult = createAnalyzerResult()
+        val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
+
         "return the expected ORT result for a given analyzer result" {
-            val analyzerResult = createAnalyzerResult()
             val expectedResultFile = getAssetFile("scanner-integration-expected-ort-result.yml")
 
-            val result = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
-
-            patchActualResult(result.toYaml(), patchStartAndEndTime = true) should
+            patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
         }
 
         "return the expected (merged) scan results for a given analyzer result" {
-            val analyzerResult = createAnalyzerResult()
             val expectedResultFile = getAssetFile("scanner-integration-expected-scan-results.yml")
 
-            val scanResults = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
-                .getScanResults().toSortedMap()
+            val scanResults = ortResult.getScanResults().toSortedMap()
 
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
                     matchExpectedResult(expectedResultFile)
