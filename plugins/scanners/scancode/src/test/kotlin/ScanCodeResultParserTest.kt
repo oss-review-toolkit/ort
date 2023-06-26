@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.scanner.scanners.scancode
+package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forAll
