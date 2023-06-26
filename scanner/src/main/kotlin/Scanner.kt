@@ -53,6 +53,8 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
+import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenanceScanResult
@@ -189,23 +191,33 @@ class Scanner(
         createMissingFileLists(controller)
         createMissingArchives(controller)
 
+        val provenances = packages.mapTo(mutableSetOf()) { pkg ->
+            val packageProvenance = controller.getPackageProvenance(pkg.id)
+
+            ProvenanceResolutionResult(
+                id = pkg.id,
+                packageProvenance = packageProvenance,
+                subRepositories = controller.getSubRepositories(pkg.id),
+                packageProvenanceResolutionIssue = controller.getPackageProvenanceResolutionIssue(pkg.id),
+                nestedProvenanceResolutionIssue = controller.getNestedProvenanceResolutionIssue(pkg.id)
+            ).filterByVcsPath()
+        }
+
+        val relevantProvenances = provenances.flatMapTo(mutableSetOf()) {
+            it.getKnownProvenancesWithoutVcsPath().values
+        }
+
+        val scanResults = controller.getAllScanResults().map { scanResult ->
+            scanResult.copy(
+                provenance = scanResult.provenance.alignRevisions(),
+                summary = scanResult.summary.copy(packageVerificationCode = "")
+            )
+        }.filterTo(mutableSetOf()) { scanResult -> scanResult.provenance in relevantProvenances }
+
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
-            provenances = packages.mapTo(mutableSetOf()) { pkg ->
-                ProvenanceResolutionResult(
-                    id = pkg.id,
-                    packageProvenance = controller.getPackageProvenance(pkg.id),
-                    subRepositories = controller.getSubRepositories(pkg.id),
-                    packageProvenanceResolutionIssue = controller.getPackageProvenanceResolutionIssue(pkg.id),
-                    nestedProvenanceResolutionIssue = controller.getNestedProvenanceResolutionIssue(pkg.id)
-                )
-            },
-            scanResults = controller.getAllScanResults().mapTo(mutableSetOf()) { scanResult ->
-                scanResult.copy(
-                    provenance = scanResult.provenance.alignRevisions(),
-                    summary = scanResult.summary.copy(packageVerificationCode = "")
-                )
-            }
+            provenances = provenances,
+            scanResults = scanResults
         )
     }
 
@@ -767,3 +779,10 @@ private fun ScanController.getSubRepositories(id: Identifier): Map<String, VcsIn
 
 private fun ScanResult.clearPackageVerificationCode(): ScanResult =
     copy(summary = summary.copy(packageVerificationCode = ""))
+
+private fun ProvenanceResolutionResult.filterByVcsPath(): ProvenanceResolutionResult =
+    copy(
+        subRepositories = subRepositories.filter { (path, _) ->
+            File(path).startsWith(packageProvenance?.vcsPath.orEmpty())
+        }
+    )

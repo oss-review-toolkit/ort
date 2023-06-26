@@ -149,17 +149,6 @@ scanner:
         revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg1"
       resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
-    sub_repositories:
-      pkg3/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
-        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
-        path: ""
-      pkg4/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-        path: ""
   - id: "Dummy::pkg3:1.0.0"
     package_provenance:
       vcs_info:
@@ -173,11 +162,6 @@ scanner:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
-        path: ""
-      pkg4/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
         path: ""
   - id: "Dummy::project:1.0.0"
     package_provenance_resolution_issue:
@@ -216,37 +200,6 @@ scanner:
       - license: "NONE"
         location:
           path: "pkg-s1/pkg-s1.txt"
-          start_line: -1
-          end_line: -1
-  - provenance:
-      vcs_info:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-        path: ""
-      resolved_revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-    scanner:
-      name: "Dummy"
-      version: "1.0.0"
-      configuration: ""
-    summary:
-      start_time: "1970-01-01T00:00:00Z"
-      end_time: "1970-01-01T00:00:00Z"
-      package_verification_code: ""
-      licenses:
-      - license: "NONE"
-        location:
-          path: "LICENSE"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
-          path: "README"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
-          path: "pkg-s2/pkg-s2.txt"
           start_line: -1
           end_line: -1
   - provenance:

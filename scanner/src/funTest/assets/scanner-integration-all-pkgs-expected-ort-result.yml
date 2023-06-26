@@ -249,17 +249,6 @@ scanner:
         revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg1"
       resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
-    sub_repositories:
-      pkg3/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
-        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
-        path: ""
-      pkg4/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-        path: ""
   - id: "Dummy::pkg2:1.0.0"
     package_provenance:
       vcs_info:
@@ -268,17 +257,6 @@ scanner:
         revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
         path: "pkg2"
       resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
-    sub_repositories:
-      pkg3/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
-        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
-        path: ""
-      pkg4/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-        path: ""
   - id: "Dummy::pkg3:1.0.0"
     package_provenance:
       vcs_info:
@@ -293,11 +271,6 @@ scanner:
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
         revision: "a732695e03efcbd74539208af98c297ee86e49d5"
         path: ""
-      pkg4/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
-        revision: "6431fd85188db22b942deb66c7a8c1a53921fc35"
-        path: ""
   - id: "Dummy::pkg4:1.0.0"
     package_provenance:
       vcs_info:
@@ -307,11 +280,6 @@ scanner:
         path: "pkg4"
       resolved_revision: "97d57bb4795bc41f496e1a8e2c7751cefc7da7ec"
     sub_repositories:
-      pkg3/subrepo:
-        type: "Git"
-        url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo.git"
-        revision: "a732695e03efcbd74539208af98c297ee86e49d5"
-        path: ""
       pkg4/subrepo:
         type: "Git"
         url: "https://github.com/oss-review-toolkit/ort-test-data-scanner-subrepo2.git"
