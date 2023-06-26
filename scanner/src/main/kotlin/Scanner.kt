@@ -754,7 +754,7 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
 
 fun <T : Provenance> T.alignRevisions(): Provenance =
     if (this is RepositoryProvenance) {
-        this.copy(vcsInfo = vcsInfo.copy(revision = resolvedRevision))
+        copy(vcsInfo = vcsInfo.copy(revision = resolvedRevision))
     } else {
         this
     }
