@@ -220,17 +220,7 @@ scanner:
       licenses:
       - license: "NONE"
         location:
-          path: ".gitmodules"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
           path: "LICENSE"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
-          path: "README"
           start_line: -1
           end_line: -1
       - license: "NONE"
@@ -240,17 +230,7 @@ scanner:
           end_line: -1
       - license: "NONE"
         location:
-          path: "pkg2/pkg2.txt"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
           path: "pkg3/pkg3.txt"
-          start_line: -1
-          end_line: -1
-      - license: "NONE"
-        location:
-          path: "pkg4/pkg4.txt"
           start_line: -1
           end_line: -1
 advisor: null
