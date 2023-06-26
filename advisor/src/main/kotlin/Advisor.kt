@@ -90,8 +90,8 @@ class Advisor(
                         val providerResults = provider.retrievePackageFindings(packages)
 
                         logger.info {
-                            "Found ${providerResults.values.distinct().size} distinct vulnerabilities via " +
-                                    "${provider.providerName}. "
+                            "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
+                                    "vulnerabilities via ${provider.providerName}. "
                         }
 
                         providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->
