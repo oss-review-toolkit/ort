@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
+import com.fasterxml.jackson.databind.JsonNode
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -34,6 +36,7 @@ import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Package
+import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -146,56 +149,75 @@ class ClearlyDefinedStorage(
     }
 
     /**
-     * Load the result file produced by ScanCode of the given [version] for the package with the given [coordinates]
-     * and parse it into a [ScanResult], or return null if no result is available.
+     * Load the data produced by the tool of the given [name] and [version] for the package with the given [coordinates]
+     * and return it as a [JsonNode], or return null if no data is available.
      */
-    private suspend fun loadScanCodeResult(coordinates: Coordinates, version: String): ScanResult? {
-        val toolResponse = service.harvestToolData(
+    private suspend fun loadToolData(coordinates: Coordinates, name: String, version: String): JsonNode? {
+        val toolData = service.harvestToolData(
             coordinates.type,
             coordinates.provider,
             coordinates.namespace ?: "-",
             coordinates.name,
             coordinates.revision.orEmpty(),
-            TOOL_SCAN_CODE,
+            name,
             version
         )
 
-        return toolResponse.use {
-            jsonMapper.readTree(it.byteStream())["content"]?.let { result ->
-                val definitions = service.getDefinitions(listOf(coordinates))
-                val described = definitions.getValue(coordinates).described
-                val sourceLocation = described.sourceLocation
-
-                val provenance = when {
-                    sourceLocation == null -> UnknownProvenance
-
-                    sourceLocation.type == ComponentType.GIT -> {
-                        RepositoryProvenance(
-                            vcsInfo = VcsInfo(
-                                type = VcsType.GIT,
-                                url = sourceLocation.url.orEmpty(),
-                                revision = sourceLocation.revision,
-                                path = sourceLocation.path.orEmpty()
-                            ),
-                            resolvedRevision = sourceLocation.revision
-                        )
-                    }
-
-                    else -> {
-                        ArtifactProvenance(
-                            sourceArtifact = RemoteArtifact(
-                                url = sourceLocation.url.orEmpty(),
-                                hash = Hash.create(described.hashes?.sha1.orEmpty())
-                            )
-                        )
-                    }
+        return toolData.use {
+            val data = jsonMapper.readTree(it.byteStream())
+            data["content"].also { content ->
+                if (content == null) {
+                    logger.warn { "'$coordinates' has no data available for tool '$name' in version '$version'." }
                 }
-
-                val summary = generateSummary(SpdxConstants.NONE, result)
-                val details = generateScannerDetails(result)
-
-                ScanResult(provenance, details, summary)
             }
         }
+    }
+
+    /**
+     * Return the [Provenance] from where the package with the given [coordinates] was harvested.
+     */
+    private suspend fun getProvenance(coordinates: Coordinates): Provenance {
+        val definitions = service.getDefinitions(listOf(coordinates))
+        val described = definitions.getValue(coordinates).described
+        val sourceLocation = described.sourceLocation
+
+        return when {
+            sourceLocation == null -> UnknownProvenance
+
+            sourceLocation.type == ComponentType.GIT -> {
+                RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = sourceLocation.url.orEmpty(),
+                        revision = sourceLocation.revision,
+                        path = sourceLocation.path.orEmpty()
+                    ),
+                    resolvedRevision = sourceLocation.revision
+                )
+            }
+
+            else -> {
+                ArtifactProvenance(
+                    sourceArtifact = RemoteArtifact(
+                        url = sourceLocation.url.orEmpty(),
+                        hash = Hash.create(described.hashes?.sha1.orEmpty())
+                    )
+                )
+            }
+        }
+    }
+
+    /**
+     * Load the result file produced by ScanCode of the given [version] for the package with the given [coordinates]
+     * and parse it into a [ScanResult], or return null if no result is available.
+     */
+    private suspend fun loadScanCodeResult(coordinates: Coordinates, version: String): ScanResult? {
+        val result = loadToolData(coordinates, TOOL_SCAN_CODE, version) ?: return null
+        val provenance = getProvenance(coordinates)
+
+        val summary = generateSummary(SpdxConstants.NONE, result)
+        val details = generateScannerDetails(result)
+
+        return ScanResult(provenance, details, summary)
     }
 }
