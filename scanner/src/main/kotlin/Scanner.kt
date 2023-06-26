@@ -203,8 +203,16 @@ class Scanner(
             ).filterByVcsPath()
         }
 
-        val relevantProvenances = provenances.flatMapTo(mutableSetOf()) {
-            it.getKnownProvenancesWithoutVcsPath().values
+        val vcsPathsForProvenances = buildMap<KnownProvenance, MutableSet<String>> {
+            provenances.forEach { provenance ->
+                val packageVcsPath = provenance.packageProvenance?.vcsPath.orEmpty()
+
+                provenance.getKnownProvenancesWithoutVcsPath().forEach { (repositoryPath, provenance) ->
+                    getVcsPathForRepositoryOrNull(packageVcsPath, repositoryPath)?.let { vcsPath ->
+                        getOrPut(provenance) { mutableSetOf() } += vcsPath
+                    }
+                }
+            }
         }
 
         val scanResults = controller.getAllScanResults().map { scanResult ->
@@ -212,7 +220,11 @@ class Scanner(
                 provenance = scanResult.provenance.alignRevisions(),
                 summary = scanResult.summary.copy(packageVerificationCode = "")
             )
-        }.filterTo(mutableSetOf()) { scanResult -> scanResult.provenance in relevantProvenances }
+        }.mapNotNullTo(mutableSetOf()) { scanResult ->
+            vcsPathsForProvenances[scanResult.provenance]?.let {
+                scanResult.copy(summary = scanResult.summary.filterByPaths(it))
+            }
+        }
 
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
@@ -786,3 +798,18 @@ private fun ProvenanceResolutionResult.filterByVcsPath(): ProvenanceResolutionRe
             File(path).startsWith(packageProvenance?.vcsPath.orEmpty())
         }
     )
+
+/**
+ * Return the VCS path applicable to a (sub-) repository which appears under [repositoryPath] in the source tree of
+ * a package residing in [vcsPath], or null if the subtrees for [repositoryPath] and [vcsPath] are disjoint.
+ */
+private fun getVcsPathForRepositoryOrNull(vcsPath: String, repositoryPath: String): String? {
+    val repoPathFile = File(repositoryPath)
+    val vcsPathFile = File(vcsPath)
+
+    return if (repoPathFile.startsWith(vcsPathFile)) {
+        ""
+    } else {
+        runCatching { vcsPathFile.toRelativeString(repoPathFile) }.getOrNull()
+    }
+}
