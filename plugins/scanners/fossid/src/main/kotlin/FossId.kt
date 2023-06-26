@@ -548,7 +548,8 @@ class FossId internal constructor(
                 // When a scan is created with the optional property 'git_repo_url', the server automatically creates
                 // an 'ignore rule' to exclude the '.git' directory.
                 // Therefore, this rule will be created automatically and does not need to be carried from the old scan.
-                val filteredRules = rules.filterNot { it.type == RuleType.DIRECTORY && it.value == ".git" }
+                val exclusions = setOf(".git", "^\\.git")
+                val filteredRules = rules.filterNot { it.type == RuleType.DIRECTORY && it.value in exclusions }
 
                 val excludesRules = context.excludes?.let {
                     convertRules(it, issues).also {
