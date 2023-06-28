@@ -376,7 +376,7 @@ advisor:
       - advisor:
           name: "NexusIQ"
           capabilities:
-            - "VULNERABILITIES"
+          - "VULNERABILITIES"
         summary:
           start_time: "2021-04-29T14:54:17.322191Z"
           end_time: "2021-04-29T14:54:18.966672Z"
