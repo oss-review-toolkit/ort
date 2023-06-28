@@ -100,6 +100,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "be26ae6e9285a5d349d037deeb5eff2015635739"
   issues:
   - 0
 - _id: 1
@@ -116,6 +117,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "bab81eca7b6fae7b64d4c7343a2f5c43c4caa171"
 - _id: 2
   provenance:
     source_artifact:
@@ -129,6 +131,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 - _id: 3
   provenance:
     source_artifact:
@@ -142,6 +145,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 - _id: 4
   provenance:
     source_artifact:
@@ -155,6 +159,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 - _id: 5
   provenance:
     source_artifact:
@@ -168,6 +173,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 - _id: 6
   provenance:
     source_artifact:
@@ -181,6 +187,7 @@ scan_results:
     configuration: ""
   start_time: "1970-01-01T00:00:00Z"
   end_time: "1970-01-01T00:00:00Z"
+  package_verification_code: "da39a3ee5e6b4b0d3255bfef95601890afd80709"
 packages:
 - _id: 0
   id: "Gradle:org.ossreviewtoolkit.gradle.example:lib:1.0.0"

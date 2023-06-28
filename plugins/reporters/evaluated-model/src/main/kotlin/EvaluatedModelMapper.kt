@@ -49,6 +49,7 @@ import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.reporter.StatisticsCalculator.getStatistics
 import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 /**
  * Maps the [reporter input][input] to an [EvaluatedModel].
@@ -426,7 +427,9 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             scanner = result.scanner,
             startTime = result.summary.startTime,
             endTime = result.summary.endTime,
-            packageVerificationCode = result.summary.packageVerificationCode,
+            packageVerificationCode = input.ortResult.getFileListForId(pkg.id)?.let { fileList ->
+                calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
+            }.orEmpty(),
             issues = issues
         )
 
