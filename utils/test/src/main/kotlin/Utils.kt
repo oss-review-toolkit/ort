@@ -164,8 +164,7 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
     val scanResults = pkgScanResultsWithKnownProvenance.values.flatten().mapTo(mutableSetOf()) { scanResult ->
         scanResult.copy(
             provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
-                ?: scanResult.provenance,
-            summary = scanResult.summary.copy(packageVerificationCode = "")
+                ?: scanResult.provenance
         )
     }
 

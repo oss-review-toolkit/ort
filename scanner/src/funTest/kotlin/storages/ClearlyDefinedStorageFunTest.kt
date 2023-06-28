@@ -40,7 +40,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 class ClearlyDefinedStorageFunTest : StringSpec({
     val storage = ClearlyDefinedStorage(ClearlyDefinedStorageConfiguration(Server.PRODUCTION.apiUrl))
@@ -73,7 +72,6 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                 summary = ScanSummary.EMPTY.copy(
                     startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
                     endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
-                    packageVerificationCode = SpdxConstants.NONE,
                     licenseFindings = setOf(
                         LicenseFinding(
                             license = "MIT",
@@ -115,8 +113,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                 ),
                 summary = ScanSummary.EMPTY.copy(
                     startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
-                    endTime = Instant.parse("2022-05-02T07:34:59.000958218Z"),
-                    packageVerificationCode = SpdxConstants.NONE
+                    endTime = Instant.parse("2022-05-02T07:34:59.000958218Z")
                 )
             )
         }

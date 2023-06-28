@@ -862,7 +862,6 @@ class FossId internal constructor(
         val summary = ScanSummary(
             startTime = startTime,
             endTime = Instant.now(),
-            packageVerificationCode = "",
             licenseFindings = licenseFindings,
             copyrightFindings = copyrightFindings,
             snippetFindings = snippetFindings,

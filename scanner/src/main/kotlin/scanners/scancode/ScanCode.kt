@@ -148,7 +148,6 @@ class ScanCode internal constructor(
 
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
         val summary = generateSummary(
-            path,
             result,
             scannerConfig.detectedLicenseMapping,
             parseLicenseExpressions

@@ -23,7 +23,6 @@ package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import com.fasterxml.jackson.databind.JsonNode
 
-import java.io.File
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -40,7 +39,6 @@ import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
-import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 import org.semver4j.Semver
@@ -77,29 +75,11 @@ private val TIMEOUT_ERROR_REGEX = Regex(
 )
 
 /**
- * Generate a summary from the given raw ScanCode [result]. From the [scanPath] the package verification code is
- * generated. If [parseExpressions] is true, license findings are preferably parsed as license expressions.
- */
-internal fun generateSummary(
-    scanPath: File,
-    result: JsonNode,
-    detectedLicenseMapping: Map<String, String> = emptyMap(),
-    parseExpressions: Boolean = true
-) =
-    generateSummary(
-        calculatePackageVerificationCode(scanPath),
-        result,
-        detectedLicenseMapping,
-        parseExpressions
-    )
-
-/**
  * Generate a summary from the given raw ScanCode [result] using [verificationCode] metadata. This variant can be used
  * if the result is not read from a local file. If [parseExpressions] is true, license findings are preferably parsed as
  * license expressions.
  */
 internal fun generateSummary(
-    verificationCode: String,
     result: JsonNode,
     detectedLicenseMapping: Map<String, String> = emptyMap(),
     parseExpressions: Boolean = true
@@ -130,7 +110,6 @@ internal fun generateSummary(
     return ScanSummary(
         startTime = startTime,
         endTime = endTime,
-        packageVerificationCode = verificationCode,
         licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions),
         copyrightFindings = getCopyrightFindings(result),
         issues = issues + getIssues(result)

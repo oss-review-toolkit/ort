@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Licensee internal constructor(
     private val name: String,
@@ -77,11 +76,11 @@ class Licensee internal constructor(
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, stdout)
+            generateSummary(startTime, endTime, stdout)
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, result: String): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
         val json = jsonMapper.readTree(result)
@@ -103,7 +102,6 @@ class Licensee internal constructor(
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             issues = listOf(
                 Issue(

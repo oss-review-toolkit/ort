@@ -122,7 +122,6 @@ class ScanOss internal constructor(
         return generateSummary(
             startTime,
             endTime,
-            path,
             resolvedResponse,
             scannerConfig.detectedLicenseMapping
         )

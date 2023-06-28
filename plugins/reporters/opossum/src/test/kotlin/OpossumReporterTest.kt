@@ -456,7 +456,6 @@ private fun createOrtResult(): OrtResult {
                         configuration = "configuration"
                     ),
                     summary = ScanSummary.EMPTY.copy(
-                        packageVerificationCode = "0000000000000000000000000000000000000000",
                         licenseFindings = setOf(
                             LicenseFinding(
                                 license = "Apache-2.0",
@@ -493,7 +492,6 @@ private fun createOrtResult(): OrtResult {
                     summary = ScanSummary.EMPTY.copy(
                         startTime = Instant.EPOCH,
                         endTime = Instant.EPOCH,
-                        packageVerificationCode = "0000000000000000000000000000000000000000",
                         licenseFindings = setOf(
                             LicenseFinding(
                                 license = "BSD-2-Clause",

@@ -225,8 +225,7 @@ private fun createOrtResult(
                     provenance = RepositoryProvenance(vcsInfo, vcsInfo.revision),
                     scanner = ScannerDetails.EMPTY,
                     summary = ScanSummary.EMPTY.copy(
-                        licenseFindings = licenseFindings,
-                        packageVerificationCode = "0000000000000000000000000000000000000000"
+                        licenseFindings = licenseFindings
                     )
                 )
             )

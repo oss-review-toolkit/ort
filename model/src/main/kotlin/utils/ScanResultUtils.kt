@@ -34,8 +34,7 @@ import org.ossreviewtoolkit.model.SnippetFinding
  * for the result. All other entries in [scanResultsByPath] hold the scan results for each respective (recursive)
  * sub-repository of the main repository. This maps the given [scanResultsByPath] to the format currently used by
  * [OrtResult]. When merging multiple [ScanSummary]s for a particular scanner the earliest start time and lasted end
- * time will be used as the new values for the respective scanner. Because the [ScanSummary] does not contain the
- * checksums of the individual files, no package verification code can be calculated.
+ * time will be used as the new values for the respective scanner.
  */
 fun mergeScanResultsByScanner(scanResultsByPath: Map<String, List<ScanResult>>): List<ScanResult> {
     val rootProvenance = scanResultsByPath.getValue("").map { it.provenance }.distinct().also {
@@ -65,7 +64,6 @@ fun mergeScanResultsByScanner(scanResultsByPath: Map<String, List<ScanResult>>):
             summary = ScanSummary(
                 startTime = startTime,
                 endTime = endTime,
-                packageVerificationCode = "",
                 licenseFindings = licenseFindings,
                 copyrightFindings = copyrightFindings,
                 snippetFindings = snippetFindings,
