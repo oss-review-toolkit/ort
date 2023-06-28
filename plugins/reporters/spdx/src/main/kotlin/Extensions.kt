@@ -23,6 +23,7 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.OrtResult
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
@@ -120,16 +121,18 @@ internal enum class SpdxPackageType(val infix: String, val suffix: String = "") 
 /**
  * Convert this ORT package to an SPDX package. As an ORT package can hold more metadata about its associated artifacts
  * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from the
- * respective ORT package metadata. [licenseInfoResolver] is used for license and copyright information, and the
- * optional [scanResult] and [provenance] are used for [type]-specific information.
+ * respective ORT package metadata. [licenseInfoResolver] is used to obtain license and copyright information and
+ * [ortResult] is used to obtain data which is not contained in this [Package] instance.
  */
 internal fun Package.toSpdxPackage(
     type: SpdxPackageType,
     licenseInfoResolver: LicenseInfoResolver,
-    scanResult: ScanResult? = null,
-    provenance: RepositoryProvenance? = null
+    ortResult: OrtResult
 ): SpdxPackage {
-    val packageVerificationCode = scanResult.toSpdxPackageVerificationCode()
+    val packageVerificationCode = ortResult.getPackageVerificationCode(id, type)?.let {
+        SpdxPackageVerificationCode(packageVerificationCodeValue = it)
+    }
+
     return SpdxPackage(
         spdxId = id.toSpdxId(type.infix, type.suffix),
         checksums = when (type) {
@@ -142,7 +145,7 @@ internal fun Package.toSpdxPackage(
             SpdxPackageType.PROJECT -> SpdxConstants.NONE
             SpdxPackageType.BINARY_PACKAGE -> binaryArtifact.url.nullOrBlankToSpdxNone()
             SpdxPackageType.SOURCE_PACKAGE -> sourceArtifact.url.nullOrBlankToSpdxNone()
-            SpdxPackageType.VCS_PACKAGE -> vcsProcessed.toSpdxDownloadLocation(provenance?.resolvedRevision)
+            SpdxPackageType.VCS_PACKAGE -> vcsProcessed.toSpdxDownloadLocation(ortResult.getResolvedRevision(id))
         },
         externalRefs = if (type == SpdxPackageType.PROJECT) emptyList() else toSpdxExternalReferences(),
         filesAnalyzed = packageVerificationCode != null,
@@ -171,6 +174,20 @@ internal fun Package.toSpdxPackage(
     )
 }
 
+private fun OrtResult.getVcsScanResult(id: Identifier): ScanResult? =
+    getScanResultsForId(id).firstOrNull { it.provenance is RepositoryProvenance }
+
+private fun OrtResult.getResolvedRevision(id: Identifier): String? =
+    (getVcsScanResult(id)?.provenance as RepositoryProvenance?)?.resolvedRevision
+
+private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPackageType): String? =
+    when (type) {
+        SpdxPackageType.VCS_PACKAGE -> getVcsScanResult(id)?.summary?.packageVerificationCode?.takeUnless {
+            it.isEmpty()
+        }
+        else -> null
+    }
+
 /**
  * Convert processed declared licenses to SPDX. Unmapped licenses are represented as `NOASSERTION`.
  */
@@ -188,14 +205,6 @@ private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
         }
 
         else -> spdxExpression.nullOrBlankToSpdxNoassertionOrNone()
-    }
-
-/**
- * Wrap a scan summary's package verification code in a [SpdxPackageVerificationCode].
- */
-internal fun ScanResult?.toSpdxPackageVerificationCode(): SpdxPackageVerificationCode? =
-    this?.summary?.packageVerificationCode?.takeUnless { it.isEmpty() }?.let {
-        SpdxPackageVerificationCode(packageVerificationCodeValue = it)
     }
 
 /**
