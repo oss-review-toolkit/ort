@@ -22,6 +22,11 @@ package org.ossreviewtoolkit.plugins.scanners.dos
 import java.io.File
 import java.time.Instant
 
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ScanSummary
@@ -50,11 +55,32 @@ class DOS internal constructor(
     override val criteria: ScannerCriteria? = null
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
 
-        logger.info { "DOS / Path to scan: $path " }
-
         val startTime = Instant.now()
 
-        // Connect DOS/API to send the scan job to DOS backend
+        logger.info { "DOS / path to scan: $path" }
+        val dosUrl = System.getenv("DOS_URL")
+        val spacesKey = System.getenv("SPACES_KEY")
+
+        // Request presigned URL from DOS API
+        val client = OkHttpClient()
+        val endPoint = "upload-url"
+        val jsonMediaType = "application/json; charset=utf-8".toMediaType()
+        val jsonInputString = """{"key": "$spacesKey"}"""
+        val body = jsonInputString.toRequestBody(jsonMediaType)
+
+        val request = Request.Builder()
+            .url(dosUrl + endPoint)
+            .post(body)
+            .build()
+
+        client.newCall(request).execute().use { response ->
+            if (!response.isSuccessful) {
+                throw Exception("Unexpected code $response")
+            }
+            // Get response body
+            val presignedUrlKey = response.body?.string()
+            logger.info { "DOS / presigned URL: $presignedUrlKey" }
+        }
 
         val endTime = Instant.now()
 
