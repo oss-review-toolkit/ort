@@ -119,7 +119,7 @@ internal enum class SpdxPackageType(val infix: String, val suffix: String = "") 
 
 /**
  * Convert this ORT package to an SPDX package. As an ORT package can hold more metadata about its associated artifacts
- * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from
+ * and origin than an SPDX package, the [type] is used to specify which kind of SPDX package should be created from the
  * respective ORT package metadata. [licenseInfoResolver] is used for license and copyright information, and the
  * optional [scanResult] and [provenance] are used for [type]-specific information.
  */
