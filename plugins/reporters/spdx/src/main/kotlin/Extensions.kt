@@ -38,6 +38,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
+import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 import org.ossreviewtoolkit.utils.spdx.model.SpdxExternalReference
@@ -182,10 +183,10 @@ private fun OrtResult.getResolvedRevision(id: Identifier): String? =
 
 private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPackageType): String? =
     when (type) {
-        SpdxPackageType.VCS_PACKAGE -> getVcsScanResult(id)?.summary?.packageVerificationCode?.takeUnless {
-            it.isEmpty()
-        }
+        SpdxPackageType.VCS_PACKAGE -> getFileListForId(id).takeIf { it?.provenance is RepositoryProvenance }
         else -> null
+    }?.let { fileList ->
+        calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
     }
 
 /**
