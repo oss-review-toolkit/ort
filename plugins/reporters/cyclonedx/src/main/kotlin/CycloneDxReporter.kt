@@ -322,7 +322,7 @@ class CycloneDxReporter : Reporter {
                                 license.extensibleTypes = null
                             }
 
-                            // Remove duplicates that may occur due to clearing the distingushing extensive type.
+                            // Remove duplicates that may occur due to clearing the distinguishing extensive type.
                             component.licenseChoice.licenses = component.licenseChoice.licenses.distinct()
                         }
                     }
