@@ -21,6 +21,7 @@
 
 package org.ossreviewtoolkit.plugins.reporters.spdx
 
+import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.OrtResult
@@ -184,6 +185,7 @@ private fun OrtResult.getResolvedRevision(id: Identifier): String? =
 private fun OrtResult.getPackageVerificationCode(id: Identifier, type: SpdxPackageType): String? =
     when (type) {
         SpdxPackageType.VCS_PACKAGE -> getFileListForId(id).takeIf { it?.provenance is RepositoryProvenance }
+        SpdxPackageType.SOURCE_PACKAGE -> getFileListForId(id).takeIf { it?.provenance is ArtifactProvenance }
         else -> null
     }?.let { fileList ->
         calculatePackageVerificationCode(fileList.files.map { it.sha1 }.asSequence())
