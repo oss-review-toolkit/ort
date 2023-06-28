@@ -45,13 +45,17 @@ class DOS internal constructor(
     }
 
     override val details: ScannerDetails
-        get() = TODO("Not yet implemented")
-    override val criteria: ScannerCriteria?
-        get() = TODO("Not yet implemented")
+        get() = ScannerDetails(name, "1.0", "")
 
+    override val criteria: ScannerCriteria? = null
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
 
+        logger.info { "DOS / Path to scan: $path " }
+
         val startTime = Instant.now()
+
+        // Connect DOS/API to send the scan job to DOS backend
+
         val endTime = Instant.now()
 
         return ScanSummary(
