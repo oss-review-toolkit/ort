@@ -371,7 +371,55 @@ scanner:
           path: "org"
           start_line: -1
           end_line: -1
-  files: []
+  files:
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+        hash:
+          value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+          algorithm: "SHA-1"
+    files:
+    - path: "LICENSE-junit.txt"
+      sha1: "1dc94a80dbba8262f732e0b0d7235149861a1b57"
+    - path: "META-INF"
+      sha1: "7aa592f161c21d3edcc778ff76f6f30c8b707962"
+    - path: "junit"
+      sha1: "fdda4a4a842bd2bb90c6bd3c8076c777264fc204"
+    - path: "org"
+      sha1: "d23b5987504c1b3de484bf2e47c76f75abb794d3"
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+        hash:
+          value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+          algorithm: "SHA-1"
+    files:
+    - path: "META-INF"
+      sha1: "7aa592f161c21d3edcc778ff76f6f30c8b707962"
+    - path: "org"
+      sha1: "d23b5987504c1b3de484bf2e47c76f75abb794d3"
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+        hash:
+          value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+          algorithm: "SHA-1"
+    files:
+    - path: "META-INF"
+      sha1: "7aa592f161c21d3edcc778ff76f6f30c8b707962"
+    - path: "org"
+      sha1: "d23b5987504c1b3de484bf2e47c76f75abb794d3"
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+        hash:
+          value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+          algorithm: "SHA-1"
+    files:
+    - path: "META-INF"
+      sha1: "7aa592f161c21d3edcc778ff76f6f30c8b707962"
+    - path: "org"
+      sha1: "d23b5987504c1b3de484bf2e47c76f75abb794d3"
 advisor: null
 evaluator: null
 resolved_configuration:

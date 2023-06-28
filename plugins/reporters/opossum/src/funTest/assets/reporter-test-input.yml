@@ -597,7 +597,70 @@ scanner:
           \ Please make sure the published POM file includes the SCM connection, see:\
           \ https://docs.gradle.org/current/userguide/publishing_maven.html#sec:modifying_the_generated_pom"
         severity: "ERROR"
-  files: []
+  files:
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://example.com/git"
+        revision: "0000000000000000000000000000000000000000"
+        path: ""
+      resolved_revision: "0000000000000000000000000000000000000000"
+    files:
+    - path: "project/file.java"
+      sha1: "6cc74f4207b821c70b74b14abe774dcda5d2a9b2"
+    - path: "project/file.kt"
+      sha1: "63db5ac00c29f8ee2085e1a24686171bb8a206b8"
+    - path: "project/file1.java"
+      sha1: "bb833fb533893ed2d12ce9e96a7f8285a542159e"
+    - path: "project/file2.java"
+      sha1: "bc38db3681c82d12994a9e1e8e90c58d2fb35e76"
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/oss-review-toolkit/ort.git"
+        revision: "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
+        path: ""
+      resolved_revision: "3dcca3e6ee0dea120922f90495bf04b4e09ae455"
+    files:
+    - path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle"
+      sha1: "8fd2d8bd263e5990aebb7994502b6a435ae255a2"
+    - path: "analyzer/src/funTest/assets/projects/synthetic/gradle/lib/src/code.cpp"
+      sha1: "dffa81d449bc8acef4ea7be963171834057cefe3"
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/com/h2database/h2/1.4.200/h2-1.4.200-sources.jar"
+        hash:
+          value: "3b5883b7a5a05b932c699760f0854ca565785a84"
+          algorithm: "SHA-1"
+    files: []
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12-sources.jar"
+        hash:
+          value: "a6c32b40bf3d76eca54e3c601e5d1470c86fcdfa"
+          algorithm: "SHA-1"
+    files: []
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-lang3/3.5/commons-lang3-3.5-sources.jar"
+        hash:
+          value: "f7d878153e86a1cdddf6b37850e00a9f8bff726f"
+          algorithm: "SHA-1"
+    files: []
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/apache/commons/commons-text/1.1/commons-text-1.1-sources.jar"
+        hash:
+          value: "f0770f7f0472bf120ada47beecadce4056fbd20a"
+          algorithm: "SHA-1"
+    files: []
+  - provenance:
+      source_artifact:
+        url: "https://repo.maven.apache.org/maven2/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3-sources.jar"
+        hash:
+          value: "1dc37250fbc78e23a65a67fbbaf71d2e9cbc3c0b"
+          algorithm: "SHA-1"
+    files: []
 advisor:
   start_time: "1970-01-01T01:01:00Z"
   end_time: "1970-01-01T01:08:00Z"
