@@ -318,7 +318,39 @@ scanner:
           path: "LICENSE.md"
           start_line: 3
           end_line: 3
-  files: []
+  files:
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/junit-team/junit.git"
+        revision: "64155f8a9babcfcf4263cf4d08253a1556e75481"
+        path: ""
+      resolved_revision: "64155f8a9babcfcf4263cf4d08253a1556e75481"
+    files:
+    - path: "LICENSE-junit.txt"
+      sha1: "1dc94a80dbba8262f732e0b0d7235149861a1b57"
+    - path: "epl-v10.html"
+      sha1: "49f3f46520878abad864392fddf0da834c041bf8"
+    - path: "pom.xml"
+      sha1: "442292b8a7efeabbe4cc176709b833b1792140ec"
+    - path: "src/site/fml/faq.fml"
+      sha1: "220d7662a1fd7597e320e6e61589127349f9e5b0"
+    - path: "src/site/resources/css/hopscotch-0.1.2.min.css"
+      sha1: "ac230b8be930f5ee9b30a59562eda4cd27452b7e"
+    - path: "src/site/resources/scripts/hopscotch-0.1.2.min.js"
+      sha1: "8d68f8ccf1ae22b306e7cc0890df978e6c8a9abb"
+  - provenance:
+      vcs_info:
+        type: "Git"
+        url: "https://github.com/vdurmont/semver4j.git"
+        revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+        path: ""
+      resolved_revision: "7653e418d610ffcd2811bcb55fd72d00d420950b"
+    files:
+    - path: "LICENSE.md"
+      sha1: "4a8486805915245bbbe2e3c8c1a9d680c6843a82"
+    - path: "pom.xml"
+      sha1: "442292b8a7efeabbe4cc176709b833b1792140ec"
 advisor:
   start_time: "2021-04-29T14:54:16.562951Z"
   end_time: "2021-04-29T14:54:18.969210Z"
