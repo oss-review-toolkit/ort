@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.test.readOrtResult
 class WebAppReporterFunTest : WordSpec({
     "WebAppReporter" should {
         "successfully export to a web application" {
-            val ortResult = readOrtResult(getAssetFile("dummy-expected-output-for-analyzer-result.yml"))
+            val ortResult = readOrtResult(getAssetFile("scan-result-for-synthetic-gradle-lib.yml"))
             val outputDir = tempdir()
 
             val report = WebAppReporter().generateReport(ReporterInput(ortResult), outputDir).single()
