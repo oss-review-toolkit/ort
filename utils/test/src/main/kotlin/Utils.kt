@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.AdvisorRecord
 import org.ossreviewtoolkit.model.AdvisorResult
 import org.ossreviewtoolkit.model.AdvisorRun
 import org.ossreviewtoolkit.model.ArtifactProvenance
+import org.ossreviewtoolkit.model.FileList
 import org.ossreviewtoolkit.model.Hash
 import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
@@ -144,10 +145,10 @@ fun readOrtResult(file: String) = readOrtResult(File(file))
 fun readOrtResult(file: File) = file.mapper().readValue<OrtResult>(patchExpectedResult(file))
 
 /**
- * Create a [ScannerRun] with the given [scanResults].
+ * Create a [ScannerRun] with the given [pkgScanResults].
  */
-fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
-    val scanResultsWithKnownProvenance = scanResults.associate { (id, scanResultsForId) ->
+fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): ScannerRun {
+    val pkgScanResultsWithKnownProvenance = pkgScanResults.associate { (id, scanResultsForId) ->
         id to scanResultsForId.map { scanResult ->
             scanResult.takeIf { scanResult.provenance is KnownProvenance } ?: scanResult.copy(
                 provenance = ArtifactProvenance(
@@ -160,8 +161,37 @@ fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): Scanne
         }
     }
 
+    val scanResults = pkgScanResultsWithKnownProvenance.values.flatten().mapTo(mutableSetOf()) { scanResult ->
+        scanResult.copy(
+            provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
+                ?: scanResult.provenance,
+            summary = scanResult.summary.copy(packageVerificationCode = "")
+        )
+    }
+
+    val filePathsByProvenance = scanResults.mapNotNull { scanResult ->
+        val provenance = scanResult.provenance as? KnownProvenance ?: return@mapNotNull null
+
+        val paths = buildSet {
+            scanResult.summary.copyrightFindings.mapTo(this) { it.location.path }
+            scanResult.summary.licenseFindings.mapTo(this) { it.location.path }
+            scanResult.summary.snippetFindings.mapTo(this) { it.sourceLocation.path }
+        }
+
+        provenance to paths
+    }.groupBy({ it.first }, { it.second }).mapValues { it.value.flatten().toSet() }
+
+    val files = filePathsByProvenance.mapTo(mutableSetOf()) { (provenance, paths) ->
+        FileList(
+            provenance = provenance,
+            files = paths.mapTo(mutableSetOf()) {
+                FileList.Entry(path = it, sha1 = HashAlgorithm.SHA1.calculate(it.encodeToByteArray()))
+            }
+        )
+    }
+
     return ScannerRun.EMPTY.copy(
-        provenances = scanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
+        provenances = pkgScanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
             val packageProvenance = scanResultsForId.firstOrNull()?.provenance as KnownProvenance
 
             ProvenanceResolutionResult(
@@ -172,12 +202,7 @@ fun scannerRunOf(vararg scanResults: Pair<Identifier, List<ScanResult>>): Scanne
                 nestedProvenanceResolutionIssue = null
             )
         },
-        scanResults = scanResultsWithKnownProvenance.values.flatten().mapTo(mutableSetOf()) { scanResult ->
-            scanResult.copy(
-                provenance = (scanResult.provenance as? RepositoryProvenance)?.clearVcsPath()?.alignRevisions()
-                    ?: scanResult.provenance,
-                summary = scanResult.summary.copy(packageVerificationCode = "")
-            )
-        }
+        scanResults = scanResults,
+        files = files
     )
 }
