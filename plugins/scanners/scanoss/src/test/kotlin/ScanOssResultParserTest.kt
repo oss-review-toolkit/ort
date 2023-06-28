@@ -42,7 +42,6 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
 class ScanOssResultParserTest : WordSpec({
@@ -53,7 +52,7 @@ class ScanOssResultParserTest : WordSpec({
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, SpdxConstants.NONE, result, emptyMap())
+            val summary = generateSummary(time, time, result, emptyMap())
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",
@@ -91,7 +90,7 @@ class ScanOssResultParserTest : WordSpec({
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, SpdxConstants.NONE, result, emptyMap())
+            val summary = generateSummary(time, time, result, emptyMap())
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",

@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
-import java.io.File
 import java.time.Instant
 
 import org.ossreviewtoolkit.clients.scanoss.FullScanResponse
@@ -37,35 +36,14 @@ import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 /**
- * Generate a summary from the given SCANOSS [result], using [startTime] and [endTime] metadata. From the [scanPath]
- * the package verification code is generated.
+ * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
+ * used if the result is not read from a local file.
  */
 internal fun generateSummary(
     startTime: Instant,
     endTime: Instant,
-    scanPath: File,
-    result: FullScanResponse,
-    detectedLicenseMapping: Map<String, String>
-) =
-    generateSummary(
-        startTime,
-        endTime,
-        calculatePackageVerificationCode(scanPath),
-        result,
-        detectedLicenseMapping
-    )
-
-/**
- * Generate a summary from the given SCANOSS [result], using [startTime], [endTime], and [verificationCode]
- * metadata. This variant can be used if the result is not read from a local file.
- */
-internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
-    verificationCode: String,
     result: FullScanResponse,
     detectedLicenseMapping: Map<String, String>
 ): ScanSummary {
@@ -96,7 +74,6 @@ internal fun generateSummary(
     return ScanSummary(
         startTime = startTime,
         endTime = endTime,
-        packageVerificationCode = verificationCode,
         licenseFindings = licenseFindings,
         copyrightFindings = copyrightFindings,
         snippetFindings = snippetFindings

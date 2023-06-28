@@ -109,10 +109,6 @@ data class ScannerRun(
                     "The revision and resolved revision of a scan result are not equal, which is not allowed."
                 }
             }
-
-            require(scanResult.summary.packageVerificationCode.isEmpty()) {
-                "Found a scan result with a non-empty package verification code, which is not allowed."
-            }
         }
 
         provenances.getDuplicates { it.id }.keys.let { idsForDuplicateProvenanceResolutionResults ->
@@ -211,8 +207,6 @@ data class ScannerRun(
                 provenance = packageProvenance,
                 summary = scanResult.summary.addIssue(resolutionResult.nestedProvenanceResolutionIssue)
             )
-
-            // TODO: Compute and set the package verification code of the scan summary.
         }
 
         return scanResults.takeIf { it.isNotEmpty() }

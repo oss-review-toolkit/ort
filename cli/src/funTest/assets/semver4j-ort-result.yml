@@ -217,7 +217,6 @@ scanner:
     summary:
       start_time: "2020-09-30T09:28:32.817956Z"
       end_time: "2020-09-30T09:29:02.889213Z"
-      package_verification_code: ""
       licenses:
       - license: "Apache-2.0"
         location:
@@ -290,7 +289,6 @@ scanner:
     summary:
       start_time: "2020-09-30T09:27:12.023451Z"
       end_time: "2020-09-30T09:28:20.525647Z"
-      package_verification_code: ""
       licenses:
       - license: "BSD-3-Clause"
         location:

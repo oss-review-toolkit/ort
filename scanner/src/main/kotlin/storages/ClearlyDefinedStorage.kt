@@ -57,7 +57,6 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
 import org.ossreviewtoolkit.utils.ort.OkHttpClientHelper
 import org.ossreviewtoolkit.utils.ort.showStackTrace
-import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 
 import retrofit2.HttpException
 
@@ -121,7 +120,7 @@ class ClearlyDefinedStorage(
                 when (name) {
                     "scancode" -> {
                         loadToolData(coordinates, name, versions.last())?.let { result ->
-                            val summary = generateSummary(SpdxConstants.NONE, result)
+                            val summary = generateSummary(result)
                             val details = generateScannerDetails(result)
 
                             val provenance = getProvenance(coordinates)

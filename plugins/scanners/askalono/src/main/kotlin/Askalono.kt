@@ -39,7 +39,6 @@ import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
-import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 
 class Askalono internal constructor(
     private val name: String,
@@ -104,7 +103,6 @@ class Askalono internal constructor(
         return ScanSummary(
             startTime = startTime,
             endTime = endTime,
-            packageVerificationCode = calculatePackageVerificationCode(scanPath),
             licenseFindings = licenseFindings,
             issues = listOf(
                 Issue(

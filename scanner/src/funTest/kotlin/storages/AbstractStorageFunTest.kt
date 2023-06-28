@@ -102,7 +102,6 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
     private val scanSummaryWithFiles = ScanSummary.EMPTY.copy(
         startTime = Instant.EPOCH + Duration.ofMinutes(1),
         endTime = Instant.EPOCH + Duration.ofMinutes(2),
-        packageVerificationCode = "packageVerificationCode",
         licenseFindings = setOf(
             LicenseFinding("license-1.1", DUMMY_TEXT_LOCATION),
             LicenseFinding("license-1.2", DUMMY_TEXT_LOCATION)
@@ -155,7 +154,9 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
 
             "not store a result for the same scanner and provenance twice" {
                 val summary1 = scanSummaryWithFiles
-                val summary2 = scanSummaryWithFiles.copy(packageVerificationCode = "anotherPackageVerificationCode")
+                val summary2 = scanSummaryWithFiles.copy(
+                    startTime = scanSummaryWithFiles.startTime.plusSeconds(10)
+                )
 
                 val scanResult1 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, summary1)
                 val scanResult2 = ScanResult(provenanceWithSourceArtifact1, scannerDetails1, summary2)

@@ -166,9 +166,7 @@ class Scanner(
             environment = Environment(),
             config = filteredScannerConfig,
             provenances = projectResults.provenances + packageResults.provenances,
-            scanResults = (projectResults.scanResults + packageResults.scanResults).mapTo(mutableSetOf()) {
-                it.clearPackageVerificationCode()
-            },
+            scanResults = projectResults.scanResults + packageResults.scanResults,
             files = projectResults.files + packageResults.files
         )
 
@@ -218,10 +216,7 @@ class Scanner(
         }
 
         val scanResults = controller.getAllScanResults().map { scanResult ->
-            scanResult.copy(
-                provenance = scanResult.provenance.alignRevisions(),
-                summary = scanResult.summary.copy(packageVerificationCode = "")
-            )
+            scanResult.copy(provenance = scanResult.provenance.alignRevisions())
         }.mapNotNullTo(mutableSetOf()) { scanResult ->
             vcsPathsForProvenances[scanResult.provenance]?.let {
                 scanResult.copy(summary = scanResult.summary.filterByPaths(it))
@@ -585,7 +580,6 @@ class Scanner(
             val summary = ScanSummary(
                 startTime = Instant.now(),
                 endTime = Instant.now(),
-                packageVerificationCode = "",
                 issues = listOf(issue)
             )
 
@@ -777,8 +771,7 @@ fun ScanResult.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance):
 
     val provenances = nestedProvenance.getProvenances()
     val scanResultsByProvenance = provenances.associateWith { provenance ->
-        // TODO: Find a solution for the incorrect packageVerificationCode and for how to associate issues to the
-        //       correct scan result.
+        // TODO: Find a solution for how to associate issues to the correct scan result.
         listOf(
             copy(
                 provenance = provenance,
@@ -805,9 +798,6 @@ private fun ScanController.getSubRepositories(id: Identifier): Map<String, VcsIn
 
     return nestedProvenance.subRepositories.entries.associate { (path, provenance) -> path to provenance.vcsInfo }
 }
-
-private fun ScanResult.clearPackageVerificationCode(): ScanResult =
-    copy(summary = summary.copy(packageVerificationCode = ""))
 
 private fun ProvenanceResolutionResult.filterByVcsPath(): ProvenanceResolutionResult =
     copy(
