@@ -777,8 +777,8 @@ any failing tests will show the deviation from the expected result in a unified 
 `git apply`. If the actual result should be taken as the new expected result, simply copy the diff from the console to
 the clipboard and run
 
-* `wl-paste | col -bx | git apply` (Linux with Wayland)
-* `xsel -b | col -bx | git apply` (Linux with X)
+* `wl-paste | cut -d ' ' -f 5- | git apply` (Linux with Wayland)
+* `xsel -b | cut -d ' ' -f 5- | git apply` (Linux with X)
 * `cat /dev/clipboard | dos2unix | cut -d ' ' -f 5- | git apply` (Windows with Git Bash)
 
 to apply the diff to the local Git working tree (this does not create a commit yet). After reviewing the changes, create
