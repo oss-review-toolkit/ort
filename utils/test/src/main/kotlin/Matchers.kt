@@ -88,8 +88,8 @@ fun matchExpectedResult(
                     Expected and actual results differ. To use the actual results as the new expected results, first
                     copy one of the following commands to the clipboard and paste it to a terminal without running it
                     yet:
-                    - `wl-paste | col -bx | git apply` (Linux with Wayland)
-                    - `xsel -b | col -bx | git apply` (Linux with X)
+                    - `wl-paste | cut -d ' ' -f 5- | git apply` (Linux with Wayland)
+                    - `xsel -b | cut -d ' ' -f 5- | git apply` (Linux with X)
                     - `cat /dev/clipboard | dos2unix | cut -d ' ' -f 5- | git apply` (Windows with Git Bash)
                     Then copy the following lines to the clipboard and run the previously pasted commands.
                 """.trimIndent() + diff.joinToString("\n", "\n")
