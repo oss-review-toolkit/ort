@@ -82,14 +82,6 @@ file("plugins").walk().maxDepth(3).filter {
     }
 }
 
-val buildCacheRetentionDays: String by settings
-
-buildCache {
-    local {
-        removeUnusedEntriesAfterDays = buildCacheRetentionDays.toInt()
-    }
-}
-
 pluginManagement {
     repositories {
         mavenCentral()
