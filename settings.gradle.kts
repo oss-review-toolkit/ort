@@ -23,6 +23,7 @@ include(":advisor")
 include(":analyzer")
 include(":cli")
 include(":clients:clearly-defined")
+include(":clients:dos")
 include(":clients:fossid-webapp")
 include(":clients:github-graphql")
 include(":clients:nexus-iq")
@@ -45,6 +46,7 @@ include(":utils:spdx")
 include(":utils:test")
 
 project(":clients:clearly-defined").name = "clearly-defined-client"
+project(":clients:dos").name = "dos-client"
 project(":clients:fossid-webapp").name = "fossid-webapp-client"
 project(":clients:github-graphql").name = "github-graphql-client"
 project(":clients:nexus-iq").name = "nexus-iq-client"
