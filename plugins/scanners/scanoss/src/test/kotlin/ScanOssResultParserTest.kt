@@ -52,7 +52,7 @@ class ScanOssResultParserTest : WordSpec({
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, result, emptyMap())
+            val summary = generateSummary(time, time, result)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",
@@ -90,7 +90,7 @@ class ScanOssResultParserTest : WordSpec({
             }
 
             val time = Instant.now()
-            val summary = generateSummary(time, time, result, emptyMap())
+            val summary = generateSummary(time, time, result)
 
             summary.licenses.map { it.toString() } should containExactlyInAnyOrder(
                 "Apache-2.0",

@@ -54,6 +54,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
@@ -66,6 +67,7 @@ import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.showStackTrace
+import org.ossreviewtoolkit.utils.spdx.toSpdx
 
 const val TOOL_NAME = "scanner"
 
@@ -602,7 +604,14 @@ class Scanner(
 
                 logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' finished." }
 
-                ScanResult(provenance, scanner.details, summary)
+                val summaryWithMappedLicenses = summary.copy(
+                    licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
+                        val licenseString = it.license.toString()
+                        it.copy(license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx())
+                    }
+                )
+
+                ScanResult(provenance, scanner.details, summaryWithMappedLicenses)
             }
         } finally {
             downloadDir.safeDeleteRecursively(force = true)

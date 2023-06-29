@@ -147,11 +147,7 @@ class ScanCode internal constructor(
         resultFile.parentFile.safeDeleteRecursively(force = true)
 
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
-        val summary = generateSummary(
-            result,
-            scannerConfig.detectedLicenseMapping,
-            parseLicenseExpressions
-        )
+        val summary = generateSummary(result, parseLicenseExpressions)
 
         val issues = summary.issues.toMutableList()
 

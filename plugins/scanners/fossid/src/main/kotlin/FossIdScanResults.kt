@@ -38,7 +38,6 @@ import org.ossreviewtoolkit.model.Snippet as OrtSnippet
 import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.PurlType
 import org.ossreviewtoolkit.utils.common.collapseToRanges
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -72,8 +71,7 @@ internal data class FindingsContainer(
  */
 internal fun <T : Summarizable> List<T>.mapSummary(
     ignoredFiles: Map<String, IgnoredFile>,
-    issues: MutableList<Issue>,
-    detectedLicenseMapping: Map<String, String>
+    issues: MutableList<Issue>
 ): FindingsContainer {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
@@ -85,7 +83,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 
         summary.licences.forEach {
             runCatching {
-                LicenseFinding(it.identifier.mapLicense(detectedLicenseMapping), location)
+                LicenseFinding(it.identifier, location)
             }.onSuccess { licenseFinding ->
                 licenseFindings += licenseFinding.copy(license = licenseFinding.license.normalize())
             }.onFailure { spdxException ->

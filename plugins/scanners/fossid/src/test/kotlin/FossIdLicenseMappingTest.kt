@@ -49,7 +49,7 @@ class FossIdLicenseMappingTest : WordSpec({
             val sampleFile = createMarkAsIdentifiedFile("invalid license")
             val issues = mutableListOf<Issue>()
 
-            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues, emptyMap())
+            val findings = listOf(sampleFile).mapSummary(emptyMap(), issues)
 
             issues should haveSize(1)
             issues.first() shouldNotBeNull {

@@ -32,7 +32,6 @@ import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -87,7 +86,7 @@ class Askalono internal constructor(
             val root = jsonMapper.readTree(line)
             root["result"]?.let { result ->
                 val licenseFinding = LicenseFinding(
-                    license = result["license"]["name"].textValue().mapLicense(scannerConfig.detectedLicenseMapping),
+                    license = result["license"]["name"].textValue(),
                     location = TextLocation(
                         // Turn absolute paths in the native result into relative paths to not expose any information.
                         relativizePath(scanPath, File(root["path"].textValue())),
