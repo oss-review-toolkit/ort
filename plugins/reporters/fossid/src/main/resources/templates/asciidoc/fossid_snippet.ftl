@@ -26,12 +26,11 @@
 :toc:
 
 = FossID Snippets
-List of all the packages with their files and snippets.
-[#list ortResult.scanResults as package, scanResults]
+List of all the provenances with their files and snippets.
+[#list ortResult.scanner.scanResults as scanResult]
 
-== Package '${package.toCoordinates()}'
+== Provenance '${scanResult.provenance.vcsInfo.url}'
 
-[#list scanResults as scanResult]
 [#assign summary = scanResult.summary]
 
 Scan start time : ${summary.startTime} +
@@ -83,5 +82,4 @@ License(s):
 |===
 [/#list]
 
-[/#list]
 [/#list]
