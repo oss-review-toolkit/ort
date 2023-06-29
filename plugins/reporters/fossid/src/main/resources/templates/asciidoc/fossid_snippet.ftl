@@ -65,14 +65,14 @@ License(s):
 [/#list]
 
 [width=100%]
-[cols="1,1,3,1,3,3,1,1"]
+[cols="1,3,1,3,3,1,1"]
 |===
-| ID | Match | pURL | License | File | URL | Score | Release Date
+| Match | pURL | License | File | URL | Score | Release Date
 
 [#list snippetFindings as snippetFinding ]
 [#assign snippet = snippetFinding.snippet]
 [#assign matchType = snippet.additionalData["matchType"]]
-[#if matchType == "PARTIAL"].2+[/#if]| ${snippet.additionalData["id"]} | ${matchType} | ${snippet.purl!""}
+| ${matchType} | ${snippet.purl!""}
 | ${snippet.licenses!""} | ${snippet.location.path!""} | ${snippet.provenance.sourceArtifact.url!""}[URL]
 | ${snippet.score!""} | ${snippet.additionalData["releaseDate"]}
 [#if matchType == "PARTIAL"]
