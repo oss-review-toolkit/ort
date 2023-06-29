@@ -59,7 +59,7 @@ data class SpdxFile(
      * A text relating to a copyright notice, even if not complete. To represent a not present value
      * [SpdxConstants.NONE] or [SpdxConstants.NOASSERTION] must be used.
      */
-    val copyrightText: String,
+    val copyrightText: String = SpdxConstants.NOASSERTION,
 
     /**
      * The list of contributors which contributed to the file. Contributors could include names of copyright holders
