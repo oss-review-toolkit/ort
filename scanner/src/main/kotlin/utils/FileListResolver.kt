@@ -33,6 +33,7 @@ import org.ossreviewtoolkit.scanner.FileList.FileEntry
 import org.ossreviewtoolkit.scanner.provenance.ProvenanceDownloader
 import org.ossreviewtoolkit.utils.common.FileMatcher
 import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
+import org.ossreviewtoolkit.utils.common.isSymbolicLink
 
 internal class FileListResolver(
     private val storage: ProvenanceFileStorage,
@@ -64,9 +65,9 @@ private val IGNORED_DIRECTORY_MATCHER by lazy {
 
 private fun createFileList(dir: File): FileList {
     val files = dir.walk().onEnter {
-        !IGNORED_DIRECTORY_MATCHER.matches(it.relativeTo(dir).invariantSeparatorsPath)
+        !IGNORED_DIRECTORY_MATCHER.matches(it.relativeTo(dir).invariantSeparatorsPath) && !it.isSymbolicLink()
     }.filter {
-        it.isFile
+        it.isFile && !it.isSymbolicLink()
     }.mapTo(mutableSetOf()) {
         FileEntry(path = it.relativeTo(dir).invariantSeparatorsPath, sha1 = HashAlgorithm.SHA1.calculate(it))
     }
