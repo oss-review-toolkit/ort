@@ -857,7 +857,7 @@ class FossId internal constructor(
 
         val (licenseFindings, copyrightFindings) = rawResults.markedAsIdentifiedFiles.ifEmpty {
             rawResults.identifiedFiles
-        }.mapSummary(ignoredFiles, issues, scannerConfig.detectedLicenseMapping)
+        }.mapSummary(ignoredFiles, issues)
 
         val summary = ScanSummary(
             startTime = startTime,

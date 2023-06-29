@@ -33,7 +33,6 @@ import org.ossreviewtoolkit.model.SnippetFinding
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
-import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 
@@ -44,8 +43,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 internal fun generateSummary(
     startTime: Instant,
     endTime: Instant,
-    result: FullScanResponse,
-    detectedLicenseMapping: Map<String, String>
+    result: FullScanResponse
 ): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
@@ -54,7 +52,7 @@ internal fun generateSummary(
     result.forEach { (_, scanResponses) ->
         scanResponses.forEach { scanResponse ->
             if (scanResponse.id == IdentificationType.FILE) {
-                licenseFindings += getLicenseFindings(scanResponse, detectedLicenseMapping)
+                licenseFindings += getLicenseFindings(scanResponse)
                 copyrightFindings += getCopyrightFindings(scanResponse)
             }
 
@@ -83,10 +81,7 @@ internal fun generateSummary(
 /**
  * Get the license findings from the given [scanResponse].
  */
-private fun getLicenseFindings(
-    scanResponse: ScanResponse,
-    detectedLicenseMappings: Map<String, String>
-): List<LicenseFinding> {
+private fun getLicenseFindings(scanResponse: ScanResponse): List<LicenseFinding> {
     val path = scanResponse.file ?: return emptyList()
     val score = scanResponse.matched?.removeSuffix("%")?.toFloatOrNull()
 
@@ -100,7 +95,7 @@ private fun getLicenseFindings(
         }
 
         LicenseFinding(
-            license = validatedLicense.mapLicense(detectedLicenseMappings),
+            license = validatedLicense,
             location = TextLocation(
                 path = path,
                 startLine = TextLocation.UNKNOWN_LINE,

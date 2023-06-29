@@ -35,7 +35,6 @@ import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
-import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -79,11 +78,7 @@ private val TIMEOUT_ERROR_REGEX = Regex(
  * if the result is not read from a local file. If [parseExpressions] is true, license findings are preferably parsed as
  * license expressions.
  */
-internal fun generateSummary(
-    result: JsonNode,
-    detectedLicenseMapping: Map<String, String> = emptyMap(),
-    parseExpressions: Boolean = true
-): ScanSummary {
+internal fun generateSummary(result: JsonNode, parseExpressions: Boolean = true): ScanSummary {
     val header = result["headers"].single()
 
     val issues = mutableListOf<Issue>()
@@ -110,7 +105,7 @@ internal fun generateSummary(
     return ScanSummary(
         startTime = startTime,
         endTime = endTime,
-        licenseFindings = getLicenseFindings(result, detectedLicenseMapping, parseExpressions),
+        licenseFindings = getLicenseFindings(result, parseExpressions),
         copyrightFindings = getCopyrightFindings(result),
         issues = issues + getIssues(result)
     )
@@ -166,11 +161,7 @@ private fun getInputPath(result: JsonNode): String {
  * in the result, these are preferred over separate license findings. Otherwise, only separate license findings are
  * parsed.
  */
-private fun getLicenseFindings(
-    result: JsonNode,
-    detectedLicenseMapping: Map<String, String>,
-    parseExpressions: Boolean
-): Set<LicenseFinding> {
+private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Set<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
     val input = getInputPath(result)
@@ -195,7 +186,7 @@ private fun getLicenseFindings(
             val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
 
             LicenseFinding(
-                license = spdxLicenseExpression.mapLicense(detectedLicenseMapping),
+                license = spdxLicenseExpression,
                 location = TextLocation(
                     path = file["path"].textValue().removePrefix(input),
                     startLine = licenseMatch.startLine,
