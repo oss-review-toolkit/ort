@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-@file:Suppress("TooManyFunctions")
-
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import com.fasterxml.jackson.databind.JsonNode
@@ -31,7 +29,6 @@ import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
@@ -109,44 +106,6 @@ internal fun generateSummary(result: JsonNode, parseExpressions: Boolean = true)
         copyrightFindings = getCopyrightFindings(result),
         issues = issues + getIssues(result)
     )
-}
-
-/**
- * Generate details for the given raw ScanCode [result].
- */
-internal fun generateScannerDetails(result: JsonNode): ScannerDetails {
-    val header = result["headers"].single()
-    val version = header["tool_version"].textValueOrEmpty()
-    val config = generateScannerOptions(header["options"])
-    return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
-}
-
-/**
- * Convert the JSON node with ScanCode [options] to a string that corresponds to the options as they have been passed on
- * the command line.
- */
-private fun generateScannerOptions(options: JsonNode?): String {
-    fun addValues(list: MutableList<String>, node: JsonNode, key: String) {
-        if (node.isEmpty) {
-            list += key
-            list += node.asText()
-        } else {
-            node.forEach {
-                list += key
-                list += it.asText()
-            }
-        }
-    }
-
-    return options?.let {
-        val optionList = mutableListOf<String>()
-
-        it.fieldNames().asSequence().forEach { option ->
-            addValues(optionList, it[option], option)
-        }
-
-        optionList.joinToString(separator = " ")
-    }.orEmpty()
 }
 
 private fun getInputPath(result: JsonNode): String {
