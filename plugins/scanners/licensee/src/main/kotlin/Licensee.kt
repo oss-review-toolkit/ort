@@ -60,26 +60,22 @@ class Licensee internal constructor(
 
     override fun getVersionArguments() = "version"
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val startTime = Instant.now()
-
+    override fun runScanner(path: File, context: ScanContext): String {
         val process = run(
             "detect",
             *CONFIGURATION_OPTIONS.toTypedArray(),
             path.absolutePath
         )
 
-        val endTime = Instant.now()
-
         return with(process) {
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, stdout)
+            stdout
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, result: String): ScanSummary {
+    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
         val json = jsonMapper.readTree(result)

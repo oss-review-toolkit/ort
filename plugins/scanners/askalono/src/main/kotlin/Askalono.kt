@@ -61,25 +61,21 @@ class Askalono internal constructor(
         // askalono 0.2.0-beta.1
         output.removePrefix("askalono ")
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val startTime = Instant.now()
-
+    override fun runScanner(path: File, context: ScanContext): String {
         val process = run(
             "--format", "json",
             "crawl", path.absolutePath
         )
 
-        val endTime = Instant.now()
-
         return with(process) {
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, stdout)
+            stdout
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, result: String): ScanSummary {
+    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
         result.lines().forEach { line ->
