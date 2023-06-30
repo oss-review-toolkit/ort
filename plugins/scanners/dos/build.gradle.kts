@@ -20,9 +20,14 @@
 plugins {
     // Apply precompiled plugins.
     id("ort-library-conventions")
+    alias(libs.plugins.kotlinSerialization)
 }
 
 dependencies {
     api(project(":model"))
     api(project(":scanner"))
+
+    implementation(libs.bundles.kotlinxSerialization)
+    implementation(libs.kotlinxCoroutines)
+    implementation(project(":clients:dos-client"))
 }

@@ -19,16 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.scanners.dos
 
-import java.io.File
-import java.time.Instant
-
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.kotlin.Logging
-
+import org.ossreviewtoolkit.clients.dos.DOSService
+import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -37,6 +33,8 @@ import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import java.io.File
+import java.time.Instant
 
 class DOS internal constructor(
     private val name: String,
@@ -53,15 +51,26 @@ class DOS internal constructor(
         get() = ScannerDetails(name, "1.0", "")
 
     override val criteria: ScannerCriteria? = null
+
+    private val service = DOSService.create()
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
 
         val startTime = Instant.now()
 
         logger.info { "DOS / path to scan: $path" }
-        val dosUrl = System.getenv("DOS_URL")
         val spacesKey = System.getenv("SPACES_KEY")
 
+        runBlocking {
+            val requestBody = PresignedUrlRequestBody(spacesKey)
+            val requestBodyJson = Json.encodeToString(requestBody)
+            logger.info { "DOS / presigned URL request body: $requestBodyJson" }
+            val response = service.getPresignedUrl(requestBody)
+            val responseJson = Json.encodeToString(response)
+            logger.info { "DOS / presigned URL call results: $responseJson" }
+        }
+
         // Request presigned URL from DOS API
+        /*
         val client = OkHttpClient()
         val endPoint = "upload-url"
         val jsonMediaType = "application/json; charset=utf-8".toMediaType()
@@ -81,6 +90,7 @@ class DOS internal constructor(
             val presignedUrlKey = response.body?.string()
             logger.info { "DOS / presigned URL: $presignedUrlKey" }
         }
+        */
 
         val endTime = Instant.now()
 

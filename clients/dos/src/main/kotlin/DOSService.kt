@@ -18,7 +18,60 @@
  */
 
 package org.ossreviewtoolkit.clients.dos
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import org.apache.logging.log4j.kotlin.Logging
+import retrofit2.Retrofit
+import retrofit2.http.Body
+import retrofit2.http.POST
 
 interface DOSService {
+
+    companion object: Logging {
+        /**
+         * The default API URL.
+         */
+        const val DEFAULT_API_URL = "https://double-open-server.herokuapp.com/api/"
+
+        /**
+         * The JSON (de-)serialization object used by this service.
+         */
+        val JSON = Json {
+            ignoreUnknownKeys = true
+            namingStrategy = JsonNamingStrategy.SnakeCase
+        }
+
+        /**
+         * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
+         */
+        fun create(url: String? = null, client: OkHttpClient? = null): DOSService {
+            val contentType = "application/json; charset=utf-8".toMediaType()
+            val retrofit = Retrofit.Builder()
+                .apply { if (client != null) client(client) }
+                .baseUrl(url ?: DEFAULT_API_URL)
+                .addConverterFactory(JSON.asConverterFactory(contentType))
+                .build()
+
+            return retrofit.create(DOSService::class.java)
+        }
+    }
+    @Serializable
+    data class PresignedUrlRequestBody(
+        val key: String? = null
+    )
+    @Serializable
+    data class PresignedUrlResponseBody(
+        val success: Boolean,
+        val presignedUrl: String? = null
+    )
+
+    val json: Json.Default
+
+    @POST("upload-url")
+    suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): PresignedUrlResponseBody
 
 }

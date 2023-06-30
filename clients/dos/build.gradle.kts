@@ -29,11 +29,10 @@ plugins {
 
 dependencies {
     api(libs.retrofit)
+    api(libs.log4jApiKotlin)
 
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.retrofitConverterKotlinxSerialization)
-
-    testImplementation(libs.wiremock)
 }
 
 tasks.withType<KotlinCompile>().configureEach {
