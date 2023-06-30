@@ -162,23 +162,32 @@ internal class OrtModelBuilder : ToolingModelBuilder {
 
                     when (val id = selectedComponent.id) {
                         is ModuleComponentIdentifier -> {
-                            val repositoryName = (selectedComponent as? ResolvedComponentResultInternal)?.repositoryName
-                            val pomFile = repositories[repositoryName]?.let { repositoryUrl ->
-                                // Note: Only Maven-style layout is supported for now.
-                                buildString {
-                                    append(repositoryUrl.removeSuffix("/"))
-                                    append('/')
-                                    append(id.group.replace('.', '/'))
-                                    append('/')
-                                    append(id.module)
-                                    append('/')
-                                    append(id.version)
-                                    append('/')
-                                    append(id.module)
-                                    append('-')
-                                    append(id.version)
-                                    append(".pom")
+                            val pomFile = if (selectedComponent is ResolvedComponentResultInternal) {
+                                val repositoryId = runCatching { selectedComponent.repositoryId }
+                                    .recoverCatching {
+                                        @Suppress("DEPRECATION")
+                                        selectedComponent.repositoryName
+                                    }.getOrNull()
+
+                                repositories[repositoryId]?.let { repositoryUrl ->
+                                    // Note: Only Maven-style layout is supported for now.
+                                    buildString {
+                                        append(repositoryUrl.removeSuffix("/"))
+                                        append('/')
+                                        append(id.group.replace('.', '/'))
+                                        append('/')
+                                        append(id.module)
+                                        append('/')
+                                        append(id.version)
+                                        append('/')
+                                        append(id.module)
+                                        append('-')
+                                        append(id.version)
+                                        append(".pom")
+                                    }
                                 }
+                            } else {
+                                null
                             }
 
                             val modelBuildingResult = poms.getValue(id.toString())
