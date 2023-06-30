@@ -21,6 +21,8 @@ package org.ossreviewtoolkit.scanner.storages
 
 import com.fasterxml.jackson.databind.JsonNode
 
+import java.time.Instant
+
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 
@@ -44,13 +46,16 @@ import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.ClearlyDefinedStorageConfiguration
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
+import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedCoordinates
 import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
+import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
+import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
@@ -115,33 +120,33 @@ class ClearlyDefinedStorage(
                 .groupBy({ it.substringBefore('/') }, { it.substringAfter('/') })
                 .mapValues { (_, versions) -> versions.sortedWith(AlphaNumericComparator) }
 
-            toolVersionsByName.mapNotNull { (name, versions) ->
-                // See https://github.com/clearlydefined/service#tool-name-registry.
-                when (name) {
-                    "scancode" -> {
-                        val version = versions.last()
-                        val data = loadToolData(coordinates, name, version)
+            val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
+                // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
+                ScannerWrapper.ALL[name]?.let { factory -> factory to versions.last() }.also {
+                    if (it == null) logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
+                }
+            }
 
-                        data["content"]?.let { result ->
-                            val summary = generateSummary(result)
-                            val details = getScanCodeDetails(result)
+            supportedScanners.mapNotNull { (factory, version) ->
+                val scanner = factory.create(ScannerConfiguration(), DownloaderConfiguration())
+                (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner ->
+                    val startTime = Instant.now()
+                    val name = factory.type.lowercase()
+                    val data = loadToolData(coordinates, name, version)
 
-                            val provenance = getProvenance(coordinates)
+                    when (factory.type) {
+                        "ScanCode" -> {
+                            data["content"]?.let { result ->
+                                val provenance = getProvenance(coordinates)
+                                val details = getScanCodeDetails(result)
+                                val endTime = Instant.now()
+                                val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
 
-                            ScanResult(provenance, details, summary)
-                        } ?: run {
-                            logger.warn {
-                                "'$coordinates' has no data available for tool '$name' in version '$version'."
+                                ScanResult(provenance, details, summary)
                             }
-
-                            null
                         }
-                    }
 
-                    else -> {
-                        logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
-
-                        null
+                        else -> null
                     }
                 }
             }
