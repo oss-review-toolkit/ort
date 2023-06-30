@@ -27,7 +27,7 @@ import kotlin.math.min
  */
 data class TextLocation(
     /**
-     * The path of the file that contains the text.
+     * The path (with invariant separators) of the file that contains the text.
      */
     val path: String,
 
