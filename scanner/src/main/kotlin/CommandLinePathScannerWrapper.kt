@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.scanner
 
-import java.io.File
-
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ScannerDetails
@@ -38,22 +36,4 @@ abstract class CommandLinePathScannerWrapper(name: String) : PathScannerWrapper,
     abstract val configuration: String
 
     override val details by lazy { ScannerDetails(name, getVersion(), configuration) }
-
-    /**
-     * Return the invariant relative path of the [scanned file][scannedFilename] with respect to the
-     * [scanned path][scanPath].
-     */
-    protected fun relativizePath(scanPath: File, scannedFilename: File): String {
-        val relativePathToScannedFile = if (scannedFilename.isAbsolute) {
-            if (scanPath.isFile) {
-                scannedFilename.relativeTo(scanPath.parentFile)
-            } else {
-                scannedFilename.relativeTo(scanPath)
-            }
-        } else {
-            scannedFilename
-        }
-
-        return relativePathToScannedFile.invariantSeparatorsPath
-    }
 }

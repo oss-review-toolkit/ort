@@ -25,7 +25,8 @@ import io.kotest.core.spec.style.StringSpec
 import io.kotest.engine.spec.tempdir
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
-import io.kotest.matchers.file.shouldNotStartWithPath
+import io.kotest.matchers.file.aFile
+import io.kotest.matchers.shouldBe
 
 import java.io.File
 
@@ -63,23 +64,21 @@ abstract class AbstractPathScannerWrapperFunTest(testTags: Set<Tag> = emptySet()
     init {
         "Scanning a single file succeeds".config(tags = testTags) {
             val result = scanner.scanPath(inputDir.resolve("LICENSE"), scanContext)
+            val findings = result.licenseFindings.map { it.copy(location = it.location.withRelativePath(inputDir)) }
 
-            with(result) {
-                licenseFindings shouldContainExactlyInAnyOrder expectedFileLicenses
-                licenseFindings.forAll {
-                    File(it.location.path) shouldNotStartWithPath inputDir
-                }
+            findings shouldContainExactlyInAnyOrder expectedFileLicenses
+            findings.forAll {
+                inputDir.resolve(it.location.path) shouldBe aFile()
             }
         }
 
         "Scanning a directory succeeds".config(tags = testTags) {
             val result = scanner.scanPath(inputDir, scanContext)
+            val findings = result.licenseFindings.map { it.copy(location = it.location.withRelativePath(inputDir)) }
 
-            with(result) {
-                licenseFindings shouldContainExactlyInAnyOrder expectedDirectoryLicenses
-                licenseFindings.forAll {
-                    File(it.location.path) shouldNotStartWithPath inputDir
-                }
+            findings shouldContainExactlyInAnyOrder expectedDirectoryLicenses
+            findings.forAll {
+                inputDir.resolve(it.location.path) shouldBe aFile()
             }
         }
     }

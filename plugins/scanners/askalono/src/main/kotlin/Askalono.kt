@@ -75,11 +75,11 @@ class Askalono internal constructor(
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, stdout)
+            generateSummary(startTime, endTime, stdout)
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, result: String): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, result: String): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
         result.lines().forEach { line ->
@@ -87,11 +87,7 @@ class Askalono internal constructor(
             root["result"]?.let { result ->
                 val licenseFinding = LicenseFinding(
                     license = result["license"]["name"].textValue(),
-                    location = TextLocation(
-                        // Turn absolute paths in the native result into relative paths to not expose any information.
-                        relativizePath(scanPath, File(root["path"].textValue())),
-                        TextLocation.UNKNOWN_LINE
-                    ),
+                    location = TextLocation(root["path"].textValue(), TextLocation.UNKNOWN_LINE),
                     score = result["score"].floatValue()
                 )
 
