@@ -41,7 +41,7 @@ internal fun Configuration.isRelevant(): Boolean {
 
     // Check if a configuration is deprecated in favor of alternatives.
     val isDeprecatedConfiguration = GradleVersion.current() >= GradleVersion.version("6.0")
-            && this is DeprecatableConfiguration && resolutionAlternatives != null
+            && this is DeprecatableConfiguration && !resolutionAlternatives.isNullOrEmpty()
 
     // Do not try to resolve dependencies metadata configurations as there often cause failures with Gradle itself. See
     // https://developer.android.com/build/releases/past-releases/agp-4-0-0-release-notes#dependency-metadata and
