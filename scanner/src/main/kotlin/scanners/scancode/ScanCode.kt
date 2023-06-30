@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
 import java.io.File
+import java.time.Instant
 
 import kotlin.math.max
 
@@ -29,7 +30,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readTree
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -151,26 +152,31 @@ class ScanCode internal constructor(
         }.orEmpty()
     }
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
+    override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
         val process = runScanCode(path, resultFile)
 
-        val result = resultFile.readTree()
-        resultFile.parentFile.safeDeleteRecursively(force = true)
+        return with(process) {
+            if (stderr.isNotBlank()) logger.debug { stderr }
 
+            // Do not throw yet if the process exited with an error as some errors might turn out to be tolerable during
+            // parsing.
+
+            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively(force = true) }
+        }
+    }
+
+    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
+        val json = jsonMapper.readTree(result)
         val parseLicenseExpressions = scanCodeConfiguration["parseLicenseExpressions"].isTrue()
-        val summary = generateSummary(result, parseLicenseExpressions)
+        val summary = generateSummary(json, parseLicenseExpressions)
 
         val issues = summary.issues.toMutableList()
 
         mapUnknownIssues(issues)
         mapTimeoutErrors(issues)
 
-        return with(process) {
-            if (stderr.isNotBlank()) logger.debug { stderr }
-
-            summary.copy(issues = issues)
-        }
+        return summary.copy(issues = issues)
     }
 
     /**

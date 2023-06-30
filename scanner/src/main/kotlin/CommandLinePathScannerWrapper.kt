@@ -19,8 +19,12 @@
 
 package org.ossreviewtoolkit.scanner
 
+import java.io.File
+import java.time.Instant
+
 import org.apache.logging.log4j.kotlin.Logging
 
+import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
@@ -36,4 +40,22 @@ abstract class CommandLinePathScannerWrapper(name: String) : PathScannerWrapper,
     abstract val configuration: String
 
     override val details by lazy { ScannerDetails(name, getVersion(), configuration) }
+
+    final override fun scanPath(path: File, context: ScanContext): ScanSummary {
+        val startTime = Instant.now()
+        val result = runScanner(path, context)
+        val endTime = Instant.now()
+        return createSummary(result, startTime, endTime)
+    }
+
+    /**
+     * Run the scanner on the given [path] with the given [context].
+     */
+    abstract fun runScanner(path: File, context: ScanContext): String
+
+    /**
+     * Create a [ScanSummary] from the scan [result] in a scanner-native format. If the [result] itself does not contain
+     * time information, [startTime] and [endTime] may be used instead.
+     */
+    abstract fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary
 }

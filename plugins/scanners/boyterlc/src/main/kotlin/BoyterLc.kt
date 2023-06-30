@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.readTree
+import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -68,9 +68,7 @@ class BoyterLc internal constructor(
         // licensechecker version 1.1.1
         output.removePrefix("licensechecker version ")
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
-        val startTime = Instant.now()
-
+    override fun runScanner(path: File, context: ScanContext): String {
         val resultFile = createOrtTempDir().resolve("result.json")
         val process = run(
             *CONFIGURATION_OPTIONS.toTypedArray(),
@@ -78,23 +76,19 @@ class BoyterLc internal constructor(
             path.absolutePath
         )
 
-        val endTime = Instant.now()
-
         return with(process) {
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, resultFile).also {
-                resultFile.parentFile.safeDeleteRecursively(force = true)
-            }
+            resultFile.readText().also { resultFile.parentFile.safeDeleteRecursively(force = true) }
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, resultFile: File): ScanSummary {
+    override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
-        val result = resultFile.readTree()
+        val json = jsonMapper.readTree(result)
 
-        result.flatMapTo(licenseFindings) { file ->
+        json.flatMapTo(licenseFindings) { file ->
             val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
             file["LicenseGuesses"].map {
                 LicenseFinding(
