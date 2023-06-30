@@ -127,6 +127,18 @@ class ScanCode internal constructor(
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
 
+    override fun getVersion(workingDir: File?): String =
+        // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
+        // 3.2.1rc2. Insert that hyphen for compatibility with Semver.
+        super.getVersion(workingDir).let {
+            val index = it.indexOf("rc")
+            if (index != -1) {
+                "${it.substring(0, index)}-${it.substring(index)}"
+            } else {
+                it
+            }
+        }
+
     override fun getVersionRequirement(): RangesList = RangesListFactory.create(">=3.0.0")
 
     override fun transformVersion(output: String): String {
@@ -174,16 +186,4 @@ class ScanCode internal constructor(
         OUTPUT_FORMAT_OPTION,
         resultFile.absolutePath
     )
-
-    override fun getVersion(workingDir: File?): String =
-        // The release candidate version names lack a hyphen in between the minor version and the extension, e.g.
-        // 3.2.1rc2. Insert that hyphen for compatibility with Semver.
-        super.getVersion(workingDir).let {
-            val index = it.indexOf("rc")
-            if (index != -1) {
-                "${it.substring(0, index)}-${it.substring(index)}"
-            } else {
-                it
-            }
-        }
 }
