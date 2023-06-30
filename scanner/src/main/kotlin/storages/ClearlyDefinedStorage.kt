@@ -50,8 +50,8 @@ import org.ossreviewtoolkit.model.utils.toClearlyDefinedSourceLocation
 import org.ossreviewtoolkit.scanner.ScanResultsStorage
 import org.ossreviewtoolkit.scanner.ScanStorageException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
-import org.ossreviewtoolkit.scanner.scanners.scancode.generateScannerDetails
 import org.ossreviewtoolkit.scanner.scanners.scancode.generateSummary
+import org.ossreviewtoolkit.scanner.storages.utils.getScanCodeDetails
 import org.ossreviewtoolkit.utils.common.AlphaNumericComparator
 import org.ossreviewtoolkit.utils.common.collectMessages
 import org.ossreviewtoolkit.utils.common.withoutPrefix
@@ -121,7 +121,7 @@ class ClearlyDefinedStorage(
                     "scancode" -> {
                         loadToolData(coordinates, name, versions.last())?.let { result ->
                             val summary = generateSummary(result)
-                            val details = generateScannerDetails(result)
+                            val details = getScanCodeDetails(result)
 
                             val provenance = getProvenance(coordinates)
 

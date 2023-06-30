@@ -19,9 +19,6 @@
 
 package org.ossreviewtoolkit.scanner.scanners.scancode
 
-import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.Matcher
@@ -32,7 +29,6 @@ import io.kotest.matchers.collections.shouldHaveSingleElement
 import io.kotest.matchers.file.beRelative
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
-import io.kotest.matchers.string.shouldContain
 
 import java.io.File
 import java.time.Instant
@@ -194,44 +190,6 @@ class ScanCodeResultParserTest : FreeSpec({
                             "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
                     severity = Severity.WARNING
                 )
-            }
-        }
-    }
-
-    "generateDetails()" - {
-        "for ScanCode 3.0.2 should" - {
-            "properly parse details" {
-                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
-
-                val details = generateScannerDetails(result)
-                details.name shouldBe ScanCode.SCANNER_NAME
-                details.version shouldBe "3.0.2"
-                details.configuration shouldContain "--timeout 300.0"
-                details.configuration shouldContain "--processes 3"
-            }
-
-            "handle a missing option property gracefully" {
-                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
-                val headers = result["headers"] as ArrayNode
-                val headerObj = headers.first() as ObjectNode
-                headerObj.remove("options")
-
-                val details = generateScannerDetails(result)
-                details.configuration shouldBe ""
-            }
-        }
-
-        for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
-            "for output format $version.0.0 should" - {
-                "properly parse details" {
-                    val filename = "scancode-output-format-$version.0.0_mime-types-2.1.18.json"
-                    val result = File("src/test/assets/$filename").readTree()
-
-                    val details = generateScannerDetails(result)
-                    details.name shouldBe ScanCode.SCANNER_NAME
-                    details.configuration shouldContain "--timeout 300.0"
-                    details.configuration shouldContain "--processes 3"
-                }
             }
         }
     }
