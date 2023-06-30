@@ -607,7 +607,10 @@ class Scanner(
                 val summaryWithMappedLicenses = summary.copy(
                     licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
                         val licenseString = it.license.toString()
-                        it.copy(license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx())
+                        it.copy(
+                            license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
+                            location = it.location.withRelativePath(downloadDir)
+                        )
                     }
                 )
 

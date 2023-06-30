@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.model
 
+import java.io.File
+
 import kotlin.math.abs
 import kotlin.math.min
 
@@ -90,4 +92,20 @@ data class TextLocation(
             linesOverlapWith(other) -> 0
             else -> min(abs(other.startLine - endLine), abs(startLine - other.endLine))
         }
+
+    /**
+     * Return a [TextLocation] whose path is relative to [basePath], or throw an [IllegalArgumentException] if the paths
+     * have different roots.
+     */
+    fun withRelativePath(basePath: File): TextLocation {
+        val pathAsFile = File(path)
+
+        val relativePath = when {
+            !pathAsFile.isAbsolute -> pathAsFile
+            basePath.isFile -> pathAsFile.relativeTo(basePath.parentFile)
+            else -> pathAsFile.relativeTo(basePath)
+        }
+
+        return copy(path = relativePath.invariantSeparatorsPath)
+    }
 }

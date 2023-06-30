@@ -84,13 +84,13 @@ class BoyterLc internal constructor(
             if (stderr.isNotBlank()) logger.debug { stderr }
             if (isError) throw ScanException(errorMessage)
 
-            generateSummary(startTime, endTime, path, resultFile).also {
+            generateSummary(startTime, endTime, resultFile).also {
                 resultFile.parentFile.safeDeleteRecursively(force = true)
             }
         }
     }
 
-    private fun generateSummary(startTime: Instant, endTime: Instant, scanPath: File, resultFile: File): ScanSummary {
+    private fun generateSummary(startTime: Instant, endTime: Instant, resultFile: File): ScanSummary {
         val licenseFindings = mutableSetOf<LicenseFinding>()
         val result = resultFile.readTree()
 
@@ -99,11 +99,7 @@ class BoyterLc internal constructor(
             file["LicenseGuesses"].map {
                 LicenseFinding(
                     license = it["LicenseId"].textValue(),
-                    location = TextLocation(
-                        // Turn absolute paths in the native result into relative paths to not expose any information.
-                        relativizePath(scanPath, filePath),
-                        TextLocation.UNKNOWN_LINE
-                    ),
+                    location = TextLocation(filePath.invariantSeparatorsPath, TextLocation.UNKNOWN_LINE),
                     score = it["Percentage"].floatValue()
                 )
             }
