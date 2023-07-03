@@ -20,8 +20,6 @@
 package org.ossreviewtoolkit.plugins.scanners.dos
 
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
