@@ -81,5 +81,4 @@ interface DOSService {
 
     @POST("upload-url")
     suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): PresignedUrlResponseBody
-
 }

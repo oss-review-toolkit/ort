@@ -25,6 +25,7 @@ import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
+import org.ossreviewtoolkit.clients.dos.packZip
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -67,6 +68,12 @@ class DOS internal constructor(
             val presignedUrl: String = Json.encodeToString(responseBody.presignedUrl)
             logger.info { "DOS / presigned URL from API: $presignedUrl" }
         }
+
+        // Zip the packet to scan
+        val zipName = path.path + ".zip"
+        val targetZipFile = File(zipName)
+        path.packZip(targetZipFile)
+        logger.info { "DOS / zipped scancode packet: $zipName" }
 
         val endTime = Instant.now()
 
