@@ -52,16 +52,16 @@ configure<PublishingExtension> {
             pom {
                 licenses {
                     license {
-                        name.set("Apache-2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                        name = "Apache-2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
                     }
                 }
 
                 scm {
-                    connection.set("scm:git:https://github.com/oss-review-toolkit/ort.git")
-                    developerConnection.set("scm:git:git@github.com:oss-review-toolkit/ort.git")
-                    tag.set(version.toString())
-                    url.set("https://github.com/oss-review-toolkit/ort")
+                    connection = "scm:git:https://github.com/oss-review-toolkit/ort.git"
+                    developerConnection = "scm:git:git@github.com:oss-review-toolkit/ort.git"
+                    tag = version.toString()
+                    url = "https://github.com/oss-review-toolkit/ort"
                 }
             }
         }

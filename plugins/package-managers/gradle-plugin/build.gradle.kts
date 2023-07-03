@@ -43,7 +43,7 @@ tasks.register<Jar>("fatJar") {
     description = "Creates a fat JAR that includes all required runtime dependencies."
     group = "Build"
 
-    archiveClassifier.set("fat")
+    archiveClassifier = "fat"
 
     from(sourceSets.main.get().output)
     dependsOn(configurations.runtimeClasspath)
