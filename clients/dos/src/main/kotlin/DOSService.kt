@@ -24,10 +24,14 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.RequestBody
 import org.apache.logging.log4j.kotlin.Logging
 import retrofit2.Retrofit
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Url
+import retrofit2.Response
 
 interface DOSService {
 
@@ -51,6 +55,7 @@ interface DOSService {
             val contentType = "application/json; charset=utf-8".toMediaType()
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
+                // For logging basic call -> response statuses, use BASIC
                 // For logging the request and response bodies of a call, use BODY
                 level = HttpLoggingInterceptor.Level.NONE
             }
@@ -68,6 +73,10 @@ interface DOSService {
             return retrofit.create(DOSService::class.java)
         }
     }
+
+    @PUT
+    suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
+
     @Serializable
     data class PresignedUrlRequestBody(
         val key: String? = null

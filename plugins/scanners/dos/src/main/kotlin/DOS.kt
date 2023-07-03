@@ -23,6 +23,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.apache.logging.log4j.kotlin.Logging
+import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
 import org.ossreviewtoolkit.clients.dos.packZip
@@ -54,26 +55,36 @@ class DOS internal constructor(
     override val criteria: ScannerCriteria? = null
 
     private val service = DOSService.create()
+    private val repository = DOSRepository(service)
+
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
 
         val startTime = Instant.now()
+        var presignedUrl: String?
+        val tmpDir = "/tmp/"
 
         logger.info { "DOS / path to scan: $path" }
-        val spacesKey = System.getenv("SPACES_KEY")
+
+        // Zip the packet to scan
+        val zipName = path.name + ".zip"
+        val targetZipFile = File(tmpDir + zipName)
+        path.packZip(targetZipFile)
+
+        logger.info { "DOS / zipped scancode packet: $zipName" }
 
         // Request presigned URL from DOS API
         runBlocking {
-            val requestBody = PresignedUrlRequestBody(spacesKey)
+            val requestBody = PresignedUrlRequestBody(zipName)
             val responseBody = service.getPresignedUrl(requestBody)
-            val presignedUrl: String = Json.encodeToString(responseBody.presignedUrl)
+            presignedUrl = responseBody.presignedUrl
+
             logger.info { "DOS / presigned URL from API: $presignedUrl" }
         }
 
-        // Zip the packet to scan
-        val zipName = path.path + ".zip"
-        val targetZipFile = File(zipName)
-        path.packZip(targetZipFile)
-        logger.info { "DOS / zipped scancode packet: $zipName" }
+        // Transfer the zipped packet to S3 Object Storage
+        runBlocking {
+            presignedUrl?.let { repository.uploadFile(it, tmpDir + zipName) }
+        }
 
         val endTime = Instant.now()
 

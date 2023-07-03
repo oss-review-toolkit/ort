@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.clients.dos
 
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
 import java.io.File
 import java.io.FileInputStream
@@ -44,7 +46,7 @@ fun File.packZip(zipFile: File) {
                         fis.copyTo(zos)
                         zos.closeEntry()
                     } catch (e: Exception) {
-                        logger.info { "Failed to add entry: $entryName" }
+                        logger.error { "Failed to add entry: $entryName" }
                         e.printStackTrace()
                     }
                 }
