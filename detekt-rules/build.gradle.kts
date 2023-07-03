@@ -19,7 +19,6 @@
 
 import org.gradle.internal.logging.text.StyledTextOutput
 import org.gradle.internal.logging.text.StyledTextOutputFactory
-import org.gradle.kotlin.dsl.support.serviceOf
 
 plugins {
     // Apply precompiled plugins.
@@ -41,9 +40,18 @@ configurations.all {
     }
 }
 
+// A provider to get a StyledTextOutputFactory via dependency injection.
+interface StyledTextOutputProvider {
+    @get:Inject
+    val out: StyledTextOutputFactory
+}
+
 tasks.named<Jar>("jar") {
+    // Resolve objects at configuration time to be compatible with the configuration cache.
+    val objects = objects
+
     doLast {
-        val out = serviceOf<StyledTextOutputFactory>().create("detekt-rules")
+        val out = objects.newInstance<StyledTextOutputProvider>().out.create("detekt-rules")
         val message = "The detekt-rules have changed. You need to stop the Gradle daemon to allow the detekt plugin " +
                 "to reload for the rule changes to take effect."
         out.withStyle(StyledTextOutput.Style.Info).println(message)
