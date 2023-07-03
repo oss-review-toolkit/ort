@@ -17,8 +17,6 @@
  * License-Filename: LICENSE
  */
 
-version = rootProject.version
-
 repositories {
     mavenCentral()
 
@@ -63,3 +61,5 @@ tasks.withType<Jar>().configureEach {
         attributes["Implementation-Version"] = project.version
     }
 }
+
+if (project != rootProject) version = rootProject.version
