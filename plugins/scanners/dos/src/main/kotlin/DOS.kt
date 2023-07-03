@@ -60,44 +60,19 @@ class DOS internal constructor(
         logger.info { "DOS / path to scan: $path" }
         val spacesKey = System.getenv("SPACES_KEY")
 
+        // Request presigned URL from DOS API
         runBlocking {
             val requestBody = PresignedUrlRequestBody(spacesKey)
-            val requestBodyJson = Json.encodeToString(requestBody)
-            logger.info { "DOS / presigned URL request body: $requestBodyJson" }
-            val response = service.getPresignedUrl(requestBody)
-            val responseJson = Json.encodeToString(response)
-            logger.info { "DOS / presigned URL call results: $responseJson" }
+            val responseBody = service.getPresignedUrl(requestBody)
+            val presignedUrl: String = Json.encodeToString(responseBody.presignedUrl)
+            logger.info { "DOS / presigned URL from API: $presignedUrl" }
         }
-
-        // Request presigned URL from DOS API
-        /*
-        val client = OkHttpClient()
-        val endPoint = "upload-url"
-        val jsonMediaType = "application/json; charset=utf-8".toMediaType()
-        val jsonInputString = """{"key": "$spacesKey"}"""
-        val body = jsonInputString.toRequestBody(jsonMediaType)
-
-        val request = Request.Builder()
-            .url(dosUrl + endPoint)
-            .post(body)
-            .build()
-
-        client.newCall(request).execute().use { response ->
-            if (!response.isSuccessful) {
-                throw Exception("Unexpected code $response")
-            }
-            // Get response body
-            val presignedUrlKey = response.body?.string()
-            logger.info { "DOS / presigned URL: $presignedUrlKey" }
-        }
-        */
 
         val endTime = Instant.now()
 
         return ScanSummary(
             startTime,
             endTime,
-            "xyz",
             emptySet(),
             emptySet(),
             emptySet(),

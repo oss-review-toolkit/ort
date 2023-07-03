@@ -33,6 +33,7 @@ dependencies {
 
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.retrofitConverterKotlinxSerialization)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 }
 
 tasks.withType<KotlinCompile>().configureEach {

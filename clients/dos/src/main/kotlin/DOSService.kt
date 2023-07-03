@@ -21,9 +21,9 @@ package org.ossreviewtoolkit.clients.dos
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.apache.logging.log4j.kotlin.Logging
 import retrofit2.Retrofit
 import retrofit2.http.Body
@@ -35,14 +35,13 @@ interface DOSService {
         /**
          * The default API URL.
          */
-        const val DEFAULT_API_URL = "https://double-open-server.herokuapp.com/api/"
+        private val DEFAULT_API_URL = System.getenv("DOS_URL")
 
         /**
          * The JSON (de-)serialization object used by this service.
          */
-        val JSON = Json {
+        private val JSON = Json {
             ignoreUnknownKeys = true
-            namingStrategy = JsonNamingStrategy.SnakeCase
         }
 
         /**
@@ -50,8 +49,18 @@ interface DOSService {
          */
         fun create(url: String? = null, client: OkHttpClient? = null): DOSService {
             val contentType = "application/json; charset=utf-8".toMediaType()
+
+            val loggingInterceptor = HttpLoggingInterceptor().apply {
+                // For logging the request and response bodies of a call, use BODY
+                level = HttpLoggingInterceptor.Level.NONE
+            }
+
+            val okHttpClient = client ?: OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor)
+                .build()
+
             val retrofit = Retrofit.Builder()
-                .apply { if (client != null) client(client) }
+                .client(okHttpClient)
                 .baseUrl(url ?: DEFAULT_API_URL)
                 .addConverterFactory(JSON.asConverterFactory(contentType))
                 .build()
@@ -66,10 +75,9 @@ interface DOSService {
     @Serializable
     data class PresignedUrlResponseBody(
         val success: Boolean,
-        val presignedUrl: String? = null
+        val presignedUrl: String? = null,
+        val message: String? = null
     )
-
-    val json: Json.Default
 
     @POST("upload-url")
     suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): PresignedUrlResponseBody
