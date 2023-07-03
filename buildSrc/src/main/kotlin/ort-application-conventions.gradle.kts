@@ -41,12 +41,12 @@ application {
 }
 
 graalvmNative {
-    toolchainDetection.set(true)
+    toolchainDetection = true
 
     // For options see https://graalvm.github.io/native-build-tools/latest/gradle-plugin.html.
     binaries {
         named("main") {
-            imageName.set(application.applicationName)
+            imageName = application.applicationName
 
             val initializeAtBuildTime = listOf(
                 "ch.qos.logback.classic.Level",
@@ -66,7 +66,7 @@ graalvmNative {
     }
 
     metadataRepository {
-        enabled.set(true)
+        enabled = true
     }
 }
 

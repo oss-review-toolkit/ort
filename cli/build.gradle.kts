@@ -24,7 +24,7 @@ plugins {
 
 application {
     applicationName = "ort"
-    mainClass.set("org.ossreviewtoolkit.cli.OrtMainKt")
+    mainClass = "org.ossreviewtoolkit.cli.OrtMainKt"
 }
 
 dependencies {

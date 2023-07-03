@@ -69,7 +69,7 @@ testing {
         register<JvmTestSuite>("funTest") {
             sources {
                 kotlin {
-                    testType.set(TestSuiteType.FUNCTIONAL_TEST)
+                    testType = TestSuiteType.FUNCTIONAL_TEST
                 }
             }
         }
@@ -125,7 +125,7 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
     rootProject.tasks.named<ReportMergeTask>(mergeDetektReportsTaskName)
 } else {
     rootProject.tasks.register<ReportMergeTask>(mergeDetektReportsTaskName) {
-        output.set(rootProject.buildDir.resolve("reports/detekt/merged.sarif"))
+        output = rootProject.buildDir.resolve("reports/detekt/merged.sarif")
     }
 }
 
@@ -135,16 +135,16 @@ tasks.withType<Detekt> detekt@{
     dependsOn(":detekt-rules:assemble")
 
     reports {
-        html.required.set(false)
+        html.required = false
 
         // TODO: Enable this once https://github.com/detekt/detekt/issues/5034 is resolved and use the merged
         //       Markdown file as a GitHub Action job summary, see
         //       https://github.blog/2022-05-09-supercharging-github-actions-with-job-summaries/.
-        md.required.set(false)
+        md.required = false
 
-        sarif.required.set(true)
-        txt.required.set(false)
-        xml.required.set(false)
+        sarif.required = true
+        txt.required = false
+        xml.required = false
     }
 
     mergeDetektReports.configure {
@@ -176,7 +176,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
-    archiveClassifier.set("sources")
+    archiveClassifier = "sources"
     from(sourceSets.main.get().allSource)
 }
 
@@ -186,7 +186,7 @@ tasks.register<Jar>("docsHtmlJar") {
 
     dependsOn(tasks.dokkatooGeneratePublicationHtml)
     from(tasks.dokkatooGeneratePublicationHtml.flatMap { it.outputDirectory })
-    archiveClassifier.set("htmldoc")
+    archiveClassifier = "htmldoc"
 }
 
 val docsJavadocJar by tasks.registering(Jar::class) {
@@ -195,7 +195,7 @@ val docsJavadocJar by tasks.registering(Jar::class) {
 
     dependsOn(tasks.dokkatooGeneratePublicationJavadoc)
     from(tasks.dokkatooGeneratePublicationJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier.set("javadoc")
+    archiveClassifier = "javadoc"
 }
 
 tasks.withType<Test>().configureEach {
@@ -253,7 +253,7 @@ tasks.named("check") {
 tasks.named<JacocoReport>("jacocoTestReport") {
     reports {
         // Enable XML in addition to HTML for CI integration.
-        xml.required.set(true)
+        xml.required = true
     }
 }
 
@@ -266,7 +266,7 @@ tasks.register<JacocoReport>("jacocoFunTestReport") {
 
     reports {
         // Enable XML in addition to HTML for CI integration.
-        xml.required.set(true)
+        xml.required = true
     }
 }
 
@@ -292,16 +292,16 @@ configure<PublishingExtension> {
             pom {
                 licenses {
                     license {
-                        name.set("Apache-2.0")
-                        url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                        name = "Apache-2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0"
                     }
                 }
 
                 scm {
-                    connection.set("scm:git:https://github.com/oss-review-toolkit/ort.git")
-                    developerConnection.set("scm:git:git@github.com:oss-review-toolkit/ort.git")
-                    tag.set(version.toString())
-                    url.set("https://github.com/oss-review-toolkit/ort")
+                    connection = "scm:git:https://github.com/oss-review-toolkit/ort.git"
+                    developerConnection = "scm:git:git@github.com:oss-review-toolkit/ort.git"
+                    tag = version.toString()
+                    url = "https://github.com/oss-review-toolkit/ort"
                 }
             }
         }
