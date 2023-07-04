@@ -25,6 +25,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.optionalValue
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
@@ -49,11 +50,10 @@ internal class ImportCommand : CliktCommand(
                 "${enumValues<LicenseClassificationProvider>().map { it.name }}."
     ).enum<LicenseClassificationProvider>()
 
-    // TODO: Make this default to the provider name with clikt 4, see https://github.com/ajalt/clikt/issues/381.
     private val prefix by option(
         "--prefix", "-p",
         help = "A prefix to use for all category names declared by the provider's classifications."
-    )
+    ).optionalValue(provider.name)
 
     private val licenseClassificationsFile by option(
         "--output", "-o",
