@@ -101,7 +101,7 @@ class ClearlyDefinedStorage(
             ?: return Result.failure(ScanStorageException("Unable to create ClearlyDefined coordinates for $pkg."))
 
         return runCatching {
-            logger.debug { "Looking up ClearlyDefined scan results for $coordinates." }
+            logger.debug { "Looking up ClearlyDefined scan results for '$coordinates'." }
 
             val tools = service.harvestTools(
                 coordinates.type,
