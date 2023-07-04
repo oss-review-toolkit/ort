@@ -164,6 +164,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
         if (helpAll) {
             registeredSubcommands().forEach {
                 println(it.getFormattedHelp())
+                println()
             }
         } else {
             println(getOrtHeader(env.ortVersion))
