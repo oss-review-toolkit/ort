@@ -67,7 +67,14 @@ class OsvService(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
             val response = client.getVulnerabilityIdsForPackages(batchRequest).execute()
             val body = response.body()
 
-            if (!response.isSuccessful || body == null) return Result.failure(IOException(response.message()))
+            if (!response.isSuccessful || body == null) {
+                val errorMessage = response.errorBody()?.string()?.let {
+                    val errorResponse = OsvApiClient.JSON.decodeFromString<ErrorResponse>(it)
+                    "Error code ${errorResponse.code}: ${errorResponse.message}"
+                } ?: with(response) { "HTTP code ${code()}: ${message()}" }
+
+                return Result.failure(IOException(errorMessage))
+            }
 
             result += body.results.map { batchResponse ->
                 batchResponse.vulnerabilities.mapTo(mutableListOf()) { it.id }
