@@ -154,6 +154,7 @@ private fun createRequest(pkg: Package): VulnerabilitiesForPackageRequest? {
 
     if (name.isNotBlank() && pkg.id.version.isNotBlank() && !ecosystem.isNullOrBlank()) {
         return VulnerabilitiesForPackageRequest(
+            // Do not specify the purl here as it is mutually exclusive with the ecosystem.
             pkg = org.ossreviewtoolkit.clients.osv.Package(
                 name = name,
                 ecosystem = ecosystem
