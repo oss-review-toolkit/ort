@@ -26,7 +26,7 @@ import com.github.ajalt.clikt.completion.completionOption
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
-import com.github.ajalt.clikt.output.CliktHelpFormatter
+import com.github.ajalt.clikt.output.MordantHelpFormatter
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -108,7 +108,7 @@ class OrtMain : CliktCommand(
 
         context {
             expandArgumentFiles = false
-            helpFormatter = CliktHelpFormatter(requiredOptionMarker = REQUIRED_OPTION_MARKER, showDefaultValues = true)
+            helpFormatter = { MordantHelpFormatter(context = it, REQUIRED_OPTION_MARKER, showDefaultValues = true) }
         }
 
         subcommands(OrtCommand.ALL.values)

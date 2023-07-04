@@ -53,7 +53,7 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
         val existingOutputFiles = outputFiles.filter { it.exists() }
         if (existingOutputFiles.isNotEmpty()) {
             throw UsageError(
-                text = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
+                message = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
                         "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
                 statusCode = 2
             )

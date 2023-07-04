@@ -201,14 +201,14 @@ internal class CreateCommand : CliktCommand(
 
         val licenseClassifications = licenseClassificationsFile?.readValue<LicenseClassifications>()
             ?: throw UsageError(
-                text = "The license classifications file must be specified in order to resolve the given " +
+                message = "The license classifications file must be specified in order to resolve the given " +
                         "non-offending license category names to license IDs.",
                 statusCode = 2
             )
 
         nonOffendingLicenseCategories.flatMapTo(result) { categoryName ->
             licenseClassifications.licensesByCategory[categoryName] ?: throw UsageError(
-                text = "The given license category '$categoryName' was not found in " +
+                message = "The given license category '$categoryName' was not found in " +
                         "'${licenseClassificationsFile!!.absolutePath}'.",
                 statusCode = 2
             )
