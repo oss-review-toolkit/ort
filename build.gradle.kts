@@ -135,8 +135,8 @@ tasks.register("allDependencies") {
     }
 }
 
-fun getCommittedFilePaths(rootDir: File): List<String> {
-    val filePaths = mutableListOf<String>()
+fun getCommittedFilePaths(rootDir: File): List<File> {
+    val filePaths = mutableListOf<File>()
 
     Git.open(rootDir).use { git ->
         TreeWalk(git.repository).use { treeWalk ->
@@ -151,7 +151,7 @@ fun getCommittedFilePaths(rootDir: File): List<String> {
             }
 
             while (treeWalk.next()) {
-                filePaths += treeWalk.pathString
+                filePaths += rootDir.resolve(treeWalk.pathString)
             }
         }
     }
@@ -192,9 +192,7 @@ val copyrightExcludedExtensions = listOf(
 )
 
 fun getCopyrightableFiles(rootDir: File): List<File> =
-    getCommittedFilePaths(rootDir).map { filePath ->
-        rootDir.resolve(filePath)
-    }.filter { file ->
+    getCommittedFilePaths(rootDir).filter { file ->
         val isHidden = file.toPath().any { it.toString().startsWith(".") }
 
         !isHidden
@@ -350,10 +348,9 @@ val checkGitAttributes by tasks.registering {
         val gitAttributesFiles = files.filter { it.endsWith(".gitattributes") }
         val commentChars = setOf('#', '/')
 
-        gitAttributesFiles.forEach { gitAttributes ->
-            logger.lifecycle("Checking file '$gitAttributes'...")
+        gitAttributesFiles.forEach { gitAttributesFile ->
+            logger.lifecycle("Checking file '$gitAttributesFile'...")
 
-            val gitAttributesFile = file(gitAttributes)
             val ignoreRules = gitAttributesFile.readLines()
                 // Skip empty and comment lines.
                 .map { it.trim() }
@@ -365,17 +362,17 @@ val checkGitAttributes by tasks.registering {
                     runCatching {
                         FastIgnoreRule(pattern)
                     }.onFailure {
-                        logger.warn("File '$gitAttributes' contains an invalid pattern in line ${index + 1}: $it")
+                        logger.warn("File '$gitAttributesFile' contains an invalid pattern in line ${index + 1}: $it")
                     }.getOrNull()
                 }
 
             // Check only those files that are in scope of this ".gitattributes" file.
             val gitAttributesDir = gitAttributesFile.parentFile
-            val filesInScope = files.filter { rootDir.resolve(it).startsWith(gitAttributesDir) }
+            val filesInScope = files.filter { it.startsWith(gitAttributesDir) }
 
             ignoreRules.forEach { rule ->
                 val matchesAnything = filesInScope.any { file ->
-                    val relativeFile = file(file).relativeTo(gitAttributesDir)
+                    val relativeFile = file.relativeTo(gitAttributesDir)
                     rule.isMatch(relativeFile.invariantSeparatorsPath, /* directory = */ false)
                 }
 
