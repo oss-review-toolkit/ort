@@ -19,15 +19,7 @@
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
-import org.eclipse.jgit.api.Git
 import org.eclipse.jgit.ignore.FastIgnoreRule
-import org.eclipse.jgit.lib.Config
-import org.eclipse.jgit.lib.Constants
-import org.eclipse.jgit.revwalk.RevWalk
-import org.eclipse.jgit.storage.file.FileBasedConfig
-import org.eclipse.jgit.treewalk.TreeWalk
-import org.eclipse.jgit.util.FS
-import org.eclipse.jgit.util.SystemReader
 
 import org.jetbrains.gradle.ext.Gradle
 import org.jetbrains.gradle.ext.runConfigurations
@@ -40,48 +32,10 @@ plugins {
     alias(libs.plugins.versions)
 }
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath(libs.jgit)
-    }
-}
-
-class GitConfigNoSystemReader(private val delegate: SystemReader) : SystemReader() {
-    override fun getenv(variable: String): String? {
-        if (variable == "GIT_CONFIG_NOSYSTEM") return "true"
-        return delegate.getenv(variable)
-    }
-
-    override fun openSystemConfig(parent: Config?, fs: FS): FileBasedConfig =
-        object : FileBasedConfig(parent, null, fs) {
-            override fun load() = Unit
-            override fun isOutdated(): Boolean = false
-        }
-
-    override fun getHostname(): String = delegate.hostname
-    override fun getProperty(key: String): String? = delegate.getProperty(key)
-    override fun openUserConfig(parent: Config?, fs: FS): FileBasedConfig = delegate.openUserConfig(parent, fs)
-    override fun openJGitConfig(parent: Config?, fs: FS): FileBasedConfig = delegate.openJGitConfig(parent, fs)
-    override fun getCurrentTime(): Long = delegate.currentTime
-    override fun getTimezone(`when`: Long): Int = delegate.getTimezone(`when`)
-}
-
-SystemReader.setInstance(GitConfigNoSystemReader(SystemReader.getInstance()))
-
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
-    version = Git.open(rootDir).use { git ->
-        // Make the output exactly match "git describe --abbrev=10 --always --tags --dirty --match=[0-9]*", which is
-        // what is used in "scripts/docker_build.sh", to make the hash match what JitPack uses.
-        val description = git.describe().setAbbrev(10).setAlways(true).setTags(true).setMatch("[0-9]*").call()
-
-        // Simulate the "--dirty" option with JGit.
-        description.takeUnless { git.status().call().hasUncommittedChanges() } ?: "$description-dirty"
-    }
+    val gitVersionProvider = providers.of(GitVersionValueSource::class) { parameters { workingDir = rootDir } }
+    version = gitVersionProvider.get()
 }
 
 logger.lifecycle("Building ORT version $version.")
@@ -135,30 +89,6 @@ tasks.register("allDependencies") {
     }
 }
 
-fun getCommittedFilePaths(rootDir: File): List<File> {
-    val filePaths = mutableListOf<File>()
-
-    Git.open(rootDir).use { git ->
-        TreeWalk(git.repository).use { treeWalk ->
-            val headCommit = RevWalk(git.repository).use {
-                val head = git.repository.resolve(Constants.HEAD)
-                it.parseCommit(head)
-            }
-
-            with(treeWalk) {
-                addTree(headCommit.tree)
-                isRecursive = true
-            }
-
-            while (treeWalk.next()) {
-                filePaths += rootDir.resolve(treeWalk.pathString)
-            }
-        }
-    }
-
-    return filePaths
-}
-
 val copyrightExcludedPaths = listOf(
     "LICENSE",
     "NOTICE",
@@ -191,14 +121,17 @@ val copyrightExcludedExtensions = listOf(
     "ttf"
 )
 
-fun getCopyrightableFiles(rootDir: File): List<File> =
-    getCommittedFilePaths(rootDir).filter { file ->
+fun getCopyrightableFiles(rootDir: File): List<File> {
+    val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
+
+    return gitFilesProvider.get().filter { file ->
         val isHidden = file.toPath().any { it.toString().startsWith(".") }
 
         !isHidden
                 && copyrightExcludedPaths.none { it in file.invariantSeparatorsPath }
                 && file.extension !in copyrightExcludedExtensions
     }
+}
 
 val maxCopyrightLines = 50
 
@@ -338,13 +271,14 @@ val checkLicenseHeaders by tasks.registering {
 }
 
 val checkGitAttributes by tasks.registering {
-    val files = getCommittedFilePaths(rootDir)
+    val gitFilesProvider = providers.of(GitFilesValueSource::class) { parameters { workingDir = rootDir } }
 
-    inputs.files(files)
+    inputs.files(gitFilesProvider)
 
     doLast {
         var hasErrors = false
 
+        val files = gitFilesProvider.get()
         val gitAttributesFiles = files.filter { it.endsWith(".gitattributes") }
         val commentChars = setOf('#', '/')
 
