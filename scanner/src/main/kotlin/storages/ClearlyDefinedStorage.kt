@@ -42,6 +42,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
+import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
@@ -141,6 +142,22 @@ class ClearlyDefinedStorage(
                                 val details = getScanCodeDetails(result)
                                 val endTime = Instant.now()
                                 val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
+
+                                ScanResult(provenance, details, summary)
+                            }
+                        }
+
+                        "Licensee" -> {
+                            data["licensee"]?.let { result ->
+                                val provenance = getProvenance(coordinates)
+                                val details = ScannerDetails(
+                                    name = name,
+                                    version = result["version"].textValue(),
+                                    configuration = result["parameters"].joinToString(" ")
+                                )
+                                val output = result["output"]["content"].toString()
+                                val endTime = Instant.now()
+                                val summary = cliScanner.createSummary(output, startTime, endTime)
 
                                 ScanResult(provenance, details, summary)
                             }
