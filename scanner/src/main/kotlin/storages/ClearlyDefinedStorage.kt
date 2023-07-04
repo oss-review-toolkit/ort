@@ -119,13 +119,22 @@ class ClearlyDefinedStorage(
                 // See https://github.com/clearlydefined/service#tool-name-registry.
                 when (name) {
                     "scancode" -> {
-                        loadToolData(coordinates, name, versions.last())?.let { result ->
+                        val version = versions.last()
+                        val data = loadToolData(coordinates, name, version)
+
+                        data["content"]?.let { result ->
                             val summary = generateSummary(result)
                             val details = getScanCodeDetails(result)
 
                             val provenance = getProvenance(coordinates)
 
                             ScanResult(provenance, details, summary)
+                        } ?: run {
+                            logger.warn {
+                                "'$coordinates' has no data available for tool '$name' in version '$version'."
+                            }
+
+                            null
                         }
                     }
 
@@ -156,9 +165,9 @@ class ClearlyDefinedStorage(
 
     /**
      * Load the data produced by the tool of the given [name] and [version] for the package with the given [coordinates]
-     * and return it as a [JsonNode], or return null if no data is available.
+     * and return it as a [JsonNode].
      */
-    private suspend fun loadToolData(coordinates: Coordinates, name: String, version: String): JsonNode? {
+    private suspend fun loadToolData(coordinates: Coordinates, name: String, version: String): JsonNode {
         val toolData = service.harvestToolData(
             coordinates.type,
             coordinates.provider,
@@ -169,14 +178,7 @@ class ClearlyDefinedStorage(
             version
         )
 
-        return toolData.use {
-            val data = jsonMapper.readTree(it.byteStream())
-            data["content"].also { content ->
-                if (content == null) {
-                    logger.warn { "'$coordinates' has no data available for tool '$name' in version '$version'." }
-                }
-            }
-        }
+        return toolData.use { jsonMapper.readTree(it.byteStream()) }
     }
 
     /**
