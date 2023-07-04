@@ -180,3 +180,9 @@ data class Severity(
         CVSS_V3
     }
 }
+
+@Serializable
+data class ErrorResponse(
+    val code: Int,
+    val message: String
+)
