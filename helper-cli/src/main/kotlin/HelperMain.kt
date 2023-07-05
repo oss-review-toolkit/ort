@@ -68,7 +68,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     init {
         context {
             expandArgumentFiles = false
-            helpFormatter = CliktHelpFormatter(showDefaultValues = true)
+            helpFormatter = CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true)
         }
 
         subcommands(
