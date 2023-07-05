@@ -27,7 +27,6 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.output.CliktHelpFormatter
-import com.github.ajalt.clikt.output.HelpFormatter
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -68,7 +67,7 @@ fun main(args: Array<String>) {
     exitProcess(0)
 }
 
-class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
+class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.", invokeWithoutSubcommand = true) {
     private companion object : Logging
 
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
@@ -98,38 +97,12 @@ class OrtMain : CliktCommand(name = ORT_NAME, invokeWithoutSubcommand = true) {
 
     private val env = Environment()
 
-    private inner class OrtHelpFormatter : CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true) {
-        var headerShownBefore = false
-
-        override fun formatHelp(
-            prolog: String,
-            epilog: String,
-            parameters: List<HelpFormatter.ParameterHelp>,
-            programName: String
-        ) =
-            buildString {
-                // The header only needs to be shown for the root command, as for subcommands the header was already
-                // shown by the root command's run(). However, only show it if it has not been shown before as part of
-                // "--help-all" (note that we cannot safely access the "helpAll" variable here as it might not have been
-                // initialized yet.)
-                val isRootCommand = currentContext.invokedSubcommand == null
-                if (isRootCommand && !headerShownBefore) {
-                    appendLine(getOrtHeader(env.ortVersion))
-                    headerShownBefore = true
-                }
-
-                appendLine(super.formatHelp(prolog, epilog, parameters, programName))
-                appendLine()
-                appendLine("* denotes required options.")
-            }
-    }
-
     init {
         completionOption()
 
         context {
             expandArgumentFiles = false
-            helpFormatter = OrtHelpFormatter()
+            helpFormatter = CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true)
         }
 
         subcommands(OrtCommand.ALL.values)
