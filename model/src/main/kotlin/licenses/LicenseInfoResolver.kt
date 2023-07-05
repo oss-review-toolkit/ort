@@ -125,7 +125,7 @@ class LicenseInfoResolver(
         val filteredDetectedLicenseInfo =
             licenseInfo.detectedLicenseInfo.filterCopyrightGarbage(copyrightGarbageFindings)
 
-        val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<CopyrightFinding>>()
+        val unmatchedCopyrights = mutableMapOf<Provenance, MutableSet<ResolvedCopyrightFinding>>()
         val resolvedLocations = resolveLocations(filteredDetectedLicenseInfo, unmatchedCopyrights)
         val detectedLicenses = licenseInfo.detectedLicenseInfo.findings.flatMapTo(mutableSetOf()) { findings ->
             FindingCurationMatcher().applyAll(
@@ -179,7 +179,7 @@ class LicenseInfoResolver(
 
     private fun resolveLocations(
         detectedLicenseInfo: DetectedLicenseInfo,
-        unmatchedCopyrights: MutableMap<Provenance, MutableSet<CopyrightFinding>>
+        unmatchedCopyrights: MutableMap<Provenance, MutableSet<ResolvedCopyrightFinding>>
     ): Map<SpdxSingleLicenseExpression, Set<ResolvedLicenseLocation>> {
         val resolvedLocations = mutableMapOf<SpdxSingleLicenseExpression, MutableSet<ResolvedLicenseLocation>>()
         val curationMatcher = FindingCurationMatcher()
@@ -225,8 +225,12 @@ class LicenseInfoResolver(
                 }
             }
 
-            unmatchedCopyrights.getOrPut(findings.provenance) { mutableSetOf() } += matchResult.unmatchedCopyrights
-        }
+            unmatchedCopyrights.getOrPut(findings.provenance) { mutableSetOf() } += resolveCopyrights(
+                copyrightFindings = matchResult.unmatchedCopyrights,
+                pathExcludes = findings.pathExcludes,
+                relativeFindingsPath = findings.relativeFindingsPath
+            )
+         }
 
         return resolvedLocations
     }
