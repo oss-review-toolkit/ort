@@ -55,7 +55,12 @@ fun main(args: Array<String>) {
     exitProcess(0)
 }
 
-internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes required options.") {
+private const val REQUIRED_OPTION_MARKER = "*"
+
+internal class HelperMain : CliktCommand(
+    name = ORTH_NAME,
+    epilog = "$REQUIRED_OPTION_MARKER denotes required options."
+) {
     private val logLevel by option(help = "Set the verbosity level of log output.").switch(
         "--error" to Level.ERROR,
         "--warn" to Level.WARN,
@@ -68,7 +73,7 @@ internal class HelperMain : CliktCommand(name = ORTH_NAME, epilog = "* denotes r
     init {
         context {
             expandArgumentFiles = false
-            helpFormatter = CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true)
+            helpFormatter = CliktHelpFormatter(requiredOptionMarker = REQUIRED_OPTION_MARKER, showDefaultValues = true)
         }
 
         subcommands(
