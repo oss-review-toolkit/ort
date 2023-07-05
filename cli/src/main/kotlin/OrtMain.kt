@@ -67,7 +67,13 @@ fun main(args: Array<String>) {
     exitProcess(0)
 }
 
-class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required options.", invokeWithoutSubcommand = true) {
+private const val REQUIRED_OPTION_MARKER = "*"
+
+class OrtMain : CliktCommand(
+    name = ORT_NAME,
+    epilog = "$REQUIRED_OPTION_MARKER denotes required options.",
+    invokeWithoutSubcommand = true
+) {
     private companion object : Logging
 
     private val configFile by option("--config", "-c", help = "The path to a configuration file.")
@@ -102,7 +108,7 @@ class OrtMain : CliktCommand(name = ORT_NAME, epilog = "* denotes required optio
 
         context {
             expandArgumentFiles = false
-            helpFormatter = CliktHelpFormatter(requiredOptionMarker = "*", showDefaultValues = true)
+            helpFormatter = CliktHelpFormatter(requiredOptionMarker = REQUIRED_OPTION_MARKER, showDefaultValues = true)
         }
 
         subcommands(OrtCommand.ALL.values)
