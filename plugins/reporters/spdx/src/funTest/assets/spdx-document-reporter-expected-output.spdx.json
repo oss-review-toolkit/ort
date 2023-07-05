@@ -198,6 +198,37 @@
     "summary" : "A package with only unmapped declared license.",
     "versionInfo" : "0.0.1"
   } ],
+  "files" : [ {
+    "SPDXID" : "SPDXRef-File-1",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "8c38f605503f2a48ef7b6220ad06aa0f3387484b"
+    } ],
+    "copyrightText" : "Copyright 2020 Some copyright holder in VCS\nCopyright 2020 Some copyright holder in source artifact\nCopyright 2020 Some other copyright holder in source artifact",
+    "fileName" : "project-path/some/file",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "NONE" ]
+  }, {
+    "SPDXID" : "SPDXRef-File-2",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "0398ccd0f49298b10a3d76a47800d2ebecd49859"
+    } ],
+    "copyrightText" : "NONE",
+    "fileName" : "LICENSE",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "GPL-3.0-only" ]
+  }, {
+    "SPDXID" : "SPDXRef-File-3",
+    "checksums" : [ {
+      "algorithm" : "SHA1",
+      "checksumValue" : "4552f707bdf537911c9943cec56a0bf11bd8468d"
+    } ],
+    "copyrightText" : "Copyright 2020 Some copyright holder in source artifact",
+    "fileName" : "some/file",
+    "licenseConcluded" : "NOASSERTION",
+    "licenseInfoInFiles" : [ "NONE" ]
+  } ],
   "relationships" : [ {
     "spdxElementId" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1",
     "relationshipType" : "GENERATED_FROM",
@@ -207,9 +238,21 @@
     "relationshipType" : "GENERATED_FROM",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs"
   }, {
+    "spdxElementId" : "SPDXRef-Package-Maven-first-package-group-first-package-0.0.1-vcs",
+    "relationshipType" : "CONTAINS",
+    "relatedSpdxElement" : "SPDXRef-File-1"
+  }, {
     "spdxElementId" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1",
     "relationshipType" : "GENERATED_FROM",
     "relatedSpdxElement" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact"
+  }, {
+    "spdxElementId" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact",
+    "relationshipType" : "CONTAINS",
+    "relatedSpdxElement" : "SPDXRef-File-2"
+  }, {
+    "spdxElementId" : "SPDXRef-Package-Maven-seventh-package-group-seventh-package-0.0.1-source-artifact",
+    "relationshipType" : "CONTAINS",
+    "relatedSpdxElement" : "SPDXRef-File-3"
   }, {
     "spdxElementId" : "SPDXRef-Project-Maven-first-project-group-first-project-name-0.0.1",
     "relationshipType" : "DEPENDS_ON",
