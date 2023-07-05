@@ -22,8 +22,13 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicInteger
+
+import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.SourceCodeOrigin.ARTIFACT
+import org.ossreviewtoolkit.model.SourceCodeOrigin.VCS
 import org.ossreviewtoolkit.model.licenses.LicenseInfoResolver
 import org.ossreviewtoolkit.reporter.LicenseTextProvider
 import org.ossreviewtoolkit.utils.ort.Environment
@@ -32,13 +37,14 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 import org.ossreviewtoolkit.utils.spdx.model.SpdxCreationInfo
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
+import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 
 /**
  * A class for mapping [OrtResult]s to [SpdxDocument]s.
  */
-internal object SpdxDocumentModelMapper {
+internal object SpdxDocumentModelMapper : Logging {
     data class SpdxDocumentParams(
         val documentName: String,
         val documentComment: String,
@@ -51,6 +57,7 @@ internal object SpdxDocumentModelMapper {
         licenseTextProvider: LicenseTextProvider,
         params: SpdxDocumentParams
     ): SpdxDocument {
+        val nextFileIndex = AtomicInteger(1)
         val packages = mutableListOf<SpdxPackage>()
         val relationships = mutableListOf<SpdxRelationship>()
 
@@ -72,6 +79,8 @@ internal object SpdxDocumentModelMapper {
 
             spdxProjectPackage
         }
+
+        val files = mutableListOf<SpdxFile>()
 
         ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }.forEach { curatedPackage ->
             val pkg = curatedPackage.metadata
@@ -99,6 +108,11 @@ internal object SpdxDocumentModelMapper {
                     ortResult
                 )
 
+                ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex).let {
+                    files += it
+                    relationships += it.createFileRelationships(vcsPackage)
+                }
+
                 val vcsPackageRelationShip = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
                     relationshipType = SpdxRelationship.Type.GENERATED_FROM,
@@ -116,6 +130,11 @@ internal object SpdxDocumentModelMapper {
                     licenseInfoResolver,
                     ortResult
                 )
+
+                ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex).let {
+                    files += it
+                    relationships += it.createFileRelationships(sourceArtifactPackage)
+                }
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
@@ -140,7 +159,8 @@ internal object SpdxDocumentModelMapper {
             documentDescribes = projectPackages.map { it.spdxId },
             name = params.documentName,
             packages = projectPackages + packages,
-            relationships = relationships.sortedBy { it.spdxElementId }
+            relationships = relationships.sortedBy { it.spdxElementId },
+            files = files
         ).addExtractedLicenseInfo(licenseTextProvider)
     }
 }

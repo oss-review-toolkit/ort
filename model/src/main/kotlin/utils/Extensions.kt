@@ -43,7 +43,7 @@ import org.ossreviewtoolkit.utils.common.percentEncode
 fun String.prependPath(prefix: String): String =
     if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
 
-internal fun TextLocation.prependedPath(prefix: String): String =
+fun TextLocation.prependedPath(prefix: String): String =
     path.prependPath(prefix)
 
 fun TextLocation.prependPath(prefix: String): TextLocation =
