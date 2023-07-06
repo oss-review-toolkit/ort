@@ -400,7 +400,7 @@ private fun OrtDependency.type(): String =
     }
 
 /**
- * Returns an [Identifier] for this [Dependency].
+ * Returns an [Identifier] for this [OrtDependency].
  */
 private fun OrtDependency.toId() = Identifier(type(), groupId, artifactId, version)
 
