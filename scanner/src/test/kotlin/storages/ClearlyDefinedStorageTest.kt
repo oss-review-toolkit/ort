@@ -322,7 +322,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             }
         }
 
-        "return an empty result if no result for the tool file is returned" {
+        "return a failure if no result for the tool file is returned" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
             server.stubFor(
@@ -332,8 +332,8 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val storage = ClearlyDefinedStorage(storageConfiguration(server))
 
-            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeSuccess {
-                it should beEmpty()
+            storage.read(TEST_PACKAGE, SCANNER_CRITERIA).shouldBeFailure {
+                it.message shouldContain "HttpException"
             }
         }
 
@@ -393,7 +393,7 @@ class ClearlyDefinedStorageTest : WordSpec({
             result.shouldBeFailure<ScanStorageException>()
         }
 
-        "return an empty result if a harvest tool file request returns an unexpected result" {
+        "return a failure if a harvest tool file request returns an unexpected result" {
             val scanCodeUrl = toolUrl(COORDINATES, "scancode", SCANCODE_VERSION)
             stubHarvestTools(server, COORDINATES, listOf(scanCodeUrl))
             server.stubFor(
@@ -407,9 +407,7 @@ class ClearlyDefinedStorageTest : WordSpec({
 
             val result = storage.read(TEST_IDENTIFIER)
 
-            result.shouldBeSuccess {
-                it should beEmpty()
-            }
+            result.shouldBeFailure<ScanStorageException>()
         }
 
         "return a failure if the connection to the server fails" {
