@@ -135,13 +135,13 @@ class ClearlyDefinedStorage(
                 val startTime = Instant.now()
                 val name = factory.type.lowercase()
                 val data = loadToolData(coordinates, name, version)
+                val provenance = getProvenance(coordinates)
+                val endTime = Instant.now()
 
                 when (factory.type) {
                     "ScanCode" -> {
                         data["content"]?.let { result ->
-                            val provenance = getProvenance(coordinates)
                             val details = getScanCodeDetails(result)
-                            val endTime = Instant.now()
                             val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
 
                             ScanResult(provenance, details, summary)
@@ -150,14 +150,12 @@ class ClearlyDefinedStorage(
 
                     "Licensee" -> {
                         data["licensee"]?.let { result ->
-                            val provenance = getProvenance(coordinates)
                             val details = ScannerDetails(
                                 name = name,
                                 version = result["version"].textValue(),
                                 configuration = result["parameters"].joinToString(" ")
                             )
                             val output = result["output"]["content"].toString()
-                            val endTime = Instant.now()
                             val summary = cliScanner.createSummary(output, startTime, endTime)
 
                             ScanResult(provenance, details, summary)
