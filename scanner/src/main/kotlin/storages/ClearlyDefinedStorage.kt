@@ -130,41 +130,41 @@ class ClearlyDefinedStorage(
 
             supportedScanners.mapNotNull { (factory, version) ->
                 val scanner = factory.create(ScannerConfiguration(), DownloaderConfiguration())
-                (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner ->
-                    val startTime = Instant.now()
-                    val name = factory.type.lowercase()
-                    val data = loadToolData(coordinates, name, version)
+                val cliScanner = (scanner as? CommandLinePathScannerWrapper) ?: return@mapNotNull null
 
-                    when (factory.type) {
-                        "ScanCode" -> {
-                            data["content"]?.let { result ->
-                                val provenance = getProvenance(coordinates)
-                                val details = getScanCodeDetails(result)
-                                val endTime = Instant.now()
-                                val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
+                val startTime = Instant.now()
+                val name = factory.type.lowercase()
+                val data = loadToolData(coordinates, name, version)
 
-                                ScanResult(provenance, details, summary)
-                            }
+                when (factory.type) {
+                    "ScanCode" -> {
+                        data["content"]?.let { result ->
+                            val provenance = getProvenance(coordinates)
+                            val details = getScanCodeDetails(result)
+                            val endTime = Instant.now()
+                            val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
+
+                            ScanResult(provenance, details, summary)
                         }
-
-                        "Licensee" -> {
-                            data["licensee"]?.let { result ->
-                                val provenance = getProvenance(coordinates)
-                                val details = ScannerDetails(
-                                    name = name,
-                                    version = result["version"].textValue(),
-                                    configuration = result["parameters"].joinToString(" ")
-                                )
-                                val output = result["output"]["content"].toString()
-                                val endTime = Instant.now()
-                                val summary = cliScanner.createSummary(output, startTime, endTime)
-
-                                ScanResult(provenance, details, summary)
-                            }
-                        }
-
-                        else -> null
                     }
+
+                    "Licensee" -> {
+                        data["licensee"]?.let { result ->
+                            val provenance = getProvenance(coordinates)
+                            val details = ScannerDetails(
+                                name = name,
+                                version = result["version"].textValue(),
+                                configuration = result["parameters"].joinToString(" ")
+                            )
+                            val output = result["output"]["content"].toString()
+                            val endTime = Instant.now()
+                            val summary = cliScanner.createSummary(output, startTime, endTime)
+
+                            ScanResult(provenance, details, summary)
+                        }
+                    }
+
+                    else -> null
                 }
             }
         }.recoverCatching { e ->
