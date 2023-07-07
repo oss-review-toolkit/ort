@@ -187,14 +187,14 @@ class ScannerCommand : OrtCommand(
 
         if (projectScannerWrappers.isNotEmpty()) {
             println("Scanning projects with:")
-            println(projectScannerWrappers.joinToString { "\t${it.details.name} (version ${it.details.version})" })
+            println(projectScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
         } else {
             println("Projects will not be scanned.")
         }
 
         if (packageScannerWrappers.isNotEmpty()) {
             println("Scanning packages with:")
-            println(packageScannerWrappers.joinToString { "\t${it.details.name} (version ${it.details.version})" })
+            println(packageScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
         } else {
             println("Packages will not be scanned.")
         }

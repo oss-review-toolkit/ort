@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
 
 class Licensee internal constructor(
-    private val name: String,
+    name: String,
     private val scannerConfig: ScannerConfiguration
 ) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {

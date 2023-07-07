@@ -42,7 +42,7 @@ import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 class BoyterLc internal constructor(
-    private val name: String,
+    name: String,
     private val scannerConfig: ScannerConfiguration
 ) : CommandLinePathScannerWrapper(name) {
     companion object : Logging {

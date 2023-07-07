@@ -43,9 +43,25 @@ sealed interface ScannerWrapper {
     }
 
     /**
+     * The name of the scanner.
+     */
+    val name: String
+
+    /**
+     * The version of the scanner.
+     */
+    val version: String
+
+    /**
+     * The configuration of the scanner.
+     */
+    val configuration: String
+
+    /**
      * The details of the scanner.
      */
     val details: ScannerDetails
+        get() = ScannerDetails(name, version, configuration)
 
     /**
      * The [ScannerCriteria] object to be used when looking up existing scan results from a scan storage. By default,
