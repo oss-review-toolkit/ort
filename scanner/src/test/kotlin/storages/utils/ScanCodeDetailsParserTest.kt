@@ -22,7 +22,7 @@ package org.ossreviewtoolkit.scanner.storages.utils
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 
-import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 
@@ -30,30 +30,28 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.readTree
 
-class ScanCodeDetailsParserTest : FreeSpec({
-    "generateDetails()" - {
-        "for ScanCode 3.0.2 should" - {
-            "properly parse details" {
-                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
+class ScanCodeDetailsParserTest : WordSpec({
+    "generateDetails()" should {
+        "properly parse details" {
+            val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
 
-                val details = getScanCodeDetails("ScanCode", result)
-                details.name shouldBe "ScanCode"
-                details.version shouldBe "3.0.2"
-                details.configuration shouldContain "--timeout 300.0"
-                details.configuration shouldContain "--processes 3"
-            }
+            val details = getScanCodeDetails("ScanCode", result)
+            details.name shouldBe "ScanCode"
+            details.version shouldBe "3.0.2"
+            details.configuration shouldContain "--timeout 300.0"
+            details.configuration shouldContain "--processes 3"
+        }
 
-            "handle a missing option property gracefully" {
-                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
-                val headers = result["headers"] as ArrayNode
-                val headerObj = headers.first() as ObjectNode
-                headerObj.remove("options")
+        "handle a missing option property gracefully" {
+            val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
+            val headers = result["headers"] as ArrayNode
+            val headerObj = headers.first() as ObjectNode
+            headerObj.remove("options")
 
-                val details = getScanCodeDetails("ScanCode", result)
-                details.name shouldBe "ScanCode"
-                details.version shouldBe "3.0.2"
-                details.configuration shouldBe ""
-            }
+            val details = getScanCodeDetails("ScanCode", result)
+            details.name shouldBe "ScanCode"
+            details.version shouldBe "3.0.2"
+            details.configuration shouldBe ""
         }
     }
 })
