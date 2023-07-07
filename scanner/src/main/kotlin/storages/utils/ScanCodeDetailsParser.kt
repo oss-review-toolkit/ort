@@ -22,17 +22,16 @@ package org.ossreviewtoolkit.scanner.storages.utils
 import com.fasterxml.jackson.databind.JsonNode
 
 import org.ossreviewtoolkit.model.ScannerDetails
-import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 
 /**
- * Generate details for the given raw ScanCode [result].
+ * Generate scanner details using the given [name] by parsing a raw [result].
  */
-internal fun getScanCodeDetails(result: JsonNode): ScannerDetails {
+internal fun getScanCodeDetails(name: String, result: JsonNode): ScannerDetails {
     val header = result["headers"].single()
     val version = header["tool_version"].textValueOrEmpty()
     val config = getScanCodeOptions(header["options"])
-    return ScannerDetails(ScanCode.SCANNER_NAME, version, config)
+    return ScannerDetails(name, version, config)
 }
 
 /**

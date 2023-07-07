@@ -30,7 +30,6 @@ import java.io.File
 
 import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.scanner.scanners.scancode.MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION
-import org.ossreviewtoolkit.scanner.scanners.scancode.ScanCode
 
 class ScanCodeDetailsParserTest : FreeSpec({
     "generateDetails()" - {
@@ -38,8 +37,8 @@ class ScanCodeDetailsParserTest : FreeSpec({
             "properly parse details" {
                 val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
 
-                val details = getScanCodeDetails(result)
-                details.name shouldBe ScanCode.SCANNER_NAME
+                val details = getScanCodeDetails("ScanCode", result)
+                details.name shouldBe "ScanCode"
                 details.version shouldBe "3.0.2"
                 details.configuration shouldContain "--timeout 300.0"
                 details.configuration shouldContain "--processes 3"
@@ -51,7 +50,9 @@ class ScanCodeDetailsParserTest : FreeSpec({
                 val headerObj = headers.first() as ObjectNode
                 headerObj.remove("options")
 
-                val details = getScanCodeDetails(result)
+                val details = getScanCodeDetails("ScanCode", result)
+                details.name shouldBe "ScanCode"
+                details.version shouldBe "3.0.2"
                 details.configuration shouldBe ""
             }
         }
@@ -62,8 +63,8 @@ class ScanCodeDetailsParserTest : FreeSpec({
                     val filename = "scancode-output-format-$version.0.0_mime-types-2.1.18.json"
                     val result = File("src/test/assets/$filename").readTree()
 
-                    val details = getScanCodeDetails(result)
-                    details.name shouldBe ScanCode.SCANNER_NAME
+                    val details = getScanCodeDetails("ScanCode", result)
+                    details.name shouldBe "ScanCode"
                     details.configuration shouldContain "--timeout 300.0"
                     details.configuration shouldContain "--processes 3"
                 }
