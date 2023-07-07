@@ -141,7 +141,7 @@ class ClearlyDefinedStorage(
                 when (factory.type) {
                     "ScanCode" -> {
                         data["content"]?.let { result ->
-                            val details = getScanCodeDetails(result)
+                            val details = getScanCodeDetails(factory.type, result)
                             val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
 
                             ScanResult(provenance, details, summary)
