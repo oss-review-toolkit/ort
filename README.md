@@ -77,9 +77,14 @@ Install the following basic prerequisites:
 
 * Git (any recent version will do).
 
-Then clone this repository. If you intend to run tests, you need to clone with submodules by running
-`git clone --recurse-submodules`. If you have already cloned non-recursively, you can initialize submodules afterwards
-by running `git submodule update --init --recursive`.
+Then clone this repository.
+
+```shell
+git clone https://github.com/oss-review-toolkit/ort
+# If you intend to run tests, you have to clone the submodules too.
+cd ort
+git submodule update --init --recursive
+```
 
 ### Build using Docker
 
