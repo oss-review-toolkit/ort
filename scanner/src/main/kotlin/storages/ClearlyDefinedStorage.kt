@@ -123,25 +123,25 @@ class ClearlyDefinedStorage(
 
             val supportedScanners = toolVersionsByName.mapNotNull { (name, versions) ->
                 // For the ClearlyDefined tool names see https://github.com/clearlydefined/service#tool-name-registry.
-                ScannerWrapper.ALL[name]?.let { factory -> factory to versions.last() }.also {
+                ScannerWrapper.ALL[name]?.let { factory ->
+                    val scanner = factory.create(ScannerConfiguration(), DownloaderConfiguration())
+                    (scanner as? CommandLinePathScannerWrapper)?.let { cliScanner -> cliScanner to versions.last() }
+                }.also {
                     if (it == null) logger.debug { "Unsupported tool '$name' for coordinates '$coordinates'." }
                 }
             }
 
-            supportedScanners.mapNotNull { (factory, version) ->
-                val scanner = factory.create(ScannerConfiguration(), DownloaderConfiguration())
-                val cliScanner = (scanner as? CommandLinePathScannerWrapper) ?: return@mapNotNull null
-
+            supportedScanners.mapNotNull { (cliScanner, version) ->
                 val startTime = Instant.now()
-                val name = factory.type.lowercase()
+                val name = cliScanner.name.lowercase()
                 val data = loadToolData(coordinates, name, version)
                 val provenance = getProvenance(coordinates)
                 val endTime = Instant.now()
 
-                when (factory.type) {
+                when (cliScanner.name) {
                     "ScanCode" -> {
                         data["content"]?.let { result ->
-                            val details = getScanCodeDetails(factory.type, result)
+                            val details = getScanCodeDetails(cliScanner.name, result)
                             val summary = cliScanner.createSummary(result.toString(), startTime, endTime)
 
                             ScanResult(provenance, details, summary)
