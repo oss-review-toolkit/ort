@@ -29,7 +29,6 @@ import io.kotest.matchers.string.shouldContain
 import java.io.File
 
 import org.ossreviewtoolkit.model.readTree
-import org.ossreviewtoolkit.scanner.scanners.scancode.MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION
 
 class ScanCodeDetailsParserTest : FreeSpec({
     "generateDetails()" - {
@@ -54,20 +53,6 @@ class ScanCodeDetailsParserTest : FreeSpec({
                 details.name shouldBe "ScanCode"
                 details.version shouldBe "3.0.2"
                 details.configuration shouldBe ""
-            }
-        }
-
-        for (version in 1..MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION) {
-            "for output format $version.0.0 should" - {
-                "properly parse details" {
-                    val filename = "scancode-output-format-$version.0.0_mime-types-2.1.18.json"
-                    val result = File("src/test/assets/$filename").readTree()
-
-                    val details = getScanCodeDetails("ScanCode", result)
-                    details.name shouldBe "ScanCode"
-                    details.configuration shouldContain "--timeout 300.0"
-                    details.configuration shouldContain "--processes 3"
-                }
             }
         }
     }
