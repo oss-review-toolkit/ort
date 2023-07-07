@@ -19,6 +19,9 @@
 
 package org.ossreviewtoolkit.scanner.storages.utils
 
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
@@ -43,9 +46,9 @@ class ScanCodeDetailsParserTest : FreeSpec({
             }
 
             "handle a missing option property gracefully" {
-                val result = java.io.File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
-                val headers = result["headers"] as com.fasterxml.jackson.databind.node.ArrayNode
-                val headerObj = headers.first() as com.fasterxml.jackson.databind.node.ObjectNode
+                val result = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json").readTree()
+                val headers = result["headers"] as ArrayNode
+                val headerObj = headers.first() as ObjectNode
                 headerObj.remove("options")
 
                 val details = getScanCodeDetails(result)
