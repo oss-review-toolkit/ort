@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
+import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
@@ -92,6 +93,18 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 custom = fromJson<SpdxDocument>(jsonSpdxDocument).getCustomReplacements()
             )
         }
+
+        "omit file information if corresponding option is disabled" {
+            val jsonSpdxDocument = generateReport(
+                ortResult,
+                FileFormat.JSON,
+                SpdxDocumentReporter.OPTION_FILE_INFORMATION_ENABLED to "false"
+            )
+
+            val document = SpdxModelMapper.fromJson<SpdxDocument>(jsonSpdxDocument)
+
+            document.files should beEmpty()
+        }
     }
 
     "Reporting to YAML" should {
@@ -108,7 +121,11 @@ class SpdxDocumentReporterFunTest : WordSpec({
     }
 })
 
-private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileFormat): String {
+private fun TestConfiguration.generateReport(
+    ortResult: OrtResult,
+    format: FileFormat,
+    vararg extraReporterOptions: Pair<String, String>
+): String {
     val input = ReporterInput(ortResult)
 
     val outputDir = tempdir()
@@ -118,7 +135,7 @@ private fun TestConfiguration.generateReport(ortResult: OrtResult, format: FileF
         SpdxDocumentReporter.OPTION_DOCUMENT_COMMENT to "some document comment",
         SpdxDocumentReporter.OPTION_DOCUMENT_NAME to "some document name",
         SpdxDocumentReporter.OPTION_OUTPUT_FILE_FORMATS to format.toString()
-    )
+    ) + extraReporterOptions
 
     return SpdxDocumentReporter().generateReport(input, outputDir, reportOptions).single().readText()
         .normalizeLineBreaks()

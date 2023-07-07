@@ -48,7 +48,8 @@ internal object SpdxDocumentModelMapper : Logging {
     data class SpdxDocumentParams(
         val documentName: String,
         val documentComment: String,
-        val creationInfoComment: String
+        val creationInfoComment: String,
+        val fileInformationEnabled: Boolean
     )
 
     fun map(
@@ -108,9 +109,11 @@ internal object SpdxDocumentModelMapper : Logging {
                     ortResult
                 )
 
-                ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex).let {
-                    files += it
-                    relationships += it.createFileRelationships(vcsPackage)
+                if (params.fileInformationEnabled) {
+                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex).let {
+                        files += it
+                        relationships += it.createFileRelationships(vcsPackage)
+                    }
                 }
 
                 val vcsPackageRelationShip = SpdxRelationship(
@@ -131,9 +134,11 @@ internal object SpdxDocumentModelMapper : Logging {
                     ortResult
                 )
 
-                ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex).let {
-                    files += it
-                    relationships += it.createFileRelationships(sourceArtifactPackage)
+                if (params.fileInformationEnabled) {
+                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex).let {
+                        files += it
+                        relationships += it.createFileRelationships(sourceArtifactPackage)
+                    }
                 }
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
