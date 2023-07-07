@@ -149,14 +149,14 @@ class Scanner(
         val filteredScannerOptions = mutableMapOf<String, Options>()
 
         projectScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.details.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.details.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
             }
         }
 
         packageScannerWrappers.forEach { scannerWrapper ->
-            scannerConfig.options?.get(scannerWrapper.details.name)?.let { options ->
-                filteredScannerOptions[scannerWrapper.details.name] = scannerWrapper.filterSecretOptions(options)
+            scannerConfig.options?.get(scannerWrapper.name)?.let { options ->
+                filteredScannerOptions[scannerWrapper.name] = scannerWrapper.filterSecretOptions(options)
             }
         }
 
@@ -320,17 +320,16 @@ class Scanner(
                     val hasNestedProvenance = controller.getNestedProvenance(pkg.id) != null
                     if (!hasNestedProvenance) {
                         logger.debug {
-                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner " +
-                                    "'${scanner.details.name}' as no nested provenance for the package could be " +
-                                    "resolved."
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
+                                    "no nested provenance for the package could be resolved."
                         }
                     }
 
                     val hasCompleteScanResult = controller.hasCompleteScanResult(scanner, pkg)
                     if (hasCompleteScanResult) {
                         logger.debug {
-                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner " +
-                                    "'${scanner.details.name}' as stored results are available."
+                            "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
+                                    "stored results are available."
                         }
                     }
 
@@ -339,7 +338,7 @@ class Scanner(
 
                 if (packagesWithIncompleteScanResult.isEmpty()) {
                     logger.info {
-                        "Skipping scan with package scanner '${scanner.details.name}' as all packages have results."
+                        "Skipping scan with package scanner '${scanner.name}' as all packages have results."
                     }
 
                     return@scanner
@@ -364,8 +363,7 @@ class Scanner(
                 }
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.details.name} " +
-                            "started."
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name} started."
                 }
 
                 // Filter the scan context to hide the excludes from scanner with scan criteria.
@@ -373,8 +371,7 @@ class Scanner(
                 val scanResult = scanner.scanPackage(referencePackage, filteredContext)
 
                 logger.info {
-                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.details.name}' " +
-                            "finished."
+                    "Scan of '${referencePackage.id.toCoordinates()}' with package scanner '${scanner.name}' finished."
                 }
 
                 packagesWithIncompleteScanResult.forEach processResults@{ pkg ->
@@ -403,7 +400,7 @@ class Scanner(
                 if (controller.hasScanResult(scanner, provenance)) {
                     logger.debug {
                         "Skipping $provenance scan (${index + 1} of ${provenances.size}) with provenance scanner " +
-                                "'${scanner.details.name}' as a result is already available."
+                                "'${scanner.name}' as a result is already available."
                     }
 
                     return@scanner
@@ -411,7 +408,7 @@ class Scanner(
 
                 logger.info {
                     "Scanning $provenance (${index + 1} of ${provenances.size}) with provenance scanner " +
-                            "'${scanner.details.name}'."
+                            "'${scanner.name}'."
                 }
 
                 // Filter the scan context to hide the excludes from scanner with scan criteria.
@@ -508,7 +505,7 @@ class Scanner(
         controller.scanners.forEach { scanner ->
             val results = controller.getScanResults(scanner)
             logger.info {
-                "\t${scanner.details.name}: Result(s) for ${results.size} of ${allKnownProvenances.size} provenance(s)."
+                "\t${scanner.name}: Result(s) for ${results.size} of ${allKnownProvenances.size} provenance(s)."
             }
         }
     }
@@ -596,13 +593,13 @@ class Scanner(
 
         return try {
             scanners.associateWith { scanner ->
-                logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' started." }
+                logger.info { "Scan of $provenance with path scanner '${scanner.name}' started." }
 
                 // Filter the scan context to hide the excludes from scanner with scan criteria.
                 val filteredContext = if (scanner.criteria == null) context else context.copy(excludes = null)
                 val summary = scanner.scanPath(downloadDir, filteredContext)
 
-                logger.info { "Scan of $provenance with path scanner '${scanner.details.name}' finished." }
+                logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
 
                 val summaryWithMappedLicenses = summary.copy(
                     licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {

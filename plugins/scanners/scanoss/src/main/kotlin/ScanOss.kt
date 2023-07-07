@@ -38,7 +38,6 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
@@ -51,7 +50,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
 
 class ScanOss internal constructor(
-    private val name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration
 ) : PathScannerWrapper {
     private companion object : Logging
@@ -67,14 +66,16 @@ class ScanOss internal constructor(
 
     private val service = ScanOssService.create(config.apiUrl)
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
-
-    override val details by lazy {
+    override val version by lazy {
         // TODO: Find out the best / cheapest way to query the SCANOSS server for its version.
         val pomProperties = "/META-INF/maven/com.scanoss/scanner/pom.properties"
         val properties = Scanner::class.java.getResourceAsStream(pomProperties).use { Properties().apply { load(it) } }
-        ScannerDetails(name, properties.getProperty("version"), "")
+        properties.getProperty("version")
     }
+
+    override val configuration = ""
+
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
 
     /**
      * The name of the file corresponding to the fingerprints can be sent to SCANOSS for more precise matches.

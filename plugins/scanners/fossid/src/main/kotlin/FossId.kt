@@ -69,7 +69,6 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.UnknownProvenance
 import org.ossreviewtoolkit.model.VcsType
@@ -97,7 +96,7 @@ import org.ossreviewtoolkit.utils.ort.showStackTrace
  * gets a Git repository URL as input and would be a good match for [ProvenanceScannerWrapper].
  */
 class FossId internal constructor(
-    private val name: String,
+    override val name: String,
     private val scannerConfig: ScannerConfiguration,
     private val config: FossIdConfig
 ) : PackageScannerWrapper {
@@ -203,8 +202,10 @@ class FossId internal constructor(
 
     private val service = FossIdRestService.create(config.serverUrl)
 
+    override val version = service.version
+    override val configuration = ""
+
     override val criteria: ScannerCriteria? = null
-    override val details = ScannerDetails(name, service.version, "")
 
     override fun filterSecretOptions(options: Options) =
         options.mapValues { (k, v) ->
@@ -671,7 +672,7 @@ class FossId internal constructor(
             // Scans that were added to the queue are interpreted as an error by FossID before version 2021.2.
             // For older versions, `waitScanComplete()` is able to deal with queued scans. Therefore, not checking the
             // response of queued scans.
-            if (details.version >= "2021.2" || scanResult.error != "Scan was added to queue.") {
+            if (version >= "2021.2" || scanResult.error != "Scan was added to queue.") {
                 scanResult.checkResponse("trigger scan", false)
             }
 

@@ -136,7 +136,7 @@ class FossIdTest : WordSpec({
         "return the version reported by FossIdServiceWithVersion" {
             val fossId = createFossId(createConfig())
 
-            fossId.details.version shouldBe FOSSID_VERSION
+            fossId.version shouldBe FOSSID_VERSION
         }
     }
 

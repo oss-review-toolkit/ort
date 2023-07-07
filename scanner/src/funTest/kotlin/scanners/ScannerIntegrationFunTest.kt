@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.PackageReference
 import org.ossreviewtoolkit.model.PackageType
 import org.ossreviewtoolkit.model.Project
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
@@ -212,7 +211,10 @@ private val pkg4 = createPackage(
 )
 
 private class DummyScanner : PathScannerWrapper {
-    override val details = ScannerDetails(name = "Dummy", version = "1.0.0", configuration = "")
+    override val name = "Dummy"
+    override val version = "1.0.0"
+    override val configuration = ""
+
     override val criteria = ScannerCriteria.forDetails(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {

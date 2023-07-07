@@ -25,21 +25,15 @@ import java.time.Instant
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 
 /**
  * A [PathScannerWrapper] that is executed as a [CommandLineTool] on the local machine.
  */
-abstract class CommandLinePathScannerWrapper(name: String) : PathScannerWrapper, CommandLineTool {
+abstract class CommandLinePathScannerWrapper(override val name: String) : PathScannerWrapper, CommandLineTool {
     private companion object : Logging
 
-    /**
-     * The configuration used by the scanner, should contain command line options that influence the scan result.
-     */
-    abstract val configuration: String
-
-    override val details by lazy { ScannerDetails(name, getVersion(), configuration) }
+    override val version by lazy { getVersion() }
 
     final override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val startTime = Instant.now()
