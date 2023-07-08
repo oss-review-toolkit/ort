@@ -805,6 +805,8 @@ private class FakePackageScannerWrapper(
     name: String = "fake"
 ) : PackageScannerWrapper {
     override val details = ScannerDetails(name, "1.0.0", "config")
+
+    // Explicit nullability is required here for a mock response.
     override val criteria: ScannerCriteria? = ScannerCriteria.forDetails(details)
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult =
