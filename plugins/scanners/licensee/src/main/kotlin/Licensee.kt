@@ -52,8 +52,9 @@ class Licensee internal constructor(
             Licensee(type, scannerConfig)
     }
 
-    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
     override val configuration = CONFIGURATION_OPTIONS.joinToString(" ")
+
+    override val criteria by lazy { ScannerCriteria.fromConfig(details, scannerConfig) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "licensee.bat" else "licensee").joinToString(File.separator)
