@@ -152,8 +152,8 @@ RUN pip install --no-cache-dir -U \
     poetry=="$PYTHON_POETRY_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION"
 
-RUN arch=$(arch | sed s/aarch64/arm64/) \
-    &&  if [ "$arch" == "arm64" ]; then \
+RUN ARCH=$(arch | sed s/aarch64/arm64/) \
+    &&  if [ "$ARCH" == "arm64" ]; then \
             pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
         else \
             curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
@@ -244,8 +244,8 @@ ENV GOBIN=/opt/go/bin
 ENV PATH=$PATH:/opt/go/bin
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
-    && curl -L https://dl.google.com/go/go$GO_VERSION.linux-$arch.tar.gz | tar -C /opt -xz \
+RUN ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/amd64/) \
+    && curl -L https://dl.google.com/go/go$GO_VERSION.linux-$ARCH.tar.gz | tar -C /opt -xz \
     && curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | bash
 
 FROM scratch AS golang
@@ -317,8 +317,8 @@ ENV PATH=$PATH:$DART_SDK/bin
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN --mount=type=tmpfs,target=/dart \
-    arch=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) \
-    && curl -o /dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$arch-release.zip \
+    ARCH=$(arch | sed s/aarch64/arm64/ | sed s/x86_64/x64/) \
+    && curl -o /dart/dart.zip -L https://storage.googleapis.com/dart-archive/channels/stable/release/$DART_VERSION/sdk/dartsdk-linux-$ARCH-release.zip \
     && unzip /dart/dart.zip
 
 FROM scratch AS dart
