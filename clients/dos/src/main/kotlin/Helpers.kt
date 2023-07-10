@@ -52,3 +52,21 @@ fun File.packZip(zipFile: File) {
         }
     }
 }
+
+fun deleteFileOrDir(file: File) {
+    if (file.isFile) {
+        try {
+            file.delete()
+            logger.info { "File $file deleted" }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    } else if (file.isDirectory) {
+        try {
+            file.deleteRecursively()
+            logger.info { "Directory $file deleted" }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+}

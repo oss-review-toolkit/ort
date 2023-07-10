@@ -24,6 +24,7 @@ import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
+import org.ossreviewtoolkit.clients.dos.deleteFileOrDir
 import org.ossreviewtoolkit.clients.dos.packZip
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -96,7 +97,15 @@ class DOS internal constructor(
 
         // Transfer the zipped packet to S3 Object Storage
         runBlocking {
-            presignedUrl?.let { repository.uploadFile(it, tmpDir + zipName) }
+            presignedUrl?.let {
+                val uploadSuccessful = repository.uploadFile(it, tmpDir + zipName)
+
+                // If upload to S3 was successful, do local cleanup
+                if (uploadSuccessful) {
+                    deleteFileOrDir(dosDir)
+                    deleteFileOrDir(targetZipFile)
+                }
+            }
         }
 
         val endTime = Instant.now()
