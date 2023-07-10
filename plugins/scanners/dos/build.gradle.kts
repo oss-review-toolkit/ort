@@ -30,4 +30,5 @@ dependencies {
     implementation(libs.bundles.kotlinxSerialization)
     implementation(libs.kotlinxCoroutines)
     implementation(project(":clients:dos-client"))
+    implementation(project(mapOf("path" to ":downloader")))
 }

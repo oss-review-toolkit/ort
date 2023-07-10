@@ -19,21 +19,21 @@ class DOSRepository(private val dosService: DOSService) {
         val response = dosService.putS3File(presignedUrl, requestBody)
 
         if (!response.isSuccessful) {
-            logger.error { "DOS / failed to upload packet to S3: ${response.message()}" }
+            logger.error { "Failed to upload packet to S3: ${response.message()}" }
         } else {
-            logger.info { "DOS / packet successfully uploaded to S3!" }
+            logger.info { "Packet successfully uploaded to S3!" }
 
             // Delete the zipped file from local storage
             val path = Paths.get(filePath)
             try {
                 val result = Files.deleteIfExists(path)
                 if (result) {
-                    logger.info { "DOS / packet deleted from local storage" }
+                    logger.info { "Packet deleted from local storage" }
                 } else {
-                    logger.info { "DOS / failed to delete the packet from local storage" }
+                    logger.info { "Failed to delete the packet from local storage" }
                 }
             } catch (e: IOException) {
-                logger.info { "DOS / failed to delete the packet from local storage" }
+                logger.info { "Failed to delete the packet from local storage" }
                 e.printStackTrace()
             }
         }

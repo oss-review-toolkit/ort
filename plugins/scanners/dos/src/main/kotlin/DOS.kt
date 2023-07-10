@@ -25,22 +25,22 @@ import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
 import org.ossreviewtoolkit.clients.dos.packZip
-import org.ossreviewtoolkit.model.ScanSummary
-import org.ossreviewtoolkit.model.ScannerDetails
+import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
-import org.ossreviewtoolkit.scanner.PathScannerWrapper
-import org.ossreviewtoolkit.scanner.ScanContext
-import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.*
+import org.ossreviewtoolkit.downloader.Downloader
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import java.io.File
 import java.time.Instant
 
 class DOS internal constructor(
     private val name: String,
     private val scannerConfig: ScannerConfiguration
-) : PathScannerWrapper {
+) : PackageScannerWrapper {
     private companion object : Logging
+    private val downloaderConfig = DownloaderConfiguration()
 
     class Factory : AbstractScannerWrapperFactory<DOS>("DOS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
@@ -55,28 +55,43 @@ class DOS internal constructor(
     private val service = DOSService.create()
     private val repository = DOSRepository(service)
 
-    override fun scanPath(path: File, context: ScanContext): ScanSummary {
+    override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
 
         val startTime = Instant.now()
-        var presignedUrl: String?
         val tmpDir = "/tmp/"
+        var presignedUrl: String?
+        val provenance: Provenance
 
-        logger.info { "DOS / path to scan: $path" }
+        logger.info { "Package to scan: $pkg" }
+
+        // Use ORT specific local file structure
+        val dosDir = createOrtTempDir()
+
+        // Download the package
+        runBlocking {
+            val downloader = Downloader(downloaderConfig)
+            provenance = downloader.download(pkg, dosDir)
+        }
+        logger.info { "Package downloaded to: $dosDir" }
+
+        // Ask for scan results from DOS/API
+        // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
 
         // Zip the packet to scan
-        val zipName = path.name + ".zip"
-        val targetZipFile = File(tmpDir + zipName)
-        path.packZip(targetZipFile)
+        val zipName = dosDir.name + ".zip"
+        val targetZipFile = File("$tmpDir$zipName")
+        dosDir.packZip(targetZipFile)
 
-        logger.info { "DOS / zipped scancode packet: $zipName" }
+        logger.info { "Zipped packet: $zipName" }
 
         // Request presigned URL from DOS API
+
         runBlocking {
             val requestBody = PresignedUrlRequestBody(zipName)
             val responseBody = service.getPresignedUrl(requestBody)
             presignedUrl = responseBody.presignedUrl
 
-            logger.info { "DOS / presigned URL from API: $presignedUrl" }
+            logger.info { "Presigned URL from API: $presignedUrl" }
         }
 
         // Transfer the zipped packet to S3 Object Storage
@@ -86,13 +101,19 @@ class DOS internal constructor(
 
         val endTime = Instant.now()
 
-        return ScanSummary(
+        val summary = ScanSummary(
             startTime,
             endTime,
             emptySet(),
             emptySet(),
             emptySet(),
             emptyList()
+        )
+
+        return ScanResult(
+            provenance,
+            details,
+            summary
         )
     }
 }
