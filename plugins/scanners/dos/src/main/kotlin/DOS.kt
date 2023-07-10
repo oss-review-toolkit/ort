@@ -37,15 +37,17 @@ import java.io.File
 import java.time.Instant
 
 class DOS internal constructor(
-    private val name: String,
-    private val scannerConfig: ScannerConfiguration
+    override val name: String,
+    private val scannerConfig: ScannerConfiguration,
+    override val version: String,
+    override val configuration: String
 ) : PackageScannerWrapper {
     private companion object : Logging
     private val downloaderConfig = DownloaderConfiguration()
 
     class Factory : AbstractScannerWrapperFactory<DOS>("DOS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            DOS(type, scannerConfig)
+            DOS(type, scannerConfig, "1.0", "")
     }
 
     override val details: ScannerDetails
