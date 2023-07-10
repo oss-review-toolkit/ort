@@ -462,7 +462,7 @@ ENV PATH=$PATH:$NUGET_DOTNET_HOME:$NUGET_DOTNET_HOME/tools:$NUGET_INSPECTOR_HOME
 # Note: We are not installing a dotnet package directly because
 # debian packages from Ubuntu and Microsoft are incomplete
 RUN mkdir -p $NUGET_DOTNET_HOME \
-    && curl --location https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
+    && curl -L https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
     | tar -C $NUGET_DOTNET_HOME -xz
 
 ARG NUGET_INSPECTOR_VERSION=0.9.12
