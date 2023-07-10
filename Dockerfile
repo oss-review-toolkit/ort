@@ -196,7 +196,7 @@ RUN rbenv install $RUBY_VERSION -v \
     && gem install bundler cocoapods:$COCOAPODS_VERSION
 
 FROM scratch AS ruby
-COPY --from=rubybuild $RBENV_ROOT $RBENV_ROOT
+COPY --from=rubybuild /opt/rbenv /opt/rbenv
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
@@ -219,7 +219,7 @@ RUN . $NVM_DIR/nvm.sh \
     && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
 
 FROM scratch AS node
-COPY --from=nodebuild $NVM_DIR $NVM_DIR
+COPY --from=nodebuild /opt/nvm /opt/nvm
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
@@ -270,7 +270,7 @@ ENV PATH=$PATH:$HASKELL_HOME/bin
 RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d $HASKELL_HOME/bin
 
 FROM scratch AS haskell
-COPY --from=haskellbuild $HASKELL_HOME $HASKELL_HOME
+COPY --from=haskellbuild /opt/haskell /opt/haskell
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
@@ -302,7 +302,7 @@ RUN curl -ksS https://storage.googleapis.com/git-repo-downloads/repo | tee $ANDR
     && sudo chmod a+x $ANDROID_HOME/cmdline-tools/bin/repo
 
 FROM scratch AS android
-COPY --from=androidbuild $ANDROID_HOME $ANDROID_HOME
+COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 #------------------------------------------------------------------------
 #  Dart
@@ -322,7 +322,7 @@ RUN --mount=type=tmpfs,target=/dart \
     && unzip /dart/dart.zip
 
 FROM scratch AS dart
-COPY --from=dartbuild $DART_SDK $DART_SDK
+COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 
 #------------------------------------------------------------------------
 # SBT
@@ -336,7 +336,7 @@ ENV PATH=$PATH:$SBT_HOME/bin
 RUN curl -L https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz | tar -C /opt -xz
 
 FROM scratch AS sbt
-COPY --from=sbtbuild $DART_SDK $DART_SDK
+COPY --from=sbtbuild /opt/sbt /opt/sbt
 
 #------------------------------------------------------------------------
 # ORT
