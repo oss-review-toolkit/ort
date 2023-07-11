@@ -113,10 +113,9 @@ class DOS internal constructor(
             deleteFileOrDir(targetZipFile)
 
             // Send the scan job to DOS API to start the backend scanning
-
+            val message = repository.postScanJob(scanFolder)
+            logger.info { "Response to scan request from DOS API: $message" }
         }
-
-
 
         // Get the results back as a JSON string
 

@@ -60,4 +60,10 @@ class DOSRepository(private val dosService: DOSService) {
         return response
     }
 
+    suspend fun postScanJob(scanFolder: String?): String? {
+        val requestBody = DOSService.ScanRequestBody(scanFolder)
+        val response = dosService.postScanJob(requestBody).message
+
+        return response
+    }
 }

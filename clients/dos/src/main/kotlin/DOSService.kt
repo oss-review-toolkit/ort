@@ -114,6 +114,22 @@ interface DOSService {
         val folderName: String? = null
     )
 
+    @Serializable
+    data class ScanRequestBody(
+        val directory: String? = null
+    )
+
+    @Serializable
+    data class ScannerJob(
+        val id: String? = null,
+        val createdAt: String? = null
+    )
+    @Serializable
+    data class ScanResponseBody(
+        val scannerJob: ScannerJob,
+        val message: String?
+    )
+
     @PUT
     suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
 
@@ -125,4 +141,7 @@ interface DOSService {
 
     @POST("package")
     suspend fun getScanFolder(@Body body: PackageRequestBody): PackageResponseBody
+
+    @POST("job")
+    suspend fun postScanJob(@Body body: ScanRequestBody): ScanResponseBody
 }
