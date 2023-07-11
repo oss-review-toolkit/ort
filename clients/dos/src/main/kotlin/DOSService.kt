@@ -18,20 +18,25 @@
  */
 
 package org.ossreviewtoolkit.clients.dos
+
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
+
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.RequestBody
+
 import org.apache.logging.log4j.kotlin.Logging
+
 import retrofit2.Retrofit
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Url
-import retrofit2.Response
 
 interface DOSService {
 
@@ -96,6 +101,16 @@ interface DOSService {
         val results: String? = null
     )
 
+    @Serializable
+    data class PackageRequestBody(
+        val zipFileKey: String? = null
+    )
+
+    @Serializable
+    data class PackageResponseBody(
+        val folderName: String? = null
+    )
+
     @PUT
     suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
 
@@ -104,4 +119,7 @@ interface DOSService {
 
     @POST("scan-results")
     suspend fun getScanResults(@Body body: ScanResultsRequestBody): ScanResultsResponseBody
+
+    @POST("package")
+    suspend fun getScanFolder(@Body body: PackageRequestBody): PackageResponseBody
 }

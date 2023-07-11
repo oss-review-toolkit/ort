@@ -109,12 +109,25 @@ class DOS internal constructor(
                 // If upload to S3 was successful, do local cleanup
                 if (uploadSuccessful) {
                     deleteFileOrDir(dosDir)
-                    deleteFileOrDir(targetZipFile)
+                    //deleteFileOrDir(targetZipFile) // don't do this here
                 }
             }
         }
 
+        // Notify DOS API about the new zipped file at S3, and get the unzipped folder
+        // name as a return
+        runBlocking {
+            logger.info { "Zipped file at S3: $zipName" }
+            val scanFolder = repository.getScanFolder(zipName)
+        }
+
+        // Send the scan job to DOS API to start the backend scanning
+
+        // Get the results back as a JSON string
+
         val endTime = Instant.now()
+
+        // Convert results to ORT form
 
         val summary = ScanSummary(
             startTime,

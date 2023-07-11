@@ -1,12 +1,10 @@
 package org.ossreviewtoolkit.clients.dos
 
+import java.io.File
+
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
-import java.io.File
-import java.io.IOException
-import java.nio.file.Files
-import java.nio.file.Paths
 
 class DOSRepository(private val dosService: DOSService) {
     /**
@@ -38,4 +36,17 @@ class DOSRepository(private val dosService: DOSService) {
         logger.info { "Scan results from API: $response" }
         return response
     }
+
+    /**
+     * Send info to API about a new zipped package awaiting in S3 to scan.
+     * Response: (unzipped) folder name at S3.
+     */
+    suspend fun getScanFolder(zipFile: String?): String? {
+        val requestBody = DOSService.PackageRequestBody(zipFile)
+        val response = dosService.getScanFolder(requestBody).folderName
+
+        logger.info { "S3 folder to scan: $response" }
+        return response
+    }
+
 }
