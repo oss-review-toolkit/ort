@@ -151,6 +151,7 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     curl -ksS https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo && \
     chmod a+x /usr/local/bin/repo && \
     # Install package managers (in versions known to work).
+    gem install cocoapods -v $COCOAPODS_VERSION && \
     npm install --location=global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION && \
@@ -172,9 +173,7 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
         SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi && \
     yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" && \
-    chmod -R o+w $ANDROID_HOME && \
-    # Install 'CocoaPods'.
-    gem install cocoapods -v $COCOAPODS_VERSION
+    chmod -R o+w $ANDROID_HOME
 
 # Add scanners (in versions known to work).
 RUN curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt && \
