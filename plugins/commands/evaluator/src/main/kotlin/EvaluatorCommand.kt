@@ -66,6 +66,7 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.DirectoryPackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
@@ -74,7 +75,6 @@ import org.ossreviewtoolkit.utils.common.safeMkdirs
 import org.ossreviewtoolkit.utils.ort.ORT_COPYRIGHT_GARBAGE_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ORT_LICENSE_CLASSIFICATIONS_FILENAME
-import org.ossreviewtoolkit.utils.ort.ORT_PACKAGE_CONFIGURATIONS_DIRNAME
 import org.ossreviewtoolkit.utils.ort.ORT_RESOLUTIONS_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
@@ -144,7 +144,6 @@ class EvaluatorCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_PACKAGE_CONFIGURATIONS_DIRNAME))
         .configurationGroup()
 
     private val packageCurationsFile by option(
@@ -273,18 +272,28 @@ class EvaluatorCommand : OrtCommand(
             ortResultInput = ortResultInput.addPackageCurations(packageCurationProviders)
         }
 
-        val packageConfigurationProvider = if (ortConfig.enableRepositoryPackageConfigurations) {
-            CompositePackageConfigurationProvider(
-                SimplePackageConfigurationProvider(ortResultInput.repository.config.packageConfigurations),
-                DirectoryPackageConfigurationProvider(packageConfigurationsDir)
-            )
-        } else {
-            if (ortResultInput.repository.config.packageConfigurations.isNotEmpty()) {
-                logger.info { "Local package configurations were not applied because the feature is not enabled." }
+        val enabledPackageConfigurationProviders = buildList {
+            val repositoryPackageConfigurations = ortResultInput.repository.config.packageConfigurations
+
+            if (ortConfig.enableRepositoryPackageConfigurations) {
+                add(SimplePackageConfigurationProvider(repositoryPackageConfigurations))
+            } else {
+                if (repositoryPackageConfigurations.isNotEmpty()) {
+                    logger.info { "Local package configurations were not applied because the feature is not enabled." }
+                }
             }
 
-            DirectoryPackageConfigurationProvider(packageConfigurationsDir)
+            if (packageConfigurationsDir != null) {
+                add(DirectoryPackageConfigurationProvider(packageConfigurationsDir))
+            } else {
+                val packageConfigurationProviders =
+                    PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
+                addAll(packageConfigurationProviders.map { it.second })
+            }
         }
+
+        val packageConfigurationProvider =
+            CompositePackageConfigurationProvider(*enabledPackageConfigurationProviders.toTypedArray())
 
         val copyrightGarbage = copyrightGarbageFile.takeIf { it.isFile }?.readValue<CopyrightGarbage>().orEmpty()
 
