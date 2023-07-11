@@ -156,9 +156,7 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     pip install --no-cache-dir wheel && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
-    curl -ksSO https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz && \
-    tar -C /opt -xzf go$GO_VERSION.linux-amd64.tar.gz && \
-    rm go$GO_VERSION.linux-amd64.tar.gz && \
+    curl -ksS https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar -C /opt -xz && \
     export GOBIN=/opt/go/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
     curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
