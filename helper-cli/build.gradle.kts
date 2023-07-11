@@ -30,6 +30,7 @@ application {
 dependencies {
     implementation(project(":analyzer"))
     implementation(project(":downloader"))
+    implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
     implementation(project(":plugins:package-curation-providers:file-package-curation-provider"))
     implementation(project(":scanner"))
     implementation(project(":utils:ort-utils"))

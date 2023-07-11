@@ -1,0 +1,2 @@
+org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DefaultDirPackageConfigurationProviderFactory
+org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProviderFactory

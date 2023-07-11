@@ -31,10 +31,10 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanResult
 import org.ossreviewtoolkit.model.config.OrtConfiguration
-import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.model.utils.FindingCurationMatcher
 import org.ossreviewtoolkit.model.utils.RootLicenseMatcher
 import org.ossreviewtoolkit.model.yamlMapper
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.scanner.ScanStorages
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_FILENAME

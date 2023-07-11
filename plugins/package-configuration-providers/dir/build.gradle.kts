@@ -23,17 +23,5 @@ plugins {
 }
 
 dependencies {
-    api(project(":plugins:commands:command-api"))
-
-    implementation(platform(project(":plugins:package-configuration-providers")))
-    implementation(platform(project(":plugins:reporters")))
-
-    implementation(project(":reporter"))
-    implementation(project(":model"))
-    implementation(project(":utils:common-utils"))
-    implementation(project(":utils:ort-utils"))
-
-    implementation(libs.clikt)
-    implementation(libs.kotlinxCoroutines)
-    implementation(libs.log4jApiKotlin)
+    api(project(":plugins:package-configuration-providers:package-configuration-provider-api"))
 }

@@ -25,6 +25,7 @@ plugins {
 dependencies {
     api(project(":plugins:commands:command-api"))
 
+    implementation(platform(project(":plugins:package-configuration-providers")))
     implementation(platform(project(":plugins:package-curation-providers")))
 
     implementation(project(":evaluator"))

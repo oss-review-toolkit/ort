@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model.utils
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 
 import java.io.File
 import java.io.IOException
@@ -28,6 +28,7 @@ import org.ossreviewtoolkit.model.Provenance
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
 import org.ossreviewtoolkit.model.readValue
+import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 /**
  * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
