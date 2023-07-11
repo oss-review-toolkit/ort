@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.config.CopyrightGarbage
 import org.ossreviewtoolkit.model.config.orEmpty
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.utils.DirectoryPackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ListCopyrightsCommand : CliktCommand(

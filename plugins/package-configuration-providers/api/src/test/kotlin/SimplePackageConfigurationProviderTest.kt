@@ -17,14 +17,15 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.model
+package org.ossreviewtoolkit.plugins.packageconfigurationproviders.api
 
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.WordSpec
 
+import org.ossreviewtoolkit.model.Identifier
+import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.config.PackageConfiguration
 import org.ossreviewtoolkit.model.config.VcsMatcher
-import org.ossreviewtoolkit.model.utils.SimplePackageConfigurationProvider
 
 class SimplePackageConfigurationProviderTest : WordSpec({
     "constructor" should {

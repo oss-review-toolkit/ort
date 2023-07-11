@@ -25,3 +25,7 @@ plugins {
 javaPlatform {
     allowDependencies()
 }
+
+dependencies {
+    api(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
+}
