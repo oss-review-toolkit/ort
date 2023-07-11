@@ -74,13 +74,11 @@ interface DOSService {
         }
     }
 
-    @PUT
-    suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
-
     @Serializable
     data class PresignedUrlRequestBody(
         val key: String? = null
     )
+
     @Serializable
     data class PresignedUrlResponseBody(
         val success: Boolean,
@@ -88,6 +86,22 @@ interface DOSService {
         val message: String? = null
     )
 
+    @Serializable
+    data class ScanResultsRequestBody(
+        val purl: String? = null
+    )
+
+    @Serializable
+    data class ScanResultsResponseBody(
+        val results: String? = null
+    )
+
+    @PUT
+    suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
+
     @POST("upload-url")
     suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): PresignedUrlResponseBody
+
+    @POST("scan-results")
+    suspend fun getScanResults(@Body body: ScanResultsRequestBody): ScanResultsResponseBody
 }

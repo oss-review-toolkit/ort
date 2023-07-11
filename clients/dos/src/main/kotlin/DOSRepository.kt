@@ -26,4 +26,16 @@ class DOSRepository(private val dosService: DOSService) {
             return true
         }
     }
+
+    /**
+     * Request earlier scan results from DOS API, using Package URL for
+     * identifying the package.
+     */
+    suspend fun getScanResults(purl: String?): DOSService.ScanResultsResponseBody {
+        val requestBody = DOSService.ScanResultsRequestBody(purl)
+        val response = dosService.getScanResults(requestBody)
+
+        logger.info { "Scan results from API: $response" }
+        return response
+    }
 }
