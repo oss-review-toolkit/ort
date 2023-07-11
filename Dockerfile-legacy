@@ -85,10 +85,11 @@ ENV \
     ANDROID_SDK_VERSION=9477386 \
     # Installation directories.
     ANDROID_HOME=/opt/android-sdk \
+    GOBIN=/opt/go/bin \
     GOPATH=/tmp/go
 
 ENV DEBIAN_FRONTEND=noninteractive \
-    PATH="$PATH:$GOPATH/bin:/opt/go/bin:/opt/ort/bin"
+    PATH="$PATH:$GOPATH/bin:$GOBIN:/opt/ort/bin"
 
 # Apt install commands.
 RUN --mount=type=cache,target=/var/cache/apt --mount=type=cache,target=/var/lib/apt \
@@ -157,7 +158,6 @@ RUN /opt/ort/bin/export_proxy_certificates.sh /tmp/certificates/ && \
     pip install --no-cache-dir conan==$CONAN_VERSION poetry==$PYTHON_POETRY_VERSION pipenv==$PYTHON_PIPENV_VERSION && \
     # Install golang in order to have `go mod` as package manager.
     curl -ksS https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar -C /opt -xz && \
-    export GOBIN=/opt/go/bin && \
     curl -ksS https://raw.githubusercontent.com/golang/dep/v$GO_DEP_VERSION/install.sh | sh && \
     curl -ksS https://raw.githubusercontent.com/commercialhaskell/stack/v$HASKELL_STACK_VERSION/etc/scripts/get-stack.sh | sh && \
     # Install SDKs required for analysis.
