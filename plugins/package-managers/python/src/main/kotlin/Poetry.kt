@@ -54,6 +54,8 @@ class Poetry(
 
     override fun command(workingDir: File?) = "poetry"
 
+    override fun transformVersion(output: String) = output.substringAfter("version ").removeSuffix(")")
+
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         // For an overview, dependency resolution involves the following steps:
         // 1. Generate "requirements.txt" file with `poetry` command.
