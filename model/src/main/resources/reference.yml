@@ -39,33 +39,33 @@ ort:
   # Providers are listed from highest to lower priority. Technically, they are applied in reverse order: The provider
   # with the highest priority is applied last, so it can overwrite any previously applied curations.
   packageCurationProviders:
-    - type: DefaultFile
-    - type: DefaultDir
-    - type: File
-      id: SomeCurationsFile
-      config:
-        path: '/some-path/curations.yml'
-        mustExist: true
-    - type: File
-      id: SomeCurationsDir
-      config:
-        path: '/some-path/curations-dir'
-        mustExist: false
-    - type: OrtConfig
-      enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
-    - type: ClearlyDefined
-      config:
-        serverUrl: 'https://api.clearlydefined.io'
-        minTotalLicenseScore: 80
-    - type: SW360
-      config:
-        restUrl: 'https://your-sw360-rest-url'
-        authUrl: 'https://your-authentication-url'
-        username: username
-        password: password
-        clientId: clientId
-        clientPassword: clientPassword
-        token: token
+  - type: DefaultFile
+  - type: DefaultDir
+  - type: File
+    id: SomeCurationsFile
+    config:
+      path: '/some-path/curations.yml'
+      mustExist: true
+  - type: File
+    id: SomeCurationsDir
+    config:
+      path: '/some-path/curations-dir'
+      mustExist: false
+  - type: OrtConfig
+    enabled: '${USE_ORT_CONFIG_CURATIONS:-true}'
+  - type: ClearlyDefined
+    config:
+      serverUrl: 'https://api.clearlydefined.io'
+      minTotalLicenseScore: 80
+  - type: SW360
+    config:
+      restUrl: 'https://your-sw360-rest-url'
+      authUrl: 'https://your-authentication-url'
+      username: username
+      password: password
+      clientId: clientId
+      clientPassword: clientPassword
+      token: token
 
   severeIssueThreshold: ERROR
   severeRuleViolationThreshold: ERROR
