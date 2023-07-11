@@ -102,7 +102,6 @@ class DOS internal constructor(
                 // If upload to S3 was successful, do local cleanup
                 if (uploadSuccessful) {
                     deleteFileOrDir(dosDir)
-                    //deleteFileOrDir(targetZipFile) // don't do this here
                 }
             }
 
@@ -111,6 +110,7 @@ class DOS internal constructor(
             logger.info { "Zipped file at S3: $zipName" }
             val scanFolder = repository.getScanFolder(zipName)
             logger.info { "S3 folder to scan: $scanFolder" }
+            deleteFileOrDir(targetZipFile)
 
             // Send the scan job to DOS API to start the backend scanning
 
