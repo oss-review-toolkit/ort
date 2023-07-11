@@ -23,7 +23,6 @@ import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
-import org.ossreviewtoolkit.clients.dos.DOSService.PresignedUrlRequestBody
 import org.ossreviewtoolkit.clients.dos.deleteFileOrDir
 import org.ossreviewtoolkit.clients.dos.packZip
 import org.ossreviewtoolkit.model.*
@@ -36,6 +35,12 @@ import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 import java.io.File
 import java.time.Instant
 
+/**
+ * DOS scanner is the ORT implementation of a ScanCode-based backend scanner, and it is a part of
+ * DoubleOpen project: https://github.com/doubleopen-project/dos
+ *
+ * Copyright (c) 2023 HH Partners
+ */
 class DOS internal constructor(
     override val name: String,
     private val scannerConfig: ScannerConfiguration,
@@ -62,47 +67,35 @@ class DOS internal constructor(
 
         val startTime = Instant.now()
         val tmpDir = "/tmp/"
-        var presignedUrl: String?
         val provenance: Provenance
 
         logger.info { "Package to scan: $pkg" }
-
         // Use ORT specific local file structure
         val dosDir = createOrtTempDir()
 
-        // Download the package
         runBlocking {
+            // Download the package
             val downloader = Downloader(downloaderConfig)
             provenance = downloader.download(pkg, dosDir)
-        }
-        logger.info { "Package downloaded to: $dosDir" }
+            logger.info { "Package downloaded to: $dosDir" }
 
-        // Ask for scan results from DOS/API
-        // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
-        runBlocking {
+            // Ask for scan results from DOS/API
+            // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
             logger.info { "Package URL: ${pkg.purl}" }
-            repository.getScanResults(pkg.purl)
-        }
+            val scanResults = repository.getScanResults(pkg.purl)
+            logger.info { "Earlier scan results for this package: $scanResults" }
 
-        // Zip the packet to scan
-        val zipName = dosDir.name + ".zip"
-        val targetZipFile = File("$tmpDir$zipName")
-        dosDir.packZip(targetZipFile)
+            // Zip the packet to scan
+            val zipName = dosDir.name + ".zip"
+            val targetZipFile = File("$tmpDir$zipName")
+            dosDir.packZip(targetZipFile)
+            logger.info { "Zipped packet: $zipName" }
 
-        logger.info { "Zipped packet: $zipName" }
-
-        // Request presigned URL from DOS API
-
-        runBlocking {
-            val requestBody = PresignedUrlRequestBody(zipName)
-            val responseBody = service.getPresignedUrl(requestBody)
-            presignedUrl = responseBody.presignedUrl
-
+            // Request presigned URL from DOS API
+            val presignedUrl = repository.getPresignedUrl(zipName)
             logger.info { "Presigned URL from API: $presignedUrl" }
-        }
 
-        // Transfer the zipped packet to S3 Object Storage
-        runBlocking {
+            // Transfer the zipped packet to S3 Object Storage
             presignedUrl?.let {
                 val uploadSuccessful = repository.uploadFile(it, tmpDir + zipName)
 
@@ -112,16 +105,18 @@ class DOS internal constructor(
                     //deleteFileOrDir(targetZipFile) // don't do this here
                 }
             }
-        }
 
-        // Notify DOS API about the new zipped file at S3, and get the unzipped folder
-        // name as a return
-        runBlocking {
+            // Notify DOS API about the new zipped file at S3, and get the unzipped folder
+            // name as a return
             logger.info { "Zipped file at S3: $zipName" }
             val scanFolder = repository.getScanFolder(zipName)
+            logger.info { "S3 folder to scan: $scanFolder" }
+
+            // Send the scan job to DOS API to start the backend scanning
+
         }
 
-        // Send the scan job to DOS API to start the backend scanning
+
 
         // Get the results back as a JSON string
 

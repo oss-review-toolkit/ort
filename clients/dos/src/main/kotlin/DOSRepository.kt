@@ -6,10 +6,22 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
 
+/**
+ * This implements the data layer of the DOS client.
+ */
 class DOSRepository(private val dosService: DOSService) {
     /**
-     * Upload a file to S3, using presigned URL, and if successful,
-     * delete the file from local storage.
+     * Get S3 presigned URL from DOS API to upload a package for scanning.
+     */
+    suspend fun getPresignedUrl(key: String?): String? {
+        val requestBody = DOSService.PresignedUrlRequestBody(key)
+        val response = dosService.getPresignedUrl(requestBody).presignedUrl
+
+        return response
+    }
+
+    /**
+     * Upload a file to S3, using presigned URL.
      */
     suspend fun uploadFile(presignedUrl: String, filePath: String): Boolean {
         val file = File(filePath)
@@ -29,9 +41,9 @@ class DOSRepository(private val dosService: DOSService) {
      * Request earlier scan results from DOS API, using Package URL for
      * identifying the package.
      */
-    suspend fun getScanResults(purl: String?): DOSService.ScanResultsResponseBody {
+    suspend fun getScanResults(purl: String?): String? {
         val requestBody = DOSService.ScanResultsRequestBody(purl)
-        val response = dosService.getScanResults(requestBody)
+        val response = dosService.getScanResults(requestBody).results
 
         logger.info { "Scan results from API: $response" }
         return response
@@ -45,7 +57,6 @@ class DOSRepository(private val dosService: DOSService) {
         val requestBody = DOSService.PackageRequestBody(zipFile)
         val response = dosService.getScanFolder(requestBody).folderName
 
-        logger.info { "S3 folder to scan: $response" }
         return response
     }
 

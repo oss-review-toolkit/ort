@@ -38,6 +38,9 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Url
 
+/**
+ * This implements the network layer of the DOS client, written as a Retrofit2 interface.
+ */
 interface DOSService {
 
     companion object: Logging {
@@ -60,7 +63,7 @@ interface DOSService {
             val contentType = "application/json; charset=utf-8".toMediaType()
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
-                // For logging basic call -> response statuses, use BASIC
+                // For logging basic call-response statuses, use BASIC
                 // For logging the request and response bodies of a call, use BODY
                 level = HttpLoggingInterceptor.Level.NONE
             }
