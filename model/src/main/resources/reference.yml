@@ -36,6 +36,16 @@ ort:
     patentFilenames: ['patents']
     rootLicenseFilenames: ['readme*']
 
+  # Package configurations have to be unique by ID and provenance. Ensure that different providers do not provide
+  # configurations for the same package, see https://github.com/oss-review-toolkit/ort/issues/6972 for details.
+  packageConfigurationProviders:
+  - type: DefaultDir
+  - type: Dir
+    id: SomeConfigDir
+    config:
+      path: '/some-path/'
+      mustExist: true
+
   # Providers are listed from highest to lower priority. Technically, they are applied in reverse order: The provider
   # with the highest priority is applied last, so it can override any previously applied curations.
   packageCurationProviders:
