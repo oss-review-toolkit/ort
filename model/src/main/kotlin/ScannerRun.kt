@@ -198,6 +198,7 @@ data class ScannerRun(
             scanResultsByProvenance[provenance].orEmpty()
         }
 
+        // TODO: Handle the case of incomplete scan results (per scanner), e.g. propagate an issue.
         val scanResults = mergeScanResultsByScanner(scanResultsByPath, packageProvenance).map { scanResult ->
             scanResult.filterByPath(packageProvenance.vcsPath).filterByIgnorePatterns(config.ignorePatterns)
         }.map { scanResult ->
