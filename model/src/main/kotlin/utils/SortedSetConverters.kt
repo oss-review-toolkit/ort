@@ -28,6 +28,7 @@ import java.util.SortedSet
 import org.ossreviewtoolkit.model.ArtifactProvenance
 import org.ossreviewtoolkit.model.CopyrightFinding
 import org.ossreviewtoolkit.model.FileList
+import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.PackageReference
@@ -72,6 +73,11 @@ class ProjectSortedSetConverter : StdConverter<Set<Project>, SortedSet<Project>>
 class ProvenanceResolutionResultSortedSetConverter :
     StdConverter<Set<ProvenanceResolutionResult>, SortedSet<ProvenanceResolutionResult>>() {
     override fun convert(value: Set<ProvenanceResolutionResult>) = value.toSortedSet(compareBy { it.id })
+}
+
+class ScannersMapConverter : StdConverter<Map<Identifier, Set<String>>, Map<Identifier, Set<String>>>() {
+    override fun convert(value: Map<Identifier, Set<String>>) =
+        value.mapValues { it.value.toSortedSet() }.toSortedMap()
 }
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */

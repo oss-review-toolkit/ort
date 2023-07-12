@@ -29,6 +29,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.FileListSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ProvenanceResolutionResultSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ScanResultSortedSetConverter
+import org.ossreviewtoolkit.model.utils.ScannersMapConverter
 import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.mergeScanResultsByScanner
 import org.ossreviewtoolkit.model.utils.prependPath
@@ -73,6 +74,12 @@ data class ScannerRun(
     val scanResults: Set<ScanResult>,
 
     /**
+     * The names of the scanners which have been used to scan the package.
+     */
+    @JsonSerialize(converter = ScannersMapConverter::class)
+    val scanners: Map<Identifier, Set<String>>,
+
+    /**
      * The list of files for each resolved provenance.
      */
     @JsonSerialize(converter = FileListSortedSetConverter::class)
@@ -90,7 +97,8 @@ data class ScannerRun(
             config = ScannerConfiguration(),
             provenances = emptySet(),
             scanResults = emptySet(),
-            files = emptySet()
+            files = emptySet(),
+            scanners = emptyMap()
         )
     }
 
@@ -192,6 +200,8 @@ data class ScannerRun(
 
         val scanResultsByPath = resolutionResult.getKnownProvenancesWithoutVcsPath().mapValues { (_, provenance) ->
             scanResultsByProvenance[provenance].orEmpty()
+        }.mapValues { (_, scanResults) ->
+            scanResults.filter { it.scanner.name in scanners[id].orEmpty() }
         }
 
         // TODO: Handle the case of incomplete scan results (per scanner), e.g. propagate an issue.

@@ -403,6 +403,19 @@ scanner:
           path: "pkg4/pkg4.txt"
           start_line: -1
           end_line: -1
+  scanners:
+    Dummy::pkg0:1.0.0:
+    - "Dummy"
+    Dummy::pkg1:1.0.0:
+    - "Dummy"
+    Dummy::pkg2:1.0.0:
+    - "Dummy"
+    Dummy::pkg3:1.0.0:
+    - "Dummy"
+    Dummy::pkg4:1.0.0:
+    - "Dummy"
+    Dummy::project:1.0.0:
+    - "Dummy"
   files:
   - provenance:
       vcs_info:

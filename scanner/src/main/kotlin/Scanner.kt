@@ -169,7 +169,8 @@ class Scanner(
             config = filteredScannerConfig,
             provenances = projectResults.provenances + packageResults.provenances,
             scanResults = projectResults.scanResults + packageResults.scanResults,
-            files = projectResults.files + packageResults.files
+            files = projectResults.files + packageResults.files,
+            scanners = projectResults.scanners + packageResults.scanners
         )
 
         return ortResult.copy(scanner = scannerRun)
@@ -238,11 +239,15 @@ class Scanner(
             }
         }
 
+        val scannerNames = scanners.mapTo(mutableSetOf()) { it.name }
+        val scannerNamesByPackageId = packages.associateBy({ it.id }) { scannerNames }
+
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
-            files = files
+            files = files,
+            scanners = scannerNamesByPackageId
         )
     }
 
