@@ -19,8 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
-import com.fasterxml.jackson.databind.JsonNode
-
 import org.ossreviewtoolkit.model.Issue
 
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
@@ -35,27 +33,20 @@ private val TIMEOUT_ERROR_REGEX = Regex(
             "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
 )
 
-private fun getInputPath(result: JsonNode): String {
-    val header = result["headers"].single()
-    val input = header["options"]["input"]
-    val path = input.takeUnless { it.isArray } ?: input.single()
-    return path.textValue().let { "$it/" }
-}
-
 /**
  * Map scan errors for all files using messages that contain the relative file path.
  */
-internal fun mapScanErrors(result: JsonNode): List<Issue> {
-    val input = getInputPath(result)
-    return result["files"]?.flatMap { file ->
-        val path = file["path"].textValue().removePrefix(input)
-        file["scan_errors"].map {
+internal fun mapScanErrors(result: ScanCodeResult): List<Issue> {
+    val input = result.headers.single().options.input.single()
+    return result.files.flatMap { file ->
+        val path = file.path.removePrefix(input).removePrefix("/")
+        file.scanErrors.map { error ->
             Issue(
                 source = ScanCode.SCANNER_NAME,
-                message = "${it.textValue()} (File: $path)"
+                message = "$error (File: $path)"
             )
         }
-    }.orEmpty()
+    }
 }
 
 /**
