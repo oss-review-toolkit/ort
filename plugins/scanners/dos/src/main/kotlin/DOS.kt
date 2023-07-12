@@ -123,11 +123,34 @@ class DOS internal constructor(
 
         // Convert results to ORT form
 
-        val summary = ScanSummary(
+        val summary = generateSummary(
             startTime,
             endTime,
-            emptySet(),
-            emptySet()
+            "{\n" +
+                    "    \"results\": {\n" +
+                    "        \"licenses\": [\n" +
+                    "            {\n" +
+                    "                \"license\": \"license\",\n" +
+                    "                \"location\": {\n" +
+                    "                    \"path\": \"path/to/file\",\n" +
+                    "                    \"start_line\": 1,\n" +
+                    "                    \"end_line\": 1\n" +
+                    "                },\n" +
+                    "                \"score\": 100.0\n" +
+                    "            }\n" +
+                    "        ],\n" +
+                    "        \"copyrights\": [\n" +
+                    "            {\n" +
+                    "                \"statement\": \"statement\",\n" +
+                    "                \"location\": {\n" +
+                    "                    \"path\": \"path/to/file\",\n" +
+                    "                    \"start_line\": 1,\n" +
+                    "                    \"end_line\": 1\n" +
+                    "                }\n" +
+                    "            }\n" +
+                    "        ]\n" +
+                    "    } \n" +
+                    "}"
         )
 
         return ScanResult(
