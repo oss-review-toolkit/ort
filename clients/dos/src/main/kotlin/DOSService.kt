@@ -33,10 +33,7 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import retrofit2.Retrofit
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Url
+import retrofit2.http.*
 
 /**
  * This implements the network layer of the DOS client, written as a Retrofit2 interface.
@@ -121,13 +118,18 @@ interface DOSService {
 
     @Serializable
     data class ScannerJob(
-        val id: String? = null,
+        val id: String,
         val createdAt: String? = null
     )
     @Serializable
     data class ScanResponseBody(
         val scannerJob: ScannerJob,
         val message: String?
+    )
+
+    @Serializable
+    data class JobStateResponseBody(
+        val state: String
     )
 
     @PUT
@@ -144,4 +146,7 @@ interface DOSService {
 
     @POST("job")
     suspend fun postScanJob(@Body body: ScanRequestBody): ScanResponseBody
+
+    @GET("job-state/{id}")
+    suspend fun getJobState(@Path("id") id: String): JobStateResponseBody
 }

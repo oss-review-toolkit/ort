@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.dos
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSRepository
@@ -113,8 +114,19 @@ class DOS internal constructor(
             deleteFileOrDir(targetZipFile)
 
             // Send the scan job to DOS API to start the backend scanning
-            val message = repository.postScanJob(scanFolder)
-            logger.info { "Response to scan request from DOS API: $message" }
+            val response = repository.postScanJob(scanFolder)
+            val id = response.scannerJob.id
+            logger.info { "Response to scan request: id = $id, message = ${response.message}" }
+
+            // Poll the job state periodically and log
+            var jobState = ""
+            while (jobState != "completed") {
+                jobState = repository.getJobState(id)
+                logger.info { "Job state: id = $id, state = $jobState" }
+                if (jobState != "completed") {
+                    delay(1000L)
+                }
+            }
         }
 
         // Get the results back as a JSON string
@@ -127,9 +139,7 @@ class DOS internal constructor(
             startTime,
             endTime,
             emptySet(),
-            emptySet(),
-            emptySet(),
-            emptyList()
+            emptySet()
         )
 
         return ScanResult(
