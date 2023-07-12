@@ -45,6 +45,7 @@ import org.ossreviewtoolkit.scanner.PathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.Scanner
 import org.ossreviewtoolkit.scanner.ScannerCriteria
+import org.ossreviewtoolkit.scanner.ScannerWrapper
 import org.ossreviewtoolkit.scanner.provenance.DefaultNestedProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultPackageProvenanceResolver
 import org.ossreviewtoolkit.scanner.provenance.DefaultProvenanceDownloader
@@ -100,7 +101,7 @@ class ScannerIntegrationFunTest : WordSpec({
     }
 })
 
-private fun createScanner(): Scanner {
+internal fun createScanner(scannerWrappers: Map<PackageType, List<ScannerWrapper>>? = null): Scanner {
     val downloaderConfiguration = DownloaderConfiguration()
     val workingTreeCache = DefaultWorkingTreeCache()
     val provenanceDownloader = DefaultProvenanceDownloader(downloaderConfiguration, workingTreeCache)
@@ -118,7 +119,7 @@ private fun createScanner(): Scanner {
         storageWriters = emptyList(),
         packageProvenanceResolver = packageProvenanceResolver,
         nestedProvenanceResolver = nestedProvenanceResolver,
-        scannerWrappers = mapOf(
+        scannerWrappers = scannerWrappers ?: mapOf(
             PackageType.PROJECT to listOf(dummyScanner),
             PackageType.PACKAGE to listOf(dummyScanner)
         )
@@ -210,8 +211,7 @@ private val pkg4 = createPackage(
     )
 )
 
-private class DummyScanner : PathScannerWrapper {
-    override val name = "Dummy"
+internal class DummyScanner(override val name: String = "Dummy") : PathScannerWrapper {
     override val version = "1.0.0"
     override val configuration = ""
 

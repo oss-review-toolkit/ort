@@ -231,6 +231,13 @@ scanner:
           path: "pkg3/pkg3.txt"
           start_line: -1
           end_line: -1
+  scanners:
+    Dummy::pkg1:1.0.0:
+    - "Dummy"
+    Dummy::pkg3:1.0.0:
+    - "Dummy"
+    Dummy::project:1.0.0:
+    - "Dummy"
   files:
   - provenance:
       vcs_info:

@@ -188,6 +188,9 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
             }
         )
     }
+    val scanners = pkgScanResults.associate { (id, scanResultsForId) ->
+        id to scanResultsForId.mapTo(mutableSetOf()) { it.scanner.name }
+    }
 
     return ScannerRun.EMPTY.copy(
         provenances = pkgScanResultsWithKnownProvenance.mapTo(mutableSetOf()) { (id, scanResultsForId) ->
@@ -202,6 +205,7 @@ fun scannerRunOf(vararg pkgScanResults: Pair<Identifier, List<ScanResult>>): Sca
             )
         },
         scanResults = scanResults,
-        files = files
+        files = files,
+        scanners = scanners
     )
 }
