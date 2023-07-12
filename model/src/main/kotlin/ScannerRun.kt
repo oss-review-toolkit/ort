@@ -198,15 +198,12 @@ data class ScannerRun(
             scanResultsByProvenance[provenance].orEmpty()
         }
 
-        val scanResults = mergeScanResultsByScanner(scanResultsByPath).map { scanResult ->
+        val scanResults = mergeScanResultsByScanner(scanResultsByPath, packageProvenance).map { scanResult ->
             scanResult.filterByPath(packageProvenance.vcsPath).filterByIgnorePatterns(config.ignorePatterns)
         }.map { scanResult ->
             // The VCS revision of scan result is equal to the resolved revision. So, use the package provenance
             // to re-align the VCS revision with the package's metadata.
-            scanResult.copy(
-                provenance = packageProvenance,
-                summary = scanResult.summary.addIssue(resolutionResult.nestedProvenanceResolutionIssue)
-            )
+            scanResult.copy(summary = scanResult.summary.addIssue(resolutionResult.nestedProvenanceResolutionIssue))
         }
 
         return scanResults.takeIf { it.isNotEmpty() }

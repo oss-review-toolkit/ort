@@ -69,7 +69,7 @@ data class NestedProvenanceScanResult(
     fun merge(): List<ScanResult> {
         val scanResultsByPath = scanResults.mapKeys { (provenance, _) -> getPath(provenance) }
 
-        return mergeScanResultsByScanner(scanResultsByPath)
+        return mergeScanResultsByScanner(scanResultsByPath, nestedProvenance.root)
     }
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
