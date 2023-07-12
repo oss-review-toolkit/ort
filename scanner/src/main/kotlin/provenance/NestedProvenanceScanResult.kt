@@ -74,13 +74,6 @@ data class NestedProvenanceScanResult(
 
     private fun getPath(provenance: KnownProvenance) = nestedProvenance.getPath(provenance)
 
-    fun filterByIgnorePatterns(ignorePatterns: List<String>): NestedProvenanceScanResult =
-        copy(
-            scanResults = scanResults.mapValues { (_, scanResults) ->
-                scanResults.map { it.filterByIgnorePatterns(ignorePatterns) }
-            }
-        )
-
     /**
      * Remove all scan results for [nestedProvenance]s which are not within the provided [path] and filter all findings
      * within the scan results by [path], taking the sub repository paths into account.
