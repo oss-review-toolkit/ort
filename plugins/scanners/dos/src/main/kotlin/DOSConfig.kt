@@ -1,20 +1,7 @@
 /*
- * Copyright (C) 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * SPDX-FileCopyrightText: 2023 HH Partners
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- * License-Filename: LICENSE
+ * SPDX-License-Identifier: MIT
  */
 
 package org.ossreviewtoolkit.plugins.scanners.dos
@@ -23,6 +10,9 @@ import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
+/**
+ * This is the configuration class for DOS Scanner.
+ */
 internal data class DOSConfig(
     /** The URL where the DOS service is running. */
     val serverUrl: String,
@@ -37,8 +27,7 @@ internal data class DOSConfig(
         /** Name of the configuration property for the polling interval. */
         private const val POLLING_INTERVAL_PROPERTY = "pollInterval"
 
-        private const val DEFAULT_SERVER_URL = "https://default.value.com"
-
+        private const val DEFAULT_SERVER_URL = "https://double-open-server.herokuapp.com/api/"
         private const val DEFAULT_POLLING_INTERVAL = 5
 
         fun create(scannerConfig: ScannerConfiguration): DOSConfig {
@@ -52,6 +41,7 @@ internal data class DOSConfig(
             require(pollInterval >= DEFAULT_POLLING_INTERVAL) {
                 "Polling interval must be >= $DEFAULT_POLLING_INTERVAL, current value is $pollInterval"
             }
+
             return DOSConfig(
                 serverUrl,
                 pollInterval

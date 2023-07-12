@@ -1,26 +1,17 @@
 /*
- * Copyright (C) 2020 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ * SPDX-FileCopyrightText: 2023 HH Partners
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- * SPDX-License-Identifier: Apache-2.0
- * License-Filename: LICENSE
+ * SPDX-License-Identifier: MIT
  */
 
 package org.ossreviewtoolkit.plugins.scanners.dos
 
+import java.io.File
+import java.time.Instant
+
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
@@ -33,8 +24,6 @@ import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
-import java.io.File
-import java.time.Instant
 
 /**
  * DOS scanner is the ORT implementation of a ScanCode-based backend scanner, and it is a part of
@@ -45,27 +34,26 @@ import java.time.Instant
 class DOS internal constructor(
     override val name: String,
     private val scannerConfig: ScannerConfiguration,
-    override val version: String,
-    override val configuration: String
+    private val config: DOSConfig
 ) : PackageScannerWrapper {
     private companion object : Logging
     private val downloaderConfig = DownloaderConfiguration()
 
     class Factory : AbstractScannerWrapperFactory<DOS>("DOS") {
         override fun create(scannerConfig: ScannerConfiguration, downloaderConfig: DownloaderConfiguration) =
-            DOS(type, scannerConfig, "1.0", "")
+            DOS(type, scannerConfig, DOSConfig.create(scannerConfig))
     }
 
     override val details: ScannerDetails
-        get() = ScannerDetails(name, "1.0", "")
-
+        get() = ScannerDetails(name, version, configuration)
     override val criteria: ScannerCriteria? = null
+    override val configuration = ""
+    override val version = "1.0"
 
-    private val service = DOSService.create()
+    private val service = DOSService.create(config.serverUrl)
     private val repository = DOSRepository(service)
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
-
         val startTime = Instant.now()
         val tmpDir = "/tmp/"
         val provenance: Provenance
@@ -124,7 +112,7 @@ class DOS internal constructor(
                 jobState = repository.getJobState(id)
                 logger.info { "Job state: id = $id, state = $jobState" }
                 if (jobState != "completed") {
-                    delay(1000L)
+                    delay(config.pollInterval * 1000L)
                 }
             }
         }

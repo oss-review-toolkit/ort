@@ -1,13 +1,20 @@
+/*
+ * SPDX-FileCopyrightText: 2023 HH Partners
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package org.ossreviewtoolkit.clients.dos
 
 import java.io.File
 
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
+
 import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
 
 /**
- * This implements the data layer of the DOS client.
+ * This class implements the data layer of the DOS client.
  */
 class DOSRepository(private val dosService: DOSService) {
     /**
