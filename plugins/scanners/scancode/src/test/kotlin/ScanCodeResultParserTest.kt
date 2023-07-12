@@ -35,8 +35,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
-import org.ossreviewtoolkit.model.jsonMapper
-import org.ossreviewtoolkit.model.readTree
 import org.ossreviewtoolkit.utils.test.transformingCollectionMatcher
 
 class ScanCodeResultParserTest : FreeSpec({
@@ -44,9 +42,8 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 3.0.2 should" - {
             "get correct counts" {
                 val resultFile = File("src/test/assets/scancode-3.0.2_mime-types-2.1.18.json")
-                val result = resultFile.readTree()
 
-                val summary = generateSummary(result)
+                val summary = parseResult(resultFile).toScanSummary()
 
                 summary.licenseFindings.size shouldBe 4
                 summary.copyrightFindings.size shouldBe 4
@@ -57,9 +54,8 @@ class ScanCodeResultParserTest : FreeSpec({
         "for ScanCode 3.2.1rc2 should" - {
             "properly parse license expressions" {
                 val resultFile = File("src/test/assets/scancode-3.2.1rc2_h2database-1.4.200.json")
-                val result = resultFile.readTree()
 
-                val summary = generateSummary(result)
+                val summary = parseResult(resultFile).toScanSummary()
 
                 summary.licenseFindings should containExactlyInAnyOrder(
                     LicenseFinding(
@@ -81,9 +77,8 @@ class ScanCodeResultParserTest : FreeSpec({
                 "get correct counts" {
                     val filename = "scancode-output-format-$version.0.0_mime-types-2.1.18.json"
                     val resultFile = File("src/test/assets/$filename")
-                    val result = resultFile.readTree()
 
-                    val summary = generateSummary(result)
+                    val summary = parseResult(resultFile).toScanSummary()
 
                     summary.licenseFindings.size shouldBe 5
                     summary.copyrightFindings.size shouldBe 4
@@ -92,12 +87,10 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 "properly summarize license findings" {
                     val resultFile = File("src/test/assets/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
-                    val result = resultFile.readTree()
 
-                    val summary = generateSummary(result)
+                    val summary = parseResult(resultFile).toScanSummary()
 
                     summary should containLicensesExactly("MIT")
-
                     summary should containLocationsForLicenseExactly(
                         "MIT",
                         TextLocation("LICENSE", 1),
@@ -110,9 +103,8 @@ class ScanCodeResultParserTest : FreeSpec({
 
                 "properly summarize copyright findings" {
                     val resultFile = File("src/test/assets/scancode-output-format-$version.0.0_mime-types-2.1.18.json")
-                    val result = resultFile.readTree()
 
-                    val summary = generateSummary(result)
+                    val summary = parseResult(resultFile).toScanSummary()
 
                     summary should containCopyrightsExactly(
                         "Copyright (c) 2014 Jonathan Ong" to
@@ -152,13 +144,13 @@ class ScanCodeResultParserTest : FreeSpec({
                           "end_timestamp": "2022-12-12T065637.770792",
                           "output_format_version": "3.0.0"
                         }
+                      ],
+                      "files": [
                       ]
                     }
                 """.trimIndent()
 
-                val result = jsonMapper.readTree(headers)
-
-                val summary = generateSummary(result)
+                val summary = parseResult(headers).toScanSummary()
 
                 summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldHaveSingleElement Issue(
                     timestamp = Instant.EPOCH,
