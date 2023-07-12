@@ -19,9 +19,9 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spm
 
-import com.fasterxml.jackson.module.kotlin.readValue
-
 import java.io.File
+
+import kotlinx.serialization.json.decodeFromStream
 
 import org.ossreviewtoolkit.analyzer.AbstractPackageManagerFactory
 import org.ossreviewtoolkit.analyzer.PackageManager
@@ -34,7 +34,6 @@ import org.ossreviewtoolkit.model.ProjectAnalyzerResult
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.config.AnalyzerConfiguration
 import org.ossreviewtoolkit.model.config.RepositoryConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.model.orEmpty
 import org.ossreviewtoolkit.model.utils.DependencyGraphBuilder
 import org.ossreviewtoolkit.utils.common.CommandLineTool
@@ -94,7 +93,7 @@ class Spm(
      * This method parses dependencies from the Package.resolved file.
      */
     private fun resolveAppDependencies(definitionFile: File): List<ProjectAnalyzerResult> {
-        val resolved = jsonMapper.readValue<PackageResolved>(definitionFile)
+        val resolved = definitionFile.inputStream().use { json.decodeFromStream<PackageResolved>(it) }
 
         return listOf(
             ProjectAnalyzerResult(
@@ -122,7 +121,7 @@ class Spm(
             "json"
         ).stdout
 
-        val spmOutput = jsonMapper.readValue<SpmDependenciesOutput>(result)
+        val spmOutput = json.decodeFromString<SpmDependenciesOutput>(result)
         val qualifiedScopeName = DependencyGraph.qualifyScope(scopeName = DEPENDENCIES_SCOPE_NAME, project = project)
 
         spmOutput.dependencies.onEach { graphBuilder.addDependency(qualifiedScopeName, it) }

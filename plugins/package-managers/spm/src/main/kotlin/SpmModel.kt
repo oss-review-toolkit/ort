@@ -19,10 +19,11 @@
 
 package org.ossreviewtoolkit.plugins.packagemanagers.spm
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.annotation.JsonProperty
-
 import java.net.URI
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.downloader.VcsHost
@@ -31,6 +32,8 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RemoteArtifact
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.utils.ort.normalizeVcsUrl
+
+val json = Json { ignoreUnknownKeys = true }
 
 abstract class SpmDependency {
     abstract val repositoryUrl: String
@@ -55,7 +58,7 @@ abstract class SpmDependency {
 /**
  * The output of the `spm dependencies` command.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 data class SpmDependenciesOutput(
     val identity: String,
     val name: String,
@@ -65,11 +68,11 @@ data class SpmDependenciesOutput(
     val dependencies: List<LibraryDependency>
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 data class LibraryDependency(
     val name: String,
     val version: String,
-    @JsonProperty("url") override val repositoryUrl: String,
+    @SerialName("url") override val repositoryUrl: String,
     val dependencies: Set<LibraryDependency>
 ) : SpmDependency() {
     override val vcs: VcsInfo
@@ -90,19 +93,19 @@ data class LibraryDependency(
         }
 }
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 data class PackageResolved(
-    @JsonProperty("object") val objects: Map<String, List<AppDependency>>,
+    @SerialName("object") val objects: Map<String, List<AppDependency>>,
     val version: Int
 )
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+@Serializable
 data class AppDependency(
-    @JsonProperty("package") val packageName: String,
+    @SerialName("package") val packageName: String,
     val state: AppDependencyState?,
-    @JsonProperty("repositoryURL") override val repositoryUrl: String
+    @SerialName("repositoryURL") override val repositoryUrl: String
 ) : SpmDependency() {
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @Serializable
     data class AppDependencyState(
         val version: String? = null,
         val revision: String? = null,
