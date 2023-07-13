@@ -248,13 +248,11 @@ data class ScannerRun(
         }
 }
 
-private fun scanResultForProvenanceResolutionIssue(packageProvenance: KnownProvenance?, issue: Issue): ScanResult =
+private fun scanResultForProvenanceResolutionIssue(packageProvenance: KnownProvenance?, issue: Issue) =
     ScanResult(
-        packageProvenance ?: UnknownProvenance,
+        provenance = packageProvenance ?: UnknownProvenance,
         scanner = ScannerDetails(name = "ProvenanceResolver", version = "", configuration = ""),
-        summary = ScanSummary.EMPTY.copy(
-            issues = listOf(issue)
-        )
+        summary = ScanSummary.EMPTY.copy(issues = listOf(issue))
     )
 
 private fun ScanSummary.addIssue(issue: Issue?): ScanSummary =
