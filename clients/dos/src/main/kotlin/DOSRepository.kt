@@ -22,9 +22,21 @@ class DOSRepository(private val dosService: DOSService) {
      */
     suspend fun getPresignedUrl(key: String?): String? {
         val requestBody = DOSService.PresignedUrlRequestBody(key)
-        val response = dosService.getPresignedUrl(requestBody).presignedUrl
+        val response = dosService.getPresignedUrl(requestBody)
+        val presignedUrl = response.presignedUrl
 
-        return response
+        if (key == null) {
+            logger.error { "Need the name of the zipped packet to upload" }
+            return null
+        }
+
+        return if (!response.success) {
+            logger.error { "Failed to get presigned URL from S3: ${response.message}" }
+            null
+        } else {
+            logger.info { "Presigned URL from API: $presignedUrl" }
+            presignedUrl
+        }
     }
 
     /**
@@ -35,12 +47,12 @@ class DOSRepository(private val dosService: DOSService) {
         val requestBody = file.readBytes().toRequestBody("application/zip".toMediaType())
         val response = dosService.putS3File(presignedUrl, requestBody)
 
-        if (!response.isSuccessful) {
+        return if (!response.isSuccessful) {
             logger.error { "Failed to upload packet to S3: ${response.message()}" }
-            return false
+            false
         } else {
-            logger.info { "Packet successfully uploaded to S3!" }
-            return true
+            logger.info { "Packet successfully uploaded to S3" }
+            true
         }
     }
 

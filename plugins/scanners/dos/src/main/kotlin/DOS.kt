@@ -82,7 +82,6 @@ class DOS internal constructor(
 
             // Request presigned URL from DOS API
             val presignedUrl = repository.getPresignedUrl(zipName)
-            logger.info { "Presigned URL from API: $presignedUrl" }
 
             // Transfer the zipped packet to S3 Object Storage
             presignedUrl?.let {
