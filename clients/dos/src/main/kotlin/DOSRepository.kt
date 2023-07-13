@@ -20,22 +20,20 @@ class DOSRepository(private val dosService: DOSService) {
     /**
      * Get S3 presigned URL from DOS API to upload a package for scanning.
      */
-    suspend fun getPresignedUrl(key: String?): String? {
-        val requestBody = DOSService.PresignedUrlRequestBody(key)
-        val response = dosService.getPresignedUrl(requestBody)
-        val presignedUrl = response.presignedUrl
-
-        if (key == null) {
+    suspend fun getPresignedUrl(key: String): String? {
+        if (key.isEmpty()) {
             logger.error { "Need the name of the zipped packet to upload" }
             return null
         }
+        val requestBody = DOSService.PresignedUrlRequestBody(key)
+        val response = dosService.getPresignedUrl(requestBody)
 
         return if (!response.success) {
             logger.error { "Failed to get presigned URL from S3: ${response.message}" }
             null
         } else {
-            logger.info { "Presigned URL from API: $presignedUrl" }
-            presignedUrl
+            logger.info { "Presigned URL from API: $response.presignedUrl" }
+            response.presignedUrl
         }
     }
 
@@ -60,12 +58,21 @@ class DOSRepository(private val dosService: DOSService) {
      * Request earlier scan results from DOS API, using Package URL for
      * identifying the package.
      */
-    suspend fun getScanResults(purl: String?): String? {
+    suspend fun getScanResults(purl: String): String? {
+        if (purl.isEmpty()) {
+            logger.error { "Need the package URL to check for scan results" }
+            return null
+        }
         val requestBody = DOSService.ScanResultsRequestBody(purl)
-        val response = dosService.getScanResults(requestBody).results
+        val response = dosService.getScanResults(requestBody)
 
-        logger.info { "Scan results from API: $response" }
-        return response
+        return if (response.results.isNullOrBlank()) {
+            logger.info { "No earlier scan results for package URL: $purl" }
+            null
+        } else {
+            logger.info { "Scan results from API: ${response.results}" }
+            response.results
+        }
     }
 
     /**

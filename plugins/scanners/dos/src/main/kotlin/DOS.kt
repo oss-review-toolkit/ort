@@ -70,9 +70,7 @@ class DOS internal constructor(
 
             // Ask for scan results from DOS/API
             // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
-            logger.info { "Package URL: ${pkg.purl}" }
-            val scanResults = repository.getScanResults(pkg.purl)
-            logger.info { "Earlier scan results for this package: $scanResults" }
+            repository.getScanResults(pkg.purl)
 
             // Zip the packet to scan
             val zipName = dosDir.name + ".zip"
