@@ -62,12 +62,12 @@ interface DOSService {
     }
 
     @Serializable
-    data class PresignedUrlRequestBody(
+    data class UploadUrlRequestBody(
         val key: String? = null
     )
 
     @Serializable
-    data class PresignedUrlResponseBody(
+    data class UploadUrlResponseBody(
         val success: Boolean,
         val presignedUrl: String? = null,
         val message: String? = null
@@ -94,7 +94,7 @@ interface DOSService {
     )
 
     @Serializable
-    data class ScanRequestBody(
+    data class JobRequestBody(
         val directory: String? = null
     )
 
@@ -104,7 +104,7 @@ interface DOSService {
         val createdAt: String? = null
     )
     @Serializable
-    data class ScanResponseBody(
+    data class JobResponseBody(
         val scannerJob: ScannerJob,
         val message: String?
     )
@@ -118,16 +118,16 @@ interface DOSService {
     suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
 
     @POST("upload-url")
-    suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): Response<PresignedUrlResponseBody>
+    suspend fun postUploadUrl(@Body body: UploadUrlRequestBody): Response<UploadUrlResponseBody>
 
     @POST("scan-results")
-    suspend fun getScanResults(@Body body: ScanResultsRequestBody): Response<ScanResultsResponseBody>
+    suspend fun postScanResults(@Body body: ScanResultsRequestBody): Response<ScanResultsResponseBody>
 
     @POST("package")
-    suspend fun getScanFolder(@Body body: PackageRequestBody): Response<PackageResponseBody>
+    suspend fun postPackage(@Body body: PackageRequestBody): Response<PackageResponseBody>
 
     @POST("job")
-    suspend fun postScanJob(@Body body: ScanRequestBody): Response<ScanResponseBody>
+    suspend fun postJob(@Body body: JobRequestBody): Response<JobResponseBody>
 
     @GET("job-state/{id}")
     suspend fun getJobState(@Path("id") id: String): Response<JobStateResponseBody>

@@ -20,7 +20,6 @@ import org.ossreviewtoolkit.model.LicenseFinding
 import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.TextLocation
 
-
 internal fun generateSummary(startTime: Instant, endTime: Instant, jsonString: String): ScanSummary {
     val mapper = ObjectMapper()
     val result: JsonNode = mapper.readTree(jsonString)

@@ -77,39 +77,46 @@ class DOS internal constructor(
                 dosDir.packZip(targetZipFile)
 
                 // Request presigned URL from DOS API
-                val presignedUrl = repository.getPresignedUrl(zipName)
+                val presignedUrl = repository.getPresignedUrl(zipName) ?: return@runBlocking
 
-                // Transfer the zipped packet to S3 Object Storage
-                presignedUrl?.let {
-                    val uploadSuccessful = repository.uploadFile(it, tmpDir + zipName)
-
-                    // If upload to S3 was successful, do local cleanup
-                    if (uploadSuccessful) {
-                        deleteFileOrDir(dosDir)
-                    }
+                // Transfer the zipped packet to S3 Object Storage and do local cleanup
+                //presignedUrl.let {
+                val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
+                if (uploadSuccessful) {
+                    deleteFileOrDir(dosDir)
+                } else {
+                    deleteFileOrDir(dosDir)
+                    return@runBlocking
                 }
+                //}
 
                 // Notify DOS API about the new zipped file at S3, and get the unzipped folder
                 // name as a return
                 logger.info { "Zipped file at S3: $zipName" }
                 val scanFolder = repository.getScanFolder(zipName)
-                deleteFileOrDir(targetZipFile)
+                if (scanFolder != null) {
+                    deleteFileOrDir(targetZipFile)
+                } else {
+                    deleteFileOrDir(targetZipFile)
+                    return@runBlocking
+                }
 
                 // Send the scan job to DOS API to start the backend scanning
-                val response = scanFolder?.let { repository.postScanJob(it) }
-                val id = response?.scannerJob?.id
-                if (response != null) {
-                    logger.info { "Response to scan request: id = $id, message = ${response.message}" }
+                val jobResponse = repository.postScanJob(scanFolder)
+                val id = jobResponse?.scannerJob?.id
+                if (jobResponse != null) {
+                    logger.info { "Response to scan request: id = $id, message = ${jobResponse.message}" }
+                } else {
+                    return@runBlocking
                 }
 
                 // Poll the job state periodically and log
-                var jobState = ""
-                while (jobState != "completed") {
-                    jobState = id?.let { repository.getJobState(it) }.toString()
-                    logger.info {
-                        "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState"
-                    }
-                    if (jobState != "completed") {
+                while (true) {
+                    val jobState = id?.let { repository.getJobState(it) }
+                    logger.info { "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
+                    if (jobState == "completed") {
+                        break
+                    } else {
                         delay(config.pollInterval * 1000L)
                     }
                 }
@@ -121,35 +128,36 @@ class DOS internal constructor(
         val thisScanEndTime = Instant.now()
 
         // Convert results to ORT form
+        val jsonString = "{\n" +
+                "    \"results\": {\n" +
+                "        \"licenses\": [\n" +
+                "            {\n" +
+                "                \"license\": \"license\",\n" +
+                "                \"location\": {\n" +
+                "                    \"path\": \"path/to/file\",\n" +
+                "                    \"start_line\": 1,\n" +
+                "                    \"end_line\": 1\n" +
+                "                },\n" +
+                "                \"score\": 100.0\n" +
+                "            }\n" +
+                "        ],\n" +
+                "        \"copyrights\": [\n" +
+                "            {\n" +
+                "                \"statement\": \"statement\",\n" +
+                "                \"location\": {\n" +
+                "                    \"path\": \"path/to/file\",\n" +
+                "                    \"start_line\": 1,\n" +
+                "                    \"end_line\": 1\n" +
+                "                }\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    } \n" +
+                "}"
 
         val summary = generateSummary(
             thisScanStartTime,
             thisScanEndTime,
-            "{\n" +
-                    "    \"results\": {\n" +
-                    "        \"licenses\": [\n" +
-                    "            {\n" +
-                    "                \"license\": \"license\",\n" +
-                    "                \"location\": {\n" +
-                    "                    \"path\": \"path/to/file\",\n" +
-                    "                    \"start_line\": 1,\n" +
-                    "                    \"end_line\": 1\n" +
-                    "                },\n" +
-                    "                \"score\": 100.0\n" +
-                    "            }\n" +
-                    "        ],\n" +
-                    "        \"copyrights\": [\n" +
-                    "            {\n" +
-                    "                \"statement\": \"statement\",\n" +
-                    "                \"location\": {\n" +
-                    "                    \"path\": \"path/to/file\",\n" +
-                    "                    \"start_line\": 1,\n" +
-                    "                    \"end_line\": 1\n" +
-                    "                }\n" +
-                    "            }\n" +
-                    "        ]\n" +
-                    "    } \n" +
-                    "}"
+            jsonString
         )
 
         return ScanResult(

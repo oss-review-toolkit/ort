@@ -18,15 +18,16 @@ import org.ossreviewtoolkit.clients.dos.DOSService.Companion.logger
  */
 class DOSRepository(private val dosService: DOSService) {
     /**
-     * Get S3 presigned URL from DOS API to upload a package for scanning.
+     * Request a presigned URL from DOS API to upload a package to S3 Object Storage for scanning.
+     * Response: the URL string or null if the request didn't succeed.
      */
     suspend fun getPresignedUrl(key: String): String? {
         if (key.isEmpty()) {
             logger.error { "Need the name of the zipped packet to upload" }
             return null
         }
-        val requestBody = DOSService.PresignedUrlRequestBody(key)
-        val response = dosService.getPresignedUrl(requestBody)
+        val requestBody = DOSService.UploadUrlRequestBody(key)
+        val response = dosService.postUploadUrl(requestBody)
 
         return if (response.isSuccessful) {
             if (response.body()?.success == true) {
@@ -44,6 +45,7 @@ class DOSRepository(private val dosService: DOSService) {
 
     /**
      * Upload a file to S3, using presigned URL.
+     * Response: true/false indication of the success of operation.
      */
     suspend fun uploadFile(presignedUrl: String, filePath: String): Boolean {
         val file = File(filePath)
@@ -62,6 +64,11 @@ class DOSRepository(private val dosService: DOSService) {
     /**
      * Request earlier scan results from DOS API, using Package URL for
      * identifying the package.
+     * Response:
+     * - if earlier results are found, return them in a JSON String
+     * - if no earlier results found, but the package is currently
+     *   being scanned, return "pending" message
+     * - otherwise, return "null"
      */
     suspend fun getScanResults(purl: String): String? {
         if (purl.isEmpty()) {
@@ -69,7 +76,7 @@ class DOSRepository(private val dosService: DOSService) {
             return null
         }
         val requestBody = DOSService.ScanResultsRequestBody(purl)
-        val response = dosService.getScanResults(requestBody)
+        val response = dosService.postScanResults(requestBody)
 
         return if (response.isSuccessful) {
             if (response.body()?.results.isNullOrBlank()) {
@@ -86,8 +93,8 @@ class DOSRepository(private val dosService: DOSService) {
     }
 
     /**
-     * Send info to API about a new zipped package awaiting in S3 to scan.
-     * Response: (unzipped) folder name at S3.
+     * Send a notification to DOS API about a new zipped package awaiting in S3 to scan.
+     * Response: (unzipped) folder name at S3, which will be used as the target for a new scan.
      */
     suspend fun getScanFolder(zipFile: String): String? {
         if (zipFile.isEmpty()) {
@@ -95,7 +102,7 @@ class DOSRepository(private val dosService: DOSService) {
             return null
         }
         val requestBody = DOSService.PackageRequestBody(zipFile)
-        val response = dosService.getScanFolder(requestBody)
+        val response = dosService.postPackage(requestBody)
 
         return if (response.isSuccessful) {
             if (response.body()?.folderName.isNullOrBlank()) {
@@ -111,13 +118,16 @@ class DOSRepository(private val dosService: DOSService) {
         }
     }
 
-    suspend fun postScanJob(scanFolder: String): DOSService.ScanResponseBody? {
+    /**
+     * Post a new scan job to DOS API, to initiate a scan of [scanFolder] directory in S3.
+     */
+    suspend fun postScanJob(scanFolder: String): DOSService.JobResponseBody? {
         if (scanFolder.isEmpty()) {
             logger.error { "Empty folder given for scan request" }
             return null
         }
-        val requestBody = DOSService.ScanRequestBody(scanFolder)
-        val response = dosService.postScanJob(requestBody)
+        val requestBody = DOSService.JobRequestBody(scanFolder)
+        val response = dosService.postJob(requestBody)
 
         return if (response.isSuccessful) {
             response.body()
@@ -127,6 +137,10 @@ class DOSRepository(private val dosService: DOSService) {
         }
     }
 
+    /**
+     * Request job status from DOS API.
+     * Response: waiting / active / completed / failed.
+     */
     suspend fun getJobState(id: String): String? {
         val response = dosService.getJobState(id)
 
@@ -136,6 +150,5 @@ class DOSRepository(private val dosService: DOSService) {
             logger.error { "$response" }
             null
         }
-
     }
 }
