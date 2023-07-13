@@ -178,18 +178,14 @@ data class ScannerRun(
     /**
      * Return all scan results related to [id] with the internal sub-repository scan results merged into the root
      * repository scan results. ScanResults for different scanners are not merged, so that the output contains exactly
-     * one scan result per scanner.
+     * one scan result per scanner. In case of any provenance resolution issue, a fake scan result just containing the
+     * issue is returned.
      */
     private fun getMergedResultsForId(id: Identifier): List<ScanResult> {
-        // Algorithm:
-        // 1. If package provenance could not be resolved, create a scan result with the resolution issue.
-        // 2. If nested provenance could not be resolved, take the scan results for the package provenance and each
-        //    scanner and add the resolution issue.
-        // 3. Else, merge the scan results for each scanner based on the nested provenance of the package.
-        val resolutionResult = provenancesById.getValue(id)
-
-        resolutionResult.packageProvenanceResolutionIssue?.let {
-            return listOf(scanResultForProvenanceResolutionIssue(resolutionResult.packageProvenance, it))
+        val resolutionResult = provenancesById.getValue(id).apply {
+            if (issues.isNotEmpty()) {
+                return listOf(scanResultForProvenanceResolutionIssues(packageProvenance, issues))
+            }
         }
 
         val packageProvenance = resolutionResult.packageProvenance!!
@@ -199,18 +195,13 @@ data class ScannerRun(
         }
 
         // TODO: Handle the case of incomplete scan results (per scanner), e.g. propagate an issue.
-        val scanResults = mergeScanResultsByScanner(scanResultsByPath, packageProvenance).map { scanResult ->
+        return mergeScanResultsByScanner(scanResultsByPath, packageProvenance).map { scanResult ->
             scanResult.filterByPath(packageProvenance.vcsPath).filterByIgnorePatterns(config.ignorePatterns)
         }.map { scanResult ->
             // The VCS revision of scan result is equal to the resolved revision. So, use the package provenance
             // to re-align the VCS revision with the package's metadata.
             scanResult.copy(summary = scanResult.summary.addIssue(resolutionResult.nestedProvenanceResolutionIssue))
         }
-
-        return scanResults.takeIf { it.isNotEmpty() }
-            ?: resolutionResult.nestedProvenanceResolutionIssue?.let { issue ->
-                listOf(scanResultForProvenanceResolutionIssue(packageProvenance, issue))
-            }.orEmpty()
     }
 
     private fun getMergedFileListForId(id: Identifier): FileList? {
@@ -248,12 +239,14 @@ data class ScannerRun(
         }
 }
 
-private fun scanResultForProvenanceResolutionIssue(packageProvenance: KnownProvenance?, issue: Issue) =
-    ScanResult(
-        provenance = packageProvenance ?: UnknownProvenance,
-        scanner = ScannerDetails(name = "ProvenanceResolver", version = "", configuration = ""),
-        summary = ScanSummary.EMPTY.copy(issues = listOf(issue))
-    )
+private fun scanResultForProvenanceResolutionIssues(
+    packageProvenance: KnownProvenance?,
+    issues: List<Issue>
+) = ScanResult(
+    provenance = packageProvenance ?: UnknownProvenance,
+    scanner = ScannerDetails(name = "ProvenanceResolver", version = "", configuration = ""),
+    summary = ScanSummary.EMPTY.copy(issues = issues)
+)
 
 private fun ScanSummary.addIssue(issue: Issue?): ScanSummary =
     if (issue == null) this else copy(issues = (issues + issue).distinct())
@@ -288,3 +281,6 @@ private fun FileList.filterByVcsPath(path: String): FileList {
 
     return FileList(provenance, files)
 }
+
+val ProvenanceResolutionResult.issues: List<Issue>
+    get() = listOfNotNull(packageProvenanceResolutionIssue, nestedProvenanceResolutionIssue)
