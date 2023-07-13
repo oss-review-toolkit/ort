@@ -24,6 +24,8 @@ import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.nio.file.Files
+import java.time.Duration
+import java.time.Instant
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 
@@ -53,6 +55,9 @@ fun File.packZip(zipFile: File) {
     }
 }
 
+/**
+ * Delete a file or folder from the local file system.
+ */
 fun deleteFileOrDir(file: File) {
     if (file.isFile) {
         try {
@@ -69,4 +74,17 @@ fun deleteFileOrDir(file: File) {
             e.printStackTrace()
         }
     }
+}
+
+/**
+ * Elapsed time for a scanjob.
+ */
+fun elapsedTime(startTime: Instant): String {
+    val currentTime = Instant.now()
+    val duration = Duration.between(startTime, currentTime)
+    val hours = duration.toHours()
+    val minutes = duration.toMinutesPart()
+    val seconds = duration.toSecondsPart()
+
+    return String.format("%02d:%02d:%02d", hours, minutes, seconds)
 }

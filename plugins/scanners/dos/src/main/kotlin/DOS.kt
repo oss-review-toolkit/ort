@@ -13,10 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.Logging
-import org.ossreviewtoolkit.clients.dos.DOSRepository
-import org.ossreviewtoolkit.clients.dos.DOSService
-import org.ossreviewtoolkit.clients.dos.deleteFileOrDir
-import org.ossreviewtoolkit.clients.dos.packZip
+import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
@@ -52,9 +49,10 @@ class DOS internal constructor(
 
     private val service = DOSService.create(config.serverUrl)
     private val repository = DOSRepository(service)
+    private val totalScanStartTime = Instant.now()
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
-        val startTime = Instant.now()
+        val thisScanStartTime = Instant.now()
         val tmpDir = "/tmp/"
         val provenance: Provenance
 
@@ -108,7 +106,9 @@ class DOS internal constructor(
                 var jobState = ""
                 while (jobState != "completed") {
                     jobState = id?.let { repository.getJobState(it) }.toString()
-                    logger.info { "Job state: id = $id, state = $jobState" }
+                    logger.info {
+                        "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState"
+                    }
                     if (jobState != "completed") {
                         delay(config.pollInterval * 1000L)
                     }
@@ -118,13 +118,13 @@ class DOS internal constructor(
 
         // Get the results back as a JSON string
 
-        val endTime = Instant.now()
+        val thisScanEndTime = Instant.now()
 
         // Convert results to ORT form
 
         val summary = generateSummary(
-            startTime,
-            endTime,
+            thisScanStartTime,
+            thisScanEndTime,
             "{\n" +
                     "    \"results\": {\n" +
                     "        \"licenses\": [\n" +
