@@ -167,15 +167,13 @@ private fun getSpdxLicenseId(license: JsonNode): String {
     val idFromSpdxKey = license["spdx_license_key"].textValueOrEmpty().toSpdxId(allowPlusSuffix = true)
 
     // For regular SPDX IDs, return early here.
-    if (idFromSpdxKey.isNotEmpty() && !idFromSpdxKey.startsWith(LICENSE_REF_PREFIX)) return idFromSpdxKey
+    if (idFromSpdxKey.isNotEmpty()) return idFromSpdxKey
 
-    return idFromSpdxKey.takeUnless { it.isEmpty() } ?: run {
-        // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
-        // on the ScanCode-specific "key".
-        val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
+    // At this point the ID is either empty or a non-ScanCode SPDX LicenseRef, so fall back to building an ID based
+    // on the ScanCode-specific "key".
+    val idFromKey = license["key"].textValue().toSpdxId(allowPlusSuffix = true)
 
-        "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
-    }
+    return "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
 }
 
 /**
