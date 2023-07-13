@@ -111,24 +111,24 @@ interface DOSService {
 
     @Serializable
     data class JobStateResponseBody(
-        val state: String
+        val state: String? = null
     )
 
     @PUT
     suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
 
     @POST("upload-url")
-    suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): PresignedUrlResponseBody
+    suspend fun getPresignedUrl(@Body body: PresignedUrlRequestBody): Response<PresignedUrlResponseBody>
 
     @POST("scan-results")
-    suspend fun getScanResults(@Body body: ScanResultsRequestBody): ScanResultsResponseBody
+    suspend fun getScanResults(@Body body: ScanResultsRequestBody): Response<ScanResultsResponseBody>
 
     @POST("package")
-    suspend fun getScanFolder(@Body body: PackageRequestBody): PackageResponseBody
+    suspend fun getScanFolder(@Body body: PackageRequestBody): Response<PackageResponseBody>
 
     @POST("job")
-    suspend fun postScanJob(@Body body: ScanRequestBody): ScanResponseBody
+    suspend fun postScanJob(@Body body: ScanRequestBody): Response<ScanResponseBody>
 
     @GET("job-state/{id}")
-    suspend fun getJobState(@Path("id") id: String): JobStateResponseBody
+    suspend fun getJobState(@Path("id") id: String): Response<JobStateResponseBody>
 }

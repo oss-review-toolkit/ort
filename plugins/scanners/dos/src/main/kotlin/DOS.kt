@@ -70,46 +70,48 @@ class DOS internal constructor(
 
             // Ask for scan results from DOS/API
             // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
-            repository.getScanResults(pkg.purl)
+            val results = repository.getScanResults(pkg.purl)
 
-            // Zip the packet to scan
-            val zipName = dosDir.name + ".zip"
-            val targetZipFile = File("$tmpDir$zipName")
-            dosDir.packZip(targetZipFile)
-            logger.info { "Zipped packet: $zipName" }
+            if (results == null) {
+                // Zip the packet to scan
+                val zipName = dosDir.name + ".zip"
+                val targetZipFile = File("$tmpDir$zipName")
+                dosDir.packZip(targetZipFile)
 
-            // Request presigned URL from DOS API
-            val presignedUrl = repository.getPresignedUrl(zipName)
+                // Request presigned URL from DOS API
+                val presignedUrl = repository.getPresignedUrl(zipName)
 
-            // Transfer the zipped packet to S3 Object Storage
-            presignedUrl?.let {
-                val uploadSuccessful = repository.uploadFile(it, tmpDir + zipName)
+                // Transfer the zipped packet to S3 Object Storage
+                presignedUrl?.let {
+                    val uploadSuccessful = repository.uploadFile(it, tmpDir + zipName)
 
-                // If upload to S3 was successful, do local cleanup
-                if (uploadSuccessful) {
-                    deleteFileOrDir(dosDir)
+                    // If upload to S3 was successful, do local cleanup
+                    if (uploadSuccessful) {
+                        deleteFileOrDir(dosDir)
+                    }
                 }
-            }
 
-            // Notify DOS API about the new zipped file at S3, and get the unzipped folder
-            // name as a return
-            logger.info { "Zipped file at S3: $zipName" }
-            val scanFolder = repository.getScanFolder(zipName)
-            logger.info { "S3 folder to scan: $scanFolder" }
-            deleteFileOrDir(targetZipFile)
+                // Notify DOS API about the new zipped file at S3, and get the unzipped folder
+                // name as a return
+                logger.info { "Zipped file at S3: $zipName" }
+                val scanFolder = repository.getScanFolder(zipName)
+                deleteFileOrDir(targetZipFile)
 
-            // Send the scan job to DOS API to start the backend scanning
-            val response = repository.postScanJob(scanFolder)
-            val id = response.scannerJob.id
-            logger.info { "Response to scan request: id = $id, message = ${response.message}" }
+                // Send the scan job to DOS API to start the backend scanning
+                val response = scanFolder?.let { repository.postScanJob(it) }
+                val id = response?.scannerJob?.id
+                if (response != null) {
+                    logger.info { "Response to scan request: id = $id, message = ${response.message}" }
+                }
 
-            // Poll the job state periodically and log
-            var jobState = ""
-            while (jobState != "completed") {
-                jobState = repository.getJobState(id)
-                logger.info { "Job state: id = $id, state = $jobState" }
-                if (jobState != "completed") {
-                    delay(config.pollInterval * 1000L)
+                // Poll the job state periodically and log
+                var jobState = ""
+                while (jobState != "completed") {
+                    jobState = id?.let { repository.getJobState(it) }.toString()
+                    logger.info { "Job state: id = $id, state = $jobState" }
+                    if (jobState != "completed") {
+                        delay(config.pollInterval * 1000L)
+                    }
                 }
             }
         }
