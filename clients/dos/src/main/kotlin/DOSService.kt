@@ -85,23 +85,27 @@ interface DOSService {
 
     @Serializable
     data class PackageRequestBody(
-        val zipFileKey: String? = null
+        val zipFileKey: String? = null,
+        val purl: String? = null
     )
 
     @Serializable
     data class PackageResponseBody(
-        val folderName: String? = null
+        val folderName: String? = null,
+        val packageId: Int = 0
     )
 
     @Serializable
     data class JobRequestBody(
-        val directory: String? = null
+        val directory: String? = null,
+        val packageId: Int = 0
     )
 
     @Serializable
     data class ScannerJob(
         val id: String,
-        val createdAt: String? = null
+        val createdAt: String? = null,
+        val packageId: Int = 0
     )
     @Serializable
     data class JobResponseBody(

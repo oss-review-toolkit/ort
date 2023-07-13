@@ -93,8 +93,8 @@ class DOS internal constructor(
                 // Notify DOS API about the new zipped file at S3, and get the unzipped folder
                 // name as a return
                 logger.info { "Zipped file at S3: $zipName" }
-                val scanFolder = repository.getScanFolder(zipName)
-                if (scanFolder != null) {
+                val packageResponse = repository.getScanFolder(zipName, pkg.purl)
+                if (packageResponse != null) {
                     deleteFileOrDir(targetZipFile)
                 } else {
                     deleteFileOrDir(targetZipFile)
@@ -102,7 +102,7 @@ class DOS internal constructor(
                 }
 
                 // Send the scan job to DOS API to start the backend scanning
-                val jobResponse = repository.postScanJob(scanFolder)
+                val jobResponse = packageResponse.folderName?.let { repository.postScanJob(it, packageResponse.packageId) }
                 val id = jobResponse?.scannerJob?.id
                 if (jobResponse != null) {
                     logger.info { "Response to scan request: id = $id, message = ${jobResponse.message}" }

@@ -96,12 +96,12 @@ class DOSRepository(private val dosService: DOSService) {
      * Send a notification to DOS API about a new zipped package awaiting in S3 to scan.
      * Response: (unzipped) folder name at S3, which will be used as the target for a new scan.
      */
-    suspend fun getScanFolder(zipFile: String): String? {
+    suspend fun getScanFolder(zipFile: String, purl: String): DOSService.PackageResponseBody? {
         if (zipFile.isEmpty()) {
             logger.error { "Need the name of the zipped file awaiting in S3" }
             return null
         }
-        val requestBody = DOSService.PackageRequestBody(zipFile)
+        val requestBody = DOSService.PackageRequestBody(zipFile, purl)
         val response = dosService.postPackage(requestBody)
 
         return if (response.isSuccessful) {
@@ -110,7 +110,7 @@ class DOSRepository(private val dosService: DOSService) {
                 null
             } else {
                 logger.info { "Folder to scan at S3: ${response.body()?.folderName}" }
-                response.body()?.folderName
+                response.body()
             }
         } else {
             logger.error { "$response" }
@@ -121,12 +121,12 @@ class DOSRepository(private val dosService: DOSService) {
     /**
      * Post a new scan job to DOS API, to initiate a scan of [scanFolder] directory in S3.
      */
-    suspend fun postScanJob(scanFolder: String): DOSService.JobResponseBody? {
+    suspend fun postScanJob(scanFolder: String, packageId: Int): DOSService.JobResponseBody? {
         if (scanFolder.isEmpty()) {
             logger.error { "Empty folder given for scan request" }
             return null
         }
-        val requestBody = DOSService.JobRequestBody(scanFolder)
+        val requestBody = DOSService.JobRequestBody(scanFolder, packageId)
         val response = dosService.postJob(requestBody)
 
         return if (response.isSuccessful) {
