@@ -173,7 +173,7 @@ class ScanCode internal constructor(
 
         val issues = summary.issues.toMutableList()
 
-        mapUnknownIssues(issues)
+        mapUnknownErrors(issues)
         mapTimeoutErrors(issues)
 
         return summary.copy(issues = issues)

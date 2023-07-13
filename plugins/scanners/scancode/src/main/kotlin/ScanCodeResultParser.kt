@@ -100,7 +100,7 @@ internal fun generateSummary(result: JsonNode, parseExpressions: Boolean = true)
         endTime = endTime,
         licenseFindings = getLicenseFindings(result, parseExpressions),
         copyrightFindings = getCopyrightFindings(result),
-        issues = issues + getIssues(result)
+        issues = issues + mapScanErrors(result)
     )
 }
 
@@ -207,9 +207,9 @@ private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
 }
 
 /**
- * Get the list of [Issue]s for scanned files.
+ * Map scan errors for all files using messages that contain the relative file path.
  */
-private fun getIssues(result: JsonNode): List<Issue> {
+private fun mapScanErrors(result: JsonNode): List<Issue> {
     val input = getInputPath(result)
     return result["files"]?.flatMap { file ->
         val path = file["path"].textValue().removePrefix(input)
@@ -251,10 +251,10 @@ internal fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
 }
 
 /**
- * Map messages about unknown issues to a more compact form. Return true if solely memory errors occurred, return false
+ * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return false
  * otherwise.
  */
-internal fun mapUnknownIssues(issues: MutableList<Issue>): Boolean {
+internal fun mapUnknownErrors(issues: MutableList<Issue>): Boolean {
     if (issues.isEmpty()) return false
 
     var onlyMemoryErrors = true
