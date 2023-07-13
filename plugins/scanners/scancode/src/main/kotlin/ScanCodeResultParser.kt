@@ -32,6 +32,7 @@ import org.ossreviewtoolkit.model.ScanSummary
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.createAndLogIssue
+import org.ossreviewtoolkit.model.mapLicense
 import org.ossreviewtoolkit.model.utils.associateLicensesWithExceptions
 import org.ossreviewtoolkit.utils.common.textValueOrEmpty
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
@@ -49,11 +50,6 @@ private data class LicenseMatch(
     val startLine: Int,
     val endLine: Int,
     val score: Float
-)
-
-internal data class LicenseKeyReplacement(
-    val scanCodeLicenseKey: String,
-    val spdxExpression: String
 )
 
 private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.lowercase()}-"
@@ -139,10 +135,10 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Set
                 )
             },
             valueTransform = {
-                LicenseKeyReplacement(it["key"].textValue(), getSpdxLicenseId(it))
+                it["key"].textValue() to getSpdxLicenseId(it)
             }
         ).map { (licenseMatch, replacements) ->
-            val spdxLicenseExpression = replaceLicenseKeys(licenseMatch.expression, replacements)
+            val spdxLicenseExpression = licenseMatch.expression.mapLicense(replacements.toMap())
 
             LicenseFinding(
                 license = spdxLicenseExpression,
@@ -175,19 +171,6 @@ private fun getSpdxLicenseId(license: JsonNode): String {
 
     return "$LICENSE_REF_PREFIX_SCAN_CODE$idFromKey"
 }
-
-/**
- * Return the given [licenseExpression] with all ScanCode license keys replaced with SPDX license IDs as specified by
- * [replacements].
- */
-internal fun replaceLicenseKeys(licenseExpression: String, replacements: Collection<LicenseKeyReplacement>): String =
-    replacements.fold(licenseExpression) { expression, replacement ->
-        val regex = "(^| |\\()(${replacement.scanCodeLicenseKey})($| |\\))".toRegex()
-
-        regex.replace(expression) {
-            "${it.groupValues[1]}${replacement.spdxExpression}${it.groupValues[3]}"
-        }
-    }
 
 /**
  * Get the copyright findings from the given [result].

@@ -193,57 +193,6 @@ class ScanCodeResultParserTest : FreeSpec({
             }
         }
     }
-
-    "replaceLicenseKeys() should" - {
-        "properly handle redundant replacements" {
-            val expression = "public-domain"
-            val replacements = listOf(
-                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain"),
-                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain")
-            )
-
-            val result = replaceLicenseKeys(expression, replacements)
-
-            result shouldBe "LicenseRef-scancode-public-domain"
-        }
-
-        "properly replace the same license multiple times" {
-            val expression = "gpl-2.0 AND (gpl-2.0 OR gpl-2.0-plus)"
-            val replacements = listOf(
-                LicenseKeyReplacement("gpl-2.0", "GPL-2.0-only"),
-                LicenseKeyReplacement("gpl-2.0-plus", "GPL-2.0-or-later")
-            )
-
-            val result = replaceLicenseKeys(expression, replacements)
-
-            result shouldBe "GPL-2.0-only AND (GPL-2.0-only OR GPL-2.0-or-later)"
-        }
-
-        "properly handle replacements with a license key being a suffix of another" {
-            val expression = "agpl-3.0-openssl"
-            val replacements = listOf(
-                LicenseKeyReplacement("agpl-3.0-openssl", "LicenseRef-scancode-agpl-3.0-openssl"),
-                LicenseKeyReplacement("openssl", "LicenseRef-scancode-openssl")
-            )
-
-            val result = replaceLicenseKeys(expression, replacements)
-
-            result shouldBe "LicenseRef-scancode-agpl-3.0-openssl"
-        }
-
-        "properly handle braces" {
-            val expression = "((public-domain AND openssl) OR mit)"
-            val replacements = listOf(
-                LicenseKeyReplacement("public-domain", "LicenseRef-scancode-public-domain"),
-                LicenseKeyReplacement("openssl", "LicenseRef-scancode-openssl"),
-                LicenseKeyReplacement("mit", "MIT")
-            )
-
-            val result = replaceLicenseKeys(expression, replacements)
-
-            result shouldBe "((LicenseRef-scancode-public-domain AND LicenseRef-scancode-openssl) OR MIT)"
-        }
-    }
 })
 
 private fun containLicensesExactly(vararg licenses: String): Matcher<ScanSummary?> =

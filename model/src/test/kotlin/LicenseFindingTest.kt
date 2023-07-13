@@ -119,5 +119,29 @@ class LicenseFindingTest : WordSpec({
             "AGPL-1.0-or-later OR BSD (3-Clause) OR BSD (2-Clause)".mapLicense(mapping) shouldBe
                     "AGPL-1.0-or-later OR BSD-3-Clause OR BSD-2-Clause"
         }
+
+        "properly replace the same license multiple times" {
+            val expression = "gpl-2.0 AND (gpl-2.0 OR gpl-2.0-plus)"
+            val replacements = mapOf(
+                "gpl-2.0" to "GPL-2.0-only",
+                "gpl-2.0-plus" to "GPL-2.0-or-later"
+            )
+
+            val result = expression.mapLicense(replacements)
+
+            result shouldBe "GPL-2.0-only AND (GPL-2.0-only OR GPL-2.0-or-later)"
+        }
+
+        "properly handle replacements with a license being a suffix of another" {
+            val expression = "agpl-3.0-openssl"
+            val replacements = mapOf(
+                "agpl-3.0-openssl" to "LicenseRef-scancode-agpl-3.0-openssl",
+                "openssl" to "LicenseRef-scancode-openssl"
+            )
+
+            val result = expression.mapLicense(replacements)
+
+            result shouldBe "LicenseRef-scancode-agpl-3.0-openssl"
+        }
     }
 })
