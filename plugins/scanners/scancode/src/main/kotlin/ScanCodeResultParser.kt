@@ -54,18 +54,6 @@ private data class LicenseMatch(
 
 private val LICENSE_REF_PREFIX_SCAN_CODE = "$LICENSE_REF_PREFIX${ScanCode.SCANNER_NAME.lowercase()}-"
 
-// Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
-private val UNKNOWN_ERROR_REGEX = Regex(
-    "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
-    RegexOption.DOT_MATCHES_ALL
-)
-
-private val TIMEOUT_ERROR_REGEX = Regex(
-    "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-            "ERROR: Processing interrupted: timeout after (?<timeout>\\d+) seconds. \\(File: (?<file>.+)\\)"
-)
-
 /**
  * Generate a summary from the given raw ScanCode [result] using [verificationCode] metadata. This variant can be used
  * if the result is not read from a local file. If [parseExpressions] is true, license findings are preferably parsed as
@@ -102,13 +90,6 @@ internal fun generateSummary(result: JsonNode, parseExpressions: Boolean = true)
         copyrightFindings = getCopyrightFindings(result),
         issues = issues + mapScanErrors(result)
     )
-}
-
-private fun getInputPath(result: JsonNode): String {
-    val header = result["headers"].single()
-    val input = header["options"]["input"]
-    val path = input.takeUnless { it.isArray } ?: input.single()
-    return path.textValue().let { "$it/" }
 }
 
 /**
@@ -204,80 +185,4 @@ private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
     }
 
     return copyrightFindings
-}
-
-/**
- * Map scan errors for all files using messages that contain the relative file path.
- */
-private fun mapScanErrors(result: JsonNode): List<Issue> {
-    val input = getInputPath(result)
-    return result["files"]?.flatMap { file ->
-        val path = file["path"].textValue().removePrefix(input)
-        file["scan_errors"].map {
-            Issue(
-                source = ScanCode.SCANNER_NAME,
-                message = "${it.textValue()} (File: $path)"
-            )
-        }
-    }.orEmpty()
-}
-
-/**
- * Map messages about timeout errors to a more compact form. Return true if solely timeout errors occurred, return false
- * otherwise.
- */
-internal fun mapTimeoutErrors(issues: MutableList<Issue>): Boolean {
-    if (issues.isEmpty()) return false
-
-    var onlyTimeoutErrors = true
-
-    val mappedIssues = issues.map { fullError ->
-        val match = TIMEOUT_ERROR_REGEX.matchEntire(fullError.message)
-        if (match?.groups?.get("timeout")?.value == ScanCode.TIMEOUT.toString()) {
-            val file = match.groups["file"]!!.value
-            fullError.copy(
-                message = "ERROR: Timeout after ${ScanCode.TIMEOUT} seconds while scanning file '$file'."
-            )
-        } else {
-            onlyTimeoutErrors = false
-            fullError
-        }
-    }
-
-    issues.clear()
-    issues += mappedIssues.distinctBy { it.message }
-
-    return onlyTimeoutErrors
-}
-
-/**
- * Map messages about unknown errors to a more compact form. Return true if solely memory errors occurred, return false
- * otherwise.
- */
-internal fun mapUnknownErrors(issues: MutableList<Issue>): Boolean {
-    if (issues.isEmpty()) return false
-
-    var onlyMemoryErrors = true
-
-    val mappedIssues = issues.map { fullError ->
-        UNKNOWN_ERROR_REGEX.matchEntire(fullError.message)?.let { match ->
-            val file = match.groups["file"]!!.value
-            val error = match.groups["error"]!!.value
-            if (error == "MemoryError") {
-                fullError.copy(message = "ERROR: MemoryError while scanning file '$file'.")
-            } else {
-                onlyMemoryErrors = false
-                val message = match.groups["message"]!!.value.trim()
-                fullError.copy(message = "ERROR: $error while scanning file '$file' ($message).")
-            }
-        } ?: run {
-            onlyMemoryErrors = false
-            fullError
-        }
-    }
-
-    issues.clear()
-    issues += mappedIssues.distinctBy { it.message }
-
-    return onlyMemoryErrors
 }
