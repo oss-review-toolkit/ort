@@ -786,6 +786,7 @@ the clipboard and run
 * `wl-paste | cut -d ' ' -f 5- | git apply` (Linux with Wayland)
 * `xsel -b | cut -d ' ' -f 5- | git apply` (Linux with X)
 * `cat /dev/clipboard | dos2unix | cut -d ' ' -f 5- | git apply` (Windows with Git Bash)
+* `pbpaste | cut -d ' ' -f 5- | git apply` (macOS)
 
 to apply the diff to the local Git working tree (this does not create a commit yet). After reviewing the changes, create
 a commit to accept the new expected result.
