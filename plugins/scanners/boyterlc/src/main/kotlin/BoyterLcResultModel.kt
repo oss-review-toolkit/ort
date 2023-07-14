@@ -17,31 +17,20 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.ossreviewtoolkit.plugins.scanners.boyterlc
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
-}
+@Serializable
+class BoyterLcResult(
+    @SerialName("Directory") val directory: String,
+    @SerialName("Filename") val filename: String,
+    @SerialName("LicenseGuesses") val licenseGuesses: List<LicenseGuess>
+)
 
-dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
-
-    implementation(libs.bundles.kotlinxSerialization)
-
-    funTestApi(testFixtures(project(":scanner")))
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-    }
-}
+@Serializable
+data class LicenseGuess(
+    @SerialName("LicenseId") val licenseId: String,
+    @SerialName("Percentage") val percentage: Float
+)
