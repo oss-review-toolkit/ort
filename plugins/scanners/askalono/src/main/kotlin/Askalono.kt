@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.plugins.scanners.askalono
 import java.io.File
 import java.time.Instant
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeToSequence
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Issue
@@ -31,13 +34,16 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
+
+private const val CONFIDENCE_NOTICE = "Confidence threshold not high enough for any known license"
+
+private val JSON = Json { ignoreUnknownKeys = true }
 
 class Askalono internal constructor(
     name: String,
@@ -77,18 +83,31 @@ class Askalono internal constructor(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
+        val results = result.byteInputStream().use { JSON.decodeToSequence<AskalonoResult>(it) }
+
         val licenseFindings = mutableSetOf<LicenseFinding>()
 
-        result.lines().forEach { line ->
-            val root = jsonMapper.readTree(line)
-            root["result"]?.let { result ->
-                val licenseFinding = LicenseFinding(
-                    license = result["license"]["name"].textValue(),
-                    location = TextLocation(root["path"].textValue(), TextLocation.UNKNOWN_LINE),
-                    score = result["score"].floatValue()
-                )
+        val issues = mutableListOf(
+            Issue(
+                source = name,
+                message = "This scanner is not capable of detecting copyright statements.",
+                severity = Severity.HINT
+            )
+        )
 
-                licenseFindings += licenseFinding
+        results.forEach {
+            if (it.error == null) {
+                licenseFindings += LicenseFinding(
+                    license = it.result.license.name,
+                    location = TextLocation(it.path, TextLocation.UNKNOWN_LINE),
+                    score = it.result.score
+                )
+            } else {
+                issues += Issue(
+                    source = name,
+                    message = it.error,
+                    severity = if (it.error == CONFIDENCE_NOTICE) Severity.HINT else Severity.ERROR
+                )
             }
         }
 
@@ -96,13 +115,7 @@ class Askalono internal constructor(
             startTime = startTime,
             endTime = endTime,
             licenseFindings = licenseFindings,
-            issues = listOf(
-                Issue(
-                    source = name,
-                    message = "This scanner is not capable of detecting copyright statements.",
-                    severity = Severity.HINT
-                )
-            )
+            issues = issues
         )
     }
 }
