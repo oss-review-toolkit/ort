@@ -55,6 +55,8 @@ import org.ossreviewtoolkit.model.config.createFileArchiver
 import org.ossreviewtoolkit.model.config.createStorage
 import org.ossreviewtoolkit.model.createAndLogIssue
 import org.ossreviewtoolkit.model.mapLicense
+import org.ossreviewtoolkit.model.utils.FileArchiver
+import org.ossreviewtoolkit.model.utils.ProvenanceFileStorage
 import org.ossreviewtoolkit.model.utils.getKnownProvenancesWithoutVcsPath
 import org.ossreviewtoolkit.model.utils.vcsPath
 import org.ossreviewtoolkit.scanner.provenance.NestedProvenance
@@ -80,7 +82,9 @@ class Scanner(
     val storageWriters: List<ScanStorageWriter>,
     val packageProvenanceResolver: PackageProvenanceResolver,
     val nestedProvenanceResolver: NestedProvenanceResolver,
-    val scannerWrappers: Map<PackageType, List<ScannerWrapper>>
+    val scannerWrappers: Map<PackageType, List<ScannerWrapper>>,
+    private val archiver: FileArchiver? = scannerConfig.archive.createFileArchiver(),
+    fileListStorage: ProvenanceFileStorage = scannerConfig.fileListStorage.createStorage()
 ) {
     private companion object : Logging
 
@@ -99,10 +103,8 @@ class Scanner(
         }
     }
 
-    private val archiver = scannerConfig.archive.createFileArchiver()
-
     private val fileListResolver = FileListResolver(
-        storage = scannerConfig.fileListStorage.createStorage(),
+        storage = fileListStorage,
         provenanceDownloader = provenanceDownloader
     )
 
