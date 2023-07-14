@@ -56,7 +56,6 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxExtractedLicenseInfo
 import org.ossreviewtoolkit.utils.spdx.model.SpdxFile
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackage
 import org.ossreviewtoolkit.utils.spdx.model.SpdxPackageVerificationCode
-import org.ossreviewtoolkit.utils.spdx.model.SpdxRelationship
 import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
@@ -427,16 +426,4 @@ private fun Provenance.matches(sourceCodeOrigin: SourceCodeOrigin): Boolean =
         SourceCodeOrigin.VCS -> this is RepositoryProvenance
         SourceCodeOrigin.ARTIFACT -> this is ArtifactProvenance
         else -> false
-    }
-
-/**
- * Return "contains" relationships from [pkg] to each [SpdxFile] contained in this collection.
- */
-internal fun Collection<SpdxFile>.createFileRelationships(pkg: SpdxPackage): Set<SpdxRelationship> =
-    mapTo(mutableSetOf()) { spdxFile ->
-        SpdxRelationship(
-            spdxElementId = pkg.spdxId,
-            relationshipType = SpdxRelationship.Type.CONTAINS,
-            relatedSpdxElement = spdxFile.spdxId
-        )
     }
