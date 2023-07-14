@@ -22,6 +22,7 @@ package org.ossreviewtoolkit.model.utils
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
 
+import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -60,7 +61,7 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
         }
 
         "return true when data for the given provenance has been added" {
-            storage.putData(VCS_PROVENANCE, InputStream.nullInputStream())
+            storage.putData(VCS_PROVENANCE, InputStream.nullInputStream(), 0L)
 
             storage.hasData(VCS_PROVENANCE) shouldBe true
         }
@@ -68,8 +69,15 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
 
     "putData()" should {
         "return the data corresponding to the given provenance given such data has been added" {
-            storage.putData(VCS_PROVENANCE, "VCS".byteInputStream())
-            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact".byteInputStream())
+            val vcsByteArray = "VCS".toByteArray()
+            val sourceArtifactByteArray = "source artifact".toByteArray()
+
+            storage.putData(VCS_PROVENANCE, ByteArrayInputStream(vcsByteArray), vcsByteArray.size.toLong())
+            storage.putData(
+                SOURCE_ARTIFACT_PROVENANCE,
+                ByteArrayInputStream(sourceArtifactByteArray),
+                sourceArtifactByteArray.size.toLong()
+            )
 
             storage.getData(VCS_PROVENANCE) shouldNotBeNull { String(use { readBytes() }) shouldBe "VCS" }
             storage.getData(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
@@ -78,8 +86,19 @@ class PostgresProvenanceFileStorageFunTest : WordSpec({
         }
 
         "return the overwritten file corresponding to the given provenance" {
-            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact".byteInputStream())
-            storage.putData(SOURCE_ARTIFACT_PROVENANCE, "source artifact updated".byteInputStream())
+            val sourceArtifactByteArray = "source artifact".toByteArray()
+            val sourceArtifactUpdatedByteArray = "source artifact updated".toByteArray()
+
+            storage.putData(
+                SOURCE_ARTIFACT_PROVENANCE,
+                ByteArrayInputStream(sourceArtifactByteArray),
+                sourceArtifactByteArray.size.toLong()
+            )
+            storage.putData(
+                SOURCE_ARTIFACT_PROVENANCE,
+                ByteArrayInputStream(sourceArtifactUpdatedByteArray),
+                sourceArtifactUpdatedByteArray.size.toLong()
+            )
 
             storage.getData(SOURCE_ARTIFACT_PROVENANCE) shouldNotBeNull {
                 String(use { readBytes() }) shouldBe "source artifact updated"

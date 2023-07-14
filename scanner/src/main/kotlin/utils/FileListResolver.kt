@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.scanner.utils
 
 import com.fasterxml.jackson.module.kotlin.readValue
 
+import java.io.ByteArrayInputStream
 import java.io.File
 
 import org.ossreviewtoolkit.model.HashAlgorithm
@@ -51,7 +52,8 @@ internal class FileListResolver(
 }
 
 private fun ProvenanceFileStorage.putFileList(provenance: KnownProvenance, fileList: FileList) {
-    putData(provenance, fileList.toYaml().byteInputStream())
+    val byteArray = fileList.toYaml().toByteArray()
+    putData(provenance, ByteArrayInputStream(byteArray), byteArray.size.toLong())
 }
 
 private fun ProvenanceFileStorage.getFileList(provenance: KnownProvenance): FileList? {
