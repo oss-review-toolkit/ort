@@ -151,7 +151,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Set
         }
     }
 
-    return associateLicensesWithExceptions(licenseFindings).toSet()
+    return associateLicensesWithExceptions(licenseFindings)
 }
 
 /**
