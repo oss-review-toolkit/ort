@@ -500,9 +500,11 @@ class FossId internal constructor(
             }
         }
 
+        val mappedUrlWithoutCredentials = urlProvider.getUrl(urlWithoutCredentials)
+
         // we ignore the revision because we want to do a delta scan
         val recentScans = scans.recentScansForRepository(
-            urlWithoutCredentials,
+            mappedUrlWithoutCredentials,
             projectRevision = projectRevision,
             defaultBranch = defaultBranch
         )
@@ -512,19 +514,19 @@ class FossId internal constructor(
         val existingScan = recentScans.findLatestPendingOrFinishedScan()
 
         val scanCode = if (existingScan == null) {
-            logger.info { "No scan found for $urlWithoutCredentials and revision $revision. Creating origin scan..." }
+            logger.info {
+                "No scan found for $mappedUrlWithoutCredentials and revision $revision. Creating origin scan..."
+            }
             namingProvider.createScanCode(projectName, DeltaTag.ORIGIN, branchLabel)
         } else {
-            logger.info { "Scan '${existingScan.code}' found for $urlWithoutCredentials and revision $revision." }
+            logger.info { "Scan '${existingScan.code}' found for $mappedUrlWithoutCredentials and revision $revision." }
             logger.info {
                 "Existing scan has for reference(s): ${existingScan.comment.orEmpty()}. Creating delta scan..."
             }
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, branchLabel)
         }
 
-        val newUrl = urlProvider.getUrl(urlWithoutCredentials)
-
-        val scanId = createScan(projectCode, scanCode, newUrl, revision, projectRevision.orEmpty())
+        val scanId = createScan(projectCode, scanCode, mappedUrlWithoutCredentials, revision, projectRevision.orEmpty())
 
         logger.info { "Initiating the download..." }
         service.downloadFromGit(config.user, config.apiKey, scanCode)
