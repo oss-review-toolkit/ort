@@ -119,7 +119,6 @@ private fun getInputPath(result: JsonNode): String {
 private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Set<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
 
-    val input = getInputPath(result)
     val files = result["files"]?.asSequence().orEmpty().filter { it["type"].textValue() == "file" }
 
     files.flatMapTo(licenseFindings) { file ->
@@ -143,7 +142,7 @@ private fun getLicenseFindings(result: JsonNode, parseExpressions: Boolean): Set
             LicenseFinding(
                 license = spdxLicenseExpression,
                 location = TextLocation(
-                    path = file["path"].textValue().removePrefix(input),
+                    path = file["path"].textValue(),
                     startLine = licenseMatch.startLine,
                     endLine = licenseMatch.endLine
                 ),
@@ -178,8 +177,6 @@ private fun getSpdxLicenseId(license: JsonNode): String {
 private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
 
-    val input = getInputPath(result)
-
     val header = result["headers"].single()
     val outputFormatVersion = header["output_format_version"]?.textValue()?.let { Semver(it) }
     val copyrightKeyName = if (outputFormatVersion == null || outputFormatVersion < Semver("2.0.0")) {
@@ -191,7 +188,7 @@ private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
     val files = result["files"]?.asSequence().orEmpty()
 
     files.flatMapTo(copyrightFindings) { file ->
-        val path = file["path"].textValue().removePrefix(input)
+        val path = file["path"].textValue()
 
         val copyrights = file["copyrights"]?.asSequence().orEmpty()
         copyrights.map { copyright ->
