@@ -32,10 +32,10 @@ interface ProvenanceFileStorage {
     fun hasData(provenance: KnownProvenance): Boolean
 
     /**
-     * Associate [provenance] with the given [data]. Replaces any existing association by [provenance]. The function
-     * implementation is responsible for closing the stream.
+     * Associate [provenance] with the given [data] of the provided [size]. Replaces any existing association by
+     * [provenance]. The function implementation is responsible for closing the stream.
      */
-    fun putData(provenance: KnownProvenance, data: InputStream)
+    fun putData(provenance: KnownProvenance, data: InputStream, size: Long)
 
     /**
      * Return the data associated by [provenance], or null if there is no such data. Note that it is the responsibility

@@ -90,7 +90,7 @@ class FileArchiver(
 
         logger.info { "Archived directory '$directory' in $zipDuration." }
 
-        val writeDuration = measureTime { storage.putData(provenance, zipFile.inputStream()) }
+        val writeDuration = measureTime { storage.putData(provenance, zipFile.inputStream(), zipFile.length()) }
 
         logger.info { "Wrote archive of directory '$directory' to storage in $writeDuration." }
 

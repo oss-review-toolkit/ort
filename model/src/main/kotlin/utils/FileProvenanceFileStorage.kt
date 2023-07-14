@@ -59,7 +59,7 @@ class FileProvenanceFileStorage(
         return storage.exists(filePath)
     }
 
-    override fun putData(provenance: KnownProvenance, data: InputStream) {
+    override fun putData(provenance: KnownProvenance, data: InputStream, size: Long) {
         storage.write(getFilePath(provenance), data)
     }
 
