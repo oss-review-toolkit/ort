@@ -22,6 +22,9 @@ package org.ossreviewtoolkit.plugins.scanners.licensee
 import java.io.File
 import java.time.Instant
 
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Issue
@@ -31,13 +34,17 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.scanner.ScanException
 import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
+
+private val JSON = Json {
+    ignoreUnknownKeys = true
+    namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 class Licensee internal constructor(
     name: String,
@@ -77,21 +84,13 @@ class Licensee internal constructor(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
-        val licenseFindings = mutableSetOf<LicenseFinding>()
+        val results = JSON.decodeFromString<LicenseeResult>(result)
 
-        val json = jsonMapper.readTree(result)
-        val matchedFiles = json["matched_files"]
-
-        matchedFiles.mapTo(licenseFindings) {
-            val filePath = File(it["filename"].textValue())
+        val licenseFindings = results.matchedFiles.mapTo(mutableSetOf()) {
             LicenseFinding(
-                license = it["matched_license"].textValue(),
-                location = TextLocation(
-                    // The path is already relative.
-                    filePath.path,
-                    TextLocation.UNKNOWN_LINE
-                ),
-                score = it["matcher"]["confidence"].floatValue()
+                license = it.matchedLicense,
+                location = TextLocation(it.filename, TextLocation.UNKNOWN_LINE),
+                score = it.matcher.confidence
             )
         }
 

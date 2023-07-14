@@ -17,31 +17,24 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.ossreviewtoolkit.plugins.scanners.licensee
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
+import kotlinx.serialization.Serializable
 
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
-}
+@Serializable
+data class LicenseeResult(
+    val matchedFiles: List<MatchedFile>
+)
 
-dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+@Serializable
+data class MatchedFile(
+    val filename: String,
+    val matcher: MatcherInfo,
+    val matchedLicense: String
+)
 
-    implementation(libs.bundles.kotlinxSerialization)
-
-    funTestApi(testFixtures(project(":scanner")))
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-    }
-}
+@Serializable
+data class MatcherInfo(
+    val name: String,
+    val confidence: Float
+)
