@@ -215,18 +215,18 @@ private fun MutableMap<LicenseFinding, MutableSet<CopyrightFinding>>.merge(
  * resulting findings.
  */
 fun associateLicensesWithExceptions(
-    findings: List<LicenseFinding>,
+    findings: Collection<LicenseFinding>,
     toleranceLines: Int = FindingsMatcher.DEFAULT_TOLERANCE_LINES
-): List<LicenseFinding> {
+): Set<LicenseFinding> {
     val (licenses, exceptions) = findings.partition { SpdxLicenseException.forId(it.license.toString()) == null }
 
-    val fixedLicenses = licenses.toMutableList()
+    val fixedLicenses = licenses.toMutableSet()
 
     val existingExceptions = licenses.mapNotNull { finding ->
         (finding.license as? SpdxLicenseWithExceptionExpression)?.exception?.let { it to finding.location }
     }
 
-    val remainingExceptions = exceptions.filterNotTo(mutableListOf()) {
+    val remainingExceptions = exceptions.filterNotTo(mutableSetOf()) {
         existingExceptions.any { (exception, location) ->
             it.license.toString() == exception && it.location in location
         }
