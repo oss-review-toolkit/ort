@@ -179,8 +179,8 @@ class Scanner(
     }
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
-        val scanners = scannerWrappers[context.packageType].orEmpty()
-        if (scanners.isEmpty()) return ScannerRun.EMPTY
+        val scanners = scannerWrappers[context.packageType]
+        if (scanners.isNullOrEmpty()) return ScannerRun.EMPTY
 
         val controller = ScanController(packages, scanners, scannerConfig)
 
