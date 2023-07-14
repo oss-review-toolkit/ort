@@ -19,11 +19,14 @@
 
 package org.ossreviewtoolkit.scanner.storages
 
+import io.kotest.assertions.retry
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.result.shouldBeSuccess
 
 import java.time.Instant
+
+import kotlin.time.Duration.Companion.seconds
 
 import org.ossreviewtoolkit.clients.clearlydefined.ClearlyDefinedService.Server
 import org.ossreviewtoolkit.model.ArtifactProvenance
@@ -46,92 +49,110 @@ class ClearlyDefinedStorageFunTest : StringSpec({
 
     "Scan results for ScanCode 3.0.2 should be read correctly" {
         val id = Identifier("Maven:com.vdurmont:semver4j:3.1.0")
-        val results = storage.read(id)
 
-        results.shouldBeSuccess {
-            it shouldContain ScanResult(
-                provenance = ArtifactProvenance(
-                    sourceArtifact = RemoteArtifact(
-                        url = "https://search.maven.org/remotecontent" +
-                                "?filepath=com/vdurmont/semver4j/3.1.0/semver4j-3.1.0-sources.jar",
-                        hash = Hash(
-                            value = "0de1248f09dfe8df3b021c84e0642ee222cceb13",
-                            algorithm = HashAlgorithm.SHA1
+        withRetry {
+            val results = storage.read(id)
+
+            results.shouldBeSuccess {
+                it shouldContain ScanResult(
+                    provenance = ArtifactProvenance(
+                        sourceArtifact = RemoteArtifact(
+                            url = "https://search.maven.org/remotecontent" +
+                                    "?filepath=com/vdurmont/semver4j/3.1.0/semver4j-3.1.0-sources.jar",
+                            hash = Hash(
+                                value = "0de1248f09dfe8df3b021c84e0642ee222cceb13",
+                                algorithm = HashAlgorithm.SHA1
+                            )
                         )
-                    )
-                ),
-                scanner = ScannerDetails(
-                    name = "ScanCode",
-                    version = "3.0.2",
-                    configuration = "input /tmp/cd-2rGiCR --classify true --copyright true --email true " +
-                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-0EjTZ7 " +
-                            "--license true --license-clarity-score true --license-diag true --license-text true " +
-                            "--package true --processes 2 --strip-root true --summary true --summary-key-files true " +
-                            "--timeout 1000.0 --url true"
-                ),
-                summary = ScanSummary.EMPTY.copy(
-                    startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
-                    endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
-                    licenseFindings = setOf(
-                        LicenseFinding(
-                            license = "MIT",
-                            location = TextLocation(
-                                path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
-                                startLine = 30,
-                                endLine = 31
-                            ),
-                            score = 60.87f
+                    ),
+                    scanner = ScannerDetails(
+                        name = "ScanCode",
+                        version = "3.0.2",
+                        configuration = "input /tmp/cd-2rGiCR --classify true --copyright true --email true " +
+                                "--generated true --info true --is-license-text true --json-pp /tmp/cd-0EjTZ7 " +
+                                "--license true --license-clarity-score true --license-diag true --license-text true " +
+                                "--package true --processes 2 --strip-root true --summary true --summary-key-files " +
+                                "true --timeout 1000.0 --url true"
+                    ),
+                    summary = ScanSummary.EMPTY.copy(
+                        startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
+                        endTime = Instant.parse("2020-02-14T00:36:37.000492119Z"),
+                        licenseFindings = setOf(
+                            LicenseFinding(
+                                license = "MIT",
+                                location = TextLocation(
+                                    path = "META-INF/maven/com.vdurmont/semver4j/pom.xml",
+                                    startLine = 30,
+                                    endLine = 31
+                                ),
+                                score = 60.87f
+                            )
                         )
                     )
                 )
-            )
+            }
         }
     }
 
     "Scan results for ScanCode 30.1.0 should be read correctly" {
         val id = Identifier("Maven:com.sksamuel.hoplite:hoplite-core:2.1.3")
-        val results = storage.read(id)
 
-        results.shouldBeSuccess {
-            it shouldContain ScanResult(
-                provenance = RepositoryProvenance(
-                    vcsInfo = VcsInfo(
-                        type = VcsType.GIT,
-                        url = "https://github.com/sksamuel/hoplite/tree/b3bf5d7bd3814cb7576091acfecd097cb3a79e72",
-                        revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
+        withRetry {
+            val results = storage.read(id)
+
+            results.shouldBeSuccess {
+                it shouldContain ScanResult(
+                    provenance = RepositoryProvenance(
+                        vcsInfo = VcsInfo(
+                            type = VcsType.GIT,
+                            url = "https://github.com/sksamuel/hoplite/tree/b3bf5d7bd3814cb7576091acfecd097cb3a79e72",
+                            revision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
+                        ),
+                        resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
                     ),
-                    resolvedRevision = "b3bf5d7bd3814cb7576091acfecd097cb3a79e72"
-                ),
-                scanner = ScannerDetails(
-                    name = "ScanCode",
-                    version = "30.1.0",
-                    configuration = "input /tmp/cd-5bxzho --classify true --copyright true --email true " +
-                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
-                            "--license true --license-clarity-score true --license-text true " +
-                            "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
-                            "--summary true --summary-key-files true --timeout 1000.0 --url true"
-                ),
-                summary = ScanSummary.EMPTY.copy(
-                    startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
-                    endTime = Instant.parse("2022-05-02T07:34:59.000958218Z")
+                    scanner = ScannerDetails(
+                        name = "ScanCode",
+                        version = "30.1.0",
+                        configuration = "input /tmp/cd-5bxzho --classify true --copyright true --email true " +
+                                "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
+                                "--license true --license-clarity-score true --license-text true " +
+                                "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
+                                "--summary true --summary-key-files true --timeout 1000.0 --url true"
+                    ),
+                    summary = ScanSummary.EMPTY.copy(
+                        startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),
+                        endTime = Instant.parse("2022-05-02T07:34:59.000958218Z")
+                    )
                 )
-            )
+            }
         }
     }
 
     "Scan results for packages without a namespace should be present" {
         val id = Identifier("NPM::iobroker.eusec:0.9.9")
-        val results = storage.read(id)
 
-        results.shouldBeSuccess { result ->
-            result.map { it.provenance } shouldContain RepositoryProvenance(
-                vcsInfo = VcsInfo(
-                    type = VcsType.GIT,
-                    url = "https://github.com/bropat/ioBroker.eusec/tree/327b125548c9b806490085a2dacfdfc6e7776803",
-                    revision = "327b125548c9b806490085a2dacfdfc6e7776803"
-                ),
-                resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
-            )
+        withRetry {
+            val results = storage.read(id)
+
+            results.shouldBeSuccess { result ->
+                result.map { it.provenance } shouldContain RepositoryProvenance(
+                    vcsInfo = VcsInfo(
+                        type = VcsType.GIT,
+                        url = "https://github.com/bropat/ioBroker.eusec/tree/327b125548c9b806490085a2dacfdfc6e7776803",
+                        revision = "327b125548c9b806490085a2dacfdfc6e7776803"
+                    ),
+                    resolvedRevision = "327b125548c9b806490085a2dacfdfc6e7776803"
+                )
+            }
         }
     }
 })
+
+private suspend fun <T> withRetry(f: suspend () -> T): T =
+    retry(
+        maxRetry = 5,
+        timeout = (10 + 20 + 40 + 80 + 160).seconds,
+        delay = 10.seconds,
+        multiplier = 2,
+        f = f
+    )
