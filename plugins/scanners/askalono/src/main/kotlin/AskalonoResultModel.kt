@@ -17,31 +17,25 @@
  * License-Filename: LICENSE
  */
 
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+package org.ossreviewtoolkit.plugins.scanners.askalono
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
+import kotlinx.serialization.Serializable
 
-    // Apply third-party plugins.
-    alias(libs.plugins.kotlinSerialization)
-}
+@Serializable
+data class AskalonoResult(
+    val path: String,
+    val result: PathResult,
+    val error: String? = null
+)
 
-dependencies {
-    api(project(":model"))
-    api(project(":scanner"))
+@Serializable
+data class PathResult(
+    val score: Float,
+    val license: LicenseResult
+)
 
-    implementation(libs.bundles.kotlinxSerialization)
-
-    funTestApi(testFixtures(project(":scanner")))
-}
-
-tasks.withType<KotlinCompile>().configureEach {
-    val customCompilerArgs = listOf(
-        "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
-    )
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-    }
-}
+@Serializable
+data class LicenseResult(
+    val name: String,
+    val aliases: Set<String>
+)
