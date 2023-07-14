@@ -179,10 +179,10 @@ class Scanner(
     }
 
     suspend fun scan(packages: Set<Package>, context: ScanContext): ScannerRun {
-        val scanners = scannerWrappers[context.packageType]
-        if (scanners.isNullOrEmpty()) return ScannerRun.EMPTY
+        val scannerWrappers = scannerWrappers[context.packageType]
+        if (scannerWrappers.isNullOrEmpty()) return ScannerRun.EMPTY
 
-        val controller = ScanController(packages, scanners, scannerConfig)
+        val controller = ScanController(packages, scannerWrappers, scannerConfig)
 
         resolvePackageProvenances(controller)
         resolveNestedProvenances(controller)
@@ -241,15 +241,15 @@ class Scanner(
             }
         }
 
-        val scannerNames = scanners.mapTo(mutableSetOf()) { it.name }
-        val scannerNamesByPackageId = packages.associateBy({ it.id }) { scannerNames }
+        val scannerNames = scannerWrappers.mapTo(mutableSetOf()) { it.name }
+        val scanners = packages.associateBy({ it.id }) { scannerNames }
 
         return ScannerRun.EMPTY.copy(
             config = scannerConfig,
             provenances = provenances,
             scanResults = scanResults,
             files = files,
-            scanners = scannerNamesByPackageId
+            scanners = scanners
         )
     }
 
