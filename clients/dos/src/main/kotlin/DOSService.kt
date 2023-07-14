@@ -10,6 +10,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -80,7 +81,7 @@ interface DOSService {
 
     @Serializable
     data class ScanResultsResponseBody(
-        val results: String? = null
+        val results: JsonElement? = null
     )
 
     @Serializable

@@ -11,6 +11,7 @@ import java.time.Instant
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.json.JsonElement
 
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.*
@@ -59,6 +60,7 @@ class DOS internal constructor(
         logger.info { "Package to scan: $pkg" }
         // Use ORT specific local file structure
         val dosDir = createOrtTempDir()
+        var results: JsonElement?
 
         runBlocking {
             // Download the package
@@ -68,9 +70,11 @@ class DOS internal constructor(
 
             // Ask for scan results from DOS/API
             // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
-            val results = repository.getScanResults(pkg.purl)
+            results = repository.getScanResults(pkg.purl)
 
             if (results == null) {
+                logger.info { "Initiating a backend scan" }
+
                 // Zip the packet to scan
                 val zipName = dosDir.name + ".zip"
                 val targetZipFile = File("$tmpDir$zipName")
@@ -80,7 +84,6 @@ class DOS internal constructor(
                 val presignedUrl = repository.getPresignedUrl(zipName) ?: return@runBlocking
 
                 // Transfer the zipped packet to S3 Object Storage and do local cleanup
-                //presignedUrl.let {
                 val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
                 if (uploadSuccessful) {
                     deleteFileOrDir(dosDir)
@@ -88,7 +91,6 @@ class DOS internal constructor(
                     deleteFileOrDir(dosDir)
                     return@runBlocking
                 }
-                //}
 
                 // Notify DOS API about the new zipped file at S3, and get the unzipped folder
                 // name as a return
@@ -105,7 +107,8 @@ class DOS internal constructor(
                 val jobResponse = packageResponse.folderName?.let { repository.postScanJob(it, packageResponse.packageId) }
                 val id = jobResponse?.scannerJob?.id
                 if (jobResponse != null) {
-                    logger.info { "Response to scan request: id = $id, message = ${jobResponse.message}" }
+                    //logger.info { "Response to scan request: id = $id, message = ${jobResponse.message}" }
+                    logger.info { "New scan request: $jobResponse" }
                 } else {
                     return@runBlocking
                 }
@@ -115,6 +118,7 @@ class DOS internal constructor(
                     val jobState = id?.let { repository.getJobState(it) }
                     logger.info { "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
                     if (jobState == "completed") {
+                        results = repository.getScanResults(pkg.purl)
                         break
                     } else {
                         delay(config.pollInterval * 1000L)
@@ -122,42 +126,12 @@ class DOS internal constructor(
                 }
             }
         }
-
-        // Get the results back as a JSON string
-
         val thisScanEndTime = Instant.now()
-
-        // Convert results to ORT form
-        val jsonString = "{\n" +
-                "    \"results\": {\n" +
-                "        \"licenses\": [\n" +
-                "            {\n" +
-                "                \"license\": \"license\",\n" +
-                "                \"location\": {\n" +
-                "                    \"path\": \"path/to/file\",\n" +
-                "                    \"start_line\": 1,\n" +
-                "                    \"end_line\": 1\n" +
-                "                },\n" +
-                "                \"score\": 100.0\n" +
-                "            }\n" +
-                "        ],\n" +
-                "        \"copyrights\": [\n" +
-                "            {\n" +
-                "                \"statement\": \"statement\",\n" +
-                "                \"location\": {\n" +
-                "                    \"path\": \"path/to/file\",\n" +
-                "                    \"start_line\": 1,\n" +
-                "                    \"end_line\": 1\n" +
-                "                }\n" +
-                "            }\n" +
-                "        ]\n" +
-                "    } \n" +
-                "}"
 
         val summary = generateSummary(
             thisScanStartTime,
             thisScanEndTime,
-            jsonString
+            results.toString()
         )
 
         return ScanResult(

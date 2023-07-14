@@ -35,7 +35,7 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, jsonString: S
 }
 private fun getLicenseFindings(result: JsonNode): Set<LicenseFinding> {
     val licenseFindings = mutableListOf<LicenseFinding>()
-    val licenses = result["results"]["licenses"]
+    val licenses = result["licenses"]
 
     licenses.forEach {
         val license = it["license"].asText()
@@ -62,7 +62,7 @@ private fun getLicenseFindings(result: JsonNode): Set<LicenseFinding> {
 
 private fun getCopyrightFindings(result: JsonNode): Set<CopyrightFinding> {
     val copyrightFindings = mutableListOf<CopyrightFinding>()
-    val copyrights = result["results"]["copyrights"]
+    val copyrights = result["copyrights"]
 
     copyrights.forEach {
         val statement = it["statement"].asText()
