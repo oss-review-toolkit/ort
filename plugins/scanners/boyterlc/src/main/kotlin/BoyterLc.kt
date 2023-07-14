@@ -22,6 +22,8 @@ package org.ossreviewtoolkit.plugins.scanners.boyterlc
 import java.io.File
 import java.time.Instant
 
+import kotlinx.serialization.json.Json
+
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.ossreviewtoolkit.model.Issue
@@ -31,7 +33,6 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.model.jsonMapper
 import org.ossreviewtoolkit.scanner.AbstractScannerWrapperFactory
 import org.ossreviewtoolkit.scanner.CommandLinePathScannerWrapper
 import org.ossreviewtoolkit.scanner.ScanContext
@@ -40,6 +41,8 @@ import org.ossreviewtoolkit.scanner.ScannerCriteria
 import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+
+private val JSON = Json { ignoreUnknownKeys = true }
 
 class BoyterLc internal constructor(
     name: String,
@@ -86,16 +89,15 @@ class BoyterLc internal constructor(
     }
 
     override fun createSummary(result: String, startTime: Instant, endTime: Instant): ScanSummary {
-        val licenseFindings = mutableSetOf<LicenseFinding>()
-        val json = jsonMapper.readTree(result)
+        val results = JSON.decodeFromString<List<BoyterLcResult>>(result)
 
-        json.flatMapTo(licenseFindings) { file ->
-            val filePath = File(file["Directory"].textValue(), file["Filename"].textValue())
-            file["LicenseGuesses"].map {
+        val licenseFindings = results.flatMapTo(mutableSetOf()) {
+            val filePath = File(it.directory, it.filename)
+            it.licenseGuesses.map { guess ->
                 LicenseFinding(
-                    license = it["LicenseId"].textValue(),
+                    license = guess.licenseId,
                     location = TextLocation(filePath.invariantSeparatorsPath, TextLocation.UNKNOWN_LINE),
-                    score = it["Percentage"].floatValue()
+                    score = guess.percentage
                 )
             }
         }
