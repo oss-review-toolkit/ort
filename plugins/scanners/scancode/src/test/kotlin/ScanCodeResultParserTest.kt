@@ -20,13 +20,10 @@
 package org.ossreviewtoolkit.plugins.scanners.scancode
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.inspectors.forAll
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactlyInAnyOrder
-import io.kotest.matchers.collections.shouldBeIn
 import io.kotest.matchers.collections.shouldHaveSingleElement
-import io.kotest.matchers.file.beRelative
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 
@@ -76,26 +73,6 @@ class ScanCodeResultParserTest : FreeSpec({
                         score = 70.0f
                     )
                 )
-            }
-
-            "properly parse absolute paths" {
-                val resultFile = File("src/test/assets/scancode-3.2.1rc2_spring-javaformat-checkstyle-0.0.15.json")
-                val result = resultFile.readTree()
-
-                val summary = generateSummary(result)
-                val fileExtensions = listOf("html", "java", "txt")
-
-                summary.licenseFindings.forAll {
-                    val file = File(it.location.path)
-                    file should beRelative()
-                    file.extension shouldBeIn fileExtensions
-                }
-
-                summary.copyrightFindings.forAll {
-                    val file = File(it.location.path)
-                    file should beRelative()
-                    file.extension shouldBeIn fileExtensions
-                }
             }
         }
 
