@@ -71,7 +71,7 @@ class DOSRepository(private val dosService: DOSService) {
      *   being scanned, return "pending" message
      * - otherwise, return "null"
      */
-    suspend fun getScanResults(purl: String): JsonElement? {
+    suspend fun getScanResults(purl: String): DOSService.ScanResultsResponseBody? {
         if (purl.isEmpty()) {
             logger.error { "Need the package URL to check for scan results" }
             return null
@@ -80,13 +80,12 @@ class DOSRepository(private val dosService: DOSService) {
         val response = dosService.postScanResults(requestBody)
 
         return if (response.isSuccessful) {
-            if (response.body()?.results == null) {
-                logger.info { "No scan results found from DOS API for $purl" }
-                null
-            } else {
-                logger.info { "Scan results found from DOS API for $purl: ${response.body()?.results}" }
-                response.body()?.results
+            when (response.body()?.state?.status) {
+                "no-results" -> logger.info { "No scan results found from DOS API for $purl" }
+                "pending" -> logger.info { "Pending scan for $purl" }
+                else -> logger.info { "Scan results found from DOS API for $purl: ${response.body()?.results}" }
             }
+            response.body()
         } else {
             logger.error { "$response" }
             null

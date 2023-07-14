@@ -81,8 +81,15 @@ interface DOSService {
 
     @Serializable
     data class ScanResultsResponseBody(
+        val state: State,
         val results: JsonElement? = null
-    )
+    ) {
+        @Serializable
+        data class State(
+            val status: String,
+            val id: String? = null
+        )
+    }
 
     @Serializable
     data class PackageRequestBody(
@@ -103,16 +110,17 @@ interface DOSService {
     )
 
     @Serializable
-    data class ScannerJob(
-        val id: String,
-        val createdAt: String? = null,
-        val packageId: Int = 0
-    )
-    @Serializable
     data class JobResponseBody(
         val scannerJob: ScannerJob,
         val message: String?
-    )
+    ) {
+        @Serializable
+        data class ScannerJob(
+            val id: String,
+            val createdAt: String? = null,
+            val packageId: Int = 0
+        )
+    }
 
     @Serializable
     data class JobStateResponseBody(

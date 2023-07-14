@@ -60,7 +60,7 @@ class DOS internal constructor(
         logger.info { "Package to scan: $pkg" }
         // Use ORT specific local file structure
         val dosDir = createOrtTempDir()
-        var results: JsonElement?
+        var scanResults: DOSService.ScanResultsResponseBody?
 
         runBlocking {
             // Download the package
@@ -69,60 +69,89 @@ class DOS internal constructor(
             logger.info { "Package downloaded to: $dosDir" }
 
             // Ask for scan results from DOS/API
-            // 1st (trivial) case: null returned, indicating no earlier scan results for this PURL
-            results = repository.getScanResults(pkg.purl)
+            scanResults = repository.getScanResults(pkg.purl)
 
-            if (results == null) {
-                logger.info { "Initiating a backend scan" }
+            when (scanResults?.state?.status) {
+                /**
+                 * No earlier scan results found from DOS database, initiate a new scan.
+                 */
+                "no-results" -> {
+                    logger.info { "Initiating a backend scan" }
 
-                // Zip the packet to scan
-                val zipName = dosDir.name + ".zip"
-                val targetZipFile = File("$tmpDir$zipName")
-                dosDir.packZip(targetZipFile)
+                    // Zip the packet to scan
+                    val zipName = dosDir.name + ".zip"
+                    val targetZipFile = File("$tmpDir$zipName")
+                    dosDir.packZip(targetZipFile)
 
-                // Request presigned URL from DOS API
-                val presignedUrl = repository.getPresignedUrl(zipName) ?: return@runBlocking
+                    // Request presigned URL from DOS API
+                    val presignedUrl = repository.getPresignedUrl(zipName) ?: return@runBlocking
 
-                // Transfer the zipped packet to S3 Object Storage and do local cleanup
-                val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
-                if (uploadSuccessful) {
-                    deleteFileOrDir(dosDir)
-                } else {
-                    deleteFileOrDir(dosDir)
-                    return@runBlocking
-                }
-
-                // Notify DOS API about the new zipped file at S3, and get the unzipped folder
-                // name as a return
-                logger.info { "Zipped file at S3: $zipName" }
-                val packageResponse = repository.getScanFolder(zipName, pkg.purl)
-                if (packageResponse != null) {
-                    deleteFileOrDir(targetZipFile)
-                } else {
-                    deleteFileOrDir(targetZipFile)
-                    return@runBlocking
-                }
-
-                // Send the scan job to DOS API to start the backend scanning
-                val jobResponse = packageResponse.folderName?.let { repository.postScanJob(it, packageResponse.packageId) }
-                val id = jobResponse?.scannerJob?.id
-                if (jobResponse != null) {
-                    //logger.info { "Response to scan request: id = $id, message = ${jobResponse.message}" }
-                    logger.info { "New scan request: $jobResponse" }
-                } else {
-                    return@runBlocking
-                }
-
-                // Poll the job state periodically and log
-                while (true) {
-                    val jobState = id?.let { repository.getJobState(it) }
-                    logger.info { "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
-                    if (jobState == "completed") {
-                        results = repository.getScanResults(pkg.purl)
-                        break
+                    // Transfer the zipped packet to S3 Object Storage and do local cleanup
+                    val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
+                    if (uploadSuccessful) {
+                        deleteFileOrDir(dosDir)
                     } else {
-                        delay(config.pollInterval * 1000L)
+                        deleteFileOrDir(dosDir)
+                        return@runBlocking
                     }
+
+                    // Notify DOS API about the new zipped file at S3, and get the unzipped folder
+                    // name as a return
+                    logger.info { "Zipped file at S3: $zipName" }
+                    val packageResponse = repository.getScanFolder(zipName, pkg.purl)
+                    if (packageResponse != null) {
+                        deleteFileOrDir(targetZipFile)
+                    } else {
+                        deleteFileOrDir(targetZipFile)
+                        return@runBlocking
+                    }
+
+                    // Send the scan job to DOS API to start the backend scanning
+                    val jobResponse = packageResponse.folderName?.let { repository.postScanJob(it, packageResponse.packageId) }
+                    val id = jobResponse?.scannerJob?.id
+                    if (jobResponse != null) {
+                        logger.info { "New scan request: $jobResponse" }
+                    } else {
+                        return@runBlocking
+                    }
+
+                    // Poll the job state periodically and log
+                    while (true) {
+                        val jobState = id?.let { repository.getJobState(it) }
+                        logger.info { "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
+                        if (jobState == "completed") {
+                            scanResults = repository.getScanResults(pkg.purl)
+                            break
+                        } else {
+                            delay(config.pollInterval * 1000L)
+                        }
+                    }
+                }
+
+                /**
+                 * No earlier results found from DOS database, but a scan for this package is
+                 * either pending or ongoing, so need to monitor the scanning process until completed,
+                 * and then return the results.
+                 */
+                "pending" -> {
+                    val idPendingJob = scanResults?.state?.id
+                    while (true) {
+                        val jobState = idPendingJob?.let { repository.getJobState(it) }
+                        logger.info { "Pending scan: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
+                        if (jobState == "completed") {
+                            scanResults = repository.getScanResults(pkg.purl)
+                            break
+                        } else {
+                            delay(config.pollInterval * 1000L)
+                        }
+                    }
+                }
+
+                /**
+                 * Scan results for this package found from the database. Do local cleaning.
+                 */
+                "ready" -> {
+                    deleteFileOrDir(dosDir)
                 }
             }
         }
@@ -131,7 +160,7 @@ class DOS internal constructor(
         val summary = generateSummary(
             thisScanStartTime,
             thisScanEndTime,
-            results.toString()
+            scanResults?.results.toString()
         )
 
         return ScanResult(
