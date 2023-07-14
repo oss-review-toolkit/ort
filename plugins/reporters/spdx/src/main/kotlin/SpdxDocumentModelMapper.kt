@@ -102,19 +102,18 @@ internal object SpdxDocumentModelMapper : Logging {
             packages += binaryPackage
 
             if (pkg.vcsProcessed.url.isNotBlank()) {
+                val filesForPackage = if (params.fileInformationEnabled) {
+                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex)
+                } else {
+                    emptyList()
+                }
+
                 // TODO: The copyright text contains copyrights from all scan results.
                 val vcsPackage = pkg.toSpdxPackage(
                     SpdxPackageType.VCS_PACKAGE,
                     licenseInfoResolver,
                     ortResult
-                )
-
-                if (params.fileInformationEnabled) {
-                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, VCS, nextFileIndex).let {
-                        files += it
-                        relationships += it.createFileRelationships(vcsPackage)
-                    }
-                }
+                ).copy(hasFiles = filesForPackage.map { it.spdxId })
 
                 val vcsPackageRelationShip = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
@@ -122,24 +121,24 @@ internal object SpdxDocumentModelMapper : Logging {
                     relatedSpdxElement = vcsPackage.spdxId
                 )
 
+                files += filesForPackage
                 packages += vcsPackage
                 relationships += vcsPackageRelationShip
             }
 
             if (pkg.sourceArtifact.url.isNotBlank()) {
+                val filesForPackage = if (params.fileInformationEnabled) {
+                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex)
+                } else {
+                    emptyList()
+                }
+
                 // TODO: The copyright text contains copyrights from all scan results.
                 val sourceArtifactPackage = pkg.toSpdxPackage(
                     SpdxPackageType.SOURCE_PACKAGE,
                     licenseInfoResolver,
                     ortResult
-                )
-
-                if (params.fileInformationEnabled) {
-                    ortResult.getSpdxFiles(pkg.id, licenseInfoResolver, ARTIFACT, nextFileIndex).let {
-                        files += it
-                        relationships += it.createFileRelationships(sourceArtifactPackage)
-                    }
-                }
+                ).copy(hasFiles = filesForPackage.map { it.spdxId })
 
                 val sourceArtifactPackageRelationship = SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
@@ -147,6 +146,7 @@ internal object SpdxDocumentModelMapper : Logging {
                     relatedSpdxElement = sourceArtifactPackage.spdxId
                 )
 
+                files += filesForPackage
                 packages += sourceArtifactPackage
                 relationships += sourceArtifactPackageRelationship
             }
