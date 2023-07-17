@@ -18,8 +18,8 @@
  */
 
 plugins {
-    // Apply core plugins.
-    `java-platform`
+    // Apply precompiled plugins.
+    id("ort-plugins-conventions")
 }
 
 javaPlatform {
