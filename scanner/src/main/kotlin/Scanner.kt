@@ -608,22 +608,23 @@ class Scanner(
 
                 logger.info { "Scan of $provenance with path scanner '${scanner.name}' finished." }
 
-                val summaryWithMappedLicenses = summary.copy(
-                    licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
-                        val licenseString = it.license.toString()
-                        it.copy(
-                            license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
-                            location = it.location.withRelativePath(downloadDir)
-                        )
-                    }
-                )
-
-                ScanResult(provenance, scanner.details, summaryWithMappedLicenses)
+                ScanResult(provenance, scanner.details, postProcessScanSummary(summary, downloadDir))
             }
         } finally {
             downloadDir.safeDeleteRecursively(force = true)
         }
     }
+
+    private fun postProcessScanSummary(summary: ScanSummary, downloadDir: File) =
+        summary.copy(
+            licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
+                val licenseString = it.license.toString()
+                it.copy(
+                    license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
+                    location = it.location.withRelativePath(downloadDir)
+                )
+            }
+        )
 
     private fun storeNestedScanResult(pkg: Package, nestedProvenanceScanResult: NestedProvenanceScanResult) {
         storePackageScanResult(pkg, nestedProvenanceScanResult)
