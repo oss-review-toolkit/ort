@@ -447,7 +447,7 @@ This tool wraps underlying license / copyright scanners with a common API so all
 same way to easily run them and compare their results. If passed an ORT result file with an analyzer result (`-i`), the
 *scanner* will automatically download the sources of the dependencies via the *downloader* and scan them afterwards.
 
-We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
+We recommend to use ORT with any of the following scanners as their integrations have been thoroughly tested (in
 alphabetical order):
 
 * [FossID](https://fossid.com/) (snippet scanner, commercial)
