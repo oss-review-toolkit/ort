@@ -299,6 +299,9 @@
             "type": "object",
             "additionalProperties": false,
             "properties": {
+                "decomposeLicenses": {
+                    "type": "boolean"
+                },
                 "skipConcluded": {
                     "type": "boolean"
                 },

@@ -32,6 +32,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 @JsonInclude(JsonInclude.Include.NON_NULL)
 data class ScannerConfiguration(
     /**
+     * A flag to toggle decomposition of compound licenses expressions to single license expressions. Use this e.g. in
+     * case some involved process or tooling cannot handle compound licenses expressions yet.
+     */
+    val decomposeLicenses: Boolean = false,
+
+    /**
      * A flag to indicate whether packages that have a concluded license and authors set (to derive copyrights from)
      * should be skipped in the scan in favor of only using the declared information.
      */

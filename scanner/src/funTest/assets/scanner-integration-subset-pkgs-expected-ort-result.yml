@@ -112,6 +112,7 @@ scanner:
     variables: {}
     tool_versions: {}
   config:
+    decompose_licenses: false
     skip_concluded: false
     create_missing_archives: false
     detected_license_mapping:

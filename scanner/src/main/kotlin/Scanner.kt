@@ -617,12 +617,16 @@ class Scanner(
 
     private fun postProcessScanSummary(summary: ScanSummary, downloadDir: File) =
         summary.copy(
-            licenseFindings = summary.licenseFindings.mapTo(mutableSetOf()) {
-                val licenseString = it.license.toString()
-                it.copy(
-                    license = licenseString.mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
-                    location = it.location.withRelativePath(downloadDir)
-                )
+            licenseFindings = summary.licenseFindings.flatMapTo(mutableSetOf()) {
+                val licenses = if (scannerConfig.decomposeLicenses) it.license.decompose() else setOf(it.license)
+                val location = it.location.withRelativePath(downloadDir)
+
+                licenses.map { license ->
+                    it.copy(
+                        license = license.toString().mapLicense(scannerConfig.detectedLicenseMapping).toSpdx(),
+                        location = location
+                    )
+                }
             }
         )
 

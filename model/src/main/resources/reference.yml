@@ -152,6 +152,7 @@ ort:
     sourceCodeOrigins: [VCS, ARTIFACT]
 
   scanner:
+    decomposeLicenses: false
     skipConcluded: true
 
     archive:
