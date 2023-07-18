@@ -89,7 +89,7 @@ private data class LicenseMatch(
     val score: Float
 )
 
-private fun LicenseEntry.getSpdxId(): String {
+private fun getSpdxId(spdxLicenseKey: String?, key: String): String {
     // There is a bug in ScanCode 3.0.2 that returns an empty string instead of null for licenses unknown to SPDX.
     val spdxId = spdxLicenseKey.orEmpty().toSpdxId(allowPlusSuffix = true)
 
@@ -119,13 +119,11 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
     val filesOfTypeFile = files.filter { it.type == "file" }
 
     // Build a map of all ScanCode license keys in the result associated with their corresponding SPDX ID.
-    val scanCodeKeyToSpdxIdMappings = mutableMapOf<String, String>()
-
-    filesOfTypeFile.forEach { file ->
-        file.licenses.forEach { license ->
-            scanCodeKeyToSpdxIdMappings[license.key] = license.getSpdxId()
+    val scanCodeKeyToSpdxIdMappings = files.flatMap { file ->
+        file.licenses.map { license ->
+            license.key to getSpdxId(license.spdxLicenseKey, license.key)
         }
-    }
+    }.toMap()
 
     filesOfTypeFile.forEach { file ->
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
