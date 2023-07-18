@@ -450,14 +450,14 @@ same way to easily run them and compare their results. If passed an ORT result f
 We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
 alphabetical order):
 
-* FossID
+* [FossID](https://fossid.com/)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
 Additionally, the following reference implementations exist (in alphabetical order):
 
-* [Askalono](https://github.com/amzn/askalono)
+* [Askalono](https://github.com/jpeddicord/askalono)
 * [lc](https://github.com/boyter/lc)
-* [Licensee](https://github.com/benbalter/licensee)
+* [Licensee](https://github.com/licensee/licensee)
 * [SCANOSS](https://www.scanoss.com/)
 
 For a comparison of some of these, see this
