@@ -47,7 +47,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdxId
 
 import org.semver4j.Semver
 
-const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 2
+const val MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION = 3
 
 private val LICENSE_REF_PREFIX_SCAN_CODE = "${SpdxConstants.LICENSE_REF_PREFIX}${ScanCode.SCANNER_NAME.lowercase()}-"
 private val TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HHmmss.n").withZone(ZoneId.of("UTC"))
@@ -65,10 +65,20 @@ fun parseResult(result: JsonElement): ScanCodeResult {
     // Select the correct set of (de-)serializers bundled in a module for parsing the respective format version.
     val module = when (outputFormatVersion?.major) {
         null, 1 -> SerializersModule {
+            polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version1.serializer() }
+            polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version1.serializer() }
             polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version1.serializer() }
         }
 
+        2 -> SerializersModule {
+            polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version1.serializer() }
+            polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version1.serializer() }
+            polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version2.serializer() }
+        }
+
         else -> SerializersModule {
+            polymorphicDefaultDeserializer(FileEntry::class) { FileEntry.Version3.serializer() }
+            polymorphicDefaultDeserializer(LicenseEntry::class) { LicenseEntry.Version3.serializer() }
             polymorphicDefaultDeserializer(CopyrightEntry::class) { CopyrightEntry.Version2.serializer() }
         }
     }
@@ -119,17 +129,18 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
     val filesOfTypeFile = files.filter { it.type == "file" }
 
     // Build a map of all ScanCode license keys in the result associated with their corresponding SPDX ID.
-    val scanCodeKeyToSpdxIdMappings = files.flatMap { file ->
-        file.licenses.map { license ->
-            license.key to getSpdxId(license.spdxLicenseKey, license.key)
-        }
-    }.toMap()
+    val scanCodeKeyToSpdxIdMappings = licenseReferences?.associate { it.key to it.spdxLicenseKey }
+        ?: files.flatMap { file ->
+            file.licenses.filterIsInstance<LicenseEntry.Version1>().map { license ->
+                license.key to getSpdxId(license.spdxLicenseKey, license.key)
+            }
+        }.toMap()
 
     filesOfTypeFile.forEach { file ->
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
         // the same expression.
         val licenses = file.licenses.groupBy {
-            LicenseMatch(it.matchedRule.licenseExpression, it.startLine, it.endLine, it.score)
+            LicenseMatch(it.licenseExpression, it.startLine, it.endLine, it.score)
         }.map {
             // Arbitrarily take the first of the duplicate license entries.
             it.value.first()
@@ -137,7 +148,7 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
 
         licenses.mapTo(licenseFindings) { license ->
             // ScanCode uses its own license keys as identifiers in license expressions.
-            val spdxLicenseExpression = license.matchedRule.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
+            val spdxLicenseExpression = license.licenseExpression.mapLicense(scanCodeKeyToSpdxIdMappings)
 
             LicenseFinding(
                 license = spdxLicenseExpression,
