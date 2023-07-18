@@ -7,6 +7,9 @@
             "pattern": "^https?://localhost.*$"
         },
         {
+            "pattern": "^https://fossid.com/$"
+        },
+        {
             "pattern": "^https://fpchat-invite.herokuapp.com/$"
         },
         {
