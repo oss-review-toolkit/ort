@@ -50,7 +50,7 @@ fun <T, K> Collection<T>.getDuplicates(keySelector: (T) -> K): Map<K, List<T>> =
 fun <T> Collection<T>.getDuplicates(): Set<T> = getDuplicates { it }.keys
 
 /**
- * Collapse consecutive [values] to a list of pairs that each denote a range. A single value is represented as a
+ * Collapse consecutive values to a list of pairs that each denote a range. A single value is represented as a
  * range whose first and last elements are equal.
  */
 fun Collection<Int>.collapseToRanges(): List<Pair<Int, Int>> {
