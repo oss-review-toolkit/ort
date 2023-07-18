@@ -63,10 +63,12 @@ class ScanCodeTest : WordSpec({
         }
     }
 
-    "commandLineOptions" should {
+    "getCommandLineOptions()" should {
         "contain the default values if the scanner configuration is empty" {
-            scanner.commandLineOptions.joinToString(" ") shouldMatch
+            scanner.getCommandLineOptions("31.2.4").joinToString(" ") shouldMatch
                 "--copyright --license --info --strip-root --timeout 300 --processes \\d+"
+            scanner.getCommandLineOptions("32.0.0").joinToString(" ") shouldMatch
+                "--copyright --license --info --strip-root --timeout 300 --processes \\d+ --license-references"
         }
 
         "contain the values from the scanner configuration" {
@@ -82,7 +84,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            scannerWithConfig.commandLineOptions.joinToString(" ") shouldBe
+            scannerWithConfig.getCommandLineOptions("31.2.4").joinToString(" ") shouldBe
                 "--command --line --commandLineNonConfig"
         }
 
@@ -99,7 +101,7 @@ class ScanCodeTest : WordSpec({
                 )
             )
 
-            scannerWithConfig.commandLineOptions shouldBe listOf("--command", "--line", "-n", "-c")
+            scannerWithConfig.getCommandLineOptions("31.2.4") shouldBe listOf("--command", "--line", "-n", "-c")
         }
     }
 
