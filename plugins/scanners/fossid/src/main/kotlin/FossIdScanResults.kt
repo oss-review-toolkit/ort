@@ -109,8 +109,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 }
 
 /**
- * Map the raw snippets to ORT [SnippetFinding]s to be included in the [ScanSummary]. If a snippet license cannot be
- * parsed, an issues is added to [issues].
+ * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
  */
 internal fun mapSnippetFindings(
     rawResults: RawResults,
