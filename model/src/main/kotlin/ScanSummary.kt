@@ -76,8 +76,7 @@ data class ScanSummary(
 
     /**
      * The list of issues that occurred during the scan. This property is not serialized if the list is empty to reduce
-     * the size of the result file. If there are no issues at all, [ScannerRun.hasIssues] already contains that
-     * information.
+     * the size of the result file.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<Issue> = emptyList()
