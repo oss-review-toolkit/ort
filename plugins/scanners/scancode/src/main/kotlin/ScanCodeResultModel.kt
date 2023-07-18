@@ -29,7 +29,8 @@ import kotlinx.serialization.json.JsonTransformingSerializer
 @Serializable
 data class ScanCodeResult(
     val headers: List<HeaderEntry>,
-    val files: List<FileEntry>
+    val files: List<FileEntry>,
+    val licenseReferences: List<LicenseReference>? = null // Available only with "--license-references".
 )
 
 @Serializable
@@ -95,6 +96,12 @@ sealed interface CopyrightEntry {
         override val statement = copyright
     }
 }
+
+@Serializable
+data class LicenseReference(
+    val key: String,
+    val spdxLicenseKey: String
+)
 
 /**
  * A serializer that wraps an old primitive input option from ScanCode 3 into an array like it is for recent ScanCode

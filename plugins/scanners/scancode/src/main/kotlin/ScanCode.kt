@@ -44,6 +44,7 @@ import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
+import org.semver4j.Semver
 
 /**
  * A wrapper for [ScanCode](https://github.com/nexB/scancode-toolkit).
@@ -63,6 +64,7 @@ class ScanCode internal constructor(
     companion object : Logging {
         const val SCANNER_NAME = "ScanCode"
 
+        private const val LICENSE_REFERENCES_OPTION_VERSION = "32.0.0"
         private const val OUTPUT_FORMAT = "json-pp"
         internal const val TIMEOUT = 300
 
@@ -113,12 +115,18 @@ class ScanCode internal constructor(
     private val nonConfigurationOptions = scanCodeConfiguration["commandLineNonConfig"]?.splitOnWhitespace()
         ?: DEFAULT_NON_CONFIGURATION_OPTIONS
 
-    val commandLineOptions by lazy {
+    internal fun getCommandLineOptions(version: String) =
         buildList {
             addAll(configurationOptions)
             addAll(nonConfigurationOptions)
+
+            if (Semver(version).isGreaterThanOrEqualTo(LICENSE_REFERENCES_OPTION_VERSION)) {
+                // Required to be able to map ScanCode license keys to SPDX IDs.
+                add("--license-references")
+            }
         }
-    }
+
+    val commandLineOptions by lazy { getCommandLineOptions(version) }
 
     override fun command(workingDir: File?) =
         listOfNotNull(workingDir, if (Os.isWindows) "scancode.bat" else "scancode").joinToString(File.separator)
