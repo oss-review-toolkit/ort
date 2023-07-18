@@ -450,7 +450,7 @@ same way to easily run them and compare their results. If passed an ORT result f
 We recommend to use ORT with one of the following scanners as their integration has been thoroughly tested (in
 alphabetical order):
 
-* [FossID](https://fossid.com/)
+* [FossID](https://fossid.com/) (snippet scanner, commercial)
 * [ScanCode](https://github.com/nexB/scancode-toolkit)
 
 Additionally, the following reference implementations exist (in alphabetical order):
@@ -458,7 +458,7 @@ Additionally, the following reference implementations exist (in alphabetical ord
 * [Askalono](https://github.com/jpeddicord/askalono)
 * [lc](https://github.com/boyter/lc)
 * [Licensee](https://github.com/licensee/licensee)
-* [SCANOSS](https://www.scanoss.com/)
+* [SCANOSS](https://www.scanoss.com/) (snippet scanner)
 
 For a comparison of some of these, see this
 [Bachelor Thesis](https://osr.cs.fau.de/2019/08/07/final-thesis-a-comparison-study-of-open-source-license-crawler/).
