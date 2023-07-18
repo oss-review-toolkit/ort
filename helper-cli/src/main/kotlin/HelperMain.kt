@@ -79,6 +79,7 @@ internal class HelperMain : CliktCommand(
         subcommands(
             ConvertOrtFileCommand(),
             CreateAnalyzerResultCommand(),
+            CreateAnalyzerResultFromPackageListCommand(),
             DevCommand(),
             ExtractRepositoryConfigurationCommand(),
             GenerateTimeoutErrorResolutionsCommand(),
