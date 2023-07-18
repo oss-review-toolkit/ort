@@ -39,8 +39,7 @@ data class AdvisorSummary(
 
     /**
      * The list of issues that occurred during the advisor run.
-     * This property is not serialized if the list is empty to reduce the size of the result file. If there are no
-     * issues at all, [AdvisorRecord.hasIssues] already contains that information.
+     * This property is not serialized if the list is empty to reduce the size of the result file.
      */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     val issues: List<Issue> = emptyList()
