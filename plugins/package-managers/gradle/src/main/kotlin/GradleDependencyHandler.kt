@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.plugins.packagemanagers.gradle.utils
+package org.ossreviewtoolkit.plugins.packagemanagers.gradle
 
 import OrtDependency
 
