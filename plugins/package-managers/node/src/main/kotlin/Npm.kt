@@ -124,7 +124,7 @@ open class Npm(
 
     private val legacyPeerDeps = options[OPTION_LEGACY_PEER_DEPS].toBoolean()
 
-    private val graphBuilder = DependencyGraphBuilder(NpmDependencyHandler(this))
+    private val graphBuilder by lazy { DependencyGraphBuilder(NpmDependencyHandler(this)) }
 
     private val npmViewCache = ConcurrentHashMap<String, Deferred<JsonNode>>()
 
