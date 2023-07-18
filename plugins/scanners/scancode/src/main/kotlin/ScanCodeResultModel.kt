@@ -49,24 +49,65 @@ data class Options(
     val input: List<String>
 )
 
-@Serializable
-data class FileEntry(
-    val path: String,
-    val type: String,
-    val licenses: List<LicenseEntry>,
-    val copyrights: List<CopyrightEntry>,
+sealed interface FileEntry {
+    val path: String
+    val type: String
+    val licenses: List<LicenseEntry>
+    val copyrights: List<CopyrightEntry>
     val scanErrors: List<String>
-)
+
+    @Serializable
+    data class Version1(
+        override val path: String,
+        override val type: String,
+        override val licenses: List<LicenseEntry>,
+        override val copyrights: List<CopyrightEntry>,
+        override val scanErrors: List<String>
+    ) : FileEntry
+
+    @Serializable
+    data class Version3(
+        override val path: String,
+        override val type: String,
+        val licenseDetections: List<LicenseDetection>,
+        override val copyrights: List<CopyrightEntry>,
+        override val scanErrors: List<String>
+    ) : FileEntry {
+        override val licenses = licenseDetections.flatMap { it.matches }
+    }
+}
 
 @Serializable
-data class LicenseEntry(
-    val key: String,
-    val score: Float,
-    val spdxLicenseKey: String? = null, // This might be explicitly set to null in JSON.
-    val startLine: Int,
-    val endLine: Int,
-    val matchedRule: LicenseRule
+data class LicenseDetection(
+    val matches: List<LicenseEntry>
 )
+
+sealed interface LicenseEntry {
+    val licenseExpression: String
+    val startLine: Int
+    val endLine: Int
+    val score: Float
+
+    @Serializable
+    data class Version1(
+        val key: String,
+        override val score: Float,
+        val spdxLicenseKey: String? = null, // This might be explicitly set to null in JSON.
+        override val startLine: Int,
+        override val endLine: Int,
+        val matchedRule: LicenseRule
+    ) : LicenseEntry {
+        override val licenseExpression = matchedRule.licenseExpression
+    }
+
+    @Serializable
+    data class Version3(
+        override val score: Float,
+        override val startLine: Int,
+        override val endLine: Int,
+        override val licenseExpression: String
+    ) : LicenseEntry
+}
 
 @Serializable
 data class LicenseRule(
