@@ -69,8 +69,6 @@ class GitWorkingTreeFunTest : StringSpec({
 
         // Ignore auto-created branches by Dependabot to avoid regular updates to this list.
         workingTree.listRemoteBranches().filterNot { it.startsWith("dependabot/") } should containAll(
-            "all-repos_autofix_bump",
-            "all-repos_autofix_bump-2023-02-05",
             "main"
         )
     }
