@@ -1,0 +1,28 @@
+---
+projectName: "Example project name"
+projectVcs:
+  type: "Git"
+  url: "https://github.com/example/project.git"
+  revision: "2222222222222222222222222222222222222222"
+  path: "vcs-path/project"
+dependencies:
+  - id: "NPM::example-dependency-one:1.0.0"
+    vcs:
+      type: "Git"
+      url: "https://github.com/example/depedency-one.git"
+      revision: "0000000000000000000000000000000000000000"
+      path: "vcs-path/dependency-one"
+    sourceArtifact:
+      url: "https://example.org/example-dependency-one.zip"
+    isExcluded: true
+    isDynamicallyLinked: true
+  - id: "NPM::example-dependency-two:2.0.0"
+    vcs:
+      type: "Git"
+      url: "https://github.com/example/depedency-1.git"
+      revision: "1111111111111111111111111111111111111111"
+      path: "vcs-path/dependency-two"
+    sourceArtifact:
+      url: "https://example.org/example-dependency-two.zip"
+    isExcluded: false
+    isDynamicallyLinked: false
