@@ -207,6 +207,7 @@ fun Identifier.getPurlType() =
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
         "nuget" -> PurlType.NUGET
+        "pod" -> PurlType.COCOAPODS
         "pypi" -> PurlType.PYPI
         else -> lowerType
     }.toString()

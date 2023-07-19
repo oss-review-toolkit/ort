@@ -59,7 +59,7 @@ project:
             - id: "Pod::TransitionKit:2.2.1"
 packages:
 - id: "Pod::ISO8601DateFormatterValueTransformer:0.6.1"
-  purl: "pkg:pod/ISO8601DateFormatterValueTransformer@0.6.1"
+  purl: "pkg:cocoapods/ISO8601DateFormatterValueTransformer@0.6.1"
   declared_licenses:
   - "Apache2"
   declared_licenses_processed:
@@ -89,7 +89,7 @@ packages:
     revision: "v0.6.1"
     path: ""
 - id: "Pod::RKValueTransformers:1.1.3"
-  purl: "pkg:pod/RKValueTransformers@1.1.3"
+  purl: "pkg:cocoapods/RKValueTransformers@1.1.3"
   declared_licenses:
   - "Apache2"
   declared_licenses_processed:
@@ -119,7 +119,7 @@ packages:
     revision: "v1.1.3"
     path: ""
 - id: "Pod::RestKit:0.27.3"
-  purl: "pkg:pod/RestKit@0.27.3"
+  purl: "pkg:cocoapods/RestKit@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -150,7 +150,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Core:0.27.3"
-  purl: "pkg:pod/RestKit%2FCore@0.27.3"
+  purl: "pkg:cocoapods/RestKit%2FCore@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -181,7 +181,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/CoreData:0.27.3"
-  purl: "pkg:pod/RestKit%2FCoreData@0.27.3"
+  purl: "pkg:cocoapods/RestKit%2FCoreData@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -212,7 +212,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Network:0.27.3"
-  purl: "pkg:pod/RestKit%2FNetwork@0.27.3"
+  purl: "pkg:cocoapods/RestKit%2FNetwork@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -243,7 +243,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/ObjectMapping:0.27.3"
-  purl: "pkg:pod/RestKit%2FObjectMapping@0.27.3"
+  purl: "pkg:cocoapods/RestKit%2FObjectMapping@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -274,7 +274,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::RestKit/Support:0.27.3"
-  purl: "pkg:pod/RestKit%2FSupport@0.27.3"
+  purl: "pkg:cocoapods/RestKit%2FSupport@0.27.3"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -305,7 +305,7 @@ packages:
     revision: "v0.27.3"
     path: ""
 - id: "Pod::SOCKit:1.1"
-  purl: "pkg:pod/SOCKit@1.1"
+  purl: "pkg:cocoapods/SOCKit@1.1"
   declared_licenses:
   - "Apache License, Version 2.0"
   declared_licenses_processed:
@@ -335,7 +335,7 @@ packages:
     revision: "1.1"
     path: ""
 - id: "Pod::TransitionKit:2.2.1"
-  purl: "pkg:pod/TransitionKit@2.2.1"
+  purl: "pkg:cocoapods/TransitionKit@2.2.1"
   declared_licenses:
   - "Apache2"
   declared_licenses_processed:
