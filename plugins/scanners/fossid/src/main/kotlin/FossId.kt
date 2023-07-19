@@ -500,7 +500,8 @@ class FossId internal constructor(
             }
         }
 
-        val mappedUrlWithoutCredentials = urlProvider.getUrl(urlWithoutCredentials)
+        val mappedUrl = urlProvider.getUrl(urlWithoutCredentials)
+        val mappedUrlWithoutCredentials = mappedUrl.replaceCredentialsInUri()
 
         // we ignore the revision because we want to do a delta scan
         val recentScans = scans.recentScansForRepository(
@@ -526,7 +527,7 @@ class FossId internal constructor(
             namingProvider.createScanCode(projectName, DeltaTag.DELTA, branchLabel)
         }
 
-        val scanId = createScan(projectCode, scanCode, mappedUrlWithoutCredentials, revision, projectRevision.orEmpty())
+        val scanId = createScan(projectCode, scanCode, mappedUrl, revision, projectRevision.orEmpty())
 
         logger.info { "Initiating the download..." }
         service.downloadFromGit(config.user, config.apiKey, scanCode)
