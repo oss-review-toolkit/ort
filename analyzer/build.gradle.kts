@@ -57,6 +57,8 @@ dependencies {
         }
     }
 
+    funTestImplementation(platform(project(":plugins:package-managers")))
+
     // Only the Java plugin's built-in "test" source set automatically depends on the test fixtures.
     funTestImplementation(testFixtures(project))
 
