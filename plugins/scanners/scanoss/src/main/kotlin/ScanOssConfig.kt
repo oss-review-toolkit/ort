@@ -19,6 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
+import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 /**
@@ -28,7 +29,7 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
  */
 internal data class ScanOssConfig(
     /** URL of the ScanOSS server. */
-    val apiUrl: String?,
+    val apiUrl: String,
 
     /** API Key required to authenticate with the ScanOSS server. */
     val apiKey: String
@@ -43,7 +44,7 @@ internal data class ScanOssConfig(
         fun create(scannerConfig: ScannerConfiguration): ScanOssConfig {
             val scanOssOptions = scannerConfig.options?.get("ScanOss")
 
-            val apiUrl = scanOssOptions?.get(API_URL_PROPERTY)
+            val apiUrl = scanOssOptions?.get(API_URL_PROPERTY) ?: ScanOssService.DEFAULT_API_URL
             val apiKey = scanOssOptions?.get(API_KEY_PROPERTY).orEmpty()
 
             return ScanOssConfig(apiUrl, apiKey)
