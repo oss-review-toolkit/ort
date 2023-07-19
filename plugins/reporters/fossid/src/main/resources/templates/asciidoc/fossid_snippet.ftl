@@ -30,14 +30,20 @@ List of all the provenances with their files and snippets.
 [#list ortResult.scanner.scanResults as scanResult]
 
 [#if scanResult.scanner.name != "FossId"] [#continue] [/#if]
-== Provenance '${scanResult.provenance.vcsInfo.url}'
+
+[#if scanResult.provenance.vcsInfo??]
+    [#assign url = scanResult.provenance.vcsInfo.url]
+[#else]
+    [#assign url = scanResult.provenance.sourceArtifact.url]
+[/#if]
+== Provenance '${url}'
 
 [#assign summary = scanResult.summary]
 
 Scan start time : ${summary.startTime} +
 End time : ${summary.startTime} +
 [#if scanResult.provenance.vcsInfo??]
-    [#assign gitRepoUrl = scanResult.provenance.vcsInfo.url]
+    [#assign gitRepoUrl = url]
     [#assign gitRevision = scanResult.provenance.vcsInfo.revision]
     Git repo URL: ${gitRepoUrl} +
     Git revision: ${gitRevision}
