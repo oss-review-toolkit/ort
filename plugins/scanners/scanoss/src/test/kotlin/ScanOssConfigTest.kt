@@ -20,17 +20,17 @@
 package org.ossreviewtoolkit.plugins.scanners.scanoss
 
 import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.beEmpty
 
+import org.ossreviewtoolkit.clients.scanoss.ScanOssService
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 
 class ScanOssConfigTest : StringSpec({
     "Default values are used" {
         with(ScanOssConfig.create(ScannerConfiguration())) {
-            apiUrl should beNull()
+            apiUrl shouldBe ScanOssService.DEFAULT_API_URL
             apiKey should beEmpty()
         }
     }
