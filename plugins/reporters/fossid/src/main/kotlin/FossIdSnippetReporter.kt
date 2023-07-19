@@ -38,6 +38,9 @@ class FossIdSnippetReporter : Reporter by delegateReporter {
     override val type = "FossIdSnippet"
 
     override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
+        val hasFossIdResults = input.ortResult.scanner?.scanResults?.any { it.scanner.name == "FossId" } ?: false
+        require(hasFossIdResults) { "No FossID scan results have been found." }
+
         val extendedOptions = options + (FreemarkerTemplateProcessor.OPTION_TEMPLATE_ID to TEMPLATE_NAME)
         return delegateReporter.generateReport(input, outputDir, extendedOptions)
     }
