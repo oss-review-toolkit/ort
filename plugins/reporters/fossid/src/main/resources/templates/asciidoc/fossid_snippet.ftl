@@ -29,6 +29,7 @@
 List of all the provenances with their files and snippets.
 [#list ortResult.scanner.scanResults as scanResult]
 
+[#if scanResult.scanner.name != "FossId"] [#continue] [/#if]
 == Provenance '${scanResult.provenance.vcsInfo.url}'
 
 [#assign summary = scanResult.summary]
