@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package org.ossreviewtoolkit.cli
+package org.ossreviewtoolkit.analyzer
 
 import io.kotest.assertions.assertSoftly
 import io.kotest.assertions.throwables.shouldThrow
@@ -32,8 +32,6 @@ import io.kotest.matchers.shouldBe
 
 import java.io.File
 
-import org.ossreviewtoolkit.analyzer.ManagedProjectFiles
-import org.ossreviewtoolkit.analyzer.PackageManager
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 import org.ossreviewtoolkit.model.config.PathExcludeReason
