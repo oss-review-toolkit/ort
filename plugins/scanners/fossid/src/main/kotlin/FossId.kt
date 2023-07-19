@@ -534,6 +534,21 @@ class FossId internal constructor(
             .checkResponse("download data from Git", false)
 
         if (existingScan == null) {
+            val excludesRules = context.excludes?.let {
+                convertRules(it, issues).also {
+                    logger.info { "${it.size} rule(s) from ORT excludes have been found." }
+                }
+            }.orEmpty()
+
+            excludesRules.forEach {
+                service.createIgnoreRule(config.user, config.apiKey, scanCode, it.type, it.value, RuleScope.SCAN)
+                    .checkResponse("create ignore rules", false)
+
+                logger.info {
+                    "Ignore rule of type '${it.type}' and value '${it.value}' has been created for the new scan."
+                }
+            }
+
             if (config.waitForResult) checkScan(scanCode)
         } else {
             val existingScanCode = requireNotNull(existingScan.code) {
