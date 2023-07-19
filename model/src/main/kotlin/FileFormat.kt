@@ -54,7 +54,7 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
          */
         fun forExtension(extension: String): FileFormat =
             extension.lowercase().let { lowerCaseExtension ->
-                enumValues<FileFormat>().find {
+                FileFormat.entries.find {
                     lowerCaseExtension in it.fileExtensions
                 } ?: throw IllegalArgumentException(
                     "Unknown file format for file extension '$extension'."
@@ -70,7 +70,7 @@ enum class FileFormat(val mapper: ObjectMapper, val fileExtension: String, varar
          * Return a list of all files inside [directory] with known extensions that can be deserialized.
          */
         fun findFilesWithKnownExtensions(directory: File): List<File> {
-            val allFileExtensions = enumValues<FileFormat>().flatMap { it.fileExtensions }
+            val allFileExtensions = FileFormat.entries.flatMap { it.fileExtensions }
             return directory.walkBottomUp().filter { it.isFile && it.extension in allFileExtensions }.toList()
         }
     }

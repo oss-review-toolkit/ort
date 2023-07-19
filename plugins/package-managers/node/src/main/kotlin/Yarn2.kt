@@ -237,7 +237,7 @@ class Yarn2(
             logger.info { "Parsing packages..." }
 
             val allProjects = parseAllPackages(iterator, definitionFile, packagesHeaders, packagedDetails)
-            val scopeNames = YarnDependencyType.values().mapTo(mutableSetOf()) { it.type }
+            val scopeNames = YarnDependencyType.entries.mapTo(mutableSetOf()) { it.type }
             return allProjects.values.map { project ->
                 ProjectAnalyzerResult(project.copy(scopeNames = scopeNames), emptySet(), issues)
             }.toList()
@@ -512,7 +512,7 @@ class Yarn2(
         // dependencies per scope is limited, because it relies on package.json parsing and only the project ones
         // are available.
 
-        return YarnDependencyType.values().associateWith { dependencyType ->
+        return YarnDependencyType.entries.associateWith { dependencyType ->
             id to dependencies.filter {
                 dependencyToType[it.name] == dependencyType
                         || (it.name !in dependencyToType && dependencyType == YarnDependencyType.DEPENDENCIES)
@@ -637,7 +637,7 @@ class Yarn2(
     private fun listDependenciesByType(definitionFile: File): Map<String, YarnDependencyType> {
         val json = jsonMapper.readTree(definitionFile)
         val result = mutableMapOf<String, YarnDependencyType>()
-        YarnDependencyType.values().forEach { dependencyType ->
+        YarnDependencyType.entries.forEach { dependencyType ->
             json[dependencyType.type]?.fieldNames()?.asSequence()?.forEach {
                 result += it to dependencyType
             }

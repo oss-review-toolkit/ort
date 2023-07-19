@@ -43,13 +43,13 @@ class ClearlyDefinedServiceTest : WordSpec({
         }
 
         "work for ComponentType" {
-            enumValues<ComponentType>().forAll {
+            ComponentType.entries.forAll {
                 ClearlyDefinedService.JSON.encodeToString(it) shouldBe "\"$it\""
             }
         }
 
         "work for Provider" {
-            enumValues<Provider>().forAll {
+            Provider.entries.forAll {
                 ClearlyDefinedService.JSON.encodeToString(it) shouldBe "\"$it\""
             }
         }

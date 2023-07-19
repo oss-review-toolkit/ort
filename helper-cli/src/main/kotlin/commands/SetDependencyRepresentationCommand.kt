@@ -125,7 +125,7 @@ internal class SetDependencyRepresentationCommand : CliktCommand(
 
     private val targetFormat by option(
         "--format", "-f",
-        help = "The target format for the conversion. Must be one of ${enumValues<TargetFormat>().map { it.name }}."
+        help = "The target format for the conversion. Must be one of ${TargetFormat.entries.map { it.name }}."
     ).enum<TargetFormat>().default(TargetFormat.GRAPH)
 
     private val handlePlaceholders by option(

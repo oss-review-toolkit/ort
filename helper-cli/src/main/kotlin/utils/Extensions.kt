@@ -221,7 +221,7 @@ internal fun OrtResult.getLicenseFindingsById(
  */
 internal fun OrtResult.getViolatedRulesByLicense(
     id: Identifier,
-    severity: Collection<Severity> = enumValues<Severity>().asList()
+    severity: Collection<Severity> = Severity.entries
 ): Map<SpdxSingleLicenseExpression, List<String>> =
     getRuleViolations()
         .filter { it.pkg == id && it.severity in severity && it.license != null }

@@ -65,7 +65,7 @@ enum class ArchiveType(extension: String, vararg aliases: String) {
     companion object {
         fun getType(filename: String): ArchiveType {
             val lowerName = filename.lowercase()
-            return (enumValues<ArchiveType>().asList() - NONE).find { type ->
+            return (ArchiveType.entries - NONE).find { type ->
                 type.extensions.any { lowerName.endsWith(it) }
             } ?: NONE
         }
@@ -109,7 +109,7 @@ fun File.unpackTryAllTypes(targetDirectory: File, filter: (ArchiveEntry) -> Bool
     val typeFromName = ArchiveType.getType(name)
     val suppressedExceptions = mutableListOf<Throwable>()
 
-    enumValues<ArchiveType>().mapNotNullTo(mutableListOf(typeFromName)) { type ->
+    ArchiveType.entries.mapNotNullTo(mutableListOf(typeFromName)) { type ->
         type.takeUnless { type == typeFromName || type == ArchiveType.NONE }
     }.find { archiveType ->
         runCatching {

@@ -54,7 +54,7 @@ class CompareCommand : OrtCommand(
     private val method by option(
         "--method", "-m",
         help = "The method to use when comparing ORT results. Must be one of " +
-                "${enumValues<CompareMethod>().map { it.name }}."
+                "${CompareMethod.entries.map { it.name }}."
     ).enum<CompareMethod>()
         .default(CompareMethod.TEXT_DIFF)
 
