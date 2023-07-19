@@ -17,7 +17,7 @@ project:
   homepage_url: "<REPLACE_URL_PROCESSED>"
 packages:
 - id: "SPM:apple:swift-argument-parser:0.2.0"
-  purl: "pkg:spm/apple/swift-argument-parser@0.2.0"
+  purl: "pkg:swift/apple/swift-argument-parser@0.2.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -45,7 +45,7 @@ packages:
     revision: "eb51f949cdd0c9d88abba9ce79d37eb7ea1231d0"
     path: ""
 - id: "SPM:apple:swift-crypto:"
-  purl: "pkg:spm/apple/swift-crypto@"
+  purl: "pkg:swift/apple/swift-crypto@"
   authors:
   - "apple"
   declared_licenses: []
@@ -73,7 +73,7 @@ packages:
     revision: ""
     path: ""
 - id: "SPM:apple:swift-llbuild:9.0.8"
-  purl: "pkg:spm/apple/swift-llbuild@9.0.8"
+  purl: "pkg:swift/apple/swift-llbuild@9.0.8"
   authors:
   - "apple"
   declared_licenses: []
@@ -101,7 +101,7 @@ packages:
     revision: "9.0.8"
     path: ""
 - id: "SPM:braze-inc:braze-ios-sdk:branch-master"
-  purl: "pkg:spm/braze-inc/braze-ios-sdk@branch-master"
+  purl: "pkg:swift/braze-inc/braze-ios-sdk@branch-master"
   authors:
   - "braze-inc"
   declared_licenses: []
@@ -129,7 +129,7 @@ packages:
     revision: ""
     path: ""
 - id: "SPM:grpc:grpc-swift:revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
-  purl: "pkg:spm/grpc/grpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
+  purl: "pkg:swift/grpc/grpc-swift@revision-efb67a324eaf1696b50e66bc471a53690e41fbf6"
   authors:
   - "grpc"
   declared_licenses: []

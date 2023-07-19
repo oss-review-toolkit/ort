@@ -187,7 +187,8 @@ enum class PurlType(private val value: String) {
     NPM("npm"),
     NUGET("nuget"),
     PYPI("pypi"),
-    RPM("rpm");
+    RPM("rpm"),
+    SWIFT("swift");
 
     override fun toString() = value
 }
@@ -209,6 +210,7 @@ fun Identifier.getPurlType() =
         "nuget" -> PurlType.NUGET
         "pod" -> PurlType.COCOAPODS
         "pypi" -> PurlType.PYPI
+        "spm" -> PurlType.SWIFT
         else -> lowerType
     }.toString()
 
