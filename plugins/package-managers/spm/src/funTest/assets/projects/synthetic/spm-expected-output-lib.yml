@@ -127,7 +127,7 @@ project:
           - id: "SPM:apple:swift-collections:1.0.4"
 packages:
 - id: "SPM:apple:swift-atomics:1.1.0"
-  purl: "pkg:spm/apple/swift-atomics@1.1.0"
+  purl: "pkg:swift/apple/swift-atomics@1.1.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -155,7 +155,7 @@ packages:
     revision: "1.1.0"
     path: ""
 - id: "SPM:apple:swift-collections:1.0.4"
-  purl: "pkg:spm/apple/swift-collections@1.0.4"
+  purl: "pkg:swift/apple/swift-collections@1.0.4"
   authors:
   - "apple"
   declared_licenses: []
@@ -183,7 +183,7 @@ packages:
     revision: "1.0.4"
     path: ""
 - id: "SPM:apple:swift-crypto:2.5.0"
-  purl: "pkg:spm/apple/swift-crypto@2.5.0"
+  purl: "pkg:swift/apple/swift-crypto@2.5.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -211,7 +211,7 @@ packages:
     revision: "2.5.0"
     path: ""
 - id: "SPM:apple:swift-log:1.5.2"
-  purl: "pkg:spm/apple/swift-log@1.5.2"
+  purl: "pkg:swift/apple/swift-log@1.5.2"
   authors:
   - "apple"
   declared_licenses: []
@@ -239,7 +239,7 @@ packages:
     revision: "1.5.2"
     path: ""
 - id: "SPM:apple:swift-metrics:2.4.1"
-  purl: "pkg:spm/apple/swift-metrics@2.4.1"
+  purl: "pkg:swift/apple/swift-metrics@2.4.1"
   authors:
   - "apple"
   declared_licenses: []
@@ -267,7 +267,7 @@ packages:
     revision: "2.4.1"
     path: ""
 - id: "SPM:apple:swift-nio:2.56.0"
-  purl: "pkg:spm/apple/swift-nio@2.56.0"
+  purl: "pkg:swift/apple/swift-nio@2.56.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -295,7 +295,7 @@ packages:
     revision: "2.56.0"
     path: ""
 - id: "SPM:apple:swift-nio-extras:1.19.0"
-  purl: "pkg:spm/apple/swift-nio-extras@1.19.0"
+  purl: "pkg:swift/apple/swift-nio-extras@1.19.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -323,7 +323,7 @@ packages:
     revision: "1.19.0"
     path: ""
 - id: "SPM:apple:swift-nio-http2:1.27.0"
-  purl: "pkg:spm/apple/swift-nio-http2@1.27.0"
+  purl: "pkg:swift/apple/swift-nio-http2@1.27.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -351,7 +351,7 @@ packages:
     revision: "1.27.0"
     path: ""
 - id: "SPM:apple:swift-nio-ssl:2.24.0"
-  purl: "pkg:spm/apple/swift-nio-ssl@2.24.0"
+  purl: "pkg:swift/apple/swift-nio-ssl@2.24.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -379,7 +379,7 @@ packages:
     revision: "2.24.0"
     path: ""
 - id: "SPM:apple:swift-nio-transport-services:1.17.0"
-  purl: "pkg:spm/apple/swift-nio-transport-services@1.17.0"
+  purl: "pkg:swift/apple/swift-nio-transport-services@1.17.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -407,7 +407,7 @@ packages:
     revision: "1.17.0"
     path: ""
 - id: "SPM:swift-server:async-http-client:1.18.0"
-  purl: "pkg:spm/swift-server/async-http-client@1.18.0"
+  purl: "pkg:swift/swift-server/async-http-client@1.18.0"
   authors:
   - "swift-server"
   declared_licenses: []
@@ -435,7 +435,7 @@ packages:
     revision: "1.18.0"
     path: ""
 - id: "SPM:swift-server:swift-backtrace:1.3.3"
-  purl: "pkg:spm/swift-server/swift-backtrace@1.3.3"
+  purl: "pkg:swift/swift-server/swift-backtrace@1.3.3"
   authors:
   - "swift-server"
   declared_licenses: []
@@ -463,7 +463,7 @@ packages:
     revision: "1.3.3"
     path: ""
 - id: "SPM:vapor:async-kit:1.17.0"
-  purl: "pkg:spm/vapor/async-kit@1.17.0"
+  purl: "pkg:swift/vapor/async-kit@1.17.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -491,7 +491,7 @@ packages:
     revision: "1.17.0"
     path: ""
 - id: "SPM:vapor:console-kit:4.6.0"
-  purl: "pkg:spm/vapor/console-kit@4.6.0"
+  purl: "pkg:swift/vapor/console-kit@4.6.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -519,7 +519,7 @@ packages:
     revision: "4.6.0"
     path: ""
 - id: "SPM:vapor:multipart-kit:4.5.4"
-  purl: "pkg:spm/vapor/multipart-kit@4.5.4"
+  purl: "pkg:swift/vapor/multipart-kit@4.5.4"
   authors:
   - "vapor"
   declared_licenses: []
@@ -547,7 +547,7 @@ packages:
     revision: "4.5.4"
     path: ""
 - id: "SPM:vapor:routing-kit:4.7.2"
-  purl: "pkg:spm/vapor/routing-kit@4.7.2"
+  purl: "pkg:swift/vapor/routing-kit@4.7.2"
   authors:
   - "vapor"
   declared_licenses: []
@@ -575,7 +575,7 @@ packages:
     revision: "4.7.2"
     path: ""
 - id: "SPM:vapor:websocket-kit:2.14.0"
-  purl: "pkg:spm/vapor/websocket-kit@2.14.0"
+  purl: "pkg:swift/vapor/websocket-kit@2.14.0"
   authors:
   - "vapor"
   declared_licenses: []
