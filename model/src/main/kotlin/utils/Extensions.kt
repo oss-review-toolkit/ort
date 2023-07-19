@@ -50,11 +50,11 @@ fun TextLocation.prependPath(prefix: String): TextLocation =
     if (prefix.isEmpty()) this else copy(path = path.prependPath(prefix))
 
 /**
- * Map the [type][Identifier.type] of a [package identifier][Package.id] to a ClearlyDefined [ComponentType], or return
- * null if a mapping is not possible.
+ * Map an [Identifier's type][Identifier.type] to a ClearlyDefined [ComponentType], or return null if a mapping is not
+ * possible.
  */
-fun Package.toClearlyDefinedType(): ComponentType? =
-    when (id.type) {
+fun Identifier.toClearlyDefinedType(): ComponentType? =
+    when (type) {
         "Bower" -> ComponentType.GIT
         "CocoaPods" -> ComponentType.POD
         "Composer" -> ComponentType.COMPOSER
@@ -88,7 +88,7 @@ fun Package.toClearlyDefinedProvider(): Provider? =
  * Map an ORT [Package] to ClearlyDefined [Coordinates], or to null if a mapping is not possible.
  */
 fun Package.toClearlyDefinedCoordinates(): Coordinates? {
-    val type = toClearlyDefinedType() ?: return null
+    val type = id.toClearlyDefinedType() ?: return null
     val provider = toClearlyDefinedProvider() ?: type.defaultProvider ?: return null
 
     return Coordinates(
