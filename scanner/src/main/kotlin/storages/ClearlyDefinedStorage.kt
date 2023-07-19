@@ -104,7 +104,9 @@ class ClearlyDefinedStorage(
      */
     private suspend fun readFromClearlyDefined(pkg: Package): Result<List<ScanResult>> {
         val coordinates = pkg.toClearlyDefinedSourceLocation()?.toCoordinates() ?: pkg.toClearlyDefinedCoordinates()
-            ?: return Result.failure(ScanStorageException("Unable to create ClearlyDefined coordinates for $pkg."))
+            ?: return Result.failure(
+                ScanStorageException("Unable to create ClearlyDefined coordinates for '${pkg.id.toCoordinates()}'.")
+            )
 
         return runCatching {
             logger.debug { "Looking up ClearlyDefined scan results for '$coordinates'." }

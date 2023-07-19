@@ -104,7 +104,7 @@ class ClearlyDefinedPackageCurationProvider(
             if (coordinates != null) {
                 coordinatesToIds[coordinates] = pkg.id
             } else {
-                logger.warn { "Unable to create ClearlyDefined coordinates for $pkg." }
+                logger.warn { "Unable to create ClearlyDefined coordinates for '${pkg.id.toCoordinates()}'." }
             }
         }
 
