@@ -52,7 +52,7 @@ object SpdxModelMapper {
              */
             fun forExtension(extension: String): FileFormat =
                 extension.lowercase().let { lowerCaseExtension ->
-                    enumValues<FileFormat>().find {
+                    FileFormat.entries.find {
                         lowerCaseExtension in it.fileExtensions
                     } ?: throw IllegalArgumentException(
                         "Unknown file format for file extension '$extension'."

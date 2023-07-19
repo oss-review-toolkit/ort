@@ -57,7 +57,7 @@ enum class ArchiveType(vararg val extensions: String) {
     companion object {
         fun getType(filename: String): ArchiveType {
             val lowerName = filename.toLowerCase()
-            return (enumValues<ArchiveType>().asList() - NONE).find { type ->
+            return (ArchiveType.entries - NONE).find { type ->
                 type.extensions.any { lowerName.endsWith(it) }
             } ?: NONE
         }

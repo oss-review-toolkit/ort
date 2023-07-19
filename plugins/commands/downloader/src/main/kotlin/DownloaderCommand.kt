@@ -181,7 +181,7 @@ class DownloaderCommand : OrtCommand(
     private val packageTypes by option(
         "--package-types",
         help = "A comma-separated list of the package types from the ORT file's analyzer result to limit downloads to."
-    ).enum<PackageType>().split(",").default(enumValues<PackageType>().asList())
+    ).enum<PackageType>().split(",").default(PackageType.entries)
 
     private val packageIds by option(
         "--package-ids",

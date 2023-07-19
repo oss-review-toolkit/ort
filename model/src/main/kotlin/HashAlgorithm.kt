@@ -86,7 +86,7 @@ enum class HashAlgorithm(vararg val aliases: String, val verifiable: Boolean = t
         /**
          * The list of algorithms that can be verified.
          */
-        val VERIFIABLE = enumValues<HashAlgorithm>().filter { it.verifiable }
+        val VERIFIABLE = HashAlgorithm.entries.filter { it.verifiable }
 
         /**
          * Create a hash algorithm from one of its [alias] names.
@@ -94,7 +94,7 @@ enum class HashAlgorithm(vararg val aliases: String, val verifiable: Boolean = t
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun fromString(alias: String): HashAlgorithm =
-            enumValues<HashAlgorithm>().find {
+            HashAlgorithm.entries.find {
                 alias.uppercase() in it.aliases
             } ?: UNKNOWN
 

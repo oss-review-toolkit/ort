@@ -80,7 +80,7 @@ fun Package.toClearlyDefinedProvider(): Provider? =
         vcsProcessed.url
     ).firstNotNullOfOrNull { url ->
         PackageProvider.get(url)?.let { provider ->
-            Provider.values().find { it.name == provider.name }
+            Provider.entries.find { it.name == provider.name }
         }
     }
 

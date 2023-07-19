@@ -75,13 +75,13 @@ sealed class SeverityStats(
             is RuleViolationsSeverityStats -> "rule violations"
         }
 
-        val resolved = Severity.values().sortedArrayDescending().map {
+        val resolved = Severity.entries.toTypedArray().sortedArrayDescending().map {
             p(resolvedCounts.getOrDefault(it, 0), it.name.lowercase())
         }
 
         println("Resolved $thing: ${resolved.joinToString()}.")
 
-        val unresolved = Severity.values().sortedArrayDescending().map {
+        val unresolved = Severity.entries.toTypedArray().sortedArrayDescending().map {
             p(unresolvedCounts.getOrDefault(it, 0), it.name.lowercase())
         }
 

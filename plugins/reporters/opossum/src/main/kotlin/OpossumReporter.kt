@@ -513,7 +513,7 @@ class OpossumReporter : Reporter {
 
         opossumInput.addBaseUrl("/", ortResult.repository.vcs)
 
-        SpdxLicense.values().forEach {
+        SpdxLicense.entries.forEach {
             val licenseText = getLicenseText(it.id)
             opossumInput.frequentLicenses += OpossumFrequentLicense(it.id, it.fullName, licenseText)
         }

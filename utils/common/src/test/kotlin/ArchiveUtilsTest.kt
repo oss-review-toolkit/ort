@@ -60,7 +60,7 @@ class ArchiveUtilsTest : WordSpec() {
 
     init {
         // The test for DEB is implemented differently and cannot be covered by the parameterized loop.
-        (enumValues<ArchiveType>().asList() - ArchiveType.DEB - ArchiveType.NONE).forEach { type ->
+        (ArchiveType.entries - ArchiveType.DEB - ArchiveType.NONE).forEach { type ->
             val extension = type.extensions.first()
 
             "${type.name} archives" should {
@@ -156,7 +156,7 @@ class ArchiveUtilsTest : WordSpec() {
 
         "unpackTryAllTypes" should {
             // The test for DEB is implemented differently and cannot be covered by the parameterized loop.
-            (enumValues<ArchiveType>().asList() - ArchiveType.DEB - ArchiveType.NONE).forEach { type ->
+            (ArchiveType.entries - ArchiveType.DEB - ArchiveType.NONE).forEach { type ->
                 val extension = type.extensions.first()
 
                 "unpack $type archives" {

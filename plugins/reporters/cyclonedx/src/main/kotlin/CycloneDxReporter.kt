@@ -101,7 +101,7 @@ class CycloneDxReporter : Reporter {
     }
 
     private fun mapHash(hash: org.ossreviewtoolkit.model.Hash): Hash? =
-        enumValues<Hash.Algorithm>().find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
+        Hash.Algorithm.entries.find { it.spec == hash.algorithm.toString() }?.let { Hash(it, hash.value) }
 
     private fun Collection<String>.mapNamesToLicenses(origin: String, input: ReporterInput): List<License> =
         map { licenseName ->
@@ -137,7 +137,7 @@ class CycloneDxReporter : Reporter {
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }
         val packages = input.ortResult.getPackages(omitExcluded = true).sortedBy { it.metadata.id }
 
-        val schemaVersion = enumValues<CycloneDxSchema.Version>().find {
+        val schemaVersion = CycloneDxSchema.Version.entries.find {
             it.versionString == options[OPTION_SCHEMA_VERSION]
         } ?: DEFAULT_SCHEMA_VERSION
 

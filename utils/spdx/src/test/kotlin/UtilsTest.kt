@@ -164,7 +164,7 @@ class UtilsTest : WordSpec() {
             }
 
             "return a non-blank string for all SPDX ids" {
-                enumValues<SpdxLicense>().forEach {
+                SpdxLicense.entries.forEach {
                     getLicenseText(it.id) shouldNot beBlank()
                 }
             }

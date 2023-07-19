@@ -64,7 +64,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdxId
  */
 private fun Hash.toSpdxChecksum(): SpdxChecksum? =
     // The SPDX checksum algorithm names are simple and assumed to be part of ORT's HashAlgorithm aliases.
-    SpdxChecksum.Algorithm.values().find { it.name in algorithm.aliases }?.let {
+    SpdxChecksum.Algorithm.entries.find { it.name in algorithm.aliases }?.let {
         SpdxChecksum(
             algorithm = it,
             checksumValue = value

@@ -32,7 +32,7 @@ class HashAlgorithmTest : StringSpec({
     val file = File("../LICENSE")
 
     "SHA string representations need to contain a dash for MessageDigest compatibility" {
-        enumValues<HashAlgorithm>().filter { it.toString().startsWith("SHA") }.forAll {
+        HashAlgorithm.entries.filter { it.toString().startsWith("SHA") }.forAll {
             it.toString() shouldStartWith "SHA-"
         }
     }

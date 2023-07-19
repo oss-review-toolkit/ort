@@ -45,7 +45,7 @@ enum class ComponentType(val defaultProvider: Provider? = null) {
 
     companion object {
         @JvmStatic
-        fun fromString(value: String) = enumValues<ComponentType>().single { it.toString() == value }
+        fun fromString(value: String) = ComponentType.entries.single { it.toString() == value }
     }
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
@@ -75,7 +75,7 @@ enum class Provider {
 
     companion object {
         @JvmStatic
-        fun fromString(value: String) = enumValues<Provider>().single { it.toString() == value }
+        fun fromString(value: String) = Provider.entries.single { it.toString() == value }
     }
 
     // Align the string representation with the serial name to make Retrofit's GET request work. Also see:
