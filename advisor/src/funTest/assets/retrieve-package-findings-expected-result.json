@@ -67,11 +67,24 @@
       "capabilities" : [ "VULNERABILITIES" ]
     },
     "summary" : {
-      "start_time" : "2022-07-20T08:55:02.798653218Z",
-      "end_time" : "2022-07-20T08:55:03.677229008Z"
+      "start_time" : "2023-07-20T09:15:42.635321500Z",
+      "end_time" : "2023-07-20T09:15:43.653138200Z"
     },
     "defects" : [ ],
     "vulnerabilities" : [ {
+      "id" : "GHSA-3qr5-h7w4-3gx3",
+      "summary" : "Donfig Command Execution",
+      "description" : "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the collect_yaml method in config_obj.py. It can execute arbitrary Python commands, resulting in command execution.",
+      "references" : [ {
+        "url" : "https://nvd.nist.gov/vuln/detail/CVE-2019-7537",
+        "scoring_system" : "CVSS:3.0",
+        "severity" : "9.8"
+      }, {
+        "url" : "https://github.com/pytroll/donfig/issues/5",
+        "scoring_system" : "CVSS:3.0",
+        "severity" : "9.8"
+      } ]
+    }, {
       "id" : "PYSEC-2019-21",
       "description" : "An issue was discovered in Donfig 0.3.0. There is a vulnerability in the collect_yaml method in config_obj.py. It can execute arbitrary Python commands, resulting in command execution.",
       "references" : [ {
