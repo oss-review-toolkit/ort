@@ -94,7 +94,7 @@ data class ScanSummary(
     }
 
     @get:JsonIgnore
-    val licenses: Set<SpdxExpression> = licenseFindings.mapTo(mutableSetOf()) { it.license }
+    val licenses: Set<SpdxExpression> by lazy { licenseFindings.mapTo(mutableSetOf()) { it.license } }
 
     /**
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
