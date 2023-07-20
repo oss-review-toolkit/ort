@@ -25,6 +25,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import java.io.File
 import java.time.Instant
 
+import kotlin.time.measureTimedValue
+
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.model.utils.FileListSortedSetConverter
 import org.ossreviewtoolkit.model.utils.ProvenanceResolutionResultSortedSetConverter
@@ -85,7 +89,7 @@ data class ScannerRun(
     @JsonSerialize(converter = FileListSortedSetConverter::class)
     val files: Set<FileList>
 ) {
-    companion object {
+    companion object : Logging {
         /**
          * A constant for a [ScannerRun] where all properties are empty.
          */
@@ -168,7 +172,15 @@ data class ScannerRun(
     }
 
     private val scanResultsById: Map<Identifier, List<ScanResult>> by lazy {
-        provenances.map { it.id }.associateWith { id -> getMergedResultsForId(id) }
+        logger.debug { "Merging scan results..." }
+
+        val (result, duration) = measureTimedValue {
+            provenances.map { it.id }.associateWith { id -> getMergedResultsForId(id) }
+        }
+
+        logger.debug { "Merging scan results took $duration." }
+
+        result
     }
 
     private val fileListByProvenance: Map<KnownProvenance, FileList> by lazy {
