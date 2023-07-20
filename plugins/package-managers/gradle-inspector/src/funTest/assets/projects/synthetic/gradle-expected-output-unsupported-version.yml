@@ -18,5 +18,8 @@ project:
   scopes: []
 packages: []
 issues:
-- "This project uses the unsupported Gradle version 3.2.1. At least Gradle 3.3 is\
-  \ required."
+- timestamp: "1970-01-01T00:00:00Z"
+  source: "Gradle"
+  message: "This project uses the unsupported Gradle version 3.2.1. At least Gradle 3.3 is\
+    \ required."
+  severity: "ERROR"
