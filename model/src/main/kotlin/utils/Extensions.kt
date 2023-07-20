@@ -171,6 +171,7 @@ enum class PurlType(private val value: String) {
     A_NAME("a-name"),
     BOWER("bower"),
     CARGO("cargo"),
+    CARTHAGE("carthage"),
     COCOAPODS("cocoapods"),
     COMPOSER("composer"),
     CONAN("conan"),
@@ -183,9 +184,11 @@ enum class PurlType(private val value: String) {
     GITHUB("github"),
     GITLAB("gitlab"),
     GOLANG("golang"),
+    HACKAGE("hackage"),
     MAVEN("maven"),
     NPM("npm"),
     NUGET("nuget"),
+    PUB("pub"),
     PYPI("pypi"),
     RPM("rpm"),
     SWIFT("swift");
@@ -200,15 +203,18 @@ enum class PurlType(private val value: String) {
 fun Identifier.getPurlType() =
     when (val lowerType = type.lowercase()) {
         "bower" -> PurlType.BOWER
+        "carthage" -> PurlType.CARTHAGE
         "composer" -> PurlType.COMPOSER
         "conan" -> PurlType.CONAN
         "crate" -> PurlType.CARGO
         "go" -> PurlType.GOLANG
         "gem" -> PurlType.GEM
+        "hackage" -> PurlType.HACKAGE
         "maven" -> PurlType.MAVEN
         "npm" -> PurlType.NPM
         "nuget" -> PurlType.NUGET
         "pod" -> PurlType.COCOAPODS
+        "pub" -> PurlType.PUB
         "pypi" -> PurlType.PYPI
         "spm" -> PurlType.SWIFT
         else -> lowerType
