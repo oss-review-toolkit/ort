@@ -26,8 +26,8 @@ import io.kotest.matchers.shouldBe
 
 import org.ossreviewtoolkit.helper.HelperMain
 import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.ResolvedConfiguration
 import org.ossreviewtoolkit.model.readValue
-import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import org.ossreviewtoolkit.utils.test.getAssetFile
@@ -47,7 +47,8 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
                 outputFile.absolutePath
             )
 
-            outputFile.readText() shouldBe expectedOutputFile.readValue<OrtResult>().patchEnvironment().toYaml()
+            outputFile.readValue<OrtResult>().patchAnalyzerResult() shouldBe
+                expectedOutputFile.readValue<OrtResult>().patchAnalyzerResult()
         }
     }
 })
@@ -61,4 +62,8 @@ private fun runMain(vararg args: String) {
     }
 }
 
-private fun OrtResult.patchEnvironment(): OrtResult = copy(analyzer = analyzer?.copy(environment = Environment()))
+private fun OrtResult.patchAnalyzerResult(): OrtResult =
+    copy(
+        analyzer = analyzer?.copy(environment = Environment()),
+        resolvedConfiguration = ResolvedConfiguration()
+    )
