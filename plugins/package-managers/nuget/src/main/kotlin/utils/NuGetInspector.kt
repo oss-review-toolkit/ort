@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.model.fromYaml
+import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.utils.common.CommandLineTool
 import org.ossreviewtoolkit.utils.common.safeDeleteRecursively
 import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
@@ -235,7 +236,7 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
 
         Package(
             id = id,
-            purl = pkg.purl,
+            purl = pkg.purl.takeUnless { it.isEmpty() } ?: id.toPurl(),
             authors = pkg.parties.toAuthors(),
             declaredLicenses = declaredLicenses,
             declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses),
