@@ -78,8 +78,7 @@ data class Hash(
     /**
      * Return the hash in Support Subresource Integrity (SRI) format.
      */
-    fun toSri() = algorithm.toString().lowercase().replace("sha-", "sha") + "-" +
-            Base64.getEncoder().encodeToString(value.decodeHex())
+    fun toSri() = algorithm.name.lowercase() + "-" + Base64.getEncoder().encodeToString(value.decodeHex())
 
     /**
      * Verify that the [file] matches this hash.
