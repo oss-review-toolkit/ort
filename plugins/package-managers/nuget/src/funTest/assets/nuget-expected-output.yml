@@ -409,7 +409,7 @@ packages:
     revision: ""
     path: ""
 - id: "NuGet::foobar:1.2.3"
-  purl: ""
+  purl: "pkg:nuget/foobar@1.2.3"
   declared_licenses: []
   declared_licenses_processed: {}
   description: ""
