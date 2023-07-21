@@ -31,6 +31,7 @@ import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.analyzer.managers.utils.PackageManagerDependencyHandler
 import org.ossreviewtoolkit.downloader.VersionControlSystem
 import org.ossreviewtoolkit.model.Hash
+import org.ossreviewtoolkit.model.HashAlgorithm
 import org.ossreviewtoolkit.model.Identifier
 import org.ossreviewtoolkit.model.Issue
 import org.ossreviewtoolkit.model.Package
@@ -310,9 +311,21 @@ class SpdxDocumentFile(
         val id = toIdentifier()
         val artifact = getRemoteArtifact()
 
+        val purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: buildString {
+            append(id.toPurl())
+
+            val qualifiers = listOfNotNull(
+                artifact?.url?.let { "download_url=$it" },
+                artifact?.hash?.takeIf { it.algorithm in HashAlgorithm.VERIFIABLE }
+                    ?.let { "checksum=${it.algorithm.name.lowercase()}:${it.value}" }
+            )
+
+            if (qualifiers.isNotEmpty()) append(qualifiers.joinToString(separator = "&", prefix = "?"))
+        }
+
         return Package(
             id = id,
-            purl = locateExternalReference(SpdxExternalReference.Type.Purl) ?: id.toPurl(),
+            purl = purl,
             cpe = locateCpe(),
             authors = originator.wrapPresentInSet(),
             declaredLicenses = setOf(licenseDeclared),
