@@ -32,6 +32,7 @@ import java.io.File
 
 import kotlin.reflect.KClass
 
+import org.ossreviewtoolkit.analyzer.PackageManagerResult
 import org.ossreviewtoolkit.model.AnalyzerResult
 import org.ossreviewtoolkit.model.AnalyzerRun
 import org.ossreviewtoolkit.model.EvaluatorRun
@@ -97,6 +98,7 @@ private val TARGET_CLASSES = setOf(
     EvaluatorRun::class,
     OrtResult::class,
     ProjectAnalyzerResult::class,
+    PackageManagerResult::class,
     ScanResult::class,
     ScannerRun::class
 )
