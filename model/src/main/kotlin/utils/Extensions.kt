@@ -197,11 +197,11 @@ enum class PurlType(private val value: String) {
 }
 
 /**
- * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to the lower-case
- * [Package]'s type if the [PurlType] cannot be determined.
+ * Map a [Package]'s type to the string representation of the respective [PurlType], or fall back to [PurlType.GENERIC]
+ * if the [Package]'s type has no direct equivalent.
  */
 fun Identifier.getPurlType() =
-    when (val lowerType = type.lowercase()) {
+    when (type.lowercase()) {
         "bower" -> PurlType.BOWER
         "carthage" -> PurlType.CARTHAGE
         "composer" -> PurlType.COMPOSER
@@ -217,7 +217,7 @@ fun Identifier.getPurlType() =
         "pub" -> PurlType.PUB
         "pypi" -> PurlType.PYPI
         "spm" -> PurlType.SWIFT
-        else -> lowerType
+        else -> PurlType.GENERIC
     }.toString()
 
 /**

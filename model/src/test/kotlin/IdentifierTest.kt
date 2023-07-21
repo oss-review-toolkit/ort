@@ -144,34 +144,34 @@ class IdentifierTest : WordSpec({
             purl shouldBe purl.lowercase()
         }
 
-        "use given type if it is not a known package manager" {
+        "use the generic type if it is not a known package manager" {
             val purl = Identifier("FooBar", "namespace", "name", "version").toPurl()
 
-            purl shouldStartWith "pkg:foobar"
+            purl shouldStartWith "pkg:generic"
         }
 
         "not use '/' for empty namespaces" {
-            val purl = Identifier("type", "", "name", "version").toPurl()
+            val purl = Identifier("generic", "", "name", "version").toPurl()
 
-            purl shouldBe "pkg:type/name@version"
+            purl shouldBe "pkg:generic/name@version"
         }
 
         "percent-encode namespaces with segments" {
-            val purl = Identifier("type", "name/space", "name", "version").toPurl()
+            val purl = Identifier("generic", "name/space", "name", "version").toPurl()
 
-            purl shouldBe "pkg:type/name%2Fspace/name@version"
+            purl shouldBe "pkg:generic/name%2Fspace/name@version"
         }
 
         "percent-encode the name" {
-            val purl = Identifier("type", "namespace", "fancy name", "version").toPurl()
+            val purl = Identifier("generic", "namespace", "fancy name", "version").toPurl()
 
-            purl shouldBe "pkg:type/namespace/fancy%20name@version"
+            purl shouldBe "pkg:generic/namespace/fancy%20name@version"
         }
 
         "percent-encode the version" {
-            val purl = Identifier("type", "namespace", "name", "release candidate").toPurl()
+            val purl = Identifier("generic", "namespace", "name", "release candidate").toPurl()
 
-            purl shouldBe "pkg:type/namespace/name@release%20candidate"
+            purl shouldBe "pkg:generic/namespace/name@release%20candidate"
         }
 
         "allow qualifiers" {
