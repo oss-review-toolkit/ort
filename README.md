@@ -783,10 +783,10 @@ any failing tests will show the deviation from the expected result in a unified 
 `git apply`. If the actual result should be taken as the new expected result, simply copy the diff from the console to
 the clipboard and run
 
-* `wl-paste | cut -d ' ' -f 5- | git apply` (Linux with Wayland)
-* `xsel -b | cut -d ' ' -f 5- | git apply` (Linux with X)
-* `cat /dev/clipboard | dos2unix | cut -d ' ' -f 5- | git apply` (Windows with Git Bash)
-* `pbpaste | cut -d ' ' -f 5- | git apply` (macOS)
+* `wl-paste | patch -p1` (Linux with Wayland)
+* `xsel -b | patch -p1` (Linux with X)
+* `cat /dev/clipboard | patch -p1` (Windows with Git Bash)
+* `pbpaste | patch -p1` (macOS)
 
 to apply the diff to the local Git working tree (this does not create a commit yet). After reviewing the changes, create
 a commit to accept the new expected result.
