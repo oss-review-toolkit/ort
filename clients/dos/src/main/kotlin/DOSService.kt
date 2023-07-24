@@ -11,6 +11,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonElement
+import okhttp3.Interceptor
 
 import okhttp3.logging.HttpLoggingInterceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -18,6 +19,7 @@ import okhttp3.OkHttpClient
 import okhttp3.RequestBody
 
 import org.apache.logging.log4j.kotlin.Logging
+import retrofit2.Invocation
 
 import retrofit2.http.*
 import retrofit2.Response
@@ -39,7 +41,7 @@ interface DOSService {
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(url: String, client: OkHttpClient? = null): DOSService {
+        fun create(url: String, token: String, client: OkHttpClient? = null): DOSService {
             val contentType = "application/json; charset=utf-8".toMediaType()
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -48,8 +50,12 @@ interface DOSService {
                 level = HttpLoggingInterceptor.Level.NONE
             }
 
+            val authInterceptor = AuthInterceptor(token)
+            //logger.info { "$authInterceptor" }
+
             val okHttpClient = client ?: OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
+                .addInterceptor(authInterceptor)
                 .build()
 
             val retrofit = Retrofit.Builder()
@@ -127,6 +133,18 @@ interface DOSService {
         val state: String? = null
     )
 
+    /**
+     * Custom annotation for skipping the Authorization Interceptor for certain network calls
+     */
+    @Target(AnnotationTarget.FUNCTION)
+    @Retention(AnnotationRetention.RUNTIME)
+    annotation class SkipAuthentication
+
+    /**
+     * S3 Object Storage doesn't accept authorization headers for the presigned URL
+     * PUT method, so skip the authorization for this function call
+     */
+    @SkipAuthentication
     @PUT
     suspend fun putS3File(@Url url: String, @Body file: RequestBody): Response<Unit>
 
@@ -144,4 +162,28 @@ interface DOSService {
 
     @GET("job-state/{id}")
     suspend fun getJobState(@Path("id") id: String): Response<JobStateResponseBody>
+
+    /**
+     * Authorization Interceptor
+     */
+    class AuthInterceptor(private val token: String): Interceptor {
+        override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+            val original = chain.request()
+
+            // Check for the SkipAuthentication annotation
+            val skipAuthentication =
+                original.tag(Invocation::class.java)?.
+                    method()?.
+                    isAnnotationPresent(SkipAuthentication::class.java) == true
+
+            if (skipAuthentication) {
+                return chain.proceed(original)
+            }
+
+            val requestBuilder = original.newBuilder()
+                .header("Authorization", "Bearer $token")
+                .method(original.method, original.body)
+            return chain.proceed(requestBuilder.build())
+        }
+    }
 }

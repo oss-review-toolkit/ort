@@ -48,7 +48,7 @@ class DOS internal constructor(
     override val configuration = ""
     override val version = "1.0"
 
-    private val service = DOSService.create(config.serverUrl)
+    private val service = DOSService.create(config.serverUrl, config.serverToken)
     private val repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 

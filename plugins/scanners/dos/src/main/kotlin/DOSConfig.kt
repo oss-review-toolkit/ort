@@ -17,6 +17,9 @@ internal data class DOSConfig(
     /** The URL where the DOS service is running. */
     val serverUrl: String,
 
+    /** The secret token to use with the DOS service **/
+    val serverToken: String,
+
     /** Interval (in seconds) to use for polling scanjob status from DOS API. */
     val pollInterval: Int
 ) {
@@ -36,6 +39,10 @@ internal data class DOSConfig(
             //requireNotNull(DOSScannerOptions) { "No DOS Scanner configuration found." }
 
             val serverUrl = dosScannerOptions?.get(SERVER_URL_PROPERTY) ?: DEFAULT_SERVER_URL
+
+            val serverToken = System.getenv("SERVER_TOKEN") ?:
+                throw IllegalStateException("Server token not set!")
+
             val pollInterval = dosScannerOptions?.get(POLLING_INTERVAL_PROPERTY)?.toInt() ?: DEFAULT_POLLING_INTERVAL
 
             require(pollInterval >= DEFAULT_POLLING_INTERVAL) {
@@ -44,6 +51,7 @@ internal data class DOSConfig(
 
             return DOSConfig(
                 serverUrl,
+                serverToken,
                 pollInterval
             )
         }
