@@ -17,7 +17,7 @@
     License-Filename: LICENSE
 --]
 
-[#assign ModelExtensions = statics['org.ossreviewtoolkit.model.utils.ExtensionsKt']]
+[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlUtilsKt']]
 
 :title-page:
 :sectnums:
@@ -45,7 +45,7 @@ section.
 [#list advisorResults as id, results]
 === ${id.name}
 
-Package URL: _${ModelExtensions.toPurl(id)}_
+Package URL: _${PurlUtils.toPurl(id)}_
 
 [#list results as result]
 
@@ -94,7 +94,7 @@ information for the single packages.
 [#list advisorResultsWithErrors as id, results]
 === ${id.name}
 
-${ModelExtensions.toPurl(id)}
+${PurlUtils.toPurl(id)}
 
 [#list results as result]
 
