@@ -50,10 +50,21 @@ class DOS internal constructor(
     private val repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 
+    private fun createSingleIssueSummary(
+        startTime: Instant,
+        endTime: Instant = Instant.now(),
+        issue: Issue
+    ) = ScanSummary.EMPTY.copy(
+        startTime = startTime,
+        endTime = endTime,
+        issues = listOf(issue)
+    )
+
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val thisScanStartTime = Instant.now()
         val tmpDir = "/tmp/"
         val provenance: Provenance
+        var summary: ScanSummary
 
         logger.info { "Package to scan: $pkg" }
         // Use ORT specific local file structure
@@ -158,10 +169,6 @@ class DOS internal constructor(
         /**
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
-        var summary: ScanSummary = ScanSummary.EMPTY.copy(
-            thisScanStartTime,
-            thisScanEndTime
-        )
 
         if (scanResults != null) {
             summary = generateSummary(
@@ -169,6 +176,14 @@ class DOS internal constructor(
                 thisScanEndTime,
                 scanResults?.results.toString()
             )
+        } else {
+            val time = Instant.now()
+            val issue = createAndLogIssue(
+                source = name,
+                message = "Something went wrong at DOS backend.",
+                severity = Severity.ERROR
+            )
+            summary = createSingleIssueSummary(time, time, issue)
         }
 
         return ScanResult(
