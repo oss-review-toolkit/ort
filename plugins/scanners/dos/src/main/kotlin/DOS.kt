@@ -11,7 +11,6 @@ import java.time.Instant
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.JsonElement
 
 import org.apache.logging.log4j.kotlin.Logging
 import org.ossreviewtoolkit.clients.dos.*
@@ -21,7 +20,6 @@ import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.scanner.*
 import org.ossreviewtoolkit.downloader.Downloader
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
-import org.ossreviewtoolkit.scanner.storages.utils.ScanResults
 
 /**
  * DOS scanner is the ORT implementation of a ScanCode-based backend scanner, and it is a part of

@@ -51,7 +51,6 @@ interface DOSService {
             }
 
             val authInterceptor = AuthInterceptor(token)
-            //logger.info { "$authInterceptor" }
 
             val okHttpClient = client ?: OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)

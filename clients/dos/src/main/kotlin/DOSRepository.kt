@@ -6,7 +6,6 @@
 
 package org.ossreviewtoolkit.clients.dos
 
-import kotlinx.serialization.json.JsonElement
 import java.io.File
 
 import okhttp3.MediaType.Companion.toMediaType
