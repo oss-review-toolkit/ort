@@ -155,11 +155,21 @@ class DOS internal constructor(
         }
         val thisScanEndTime = Instant.now()
 
-        val summary = generateSummary(
+        /**
+         * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
+         */
+        var summary: ScanSummary = ScanSummary.EMPTY.copy(
             thisScanStartTime,
-            thisScanEndTime,
-            scanResults?.results.toString()
+            thisScanEndTime
         )
+
+        if (scanResults != null) {
+            summary = generateSummary(
+                thisScanStartTime,
+                thisScanEndTime,
+                scanResults?.results.toString()
+            )
+        }
 
         return ScanResult(
             provenance,
