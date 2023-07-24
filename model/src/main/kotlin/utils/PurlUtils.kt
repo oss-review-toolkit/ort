@@ -102,7 +102,7 @@ fun Identifier.toPurl() = if (this == Identifier.EMPTY) "" else createPurl(getPu
  * pkg:golang/google.golang.org/genproto#googleapis/api/annotations
  *
  */
-fun createPurl(
+internal fun createPurl(
     type: String,
     namespace: String,
     name: String,
