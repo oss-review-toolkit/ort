@@ -27,7 +27,7 @@
     Excluded projects and packages are ignored.
 --]
 
-[#assign ModelExtensions = statics['org.ossreviewtoolkit.model.utils.ExtensionsKt']]
+[#assign PurlUtils = statics['org.ossreviewtoolkit.model.utils.PurlUtilsKt']]
 
 [#-- Add the licenses of the projects. --]
 :title-page:
@@ -88,12 +88,12 @@ The applicable license information is listed below:
 [#if !package.excluded]
 *Dependency*
 
-Package URL: _${ModelExtensions.toPurl(package.id)}_
+Package URL: _${PurlUtils.toPurl(package.id)}_
 
 [#-- List the content of archived license files and associated copyrights. --]
 [#list package.licenseFiles.files as licenseFile]
 
-License File: <<${ModelExtensions.toPurl(package.id)} ${licenseFile.path}, ${licenseFile.path}>>
+License File: <<${PurlUtils.toPurl(package.id)} ${licenseFile.path}, ${licenseFile.path}>>
 
 [#assign copyrights = licenseFile.getCopyrights()]
 [#list copyrights as copyright]
@@ -174,7 +174,7 @@ ${exceptionText}
 [#if !package.excluded]
 
 [#list package.licenseFiles.files as licenseFile]
-=== ${ModelExtensions.toPurl(package.id)} ${licenseFile.path}
+=== ${PurlUtils.toPurl(package.id)} ${licenseFile.path}
 
 ++++
 [#assign copyrights = licenseFile.getCopyrights()]
