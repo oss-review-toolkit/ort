@@ -33,6 +33,7 @@ import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.KotlinCompilation
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -116,9 +117,8 @@ detekt {
     basePath = rootDir.path
 }
 
-// See https://kotlinlang.org/docs/compiler-reference.html#jvm-target-version.
 val javaVersion = JavaVersion.current()
-val maxKotlinJvmTarget = javaVersion.majorVersion.toInt().coerceAtMost(19)
+val maxKotlinJvmTarget = minOf(javaVersion.majorVersion.toInt(), enumValues<JvmTarget>().max().target.toInt())
 
 val mergeDetektReportsTaskName = "mergeDetektReports"
 val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
