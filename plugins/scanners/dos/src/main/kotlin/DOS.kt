@@ -64,7 +64,8 @@ class DOS internal constructor(
         val thisScanStartTime = Instant.now()
         val tmpDir = "/tmp/"
         val provenance: Provenance
-        var summary: ScanSummary
+        val summary: ScanSummary
+        val issues = mutableListOf<Issue>()
 
         logger.info { "Package to scan: $pkg" }
         // Use ORT specific local file structure
@@ -77,8 +78,17 @@ class DOS internal constructor(
             provenance = downloader.download(pkg, dosDir)
             logger.info { "Package downloaded to: $dosDir" }
 
-            // Ask for scan results from DOS/API
+            // Ask for scan results from DOS API
             scanResults = repository.getScanResults(pkg.purl)
+
+            if (scanResults == null) {
+                issues += createAndLogIssue(
+                    source = name,
+                    message = "Could not request scan results from DOS API",
+                    severity = Severity.ERROR
+                )
+                return@runBlocking
+            }
 
             when (scanResults?.state?.status) {
                 /**
@@ -93,13 +103,26 @@ class DOS internal constructor(
                     dosDir.packZip(targetZipFile)
 
                     // Request presigned URL from DOS API
-                    val presignedUrl = repository.getPresignedUrl(zipName) ?: return@runBlocking
+                    val presignedUrl = repository.getPresignedUrl(zipName)
+                    if (presignedUrl == null) {
+                        issues += createAndLogIssue(
+                            source = name,
+                            message = "Could not get a presigned URL for this package",
+                            severity = Severity.ERROR
+                        )
+                        return@runBlocking
+                    }
 
                     // Transfer the zipped packet to S3 Object Storage and do local cleanup
                     val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
                     if (uploadSuccessful) {
                         deleteFileOrDir(dosDir)
                     } else {
+                        issues += createAndLogIssue(
+                            source = name,
+                            message = "Could not upload the packet to S3",
+                            severity = Severity.ERROR
+                        )
                         deleteFileOrDir(dosDir)
                         return@runBlocking
                     }
@@ -111,6 +134,11 @@ class DOS internal constructor(
                     if (packageResponse != null) {
                         deleteFileOrDir(targetZipFile)
                     } else {
+                        issues += createAndLogIssue(
+                            source = name,
+                            message = "Could not get the scan folder name from DOS API",
+                            severity = Severity.ERROR
+                        )
                         deleteFileOrDir(targetZipFile)
                         return@runBlocking
                     }
@@ -121,6 +149,11 @@ class DOS internal constructor(
                     if (jobResponse != null) {
                         logger.info { "New scan request: $jobResponse" }
                     } else {
+                        issues += createAndLogIssue(
+                            source = name,
+                            message = "Could not create a new scan job at DOS API",
+                            severity = Severity.ERROR
+                        )
                         return@runBlocking
                     }
 
@@ -169,21 +202,20 @@ class DOS internal constructor(
         /**
          * Handle gracefully non-successful calls to DOS backend and log issues for failing tasks
          */
-
-        if (scanResults != null) {
-            summary = generateSummary(
+        summary = if (scanResults != null) {
+            generateSummary(
                 thisScanStartTime,
                 thisScanEndTime,
                 scanResults?.results.toString()
             )
         } else {
-            val time = Instant.now()
-            val issue = createAndLogIssue(
-                source = name,
-                message = "Something went wrong at DOS backend.",
-                severity = Severity.ERROR
-            )
-            summary = createSingleIssueSummary(time, time, issue)
+            ScanSummary(
+                thisScanStartTime,
+                thisScanEndTime,
+                emptySet(),
+                emptySet(),
+                emptySet(),
+                issues)
         }
 
         return ScanResult(
