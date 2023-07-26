@@ -60,10 +60,12 @@ class OrtConfigPackageConfigurationProvider : PackageConfigurationProvider {
         }
     }
 
+    private val provider by lazy {
+        DirectoryPackageConfigurationProvider(configurationsDir.resolve(PACKAGE_CONFIGURATIONS_DIR))
+    }
+
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance) =
-        DirectoryPackageConfigurationProvider(
-            configurationsDir.resolve(PACKAGE_CONFIGURATIONS_DIR)
-        ).getPackageConfigurations(packageId, provenance)
+        provider.getPackageConfigurations(packageId, provenance)
 }
 
 private fun updateOrtConfig(dir: File) {
