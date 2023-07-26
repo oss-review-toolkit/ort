@@ -41,7 +41,7 @@ class NuGetFunTest : StringSpec({
 
     "License extraction is done correctly" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithCsProj/test.csproj")
-        val expectedResultFile = getAssetFile("dotnet-license-data-extraction.yml")
+        val expectedResultFile = getAssetFile("dotnet-license-expected-output.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
@@ -50,7 +50,7 @@ class NuGetFunTest : StringSpec({
 
     "A .csproj file with an accompanying .nuspec file is detected correctly" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithNuspec/test.csproj")
-        val expectedResultFile = getAssetFile("dotnet-expected-output-with-nuspec.yml")
+        val expectedResultFile = getAssetFile("dotnet-with-nuspec-expected-output.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
@@ -59,7 +59,7 @@ class NuGetFunTest : StringSpec({
 
     "A large number of dependencies is resolved at once in a .csproj file" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithManyDepsCsProj/test.csproj")
-        val expectedResultFile = getAssetFile("dotnet-many-deps-resolution.yml")
+        val expectedResultFile = getAssetFile("dotnet-many-deps-expected-output.yml")
 
         val result = create("NuGet").resolveSingleProject(definitionFile)
 
@@ -77,7 +77,7 @@ class NuGetFunTest : StringSpec({
 
     "Project dependencies are detected correctly with a nuget.config present" {
         val definitionFile = getAssetFile("dotnet/subProjectTestWithNuGetConfig/test.csproj")
-        val expectedResultFile = getAssetFile("dotnet-with-csproj-and-nuget-config-output.yml")
+        val expectedResultFile = getAssetFile("dotnet-with-csproj-and-nuget-config-expected-output.yml")
 
         val result = create(
             "NuGet",
