@@ -26,4 +26,5 @@ dependencies {
     api(project(":plugins:package-configuration-providers:package-configuration-provider-api"))
 
     implementation(project(":downloader"))
+    implementation(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
 }

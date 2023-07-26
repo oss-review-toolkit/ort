@@ -58,8 +58,8 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.reporter.DefaultLicenseTextProvider
 import org.ossreviewtoolkit.reporter.HowToFixTextProvider
 import org.ossreviewtoolkit.reporter.Reporter
@@ -220,7 +220,7 @@ class ReporterCommand : OrtCommand(
             ortConfig.enableRepositoryPackageConfigurations -> {
                 CompositePackageConfigurationProvider(
                     SimplePackageConfigurationProvider(ortResult.repository.config.packageConfigurations),
-                    DirectoryPackageConfigurationProvider(packageConfigurationsDir)
+                    DirPackageConfigurationProvider(packageConfigurationsDir)
                 )
             }
 
@@ -229,7 +229,7 @@ class ReporterCommand : OrtCommand(
                     logger.info { "Local package configurations were not applied because the feature is not enabled." }
                 }
 
-                DirectoryPackageConfigurationProvider(packageConfigurationsDir)
+                DirPackageConfigurationProvider(packageConfigurationsDir)
             }
         }
 

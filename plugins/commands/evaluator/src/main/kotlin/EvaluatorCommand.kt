@@ -65,9 +65,9 @@ import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
 import org.ossreviewtoolkit.plugins.commands.api.utils.writeOrtResult
-import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.DirectoryPackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.PackageConfigurationProviderFactory
 import org.ossreviewtoolkit.plugins.packageconfigurationproviders.api.SimplePackageConfigurationProvider
+import org.ossreviewtoolkit.plugins.packageconfigurationproviders.dir.DirPackageConfigurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.api.SimplePackageCurationProvider
 import org.ossreviewtoolkit.plugins.packagecurationproviders.file.FilePackageCurationProvider
 import org.ossreviewtoolkit.utils.common.expandTilde
@@ -284,7 +284,7 @@ class EvaluatorCommand : OrtCommand(
             }
 
             if (packageConfigurationsDir != null) {
-                add(DirectoryPackageConfigurationProvider(packageConfigurationsDir))
+                add(DirPackageConfigurationProvider(packageConfigurationsDir))
             } else {
                 val packageConfigurationProviders =
                     PackageConfigurationProviderFactory.create(ortConfig.packageConfigurationProviders)
