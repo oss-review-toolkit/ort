@@ -20,22 +20,22 @@ project:
     dependencies:
     - id: "Pub:http_parser:http_parser:4.0.2"
       dependencies:
-      - id: "Pub:collection:collection:1.17.2"
+      - id: "Pub:collection:collection:1.18.0"
       - id: "Pub:source_span:source_span:1.10.0"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:path:path:1.8.3"
         - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:string_scanner:string_scanner:1.2.0"
         dependencies:
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:typed_data:typed_data:1.3.2"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
     - id: "Pub:meta:meta:1.9.1"
     - id: "Pub:path:path:1.8.3"
     - id: "Pub:pedantic:pedantic:1.11.1"
@@ -45,27 +45,27 @@ project:
       dependencies:
       - id: "Pub:async:async:2.11.0"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:meta:meta:1.9.1"
-      - id: "Pub:collection:collection:1.17.2"
+      - id: "Pub:collection:collection:1.18.0"
       - id: "Pub:http_parser:http_parser:4.0.2"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:string_scanner:string_scanner:1.2.0"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:typed_data:typed_data:1.3.2"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
       - id: "Pub:path:path:1.8.3"
       - id: "Pub:stack_trace:stack_trace:1.11.1"
         dependencies:
@@ -74,7 +74,7 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
     - id: "Pub:test:test:1.24.4"
       dependencies:
@@ -84,24 +84,24 @@ project:
           dependencies:
           - id: "Pub:dart_internal:dart_internal:0.2.8"
           - id: "Pub:meta:meta:1.9.1"
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:convert:convert:3.1.1"
           dependencies:
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:crypto:crypto:3.0.3"
           dependencies:
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:glob:glob:2.1.2"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:file:file:7.0.0"
             dependencies:
             - id: "Pub:meta:meta:1.9.1"
@@ -111,7 +111,7 @@ project:
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:meta:meta:1.9.1"
@@ -121,54 +121,54 @@ project:
         - id: "Pub:path:path:1.8.3"
         - id: "Pub:pub_semver:pub_semver:2.1.4"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:watcher:watcher:1.1.0"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:path:path:1.8.3"
         - id: "Pub:yaml:yaml:3.1.2"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:async:async:2.11.0"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:boolean_selector:boolean_selector:2.1.1"
         dependencies:
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:string_scanner:string_scanner:1.2.0"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
-      - id: "Pub:collection:collection:1.17.2"
+      - id: "Pub:collection:collection:1.18.0"
       - id: "Pub:coverage:coverage:1.6.3"
         dependencies:
         - id: "Pub:args:args:2.4.2"
@@ -181,7 +181,7 @@ project:
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -192,7 +192,7 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:io:io:1.0.4"
         dependencies:
@@ -202,7 +202,7 @@ project:
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:js:js:0.6.7"
@@ -212,7 +212,7 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -223,27 +223,27 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:boolean_selector:boolean_selector:2.1.1"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -253,13 +253,13 @@ project:
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
@@ -272,7 +272,7 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
           dependencies:
@@ -281,27 +281,27 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:http_parser:http_parser:4.0.2"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:path:path:1.8.3"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
           dependencies:
@@ -310,7 +310,7 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:shelf_packages_handler:shelf_packages_handler:3.0.2"
         dependencies:
@@ -319,27 +319,27 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:http_parser:http_parser:4.0.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
             dependencies:
@@ -348,7 +348,7 @@ project:
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:shelf_static:shelf_static:1.1.2"
           dependencies:
@@ -356,52 +356,52 @@ project:
             dependencies:
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:http_parser:http_parser:4.0.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:mime:mime:1.0.4"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:shelf:shelf:1.4.1"
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:http_parser:http_parser:4.0.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
               - id: "Pub:string_scanner:string_scanner:1.2.0"
                 dependencies:
                 - id: "Pub:source_span:source_span:1.10.0"
                   dependencies:
-                  - id: "Pub:collection:collection:1.17.2"
+                  - id: "Pub:collection:collection:1.18.0"
                   - id: "Pub:path:path:1.8.3"
                   - id: "Pub:term_glyph:term_glyph:1.2.1"
               - id: "Pub:typed_data:typed_data:1.3.2"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:stack_trace:stack_trace:1.11.1"
               dependencies:
@@ -410,7 +410,7 @@ project:
               dependencies:
               - id: "Pub:async:async:2.11.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:shelf_static:shelf_static:1.1.2"
         dependencies:
@@ -418,52 +418,52 @@ project:
           dependencies:
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:http_parser:http_parser:4.0.2"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:mime:mime:1.0.4"
         - id: "Pub:path:path:1.8.3"
         - id: "Pub:shelf:shelf:1.4.1"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:http_parser:http_parser:4.0.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
             dependencies:
@@ -472,7 +472,7 @@ project:
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:shelf_web_socket:shelf_web_socket:1.0.4"
         dependencies:
@@ -480,27 +480,27 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:http_parser:http_parser:4.0.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
             dependencies:
@@ -509,34 +509,34 @@ project:
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:stream_channel:stream_channel:2.1.2"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:web_socket_channel:web_socket_channel:2.4.0"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:crypto:crypto:3.0.3"
             dependencies:
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:stream_channel:stream_channel:2.1.2"
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:source_span:source_span:1.10.0"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:path:path:1.8.3"
         - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -546,33 +546,33 @@ project:
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:test_api:test_api:0.6.1"
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:boolean_selector:boolean_selector:2.1.1"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -582,13 +582,13 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:string_scanner:string_scanner:1.2.0"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:term_glyph:term_glyph:1.2.1"
@@ -600,24 +600,24 @@ project:
             dependencies:
             - id: "Pub:dart_internal:dart_internal:0.2.8"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:convert:convert:3.1.1"
             dependencies:
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:crypto:crypto:3.0.3"
             dependencies:
             - id: "Pub:typed_data:typed_data:1.3.2"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:glob:glob:2.1.2"
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:file:file:7.0.0"
               dependencies:
               - id: "Pub:meta:meta:1.9.1"
@@ -627,7 +627,7 @@ project:
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:meta:meta:1.9.1"
@@ -637,55 +637,55 @@ project:
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:pub_semver:pub_semver:2.1.4"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:watcher:watcher:1.1.0"
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
             - id: "Pub:path:path:1.8.3"
           - id: "Pub:yaml:yaml:3.1.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:args:args:2.4.2"
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:boolean_selector:boolean_selector:2.1.1"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:coverage:coverage:1.6.3"
           dependencies:
           - id: "Pub:args:args:2.4.2"
@@ -698,7 +698,7 @@ project:
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -709,16 +709,16 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:path:path:1.8.3"
         - id: "Pub:glob:glob:2.1.2"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:file:file:7.0.0"
             dependencies:
             - id: "Pub:meta:meta:1.9.1"
@@ -728,7 +728,7 @@ project:
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:io:io:1.0.4"
@@ -739,7 +739,7 @@ project:
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:meta:meta:1.9.1"
@@ -751,7 +751,7 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
             dependencies:
@@ -763,7 +763,7 @@ project:
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -773,12 +773,12 @@ project:
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -788,33 +788,33 @@ project:
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:test_api:test_api:0.6.1"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:boolean_selector:boolean_selector:2.1.1"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
             - id: "Pub:string_scanner:string_scanner:1.2.0"
               dependencies:
               - id: "Pub:source_span:source_span:1.10.0"
                 dependencies:
-                - id: "Pub:collection:collection:1.17.2"
+                - id: "Pub:collection:collection:1.18.0"
                 - id: "Pub:path:path:1.8.3"
                 - id: "Pub:term_glyph:term_glyph:1.2.1"
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:stack_trace:stack_trace:1.11.1"
@@ -824,68 +824,68 @@ project:
             dependencies:
             - id: "Pub:async:async:2.11.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:vm_service:vm_service:11.8.0"
         - id: "Pub:yaml:yaml:3.1.2"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
           - id: "Pub:string_scanner:string_scanner:1.2.0"
             dependencies:
             - id: "Pub:source_span:source_span:1.10.0"
               dependencies:
-              - id: "Pub:collection:collection:1.17.2"
+              - id: "Pub:collection:collection:1.18.0"
               - id: "Pub:path:path:1.8.3"
               - id: "Pub:term_glyph:term_glyph:1.2.1"
       - id: "Pub:typed_data:typed_data:1.3.2"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
       - id: "Pub:web_socket_channel:web_socket_channel:2.4.0"
         dependencies:
         - id: "Pub:async:async:2.11.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:crypto:crypto:3.0.3"
           dependencies:
           - id: "Pub:typed_data:typed_data:1.3.2"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:stream_channel:stream_channel:2.1.2"
           dependencies:
           - id: "Pub:async:async:2.11.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
       - id: "Pub:webkit_inspection_protocol:webkit_inspection_protocol:1.2.0"
         dependencies:
         - id: "Pub:logging:logging:1.2.0"
       - id: "Pub:yaml:yaml:3.1.2"
         dependencies:
-        - id: "Pub:collection:collection:1.17.2"
+        - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:source_span:source_span:1.10.0"
           dependencies:
-          - id: "Pub:collection:collection:1.17.2"
+          - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:path:path:1.8.3"
           - id: "Pub:term_glyph:term_glyph:1.2.1"
         - id: "Pub:string_scanner:string_scanner:1.2.0"
           dependencies:
           - id: "Pub:source_span:source_span:1.10.0"
             dependencies:
-            - id: "Pub:collection:collection:1.17.2"
+            - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:path:path:1.8.3"
             - id: "Pub:term_glyph:term_glyph:1.2.1"
 packages:
@@ -1022,8 +1022,8 @@ packages:
     url: "https://github.com/dart-lang/boolean_selector.git"
     revision: ""
     path: ""
-- id: "Pub:collection:collection:1.17.2"
-  purl: "pkg:pub/collection/collection@1.17.2"
+- id: "Pub:collection:collection:1.18.0"
+  purl: "pkg:pub/collection/collection@1.18.0"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "Collections and utilities functions and classes related to collections."
