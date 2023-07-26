@@ -57,7 +57,6 @@ import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.normalizeLineBreaks
 import org.ossreviewtoolkit.utils.ort.Environment
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromJson
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.fromYaml
@@ -101,7 +100,7 @@ class SpdxDocumentReporterFunTest : WordSpec({
                 SpdxDocumentReporter.OPTION_FILE_INFORMATION_ENABLED to "false"
             )
 
-            val document = SpdxModelMapper.fromJson<SpdxDocument>(jsonSpdxDocument)
+            val document = fromJson<SpdxDocument>(jsonSpdxDocument)
 
             document.files should beEmpty()
         }
