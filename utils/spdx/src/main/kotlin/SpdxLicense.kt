@@ -593,7 +593,7 @@ enum class SpdxLicense(
         @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
         @JvmStatic
         fun forId(id: String) =
-            values().find { id.equals(it.id, ignoreCase = true) || id.equals(it.fullName, ignoreCase = true) }
+            entries.find { id.equals(it.id, ignoreCase = true) || id.equals(it.fullName, ignoreCase = true) }
     }
 
     /**

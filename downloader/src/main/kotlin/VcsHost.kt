@@ -323,7 +323,7 @@ enum class VcsHost(
         /**
          * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
          */
-        fun fromUrl(url: URI): VcsHost? = values().find { host -> host.isApplicable(url) }
+        fun fromUrl(url: URI): VcsHost? = entries.find { host -> host.isApplicable(url) }
 
         /**
          * Return the applicable [VcsHost] for the given [url], or null if no applicable host is found.
@@ -415,7 +415,7 @@ enum class VcsHost(
          */
         fun toPermalink(vcsInfo: VcsInfo, startLine: Int = -1, endLine: Int = -1): String? {
             if (!isValidLineRange(startLine, endLine)) return null
-            return values().find { host -> host.isApplicable(vcsInfo) }
+            return entries.find { host -> host.isApplicable(vcsInfo) }
                 ?.toPermalinkInternal(vcsInfo.normalize(), startLine, endLine)
         }
 
@@ -425,7 +425,7 @@ enum class VcsHost(
          */
         fun toArchiveDownloadUrl(vcsInfo: VcsInfo): String? {
             val normalizedVcsInfo = vcsInfo.normalize()
-            val host = values().find { it.isApplicable(normalizedVcsInfo) } ?: return null
+            val host = entries.find { it.isApplicable(normalizedVcsInfo) } ?: return null
 
             return normalizedVcsInfo.url.toUri {
                 val userOrOrg = host.getUserOrOrgInternal(it) ?: return@toUri null
@@ -439,7 +439,7 @@ enum class VcsHost(
          * determined.
          */
         fun toRawDownloadUrl(fileUrl: String): String? {
-            val host = values().find { it.isApplicable(fileUrl) } ?: return null
+            val host = entries.find { it.isApplicable(fileUrl) } ?: return null
             return fileUrl.toUri {
                 val userOrOrg = host.getUserOrOrgInternal(it) ?: return@toUri null
                 val project = host.getProjectInternal(it) ?: return@toUri null
@@ -453,7 +453,7 @@ enum class VcsHost(
          * e.g. an on-premises Git server).
          */
         fun getProject(projectUrl: String): String? {
-            val host = values().find { it.isApplicable(projectUrl) }
+            val host = entries.find { it.isApplicable(projectUrl) }
                 ?: return GIT_PROJECT_NAME.find(projectUrl)?.groupValues?.getOrNull(1)
             return projectUrl.toUri { host.getProjectInternal(it) }.getOrNull()
         }
