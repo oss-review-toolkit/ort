@@ -31,8 +31,8 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.utils.PackageConfigurationProvider
 
 /**
- * A provider for [PackageConfiguration]s providing exactly the packages of the given list.
- * Throws an exception if there is more than one configuration per [Identifier] and [Provenance].
+ * A [PackageConfigurationProvider] that provides the [PackageConfiguration]s specified in the collection. Throws an
+ * exception if there is more than one configuration per [Identifier] and [Provenance].
  */
 open class SimplePackageConfigurationProvider(
     configurations: Collection<PackageConfiguration>
