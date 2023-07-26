@@ -148,6 +148,14 @@ class DOS internal constructor(
                     val id = jobResponse?.scannerJob?.id
                     if (jobResponse != null) {
                         logger.info { "New scan request: $jobResponse" }
+                        if (jobResponse.message == "Adding job to queue was unsuccessful") {
+                            issues += createAndLogIssue(
+                                source = name,
+                                message = "DOS API returned an 'unsuccessful' response to the scan job request",
+                                severity = Severity.ERROR
+                            )
+                            return@runBlocking
+                        }
                     } else {
                         issues += createAndLogIssue(
                             source = name,
