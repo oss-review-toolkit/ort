@@ -52,11 +52,11 @@ private val KNOWN_PREFIX_REGEX = listOf(
     "^(?:[P|p]ortions [C|c]opyright \\([C|c]\\))"
 ).map { it.toRegex() }
 
-private val SINGLE_YEARS_REGEX = "(?=.*)\\b([\\d]{4})\\b".toRegex()
+private val SINGLE_YEARS_REGEX = "(?=.*)\\b(\\d{4})\\b".toRegex()
 
 private val U_QUOTE_REGEX = "(.*\\b)u'(\\d{4}\\b)".toRegex()
 
-private val YEAR_RANGE_REGEX = "(?=.*)\\b([\\d]{4})( *- *)([\\d]{4}|[\\d]{2}|[\\d])\\b".toRegex()
+private val YEAR_RANGE_REGEX = "(?=.*)\\b(\\d{4})( *- *)(\\d{4}|\\d{2}|\\d)\\b".toRegex()
 
 /**
  * Remove all found years from the [copyrightStatement] and replace them with the [YEAR_PLACEHOLDER]. The replacement is
