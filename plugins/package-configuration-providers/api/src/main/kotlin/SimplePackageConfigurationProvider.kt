@@ -42,7 +42,7 @@ open class SimplePackageConfigurationProvider(
     init {
         configurations.checkAtMostOneConfigurationPerIdAndProvenance()
 
-        configurationsById = configurations.groupByTo(HashMap()) { it.id }
+        configurationsById = configurations.groupBy { it.id }
     }
 
     override fun getPackageConfigurations(packageId: Identifier, provenance: Provenance): List<PackageConfiguration> =
