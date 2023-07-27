@@ -630,7 +630,7 @@ pipeline {
                             ORT_OPTIONS="$ORT_OPTIONS --stacktrace"
                         fi
 
-                        /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl.rules.kts -o out/results/evaluator
+                        /opt/ort/bin/ort $ORT_OPTIONS evaluate -i out/results/current-result.yml --rules-resource /rules/osadl/project-license.rules.kts -o out/results/evaluator
                         '''.stripIndent().trim()
 
                         if (status >= ORT_FAILURE_STATUS_CODE) unstable('Rule violations found.')

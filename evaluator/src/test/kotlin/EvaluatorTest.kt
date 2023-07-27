@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.test.ortResult
 class EvaluatorTest : WordSpec({
     "checkSyntax" should {
         "succeed if the script can be compiled" {
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
+            val script = javaClass.getResource("/rules/osadl/project-license.rules.kts").readText()
 
             val result = Evaluator(ortResult).checkSyntax(script)
 
@@ -119,7 +119,9 @@ class EvaluatorTest : WordSpec({
         }
     }
 
-    "OSADL compliance rules" should {
+    "OSADL project license rules" should {
+        val script = javaClass.getResource("/rules/osadl/project-license.rules.kts").readText()
+
         "return no violation for compatible licenses" {
             val compatibleOrtResult = ortResult {
                 project("Maven:group:project-foo:1") {
@@ -146,7 +148,6 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(compatibleOrtResult).run(script)
 
@@ -179,7 +180,6 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(incompatibleOrtResult).run(script)
 
@@ -212,7 +212,6 @@ class EvaluatorTest : WordSpec({
                     }
                 }
             }
-            val script = javaClass.getResource("/rules/osadl.rules.kts").readText()
 
             val result = Evaluator(incompatibleOrtResult).run(script)
 

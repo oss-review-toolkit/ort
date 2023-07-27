@@ -28,7 +28,7 @@
 //
 // Use this rule like:
 //
-// $ ort evaluate -i scanner/src/funTest/assets/scanner-integration-all-pkgs-expected-ort-result.yml --rules-resource /rules/osadl.rules.kts
+// $ ort evaluate -i scanner/src/funTest/assets/scanner-integration-all-pkgs-expected-ort-result.yml --rules-resource /rules/osadl/project-license.rules.kts
 
 import org.ossreviewtoolkit.evaluator.osadl.Compatibility
 import org.ossreviewtoolkit.evaluator.osadl.CompatibilityMatrix
@@ -37,7 +37,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
     val licenseView = LicenseView.CONCLUDED_OR_DECLARED_AND_DETECTED
 
     // Define a rule that is executed for each dependency.
-    dependencyRule("OSADL_MATRIX_COMPATIBILITY") {
+    dependencyRule("OSADL_PROJECT_LICENSE_DEPENDENCY_RULE") {
         // Requirements for the rule to trigger a violation.
         require {
             -isExcluded()
@@ -47,7 +47,7 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
         val outboundLicenses = projectLicenseInfo.licenses.map { it.license }
 
         // Define a rule that is executed for each license of the dependency.
-        licenseRule("OSADL_PROJECT_LICENSE_COMPATIBILITY", licenseView) {
+        licenseRule("OSADL_PROJECT_LICENSE_RULE", licenseView) {
             // Requirements for the rule to trigger a violation.
             require {
                 -isExcluded()

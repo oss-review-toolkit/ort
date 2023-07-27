@@ -49,7 +49,7 @@ object CompatibilityMatrix : Logging {
     }
 
     private val matrix by lazy {
-        javaClass.getResourceAsStream("/rules/matrixseqexpl.json").use {
+        javaClass.getResourceAsStream("/rules/osadl/matrixseqexpl.json").use {
             Json.Default.decodeFromStream<MatrixLicenses>(it)
         }
     }
