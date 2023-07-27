@@ -104,28 +104,19 @@ interface DOSService {
 
     @Serializable
     data class PackageResponseBody(
-        val folderName: String? = null,
         val packageId: Int = 0
     )
 
     @Serializable
     data class JobRequestBody(
-        val directory: String? = null,
         val packageId: Int = 0
     )
 
     @Serializable
     data class JobResponseBody(
-        val scannerJob: ScannerJob,
+        val scannerJobId: String? = null,
         val message: String?
-    ) {
-        @Serializable
-        data class ScannerJob(
-            val id: String,
-            val createdAt: String? = null,
-            val packageId: Int = 0
-        )
-    }
+    )
 
     @Serializable
     data class JobStateResponseBody(

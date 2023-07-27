@@ -127,16 +127,15 @@ class DOS internal constructor(
                         return@runBlocking
                     }
 
-                    // Notify DOS API about the new zipped file at S3, and get the unzipped folder
-                    // name as a return
+                    // Notify DOS API about the new zipped file at S3, and get package ID as a return
                     logger.info { "Zipped file at S3: $zipName" }
-                    val packageResponse = repository.getScanFolder(zipName, pkg.purl)
+                    val packageResponse = repository.getPackageId(zipName, pkg.purl)
                     if (packageResponse != null) {
                         deleteFileOrDir(targetZipFile)
                     } else {
                         issues += createAndLogIssue(
                             source = name,
-                            message = "Could not get the scan folder name from DOS API",
+                            message = "Could not get the package ID from DOS API",
                             severity = Severity.ERROR
                         )
                         deleteFileOrDir(targetZipFile)
@@ -144,8 +143,8 @@ class DOS internal constructor(
                     }
 
                     // Send the scan job to DOS API to start the backend scanning
-                    val jobResponse = packageResponse.folderName?.let { repository.postScanJob(it, packageResponse.packageId) }
-                    val id = jobResponse?.scannerJob?.id
+                    val jobResponse = packageResponse.packageId.let { repository.postScanJob(packageResponse.packageId) }
+                    val id = jobResponse?.scannerJobId
                     if (jobResponse != null) {
                         logger.info { "New scan request: $jobResponse" }
                         if (jobResponse.message == "Adding job to queue was unsuccessful") {
