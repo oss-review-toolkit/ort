@@ -31,7 +31,7 @@ class DOSRepository(private val dosService: DOSService) {
 
         return if (response.isSuccessful) {
             if (response.body()?.success == true) {
-                logger.info { "Presigned URL from API: ${response.body()?.presignedUrl}" }
+                logger.info { "Presigned URL from API successfully fetched" }
                 response.body()?.presignedUrl
             } else {
                 logger.error { "Error msg from API: ${response.body()?.message}" }
@@ -82,7 +82,7 @@ class DOSRepository(private val dosService: DOSService) {
             when (response.body()?.state?.status) {
                 "no-results" -> logger.info { "No scan results found from DOS API for $purl" }
                 "pending" -> logger.info { "Pending scan for $purl" }
-                else -> logger.info { "Scan results found from DOS API for $purl: ${response.body()?.results}" }
+                "ready" -> logger.info { "Scan results found from DOS API for $purl" }
             }
             response.body()
         } else {

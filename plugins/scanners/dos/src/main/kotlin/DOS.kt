@@ -67,7 +67,7 @@ class DOS internal constructor(
         val summary: ScanSummary
         val issues = mutableListOf<Issue>()
 
-        logger.info { "Package to scan: $pkg" }
+        logger.info { "Package to scan: ${pkg.purl}" }
         // Use ORT specific local file structure
         val dosDir = createOrtTempDir()
         var scanResults: DOSService.ScanResultsResponseBody?
