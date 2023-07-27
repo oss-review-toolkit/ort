@@ -48,6 +48,11 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
         // Define a rule that is executed for each license of the dependency.
         licenseRule("OSADL_PROJECT_LICENSE_COMPATIBILITY", licenseView) {
+            // Requirements for the rule to trigger a violation.
+            require {
+                -isExcluded()
+            }
+
             outboundLicenses.forEach { outboundLicense ->
                 val compatibilityInfo = CompatibilityMatrix
                     // Be conservative and use the simple license string without the exception string for lookup.
