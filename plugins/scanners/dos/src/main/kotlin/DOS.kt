@@ -46,7 +46,7 @@ class DOS internal constructor(
     override val configuration = ""
     override val version = "1.0"
 
-    private val service = DOSService.create(config.serverUrl, config.serverToken)
+    private val service = DOSService.create(config.serverUrl, config.serverToken, config.restTimeout)
     private val repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 
@@ -146,7 +146,7 @@ class DOS internal constructor(
                     val jobResponse = packageResponse.packageId.let { repository.postScanJob(packageResponse.packageId) }
                     val id = jobResponse?.scannerJobId
                     if (jobResponse != null) {
-                        logger.info { "New scan request: $jobResponse" }
+                        logger.info { "New scan request: ${pkg.purl}" }
                         if (jobResponse.message == "Adding job to queue was unsuccessful") {
                             issues += createAndLogIssue(
                                 source = name,

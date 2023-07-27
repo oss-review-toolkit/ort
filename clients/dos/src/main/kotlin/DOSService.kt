@@ -24,6 +24,7 @@ import retrofit2.Invocation
 import retrofit2.http.*
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.time.Duration
 
 /**
  * A Retrofit2 interface to define the network layer of the DOS client.
@@ -41,7 +42,7 @@ interface DOSService {
         /**
          * Create a new service instance that connects to the [url] specified and uses the optionally provided [client].
          */
-        fun create(url: String, token: String, client: OkHttpClient? = null): DOSService {
+        fun create(url: String, token: String, timeout: Int, client: OkHttpClient? = null): DOSService {
             val contentType = "application/json; charset=utf-8".toMediaType()
 
             val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -53,6 +54,10 @@ interface DOSService {
             val authInterceptor = AuthInterceptor(token)
 
             val okHttpClient = client ?: OkHttpClient.Builder()
+                .callTimeout(Duration.ofSeconds(timeout.toLong()))
+                .connectTimeout(Duration.ofSeconds(timeout.toLong()))
+                .readTimeout(Duration.ofSeconds(timeout.toLong()))
+                .writeTimeout(Duration.ofSeconds(timeout.toLong()))
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(authInterceptor)
                 .build()
