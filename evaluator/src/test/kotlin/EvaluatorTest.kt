@@ -112,8 +112,8 @@ class EvaluatorTest : WordSpec({
         }
     }
 
-    "OSADL compliance rules" should {
-        val script = getResource("/rules/osadl.rules.kts")
+    "OSADL project-license rules" should {
+        val script = getResource("/rules/project-license.rules.kts")
 
         "return no violation for compatible licenses" {
             val compatibleOrtResult = ortResult {
