@@ -82,7 +82,7 @@ project:
         dependencies:
         - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:62.0.0"
           dependencies:
-          - id: "Pub:dart_internal:dart_internal:0.2.8"
+          - id: "Pub:dart_internal:dart_internal:0.2.9"
           - id: "Pub:meta:meta:1.9.1"
         - id: "Pub:collection:collection:1.18.0"
         - id: "Pub:convert:convert:3.1.1"
@@ -598,7 +598,7 @@ project:
           dependencies:
           - id: "Pub:_fe_analyzer_shared:_fe_analyzer_shared:62.0.0"
             dependencies:
-            - id: "Pub:dart_internal:dart_internal:0.2.8"
+            - id: "Pub:dart_internal:dart_internal:0.2.9"
             - id: "Pub:meta:meta:1.9.1"
           - id: "Pub:collection:collection:1.18.0"
           - id: "Pub:convert:convert:3.1.1"
@@ -1127,8 +1127,8 @@ packages:
     url: "https://github.com/dart-lang/crypto.git"
     revision: ""
     path: ""
-- id: "Pub:dart_internal:dart_internal:0.2.8"
-  purl: "pkg:pub/dart_internal/dart_internal@0.2.8"
+- id: "Pub:dart_internal:dart_internal:0.2.9"
+  purl: "pkg:pub/dart_internal/dart_internal@0.2.9"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "This package is not intended for wide use. It provides a temporary\
