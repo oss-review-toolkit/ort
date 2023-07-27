@@ -17,8 +17,14 @@
  * License-Filename: LICENSE
  */
 
-// The following code uses OSADL's publicly available compatibility matrix for Open Source licenses, see
-// https://www.osadl.org/Access-to-raw-data.oss-compliance-raw-data-access.0.html.
+// The following code uses OSADL's publicly available compatibility matrix for Open Source licenses [1] to check
+// compatibility with the project license, i.e. whether the chosen outbound license is compatible with the inbound
+// licenses. This covers the use-case of publishing an Open Source project with Open Source dependencies. To perform the
+// check, it is sufficient to check compatibility of the licenses of the dependencies (one-way) with the project
+// license [2].
+//
+// [1]: https://www.osadl.org/Access-to-raw-data.oss-compliance-raw-data-access.0.html.
+// [2]: https://github.com/oss-review-toolkit/ort/pull/4977#discussion_r997947353
 //
 // Use this rule like:
 //
