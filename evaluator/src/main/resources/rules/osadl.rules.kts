@@ -28,7 +28,7 @@
 //
 // Use this rule like:
 //
-// $ ort evaluate -i scanner/src/funTest/assets/scanner-integration-expected-ort-result.yml --rules-resource /rules/osadl.rules.kts
+// $ ort evaluate -i scanner/src/funTest/assets/scanner-integration-all-pkgs-expected-ort-result.yml --rules-resource /rules/osadl.rules.kts
 
 import org.ossreviewtoolkit.evaluator.osadl.Compatibility
 import org.ossreviewtoolkit.evaluator.osadl.CompatibilityMatrix
