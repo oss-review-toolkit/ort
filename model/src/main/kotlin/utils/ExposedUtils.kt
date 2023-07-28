@@ -45,7 +45,7 @@ fun <T : Any> Transaction.execShow(statement: String, transform: (ResultSet) -> 
     return exec(object : Statement<T>(StatementType.SELECT, emptyList()) {
         override fun arguments(): Iterable<Iterable<Pair<IColumnType, Any?>>> = emptyList()
 
-        override fun prepareSQL(transaction: Transaction): String = statement
+        override fun prepareSQL(transaction: Transaction, prepared: Boolean): String = statement
 
         override fun PreparedStatementApi.executeInternal(transaction: Transaction): T =
             executeQuery().use { transform(it) }
