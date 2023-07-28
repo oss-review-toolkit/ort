@@ -91,12 +91,12 @@ interface DOSService {
 
     @Serializable
     data class ScanResultsResponseBody(
-        val state: State,
+        var state: State,
         val results: JsonElement? = null
     ) {
         @Serializable
         data class State(
-            val status: String,
+            var status: String,
             val id: String? = null
         )
     }

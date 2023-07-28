@@ -82,11 +82,7 @@ class DOS internal constructor(
             scanResults = repository.getScanResults(pkg.purl)
 
             if (scanResults == null) {
-                issues += createAndLogIssue(
-                    source = name,
-                    message = "Could not request scan results from DOS API",
-                    severity = Severity.ERROR
-                )
+                issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
             }
 
@@ -176,32 +172,8 @@ class DOS internal constructor(
                         }
                     }
                 }
-
-                /**
-                 * No earlier results found from DOS database, but a scan for this package is
-                 * either pending or ongoing, so need to monitor the scanning process until completed,
-                 * and then return the results.
-                 */
-                "pending" -> {
-                    val idPendingJob = scanResults?.state?.id
-                    while (true) {
-                        val jobState = idPendingJob?.let { repository.getJobState(it) }
-                        logger.info { "Pending scan: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
-                        if (jobState == "completed") {
-                            scanResults = repository.getScanResults(pkg.purl)
-                            break
-                        } else {
-                            delay(config.pollInterval * 1000L)
-                        }
-                    }
-                }
-
-                /**
-                 * Scan results for this package found from the database. Do local cleaning.
-                 */
-                "ready" -> {
-                    deleteFileOrDir(dosDir)
-                }
+                "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg, it, thisScanStartTime) }
+                "ready" -> deleteFileOrDir(dosDir)
             }
         }
         val thisScanEndTime = Instant.now()
@@ -224,11 +196,88 @@ class DOS internal constructor(
                 emptySet(),
                 issues)
         }
+        return ScanResult(provenance, details, summary)
+    }
 
-        return ScanResult(
-            provenance,
-            details,
-            summary
-        )
+    private suspend fun runBackendScan(
+        pkg: Package,
+        dosDir: File,
+        tmpDir: String,
+        thisScanStartTime: Instant,
+        issues: MutableList<Issue>): DOSService.ScanResultsResponseBody? {
+
+        // Zip the packet to scan
+        val zipName = dosDir.name + ".zip"
+        val targetZipFile = File("$tmpDir$zipName")
+        dosDir.packZip(targetZipFile)
+
+        // Request presigned URL from DOS API
+        val presignedUrl = repository.getPresignedUrl(zipName)
+        if (presignedUrl == null) {
+            issues.add(createAndLogIssue(name, "Could not get a presigned URL for this package", Severity.ERROR))
+            return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
+        }
+
+        // Transfer the zipped packet to S3 Object Storage and do local cleanup
+        val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
+        if (uploadSuccessful) {
+            deleteFileOrDir(dosDir)
+        } else {
+            issues.add(createAndLogIssue(name, "Could not upload the packet to S3", Severity.ERROR))
+            deleteFileOrDir(dosDir)
+            return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
+        }
+
+        // Notify DOS API about the new zipped file at S3, and get package ID as a return
+        logger.info { "Zipped file at S3: $zipName" }
+        val packageResponse = repository.getPackageId(zipName, pkg.purl)
+        if (packageResponse != null) {
+            deleteFileOrDir(targetZipFile)
+        } else {
+            issues.add(createAndLogIssue(name, "Could not get the package ID from DOS API", Severity.ERROR))
+            deleteFileOrDir(targetZipFile)
+            return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
+        }
+
+        // Send the scan job to DOS API to start the backend scanning
+        val jobResponse = packageResponse.packageId.let { repository.postScanJob(packageResponse.packageId) }
+        val id = jobResponse?.scannerJobId
+        if (jobResponse != null) {
+            logger.info { "New scan request: ${pkg.purl}" }
+            if (jobResponse.message == "Adding job to queue was unsuccessful") {
+                issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
+                return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
+            }
+        } else {
+            issues.add(createAndLogIssue(name, "Could not create a new scan job at DOS API", Severity.ERROR))
+            return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
+        }
+
+        return pollForCompletion(pkg, id, "New scan request", thisScanStartTime)
+    }
+
+    private suspend fun waitForPendingScan(
+        pkg: Package,
+        id: String,
+        thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
+        return pollForCompletion(pkg, id, "Pending scan", thisScanStartTime)
+    }
+
+    private suspend fun pollForCompletion(
+        pkg: Package,
+        jobId: String?,
+        logMessagePrefix: String,
+        thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
+        while (true) {
+            val jobState = jobId?.let { repository.getJobState(it) }
+            logger.info {
+                "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState"
+            }
+            if (jobState == "completed") {
+                return repository.getScanResults(pkg.purl)
+            } else {
+                delay(config.pollInterval * 1000L)
+            }
+        }
     }
 }
