@@ -80,96 +80,23 @@ class DOS internal constructor(
 
             // Ask for scan results from DOS API
             scanResults = repository.getScanResults(pkg.purl)
-
             if (scanResults == null) {
                 issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
             }
 
             when (scanResults?.state?.status) {
-                /**
-                 * No earlier scan results found from DOS database, initiate a new scan.
-                 */
                 "no-results" -> {
-                    logger.info { "Initiating a backend scan" }
-
-                    // Zip the packet to scan
-                    val zipName = dosDir.name + ".zip"
-                    val targetZipFile = File("$tmpDir$zipName")
-                    dosDir.packZip(targetZipFile)
-
-                    // Request presigned URL from DOS API
-                    val presignedUrl = repository.getPresignedUrl(zipName)
-                    if (presignedUrl == null) {
-                        issues += createAndLogIssue(
-                            source = name,
-                            message = "Could not get a presigned URL for this package",
-                            severity = Severity.ERROR
-                        )
+                    scanResults = runBackendScan(
+                        pkg,
+                        dosDir,
+                        tmpDir,
+                        thisScanStartTime,
+                        issues
+                    )
+                    if (scanResults == null || scanResults!!.state.status == "failed") {
+                        logger.error { "Something went wrong at DOS backend, exiting scan of this package" }
                         return@runBlocking
-                    }
-
-                    // Transfer the zipped packet to S3 Object Storage and do local cleanup
-                    val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
-                    if (uploadSuccessful) {
-                        deleteFileOrDir(dosDir)
-                    } else {
-                        issues += createAndLogIssue(
-                            source = name,
-                            message = "Could not upload the packet to S3",
-                            severity = Severity.ERROR
-                        )
-                        deleteFileOrDir(dosDir)
-                        return@runBlocking
-                    }
-
-                    // Notify DOS API about the new zipped file at S3, and get package ID as a return
-                    logger.info { "Zipped file at S3: $zipName" }
-                    val packageResponse = repository.getPackageId(zipName, pkg.purl)
-                    if (packageResponse != null) {
-                        deleteFileOrDir(targetZipFile)
-                    } else {
-                        issues += createAndLogIssue(
-                            source = name,
-                            message = "Could not get the package ID from DOS API",
-                            severity = Severity.ERROR
-                        )
-                        deleteFileOrDir(targetZipFile)
-                        return@runBlocking
-                    }
-
-                    // Send the scan job to DOS API to start the backend scanning
-                    val jobResponse = packageResponse.packageId.let { repository.postScanJob(packageResponse.packageId) }
-                    val id = jobResponse?.scannerJobId
-                    if (jobResponse != null) {
-                        logger.info { "New scan request: ${pkg.purl}" }
-                        if (jobResponse.message == "Adding job to queue was unsuccessful") {
-                            issues += createAndLogIssue(
-                                source = name,
-                                message = "DOS API returned an 'unsuccessful' response to the scan job request",
-                                severity = Severity.ERROR
-                            )
-                            return@runBlocking
-                        }
-                    } else {
-                        issues += createAndLogIssue(
-                            source = name,
-                            message = "Could not create a new scan job at DOS API",
-                            severity = Severity.ERROR
-                        )
-                        return@runBlocking
-                    }
-
-                    // Poll the job state periodically and log
-                    while (true) {
-                        val jobState = id?.let { repository.getJobState(it) }
-                        logger.info { "Elapsed time: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState" }
-                        if (jobState == "completed") {
-                            scanResults = repository.getScanResults(pkg.purl)
-                            break
-                        } else {
-                            delay(config.pollInterval * 1000L)
-                        }
                     }
                 }
                 "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg, it, thisScanStartTime) }
@@ -205,6 +132,8 @@ class DOS internal constructor(
         tmpDir: String,
         thisScanStartTime: Instant,
         issues: MutableList<Issue>): DOSService.ScanResultsResponseBody? {
+
+        logger.info { "Initiating a backend scan" }
 
         // Zip the packet to scan
         val zipName = dosDir.name + ".zip"
