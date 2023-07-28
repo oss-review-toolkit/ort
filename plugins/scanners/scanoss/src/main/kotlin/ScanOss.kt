@@ -48,6 +48,7 @@ import org.ossreviewtoolkit.utils.common.VCS_DIRECTORIES
 
 // An arbitrary name to use for the multipart body being sent.
 private const val FAKE_WFP_FILE_NAME = "fake.wfp"
+private const val ARG_FIELD_NAME = "file"
 
 class ScanOss internal constructor(
     override val name: String,
@@ -103,7 +104,7 @@ class ScanOss internal constructor(
 
         val response = runBlocking {
             val wfpBody = wfpString.toRequestBody("application/octet-stream".toMediaType())
-            val wfpFile = MultipartBody.Part.createFormData(FAKE_WFP_FILE_NAME, FAKE_WFP_FILE_NAME, wfpBody)
+            val wfpFile = MultipartBody.Part.createFormData(ARG_FIELD_NAME, FAKE_WFP_FILE_NAME, wfpBody)
 
             service.scan(wfpFile)
         }
