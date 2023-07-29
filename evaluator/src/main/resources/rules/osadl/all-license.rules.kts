@@ -56,7 +56,12 @@ val ruleSet = ruleSet(ortResult, licenseInfoResolver) {
 
         // Define a rule that is executed for each license of the dependency.
         licenseRule("OSADL_ALL_LICENSE_RULE", licenseView) {
+            // Requirements for the rule to trigger a violation.
+            require {
+                -isExcluded()
+            }
 
+            allProjectLicenses.getOrPut(license) { mutableSetOf() } += pkg.metadata.id
         }
     }
 
