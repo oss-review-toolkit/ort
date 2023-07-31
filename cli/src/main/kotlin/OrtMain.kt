@@ -35,6 +35,12 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.switch
 import com.github.ajalt.clikt.parameters.options.versionOption
 import com.github.ajalt.clikt.parameters.types.file
+import com.github.ajalt.mordant.rendering.TextColors
+import com.github.ajalt.mordant.rendering.Theme
+import com.github.ajalt.mordant.rendering.VerticalAlign
+import com.github.ajalt.mordant.rendering.Widget
+import com.github.ajalt.mordant.table.ColumnWidth
+import com.github.ajalt.mordant.table.grid
 
 import kotlin.system.exitProcess
 
@@ -68,6 +74,16 @@ fun main(args: Array<String>) {
 }
 
 private const val REQUIRED_OPTION_MARKER = "*"
+
+private val ORT_LOGO = """
+     ______________________________
+    /        \_______   \__    ___/
+    |    |   | |       _/ |    |
+    |    |   | |    |   \ |    |
+    \________/ |____|___/ |____|
+""".trimIndent()
+
+private val ORT_LOGO_WIDTH = ORT_LOGO.lines().maxOf { it.length }
 
 class OrtMain : CliktCommand(
     name = ORT_NAME,
@@ -153,37 +169,45 @@ class OrtMain : CliktCommand(
         }
     }
 
-    private fun getOrtHeader(version: String): String {
-        val variables = mutableListOf(
-            "$ORT_CONFIG_DIR_ENV_NAME = $ortConfigDirectory",
-            "$ORT_DATA_DIR_ENV_NAME = $ortDataDirectory"
-        )
+    private fun getOrtHeader(version: String): Widget =
+        grid {
+            column(0) { width = ColumnWidth.Fixed(ORT_LOGO_WIDTH) }
+            column(1) { verticalAlign = VerticalAlign.BOTTOM }
+            padding { bottom = 1 }
 
-        env.variables.entries.mapTo(variables) { (key, value) -> "$key = $value" }
+            row {
+                cell(ORT_LOGO) { style = TextColors.cyan }
 
-        val commandName = currentContext.invokedSubcommand?.commandName
-        val command = commandName?.let { " '$commandName'" }.orEmpty()
-        val user = System.getProperty("user.name").takeUnless { it == "?" } ?: Os.userHomeDirectory.name
+                val commandName = currentContext.invokedSubcommand?.commandName
+                val command = commandName?.let { " '${TextColors.cyan(commandName)}'" }.orEmpty()
 
-        val header = mutableListOf<String>()
-        val maxMemInMib = env.maxMemory / 1.mebibytes
+                val userName = System.getProperty("user.name").takeUnless { it == "?" } ?: Os.userHomeDirectory.name
+                val user = userName?.let { " as '${Theme.Default.warning(userName)}'" }.orEmpty()
 
-        """
-             ______________________________
-            /        \_______   \__    ___/ The OSS Review Toolkit, version $version.
-            |    |   | |       _/ |    |
-            |    |   | |    |   \ |    |    Running$command as '$user' under Java ${env.javaVersion} on ${env.os}
-            \________/ |____|___/ |____|    with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
+                val maxMemInMib = env.maxMemory / 1.mebibytes
 
-        """.trimIndent().lines().mapTo(header) {
-            it.trimEnd()
+                cell(
+                    """
+                        The OSS Review Toolkit, version ${Theme.Default.info(version)}.
+    
+                        Running$command$user under Java ${env.javaVersion} on ${env.os}
+                        with ${env.processors} CPUs and a maximum of $maxMemInMib MiB of memory.
+                    """.trimIndent()
+                )
+            }
+
+            row {
+                val content = mutableListOf("Environment variables:")
+
+                listOf(
+                    ORT_CONFIG_DIR_ENV_NAME to ortConfigDirectory.path,
+                    ORT_DATA_DIR_ENV_NAME to ortDataDirectory.path,
+                    *env.variables.toList().toTypedArray()
+                ).mapTo(content) { (key, value) ->
+                    "${Theme.Default.info(key)} = ${Theme.Default.warning(value)}"
+                }
+
+                cell(content.joinToString("\n")) { columnSpan = 2 }
+            }
         }
-
-        if (variables.isNotEmpty()) {
-            header += "Environment variables:"
-            header += variables
-        }
-
-        return header.joinToString("\n", postfix = "\n")
-    }
 }
