@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.commands.evaluator
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -335,7 +336,7 @@ class EvaluatorCommand : OrtCommand(
             evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
 
-        severityStats.print().conclude(ortConfig.severeRuleViolationThreshold, 2)
+        severityStats.print(terminal).conclude(ortConfig.severeRuleViolationThreshold, 2)
     }
 }
 

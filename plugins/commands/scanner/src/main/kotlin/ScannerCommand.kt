@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.commands.scanner
 
 import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.groups.mutuallyExclusiveOptions
 import com.github.ajalt.clikt.parameters.groups.required
 import com.github.ajalt.clikt.parameters.groups.single
@@ -170,7 +171,7 @@ class ScannerCommand : OrtCommand(
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
+        severityStats.print(terminal).conclude(ortConfig.severeIssueThreshold, 2)
     }
 
     private fun runScanners(

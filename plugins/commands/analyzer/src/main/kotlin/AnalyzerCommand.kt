@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.analyzer
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
@@ -230,6 +231,6 @@ class AnalyzerCommand : OrtCommand(
             .partition { resolutionProvider.isResolved(it) }
         val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
 
-        severityStats.print().conclude(ortConfig.severeIssueThreshold, 2)
+        severityStats.print(terminal).conclude(ortConfig.severeIssueThreshold, 2)
     }
 }
