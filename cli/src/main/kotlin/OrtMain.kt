@@ -142,14 +142,14 @@ class OrtMain : CliktCommand(
 
         if (helpAll) {
             registeredSubcommands().forEach {
-                println(it.getFormattedHelp())
-                println()
+                echo(it.getFormattedHelp())
+                echo()
             }
         } else {
-            println(getOrtHeader(env.ortVersion))
-            println("Looking for ORT configuration in the following file:")
-            println("\t" + configFile.absolutePath + " (does not exist)".takeIf { !configFile.exists() }.orEmpty())
-            println()
+            echo(getOrtHeader(env.ortVersion))
+            echo("Looking for ORT configuration in the following file:")
+            echo("\t" + configFile.absolutePath + " (does not exist)".takeIf { !configFile.exists() }.orEmpty())
+            echo()
         }
     }
 
