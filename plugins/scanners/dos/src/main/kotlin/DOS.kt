@@ -50,15 +50,6 @@ class DOS internal constructor(
     private val repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 
-    private fun createSingleIssueSummary(
-        startTime: Instant,
-        endTime: Instant = Instant.now(),
-        issue: Issue
-    ) = ScanSummary.EMPTY.copy(
-        startTime = startTime,
-        endTime = endTime,
-        issues = listOf(issue)
-    )
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val thisScanStartTime = Instant.now()
