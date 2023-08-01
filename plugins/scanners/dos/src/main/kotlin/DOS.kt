@@ -165,7 +165,7 @@ class DOS internal constructor(
         }
         deleteFileOrDir(targetZipFile)
 
-        return id?.let { pollForCompletion(pkg, it, "New scan request", thisScanStartTime) }
+        return id?.let { pollForCompletion(pkg, it, "Ongoing scan", thisScanStartTime) }
     }
 
     private suspend fun waitForPendingScan(
@@ -184,8 +184,9 @@ class DOS internal constructor(
             val jobState = repository.getJobState(jobId)
             if (jobState != null) {
                 logger.info {
-                    "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, "+
-                            "state = ${jobState.state.status}"
+                    "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, " +
+                            "state = ${jobState.state.status}, " +
+                            "message = ${jobState.state.message}"
                 }
             }
             if (jobState != null) {
