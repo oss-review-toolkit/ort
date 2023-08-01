@@ -102,31 +102,28 @@ interface DOSService {
     }
 
     @Serializable
-    data class PackageRequestBody(
+    data class JobRequestBody(
         val zipFileKey: String? = null,
         val purl: String? = null
     )
 
     @Serializable
-    data class PackageResponseBody(
-        val packageId: Int = 0
-    )
-
-    @Serializable
-    data class JobRequestBody(
-        val packageId: Int = 0
-    )
-
-    @Serializable
     data class JobResponseBody(
         val scannerJobId: String? = null,
-        val message: String?
+        val message: String? = null
     )
 
     @Serializable
     data class JobStateResponseBody(
-        val state: String? = null
-    )
+        var state: State,
+        val results: JsonElement? = null
+    ) {
+        @Serializable
+        data class State(
+            var status: String? = null,
+            val message: String? = null
+        )
+    }
 
     /**
      * Custom annotation for skipping the Authorization Interceptor for certain network calls
@@ -148,9 +145,6 @@ interface DOSService {
 
     @POST("scan-results")
     suspend fun postScanResults(@Body body: ScanResultsRequestBody): Response<ScanResultsResponseBody>
-
-    @POST("package")
-    suspend fun postPackage(@Body body: PackageRequestBody): Response<PackageResponseBody>
 
     @POST("job")
     suspend fun postJob(@Body body: JobRequestBody): Response<JobResponseBody>
