@@ -50,7 +50,6 @@ class DOS internal constructor(
     private val repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 
-
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val thisScanStartTime = Instant.now()
         val tmpDir = "/tmp/"
@@ -148,32 +147,25 @@ class DOS internal constructor(
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
-        // Notify DOS API about the new zipped file at S3, and get package ID as a return
-        logger.info { "Zipped file at S3: $zipName" }
-        val packageResponse = repository.getPackageId(zipName, pkg.purl)
-        if (packageResponse != null) {
-            deleteFileOrDir(targetZipFile)
-        } else {
-            issues.add(createAndLogIssue(name, "Could not get the package ID from DOS API", Severity.ERROR))
-            deleteFileOrDir(targetZipFile)
-            return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
-        }
-
-        // Send the scan job to DOS API to start the backend scanning
-        val jobResponse = packageResponse.packageId.let { repository.postScanJob(packageResponse.packageId) }
+        // Send the scan job to DOS API to start the backend scanning and do local cleanup
+        val jobResponse = repository.postScanJob(zipName, pkg.purl)
         val id = jobResponse?.scannerJobId
+
         if (jobResponse != null) {
-            logger.info { "New scan request: ${pkg.purl}" }
+            logger.info { "New scan request: Package = ${pkg.purl}, Zip file = $zipName" }
             if (jobResponse.message == "Adding job to queue was unsuccessful") {
                 issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
+                deleteFileOrDir(targetZipFile)
                 return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
             }
         } else {
             issues.add(createAndLogIssue(name, "Could not create a new scan job at DOS API", Severity.ERROR))
+            deleteFileOrDir(targetZipFile)
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
+        deleteFileOrDir(targetZipFile)
 
-        return pollForCompletion(pkg, id, "New scan request", thisScanStartTime)
+        return id?.let { pollForCompletion(pkg, it, "New scan request", thisScanStartTime) }
     }
 
     private suspend fun waitForPendingScan(
@@ -185,18 +177,29 @@ class DOS internal constructor(
 
     private suspend fun pollForCompletion(
         pkg: Package,
-        jobId: String?,
+        jobId: String,
         logMessagePrefix: String,
         thisScanStartTime: Instant): DOSService.ScanResultsResponseBody? {
         while (true) {
-            val jobState = jobId?.let { repository.getJobState(it) }
-            logger.info {
-                "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, state = $jobState"
+            val jobState = repository.getJobState(jobId)
+            if (jobState != null) {
+                logger.info {
+                    "$logMessagePrefix: ${elapsedTime(thisScanStartTime)}/${elapsedTime(totalScanStartTime)}, "+
+                            "state = ${jobState.state.status}"
+                }
             }
-            if (jobState == "completed") {
-                return repository.getScanResults(pkg.purl)
-            } else {
-                delay(config.pollInterval * 1000L)
+            if (jobState != null) {
+                when (jobState.state.status) {
+                    "completed" -> {
+                        logger.info { "Scan completed" }
+                        return repository.getScanResults(pkg.purl)
+                    }
+                    "failed" -> {
+                        logger.error { "Scan failed" }
+                        return null
+                    }
+                    else -> delay(config.pollInterval * 1000L)
+                }
             }
         }
     }
