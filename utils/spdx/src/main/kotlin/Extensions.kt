@@ -81,8 +81,8 @@ fun String.isSpdxExpressionOrNotPresent(): Boolean =
     SpdxConstants.isNotPresent(this) || isSpdxExpression()
 
 /**
- * Parses the string as an [SpdxExpression] and returns the result.
- * @throws SpdxException if the string is not a valid representation of an SPDX expression.
+ * Parses the string as an [SpdxExpression] of the given [strictness] and returns the result on success, or throws an
+ * [SpdxException] if the string cannot be parsed.
  */
 fun String.toSpdx(strictness: Strictness = Strictness.ALLOW_ANY): SpdxExpression =
     SpdxExpression.parse(this, strictness)
