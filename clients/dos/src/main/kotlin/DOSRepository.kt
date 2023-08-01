@@ -92,31 +92,14 @@ class DOSRepository(private val dosService: DOSService) {
     }
 
     /**
-     * Send a notification to DOS API about a new zipped package awaiting in S3 to scan.
-     * Response: (unzipped) folder name at S3, which will be used as the target for a new scan.
+     * Post a new scan job to DOS API for [zipFileKey] and [purl].
      */
-    suspend fun getPackageId(zipFile: String, purl: String): DOSService.PackageResponseBody? {
-        if (zipFile.isEmpty()) {
-            logger.error { "Need the name of the zipped file awaiting in S3" }
+    suspend fun postScanJob(zipFileKey: String, purl: String): DOSService.JobResponseBody? {
+        if (zipFileKey.isEmpty() || purl.isEmpty()) {
+            logger.error { "Need the Zip filename and package URL to send the scan job" }
             return null
         }
-        val requestBody = DOSService.PackageRequestBody(zipFile, purl)
-        val response = dosService.postPackage(requestBody)
-
-        return if (response.isSuccessful) {
-            logger.info { "Package ID at DOS API: ${response.body()?.packageId}" }
-            response.body()
-        } else {
-            logger.error { "$response" }
-            null
-        }
-    }
-
-    /**
-     * Post a new scan job to DOS API for [packageId].
-     */
-    suspend fun postScanJob(packageId: Int): DOSService.JobResponseBody? {
-        val requestBody = DOSService.JobRequestBody(packageId)
+        val requestBody = DOSService.JobRequestBody(zipFileKey, purl)
         val response = dosService.postJob(requestBody)
 
         return if (response.isSuccessful) {
@@ -131,11 +114,15 @@ class DOSRepository(private val dosService: DOSService) {
      * Request job status from DOS API.
      * Response: waiting / active / completed / failed.
      */
-    suspend fun getJobState(id: String): String? {
+    suspend fun getJobState(id: String): DOSService.JobStateResponseBody? {
+        if (id.isEmpty()) {
+            logger.error { "Need the job ID to check for job state" }
+            return null
+        }
         val response = dosService.getJobState(id)
 
         return if (response.isSuccessful) {
-            response.body()?.state
+            response.body()
         } else {
             logger.error { "$response" }
             null
