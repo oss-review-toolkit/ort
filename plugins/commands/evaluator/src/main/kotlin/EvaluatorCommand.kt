@@ -25,12 +25,14 @@ import com.github.ajalt.clikt.parameters.options.associate
 import com.github.ajalt.clikt.parameters.options.convert
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
+import com.github.ajalt.clikt.parameters.options.multiple
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.split
 import com.github.ajalt.clikt.parameters.types.enum
 import com.github.ajalt.clikt.parameters.types.file
 
 import java.io.File
+import java.net.URL
 import java.time.Duration
 
 import kotlin.time.toKotlinDuration
@@ -112,12 +114,12 @@ class EvaluatorCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .default(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME))
+        .multiple(listOf(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)))
 
     private val rulesResource by option(
         "--rules-resource",
         help = "The name of a script resource on the classpath that contains rules."
-    )
+    ).multiple()
 
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
@@ -196,10 +198,10 @@ class EvaluatorCommand : OrtCommand(
     ).flag()
 
     override fun run() {
-        val scriptUrls = listOfNotNull(
-            rulesFile.takeIf { it.isFile }?.toURI()?.toURL(),
-            rulesResource?.let { javaClass.getResource(it) }
-        )
+        val scriptUrls = mutableListOf<URL>()
+
+        rulesFile.mapTo(scriptUrls) { it.toURI().toURL() }
+        rulesResource.mapTo(scriptUrls) { javaClass.getResource(it) }
 
         if (scriptUrls.isEmpty()) {
             throw BadParameterValue("Neither a rules file nor a rules resource was specified.")
