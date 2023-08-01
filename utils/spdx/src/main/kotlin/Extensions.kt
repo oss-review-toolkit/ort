@@ -68,10 +68,10 @@ fun SpdxLicense.toExpression(): SpdxLicenseIdExpression {
 }
 
 /**
- * Return true if and only if this String can be successfully parsed to a [SpdxExpression].
+ * Return true if and only if this string can be successfully parsed to a [SpdxExpression] of the given [strictness].
  */
-fun String.isSpdxExpression(): Boolean =
-    runCatching { SpdxExpression.parse(this, Strictness.ALLOW_DEPRECATED) }.isSuccess
+fun String.isSpdxExpression(strictness: Strictness = Strictness.ALLOW_DEPRECATED): Boolean =
+    runCatching { SpdxExpression.parse(this, strictness) }.isSuccess
 
 /**
  * Return true if and only if this String can be successfully parsed to an [SpdxExpression] or if it equals
