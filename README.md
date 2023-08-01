@@ -718,7 +718,12 @@ considered to be well-supported.
 
 To run the ORT binaries (also see [Installation from binaries](#from-binaries)) at least Java 11 is required. Memory and
 CPU requirements vary depending on the size and type of project(s) to analyze / scan, but the general recommendation is
-to configure Java with 8 GiB of memory (`-Xmx=8g`) and to use a CPU with at least 4 cores.
+to configure Java with 8 GiB of memory and to use a CPU with at least 4 cores.
+
+```shell
+# This will give the Java Virtual Machine 8GB Memory.
+export JAVA_OPTS="$JAVA_OPTS -Xmx8g"
+```
 
 If ORT requires external tools in order to analyze a project, these tools are listed by the `ort requirements` command.
 If a package manager is not list listed there, support for it is integrated directly into ORT and does not require any
