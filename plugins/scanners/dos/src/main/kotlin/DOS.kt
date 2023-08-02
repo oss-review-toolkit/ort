@@ -165,7 +165,7 @@ class DOS internal constructor(
         }
         deleteFileOrDir(targetZipFile)
 
-        return id?.let { pollForCompletion(pkg, it, "Ongoing scan", thisScanStartTime) }
+        return id?.let { pollForCompletion(pkg, it, "New scan", thisScanStartTime) }
     }
 
     private suspend fun waitForPendingScan(
