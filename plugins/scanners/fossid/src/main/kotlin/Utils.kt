@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 
-private val DIRECTORY_REGEX = "(?<directory>(?:\\w+/)*\\w+)/?(?<starstar>\\*\\*)?".toRegex()
+private val DIRECTORY_REGEX = "(?<directory>(?:[\\w.]+/)*[\\w.]+)/?(?<starstar>\\*\\*)?".toRegex()
 private val EXTENSION_REGEX = "\\*\\.(?<extension>\\w+)".toRegex()
 private val FILE_REGEX = "(?<file>[^/]+)".toRegex()
 
@@ -52,6 +52,16 @@ internal fun convertRules(excludes: Excludes, issues: MutableList<Issue>): List<
 }
 
 private fun PathExclude.mapToRule(): IgnoreRule? {
+    EXTENSION_REGEX.matchEntire(pattern)?.let { extensionMatch ->
+        val extension = extensionMatch.groups["extension"]!!.value
+        return IgnoreRule(-1, RuleType.EXTENSION, ".$extension", -1, "")
+    }
+
+    FILE_REGEX.matchEntire(pattern)?.let { fileMatch ->
+        val file = fileMatch.groups["file"]!!.value
+        return IgnoreRule(-1, RuleType.FILE, file, -1, "")
+    }
+
     DIRECTORY_REGEX.matchEntire(pattern)?.let { directoryMatch ->
         val directory = directoryMatch.groups["directory"]!!.value
         val starStar = directoryMatch.groups["starstar"]?.value
@@ -61,16 +71,6 @@ private fun PathExclude.mapToRule(): IgnoreRule? {
         } else {
             IgnoreRule(-1, RuleType.DIRECTORY, "$directory/**", -1, "")
         }
-    }
-
-    EXTENSION_REGEX.matchEntire(pattern)?.let { extensionMatch ->
-        val extension = extensionMatch.groups["extension"]!!.value
-        return IgnoreRule(-1, RuleType.EXTENSION, ".$extension", -1, "")
-    }
-
-    FILE_REGEX.matchEntire(pattern)?.let { fileMatch ->
-        val file = fileMatch.groups["file"]!!.value
-        return IgnoreRule(-1, RuleType.FILE, file, -1, "")
     }
 
     return null
