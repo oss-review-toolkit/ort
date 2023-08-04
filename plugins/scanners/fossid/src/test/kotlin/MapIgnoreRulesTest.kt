@@ -65,6 +65,34 @@ class MapIgnoreRulesTest : WordSpec({
             issues should beEmpty()
         }
 
+        "map rule with directory containing a dot" {
+            val exclude = Excludes(listOf(PathExclude(".git/", PathExcludeReason.OTHER)))
+            val issues = mutableListOf<Issue>()
+
+            val ignoreRules = convertRules(exclude, issues)
+
+            ignoreRules shouldHaveSize 1
+            ignoreRules.first().shouldNotBeNull {
+                value shouldBe ".git"
+                type shouldBe RuleType.DIRECTORY
+            }
+        }
+
+        "map rule with directory containing subdirectories with a dot" {
+            val exclude = Excludes(listOf(PathExclude("src/example.test/templates/", PathExcludeReason.OTHER)))
+            val issues = mutableListOf<Issue>()
+
+            val ignoreRules = convertRules(exclude, issues)
+
+            ignoreRules shouldHaveSize 1
+            ignoreRules.first().shouldNotBeNull {
+                value shouldBe "src/example.test/templates"
+                type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
         "map rule with directory" {
             val exclude = Excludes(listOf(PathExclude("directory/", PathExcludeReason.OTHER)))
             val issues = mutableListOf<Issue>()
