@@ -13,6 +13,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
 import org.apache.logging.log4j.kotlin.Logging
+import org.jetbrains.annotations.VisibleForTesting
 import org.ossreviewtoolkit.clients.dos.*
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
@@ -47,7 +48,7 @@ class DOS internal constructor(
     override val version = "1.0"
 
     private val service = DOSService.create(config.serverUrl, config.serverToken, config.restTimeout)
-    private val repository = DOSRepository(service)
+    var repository = DOSRepository(service)
     private val totalScanStartTime = Instant.now()
 
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
@@ -116,7 +117,8 @@ class DOS internal constructor(
         return ScanResult(provenance, details, summary)
     }
 
-    private suspend fun runBackendScan(
+    @VisibleForTesting
+    internal suspend fun runBackendScan(
         pkg: Package,
         dosDir: File,
         tmpDir: String,
