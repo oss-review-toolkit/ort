@@ -6600,7 +6600,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Runtime for Regenerator-compiled generator and async functions."
-  homepage_url: "https://github.com/facebook/regenerator/tree/master#readme"
+  homepage_url: "https://github.com/facebook/regenerator/tree/main#readme"
   binary_artifact:
     url: ""
     hash:
@@ -6630,7 +6630,7 @@ packages:
   declared_licenses_processed:
     spdx_expression: "MIT"
   description: "Runtime for Regenerator-compiled generator and async functions."
-  homepage_url: "https://github.com/facebook/regenerator/tree/master#readme"
+  homepage_url: "https://github.com/facebook/regenerator/tree/main#readme"
   binary_artifact:
     url: ""
     hash:
