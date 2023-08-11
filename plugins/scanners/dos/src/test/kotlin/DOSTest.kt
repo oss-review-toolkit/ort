@@ -1,59 +1,133 @@
 package org.ossreviewtoolkit.plugins.scanners.dos
 
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock.*
+import com.github.tomakehurst.wiremock.common.ConsoleNotifier
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import io.kotest.core.spec.style.AnnotationSpec
+import io.kotest.core.spec.style.WordSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.*
+
+import kotlinx.coroutines.runBlocking
 
 import java.io.File
 import java.time.Instant
 
 import kotlinx.coroutines.test.runTest
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.apache.logging.log4j.kotlin.Logging
+import org.apache.logging.log4j.Level
+import org.junit.jupiter.api.*
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.Test
+import org.junit.platform.commons.logging.LoggerFactory
 
 import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.model.*
+import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
 import org.ossreviewtoolkit.utils.common.withoutSuffix
 
 class DOSTest {
-    private val scannerConfig = mockk<ScannerConfiguration>()
-    private val config = mockk<DOSConfig>()
-    private val repository = mockk<DOSRepository>(relaxed = true)
 
     private lateinit var dos: DOS
+    private companion object : Logging
+
+    val server = WireMockServer(WireMockConfiguration
+        .options()
+        .dynamicPort()
+        .notifier(ConsoleNotifier(false))
+    )
+
+    fun getResourceAsString(resourceName: String): String {
+        return DOSTest::class.java.getResource(resourceName)?.readText(Charsets.UTF_8) ?: "xxx"
+    }
 
     @BeforeEach
-    fun setUp() {
-        every { DOSConfig.create(scannerConfig) } returns config
-        dos = DOS("DOS", scannerConfig, config)
-        dos.repository = repository
+    fun setup() {
+        server.start()
+        val scannerOptions = mapOf(DOSConfig.SERVER_URL_PROPERTY to "http://localhost:${server.port()}/api/")
+        val configuration = ScannerConfiguration(options = mapOf("DOS" to scannerOptions))
+        dos = DOS.Factory().create(configuration, DownloaderConfiguration())
+    }
+
+    @AfterEach
+    fun teardown() {
+        server.stop()
     }
 
     @Test
-    fun `test runBackendScan with successful interactions`() = runTest {
-        val pkg = Package.EMPTY
-        val dosDir = mockk<File>()
-        val tmpDir = "/tmp/"
-        val thisScanStartTime = Instant.now()
-        val issues = mutableListOf<Issue>()
+    fun `getScanResults() should return null when service unavailable`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(400)
+                )
+        )
+        runBlocking {
+            dos.repository.getScanResults("purl") shouldBe null
+        }
+    }
 
-        val zipName = "test.zip"
-        val purl = "pkg:pypi/requests@2.25.1"
+    @Test
+    fun `getScanResults() should return 'no-results' when no results in db`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(
+                            """
+                            {
+                                "state": {
+                                    "status": "no-results",
+                                    "id": null
+                                },
+                                "results": []
+                            }
+                            """.trimIndent()
+                        )
+                )
+        )
+        runBlocking {
+            val status = dos.repository.getScanResults("purl")?.state?.status
+            status shouldBe "no-results"
+        }
+    }
 
-        every { dosDir.name } returns zipName.withoutSuffix("zip").toString()
-        coEvery { repository.getPresignedUrl(zipName) } returns "presigned_url"
-        coEvery { repository.uploadFile(any(), any()) } returns true
-        coEvery { repository.postScanJob(zipName, purl) } returns DOSService.JobResponseBody("job_id", "message")
-
-        val result = dos.runBackendScan(pkg, dosDir, tmpDir, thisScanStartTime, issues)
-
-        assertNotNull(result)
-        coVerifySequence {
-            repository.getPresignedUrl(zipName)
-            repository.uploadFile(any(), any())
-            repository.postScanJob(zipName, purl)
+    @Test
+    fun `getScanResults() should return 'pending' when scan ongoing`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(
+                            """
+                            {
+                                "state": {
+                                    "status": "pending",
+                                    "id": "dj34eh4h65"
+                                },
+                                "results": []
+                            }
+                            """.trimIndent()
+                        )
+                )
+        )
+        runBlocking {
+            val status = dos.repository.getScanResults("purl")?.state?.status
+            val id = dos.repository.getScanResults("purl")?.state?.id
+            status shouldBe "pending"
+            id shouldBe "dj34eh4h65"
         }
     }
 }

@@ -33,4 +33,5 @@ dependencies {
     implementation(project(mapOf("path" to ":downloader")))
 
     testImplementation(libs.mockk)
+    testImplementation(libs.wiremock)
 }

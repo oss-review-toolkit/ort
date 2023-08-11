@@ -28,7 +28,7 @@ internal data class DOSConfig(
 ) {
     companion object: Logging {
         /** Name of the configuration property for the server URL. **/
-        private const val SERVER_URL_PROPERTY = "serverUrl"
+        const val SERVER_URL_PROPERTY = "serverUrl"
 
         /** Name of the configuration property for the polling interval. **/
         private const val POLLING_INTERVAL_PROPERTY = "pollInterval"
