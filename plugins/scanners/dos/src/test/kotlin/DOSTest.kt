@@ -10,35 +10,25 @@ import io.kotest.matchers.shouldBe
 import io.mockk.*
 
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-import java.io.File
-import java.time.Instant
-
-import kotlinx.coroutines.test.runTest
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import org.apache.logging.log4j.kotlin.Logging
-import org.apache.logging.log4j.Level
+import org.eclipse.jetty.util.ajax.JSON
 import org.junit.jupiter.api.*
 
 import org.junit.jupiter.api.Assertions.*
-import org.junit.platform.commons.logging.LoggerFactory
-
-import org.ossreviewtoolkit.clients.dos.DOSRepository
 import org.ossreviewtoolkit.clients.dos.DOSService
+
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
-import org.ossreviewtoolkit.utils.common.withoutSuffix
 
 class DOSTest {
 
     private lateinit var dos: DOS
     private companion object : Logging
+    val json = Json { prettyPrint = true }
 
     val server = WireMockServer(WireMockConfiguration
         .options()
@@ -84,17 +74,7 @@ class DOSTest {
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(
-                            """
-                            {
-                                "state": {
-                                    "status": "no-results",
-                                    "id": null
-                                },
-                                "results": []
-                            }
-                            """.trimIndent()
-                        )
+                        .withBody(getResourceAsString("/no-results.json"))
                 )
         )
         runBlocking {
@@ -110,24 +90,40 @@ class DOSTest {
                 .willReturn(
                     aResponse()
                         .withStatus(200)
-                        .withBody(
-                            """
-                            {
-                                "state": {
-                                    "status": "pending",
-                                    "id": "dj34eh4h65"
-                                },
-                                "results": []
-                            }
-                            """.trimIndent()
-                        )
+                        .withBody(getResourceAsString("/pending.json"))
                 )
         )
         runBlocking {
-            val status = dos.repository.getScanResults("purl")?.state?.status
-            val id = dos.repository.getScanResults("purl")?.state?.id
+            val response = dos.repository.getScanResults("purl")
+            val status = response?.state?.status
+            val id = response?.state?.id
             status shouldBe "pending"
             id shouldBe "dj34eh4h65"
+        }
+    }
+
+    @Test
+    fun `getScanResults() should return 'ready' plus the results for results in db`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(getResourceAsString("/ready.json"))
+                )
+        )
+        runBlocking {
+            val response = dos.repository.getScanResults("purl")
+            val status = response?.state?.status
+            val id = response?.state?.id
+
+            val resultsJson = json.encodeToString(response?.results)
+            val readyResponse = json.decodeFromString<DOSService.ScanResultsResponseBody>(getResourceAsString("/ready.json"))
+            val expectedJson = json.encodeToString(readyResponse.results)
+
+            status shouldBe "ready"
+            id shouldBe null
+            resultsJson shouldBe expectedJson
         }
     }
 }
