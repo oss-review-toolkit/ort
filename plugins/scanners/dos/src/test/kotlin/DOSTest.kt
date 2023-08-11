@@ -23,6 +23,8 @@ import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.utils.ort.createOrtTempDir
+import java.time.Instant
 
 class DOSTest {
 
@@ -124,6 +126,40 @@ class DOSTest {
             status shouldBe "ready"
             id shouldBe null
             resultsJson shouldBe expectedJson
+        }
+    }
+
+    @Test
+    fun `runBackendScan() with failing presigned URL retrieval should abort and log an issue`() {
+        server.stubFor(
+            post(urlEqualTo("/api/upload-url"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(400)
+                )
+        )
+        val dosDir = createOrtTempDir()
+        val tmpDir = "/tmp/"
+        val thisScanStartTime = Instant.now()
+        val issues = mutableListOf<Issue>()
+        val pkg = Package.EMPTY.copy(
+            id = Identifier("Maven:org.apache.commons:commons-lang3:3.9"),
+            binaryArtifact = RemoteArtifact.EMPTY.copy(url = "https://www.apache.org/dist/commons/commons-lang3/3.9/")
+        )
+        val result = runBlocking {
+            dos.runBackendScan(
+                pkg,
+                dosDir,
+                tmpDir,
+                thisScanStartTime,
+                issues
+            )
+        }
+        if (result != null) {
+            result.state.status shouldBe "failed"
+            issues.size shouldBe 1
+            issues[0].message shouldBe "Could not get a presigned URL for this package"
+            issues[0].severity shouldBe Severity.ERROR
         }
     }
 }
