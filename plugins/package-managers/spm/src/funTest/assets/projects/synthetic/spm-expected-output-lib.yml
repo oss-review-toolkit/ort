@@ -79,8 +79,12 @@ project:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:swift-server:swift-backtrace:1.3.3"
-    - id: "SPM:vapor:async-kit:1.17.0"
+    - id: "SPM:vapor:async-kit:1.18.0"
       dependencies:
+      - id: "SPM:apple:swift-algorithms:1.0.0"
+        dependencies:
+        - id: "SPM:apple:swift-numerics:1.0.2"
+      - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-log:1.5.3"
       - id: "SPM:apple:swift-nio:2.58.0"
         dependencies:
@@ -126,6 +130,34 @@ project:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
 packages:
+- id: "SPM:apple:swift-algorithms:1.0.0"
+  purl: "pkg:swift/apple/swift-algorithms@1.0.0"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-algorithms"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-algorithms.git"
+    revision: "1.0.0"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-algorithms.git"
+    revision: "1.0.0"
+    path: ""
 - id: "SPM:apple:swift-atomics:1.1.0"
   purl: "pkg:swift/apple/swift-atomics@1.1.0"
   authors:
@@ -406,6 +438,34 @@ packages:
     url: "https://github.com/apple/swift-nio-transport-services.git"
     revision: "1.19.0"
     path: ""
+- id: "SPM:apple:swift-numerics:1.0.2"
+  purl: "pkg:swift/apple/swift-numerics@1.0.2"
+  authors:
+  - "apple"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/apple/swift-numerics"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/apple/swift-numerics.git"
+    revision: "1.0.2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/apple/swift-numerics.git"
+    revision: "1.0.2"
+    path: ""
 - id: "SPM:swift-server:async-http-client:1.18.0"
   purl: "pkg:swift/swift-server/async-http-client@1.18.0"
   authors:
@@ -462,8 +522,8 @@ packages:
     url: "https://github.com/swift-server/swift-backtrace.git"
     revision: "1.3.3"
     path: ""
-- id: "SPM:vapor:async-kit:1.17.0"
-  purl: "pkg:swift/vapor/async-kit@1.17.0"
+- id: "SPM:vapor:async-kit:1.18.0"
+  purl: "pkg:swift/vapor/async-kit@1.18.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -483,12 +543,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/async-kit.git"
-    revision: "1.17.0"
+    revision: "1.18.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/async-kit.git"
-    revision: "1.17.0"
+    revision: "1.18.0"
     path: ""
 - id: "SPM:vapor:console-kit:4.6.0"
   purl: "pkg:swift/vapor/console-kit@4.6.0"
