@@ -29,6 +29,7 @@ internal class LicenseClassificationsCommand : NoOpCliktCommand(
 ) {
     init {
         subcommands(
+            FilterCommand(),
             ImportCommand(),
             MergeCommand()
         )
