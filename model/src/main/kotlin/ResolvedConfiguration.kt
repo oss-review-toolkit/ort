@@ -73,7 +73,7 @@ data class ResolvedConfiguration(
 
 data class ResolvedPackageCurations(
     /**
-     * All enabled providers ordered highest-priority-first.
+     * The package curation provider.
      */
     val provider: Provider,
 
