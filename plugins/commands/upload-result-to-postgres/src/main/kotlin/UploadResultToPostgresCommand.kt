@@ -30,7 +30,6 @@ import java.sql.SQLException
 import org.apache.logging.log4j.kotlin.Logging
 
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SchemaUtils.withDataBaseLock
@@ -145,5 +144,5 @@ class UploadResultToPostgresCommand : OrtCommand(
 }
 
 private class OrtResults(tableName: String, columnName: String) : IntIdTable(tableName) {
-    val result: Column<OrtResult> = jsonb(columnName)
+    val result = jsonb<OrtResult>(columnName)
 }
