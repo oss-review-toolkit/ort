@@ -22,40 +22,20 @@ package org.ossreviewtoolkit.scanner.storages.utils
 import kotlin.reflect.KClass
 
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
+import org.jetbrains.exposed.sql.json.jsonb
 
 import org.ossreviewtoolkit.model.jsonMapper
 
-import org.postgresql.util.PGobject
-
 /**
- * This class provides basic support for Jsonb column types in PostgreSQL databases. This is required because Exposed
- * does not support this column type [1].
- *
- * [1]: https://github.com/JetBrains/Exposed/issues/127
+ * Create a JSONB column using [jsonMapper] for serialization and deserialization.
  */
-private class JsonbColumnType<T : Any>(private val klass: KClass<T>) : ColumnType() {
-    override fun sqlType(): String = "JSONB"
-
-    override fun notNullValueToDB(value: Any): Any = jsonMapper.writeValueAsString(value).escapeNull()
-
-    override fun setParameter(stmt: PreparedStatementApi, index: Int, value: Any?) {
-        stmt[index] = PGobject().apply {
-            type = sqlType()
-            this.value = value as String
-        }
-    }
-
-    override fun valueFromDB(value: Any): Any =
-        when (value) {
-            is PGobject -> jsonMapper.readValue(value.value!!.unescapeNull(), klass.java)
-            else -> value
-        }
-}
-
-fun <T : Any> Table.jsonb(name: String, klass: KClass<T>): Column<T> = registerColumn(name, JsonbColumnType(klass))
+fun <T : Any> Table.jsonb(name: String, klass: KClass<T>): Column<T> =
+    jsonb(
+        name = name,
+        serialize = { jsonMapper.writeValueAsString(it).escapeNull() },
+        deserialize = { jsonMapper.readValue(it.unescapeNull(), klass.java) }
+    )
 
 /**
  * The null character "\u0000" is not allowed in PostgreSQL JSONB columns, so we need to escape it before writing a
