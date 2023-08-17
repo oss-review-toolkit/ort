@@ -4,17 +4,15 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import com.github.tomakehurst.wiremock.common.ConsoleNotifier
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
-import io.kotest.core.spec.style.AnnotationSpec
-import io.kotest.core.spec.style.WordSpec
+
 import io.kotest.matchers.shouldBe
-import io.mockk.*
 
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 import org.apache.logging.log4j.kotlin.Logging
-import org.eclipse.jetty.util.ajax.JSON
+
 import org.junit.jupiter.api.*
 
 import org.junit.jupiter.api.Assertions.*
@@ -23,6 +21,7 @@ import org.ossreviewtoolkit.clients.dos.DOSService
 import org.ossreviewtoolkit.model.*
 import org.ossreviewtoolkit.model.config.DownloaderConfiguration
 import org.ossreviewtoolkit.model.config.ScannerConfiguration
+import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.ort.createOrtTempDir
 import java.time.Instant
 
@@ -115,7 +114,7 @@ class DOSTest {
                 )
         )
         runBlocking {
-            val response = dos.repository.getScanResults("purl")
+            val response = dos.repository.getScanResults("pkg:npm/mime-types@2.1.18")
             val status = response?.state?.status
             val id = response?.state?.id
 
@@ -161,5 +160,39 @@ class DOSTest {
             issues[0].message shouldBe "Could not get a presigned URL for this package"
             issues[0].severity shouldBe Severity.ERROR
         }
+    }
+
+    @Test
+    fun `scanPackage() should return existing results`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(getResourceAsString("/ready.json"))
+                )
+        )
+        val pkg = Package.EMPTY.copy(
+            id = Identifier(
+                type = "NPM",
+                namespace = "",
+                name = "mime-types",
+                version = "2.1.18"
+            ),
+            purl = "pkg:npm/mime-types@2.1.18",
+            vcs = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/jshttp/mime-types.git",
+                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127"
+            )
+        )
+        val scanResult = dos.scanPackage(pkg, ScanContext(
+            labels = emptyMap(),
+            packageType = PackageType.PROJECT,
+            excludes = null
+        ))
+        scanResult.summary.licenseFindings.size shouldBe 4
+        scanResult.summary.copyrightFindings.size shouldBe 2
+        scanResult.summary.issues.size shouldBe 0
     }
 }
