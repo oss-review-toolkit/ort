@@ -38,7 +38,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
-    - id: "SPM:apple:swift-nio-ssl:2.24.0"
+    - id: "SPM:apple:swift-nio-ssl:2.25.0"
       dependencies:
       - id: "SPM:apple:swift-nio:2.58.0"
         dependencies:
@@ -65,7 +65,7 @@ project:
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
-      - id: "SPM:apple:swift-nio-ssl:2.24.0"
+      - id: "SPM:apple:swift-nio-ssl:2.25.0"
         dependencies:
         - id: "SPM:apple:swift-nio:2.58.0"
           dependencies:
@@ -100,7 +100,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
-    - id: "SPM:vapor:routing-kit:4.7.2"
+    - id: "SPM:vapor:routing-kit:4.8.0"
       dependencies:
       - id: "SPM:apple:swift-log:1.5.3"
     - id: "SPM:vapor:websocket-kit:2.14.0"
@@ -116,7 +116,7 @@ project:
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
-      - id: "SPM:apple:swift-nio-ssl:2.24.0"
+      - id: "SPM:apple:swift-nio-ssl:2.25.0"
         dependencies:
         - id: "SPM:apple:swift-nio:2.58.0"
           dependencies:
@@ -382,8 +382,8 @@ packages:
     url: "https://github.com/apple/swift-nio-http2.git"
     revision: "1.27.0"
     path: ""
-- id: "SPM:apple:swift-nio-ssl:2.24.0"
-  purl: "pkg:swift/apple/swift-nio-ssl@2.24.0"
+- id: "SPM:apple:swift-nio-ssl:2.25.0"
+  purl: "pkg:swift/apple/swift-nio-ssl@2.25.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -403,12 +403,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-ssl.git"
-    revision: "2.24.0"
+    revision: "2.25.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-ssl.git"
-    revision: "2.24.0"
+    revision: "2.25.0"
     path: ""
 - id: "SPM:apple:swift-nio-transport-services:1.19.0"
   purl: "pkg:swift/apple/swift-nio-transport-services@1.19.0"
@@ -606,8 +606,8 @@ packages:
     url: "https://github.com/vapor/multipart-kit.git"
     revision: "4.5.4"
     path: ""
-- id: "SPM:vapor:routing-kit:4.7.2"
-  purl: "pkg:swift/vapor/routing-kit@4.7.2"
+- id: "SPM:vapor:routing-kit:4.8.0"
+  purl: "pkg:swift/vapor/routing-kit@4.8.0"
   authors:
   - "vapor"
   declared_licenses: []
@@ -627,12 +627,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.7.2"
+    revision: "4.8.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/vapor/routing-kit.git"
-    revision: "4.7.2"
+    revision: "4.8.0"
     path: ""
 - id: "SPM:vapor:websocket-kit:2.14.0"
   purl: "pkg:swift/vapor/websocket-kit@2.14.0"
