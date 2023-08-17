@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.scanner.storages.utils
 
-import kotlin.reflect.KClass
+import com.fasterxml.jackson.module.kotlin.readValue
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
@@ -27,14 +27,11 @@ import org.jetbrains.exposed.sql.json.jsonb
 
 import org.ossreviewtoolkit.model.jsonMapper
 
-/**
- * Create a JSONB column using [jsonMapper] for serialization and deserialization.
- */
-fun <T : Any> Table.jsonb(name: String, klass: KClass<T>): Column<T> =
+inline fun <reified T : Any> Table.jsonb(name: String): Column<T> =
     jsonb(
         name = name,
         serialize = { jsonMapper.writeValueAsString(it).escapeNull() },
-        deserialize = { jsonMapper.readValue(it.unescapeNull(), klass.java) }
+        deserialize = { jsonMapper.readValue(it.unescapeNull()) }
     )
 
 /**
@@ -42,9 +39,9 @@ fun <T : Any> Table.jsonb(name: String, klass: KClass<T>): Column<T> =
  * string to the database.
  * See: [https://www.postgresql.org/docs/11/datatype-json.html]
  */
-private fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
+fun String.escapeNull() = replace("\\u0000", "\\\\u0000")
 
 /**
  * Unescape the null character "\u0000". For details see [escapeNull].
  */
-private fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")
+fun String.unescapeNull() = replace("\\\\u0000", "\\u0000")

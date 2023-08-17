@@ -97,7 +97,7 @@ private class NestedProvenances(tableName: String) : IntIdTable(tableName) {
     val vcsType = text("vcs_type")
     val vcsUrl = text("vcs_url")
     val vcsRevision = text("vcs_revision")
-    val result = jsonb("result", NestedProvenanceResolutionResult::class)
+    val result = jsonb<NestedProvenanceResolutionResult>("result")
 
     init {
         // Index to improve lookup performance.

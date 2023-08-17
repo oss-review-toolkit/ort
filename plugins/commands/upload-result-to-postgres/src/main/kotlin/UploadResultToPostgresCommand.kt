@@ -145,5 +145,5 @@ class UploadResultToPostgresCommand : OrtCommand(
 }
 
 private class OrtResults(tableName: String, columnName: String) : IntIdTable(tableName) {
-    val result: Column<OrtResult> = jsonb(columnName, OrtResult::class)
+    val result: Column<OrtResult> = jsonb(columnName)
 }

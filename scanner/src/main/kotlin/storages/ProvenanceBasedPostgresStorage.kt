@@ -180,7 +180,7 @@ private class ProvenanceScanResults(tableName: String) : IntIdTable(tableName) {
     val scannerName = text("scanner_name")
     val scannerVersion = text("scanner_version")
     val scannerConfiguration = text("scanner_configuration")
-    val scanSummary = jsonb("scan_summary", ScanSummary::class)
+    val scanSummary = jsonb<ScanSummary>("scan_summary")
 
     init {
         // Indices to prevent duplicate entries.

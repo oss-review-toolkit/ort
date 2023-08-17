@@ -144,7 +144,7 @@ private class PackageProvenances(tableName: String) : IntIdTable(tableName) {
     val vcsUrl = text("vcs_url").nullable()
     val vcsRevision = text("vcs_revision").nullable()
     val vcsPath = text("vcs_path").nullable()
-    val result = jsonb("result", PackageProvenanceResolutionResult::class)
+    val result = jsonb<PackageProvenanceResolutionResult>("result")
 
     init {
         // Indices to prevent duplicate entries.
