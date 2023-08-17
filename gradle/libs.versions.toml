@@ -84,6 +84,7 @@ exposedCore = { module = "org.jetbrains.exposed:exposed-core", version.ref = "ex
 exposedDao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
 exposedJavaTime = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
 exposedJdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+exposedJson = { module = "org.jetbrains.exposed:exposed-json", version.ref = "exposed" }
 flexmark = { module = "com.vladsch.flexmark:flexmark", version.ref = "flexmark" }
 freemarker = { module = "org.freemarker:freemarker", version.ref = "freemarker" }
 graalVmNativeImage = { module = "org.graalvm.buildtools:native-gradle-plugin", version.ref = "graalVmNativeImagePlugin" }
@@ -153,7 +154,7 @@ wiremock = { module = "com.github.tomakehurst:wiremock-jre8", version.ref = "wir
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
 [bundles]
-exposed = ["exposedCore", "exposedDao", "exposedJdbc", "exposedJavaTime"]
+exposed = ["exposedCore", "exposedDao", "exposedJdbc", "exposedJavaTime", "exposedJson"]
 hoplite = ["hopliteCore", "hopliteYaml"]
 kotlinxSerialization = ["kotlinxSerializationCore", "kotlinxSerializationJson"]
 mavenResolver = ["mavenResolverConnectorBasic", "mavenResolverTransportFile", "mavenResolverTransportHttp", "mavenResolverTransportWagon"]
