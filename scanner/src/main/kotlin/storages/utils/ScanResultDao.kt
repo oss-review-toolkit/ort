@@ -30,7 +30,7 @@ import org.ossreviewtoolkit.model.ScanResult
 
 object ScanResults : IntIdTable("scan_results") {
     val identifier: Column<String> = text("identifier").index("identifier")
-    val scanResult: Column<ScanResult> = jsonb("scan_result", ScanResult::class)
+    val scanResult: Column<ScanResult> = jsonb("scan_result")
 }
 
 class ScanResultDao(id: EntityID<Int>) : IntEntity(id) {
