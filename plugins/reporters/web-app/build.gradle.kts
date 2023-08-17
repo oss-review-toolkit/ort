@@ -22,7 +22,7 @@ plugins {
     id("ort-library-conventions")
 }
 
-val generatedResourcesDir = file("$buildDir/generated-resources/main")
+val generatedResourcesDir = layout.buildDirectory.dir("generated-resources/main")
 val copyWebAppTemplate by tasks.registering(Copy::class) {
     dependsOn(":plugins:reporters:web-app-template:yarnBuild")
 
