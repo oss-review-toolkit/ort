@@ -30,15 +30,15 @@ class DOSTest {
 
     private lateinit var dos: DOS
     private companion object : Logging
-    val json = Json { prettyPrint = true }
+    private val json = Json { prettyPrint = true }
 
-    val server = WireMockServer(WireMockConfiguration
+    private val server = WireMockServer(WireMockConfiguration
         .options()
         .dynamicPort()
         .notifier(ConsoleNotifier(false))
     )
 
-    fun getResourceAsString(resourceName: String): String {
+    private fun getResourceAsString(resourceName: String): String {
         return DOSTest::class.java.getResource(resourceName)?.readText(Charsets.UTF_8) ?: "xxx"
     }
 
