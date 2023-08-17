@@ -125,7 +125,7 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
     rootProject.tasks.named<ReportMergeTask>(mergeDetektReportsTaskName)
 } else {
     rootProject.tasks.register<ReportMergeTask>(mergeDetektReportsTaskName) {
-        output = rootProject.buildDir.resolve("reports/detekt/merged.sarif")
+        output = rootProject.layout.buildDirectory.dir("reports/detekt/merged.sarif").get().asFile
     }
 }
 
@@ -225,7 +225,7 @@ tasks.withType<Test>().configureEach {
         )
     }
 
-    val testSystemProperties = mutableListOf("gradle.build.dir" to project.buildDir.path)
+    val testSystemProperties = mutableListOf("gradle.build.dir" to project.layout.buildDirectory.get().asFile.path)
 
     listOf(
         "java.io.tmpdir",
