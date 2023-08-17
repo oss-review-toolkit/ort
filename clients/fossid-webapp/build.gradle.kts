@@ -30,5 +30,6 @@ dependencies {
     implementation(libs.kotlinxCoroutines)
     implementation(libs.retrofitConverterJackson)
 
+    testImplementation(libs.mockk)
     testImplementation(libs.wiremock)
 }
