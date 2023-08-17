@@ -173,19 +173,15 @@ class DOSTest {
                 )
         )
         val pkg = Package.EMPTY.copy(
-            id = Identifier(
-                type = "NPM",
-                namespace = "",
-                name = "mime-types",
-                version = "2.1.18"
-            ),
             purl = "pkg:npm/mime-types@2.1.18",
-            vcs = VcsInfo(
+            vcsProcessed = VcsInfo(
                 type = VcsType.GIT,
                 url = "https://github.com/jshttp/mime-types.git",
-                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127"
+                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127",
+                path = ""
             )
         )
+
         val scanResult = dos.scanPackage(pkg, ScanContext(
             labels = emptyMap(),
             packageType = PackageType.PROJECT,

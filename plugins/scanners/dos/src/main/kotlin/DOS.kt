@@ -63,19 +63,18 @@ class DOS internal constructor(
         val dosDir = createOrtTempDir()
         var scanResults: DOSService.ScanResultsResponseBody?
 
-        runBlocking {
-            // Download the package
-            val downloader = Downloader(downloaderConfig)
-            provenance = downloader.download(pkg, dosDir)
-            logger.info { "Package downloaded to: $dosDir" }
+        // Download the package
+        val downloader = Downloader(downloaderConfig)
+        provenance = downloader.download(pkg, dosDir)
+        logger.info { "Package downloaded to: $dosDir" }
 
+        runBlocking {
             // Ask for scan results from DOS API
             scanResults = repository.getScanResults(pkg.purl)
             if (scanResults == null) {
                 issues.add(createAndLogIssue(name, "Could not request scan results from DOS API", Severity.ERROR))
                 return@runBlocking
             }
-
             when (scanResults?.state?.status) {
                 "no-results" -> {
                     scanResults = runBackendScan(
