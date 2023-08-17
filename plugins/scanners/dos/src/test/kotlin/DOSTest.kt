@@ -191,4 +191,44 @@ class DOSTest {
         scanResult.summary.copyrightFindings.size shouldBe 2
         scanResult.summary.issues.size shouldBe 0
     }
+
+    @Test
+    fun `scanPackage() should abort and log an issue when backend fails`() {
+        server.stubFor(
+            post(urlEqualTo("/api/scan-results"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(200)
+                        .withBody(getResourceAsString("/no-results.json"))
+                )
+        )
+        server.stubFor(
+            post(urlEqualTo("/api/upload-url"))
+                .willReturn(
+                    aResponse()
+                        .withStatus(400)
+                )
+        )
+        val pkg = Package.EMPTY.copy(
+            purl = "pkg:npm/mime-types@2.1.18",
+            vcsProcessed = VcsInfo(
+                type = VcsType.GIT,
+                url = "https://github.com/jshttp/mime-types.git",
+                revision = "076f7902e3a730970ea96cd0b9c09bb6110f1127",
+                path = ""
+            )
+        )
+
+        val scanResult = dos.scanPackage(pkg, ScanContext(
+            labels = emptyMap(),
+            packageType = PackageType.PROJECT,
+            excludes = null
+        ))
+
+        scanResult.summary.licenseFindings.size shouldBe 0
+        scanResult.summary.copyrightFindings.size shouldBe 0
+        scanResult.summary.issues.size shouldBe 1
+        scanResult.summary.issues[0].message shouldBe "Could not get a presigned URL for this package"
+        scanResult.summary.issues[0].severity shouldBe Severity.ERROR
+    }
 }
