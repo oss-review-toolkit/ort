@@ -19,6 +19,9 @@
 
 import org.gradle.accessors.dm.LibrariesForLibs
 
+import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 private val Project.libs: LibrariesForLibs
     get() = extensions.getByType()
 
@@ -40,4 +43,15 @@ dependencies {
     implementation(libs.graalVmNativeImage)
     implementation(libs.jgit)
     implementation(libs.kotlin)
+}
+
+tasks.withType<KotlinCompile>().configureEach {
+    val customCompilerArgs = listOf(
+        "-opt-in=kotlin.ExperimentalStdlibApi"
+    )
+
+    compilerOptions {
+        freeCompilerArgs.addAll(customCompilerArgs)
+        languageVersion = KotlinVersion.KOTLIN_1_9
+    }
 }
