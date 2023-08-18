@@ -118,7 +118,8 @@ detekt {
 }
 
 val javaVersion = JavaVersion.current()
-val maxKotlinJvmTarget = minOf(javaVersion.majorVersion.toInt(), JvmTarget.entries.max().target.toInt())
+val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaVersion.majorVersion) }
+    .getOrDefault(JvmTarget.entries.max())
 
 val mergeDetektReportsTaskName = "mergeDetektReports"
 val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
@@ -130,7 +131,7 @@ val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTask
 }
 
 tasks.withType<Detekt> detekt@{
-    jvmTarget = maxKotlinJvmTarget.toString()
+    jvmTarget = maxKotlinJvmTarget.target
 
     dependsOn(":detekt-rules:assemble")
 
@@ -156,8 +157,8 @@ tasks.withType<Detekt> detekt@{
 
 tasks.withType<JavaCompile>().configureEach {
     // Align this with Kotlin to avoid errors, see https://youtrack.jetbrains.com/issue/KT-48745.
-    sourceCompatibility = maxKotlinJvmTarget.toString()
-    targetCompatibility = maxKotlinJvmTarget.toString()
+    sourceCompatibility = maxKotlinJvmTarget.target
+    targetCompatibility = maxKotlinJvmTarget.target
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -167,10 +168,10 @@ tasks.withType<KotlinCompile>().configureEach {
         "-opt-in=kotlin.time.ExperimentalTime"
     )
 
-    kotlinOptions {
+    compilerOptions {
         allWarningsAsErrors = true
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
-        jvmTarget = maxKotlinJvmTarget.toString()
+        freeCompilerArgs.addAll(customCompilerArgs)
+        jvmTarget = maxKotlinJvmTarget
     }
 }
 
