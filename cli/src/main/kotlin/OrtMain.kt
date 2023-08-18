@@ -42,6 +42,8 @@ import com.github.ajalt.mordant.rendering.Widget
 import com.github.ajalt.mordant.table.ColumnWidth
 import com.github.ajalt.mordant.table.grid
 
+import java.time.Duration
+
 import kotlin.system.exitProcess
 
 import org.apache.logging.log4j.kotlin.Logging
@@ -104,6 +106,8 @@ class OrtMain : CliktCommand(
         "--debug" to Level.DEBUG
     ).default(Level.WARN)
 
+    private val monitorStackTraces by option(help = "Continuously print out the stack traces of all threads.").flag()
+
     private val stacktrace by option(help = "Print out the stacktrace for all exceptions.").flag()
 
     private val configArguments by option(
@@ -145,6 +149,8 @@ class OrtMain : CliktCommand(
 
         // Make the parameter globally available.
         printStackTrace = stacktrace
+
+        if (monitorStackTraces) startStackTraceMonitoring()
 
         // Make options available to subcommands and apply static configuration.
         val ortConfig = OrtConfiguration.load(args = configArguments, file = configFile)
@@ -211,3 +217,32 @@ class OrtMain : CliktCommand(
             }
         }
 }
+
+private fun startStackTraceMonitoring(interval: Duration = Duration.ofSeconds(1)) {
+    Thread {
+        while (true) {
+            Thread.sleep(interval.toMillis())
+            println(getAllStackTracesAsString())
+        }
+    }.start()
+}
+
+private fun getAllStackTracesAsString(): String =
+    buildString {
+        appendLine("Thread dump")
+        appendLine()
+
+        Thread.getAllStackTraces().entries.sortedWith(
+            compareBy({ it.key.name == "main" }, { it.key.name })
+        ).forEach { (thread, stackTraceElements) ->
+            appendLine("[${thread.name}]")
+            appendLine()
+
+            stackTraceElements.reversed().forEach { element ->
+                append("${element.className}.${element.methodName}() ")
+                appendLine("[${element.fileName}:${element.lineNumber}]")
+            }
+
+            appendLine()
+        }
+    }
