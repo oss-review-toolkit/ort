@@ -169,7 +169,6 @@ tasks.withType<KotlinCompile>().configureEach {
 
     kotlinOptions {
         allWarningsAsErrors = true
-        apiVersion = "1.9"
         freeCompilerArgs = freeCompilerArgs + customCompilerArgs
         jvmTarget = maxKotlinJvmTarget.toString()
     }
