@@ -41,7 +41,7 @@ tasks.withType<KotlinCompile>().configureEach {
         "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
     )
 
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+    compilerOptions {
+        freeCompilerArgs.addAll(customCompilerArgs)
     }
 }

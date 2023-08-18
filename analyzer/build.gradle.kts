@@ -77,8 +77,8 @@ listOf("compileKotlin", "compileTestKotlin").forEach {
             "-opt-in=kotlinx.serialization.ExperimentalSerializationApi"
         )
 
-        kotlinOptions {
-            freeCompilerArgs = freeCompilerArgs + customCompilerArgs
+        compilerOptions {
+            freeCompilerArgs.addAll(customCompilerArgs)
         }
     }
 }
