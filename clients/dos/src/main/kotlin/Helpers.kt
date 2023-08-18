@@ -59,19 +59,21 @@ fun File.packZip(zipFile: File) {
  * Delete a file or folder from the local file system.
  */
 fun deleteFileOrDir(file: File) {
-    if (file.isFile) {
-        try {
-            file.delete()
-            logger.info { "File $file deleted" }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    } else if (file.isDirectory) {
-        try {
-            file.deleteRecursively()
-            logger.info { "Directory $file deleted" }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    if (file.exists()) {
+        if (file.isFile) {
+            try {
+                file.delete()
+                logger.info { "File $file deleted" }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        } else if (file.isDirectory) {
+            try {
+                file.deleteRecursively()
+                logger.info { "Directory $file deleted" }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 }
