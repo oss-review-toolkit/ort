@@ -126,27 +126,28 @@ class DOS internal constructor(
 
         logger.info { "Initiating a backend scan" }
 
-        // Zip the packet to scan
+        // Zip the packet to scan and do local cleanup
         val zipName = dosDir.name + ".zip"
         val targetZipFile = File("$tmpDir$zipName")
         dosDir.packZip(targetZipFile)
+        deleteFileOrDir(dosDir)  // ORT temp directory not needed anymore
 
         // Request presigned URL from DOS API
         val presignedUrl = repository.getPresignedUrl(zipName)
         if (presignedUrl == null) {
             issues.add(createAndLogIssue(name, "Could not get a presigned URL for this package", Severity.ERROR))
+            deleteFileOrDir(targetZipFile)  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
 
         // Transfer the zipped packet to S3 Object Storage and do local cleanup
         val uploadSuccessful = repository.uploadFile(presignedUrl, tmpDir + zipName)
-        if (uploadSuccessful) {
-            deleteFileOrDir(dosDir)
-        } else {
+        if (!uploadSuccessful) {
             issues.add(createAndLogIssue(name, "Could not upload the packet to S3", Severity.ERROR))
-            deleteFileOrDir(dosDir)
+            deleteFileOrDir(targetZipFile)  // local cleanup before returning
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
+        deleteFileOrDir(targetZipFile)  // make sure the zipped packet is always deleted locally
 
         // Send the scan job to DOS API to start the backend scanning and do local cleanup
         val jobResponse = repository.postScanJob(zipName, pkg.purl)
@@ -156,15 +157,12 @@ class DOS internal constructor(
             logger.info { "New scan request: Package = ${pkg.purl}, Zip file = $zipName" }
             if (jobResponse.message == "Adding job to queue was unsuccessful") {
                 issues.add(createAndLogIssue(name, "DOS API: 'unsuccessful' response to the scan job request", Severity.ERROR))
-                deleteFileOrDir(targetZipFile)
                 return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
             }
         } else {
             issues.add(createAndLogIssue(name, "Could not create a new scan job at DOS API", Severity.ERROR))
-            deleteFileOrDir(targetZipFile)
             return DOSService.ScanResultsResponseBody(DOSService.ScanResultsResponseBody.State("failed"))
         }
-        deleteFileOrDir(targetZipFile)
 
         return id?.let { pollForCompletion(pkg, it, "New scan", thisScanStartTime) }
     }
