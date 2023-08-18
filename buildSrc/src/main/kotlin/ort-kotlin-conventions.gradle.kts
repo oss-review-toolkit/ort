@@ -118,7 +118,7 @@ detekt {
 }
 
 val javaVersion = JavaVersion.current()
-val maxKotlinJvmTarget = minOf(javaVersion.majorVersion.toInt(), enumValues<JvmTarget>().max().target.toInt())
+val maxKotlinJvmTarget = minOf(javaVersion.majorVersion.toInt(), JvmTarget.entries.max().target.toInt())
 
 val mergeDetektReportsTaskName = "mergeDetektReports"
 val mergeDetektReports = if (rootProject.tasks.findByName(mergeDetektReportsTaskName) != null) {
