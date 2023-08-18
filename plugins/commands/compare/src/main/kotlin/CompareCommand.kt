@@ -68,6 +68,11 @@ class CompareCommand : OrtCommand(
         help = "Ignore environment differences."
     ).flag()
 
+    private val ignoreTmpDir by option(
+        "--ignore-tmp-dir", "-d",
+        help = "Ignore temporary directory differences."
+    ).flag()
+
     override fun run() {
         if (fileA == fileB) {
             println("The arguments point to the same file.")
@@ -88,6 +93,10 @@ class CompareCommand : OrtCommand(
 
                     if (ignoreEnvironment) {
                         put("""^(\s{2}environment:)$\n(?:^\s{4,}.+\n?)+$""", "$1\n    ort_version: \"deadbeef\"")
+                    }
+
+                    if (ignoreTmpDir) {
+                        put("""([/\\][Tt]e?mp[/\\]ort)[/\\-][\w./\\-]+""", "$1")
                     }
                 }
 
