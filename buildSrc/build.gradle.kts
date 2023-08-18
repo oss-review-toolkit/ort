@@ -19,6 +19,7 @@
 
 import org.gradle.accessors.dm.LibrariesForLibs
 
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -45,6 +46,16 @@ dependencies {
     implementation(libs.kotlin)
 }
 
+val javaVersion = JavaVersion.current()
+val maxKotlinJvmTarget = runCatching { JvmTarget.fromTarget(javaVersion.majorVersion) }
+    .getOrDefault(enumValues<JvmTarget>().max())
+
+tasks.withType<JavaCompile>().configureEach {
+    // Align this with Kotlin to avoid errors, see https://youtrack.jetbrains.com/issue/KT-48745.
+    sourceCompatibility = maxKotlinJvmTarget.target
+    targetCompatibility = maxKotlinJvmTarget.target
+}
+
 tasks.withType<KotlinCompile>().configureEach {
     val customCompilerArgs = listOf(
         "-opt-in=kotlin.ExperimentalStdlibApi"
@@ -53,5 +64,6 @@ tasks.withType<KotlinCompile>().configureEach {
     compilerOptions {
         freeCompilerArgs.addAll(customCompilerArgs)
         languageVersion = KotlinVersion.KOTLIN_1_9
+        jvmTarget = maxKotlinJvmTarget
     }
 }
