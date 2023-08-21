@@ -297,20 +297,31 @@ private fun parsePackageId(node: JsonNode) =
 
 private fun parseRepositoryUrl(node: JsonNode) = node["repository"].textValueOrEmpty()
 
+// Match source dependencies that directly reference git repositories. The specified tag or branch
+// name is ignored (i.e. not captured) in favor of the actual commit hash that they currently refer
+// to.
+// See https://doc.rust-lang.org/cargo/reference/specifying-dependencies.html#specifying-dependencies-from-git-repositories
+// for the specification for this kind of dependency.
+private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-zA-Z]+)")
+
 private fun parseSourceArtifact(
     node: JsonNode,
     hashes: Map<String, String>
 ): RemoteArtifact? {
-    if (node["source"].textValueOrEmpty() != "registry+https://github.com/rust-lang/crates.io-index") {
-        return null
+    val source = node["source"]?.textValue() ?: return null
+
+    if (source == "registry+https://github.com/rust-lang/crates.io-index") {
+        val name = node["name"]?.textValue() ?: return null
+        val version = node["version"]?.textValue() ?: return null
+        val url = "https://crates.io/api/v1/crates/$name/$version/download"
+        val id = parseCargoId(node)
+        val hash = Hash.create(hashes[id].orEmpty())
+        return RemoteArtifact(url, hash)
     }
 
-    val name = node["name"]?.textValue() ?: return null
-    val version = node["version"]?.textValue() ?: return null
-    val url = "https://crates.io/api/v1/crates/$name/$version/download"
-    val id = parseCargoId(node)
-    val hash = Hash.create(hashes[id].orEmpty())
-    return RemoteArtifact(url, hash)
+    val match = GIT_DEPENDENCY_REGEX.matchEntire(source) ?: return null
+    val (url, hash) = match.destructured
+    return RemoteArtifact(url, Hash.create(hash))
 }
 
 private fun parseVcsInfo(node: JsonNode) =
