@@ -74,6 +74,11 @@ class CompareCommand : OrtCommand(
             throw ProgramResult(0)
         }
 
+        if (fileA.extension != fileB.extension) {
+            println("The file arguments need to be of the same type.")
+            throw ProgramResult(2)
+        }
+
         when (method) {
             CompareMethod.TEXT_DIFF -> {
                 val replacements = buildMap {
