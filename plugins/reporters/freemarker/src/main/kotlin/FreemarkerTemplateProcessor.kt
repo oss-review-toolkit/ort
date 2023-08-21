@@ -40,6 +40,7 @@ import org.ossreviewtoolkit.model.Package
 import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.SnippetFinding
+import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.Vulnerability
 import org.ossreviewtoolkit.model.VulnerabilityReference
 import org.ossreviewtoolkit.model.config.RuleViolationResolution
@@ -319,11 +320,27 @@ class FreemarkerTemplateProcessor(
             snippetFindings.groupBy { it.sourceLocation.path }
 
         /**
+         * Return a list of [SnippetFinding]s grouped by the source file location ( line ranges) being matched by those
+         * snippets.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun groupSnippetsBySourceLines(snippetFindings: Collection<SnippetFinding>): Map<TextLocation, SnippetFinding> =
+            snippetFindings.associateBy { it.sourceLocation }
+
+        /**
+         * Return a flag if the given [sourceLocation] refers to the full source file.
+         */
+        @Suppress("UNUSED") // This function is used in the templates.
+        fun isFullFileLocation(sourceLocation: TextLocation) =
+            sourceLocation.startLine == TextLocation.UNKNOWN_LINE && sourceLocation.endLine == TextLocation.UNKNOWN_LINE
+
+        /**
          * Collect all the licenses present in a collection of [SnippetFinding]s.
          */
         @Suppress("UNUSED") // This function is used in the templates.
-        fun collectLicenses(snippetFindings: Collection<SnippetFinding>): Set<String> =
-            snippetFindings.flatMapTo(mutableSetOf()) { it.snippets.map { snippet -> snippet.licenses.toString() } }
+        fun collectLicenses(snippetsFindings: Collection<SnippetFinding>): Set<String> =
+            snippetsFindings.flatMap { findings -> findings.snippets }.map { snippet -> snippet.licenses.toString() }
+                .toSet()
 
         /**
          * Return a flag indicating that issues have been encountered during the run of an advisor with the given

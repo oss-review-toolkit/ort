@@ -53,40 +53,49 @@ End time : ${summary.startTime} +
     [/#if]
 [/#if]
 
-[#assign snippets = helper.groupSnippetsByFile(summary.snippetFindings)]
+[#list helper.groupSnippetsByFile(summary.snippetFindings) as filePath, snippetFindings ]
 
-[#list snippets as filePath, snippetFindings]
 [#if gitRepoUrl?? && gitRepoUrl?contains("github.com")]
-  [#assign localFileURL = '_${githubBaseURL}/${filePath}[source]_']
+    [#assign localFileURL = '${githubBaseURL}/${filePath}[${filePath}]']
 [#else]
-  [#assign localFileURL = "_source_"]
+    [#assign localFileURL = "${filePath}"]
 [/#if]
-
 [#assign licenses = helper.collectLicenses(snippetFindings)]
 
-*${filePath}* +
+*${localFileURL}* +
 License(s):
 [#list licenses as license]
   ${license}[#sep],
 [/#list]
 
+[#list helper.groupSnippetsBySourceLines(snippetFindings) as sourceLocation, snippetFinding]
+[#assign snippetCount = snippetFinding.snippets?size]
+
 [width=100%]
 [cols="1,3,1,3,3,1,1"]
 |===
-| Match | pURL | License | File | URL | Score | Release Date
+| Source Location | pURL | License | File | URL | Score | Release Date
 
-[#list snippetFindings as snippetFinding ]
-[#assign snippet = snippetFinding.snippet]
-[#assign matchType = snippet.additionalData["matchType"]]
-| ${matchType} | ${snippet.purl!""}
-| ${snippet.licenses!""} | ${snippet.location.path!""} | ${snippet.provenance.sourceArtifact.url!""}[URL]
-| ${snippet.score!""} | ${snippet.additionalData["releaseDate"]}
-[#if matchType == "PARTIAL"]
-2+^| *Matched lines* 5+| ${localFileURL}: ${snippet.additionalData["matchedLinesSource"]} /
-    _remote_: ${snippet.additionalData["matchedLinesSnippet"]}
+.${snippetCount}+|
+[#if helper.isFullFileLocation(sourceLocation)]
+Full match
+[#else]
+Partial match +
+${sourceLocation.startLine}-${sourceLocation.endLine}
 [/#if]
+
+[#list snippetFinding.snippets as snippet ]
+[#assign matchType = snippet.additionalData["matchType"]]
+[#assign snippetFilePath = snippet.location.path!""]
+[#if matchType == "PARTIAL" && snippetFilePath?has_content]
+    [#assign snippetFilePath = "${snippetFilePath}#${snippet.additionalData['matchedLinesSnippet']}"]
+[/#if]
+
+| ${snippet.purl!""}
+| ${snippet.licenses!""} | ${snippetFilePath} | ${snippet.provenance.sourceArtifact.url!""}[URL]
+| ${snippet.score!""} | ${snippet.additionalData["releaseDate"]}
 [/#list]
 |===
 [/#list]
-
+[/#list]
 [/#list]
