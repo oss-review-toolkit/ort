@@ -59,7 +59,7 @@ object ConfigurationResolver : Logging {
         packages: Collection<Package>,
         curationProviders: List<Pair<String, PackageCurationProvider>>
     ): List<ResolvedPackageCurations> {
-        val packageCurations = mutableMapOf<String, Set<PackageCuration>>()
+        val packageCurations = mutableMapOf<String, List<PackageCuration>>()
 
         curationProviders.forEach { (id, curationProvider) ->
             val (curations, duration) = measureTimedValue {
@@ -68,7 +68,7 @@ object ConfigurationResolver : Logging {
 
             val (applicableCurations, nonApplicableCurations) = curations.partition { curation ->
                 packages.any { pkg -> curation.isApplicable(pkg.id) }
-            }.let { it.first.toSet() to it.second.toSet() }
+            }.let { it.first to it.second }
 
             if (nonApplicableCurations.isNotEmpty()) {
                 logger.warn {
