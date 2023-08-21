@@ -21,8 +21,14 @@ package org.ossreviewtoolkit.plugins.reporters.spdx
 
 import java.io.File
 
+import org.apache.logging.log4j.kotlin.Logging
+
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
+import org.ossreviewtoolkit.utils.spdx.SpdxCompoundExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxConstants.LICENSE_REF_PREFIX
+import org.ossreviewtoolkit.utils.spdx.SpdxExpression
+import org.ossreviewtoolkit.utils.spdx.SpdxLicenseWithExceptionExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxModelMapper.FileFormat
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
 
@@ -42,7 +48,7 @@ import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
  *                               about files containing findings.
  */
 class SpdxDocumentReporter : Reporter {
-    companion object {
+    companion object : Logging {
         const val REPORT_BASE_FILENAME = "bom.spdx"
 
         const val OPTION_CREATION_INFO_COMMENT = "creationInfo.comment"
@@ -80,6 +86,16 @@ class SpdxDocumentReporter : Reporter {
             params
         )
 
+        val licenseRefExceptions = spdxDocument.getLicenseRefExceptions()
+        if (licenseRefExceptions.isNotEmpty()) {
+            logger.warn {
+                "The SPDX document contains the following ${licenseRefExceptions.size} LicenseRef- exceptions " +
+                        "used by a WITH operator, which does not conform with SPDX specification version 2: \n" +
+                        "finding ${licenseRefExceptions.joinToString("\n")}\n You may be able to use "
+                        "license curations to fix up these exceptions into valid SPDX v2 license expressions."
+            }
+        }
+
         return outputFileFormats.map { fileFormat ->
             val serializedDocument = fileFormat.mapper.writeValueAsString(spdxDocument)
 
@@ -87,5 +103,31 @@ class SpdxDocumentReporter : Reporter {
                 bufferedWriter().use { it.write(serializedDocument) }
             }
         }
+    }
+}
+
+private fun SpdxDocument.getLicenseRefExceptions(): Set<String> {
+    val licenses = buildSet {
+        files.flatMapTo(this) { it.licenseInfoInFiles }
+        packages.flatMapTo(this) { it.licenseInfoFromFiles }
+    }
+
+    return buildSet {
+        licenses.forEach { license ->
+            SpdxExpression.parse(license, SpdxExpression.Strictness.ALLOW_ANY).getLicenseRefExceptions(this)
+        }
+    }
+}
+
+private fun SpdxExpression.getLicenseRefExceptions(result: MutableSet<String>) {
+    when (this) {
+        is SpdxCompoundExpression -> {
+            left.getLicenseRefExceptions(result)
+            right.getLicenseRefExceptions(result)
+        }
+        is SpdxLicenseWithExceptionExpression -> if (isPresent() && exception.startsWith(LICENSE_REF_PREFIX)) {
+            result.add(exception)
+        }
+        else -> { }
     }
 }
