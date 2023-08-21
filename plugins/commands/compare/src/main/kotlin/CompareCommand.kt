@@ -19,6 +19,12 @@
 
 package org.ossreviewtoolkit.plugins.commands.compare
 
+import com.fasterxml.jackson.core.JsonGenerator
+import com.fasterxml.jackson.databind.SerializerProvider
+import com.fasterxml.jackson.databind.module.SimpleModule
+import com.fasterxml.jackson.databind.ser.std.StdSerializer
+import com.fasterxml.jackson.module.kotlin.readValue
+
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.convert
@@ -30,12 +36,14 @@ import com.github.ajalt.clikt.parameters.types.file
 import com.github.difflib.DiffUtils
 import com.github.difflib.UnifiedDiffUtils
 
-import java.io.File
 import java.time.Instant
 
+import org.ossreviewtoolkit.model.OrtResult
+import org.ossreviewtoolkit.model.mapper
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
 import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.common.getCommonParentFile
+import org.ossreviewtoolkit.utils.ort.Environment
 
 class CompareCommand : OrtCommand(
     name = "compare",
@@ -86,21 +94,43 @@ class CompareCommand : OrtCommand(
 
         when (method) {
             CompareMethod.TEXT_DIFF -> {
+                // Reserialize file contents with some data types replaced by invariant strings.
+                val deserializer = fileA.mapper()
+                val serializer = deserializer.copy().registerModule(
+                    SimpleModule().apply {
+                        if (ignoreTime) addSerializer(InvariantInstantSerializer())
+                        if (ignoreEnvironment) addSerializer(InvariantEnvironmentSerializer())
+                    }
+                )
+
+                val resultA = deserializer.readValue<OrtResult>(fileA)
+                val resultB = deserializer.readValue<OrtResult>(fileB)
+
+                val textA = serializer.writeValueAsString(resultA)
+                val textB = serializer.writeValueAsString(resultB)
+
+                // Apply data type independent replacements in the texts.
                 val replacements = buildMap {
-                    if (ignoreTime) {
-                        put("""^(\s+(?:start|end)_time:) "[^"]+"$""", "$1 \"${Instant.EPOCH}\"")
-                    }
-
-                    if (ignoreEnvironment) {
-                        put("""^(\s{2}environment:)$\n(?:^\s{4,}.+\n?)+$""", "$1\n    ort_version: \"deadbeef\"")
-                    }
-
                     if (ignoreTmpDir) {
                         put("""([/\\][Tt]e?mp[/\\]ort)[/\\-][\w./\\-]+""", "$1")
                     }
                 }
 
-                val diff = unifiedDiff(fileA, fileB, replacements)
+                val replacementRegexes = replacements.mapKeys { (pattern, _) -> Regex(pattern, RegexOption.MULTILINE) }
+
+                val linesA = replacementRegexes.replaceIn(textA).lines()
+                val linesB = replacementRegexes.replaceIn(textB).lines()
+
+                // Create unified diff output.
+                val commonParent = getCommonParentFile(setOf(fileA, fileB))
+                val diff = UnifiedDiffUtils.generateUnifiedDiff(
+                    "a/${fileA.relativeTo(commonParent).invariantSeparatorsPath}",
+                    "b/${fileB.relativeTo(commonParent).invariantSeparatorsPath}",
+                    linesA,
+                    DiffUtils.diff(linesA, linesB),
+                    /* contextSize = */ 7
+                )
+
                 if (diff.isEmpty()) {
                     println("The ORT results are the same.")
                     throw ProgramResult(0)
@@ -122,32 +152,18 @@ private enum class CompareMethod {
     TEXT_DIFF
 }
 
-private fun unifiedDiff(
-    a: File, b: File, replacements: Map<String, String> = emptyMap(), contextSize: Int = 7
-): List<String> {
-    val replaceRegexes = replacements.mapKeys { (pattern, _) -> Regex(pattern, RegexOption.MULTILINE) }
-
-    val textA = a.readText().let {
-        replaceRegexes.entries.fold(it) { text, (from, to) ->
-            text.replace(from, to)
-        }
+private class InvariantInstantSerializer : StdSerializer<Instant>(Instant::class.java) {
+    override fun serialize(value: Instant, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeString("invariant")
     }
+}
 
-    val textB = b.readText().let {
-        replaceRegexes.entries.fold(it) { text, (from, to) ->
-            text.replace(from, to)
-        }
+private class InvariantEnvironmentSerializer : StdSerializer<Environment>(Environment::class.java) {
+    override fun serialize(value: Environment, gen: JsonGenerator, provider: SerializerProvider) {
+        gen.writeString("invariant")
     }
+}
 
-    val linesA = textA.lines()
-    val linesB = textB.lines()
-
-    val commonParent = getCommonParentFile(setOf(a, b))
-    return UnifiedDiffUtils.generateUnifiedDiff(
-        "a/${a.relativeTo(commonParent).invariantSeparatorsPath}",
-        "b/${b.relativeTo(commonParent).invariantSeparatorsPath}",
-        linesA,
-        DiffUtils.diff(linesA, linesB),
-        contextSize
-    )
+private fun Map<Regex, String>.replaceIn(text: String) = entries.fold(text) { currentText, (from, to) ->
+    currentText.replace(from, to)
 }
