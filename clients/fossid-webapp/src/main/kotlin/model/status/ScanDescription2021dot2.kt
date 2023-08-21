@@ -19,11 +19,13 @@
 
 package org.ossreviewtoolkit.clients.fossid.model.status
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
  * A description of scan status. This class is for FossID version 2021.2.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 data class ScanDescription2021dot2(
     val id: Long?,
     val scanId: String,
