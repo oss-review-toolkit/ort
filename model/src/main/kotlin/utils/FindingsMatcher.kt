@@ -237,7 +237,7 @@ fun associateLicensesWithExceptions(
     while (i.hasNext()) {
         val exception = i.next()
 
-        // Determine all licenses exception is applicable to.
+        // Determine all licenses the exception is applicable to.
         val applicableLicenses = SpdxLicenseException.mapping[exception.license.toString()].orEmpty().map { it.id }
 
         // Determine applicable license findings from the same path.
