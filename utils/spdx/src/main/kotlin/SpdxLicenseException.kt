@@ -45,13 +45,16 @@ enum class SpdxLicenseException(
      */
     val deprecated: Boolean = false
 ) {
+    ASTERISK_EXCEPTION("Asterisk-exception", "Asterisk exception"),
     AUTOCONF_EXCEPTION_2_0("Autoconf-exception-2.0", "Autoconf exception 2.0"),
     AUTOCONF_EXCEPTION_3_0("Autoconf-exception-3.0", "Autoconf exception 3.0"),
     AUTOCONF_EXCEPTION_GENERIC("Autoconf-exception-generic", "Autoconf generic exception"),
+    AUTOCONF_EXCEPTION_MACRO("Autoconf-exception-macro", "Autoconf macro exception"),
     BISON_EXCEPTION_2_2("Bison-exception-2.2", "Bison exception 2.2"),
     BOOTLOADER_EXCEPTION("Bootloader-exception", "Bootloader Distribution Exception"),
     CLASSPATH_EXCEPTION_2_0("Classpath-exception-2.0", "Classpath exception 2.0"),
     CLISP_EXCEPTION_2_0("CLISP-exception-2.0", "CLISP exception 2.0"),
+    CRYPTSETUP_OPENSSL_EXCEPTION("cryptsetup-OpenSSL-exception", "cryptsetup OpenSSL exception"),
     DIGIRULE_FOSS_EXCEPTION("DigiRule-FOSS-exception", "DigiRule FOSS License Exception"),
     ECOS_EXCEPTION_2_0("eCos-exception-2.0", "eCos exception 2.0"),
     FAWKES_RUNTIME_EXCEPTION("Fawkes-Runtime-exception", "Fawkes Runtime Exception"),
@@ -62,6 +65,7 @@ enum class SpdxLicenseException(
     GCC_EXCEPTION_3_1("GCC-exception-3.1", "GCC Runtime Library exception 3.1"),
     GNAT_EXCEPTION("GNAT-exception", "GNAT exception"),
     GNU_JAVAMAIL_EXCEPTION("gnu-javamail-exception", "GNU JavaMail exception"),
+    GPL_3_0_INTERFACE_EXCEPTION("GPL-3.0-interface-exception", "GPL-3.0 Interface Exception"),
     GPL_3_0_LINKING_EXCEPTION("GPL-3.0-linking-exception", "GPL-3.0 Linking Exception"),
     GPL_3_0_LINKING_SOURCE_EXCEPTION("GPL-3.0-linking-source-exception", "GPL-3.0 Linking Exception (with Corresponding Source)"),
     GPL_CC_1_0("GPL-CC-1.0", "GPL Cooperation Commitment 1.0"),
@@ -70,8 +74,10 @@ enum class SpdxLicenseException(
     I2P_GPL_JAVA_EXCEPTION("i2p-gpl-java-exception", "i2p GPL+Java Exception"),
     KICAD_LIBRARIES_EXCEPTION("KiCad-libraries-exception", "KiCad Libraries Exception"),
     LGPL_3_0_LINKING_EXCEPTION("LGPL-3.0-linking-exception", "LGPL-3.0 Linking Exception"),
+    LIBPRI_OPENH323_EXCEPTION("libpri-OpenH323-exception", "libpri OpenH323 exception"),
     LIBTOOL_EXCEPTION("Libtool-exception", "Libtool Exception"),
     LINUX_SYSCALL_NOTE("Linux-syscall-note", "Linux Syscall Note"),
+    LLGPL("LLGPL", "LLGPL Preamble"),
     LLVM_EXCEPTION("LLVM-exception", "LLVM Exception"),
     LZMA_EXCEPTION("LZMA-exception", "LZMA exception"),
     MIF_EXCEPTION("mif-exception", "Macros and Inline Functions Exception"),
@@ -91,6 +97,7 @@ enum class SpdxLicenseException(
     SWI_EXCEPTION("SWI-exception", "SWI exception"),
     UNIVERSAL_FOSS_EXCEPTION_1_0("Universal-FOSS-exception-1.0", "Universal FOSS Exception, Version 1.0"),
     U_BOOT_EXCEPTION_2_0("u-boot-exception-2.0", "U-Boot exception 2.0"),
+    VSFTPD_OPENSSL_EXCEPTION("vsftpd-openssl-exception", "vsftpd OpenSSL exception"),
     WXWINDOWS_EXCEPTION_3_1("WxWindows-exception-3.1", "WxWindows Library Exception 3.1"),
     X11VNC_OPENSSL_EXCEPTION("x11vnc-openssl-exception", "x11vnc OpenSSL Exception"),
     _389_EXCEPTION("389-exception", "389 Directory Server Exception");
