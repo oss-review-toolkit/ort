@@ -539,7 +539,7 @@ data class OrtResult(
                     if (it.provider.id != REPOSITORY_CONFIGURATION_PROVIDER_ID) {
                         it
                     } else {
-                        it.copy(curations = config.curations.packages.toSet())
+                        it.copy(curations = config.curations.packages)
                     }
                 }
             )
