@@ -110,12 +110,8 @@ class ScanCodeTest : WordSpec({
             val process = mockk<ProcessCapture>()
             every { process.isError } returns true
             every { process.stderr } returns "some error"
-            every { process.errorMessage } returns "some error message"
 
             val scannerSpy = spyk(scanner)
-            every { scannerSpy.name } returns "ScanCode"
-            every { scannerSpy.version } returns "30.1.0"
-            every { scannerSpy.configuration } returns ""
             every { scannerSpy.runScanCode(any(), any()) } answers {
                 val resultFile = File("src/test/assets/scancode-with-issues.json")
                 val targetFile = secondArg<File>()
