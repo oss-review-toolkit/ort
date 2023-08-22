@@ -379,6 +379,9 @@
                 },
                 "httpFileStorage": {
                     "§ref": "#/definitions/HttpFileStorage"
+                },
+                "s3FileStorage": {
+                    "§ref": "#/definitions/S3FileStorage"
                 }
             },
             "required": [
@@ -417,6 +420,27 @@
             },
             "required": [
                 "url"
+            ]
+        },
+        "S3FileStorage": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "bucketName": {
+                    "type": "string"
+                },
+                "awsRegion": {
+                    "type": "string"
+                },
+                "accessKeyId": {
+                    "type": "string"
+                },
+                "secretAccessKey": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "bucketName"
             ]
         },
         "PostgresConfig": {

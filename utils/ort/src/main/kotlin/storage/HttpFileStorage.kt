@@ -105,12 +105,9 @@ class HttpFileStorage(
 
         val response = httpClient.execute(request)
         if (response.isSuccessful) {
-            response.body?.let { body ->
+            response.body.let { body ->
                 return body.byteStream()
             }
-
-            response.close()
-            throw IOException("The response body must not be null.")
         }
 
         response.close()

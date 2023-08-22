@@ -17,20 +17,26 @@
  * License-Filename: LICENSE
  */
 
-plugins {
-    // Apply precompiled plugins.
-    id("ort-library-conventions")
-}
+package org.ossreviewtoolkit.model.config
 
-dependencies {
-    api(project(":utils:common-utils"))
-    api(project(":utils:spdx-utils"))
-
-    api(libs.okhttp)
-
-    implementation(libs.commonsCompress)
-    implementation(libs.kotlinxCoroutines)
-    implementation(libs.aws.s3)
-
-    testImplementation(libs.mockk)
-}
+/**
+ * A class to hold the configuration for using local files as a storage.
+ */
+data class S3FileStorageConfiguration(
+    /**
+     * The name of the S3 bucket used to store files in.
+     */
+    val bucketName: String,
+    /**
+     * The AWS region to be used.
+     */
+     val awsRegion: String?,
+    /**
+     * The AWS access key.
+     */
+     val accessKeyId: String?,
+    /**
+     * The AWS secret for the access key.
+     */
+     val secretAccessKey: String?
+)

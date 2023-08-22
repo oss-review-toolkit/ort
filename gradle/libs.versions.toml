@@ -42,12 +42,13 @@ logback = "1.4.11"
 maven = "3.9.4"
 mavenResolver = "1.9.15"
 mockk = "1.13.7"
-okhttp = "4.11.0"
+okhttp = "5.0.0-alpha.11"
 postgres = "42.6.0"
 postgresEmbedded = "1.0.1"
 reflections = "0.10.2"
 retrofit = "2.9.0"
 retrofitConverterKotlinxSerialization = "1.0.0"
+s3 = "0.29.0-beta"
 saxonHe = "12.3"
 scanoss = "1.1.6"
 semver4j = "5.1.0"
@@ -70,6 +71,7 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin
 antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorjPdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
+aws-s3 = { module = "aws.sdk.kotlin:s3", version.ref = "s3" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }

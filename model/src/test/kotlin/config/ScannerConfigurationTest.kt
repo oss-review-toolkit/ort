@@ -51,6 +51,7 @@ class ScannerConfigurationTest : WordSpec({
             actualScannerConfig.storageReaders shouldBe expectedScannerConfig.storageReaders
             actualScannerConfig.storageWriters shouldBe expectedScannerConfig.storageWriters
             actualScannerConfig.archive?.fileStorage?.httpFileStorage should beNull()
+            actualScannerConfig.archive?.fileStorage?.s3FileStorage should beNull()
 
             actualStorages.keys shouldContainExactly expectedStorages.keys
             actualStorages.entries.forAll { (storageKey, storage) ->

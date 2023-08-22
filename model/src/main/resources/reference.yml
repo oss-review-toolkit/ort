@@ -256,6 +256,14 @@ ort:
               key1: value1
               key2: value2
 
+      aws:
+        backend:
+          s3FileStorage:
+            bucketName: "ort-scan-results"
+            awsRegion: "us-east-1"
+            accessKeyId: "accessKey"
+            secretAccessKey: "secret"
+
       clearlyDefined:
         serverUrl: 'https://api.clearlydefined.io'
 
@@ -281,7 +289,7 @@ ort:
         token: token
 
     # Storage readers are listed from highest to lower priority, i.e. the first match wins.
-    storageReaders: [local, postgres, http, clearlyDefined]
+    storageReaders: [local, postgres, http, aws, clearlyDefined]
 
     # For storage writers no priority is implied by the order; scan results are stored for all writers.
     storageWriters: [postgres]
