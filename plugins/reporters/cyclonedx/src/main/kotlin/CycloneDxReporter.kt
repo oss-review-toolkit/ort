@@ -21,6 +21,7 @@ package org.ossreviewtoolkit.plugins.reporters.cyclonedx
 
 import java.io.File
 import java.util.Base64
+import java.util.Date
 import java.util.SortedSet
 import java.util.UUID
 
@@ -34,6 +35,8 @@ import org.cyclonedx.model.ExternalReference
 import org.cyclonedx.model.Hash
 import org.cyclonedx.model.License
 import org.cyclonedx.model.LicenseChoice
+import org.cyclonedx.model.Metadata
+import org.cyclonedx.model.Tool
 
 import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.LicenseSource
@@ -44,6 +47,8 @@ import org.ossreviewtoolkit.model.utils.toPurl
 import org.ossreviewtoolkit.reporter.Reporter
 import org.ossreviewtoolkit.reporter.ReporterInput
 import org.ossreviewtoolkit.utils.common.isFalse
+import org.ossreviewtoolkit.utils.ort.Environment
+import org.ossreviewtoolkit.utils.ort.ORT_FULL_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_NAME
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 
@@ -148,9 +153,20 @@ class CycloneDxReporter : Reporter {
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }
             ?: setOf(FileFormat.XML)
 
+        val metadata = Metadata().apply {
+            timestamp = Date()
+            tools = listOf(
+                Tool().apply {
+                    name = ORT_FULL_NAME
+                    version = Environment.ORT_VERSION
+                }
+            )
+        }
+
         if (createSingleBom) {
             val bom = Bom().apply {
                 serialNumber = "urn:uuid:${UUID.randomUUID()}"
+                this.metadata = metadata
                 components = mutableListOf()
             }
 
@@ -187,6 +203,7 @@ class CycloneDxReporter : Reporter {
             projects.forEach { project ->
                 val bom = Bom().apply {
                     serialNumber = "urn:uuid:${UUID.randomUUID()}"
+                    this.metadata = metadata
                     components = mutableListOf()
                 }
 
