@@ -168,8 +168,11 @@ class CycloneDxReporterFunTest : WordSpec({
     }
 })
 
-private fun String.patchCycloneDxResult() =
-    replace(
-        """urn:uuid:[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}""".toRegex(),
-        "urn:uuid:01234567-0123-0123-0123-01234567"
-    )
+private fun String.patchCycloneDxResult(): String {
+    val headerEnd = indexOf("components").takeUnless { it < 0 } ?: length
+    return substring(0, headerEnd)
+        .replaceFirst(
+            """urn:uuid:[a-f0-9]{8}(?:-[a-f0-9]{4}){4}[a-f0-9]{8}""".toRegex(),
+            "urn:uuid:01234567-0123-0123-0123-01234567"
+        ) + substring(headerEnd)
+}
