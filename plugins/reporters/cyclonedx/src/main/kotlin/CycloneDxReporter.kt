@@ -57,6 +57,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
  * each [Project] contained in the ORT result a separate SBOM is created.
  *
  * This reporter supports the following options:
+ * - *data.license*: The license for the data contained in the report. Deafults to [DEFAULT_DATA_LICENSE].
  * - *schema.version*: The CycloneDX schema version to use. Defaults to [DEFAULT_SCHEMA_VERSION].
  * - *single.bom*: If true (the default), a single SBOM for all projects is created; if set to false, separate SBOMs are
  *                 created for each project.
@@ -66,10 +67,12 @@ import org.ossreviewtoolkit.utils.spdx.SpdxLicense
 class CycloneDxReporter : Reporter {
     companion object {
         val DEFAULT_SCHEMA_VERSION = CycloneDxSchema.Version.VERSION_14
+        val DEFAULT_DATA_LICENSE = SpdxLicense.CC0_1_0
 
         const val REPORT_BASE_FILENAME = "bom.cyclonedx"
 
         const val OPTION_SCHEMA_VERSION = "schema.version"
+        const val OPTION_DATA_LICENSE = "data.license"
         const val OPTION_SINGLE_BOM = "single.bom"
         const val OPTION_OUTPUT_FILE_FORMATS = "output.file.formats"
     }
@@ -146,6 +149,7 @@ class CycloneDxReporter : Reporter {
             it.versionString == options[OPTION_SCHEMA_VERSION]
         } ?: DEFAULT_SCHEMA_VERSION
 
+        val dataLicense = options[OPTION_DATA_LICENSE] ?: DEFAULT_DATA_LICENSE.id
         val createSingleBom = !options[OPTION_SINGLE_BOM].isFalse()
 
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
@@ -161,6 +165,7 @@ class CycloneDxReporter : Reporter {
                     version = Environment.ORT_VERSION
                 }
             )
+            licenseChoice = LicenseChoice().apply { expression = dataLicense }
         }
 
         if (createSingleBom) {
