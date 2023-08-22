@@ -23,6 +23,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 import org.ossreviewtoolkit.utils.ort.storage.FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.HttpFileStorage
 import org.ossreviewtoolkit.utils.ort.storage.LocalFileStorage
+import org.ossreviewtoolkit.utils.ort.storage.S3FileStorage
 import org.ossreviewtoolkit.utils.ort.storage.XZCompressedLocalFileStorage
 
 /**
@@ -37,18 +38,30 @@ data class FileStorageConfiguration(
     /**
      * The configuration of a [LocalFileStorage].
      */
-    val localFileStorage: LocalFileStorageConfiguration? = null
+    val localFileStorage: LocalFileStorageConfiguration? = null,
+
+    /**
+     * The configuration of a [S3FileStorage].
+     */
+    val s3FileStorage: S3FileStorageConfiguration? = null
 ) {
     /**
      * Create a [FileStorage] based on this configuration.
      */
     fun createFileStorage(): FileStorage {
-        val storage = requireNotNull(listOfNotNull(httpFileStorage, localFileStorage).singleOrNull()) {
+        val storage = requireNotNull(listOfNotNull(httpFileStorage, localFileStorage, s3FileStorage).singleOrNull()) {
             "Exactly one implementation must be configured for a FileStorage."
         }
 
         if (storage is HttpFileStorageConfiguration) {
             return HttpFileStorage(storage.url, storage.query, storage.headers)
+        }
+
+        if (storage is S3FileStorageConfiguration) {
+            return S3FileStorage(
+                storage.accessKeyId, storage.awsRegion, storage.bucketName, storage.compression,
+                storage.customEndpoint, storage.secretAccessKey
+            )
         }
 
         check(storage is LocalFileStorageConfiguration)

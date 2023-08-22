@@ -546,6 +546,35 @@ ort:
     storageWriters: ["artifactoryStorage"]
 ```
 
+### AWS S3 Storage
+
+An [AWS S3 Bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) can be used to store scan
+results. You must provide a previously created Bucket, an optional AWS region (if not present, the
+[default](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/region-selection.html) will be used),
+credentials (if not provided, system
+[default](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/credential-providers.html) values will be
+used), and an optional [custom endpoint](https://docs.aws.amazon.com/sdkref/latest/guide/feature-ss-endpoints.html) to
+support local endpoints, VPC endpoints, and third-party local AWS development environments. Also, you can optionally
+set the data to be compressed before stored.
+
+```yaml
+ort:
+  scanner:
+    storages:
+      awsS3Storage:
+        backend:
+          s3FileStorage:
+            accessKeyId: "aws-access-key (optional)"
+            awsRegion: "us-east-1 (optional)"
+            bucketName: "ort-scan-results"
+            compression: true (optional),
+            customEndpoint: "https://192.145.16.241/aws (optional)",
+            secretAccessKey: "aws-access-key-secret (optional)"
+
+    storageReaders: ["awsS3Storage"]
+    storageWriters: ["awsS3Storage"]
+```
+
 ### PostgreSQL Storage
 
 To use PostgreSQL for storing scan results you need at least version 9.4, create a database with the `client_encoding`
