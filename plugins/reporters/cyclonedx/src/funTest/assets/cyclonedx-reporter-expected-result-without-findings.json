@@ -10,6 +10,11 @@
         "name": "OSS Review Toolkit",
         "version": "deadbeef"
       }
+    ],
+    "licenses": [
+      {
+        "expression": "CC0-1.0"
+      }
     ]
   },
   "externalReferences": [

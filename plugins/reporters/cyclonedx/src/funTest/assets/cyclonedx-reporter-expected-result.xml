@@ -8,6 +8,9 @@
         <version>deadbeef</version>
       </tool>
     </tools>
+    <licenses>
+      <expression>CC0-1.0</expression>
+    </licenses>
   </metadata>
   <components>
     <component type="library">
