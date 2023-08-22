@@ -551,7 +551,7 @@ ort:
 An AWS S3 Bucket can be used to store scan results. You must provide a previously created Bucket, an optional AWS region
 (if not present it will use [default](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/region-selection.html)) 
 and credentials (if not provided, system [default](https://docs.aws.amazon.com/sdk-for-kotlin/latest/developer-guide/credential-providers.html) 
-values will be used).
+values will be used). Optionally, you can set the data to be stored compressed.
 
 ```yaml
 ort:
@@ -564,6 +564,7 @@ ort:
             awsRegion: "us-east-1 (optional)"
             accessKeyId: "aws-access-key (optional)"
             secretAccessKey: "aws-access-key-secret (optional)"
+            compression: true
 
     storageReaders: ["awsStorage"]
     storageWriters: ["awsStorage"]

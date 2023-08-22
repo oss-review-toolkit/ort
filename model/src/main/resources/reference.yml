@@ -263,6 +263,7 @@ ort:
             awsRegion: "us-east-1"
             accessKeyId: "accessKey"
             secretAccessKey: "secret"
+            compression: false
 
       clearlyDefined:
         serverUrl: 'https://api.clearlydefined.io'

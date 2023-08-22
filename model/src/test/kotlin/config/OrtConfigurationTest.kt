@@ -289,6 +289,7 @@ class OrtConfigurationTest : WordSpec({
                         awsRegion shouldBe "us-east-1"
                         accessKeyId shouldBe "accessKey"
                         secretAccessKey shouldBe "secret"
+                        compression shouldBe false
                     }
 
                     val cdStorage = this["clearlyDefined"]

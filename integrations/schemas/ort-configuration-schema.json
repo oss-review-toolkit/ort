@@ -437,6 +437,9 @@
                 },
                 "secretAccessKey": {
                     "type": "string"
+                },
+                "compression": {
+                    "type": "boolean"
                 }
             },
             "required": [

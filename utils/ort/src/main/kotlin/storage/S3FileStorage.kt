@@ -34,6 +34,7 @@ import aws.smithy.kotlin.runtime.content.toByteArray
 import aws.smithy.kotlin.runtime.net.Url
 
 import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.InputStream
 
@@ -43,11 +44,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream
 import org.apache.logging.log4j.kotlin.Logging
 
 /**
  * A [FileStorage] that stores files in an AWS S3 bucket [bucketName]. The [read] and [exists] operations are
- * blocking, but the [write] operation is asynchronous unless a [customEndpoint] is provided.
+ * blocking, but the [write] operation is asynchronous unless a [customEndpoint] is provided. Contents are compressed
+ * before store if the [compression] flag is set to true.
  */
 @Suppress("SwallowedException")
 class S3FileStorage(
@@ -70,7 +74,11 @@ class S3FileStorage(
     /**
      * Non-public endpoint for testing.
      */
-    private val customEndpoint: String? = null
+    private val customEndpoint: String? = null,
+    /**
+     * Whether to use compression for storing files or not. Defaults to true.
+     */
+    private val compression: Boolean = false
 ) : FileStorage {
     private companion object : Logging
 
@@ -132,7 +140,8 @@ class S3FileStorage(
         val job = scope.async {
             try {
                 s3.getObject(request) { resp ->
-                    ByteArrayInputStream(resp.body?.toByteArray())
+                    val stream = ByteArrayInputStream(resp.body?.toByteArray())
+                    if (compression) XZCompressorInputStream(stream) else stream
                 }
             } catch (e: NoSuchKey) {
                 throw NoSuchFileException(File(path))
@@ -151,10 +160,16 @@ class S3FileStorage(
     override fun write(path: String, inputStream: InputStream) {
         val job = scope.launch {
             inputStream.use {
-                 PutObjectRequest {
+                PutObjectRequest {
                     key = path
                     bucket = bucketName
-                    body = ByteStream.fromBytes(it.readBytes())
+                    body = if (compression) {
+                        val stream = ByteArrayOutputStream()
+                        XZCompressorOutputStream(stream).write(it.readBytes())
+                        ByteStream.fromBytes(stream.toByteArray())
+                    } else {
+                        ByteStream.fromBytes(it.readBytes())
+                    }
                 }
             }.let {
                 try {

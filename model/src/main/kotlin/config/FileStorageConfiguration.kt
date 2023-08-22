@@ -58,7 +58,11 @@ data class FileStorageConfiguration(
         }
 
         if (storage is S3FileStorageConfiguration) {
-            return S3FileStorage(storage.bucketName, storage.awsRegion, storage.accessKeyId, storage.secretAccessKey)
+            // Custom endpoint is just for testing
+            return S3FileStorage(
+                storage.bucketName, storage.awsRegion, storage.accessKeyId, storage.secretAccessKey,
+                null, storage.compression
+            )
         }
 
         check(storage is LocalFileStorageConfiguration)

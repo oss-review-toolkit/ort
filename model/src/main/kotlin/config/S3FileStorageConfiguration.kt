@@ -30,13 +30,17 @@ data class S3FileStorageConfiguration(
     /**
      * The AWS region to be used.
      */
-     val awsRegion: String?,
+    val awsRegion: String?,
     /**
      * The AWS access key.
      */
-     val accessKeyId: String?,
+    val accessKeyId: String?,
     /**
      * The AWS secret for the access key.
      */
-     val secretAccessKey: String?
+    val secretAccessKey: String?,
+    /**
+     * Whether to use compression for storing files or not. Defaults to true.
+     */
+    val compression: Boolean = false
 )

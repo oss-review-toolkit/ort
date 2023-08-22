@@ -105,7 +105,8 @@ class S3FileStorageFunTest : WordSpec() {
         awsRegion = "us-east-1",
         accessKeyId = "key",
         secretAccessKey = "secret",
-        customEndpoint = "$protocol://${loopback.hostAddress}:$port"
+        customEndpoint = "$protocol://${loopback.hostAddress}:$port",
+        compression = false
     )
 
     override suspend fun afterEach(testCase: TestCase, result: TestResult) {
