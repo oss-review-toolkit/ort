@@ -193,6 +193,7 @@ class OrtConfigurationTest : WordSpec({
                     enabled shouldBe true
 
                     fileStorage shouldNotBeNull {
+                        s3FileStorage should beNull()
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {
                             directory shouldBe File("~/.ort/scanner/archive")
@@ -224,6 +225,7 @@ class OrtConfigurationTest : WordSpec({
 
                 fileListStorage shouldNotBeNull {
                     fileStorage shouldNotBeNull {
+                        s3FileStorage should beNull()
                         httpFileStorage should beNull()
                         localFileStorage shouldNotBeNull {
                             directory shouldBe File("~/.ort/scanner/file-lists")
@@ -291,7 +293,7 @@ class OrtConfigurationTest : WordSpec({
 
                 storages shouldNotBeNull {
                     keys shouldContainExactlyInAnyOrder setOf(
-                        "local", "http", "clearlyDefined", "postgres", "sw360Configuration"
+                        "local", "http", "aws", "clearlyDefined", "postgres", "sw360Configuration"
                     )
 
                     val localStorage = this["local"]
@@ -307,6 +309,16 @@ class OrtConfigurationTest : WordSpec({
                         url shouldBe "https://your-http-server"
                         query shouldBe "?username=user&password=123"
                         headers should containExactlyEntries("key1" to "value1", "key2" to "value2")
+                    }
+
+                    val s3Storage = this["aws"]
+                    s3Storage.shouldBeInstanceOf<FileBasedStorageConfiguration>()
+                    s3Storage.backend.s3FileStorage shouldNotBeNull {
+                        bucketName shouldBe "ort-scan-results"
+                        awsRegion shouldBe "us-east-1"
+                        accessKeyId shouldBe "accessKey"
+                        secretAccessKey shouldBe "secret"
+                        compression shouldBe false
                     }
 
                     val cdStorage = this["clearlyDefined"]
@@ -338,7 +350,7 @@ class OrtConfigurationTest : WordSpec({
                     sw360Storage.token shouldBe "token"
                 }
 
-                storageReaders shouldContainExactly listOf("local", "postgres", "http", "clearlyDefined")
+                storageReaders shouldContainExactly listOf("local", "postgres", "http", "aws", "clearlyDefined")
                 storageWriters shouldContainExactly listOf("postgres")
 
                 ignorePatterns shouldContainExactly listOf("**/META-INF/DEPENDENCIES")
@@ -346,6 +358,7 @@ class OrtConfigurationTest : WordSpec({
                 provenanceStorage shouldNotBeNull {
                     fileStorage shouldNotBeNull {
                         httpFileStorage should beNull()
+                        s3FileStorage should beNull()
                         localFileStorage shouldNotBeNull {
                             directory shouldBe File("~/.ort/scanner/provenance")
                             compression shouldBe false

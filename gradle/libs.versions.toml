@@ -50,6 +50,7 @@ postgresEmbedded = "1.0.2"
 reflections = "0.10.2"
 retrofit = "2.9.0"
 retrofitConverterKotlinxSerialization = "1.0.0"
+s3 = "2.20.162"
 saxonHe = "12.3"
 scanoss = "1.1.6"
 semver4j = "5.2.2"
@@ -74,6 +75,7 @@ versions = { id = "com.github.ben-manes.versions", version.ref = "versionsPlugin
 antlr = { module = "org.antlr:antlr4", version.ref = "antlr" }
 asciidoctorj = { module = "org.asciidoctor:asciidoctorj", version.ref = "asciidoctorj" }
 asciidoctorjPdf = { module = "org.asciidoctor:asciidoctorj-pdf", version.ref = "asciidoctorjPdf" }
+awsS3 = { module = "software.amazon.awssdk:s3", version.ref = "s3" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
 commonsCompress = { module = "org.apache.commons:commons-compress", version.ref = "commonsCompress" }
 cvssCalculator = { module = "us.springett:cvss-calculator", version.ref = "cvssCalculator" }

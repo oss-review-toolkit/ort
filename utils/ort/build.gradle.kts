@@ -28,6 +28,7 @@ dependencies {
 
     api(libs.okhttp)
 
+    implementation(libs.awsS3)
     implementation(libs.commonsCompress)
     implementation(libs.kotlinxCoroutines)
 
