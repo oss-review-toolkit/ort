@@ -4,7 +4,7 @@
   "creationInfo" : {
     "comment" : "some creation info comment",
     "created" : "<REPLACE_CREATION_DATE_AND_TIME>",
-    "creators" : [ "Tool: OSS Review Toolkit - <REPLACE_ORT_VERSION>" ],
+    "creators" : [ "Tool: ort-<REPLACE_ORT_VERSION>" ],
     "licenseListVersion" : "<REPLACE_LICENSE_LIST_VERSION>"
   },
   "name" : "some document name",
