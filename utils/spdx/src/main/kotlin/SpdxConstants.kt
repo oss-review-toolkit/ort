@@ -46,17 +46,17 @@ object SpdxConstants {
     /**
      * A prefix used in fields like "originator", "supplier", or "annotator" to describe a person.
      */
-    const val PERSON = "Person: "
+    const val PERSON = "Person:"
 
     /**
      * A prefix used in fields like "originator", "supplier", or "annotator" to describe an organization.
      */
-    const val ORGANIZATION = "Organization: "
+    const val ORGANIZATION = "Organization:"
 
     /**
      * A prefix used in fields like "annotator" to describe a tool.
      */
-    const val TOOL = "Tool: "
+    const val TOOL = "Tool:"
 
     /**
      * The prefix to be used for SPDX document IDs or references.
