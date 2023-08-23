@@ -44,6 +44,7 @@ plugins {
     // Apply core plugins.
     jacoco
     `maven-publish`
+    signing
 
     // Apply precompiled plugins.
     id("ort-base-conventions")
@@ -325,4 +326,17 @@ configure<PublishingExtension> {
             }
         }
     }
+}
+
+signing {
+    val signingKey = System.getenv("SIGNING_KEY") ?: return@signing
+    val signingPassword = System.getenv("SIGNING_PASSWORD") ?: return@signing
+    useInMemoryPgpKeys(signingKey, signingPassword)
+
+    setRequired {
+        // Do not require signing for `PublishToMavenLocal` tasks only.
+        gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
+    }
+
+    sign(publishing.publications)
 }
