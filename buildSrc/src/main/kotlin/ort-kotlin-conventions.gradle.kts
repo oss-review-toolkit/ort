@@ -279,7 +279,11 @@ tasks.register("jacocoReport") {
 
 configure<PublishingExtension> {
     publications {
-        create<MavenPublication>(name) {
+        val publicationName = name.replace(Regex("([a-z])-([a-z])")) {
+            "${it.groupValues[1]}${it.groupValues[2].uppercase()}"
+        }
+
+        create<MavenPublication>(publicationName) {
             fun getGroupId(parent: Project?): String =
                 if (parent == null) "" else "${getGroupId(parent.parent)}.${parent.name.replace("-", "")}"
 
