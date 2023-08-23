@@ -58,7 +58,7 @@ tasks.withType<Jar>().configureEach {
     isReproducibleFileOrder = true
 
     manifest {
-        attributes["Implementation-Version"] = project.version
+        attributes["Implementation-Version"] = version
     }
 }
 
