@@ -208,7 +208,7 @@ private fun String?.wrapPresentInSet(): Set<String> {
 
         // Do not split an organization like "Acme, Inc." by comma.
         withoutPrefix(SpdxConstants.ORGANIZATION)?.let {
-            return setOf(it)
+            return setOf(it.trim())
         }
     }
 
