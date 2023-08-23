@@ -157,7 +157,7 @@ internal object SpdxDocumentModelMapper : Logging {
             creationInfo = SpdxCreationInfo(
                 comment = params.creationInfoComment,
                 created = Instant.now().truncatedTo(ChronoUnit.SECONDS),
-                creators = listOf("${SpdxConstants.TOOL}$ORT_FULL_NAME - ${Environment.ORT_VERSION}"),
+                creators = listOf("${SpdxConstants.TOOL} $ORT_FULL_NAME - ${Environment.ORT_VERSION}"),
                 licenseListVersion = SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-")
             ),
             documentNamespace = "spdx://${UUID.randomUUID()}",
