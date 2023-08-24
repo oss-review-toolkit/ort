@@ -3,6 +3,7 @@ dependencyAnalysisPlugin = "1.21.0"
 detektPlugin = "1.23.1"
 dokkatooPlugin = "1.6.0"
 downloadPlugin = "5.5.0"
+gitSemverPlugin = "0.5.0"
 graalVmNativeImagePlugin = "0.9.25"
 graphQlPlugin = "6.5.3"
 ideaExtPlugin = "1.1.7"
@@ -61,6 +62,7 @@ xz = "1.9"
 [plugins]
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysisPlugin" }
 download = { id = "de.undercouch.download", version.ref = "downloadPlugin" }
+gitSemver = { id = "com.github.jmongard.git-semver-plugin", version.ref = "gitSemverPlugin" }
 graphQl = { id = "com.expediagroup.graphql", version.ref = "graphQlPlugin" }
 ideaExt = { id = "org.jetbrains.gradle.plugin.idea-ext", version.ref = "ideaExtPlugin" }
 kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinPlugin" }
