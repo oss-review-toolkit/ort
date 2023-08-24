@@ -28,14 +28,22 @@ import org.jetbrains.gradle.ext.settings
 plugins {
     // Apply third-party plugins.
     alias(libs.plugins.dependencyAnalysis)
+    alias(libs.plugins.gitSemver)
     alias(libs.plugins.ideaExt)
     alias(libs.plugins.versions)
 }
 
+semver {
+    // Do not create an empty release commit when running the "releaseVersion" task.
+    createReleaseCommit = false
+
+    // Do not let untracked files bump the version or add a "-SNAPSHOT" suffix.
+    noDirtyCheck = true
+}
+
 // Only override a default version (which usually is "unspecified"), but not a custom version.
 if (version == Project.DEFAULT_VERSION) {
-    val gitVersionProvider = providers.of(GitVersionValueSource::class) { parameters { workingDir = rootDir } }
-    version = gitVersionProvider.get()
+    version = semver.version
 }
 
 logger.lifecycle("Building ORT version $version.")
