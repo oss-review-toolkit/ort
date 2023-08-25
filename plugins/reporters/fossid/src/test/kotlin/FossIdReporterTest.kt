@@ -221,6 +221,18 @@ class FossIdReporterTest : WordSpec({
             }
         }
 
+        "generate a report for merged scan results" {
+            val (serviceMock, reporterMock) = createReporterMock()
+            val input = createReporterInput("$SCANCODE_1,$SCANCODE_2")
+
+            reporterMock.generateReport(input, DIRECTORY_SAMPLE, DEFAULT_OPTIONS)
+
+            coVerifyAll {
+                serviceMock.generateReport(USER_KEY_SAMPLE, API_KEY_SAMPLE, SCANCODE_1, any(), any(), any())
+                serviceMock.generateReport(USER_KEY_SAMPLE, API_KEY_SAMPLE, SCANCODE_2, any(), any(), any())
+            }
+        }
+
         "return the generated file(s)" {
             val (_, reporterMock) = createReporterMock()
             val input = createReporterInput(SCANCODE_1)

@@ -69,10 +69,19 @@ fun mergeScanResultsByScanner(
                 snippetFindings = snippetFindings,
                 issues = issues
             ),
-            additionalData = scanResultsForScanner.map { it.additionalData }.reduce { acc, map -> acc + map }
+            additionalData = scanResultsForScanner.map { it.additionalData }.mergeAdditionalData()
         )
     }
 }
+
+/**
+ * Merge together a list of [AdditionalData]. If there is only one of them, it is left untouched. If there are more than
+ * one, the collection of key pairs are each replaced by a single key pair: the key has the same name. The values are
+ * concatenated as CSV.
+ */
+private fun List<Map<String, String>>.mergeAdditionalData(): Map<String, String> = flatMap { it.entries }
+    .groupBy({ it.key }) { it.value }
+    .mapValues { it.value.joinToString(",") }
 
 private fun Map<String, List<ScanResult>>.mergeLicenseFindings(): Set<LicenseFinding> {
     val findingsByPath = mapValues { (_, scanResults) ->
