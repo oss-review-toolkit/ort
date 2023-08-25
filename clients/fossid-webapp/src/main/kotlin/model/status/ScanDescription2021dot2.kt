@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 
 /**
- * A description of scan status. This class is for FossID version 2021.2.
+ * A description of scan status. This class is for FossID version 2021.2 and later.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ScanDescription2021dot2(
