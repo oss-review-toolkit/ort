@@ -93,18 +93,21 @@ class FossIdReporter : Reporter {
         val service = FossIdRestService.create(serverUrl)
 
         return runBlocking(Dispatchers.IO) {
-            input.ortResult.getScanResults().values.flatten().mapNotNull { result ->
-                result.additionalData[SCAN_CODE_KEY]?.let { scanCode ->
-                    async {
-                        logger.info { "Generating report for scan $scanCode." }
-                        service.generateReport(user, apiKey, scanCode, reportType, selectionType, outputDir)
-                            .onFailure {
-                                it.showStackTrace()
-                                logger.info {
-                                    "Error during report generation: ${it.collectMessages()}."
-                                }
-                            }.getOrNull()
-                    }
+            val scanResults = input.ortResult.getScanResults().values.flatten()
+            val scanCodes = scanResults.flatMapTo(mutableSetOf()) {
+                it.additionalData[SCAN_CODE_KEY].orEmpty().split(',')
+            }
+
+            scanCodes.map { scanCode ->
+                async {
+                    logger.info { "Generating report for scan $scanCode." }
+                    service.generateReport(user, apiKey, scanCode, reportType, selectionType, outputDir)
+                        .onFailure {
+                            it.showStackTrace()
+                            logger.info {
+                                "Error during report generation: ${it.collectMessages()}."
+                            }
+                        }.getOrNull()
                 }
             }.awaitAll().filterNotNull()
         }
