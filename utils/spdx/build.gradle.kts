@@ -22,7 +22,6 @@ import de.undercouch.gradle.tasks.download.Download
 import groovy.json.JsonSlurper
 
 import java.net.URI
-import java.net.URL
 
 val spdxLicenseListVersion: String by project
 
@@ -90,7 +89,7 @@ data class LicenseInfo(
 )
 
 fun interface SpdxLicenseTextProvider {
-    fun getLicenseUrl(info: LicenseInfo): URL?
+    fun getLicenseUrl(info: LicenseInfo): URI?
 }
 
 class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
@@ -112,18 +111,18 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
         }.toMap()
     }
 
-    override fun getLicenseUrl(info: LicenseInfo): URL? {
+    override fun getLicenseUrl(info: LicenseInfo): URI? {
         val key = spdxIdToScanCodeKeyMap[info.id] ?: return null
-        return URI("$url/$key.LICENSE").toURL()
+        return URI("$url/$key.LICENSE")
     }
 }
 
 class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
     private val url = "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion"
 
-    override fun getLicenseUrl(info: LicenseInfo): URL? {
+    override fun getLicenseUrl(info: LicenseInfo): URI? {
         val prefix = "deprecated_".takeIf { info.isDeprecated && !info.isException }.orEmpty()
-        return URI("$url/text/$prefix${info.id}.txt").toURL()
+        return URI("$url/text/$prefix${info.id}.txt")
     }
 }
 
@@ -359,7 +358,7 @@ val generateSpdxLicenseEnum by tasks.registering(Download::class) {
 
     src(licenseUrlMap.keys.sortedBy { it.toString().lowercase() })
     dest("src/main/resources/$licensesResourcePath")
-    eachFile { name = licenseUrlMap[sourceURL] }
+    eachFile { name = licenseUrlMap[sourceURL.toURI()] }
 
     doLast {
         generateEnumClass(
@@ -392,7 +391,7 @@ val generateSpdxLicenseExceptionEnum by tasks.registering(Download::class) {
 
     src(licenseExceptionUrlMap.keys.sortedBy { it.toString().lowercase() })
     dest("src/main/resources/$exceptionsResourcePath")
-    eachFile { name = licenseExceptionUrlMap[sourceURL] }
+    eachFile { name = licenseExceptionUrlMap[sourceURL.toURI()] }
 
     doLast {
         generateEnumClass(
