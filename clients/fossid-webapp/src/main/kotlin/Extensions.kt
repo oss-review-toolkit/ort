@@ -49,7 +49,7 @@ fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataC
     requireNotNull(this)
 
     require(error == null) {
-        "Could not '$operation'. Additional information : $error"
+        "Could not '$operation'. Additional information: $error"
     }
 
     if (withDataCheck) {
