@@ -75,9 +75,8 @@ fun mergeScanResultsByScanner(
 }
 
 /**
- * Merge together a list of [AdditionalData]. If there is only one of them, it is left untouched. If there are more than
- * one, the collection of key pairs are each replaced by a single key pair: the key has the same name. The values are
- * concatenated as CSV.
+ * Merge a list of [ScanResult.additionalData] by keeping all keys and concatenating values to a string separated by
+ * commas.
  */
 private fun List<Map<String, String>>.mergeAdditionalData(): Map<String, String> = flatMap { it.entries }
     .groupBy({ it.key }) { it.value }
