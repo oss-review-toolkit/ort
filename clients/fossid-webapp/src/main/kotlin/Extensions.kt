@@ -54,7 +54,7 @@ fun <B : EntityResponseBody<T>, T> B?.checkResponse(operation: String, withDataC
 
     if (withDataCheck) {
         requireNotNull(data) {
-            "No Payload received for '$operation'. Additional information: $error"
+            "No Payload received for '$operation'."
         }
     }
 
