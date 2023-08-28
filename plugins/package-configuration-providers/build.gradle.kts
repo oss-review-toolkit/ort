@@ -21,11 +21,3 @@ plugins {
     // Apply precompiled plugins.
     id("ort-plugins-conventions")
 }
-
-javaPlatform {
-    allowDependencies()
-}
-
-dependencies {
-    api(project(":plugins:package-configuration-providers:dir-package-configuration-provider"))
-}
