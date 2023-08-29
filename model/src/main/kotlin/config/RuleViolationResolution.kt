@@ -46,7 +46,8 @@ data class RuleViolationResolution(
     private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
     /**
-     * True if [message] matches the message of the [violation].
+     * True if [message] matches the message of the [violation]. Whitespace in the message of the [violation] is
+     * [collapsed][collapseWhitespace] before matching.
      */
     fun matches(violation: RuleViolation) = regex.matches(violation.message.collapseWhitespace())
 }
