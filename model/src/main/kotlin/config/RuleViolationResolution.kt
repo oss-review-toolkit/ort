@@ -29,8 +29,7 @@ import org.ossreviewtoolkit.utils.common.collapseWhitespace
 data class RuleViolationResolution(
     /**
      * A regular expression string to match the messages of rule violations to resolve. Will be converted to
-     * a [Regex] using
-     * [RegexOption.DOT_MATCHES_ALL].
+     * a [Regex] using [RegexOption.DOT_MATCHES_ALL].
      */
     val message: String,
 
