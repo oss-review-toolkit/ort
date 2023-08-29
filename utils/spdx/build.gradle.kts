@@ -21,6 +21,8 @@ import de.undercouch.gradle.tasks.download.Download
 
 import groovy.json.JsonSlurper
 
+import java.net.Authenticator
+import java.net.PasswordAuthentication
 import java.net.URI
 
 val spdxLicenseListVersion: String by project
@@ -79,6 +81,20 @@ dependencies {
     implementation(libs.jacksonModuleKotlin)
 
     testImplementation(libs.kotestAssertionsJson)
+}
+
+if (Authenticator.getDefault() == null) {
+    Authenticator.setDefault(object : Authenticator() {
+        override fun getPasswordAuthentication(): PasswordAuthentication {
+            if (requestorType != RequestorType.PROXY) return super.getPasswordAuthentication()
+
+            val proxyUser = System.getProperty("$requestingProtocol.proxyUser")
+            val proxyPassword = System.getProperty("$requestingProtocol.proxyPassword")
+            if (proxyUser == null || proxyPassword == null) return super.getPasswordAuthentication()
+
+            return PasswordAuthentication(proxyUser, proxyPassword.toCharArray())
+        }
+    })
 }
 
 data class LicenseInfo(
