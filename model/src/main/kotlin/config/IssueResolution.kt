@@ -46,7 +46,8 @@ data class IssueResolution(
     private val regex = Regex(message.collapseWhitespace(), RegexOption.DOT_MATCHES_ALL)
 
     /**
-     * True if [message] matches the message of [issue].
+     * True if [message] matches the message of [issue]. Whitespace in the message of the [issue] is
+     * [collapsed][collapseWhitespace] before matching.
      */
     fun matches(issue: Issue) = regex.matches(issue.message.collapseWhitespace())
 }
