@@ -27,6 +27,16 @@ import org.ossreviewtoolkit.model.Severity
 
 class RuleViolationResolutionTest : WordSpec({
     "matches" should {
+        "interpret the message as a regular expression" {
+            ruleViolationResolution("message").matches(ruleViolation("message")) shouldBe true
+            ruleViolationResolution(".*").matches(ruleViolation("message")) shouldBe true
+            ruleViolationResolution("[a-zA-Z0-9]*").matches(ruleViolation("M3ss4GE")) shouldBe true
+
+            ruleViolationResolution("").matches(ruleViolation("message")) shouldBe false
+            ruleViolationResolution(".+").matches(ruleViolation("")) shouldBe false
+            ruleViolationResolution("!(message)").matches(ruleViolation("message")) shouldBe false
+        }
+
         "ignore white spaces" {
             val result = ruleViolationResolution("Message with additional spaces. Another line.").matches(
                 ruleViolation(
