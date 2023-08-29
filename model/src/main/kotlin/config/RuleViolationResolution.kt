@@ -23,8 +23,8 @@ import org.ossreviewtoolkit.model.RuleViolation
 import org.ossreviewtoolkit.utils.common.collapseWhitespace
 
 /**
- * Defines the resolution of a rule violation. This can be used to silence rule violations that have been identified
- * as not being relevant or are acceptable / approved.
+ * Defines the resolution of a [RuleViolation]. This can be used to silence rule violations that have been identified as
+ * not being relevant or are acceptable / approved.
  */
 data class RuleViolationResolution(
     /**
