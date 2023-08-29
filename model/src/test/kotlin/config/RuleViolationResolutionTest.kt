@@ -56,8 +56,8 @@ private fun ruleViolationResolution(message: String) = RuleViolationResolution(
     comment = ""
 )
 
-private fun ruleViolation(message: String): RuleViolation {
-    return RuleViolation(
+private fun ruleViolation(message: String) =
+    RuleViolation(
         rule = "",
         pkg = null,
         license = null,
@@ -66,4 +66,3 @@ private fun ruleViolation(message: String): RuleViolation {
         message = message,
         howToFix = ""
     )
-}
