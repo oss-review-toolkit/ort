@@ -28,17 +28,17 @@ import org.ossreviewtoolkit.model.Severity
 class RuleViolationResolutionTest : WordSpec({
     "matches" should {
         "interpret the message as a regular expression" {
-            ruleViolationResolution("message").matches(ruleViolation("message")) shouldBe true
-            ruleViolationResolution(".*").matches(ruleViolation("message")) shouldBe true
-            ruleViolationResolution("[a-zA-Z0-9]*").matches(ruleViolation("M3ss4GE")) shouldBe true
+            resolution("message").matches(ruleViolation("message")) shouldBe true
+            resolution(".*").matches(ruleViolation("message")) shouldBe true
+            resolution("[a-zA-Z0-9]*").matches(ruleViolation("M3ss4GE")) shouldBe true
 
-            ruleViolationResolution("").matches(ruleViolation("message")) shouldBe false
-            ruleViolationResolution(".+").matches(ruleViolation("")) shouldBe false
-            ruleViolationResolution("!(message)").matches(ruleViolation("message")) shouldBe false
+            resolution("").matches(ruleViolation("message")) shouldBe false
+            resolution(".+").matches(ruleViolation("")) shouldBe false
+            resolution("!(message)").matches(ruleViolation("message")) shouldBe false
         }
 
         "ignore white spaces" {
-            val result = ruleViolationResolution("Message with additional spaces. Another line.").matches(
+            val result = resolution("Message with additional spaces. Another line.").matches(
                 ruleViolation(
                     """
                         Message with  additional spaces. 
@@ -51,7 +51,7 @@ class RuleViolationResolutionTest : WordSpec({
         }
 
         "ignore new lines" {
-            val result = ruleViolationResolution("Message with newline.").matches(
+            val result = resolution("Message with newline.").matches(
                 ruleViolation("Message with\nnewline.")
             )
 
@@ -60,7 +60,7 @@ class RuleViolationResolutionTest : WordSpec({
     }
 })
 
-private fun ruleViolationResolution(message: String) = RuleViolationResolution(
+private fun resolution(message: String) = RuleViolationResolution(
     message = message,
     reason = RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
     comment = ""
