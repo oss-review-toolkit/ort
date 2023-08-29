@@ -38,24 +38,18 @@ class RuleViolationResolutionTest : WordSpec({
         }
 
         "ignore white spaces" {
-            val result = resolution("Message with additional spaces. Another line.").matches(
+             resolution("Message with additional spaces. Another line.").matches(
                 ruleViolation(
                     """
                         Message with  additional spaces. 
                         Another line.
                     """
                 )
-            )
-
-            result shouldBe true
+            ) shouldBe true
         }
 
         "ignore new lines" {
-            val result = resolution("Message with newline.").matches(
-                ruleViolation("Message with\nnewline.")
-            )
-
-            result shouldBe true
+            resolution("Message with newline.").matches(ruleViolation("Message with\nnewline.")) shouldBe true
         }
     }
 })
