@@ -265,6 +265,12 @@ interface FossIdRestService {
     @POST("api.php")
     suspend fun generateReport(@Body body: PostRequestBody): Response<ResponseBody>
 
+    @POST("api.php")
+    suspend fun markAsIdentified(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
+    @POST("api.php")
+    suspend fun unmarkAsIdentified(@Body body: PostRequestBody): EntityResponseBody<Nothing>
+
     @GET("index.php?form=login")
     suspend fun getLoginPage(): ResponseBody
 }
