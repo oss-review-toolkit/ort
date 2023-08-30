@@ -45,7 +45,7 @@ internal class FilterCommand : CliktCommand(
     private val keepLicenseCategories by option(
         "--keep-categories", "-k",
         help = "The comma separated license categories for which the corresponding categorization shall be kept. All " +
-                "categories corresponding to the kept categorizations will also be kept."
+            "categories corresponding to the kept categorizations will also be kept."
     ).convert { it.expandTilde() }.split(",").required()
 
     override fun run() {

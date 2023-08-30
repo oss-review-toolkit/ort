@@ -242,10 +242,10 @@ private fun id(group: String, artifact: String, version: String): Identifier =
  */
 private fun scopeDependencies(scopes: Set<Scope>, name: String): String =
     buildString {
-    scopes.find { it.name == name }?.let { scope ->
-        scope.dependencies.sorted().forEach { dumpDependencies(it) }
+        scopes.find { it.name == name }?.let { scope ->
+            scope.dependencies.sorted().forEach { dumpDependencies(it) }
+        }
     }
-}
 
 /**
  * Transform a dependency tree structure starting at [ref] to a string.

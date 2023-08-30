@@ -95,7 +95,7 @@ class SpdxDocumentTest : WordSpec({
             }
 
             exception.message shouldContain "The document must either have at least one relationship of type " +
-                    "'DESCRIBES' or contain the 'documentDescribes' field."
+                "'DESCRIBES' or contain the 'documentDescribes' field."
         }
     }
 })

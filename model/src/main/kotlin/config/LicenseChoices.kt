@@ -49,7 +49,7 @@ data class LicenseChoices(
         val choicesWithoutGiven = repositoryLicenseChoices.filter { it.given == null }
         require(choicesWithoutGiven.isEmpty()) {
             "LicenseChoices ${choicesWithoutGiven.joinToString()} defined in $ORT_REPO_CONFIG_FILENAME are missing " +
-                    "the 'given' expression."
+                "the 'given' expression."
         }
     }
 }

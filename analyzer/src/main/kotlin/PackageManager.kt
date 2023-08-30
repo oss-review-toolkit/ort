@@ -339,7 +339,7 @@ abstract class PackageManager(
                         createAndLogIssue(
                             source = managerName,
                             message = "$managerName failed to resolve dependencies for path '$relativePath': " +
-                                    it.collectMessages()
+                                it.collectMessages()
                         )
                     )
 
@@ -369,7 +369,7 @@ abstract class PackageManager(
                 .takeUnless { it.isEmpty() } ?: "."
 
             "No lockfile found in '$relativePathString'. This potentially results in unstable versions of " +
-                    "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."
+                "dependencies. To support this, enable the 'allowDynamicVersions' option in '$ORT_CONFIG_FILENAME'."
         }
     }
 

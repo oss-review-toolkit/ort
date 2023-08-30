@@ -48,7 +48,7 @@ class AnalyzerResultBuilder {
         val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
             "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
-                    duplicates.values
+                duplicates.values
         }
 
         return AnalyzerResult(projects, packages, issues, dependencyGraphs)
@@ -58,37 +58,37 @@ class AnalyzerResultBuilder {
 
     fun addResult(projectAnalyzerResult: ProjectAnalyzerResult) =
         apply {
-        // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
-        //       the same ID exist. We need to decide how to handle that case.
-        val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
+            // TODO: It might be, e.g. in the case of PIP "requirements.txt" projects, that different projects with
+            //       the same ID exist. We need to decide how to handle that case.
+            val existingProject = projects.find { it.id == projectAnalyzerResult.project.id }
 
-        if (existingProject != null) {
-            val existingDefinitionFileUrl = existingProject.let {
-                "${it.vcsProcessed.url}/${it.definitionFilePath}"
-            }
-            val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
-                "${it.vcsProcessed.url}/${it.definitionFilePath}"
-            }
+            if (existingProject != null) {
+                val existingDefinitionFileUrl = existingProject.let {
+                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                }
+                val incomingDefinitionFileUrl = projectAnalyzerResult.project.let {
+                    "${it.vcsProcessed.url}/${it.definitionFilePath}"
+                }
 
-            val issue = createAndLogIssue(
-                source = "analyzer",
-                message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
+                val issue = createAndLogIssue(
+                    source = "analyzer",
+                    message = "Multiple projects with the same id '${existingProject.id.toCoordinates()}' " +
                         "found. Not adding the project defined in '$incomingDefinitionFileUrl' to the " +
                         "analyzer results as it duplicates the project defined in " +
                         "'$existingDefinitionFileUrl'."
-            )
+                )
 
-            val projectIssues = issues.getOrDefault(existingProject.id, emptyList())
-            issues[existingProject.id] = projectIssues + issue
-        } else {
-            projects += projectAnalyzerResult.project
-            addPackages(projectAnalyzerResult.packages)
+                val projectIssues = issues.getOrDefault(existingProject.id, emptyList())
+                issues[existingProject.id] = projectIssues + issue
+            } else {
+                projects += projectAnalyzerResult.project
+                addPackages(projectAnalyzerResult.packages)
 
-            if (projectAnalyzerResult.issues.isNotEmpty()) {
-                issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
+                if (projectAnalyzerResult.issues.isNotEmpty()) {
+                    issues[projectAnalyzerResult.project.id] = projectAnalyzerResult.issues
+                }
             }
         }
-    }
 
     /**
      * Add the given [packageSet] to this builder. This function can be used for packages that have been obtained
@@ -102,8 +102,8 @@ class AnalyzerResultBuilder {
      */
     fun addDependencyGraph(packageManagerName: String, graph: DependencyGraph) =
         apply {
-        dependencyGraphs[packageManagerName] = graph
-    }
+            dependencyGraphs[packageManagerName] = graph
+        }
 }
 
 private fun AnalyzerResult.resolvePackageManagerDependencies(): AnalyzerResult {

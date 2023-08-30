@@ -338,7 +338,7 @@ class ExtensionsTest : WordSpec({
     "String.collapseWhitespace()" should {
         "remove additional white spaces" {
             "String with additional   white spaces. ".collapseWhitespace() shouldBe
-                    "String with additional white spaces."
+                "String with additional white spaces."
         }
 
         "remove newlines" {
@@ -392,27 +392,27 @@ class ExtensionsTest : WordSpec({
     "String.replaceCredentialsInUri" should {
         "strip the user name from a string representing a URL" {
             "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project"
+                "ssh://gerrit.host.com:29418/parent/project"
         }
 
         "strip the user name and password from a string representing a URL" {
             "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project"
+                "ssh://gerrit.host.com:29418/parent/project"
         }
 
         "replace the user name from a string representing a URL" {
             "ssh://bot@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user") shouldBe
-                    "ssh://user@gerrit.host.com:29418/parent/project"
+                "ssh://user@gerrit.host.com:29418/parent/project"
         }
 
         "replace the user name and password from a string representing a URL" {
             "ssh://bot:pass@gerrit.host.com:29418/parent/project".replaceCredentialsInUri("user:secret") shouldBe
-                    "ssh://user:secret@gerrit.host.com:29418/parent/project"
+                "ssh://user:secret@gerrit.host.com:29418/parent/project"
         }
 
         "not modify encodings in a URL" {
             "ssh://bot@gerrit.host.com:29418/parent/project%20with%20spaces".replaceCredentialsInUri() shouldBe
-                    "ssh://gerrit.host.com:29418/parent/project%20with%20spaces"
+                "ssh://gerrit.host.com:29418/parent/project%20with%20spaces"
         }
 
         "not modify a string not representing a URL" {
@@ -473,20 +473,20 @@ class ExtensionsTest : WordSpec({
     "URI.getQueryParameters" should {
         "return the query parameter for a simple query" {
             URI("https://oss-review-toolkit.org?key=value").getQueryParameters() shouldBe
-                    mapOf("key" to listOf("value"))
+                mapOf("key" to listOf("value"))
         }
 
         "work with multiple query parameters" {
             URI("https://oss-review-toolkit.org?key1=value1&key2=value2").getQueryParameters() shouldBe
-                    mapOf("key1" to listOf("value1"), "key2" to listOf("value2"))
+                mapOf("key1" to listOf("value1"), "key2" to listOf("value2"))
         }
 
         "return query parameter with multiple values" {
             URI("https://oss-review-toolkit.org?key=value1,value2,value3").getQueryParameters() shouldBe
-                    mapOf("key" to listOf("value1", "value2", "value3"))
+                mapOf("key" to listOf("value1", "value2", "value3"))
 
             URI("https://oss-review-toolkit.org?key=value1&key=value2").getQueryParameters() shouldBe
-                    mapOf("key" to listOf("value1", "value2"))
+                mapOf("key" to listOf("value1", "value2"))
         }
 
         "work for URIs without query parameters" {

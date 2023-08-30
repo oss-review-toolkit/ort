@@ -64,7 +64,7 @@ class LicenseFindingTest : WordSpec({
             )
 
             "LicenseRef-scancode-unknown-license-reference".mapLicense(mapping) shouldBe
-                    "LicenseRef-scancode-unknown-license-reference"
+                "LicenseRef-scancode-unknown-license-reference"
         }
 
         "apply the license mapping to non-parsable SPDX licenses" {
@@ -84,13 +84,13 @@ class LicenseFindingTest : WordSpec({
                     "(example) test license OR " +
                     "test (example) license OR " +
                     "test license (example)"
-            ).mapLicense(mapping) shouldBe
-                    "LicenseRef-scancode-proprietary-license OR " +
-                            "LicenseRef-scancode-proprietary-license OR " +
-                            "LicenseRef-scancode-proprietary-license OR " +
-                            "LicenseRef-scancode-proprietary-license OR " +
-                            "LicenseRef-scancode-proprietary-license OR " +
-                            "LicenseRef-scancode-proprietary-license"
+                ).mapLicense(mapping) shouldBe
+                "LicenseRef-scancode-proprietary-license OR " +
+                "LicenseRef-scancode-proprietary-license OR " +
+                "LicenseRef-scancode-proprietary-license OR " +
+                "LicenseRef-scancode-proprietary-license OR " +
+                "LicenseRef-scancode-proprietary-license OR " +
+                "LicenseRef-scancode-proprietary-license"
         }
 
         "apply the license mapping to complex SPDX expressions" {
@@ -99,7 +99,7 @@ class LicenseFindingTest : WordSpec({
             )
 
             "(AGPL-1.0-or-later AND BSD (3-Clause)) OR MIT".mapLicense(mapping) shouldBe
-                    "(AGPL-1.0-or-later AND BSD-3-Clause) OR MIT"
+                "(AGPL-1.0-or-later AND BSD-3-Clause) OR MIT"
         }
 
         "apply the license mapping without removing necessary parentheses" {
@@ -117,7 +117,7 @@ class LicenseFindingTest : WordSpec({
             )
 
             "AGPL-1.0-or-later OR BSD (3-Clause) OR BSD (2-Clause)".mapLicense(mapping) shouldBe
-                    "AGPL-1.0-or-later OR BSD-3-Clause OR BSD-2-Clause"
+                "AGPL-1.0-or-later OR BSD-3-Clause OR BSD-2-Clause"
         }
 
         "properly replace the same license multiple times" {

@@ -116,8 +116,8 @@ data class ScanSummary(
 
         fun TextLocation.matchesPaths() =
             paths.any { filterPath ->
-            this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
-        }
+                this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
+            }
 
         return copy(
             licenseFindings = licenseFindings.filterTo(mutableSetOf()) { it.location.matchesPaths() },

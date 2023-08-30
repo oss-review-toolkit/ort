@@ -51,9 +51,9 @@ sealed class SeverityStats(
             resolvedRuleViolations: Collection<RuleViolation>,
             unresolvedRuleViolations: Collection<RuleViolation>
         ) = RuleViolationsSeverityStats(
-                resolvedCounts = resolvedRuleViolations.groupingBy { it.severity }.eachCount(),
-                unresolvedCounts = unresolvedRuleViolations.groupingBy { it.severity }.eachCount()
-            )
+            resolvedCounts = resolvedRuleViolations.groupingBy { it.severity }.eachCount(),
+            unresolvedCounts = unresolvedRuleViolations.groupingBy { it.severity }.eachCount()
+        )
     }
 
     /**
@@ -109,7 +109,7 @@ sealed class SeverityStats(
 
             println(
                 "There $be $severeCount unresolved $thing with a severity equal to or greater than the $threshold " +
-                        "threshold."
+                    "threshold."
             )
 
             throw ProgramResult(severeStatusCode)

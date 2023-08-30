@@ -229,14 +229,14 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                         // clear cases.
                         logger.info {
                             "Maven SCM connection '$connection' of project ${project.artifact} lacks the required " +
-                                    "'scm' prefix."
+                                "'scm' prefix."
                         }
 
                         VcsInfo(type = VcsType.GIT, url = connection, revision = tag)
                     } else {
                         logger.info {
                             "Ignoring Maven SCM connection '$connection' of project ${project.artifact} due to an " +
-                                    "unexpected format."
+                                "unexpected format."
                         }
 
                         VcsInfo.EMPTY
@@ -427,7 +427,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
 
             logger.warn {
                 "There have been issues building the Maven project models, this could lead to errors during " +
-                        "dependency analysis: ${e.collectMessages()}"
+                    "dependency analysis: ${e.collectMessages()}"
             }
 
             e.results
@@ -439,7 +439,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             if (projectBuildingResult.project == null) {
                 logger.warn {
                     "Project for POM file '${projectBuildingResult.pomFile.absolutePath}' could not be built:\n" +
-                            projectBuildingResult.problems.joinToString("\n")
+                        projectBuildingResult.problems.joinToString("\n")
                 }
             } else {
                 val project = projectBuildingResult.project
@@ -470,8 +470,8 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             if (resultForPomFile != null) {
                 logger.warn {
                     "There was an error building project '${e.projectId}' at '${e.pomFile.safePath}'. " +
-                            "Still continuing with the incompletely built project '${resultForPomFile.projectId}' at " +
-                            "'${resultForPomFile.pomFile.safePath}': ${e.collectMessages()}"
+                        "Still continuing with the incompletely built project '${resultForPomFile.projectId}' at " +
+                        "'${resultForPomFile.pomFile.safePath}': ${e.collectMessages()}"
                 }
 
                 resultForPomFile
@@ -704,7 +704,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
                 if (failedProject != null) {
                     logger.warn {
                         "There was an error building '${it.identifier()}', continuing with the incompletely built " +
-                                "project: ${e.collectMessages()}"
+                            "project: ${e.collectMessages()}"
                     }
                     failedProject.project
                 } else {
@@ -759,9 +759,9 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
         val isSpringMetadataProject = with(mavenProject) {
             listOf("boot", "cloud").any {
                 groupId == "org.springframework.$it" && (
-                        artifactId.startsWith("spring-$it-starter") ||
+                    artifactId.startsWith("spring-$it-starter") ||
                         artifactId.startsWith("spring-$it-contract-spec")
-                )
+                    )
             }
         }
 
@@ -782,7 +782,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
             vcs = vcsFromPackage,
             vcsProcessed = vcsProcessed,
             isMetadataOnly = (mavenProject.packaging == "pom" && binaryRemoteArtifact.url.endsWith(".pom"))
-                    || isSpringMetadataProject,
+                || isSpringMetadataProject,
             isModified = isBinaryArtifactModified || isSourceArtifactModified
         )
     }

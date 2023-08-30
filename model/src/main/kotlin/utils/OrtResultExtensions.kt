@@ -77,12 +77,12 @@ fun OrtResult.createLicenseInfoResolver(
     addAuthorsToCopyrights: Boolean = false,
     archiver: FileArchiver? = null
 ) = LicenseInfoResolver(
-        DefaultLicenseInfoProvider(this, packageConfigurationProvider),
-        copyrightGarbage,
-        addAuthorsToCopyrights,
-        archiver,
-        LicenseFilePatterns.getInstance()
-    )
+    DefaultLicenseInfoProvider(this, packageConfigurationProvider),
+    copyrightGarbage,
+    addAuthorsToCopyrights,
+    archiver,
+    LicenseFilePatterns.getInstance()
+)
 
 /**
  * Return the path where the repository given by [provenance] is linked into the source tree.

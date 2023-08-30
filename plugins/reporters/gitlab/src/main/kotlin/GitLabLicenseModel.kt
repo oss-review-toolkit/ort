@@ -117,6 +117,6 @@ private inline fun <reified T> sortedCollectionSerializer(comparator: Comparator
     val delegate = serializer<Collection<T>>()
     return object : KSerializer<Collection<T>> by delegate {
         override fun serialize(encoder: Encoder, value: Collection<T>) =
-             delegate.serialize(encoder, value.sortedWith(comparator))
+            delegate.serialize(encoder, value.sortedWith(comparator))
     }
 }

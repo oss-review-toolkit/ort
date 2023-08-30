@@ -122,10 +122,10 @@ class Git : VersionControlSystem(), CommandLineTool {
 
     override fun getWorkingTree(vcsDirectory: File): WorkingTree =
         GitWorkingTree(
-        workingDir = vcsDirectory,
-        vcsType = type,
-        repositoryUrlPrefixReplacements = REPOSITORY_URL_PREFIX_REPLACEMENTS
-    )
+            workingDir = vcsDirectory,
+            vcsType = type,
+            repositoryUrlPrefixReplacements = REPOSITORY_URL_PREFIX_REPLACEMENTS
+        )
 
     override fun isApplicableUrlInternal(vcsUrl: String): Boolean =
         runCatching {

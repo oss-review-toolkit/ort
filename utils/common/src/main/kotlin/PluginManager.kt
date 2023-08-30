@@ -36,11 +36,11 @@ interface Plugin {
          */
         inline fun <reified T : Plugin> getAll() =
             getLoaderFor<T>()
-            .iterator()
-            .asSequence()
-            .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
-                it.type
-            }
+                .iterator()
+                .asSequence()
+                .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {
+                    it.type
+                }
     }
 
     /**

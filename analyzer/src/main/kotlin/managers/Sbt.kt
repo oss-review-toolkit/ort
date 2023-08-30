@@ -173,7 +173,7 @@ class Sbt(
 
             logger.info {
                 "No POM locations found in the output of SBT's 'makePom' command. Falling back to look for POMs in " +
-                        "the '$targetDir' directory."
+                    "the '$targetDir' directory."
             }
 
             targetDir.walk().maxDepth(1).filterTo(pomFiles) { it.extension == "pom" }
@@ -215,7 +215,7 @@ class Sbt(
             if (!Semver(lowestSbtVersion).satisfies(sbtVersionRequirement)) {
                 throw IOException(
                     "Unsupported $managerName version $lowestSbtVersion does not fulfill " +
-                            "$sbtVersionRequirement."
+                        "$sbtVersionRequirement."
                 )
             }
         }

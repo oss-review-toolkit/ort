@@ -78,7 +78,7 @@ class Mercurial : VersionControlSystem(MercurialCommand) {
                 default = ${vcs.url}
                 [extensions]
 
-                """.trimIndent() + extensionsList.joinToString("\n")
+            """.trimIndent() + extensionsList.joinToString("\n")
         )
 
         if (MERCURIAL_SPARSE_EXTENSION in extensionsList) {

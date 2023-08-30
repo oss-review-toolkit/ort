@@ -64,8 +64,8 @@ class ScanStorages(
 
             fun resolve(name: String): ScanStorage =
                 requireNotNull(storages[name]) {
-                "Could not resolve storage '$name'."
-            }
+                    "Could not resolve storage '$name'."
+                }
 
             val defaultStorage by lazy { createDefaultStorage() }
 

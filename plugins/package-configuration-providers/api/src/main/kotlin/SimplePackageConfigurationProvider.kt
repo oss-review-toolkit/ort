@@ -53,6 +53,6 @@ private fun Collection<PackageConfiguration>.checkAtMostOneConfigurationPerIdAnd
 
     require(configurationsWithSameMatcher.isEmpty()) {
         "There must be at most one package configuration per Id and provenance, but found multiple for:\n" +
-                "${configurationsWithSameMatcher.keys.joinToString(prefix = "  ", separator = "\n  ")}."
+            "${configurationsWithSameMatcher.keys.joinToString(prefix = "  ", separator = "\n  ")}."
     }
 }

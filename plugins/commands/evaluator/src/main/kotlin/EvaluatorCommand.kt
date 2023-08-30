@@ -98,7 +98,7 @@ class EvaluatorCommand : OrtCommand(
     private val outputDir by option(
         "--output-dir", "-o",
         help = "The directory to write the ORT result file with evaluation results to.  If no output directory is " +
-                "specified, no ORT result file is written and only the exit code signals a success or failure."
+            "specified, no ORT result file is written and only the exit code signals a success or failure."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
@@ -143,7 +143,7 @@ class EvaluatorCommand : OrtCommand(
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                "contain a single package configuration."
+            "contain a single package configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -152,8 +152,8 @@ class EvaluatorCommand : OrtCommand(
     private val packageCurationsFile by option(
         "--package-curations-file",
         help = "A file containing package curations. This replaces all package curations contained in the given ORT " +
-                "result file with the ones present in the given file and, if enabled, those from the package " +
-                "configuration."
+            "result file with the ones present in the given file and, if enabled, those from the package " +
+            "configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -162,8 +162,8 @@ class EvaluatorCommand : OrtCommand(
     private val packageCurationsDir by option(
         "--package-curations-dir",
         help = "A directory containing package curation files. This replaces all package curations contained in the " +
-                "given ORT result file with the ones present in the given directory and, if enabled, those from the " +
-                "package configuration file."
+            "given ORT result file with the ones present in the given directory and, if enabled, those from the " +
+            "package configuration file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -172,7 +172,7 @@ class EvaluatorCommand : OrtCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides the repository configuration " +
-                "contained in the ORT result input file."
+            "contained in the ORT result input file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -190,7 +190,7 @@ class EvaluatorCommand : OrtCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
-                "times. For example: --label distribution=external"
+            "times. For example: --label distribution=external"
     ).associate()
 
     private val checkSyntax by option(
@@ -209,10 +209,10 @@ class EvaluatorCommand : OrtCommand(
         }
 
         val configurationFiles = listOfNotNull(
-                copyrightGarbageFile,
-                licenseClassificationsFile,
-                packageCurationsFile,
-                repositoryConfigurationFile
+            copyrightGarbageFile,
+            licenseClassificationsFile,
+            packageCurationsFile,
+            repositoryConfigurationFile
         )
 
         val configurationInfo = configurationFiles.joinToString("\n\t") { file ->

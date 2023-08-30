@@ -116,7 +116,7 @@ class GitHubServiceTest : WordSpec({
             exception.errors shouldHaveSize 1
             with(exception.errors.first()) {
                 message shouldBe
-                        "Requesting 101 records on the `issues` connection exceeds the `first` limit of 100 records."
+                    "Requesting 101 records on the `issues` connection exceeds the `first` limit of 100 records."
                 path should containExactly("repository", "issues")
             }
         }

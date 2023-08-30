@@ -120,12 +120,12 @@ fun filterVersionNames(version: String, names: List<String>, project: String? = 
 
                 // Full match with the current version variant.
                 last == null
-                        // The prefix does not end with the current separators or a digit.
-                        || (last !in currentSeparators && !last.isDigit())
-                        // The prefix ends with the current separators but the forelast character is not a digit.
-                        || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
-                        // The prefix ends with 'v' and the forelast character is a separator.
-                        || (last == 'v' && (forelast == null || forelast in currentSeparators))
+                    // The prefix does not end with the current separators or a digit.
+                    || (last !in currentSeparators && !last.isDigit())
+                    // The prefix ends with the current separators but the forelast character is not a digit.
+                    || (last in currentSeparators && (forelast == null || !forelast.isDigit()))
+                    // The prefix ends with 'v' and the forelast character is a separator.
+                    || (last == 'v' && (forelast == null || forelast in currentSeparators))
             } ?: false
 
             hasIgnorableSuffixOnly || hasIgnorablePrefixOnly

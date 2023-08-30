@@ -46,7 +46,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 internal class DownloadResultsFromPostgresCommand : CliktCommand(
     name = "download-results-from-postgres",
     help = "Download an ORT result from a PostgreSQL database. The symmetric command to ORT's " +
-            " upload-result-to-postgres command."
+        " upload-result-to-postgres command."
 ) {
     private val outputDir by option(
         "--output-dir", "-o",
@@ -77,7 +77,7 @@ internal class DownloadResultsFromPostgresCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgres.connection.schema=testSchema"
+            "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
     private val startId by option(
@@ -183,7 +183,7 @@ private class OrtResultStorage(private val storageDir: File) {
         val ortResultFile = ortResultFile(id)
 
         return md5sumFile.isFile && ortResultFile.isFile &&
-                HashAlgorithm.MD5.calculate(ortResultFile) == md5sumFile.readText()
+            HashAlgorithm.MD5.calculate(ortResultFile) == md5sumFile.readText()
     }
 
     private fun ortResultFile(id: Int): File = storageDir.resolve("$id/ort-result.json.xz")

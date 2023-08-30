@@ -43,7 +43,7 @@ class RepositoryConfigurationTest : WordSpec({
                   - pattern: "android/**/build.gradle"
                     reason: "BUILD_TOOL_OF"
                     comment: "project comment"
-                """.trimIndent()
+            """.trimIndent()
 
             val config = configuration.fromYaml<RepositoryConfiguration>()
 
@@ -121,7 +121,7 @@ class RepositoryConfigurationTest : WordSpec({
                     - given: MPL-2.0 or EPL-1.0
                       choice: MPL-2.0
                     - choice: MPL-2.0 AND MIT
-                """.trimIndent()
+            """.trimIndent()
 
             val repositoryConfiguration = configuration.fromYaml<RepositoryConfiguration>()
 

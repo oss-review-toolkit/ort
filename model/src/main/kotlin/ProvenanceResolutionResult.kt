@@ -67,14 +67,14 @@ data class ProvenanceResolutionResult(
             // TODO: Check if Git-Repo allows to include sub directories of repositories.
             require(vcsInfo.path.isEmpty()) {
                 "The resolved sub-repository for package ${id.toCoordinates()} under path '$path' has a non-empty " +
-                        "VCS path which is not allowed."
+                    "VCS path which is not allowed."
             }
         }
 
         if (packageProvenanceResolutionIssue != null) {
             require(nestedProvenanceResolutionIssue == null) {
                 "Nested provenance resolution issue is not null, even though nested provenance resolution was not " +
-                        "executed."
+                    "executed."
             }
         }
     }

@@ -44,7 +44,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 val curations = provider.getCurationsFor(packages)
 
                 curations.map { it.data.concludedLicense } shouldHaveSingleElement
-                        "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
+                    "CDDL-1.0 OR GPL-2.0-only WITH Classpath-exception-2.0".toSpdx()
             }
         }
 
@@ -55,7 +55,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
                 val curations = provider.getCurationsFor(packages)
 
                 curations.map { it.data.vcs?.revision } shouldHaveSingleElement
-                        "0b97c416e42a184ff9728877b461c616187c58f7"
+                    "0b97c416e42a184ff9728877b461c616187c58f7"
             }
         }
 

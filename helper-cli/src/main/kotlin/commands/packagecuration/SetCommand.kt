@@ -35,7 +35,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class SetCommand : CliktCommand(
     help = "(Re-)set all package curations for a given ORT file to the curations specified via package curations " +
-            "file and directory. If no curations are given then all curations get removed."
+        "file and directory. If no curations are given then all curations get removed."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",

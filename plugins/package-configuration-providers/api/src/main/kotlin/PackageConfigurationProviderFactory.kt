@@ -45,14 +45,14 @@ interface PackageConfigurationProviderFactory<CONFIG> : ConfigurablePluginFactor
                 .apply {
                     require(none { (id, _) -> id.isBlank() }) {
                         "The configuration contains a package configuration provider with a blank ID which is not " +
-                                "allowed."
+                            "allowed."
                     }
 
                     val duplicateIds = getDuplicates { (id, _) -> id }.keys
                     require(duplicateIds.isEmpty()) {
                         "Found multiple package configuration providers for the IDs ${duplicateIds.joinToString()}, " +
-                                "which is not allowed. Please configure a unique ID for each package configuration " +
-                                "provider."
+                            "which is not allowed. Please configure a unique ID for each package configuration " +
+                            "provider."
                     }
                 }
     }

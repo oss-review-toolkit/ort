@@ -121,18 +121,18 @@ suspend fun FossIdRestService.createProject(
     projectName: String,
     comment: String = "Created by ORT"
 ) = createProject(
-        PostRequestBody(
-            "create",
-            PROJECT_GROUP,
-            user,
-            apiKey,
-            mapOf(
-                "project_code" to projectCode,
-                "project_name" to projectName,
-                "comment" to comment
-            )
+    PostRequestBody(
+        "create",
+        PROJECT_GROUP,
+        user,
+        apiKey,
+        mapOf(
+            "project_code" to projectCode,
+            "project_name" to projectName,
+            "comment" to comment
         )
     )
+)
 
 /**
  * Create a new scan of [gitRepoUrl]/[gitBranch] for the given [projectCode].
@@ -205,7 +205,7 @@ suspend fun FossIdRestService.deleteScan(user: String, apiKey: String, scanCode:
                 "scan_code" to scanCode,
                 "delete_identifications" to "1"
             )
-         )
+        )
     )
 
 /**
@@ -371,19 +371,19 @@ suspend fun FossIdRestService.createIgnoreRule(
     value: String,
     scope: RuleScope
 ) = createIgnoreRule(
-        PostRequestBody(
-            "ignore_rules_add",
-            SCAN_GROUP,
-            user,
-            apiKey,
-            mapOf(
-                "scan_code" to scanCode,
-                "type" to type.name.lowercase(),
-                "value" to value,
-                "apply_to" to scope.name.lowercase()
-            )
+    PostRequestBody(
+        "ignore_rules_add",
+        SCAN_GROUP,
+        user,
+        apiKey,
+        mapOf(
+            "scan_code" to scanCode,
+            "type" to type.name.lowercase(),
+            "value" to value,
+            "apply_to" to scope.name.lowercase()
         )
     )
+)
 
 /**
  * Ask the FossID server to generate a [reportType] report containing [selectionType]. The report will be generated in

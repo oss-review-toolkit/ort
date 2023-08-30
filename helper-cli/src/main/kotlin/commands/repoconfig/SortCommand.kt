@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class SortCommand : CliktCommand(
     help = "Sorts all exclude and curation entries of the given repository configuration alphabetically. The output " +
-            "is written to the given repository configuration file."
+        "is written to the given repository configuration file."
 ) {
     private val repositoryConfigurationFile by argument(
         "repository-configuration-file",

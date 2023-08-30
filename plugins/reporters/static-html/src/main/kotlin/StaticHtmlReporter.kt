@@ -726,9 +726,9 @@ private fun ResolvedLicenseLocation.permalink(id: Identifier): String? {
                 return with(id) {
                     val group = namespace.replace('.', '/')
                     "https://repository.sonatype.org/" +
-                            "service/local/repositories/central-proxy/" +
-                            "archive/$group/$name/$version/$name-$version-sources.jar/" +
-                            "!/${location.path}"
+                        "service/local/repositories/central-proxy/" +
+                        "archive/$group/$name/$version/$name-$version-sources.jar/" +
+                        "!/${location.path}"
                 }
             }
         }

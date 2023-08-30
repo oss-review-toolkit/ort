@@ -171,7 +171,7 @@ class ClearlyDefinedStorage(
             e.showStackTrace()
 
             val message = "Error when reading results for '${pkg.id.toCoordinates()}' from ClearlyDefined: " +
-                    e.collectMessages()
+                e.collectMessages()
 
             logger.error { message }
 

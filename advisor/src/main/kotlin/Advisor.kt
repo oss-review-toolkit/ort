@@ -60,7 +60,7 @@ class Advisor(
         if (ortResult.analyzer == null) {
             logger.warn {
                 "Cannot run the advisor as the provided ORT result does not contain an analyzer result. " +
-                        "No result will be added."
+                    "No result will be added."
             }
 
             return ortResult
@@ -91,7 +91,7 @@ class Advisor(
 
                         logger.info {
                             "Found ${providerResults.values.flatMap { it.vulnerabilities }.distinct().size} distinct " +
-                                    "vulnerabilities via ${provider.providerName}. "
+                                "vulnerabilities via ${provider.providerName}. "
                         }
 
                         providerResults.keys.takeIf { it.isNotEmpty() }?.let { pkgs ->

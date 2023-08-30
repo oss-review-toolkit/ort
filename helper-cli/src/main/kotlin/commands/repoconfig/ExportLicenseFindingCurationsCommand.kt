@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     help = "Export the license finding curations to a file which maps repository URLs to the license finding " +
-            "curations for the respective repository."
+        "curations for the respective repository."
 ) {
     private val licenseFindingCurationsFile by option(
         "--license-finding-curations-file",
@@ -67,13 +67,13 @@ internal class ExportLicenseFindingCurationsCommand : CliktCommand(
     private val updateOnlyExisting by option(
         "--update-only-existing",
         help = "If enabled, only entries are imported for which an entry already exists which differs only in terms " +
-                "of its concluded license, comment or reason."
+            "of its concluded license, comment or reason."
     ).flag()
 
     private val vcsUrlMappingFile by option(
         "--vcs-url-mapping-file",
         help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
-                "the export."
+            "the export."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

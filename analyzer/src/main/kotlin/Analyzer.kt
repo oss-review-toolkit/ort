@@ -207,7 +207,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 if (managerForName == null) {
                     logger.debug {
                         "Ignoring that ${packageManager.managerName} must run after $name, because there are no " +
-                                "definition files for $name."
+                            "definition files for $name."
                     }
                 } else {
                     result.getOrPut(packageManager) { mutableSetOf() } += name
@@ -223,7 +223,7 @@ class Analyzer(private val config: AnalyzerConfiguration, private val labels: Ma
                 if (managerForName == null) {
                     logger.debug {
                         "Ignoring that ${packageManager.managerName} must run before $name, because there are no " +
-                                "definition files for $name."
+                            "definition files for $name."
                     }
                 } else {
                     result.getOrPut(managerForName) { mutableSetOf() } += packageManager.managerName
@@ -305,7 +305,7 @@ private class PackageManagerRunner(
                 if (remaining.isNotEmpty()) {
                     Analyzer.logger.info {
                         "${manager.managerName} is waiting for the following package managers to complete: " +
-                                remaining.joinToString(postfix = ".")
+                            remaining.joinToString(postfix = ".")
                     }
                 }
 

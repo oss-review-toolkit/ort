@@ -51,8 +51,8 @@ class OpossumReporterFunTest : WordSpec({
                 get("attributionBreakpoints").size() shouldBe 4
                 get("externalAttributionSources").size() shouldBe 6
                 get("resourcesToAttributions").fieldNames().asSequence() shouldContain
-                        "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/" +
-                        "compile/org.apache.commons/commons-text@1.1/dependencies/org.apache.commons/commons-lang3@3.5"
+                    "/analyzer/src/funTest/assets/projects/synthetic/gradle/lib/build.gradle/" +
+                    "compile/org.apache.commons/commons-text@1.1/dependencies/org.apache.commons/commons-lang3@3.5"
             }
         }
     }

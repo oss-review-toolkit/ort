@@ -147,7 +147,7 @@ data class SpdxDocument(
         val duplicateExternalDocumentRefs = externalDocumentRefs.getDuplicates { it.externalDocumentId }
         require(duplicateExternalDocumentRefs.isEmpty()) {
             "The document must not contain duplicate external document references but has " +
-                    "${duplicateExternalDocumentRefs.keys}."
+                "${duplicateExternalDocumentRefs.keys}."
         }
 
         require(documentNamespace.isNotBlank()) { "The document namespace must not be blank." }
@@ -170,7 +170,7 @@ data class SpdxDocument(
         val hasDescribesRelationship = relationships.any { it.relationshipType == SpdxRelationship.Type.DESCRIBES }
         require(hasDescribesRelationship || documentDescribes.isNotEmpty()) {
             "The document must either have at least one relationship of type 'DESCRIBES' or contain the " +
-                    "'documentDescribes' field."
+                "'documentDescribes' field."
         }
     }
 }

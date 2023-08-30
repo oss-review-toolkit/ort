@@ -135,8 +135,8 @@ class CocoaPods(
             issues += createAndLogIssue(
                 source = managerName,
                 message = "Missing lockfile '${lockfile.relativeTo(analysisRoot).invariantSeparatorsPath}' for " +
-                        "definition file '${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The " +
-                        "analysis of a Podfile without a lockfile is not supported."
+                    "definition file '${definitionFile.relativeTo(analysisRoot).invariantSeparatorsPath}'. The " +
+                    "analysis of a Podfile without a lockfile is not supported."
             )
         }
 

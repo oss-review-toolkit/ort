@@ -335,7 +335,7 @@ open class Npm(
             vcsFromPackage = vcsFromPackage.merge(vcsFromDirectory)
         } else {
             val hasIncompleteData = description.isEmpty() || homepageUrl.isEmpty() || downloadUrl.isEmpty()
-                    || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
+                || hash == Hash.NONE || vcsFromPackage == VcsInfo.EMPTY
 
             if (hasIncompleteData) {
                 runCatching {
@@ -490,7 +490,7 @@ open class Npm(
             logger.debug {
                 "It seems that the '$dependencyName' module was not installed as the package file could not be found " +
                     "anywhere in '${pathToRoot.joinToString()}'. This might be fine if the module is specific to a " +
-                        "platform other than the one ORT is running on. A typical example is the 'fsevents' module."
+                    "platform other than the one ORT is running on. A typical example is the 'fsevents' module."
             }
         }
 

@@ -106,7 +106,7 @@ data class SpdxSnippet(
         licenseInfoInSnippets.filterNot { it.isSpdxExpressionOrNotPresent() }.let { invalidEntries ->
             require(invalidEntries.isEmpty()) {
                 "The entries in licenseInfoInSnippets must each be either an SpdxExpression, 'NONE' or " +
-                        "'NOASSERTION', but found ${invalidEntries.joinToString()}."
+                    "'NOASSERTION', but found ${invalidEntries.joinToString()}."
             }
         }
 

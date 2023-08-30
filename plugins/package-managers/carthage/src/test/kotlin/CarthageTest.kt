@@ -82,7 +82,7 @@ class CarthageTest : WordSpec() {
             "parse a binary dependency url" {
                 mockkStatic("kotlin.io.TextStreamsKt")
                 every { URI.create("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
                 val cartfile = File("src/test/assets/Cartfile-binary.resolved")
 
@@ -100,7 +100,7 @@ class CarthageTest : WordSpec() {
             "parse mixed dependencies" {
                 mockkStatic("kotlin.io.TextStreamsKt")
                 every { URI.create("https://host.tld/path/to/binary/spec.json").toURL().readBytes() } returns
-                        File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
+                    File("src/test/assets/Carthage-binary-specification.json").readText().toByteArray()
 
                 val cartfile = File("src/test/assets/Cartfile-mixed.resolved")
 

@@ -58,7 +58,7 @@ import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 internal class CreateAnalyzerResultCommand : CliktCommand(
     help = "Creates an analyzer result that contains packages for the given list of package ids. The result contains " +
-            "only packages which have a corresponding ScanCode scan result in the postgres storage."
+        "only packages which have a corresponding ScanCode scan result in the postgres storage."
 ) {
     private val packageIdsFile by option(
         "--package-ids-file",
@@ -87,7 +87,7 @@ internal class CreateAnalyzerResultCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgres.connection.schema=testSchema"
+            "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
     private val scancodeVersion by option(
@@ -189,17 +189,17 @@ private fun getScannedPackages(
 
 private fun createAnalyzerResult(packages: Collection<ScannedPackage>) =
     OrtResult.EMPTY.copy(
-    analyzer = AnalyzerRun(
-        startTime = Instant.now(),
-        endTime = Instant.now(),
-        environment = Environment(),
-        config = AnalyzerConfiguration(),
-        result = AnalyzerResult(
-            projects = emptySet(),
-            packages = packages.mapTo(mutableSetOf()) { it.toPackage() }
+        analyzer = AnalyzerRun(
+            startTime = Instant.now(),
+            endTime = Instant.now(),
+            environment = Environment(),
+            config = AnalyzerConfiguration(),
+            result = AnalyzerResult(
+                projects = emptySet(),
+                packages = packages.mapTo(mutableSetOf()) { it.toPackage() }
+            )
         )
     )
-)
 
 private fun Collection<ScannedPackage>.filterMaxByRowId(): List<ScannedPackage> {
     fun filterMaxByRowId(predicate: (ScannedPackage) -> Boolean) =

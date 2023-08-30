@@ -58,7 +58,7 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                     provenance = ArtifactProvenance(
                         sourceArtifact = RemoteArtifact(
                             url = "https://search.maven.org/remotecontent" +
-                                    "?filepath=com/vdurmont/semver4j/3.1.0/semver4j-3.1.0-sources.jar",
+                                "?filepath=com/vdurmont/semver4j/3.1.0/semver4j-3.1.0-sources.jar",
                             hash = Hash(
                                 value = "0de1248f09dfe8df3b021c84e0642ee222cceb13",
                                 algorithm = HashAlgorithm.SHA1
@@ -69,10 +69,10 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                         name = "ScanCode",
                         version = "3.0.2",
                         configuration = "input /tmp/cd-2rGiCR --classify true --copyright true --email true " +
-                                "--generated true --info true --is-license-text true --json-pp /tmp/cd-0EjTZ7 " +
-                                "--license true --license-clarity-score true --license-diag true --license-text true " +
-                                "--package true --processes 2 --strip-root true --summary true --summary-key-files " +
-                                "true --timeout 1000.0 --url true"
+                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-0EjTZ7 " +
+                            "--license true --license-clarity-score true --license-diag true --license-text true " +
+                            "--package true --processes 2 --strip-root true --summary true --summary-key-files " +
+                            "true --timeout 1000.0 --url true"
                     ),
                     summary = ScanSummary.EMPTY.copy(
                         startTime = Instant.parse("2020-02-14T00:36:14.000335513Z"),
@@ -114,10 +114,10 @@ class ClearlyDefinedStorageFunTest : StringSpec({
                         name = "ScanCode",
                         version = "30.1.0",
                         configuration = "input /tmp/cd-5bxzho --classify true --copyright true --email true " +
-                                "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
-                                "--license true --license-clarity-score true --license-text true " +
-                                "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
-                                "--summary true --summary-key-files true --timeout 1000.0 --url true"
+                            "--generated true --info true --is-license-text true --json-pp /tmp/cd-ZLZNNN " +
+                            "--license true --license-clarity-score true --license-text true " +
+                            "--license-text-diagnostics true --package true --processes 2 --strip-root true " +
+                            "--summary true --summary-key-files true --timeout 1000.0 --url true"
                     ),
                     summary = ScanSummary.EMPTY.copy(
                         startTime = Instant.parse("2022-05-02T07:34:28.000784295Z"),

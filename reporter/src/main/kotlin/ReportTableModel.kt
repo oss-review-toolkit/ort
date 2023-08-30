@@ -216,7 +216,7 @@ data class ReportTableModel(
         init {
             val unresolvedIssues = rows.flatMap {
                 it.analyzerIssues.flatMap { (_, issues) -> issues } +
-                        it.scanIssues.flatMap { (_, issues) -> issues }
+                    it.scanIssues.flatMap { (_, issues) -> issues }
             }.filterNot { it.isResolved }.groupBy { it.severity }
 
             errorCount = unresolvedIssues[Severity.ERROR].orEmpty().size

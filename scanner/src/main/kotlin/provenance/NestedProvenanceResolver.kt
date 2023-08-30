@@ -70,7 +70,7 @@ class DefaultNestedProvenanceResolver(
             } else {
                 logger.info {
                     "Found a stored nested provenance for $provenance with at least one non-fixed revision, " +
-                            "restarting resolution."
+                        "restarting resolution."
                 }
             }
         } else {

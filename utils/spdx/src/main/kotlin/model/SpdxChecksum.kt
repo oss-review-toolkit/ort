@@ -58,7 +58,7 @@ data class SpdxChecksum(
 
         require(algorithm.checksumHexDigits == -1 || checksumValue.length == algorithm.checksumHexDigits) {
             "Expected a checksum value with ${algorithm.checksumHexDigits} hexadecimal symbols, but found " +
-                    "${checksumValue.length}."
+                "${checksumValue.length}."
         }
     }
 }

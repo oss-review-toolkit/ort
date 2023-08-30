@@ -46,7 +46,7 @@ class MavenSupportTest : WordSpec({
             }
 
             MavenSupport.getOriginalScm(mavenProject)?.connection shouldBe
-                    "scm:git:https://github.com/spring-projects/spring-boot.git"
+                "scm:git:https://github.com/spring-projects/spring-boot.git"
             MavenSupport.getOriginalScm(mavenProject)?.url shouldBe "https://github.com/oss-review-toolkit/correctUrl"
         }
 
@@ -65,7 +65,7 @@ class MavenSupportTest : WordSpec({
             }
 
             MavenSupport.getOriginalScm(mavenProject)?.connection shouldBe
-                    "scm:git:https://github.com/oss-review-toolkit/childConnection.git"
+                "scm:git:https://github.com/oss-review-toolkit/childConnection.git"
             MavenSupport.getOriginalScm(mavenProject)?.url shouldBe "https://github.com/spring-projects/spring-boot"
         }
     }

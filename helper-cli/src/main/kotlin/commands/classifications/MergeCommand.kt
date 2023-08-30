@@ -40,7 +40,7 @@ internal class MergeCommand : CliktCommand(
 ) {
     private val licenseClassificationsFiles by argument(
         help = "The license classifications file to merge, in order. Existing classifications will be maintained " +
-                "unless they are redefined, in which case they will be overwritten."
+            "unless they are redefined, in which case they will be overwritten."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

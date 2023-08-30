@@ -53,7 +53,7 @@ tasks.named<Jar>("jar") {
     doLast {
         val out = objects.newInstance<StyledTextOutputProvider>().out.create("detekt-rules")
         val message = "The detekt-rules have changed. You need to stop the Gradle daemon to allow the detekt plugin " +
-                "to reload for the rule changes to take effect."
+            "to reload for the rule changes to take effect."
         out.withStyle(StyledTextOutput.Style.Info).println(message)
     }
 }

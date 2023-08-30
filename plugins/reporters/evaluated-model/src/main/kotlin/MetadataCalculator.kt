@@ -29,6 +29,6 @@ import org.ossreviewtoolkit.model.OrtResult
 internal class MetadataCalculator {
     fun getMetadata(ortResult: OrtResult) =
         Metadata(
-        analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
-    )
+            analyzerStartTime = ortResult.analyzer?.startTime ?: Instant.now()
+        )
 }

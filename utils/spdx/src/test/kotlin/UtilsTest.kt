@@ -87,7 +87,7 @@ class UtilsTest : WordSpec() {
 
                 calculatePackageVerificationCode(sha1sums) shouldBe "1a74d8321c452522ec516a46893e6a42f36b5953"
                 calculatePackageVerificationCode(sha1sums, excludes) shouldBe
-                        "1a74d8321c452522ec516a46893e6a42f36b5953 (excludes: ./package.spdx)"
+                    "1a74d8321c452522ec516a46893e6a42f36b5953 (excludes: ./package.spdx)"
             }
 
             "work for given files and excludes" {
@@ -100,7 +100,7 @@ class UtilsTest : WordSpec() {
 
                 calculatePackageVerificationCode(files) shouldBe "378d5a37b5b10b90535e32a190014d2a8d25354a"
                 calculatePackageVerificationCode(files, excludes) shouldBe
-                        "378d5a37b5b10b90535e32a190014d2a8d25354a (excludes: ./package.spdx)"
+                    "378d5a37b5b10b90535e32a190014d2a8d25354a (excludes: ./package.spdx)"
             }
 
             "work for a given file" {
@@ -118,7 +118,7 @@ class UtilsTest : WordSpec() {
                 setupTempFile("dir/package.spdx", "content")
 
                 calculatePackageVerificationCode(tempDir) shouldBe
-                        "15d3fa138d9302ec9a1584180b5eba0d342b60fa (excludes: ./package.spdx, ./dir/package.spdx)"
+                    "15d3fa138d9302ec9a1584180b5eba0d342b60fa (excludes: ./package.spdx, ./dir/package.spdx)"
             }
 
             "exclude VCS directories" {
@@ -129,7 +129,7 @@ class UtilsTest : WordSpec() {
                 }
 
                 calculatePackageVerificationCode(tempDir) shouldBe
-                        "81e250a78cc6386afc25fa57ad6eaee31394019b"
+                    "81e250a78cc6386afc25fa57ad6eaee31394019b"
             }
         }
 

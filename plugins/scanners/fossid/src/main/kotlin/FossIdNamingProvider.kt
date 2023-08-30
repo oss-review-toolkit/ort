@@ -50,11 +50,11 @@ internal class FossIdNamingProvider(
 
     fun createProjectCode(projectName: String): String =
         namingProjectPattern?.let {
-        val builtins = mapOf(
-            "#projectName" to projectName
-        )
-        replaceNamingConventionVariables(namingProjectPattern, builtins, namingConventionVariables)
-    } ?: projectName
+            val builtins = mapOf(
+                "#projectName" to projectName
+            )
+            replaceNamingConventionVariables(namingProjectPattern, builtins, namingConventionVariables)
+        } ?: projectName
 
     fun createScanCode(projectName: String, deltaTag: FossId.DeltaTag? = null, branch: String = ""): String {
         var defaultPattern = "#projectName_#currentTimestamp"

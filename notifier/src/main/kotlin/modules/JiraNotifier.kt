@@ -80,7 +80,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
         }.onFailure {
             logger.error {
                 "The transition to state '$state' for the issue '$issueKey' is not possible: " +
-                        it.collectMessages()
+                    it.collectMessages()
             }
         }.isSuccess
     }
@@ -127,7 +127,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                 return Result.failure(
                     IllegalArgumentException(
                         "The issue type '$issueType' is not valid. Use a valid issue type as specified in your " +
-                                "project '$projectKey'."
+                            "project '$projectKey'."
                     )
                 )
             }
@@ -166,7 +166,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
                     }.map { issue }.onFailure {
                         logger.error {
                             "The comment for the issue '${issue.key} could not be added: " +
-                                    it.collectMessages()
+                                it.collectMessages()
                         }
                     }
                 } else if (searchResult.total > 1) {
@@ -187,7 +187,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
             }.onFailure {
                 logger.error {
                     "The issue for the project '$projectKey' could not be created: " +
-                            it.collectMessages()
+                        it.collectMessages()
                 }
             }
         }

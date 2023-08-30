@@ -59,7 +59,7 @@ class HashTest : WordSpec({
         "create a SHA512 hash from a SHA-512 value" {
             Hash.create(
                 "760d9348be5813285b8ad38795a2a5afe788bcddab4f7190ed581c6ea524c0d67a7dd5bdd5384f197e3b5a58c070ab5b" +
-                        "db704493cc8e0ad63ab35f753b6d61bf"
+                    "db704493cc8e0ad63ab35f753b6d61bf"
             ).algorithm shouldBe HashAlgorithm.SHA512
         }
 

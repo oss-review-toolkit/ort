@@ -98,7 +98,7 @@ class UploadCurationsCommand : OrtCommand(
         val curationsByHarvestStatus = curations.groupBy { curation ->
             definitions[curationsToCoordinates[curation]]?.getHarvestStatus() ?: logger.warn {
                 "No definition data available for package '${curation.id.toCoordinates()}', cannot request a harvest " +
-                        "or upload curations for it."
+                    "or upload curations for it."
             }
         }
 
@@ -109,13 +109,13 @@ class UploadCurationsCommand : OrtCommand(
 
             println(
                 "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +
-                        "Check $definitionUrl for the harvesting status."
+                    "Check $definitionUrl for the harvesting status."
             )
         }
 
         var uploadedCurationsCount = 0
         val uploadableCurations = curationsByHarvestStatus[HarvestStatus.HARVESTED].orEmpty() +
-                curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
+            curationsByHarvestStatus[HarvestStatus.PARTIALLY_HARVESTED].orEmpty()
 
         uploadableCurations.forEachIndexed { index, curation ->
             val patch = curation.toContributionPatch()
@@ -164,9 +164,9 @@ private fun PackageCuration.toContributionPatch(): ContributionPatch? {
         type = ContributionType.OTHER,
         summary = "Curation for component $coordinates.",
         details = "Imported from curation data of the " +
-                "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
-                "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
-                "module.",
+            "[OSS Review Toolkit](https://github.com/oss-review-toolkit/ort) via the " +
+            "[clearly-defined](https://github.com/oss-review-toolkit/ort/tree/main/clients/clearly-defined) " +
+            "module.",
         resolution = data.comment ?: "Unknown, original data contains no comment.",
         removedDefinitions = false
     )

@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class SortCommand : CliktCommand(
     help = "Sorts all exclude and curation entries of the given package configuration alphabetically. The output " +
-            "is written to the given package configuration file."
+        "is written to the given package configuration file."
 ) {
     private val packageConfigurationFile by argument(
         "package-configuration-file",

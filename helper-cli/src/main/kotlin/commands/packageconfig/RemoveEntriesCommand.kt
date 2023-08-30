@@ -48,7 +48,7 @@ internal class RemoveEntriesCommand : CliktCommand(
     private val ortFile by option(
         "--ort-file",
         help = "The ORT result file to read as input which should contain a scan result to which the given " +
-                "package configuration applies to."
+            "package configuration applies to."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -84,7 +84,7 @@ internal class RemoveEntriesCommand : CliktCommand(
         buildString {
             val removedPathExcludes = packageConfiguration.pathExcludes.size - pathExcludes.size
             val removedLicenseFindingCurations = packageConfiguration.licenseFindingCurations.size -
-                    licenseFindingCurations.size
+                licenseFindingCurations.size
 
             appendLine("Removed entries:")
             appendLine()

@@ -22,10 +22,10 @@ package org.ossreviewtoolkit.clients.fossid.model.identification.ignored
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class IgnoredFile(
-        @JsonProperty("scan_file_id")
-        val id: Int,
-        @JsonProperty("local_path")
-        val path: String,
-        val reason: String,
-        val matchType: String
+    @JsonProperty("scan_file_id")
+    val id: Int,
+    @JsonProperty("local_path")
+    val path: String,
+    val reason: String,
+    val matchType: String
 )

@@ -70,8 +70,8 @@ class PostgresPackageProvenanceStorage(
         database.transaction {
             table.select {
                 table.identifier eq id.toCoordinates() and
-                        (table.artifactUrl eq sourceArtifact.url) and
-                        (table.artifactHash eq sourceArtifact.hash.value)
+                    (table.artifactUrl eq sourceArtifact.url) and
+                    (table.artifactHash eq sourceArtifact.hash.value)
             }.map { it[table.result] }.firstOrNull()
         }
 
@@ -79,10 +79,10 @@ class PostgresPackageProvenanceStorage(
         database.transaction {
             table.select {
                 table.identifier eq id.toCoordinates() and
-                        (table.vcsType eq vcs.type.toString()) and
-                        (table.vcsUrl eq vcs.url) and
-                        (table.vcsRevision eq vcs.revision) and
-                        (table.vcsPath eq vcs.path)
+                    (table.vcsType eq vcs.type.toString()) and
+                    (table.vcsUrl eq vcs.url) and
+                    (table.vcsRevision eq vcs.revision) and
+                    (table.vcsPath eq vcs.path)
             }.map { it[table.result] }.firstOrNull()
         }
 
@@ -101,8 +101,8 @@ class PostgresPackageProvenanceStorage(
         database.transaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates() and
-                        (table.artifactUrl eq sourceArtifact.url) and
-                        (table.artifactHash eq sourceArtifact.hash.value)
+                    (table.artifactUrl eq sourceArtifact.url) and
+                    (table.artifactHash eq sourceArtifact.hash.value)
             }
 
             table.insert {
@@ -118,10 +118,10 @@ class PostgresPackageProvenanceStorage(
         database.transaction {
             table.deleteWhere {
                 table.identifier eq id.toCoordinates() and
-                        (table.vcsType eq vcs.type.toString()) and
-                        (table.vcsUrl eq vcs.url) and
-                        (table.vcsRevision eq vcs.revision) and
-                        (table.vcsPath eq vcs.path)
+                    (table.vcsType eq vcs.type.toString()) and
+                    (table.vcsUrl eq vcs.url) and
+                    (table.vcsRevision eq vcs.revision) and
+                    (table.vcsPath eq vcs.path)
             }
 
             table.insert {

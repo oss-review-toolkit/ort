@@ -221,14 +221,14 @@ class Gradle(
                 if (stdout.size() > 0) {
                     logger.debug {
                         "Analyzing the project in '$projectDir' produced the following standard output:\n" +
-                                stdout.toString().prependIndent("\t")
+                            stdout.toString().prependIndent("\t")
                     }
                 }
 
                 if (stderr.size() > 0) {
                     logger.warn {
                         "Analyzing the project in '$projectDir' produced the following error output:\n" +
-                                stderr.toString().prependIndent("\t")
+                            stderr.toString().prependIndent("\t")
                     }
                 }
 

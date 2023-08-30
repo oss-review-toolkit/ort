@@ -90,15 +90,15 @@ class ProvenanceBasedPostgresStorage(
                     is ArtifactProvenance -> {
                         query.andWhere {
                             table.artifactUrl eq provenance.sourceArtifact.url and
-                                    (table.artifactHash eq provenance.sourceArtifact.hash.value)
+                                (table.artifactHash eq provenance.sourceArtifact.hash.value)
                         }
                     }
 
                     is RepositoryProvenance -> {
                         query.andWhere {
                             table.vcsType eq provenance.vcsInfo.type.toString() and
-                                    (table.vcsUrl eq provenance.vcsInfo.url) and
-                                    (table.vcsRevision eq provenance.resolvedRevision)
+                                (table.vcsUrl eq provenance.vcsInfo.url) and
+                                (table.vcsRevision eq provenance.resolvedRevision)
                         }
                     }
                 }

@@ -63,13 +63,13 @@ internal class ListPackagesCommand : CliktCommand(
     private val offendingOnly by option(
         "--offending-only",
         help = "Only list packages causing at least one rule violation with an offending severity, see " +
-                "--offending-severities."
+            "--offending-severities."
     ).flag()
 
     private val offendingSeverities by option(
         "--offending-severities",
         help = "Set the severities to use for the filtering enabled by --offending-only, specified as " +
-                "comma-separated values."
+            "comma-separated values."
     ).enum<Severity>().split(",").default(Severity.entries)
 
     override fun run() {

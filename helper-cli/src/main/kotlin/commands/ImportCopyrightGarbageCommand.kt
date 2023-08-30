@@ -38,7 +38,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ImportCopyrightGarbageCommand : CliktCommand(
     help = "Import copyright garbage from a plain text file containing one copyright statement per line into the " +
-            "given copyright garbage file."
+        "given copyright garbage file."
 ) {
     private val inputCopyrightGarbageFile by option(
         "--input-copyright-garbage-file", "-i",

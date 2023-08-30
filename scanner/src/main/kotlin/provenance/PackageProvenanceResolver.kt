@@ -100,7 +100,7 @@ class DefaultPackageProvenanceResolver(
         val message = buildString {
             append(
                 "Could not resolve provenance for package '${pkg.id.toCoordinates()}' for source code origins " +
-                        "$sourceCodeOriginPriority."
+                    "$sourceCodeOriginPriority."
             )
 
             errors.forEach { (origin, throwable) ->
@@ -126,14 +126,14 @@ class DefaultPackageProvenanceResolver(
             is UnresolvedPackageProvenance -> {
                 logger.info {
                     "Found a stored artifact resolution for package '${pkg.id.toCoordinates()}' which failed " +
-                            "previously, re-attempting resolution. The error was: ${storedResult.message}"
+                        "previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
             }
 
             else -> {
                 logger.info {
                     "Could not find a stored artifact resolution result for package '${pkg.id.toCoordinates()}', " +
-                            "attempting resolution."
+                        "attempting resolution."
                 }
             }
         }
@@ -150,7 +150,7 @@ class DefaultPackageProvenanceResolver(
 
         throw IOException(
             "Could not verify existence of source artifact at ${pkg.sourceArtifact.url}. " +
-                    "HTTP request got response $responseCode."
+                "HTTP request got response $responseCode."
         )
     }
 
@@ -176,17 +176,17 @@ class DefaultPackageProvenanceResolver(
                 if (storedResult.isFixedRevision) {
                     logger.info {
                         "Found a stored repository resolution for package '${pkg.id.toCoordinates()}' with the fixed " +
-                                "revision ${storedResult.clonedRevision} which was resolved to " +
-                                "${storedResult.provenance.resolvedRevision}."
+                            "revision ${storedResult.clonedRevision} which was resolved to " +
+                            "${storedResult.provenance.resolvedRevision}."
                     }
 
                     return storedResult.provenance
                 } else {
                     logger.info {
                         "Found a stored repository resolution result for package '${pkg.id.toCoordinates()}' with " +
-                                "the non-fixed revision ${storedResult.clonedRevision} which was resolved to " +
-                                "${storedResult.provenance.resolvedRevision}. Restarting resolution of the " +
-                                "non-fixed revision."
+                            "the non-fixed revision ${storedResult.clonedRevision} which was resolved to " +
+                            "${storedResult.provenance.resolvedRevision}. Restarting resolution of the " +
+                            "non-fixed revision."
                     }
                 }
             }
@@ -194,14 +194,14 @@ class DefaultPackageProvenanceResolver(
             is UnresolvedPackageProvenance -> {
                 logger.info {
                     "Found a stored repository resolution result for package '${pkg.id.toCoordinates()}' which " +
-                            "failed previously, re-attempting resolution. The error was: ${storedResult.message}"
+                        "failed previously, re-attempting resolution. The error was: ${storedResult.message}"
                 }
             }
 
             else -> {
                 logger.info {
                     "Could not find a stored repository resolution result for package '${pkg.id.toCoordinates()}', " +
-                            "attempting resolution."
+                        "attempting resolution."
                 }
             }
         }
@@ -220,7 +220,7 @@ class DefaultPackageProvenanceResolver(
             if (revisionCandidates.isEmpty()) {
                 addAndLogMessage(
                     "Could not find any revision candidates for package '${pkg.id.toCoordinates()}' with " +
-                            "${pkg.vcsProcessed}."
+                        "${pkg.vcsProcessed}."
                 )
             }
 
@@ -233,7 +233,7 @@ class DefaultPackageProvenanceResolver(
                 ) {
                     addAndLogMessage(
                         "Discarding revision '$revision' because the requested VCS path '${pkg.vcsProcessed.path}' " +
-                                "does not exist."
+                            "does not exist."
                     )
 
                     return@forEachIndexed
@@ -248,7 +248,7 @@ class DefaultPackageProvenanceResolver(
 
                 logger.info {
                     "Resolved revision for package '${pkg.id.toCoordinates()}' to $resolvedRevision based on " +
-                            "guessed revision $revision."
+                        "guessed revision $revision."
                 }
 
                 val repositoryProvenance = RepositoryProvenance(pkg.vcsProcessed, workingTree.getRevision())
@@ -265,7 +265,7 @@ class DefaultPackageProvenanceResolver(
             }
 
             val message = "Could not resolve revision for package '${pkg.id.toCoordinates()}' with " +
-                    "${pkg.vcsProcessed}:\n${messages.joinToString("\n") { "\t$it" }}"
+                "${pkg.vcsProcessed}:\n${messages.joinToString("\n") { "\t$it" }}"
 
             storage.putProvenance(pkg.id, pkg.vcsProcessed, UnresolvedPackageProvenance(message))
 

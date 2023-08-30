@@ -89,7 +89,7 @@ data class Identifier(
     init {
         require(sanitizedComponents.none { ":" in it }) {
             "An identifier's properties must not contain ':' because that character is used as a separator in the " +
-                    "string representation: type='$type', namespace='$namespace', name='$name', version='$version'."
+                "string representation: type='$type', namespace='$namespace', name='$name', version='$version'."
         }
     }
 

@@ -282,7 +282,7 @@ class Pub(
                     createAndLogIssue(
                         source = managerName,
                         message = "The Gradle package manager plugin was not found in the runtime classpath of " +
-                                "ORT. Gradle project analysis will be disabled.",
+                            "ORT. Gradle project analysis will be disabled.",
                         severity = Severity.WARNING
                     )
                 }
@@ -396,7 +396,7 @@ class Pub(
                         createAndLogIssue(
                             source = managerName,
                             message = "Could not resolve dependencies of '$packageName': " +
-                                    e.collectMessages()
+                                e.collectMessages()
                         )
                     )
                 )
@@ -466,7 +466,7 @@ class Pub(
             source = managerName,
             severity = Severity.WARNING,
             message = "Cannot get iOS dependencies for package '$packageName'. Support for CocoaPods is not yet " +
-                    "implemented."
+                "implemented."
         )
 
         return ProjectAnalyzerResult(Project.EMPTY, emptySet(), listOf(issue))
@@ -529,7 +529,7 @@ class Pub(
                             vcs = VersionControlSystem.forDirectory(workingDir.resolve(path))?.getInfo() ?: run {
                                 logger.warn {
                                     "Invalid path of package $rawName: " +
-                                    "'$path' is outside of the project root '$workingDir'."
+                                        "'$path' is outside of the project root '$workingDir'."
                                 }
                                 VcsInfo.EMPTY
                             }
@@ -613,7 +613,7 @@ class Pub(
                     issues += createAndLogIssue(
                         source = managerName,
                         message = "Failed to parse $PUBSPEC_YAML for package $packageName:$packageVersion: " +
-                                e.collectMessages()
+                            e.collectMessages()
                     )
                 }
             }

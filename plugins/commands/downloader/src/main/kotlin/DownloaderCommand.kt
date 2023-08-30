@@ -106,32 +106,32 @@ class DownloaderCommand : OrtCommand(
     private val projectNameOption by option(
         "--project-name",
         help = "The speaking name of the project to download. For use together with '--project-url'. Ignored if " +
-                "'--ort-file' is also specified. (default: the last part of the project URL)"
+            "'--ort-file' is also specified. (default: the last part of the project URL)"
     ).inputGroup()
 
     private val vcsTypeOption by option(
         "--vcs-type",
         help = "The VCS type if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
-                "(default: the VCS type detected by querying the project URL)"
+            "(default: the VCS type detected by querying the project URL)"
     ).inputGroup()
 
     private val vcsRevisionOption by option(
         "--vcs-revision",
         help = "The VCS revision if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
-                "(default: the VCS's default revision)"
+            "(default: the VCS's default revision)"
     ).inputGroup()
 
     private val vcsPath by option(
         "--vcs-path",
         help = "The VCS path if '--project-url' points to a VCS. Ignored if '--ort-file' is also specified. " +
-                "(default: the empty root path)"
+            "(default: the empty root path)"
     ).default("").inputGroup()
 
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
         help = "A file containing the license classifications that are used to limit downloads if the included " +
-                "categories are specified in the '$ORT_CONFIG_FILENAME' file. If not specified, all packages are " +
-                "downloaded."
+            "categories are specified in the '$ORT_CONFIG_FILENAME' file. If not specified, all packages are " +
+            "downloaded."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -170,11 +170,11 @@ class DownloaderCommand : OrtCommand(
     private val archiveMode by mutuallyExclusiveOptions(
         option(
             help = "Archive the downloaded source code as ZIP files to the output directory. Is ignored if " +
-                    "'--project-url' is also specified."
+                "'--project-url' is also specified."
         ).switch("--archive" to ArchiveMode.ENTITY),
         option(
             help = "Archive all the downloaded source code as a single ZIP file to the output directory. Is ignored " +
-                    "if '--project-url' is also specified."
+                "if '--project-url' is also specified."
         ).switch("--archive-all" to ArchiveMode.BUNDLE)
     ).single().default(ArchiveMode.NONE)
 
@@ -186,7 +186,7 @@ class DownloaderCommand : OrtCommand(
     private val packageIds by option(
         "--package-ids",
         help = "A comma-separated list of regular expressions for matching package ids from the ORT file's analyzer " +
-                "result to limit downloads to. If not specified, all packages are downloaded."
+            "result to limit downloads to. If not specified, all packages are downloaded."
     ).split(",")
 
     private val skipExcluded by option(
@@ -227,7 +227,7 @@ class DownloaderCommand : OrtCommand(
         if (ortResult.analyzer?.result == null) {
             logger.warn {
                 "Cannot run the downloader as the provided ORT result file '${ortFile.canonicalPath}' does " +
-                        "not contain an analyzer result. Nothing will be downloaded."
+                    "not contain an analyzer result. Nothing will be downloaded."
             }
 
             throw ProgramResult(0)
@@ -235,7 +235,7 @@ class DownloaderCommand : OrtCommand(
 
         println(
             "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
-                    "'${ortFile.canonicalPath}'..."
+                "'${ortFile.canonicalPath}'..."
         )
 
         val packages = mutableListOf<Package>().apply {

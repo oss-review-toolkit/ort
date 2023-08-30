@@ -68,11 +68,11 @@ abstract class Rule(
      */
     private fun matches() =
         matchers.all { matcher ->
-        matcher.matches().also { matches ->
-            logger.info { "\t${matcher.description} == $matches" }
-            if (!matches) logger.info { "\tRule skipped." }
+            matcher.matches().also { matches ->
+                logger.info { "\t${matcher.description} == $matches" }
+                if (!matches) logger.info { "\tRule skipped." }
+            }
         }
-    }
 
     /**
      * Evaluate this rule by checking if all matchers apply. If this is the case all [violations] configured in this

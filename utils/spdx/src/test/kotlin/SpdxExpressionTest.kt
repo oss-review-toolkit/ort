@@ -182,20 +182,20 @@ class SpdxExpressionTest : WordSpec({
         "be valid in lenient mode" {
             assertSoftly {
                 licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_ANY) shouldBe
-                        SpdxLicenseWithExceptionExpression(
-                            SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
-                            "LicenseRef-ort-exception"
-                        )
+                    SpdxLicenseWithExceptionExpression(
+                        SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                        "LicenseRef-ort-exception"
+                    )
                 licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_ANY) shouldBe
-                        SpdxLicenseWithExceptionExpression(
-                            SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
-                            "LicenseRef-ort-exception-2.0"
-                        )
+                    SpdxLicenseWithExceptionExpression(
+                        SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                        "LicenseRef-ort-exception-2.0"
+                    )
                 licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_ANY) shouldBe
-                        SpdxLicenseWithExceptionExpression(
-                            SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
-                            "LicenseRef-ort-license"
-                        )
+                    SpdxLicenseWithExceptionExpression(
+                        SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                        "LicenseRef-ort-license"
+                    )
             }
         }
 
@@ -234,15 +234,15 @@ class SpdxExpressionTest : WordSpec({
         "be valid when allowing LicenseRef exceptions" {
             assertSoftly {
                 licenseRefWithLicenseRefException.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS) shouldBe
-                        SpdxLicenseWithExceptionExpression(
-                            SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
-                            "LicenseRef-ort-exception"
-                        )
+                    SpdxLicenseWithExceptionExpression(
+                        SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                        "LicenseRef-ort-exception"
+                    )
                 licenseRefWithLicenseRefException2.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS) shouldBe
-                        SpdxLicenseWithExceptionExpression(
-                            SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
-                            "LicenseRef-ort-exception-2.0"
-                        )
+                    SpdxLicenseWithExceptionExpression(
+                        SpdxLicenseReferenceExpression("LicenseRef-ort-license"),
+                        "LicenseRef-ort-exception-2.0"
+                    )
 
                 shouldThrow<SpdxException> {
                     licenseRefWithLicenseRef.toSpdx(Strictness.ALLOW_LICENSEREF_EXCEPTIONS)
@@ -313,19 +313,19 @@ class SpdxExpressionTest : WordSpec({
         "normalize deprecated license exceptions to non-deprecated ones" {
             assertSoftly {
                 "GPL-2.0-with-autoconf-exception".toSpdx().normalize() shouldBe
-                        (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0)
+                    (GPL_2_0_ONLY with AUTOCONF_EXCEPTION_2_0)
                 "GPL-2.0-with-bison-exception".toSpdx().normalize() shouldBe
-                        (GPL_2_0_ONLY with BISON_EXCEPTION_2_2)
+                    (GPL_2_0_ONLY with BISON_EXCEPTION_2_2)
                 "GPL-2.0-with-classpath-exception".toSpdx().normalize() shouldBe
-                        (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)
+                    (GPL_2_0_ONLY with CLASSPATH_EXCEPTION_2_0)
                 "GPL-2.0-with-font-exception".toSpdx().normalize() shouldBe
-                        (GPL_2_0_ONLY with FONT_EXCEPTION_2_0)
+                    (GPL_2_0_ONLY with FONT_EXCEPTION_2_0)
                 "GPL-2.0-with-GCC-exception".toSpdx().normalize() shouldBe
-                        (GPL_2_0_ONLY with GCC_EXCEPTION_2_0)
+                    (GPL_2_0_ONLY with GCC_EXCEPTION_2_0)
                 "GPL-3.0-with-autoconf-exception".toSpdx().normalize() shouldBe
-                        (GPL_3_0_ONLY with AUTOCONF_EXCEPTION_3_0)
+                    (GPL_3_0_ONLY with AUTOCONF_EXCEPTION_3_0)
                 "GPL-3.0-with-GCC-exception".toSpdx().normalize() shouldBe
-                        (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
+                    (GPL_3_0_ONLY with GCC_EXCEPTION_3_1)
             }
         }
     }
@@ -349,9 +349,9 @@ class SpdxExpressionTest : WordSpec({
         "work with LicenseRef-* identifiers" {
             "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0 AND LicenseRef-scancode-commercial-license"
                 .decompose() should containExactlyInAnyOrder(
-                    "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
-                    "LicenseRef-scancode-commercial-license"
-                )
+                "LicenseRef-gpl-2.0-custom WITH Classpath-exception-2.0",
+                "LicenseRef-scancode-commercial-license"
+            )
         }
 
         "return distinct strings" {
@@ -362,9 +362,9 @@ class SpdxExpressionTest : WordSpec({
         "not merge license-exception pairs with single matching licenses" {
             "GPL-2.0-or-later WITH Classpath-exception-2.0 AND GPL-2.0-or-later"
                 .decompose() should containExactlyInAnyOrder(
-                    "GPL-2.0-or-later WITH Classpath-exception-2.0",
-                    "GPL-2.0-or-later"
-                )
+                "GPL-2.0-or-later WITH Classpath-exception-2.0",
+                "GPL-2.0-or-later"
+            )
         }
     }
 
@@ -383,12 +383,12 @@ class SpdxExpressionTest : WordSpec({
 
         "correctly convert ORs on both sides of an AND expression" {
             "(a OR b) AND (c OR d)".toSpdx().disjunctiveNormalForm() should
-                    beString("(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)")
+                beString("(a AND c) OR (a AND d) OR (b AND c) OR (b AND d)")
         }
 
         "correctly convert a complex expression" {
             "(a OR b) AND c AND (d OR e)".toSpdx().disjunctiveNormalForm() should
-                    beString("(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)")
+                beString("(a AND c AND d) OR (a AND c AND e) OR (b AND c AND d) OR (b AND c AND e)")
         }
     }
 
@@ -406,7 +406,7 @@ class SpdxExpressionTest : WordSpec({
 
         "correctly sort a complex expression" {
             "(h OR g) AND (f OR e) OR (c OR d) AND (a OR b)".toSpdx().sorted() should
-                    beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
+                beString("((a OR b) AND (c OR d)) OR ((e OR f) AND (g OR h))")
         }
     }
 

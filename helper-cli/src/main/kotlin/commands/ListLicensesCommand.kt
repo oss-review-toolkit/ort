@@ -69,8 +69,8 @@ internal class ListLicensesCommand : CliktCommand(
     private val sourceCodeDir by option(
         "--source-code-dir",
         help = "A directory containing the sources for the target package. These sources should match the provenance " +
-                "of the respective scan result in the ORT result. If not specified those sources are downloaded if " +
-                "needed."
+            "of the respective scan result in the ORT result. If not specified those sources are downloaded if " +
+            "needed."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -78,13 +78,13 @@ internal class ListLicensesCommand : CliktCommand(
     private val offendingOnly by option(
         "--offending-only",
         help = "Only list licenses causing at least one rule violation with an offending severity, see " +
-                "--offending-severities."
+            "--offending-severities."
     ).flag()
 
     private val offendingSeverities by option(
         "--offending-severities",
         help = "Set the severities to use for the filtering enabled by --offending-only, specified as " +
-                "comma-separated values."
+            "comma-separated values."
     ).enum<Severity>().split(",").default(Severity.entries)
 
     private val omitExcluded by option(
@@ -110,7 +110,7 @@ internal class ListLicensesCommand : CliktCommand(
     private val decomposeLicenseExpressions by option(
         "--decompose-license-expressions",
         help = "Decompose SPDX license expressions into its single licenses components and list the findings for " +
-                "each single license separately."
+            "each single license separately."
     ).flag()
 
     private val repositoryConfigurationFile by option(
@@ -123,7 +123,7 @@ internal class ListLicensesCommand : CliktCommand(
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                "contain a single package configuration."
+            "contain a single package configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
 
@@ -177,7 +177,7 @@ internal class ListLicensesCommand : CliktCommand(
                         val isAllowedFile = fileAllowList.isEmpty() || FileMatcher.match(fileAllowList, location.path)
 
                         val isIncluded = !omitExcluded || !isPathExcluded(provenance, location.path) ||
-                                ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
+                            ignoreExcludedRuleIds.intersect(violatedRulesByLicense[license].orEmpty()).isNotEmpty()
 
                         isAllowedFile && isIncluded
                     }
@@ -280,7 +280,7 @@ private fun Collection<TextLocation>.groupByText(baseDir: File): List<TextLocati
     val unresolvedLocations = (this - resolvedLocations.values.flatten()).toSet()
 
     return resolvedLocations.map { (text, locations) -> TextLocationGroup(locations = locations, text = text) } +
-            unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }
+        unresolvedLocations.map { TextLocationGroup(locations = setOf(it)) }
 }
 
 private fun TextLocation.resolve(baseDir: File): String? {

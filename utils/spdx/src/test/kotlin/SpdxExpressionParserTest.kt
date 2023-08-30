@@ -201,7 +201,7 @@ class SpdxExpressionParserTest : WordSpec({
             }
 
             exception.message shouldBe
-                    "mismatched input '<EOF>' expecting {'(', DOCUMENTREFERENCE, LICENSEREFERENCE, IDSTRING}"
+                "mismatched input '<EOF>' expecting {'(', DOCUMENTREFERENCE, LICENSEREFERENCE, IDSTRING}"
         }
     }
 })

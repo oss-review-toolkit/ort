@@ -47,7 +47,7 @@ internal class ImportCommand : CliktCommand(
 ) {
     private val provider by argument(
         help = "The name of the provider to import license classifications from. Must be one of " +
-                "${LicenseClassificationProvider.entries.map { it.name }}."
+            "${LicenseClassificationProvider.entries.map { it.name }}."
     ).enum<LicenseClassificationProvider>()
 
     private val prefix by option(

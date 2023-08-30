@@ -56,7 +56,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
                 else -> {
                     logger.info {
                         "Could not read resolved nested provenances for '$root' from path '$path': " +
-                                it.collectMessages()
+                            it.collectMessages()
                     }
 
                     emptyList()
@@ -84,7 +84,7 @@ class FileBasedNestedProvenanceStorage(private val backend: FileStorage) : Neste
 
                     logger.warn {
                         "Could not store resolved nested provenance for '$root' at path '$path': " +
-                                it.collectMessages()
+                            it.collectMessages()
                     }
                 }
                 else -> throw it
@@ -97,6 +97,6 @@ private const val FILE_NAME = "resolved_nested_provenance.yml"
 
 private fun storagePath(root: RepositoryProvenance) =
     "${root.vcsInfo.type.toString().fileSystemEncode()}/" +
-            "${root.vcsInfo.url.fileSystemEncode()}/" +
-            "${root.resolvedRevision.fileSystemEncode()}/" +
-            FILE_NAME
+        "${root.vcsInfo.url.fileSystemEncode()}/" +
+        "${root.resolvedRevision.fileSystemEncode()}/" +
+        FILE_NAME

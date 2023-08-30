@@ -65,7 +65,7 @@ class ProvenanceBasedFileStorage(private val backend: FileStorage) : ProvenanceB
                 else -> {
                     logger.info {
                         "Could not read scan results for '$provenance' from path '$path': " +
-                                it.collectMessages()
+                            it.collectMessages()
                     }
 
                     // TODO: Propagate error.
@@ -121,9 +121,9 @@ private fun storagePath(provenance: KnownProvenance) =
         is ArtifactProvenance -> "artifact/${provenance.sourceArtifact.url.fileSystemEncode()}/$SCAN_RESULTS_FILE_NAME"
         is RepositoryProvenance -> {
             "repository/${provenance.vcsInfo.type.toString().fileSystemEncode()}" +
-                    "/${provenance.vcsInfo.url.fileSystemEncode()}" +
-                    "/${provenance.resolvedRevision.fileSystemEncode()}" +
-                    "/$SCAN_RESULTS_FILE_NAME"
+                "/${provenance.vcsInfo.url.fileSystemEncode()}" +
+                "/${provenance.resolvedRevision.fileSystemEncode()}" +
+                "/$SCAN_RESULTS_FILE_NAME"
         }
     }
 
@@ -134,8 +134,8 @@ private fun ScanResult.matches(other: ScanResult): Boolean {
     return scanner == other.scanner && when {
         thisProvenance is RepositoryProvenance && otherProvenance is RepositoryProvenance -> {
             thisProvenance.vcsInfo.type == otherProvenance.vcsInfo.type &&
-                    thisProvenance.vcsInfo.url == otherProvenance.vcsInfo.url &&
-                    thisProvenance.resolvedRevision == otherProvenance.resolvedRevision
+                thisProvenance.vcsInfo.url == otherProvenance.vcsInfo.url &&
+                thisProvenance.resolvedRevision == otherProvenance.resolvedRevision
         }
 
         else -> provenance == otherProvenance

@@ -54,7 +54,7 @@ internal class SetLabelsCommand : CliktCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
-                "times. For example: --label distribution=external"
+            "times. For example: --label distribution=external"
     ).associate()
 
     private val removeExistingLabels by option(
@@ -66,7 +66,7 @@ internal class SetLabelsCommand : CliktCommand(
         var ortResult = readOrtResult(inputOrtFile)
 
         if (removeExistingLabels) {
-           ortResult = ortResult.copy(labels = emptyMap())
+            ortResult = ortResult.copy(labels = emptyMap())
         }
 
         writeOrtResult(ortResult.mergeLabels(labels), outputOrtFile)

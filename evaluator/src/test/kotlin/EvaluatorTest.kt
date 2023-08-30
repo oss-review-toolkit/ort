@@ -185,20 +185,20 @@ class EvaluatorTest : WordSpec({
 
             result.violations.map { it.message } shouldContainExactlyInAnyOrder listOf(
                 "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-foo:1' is incompatible " +
-                        "with the inbound license AGPL-3.0-only of its dependency " +
-                        "'Maven:group:package-foo-transitive:1'. Software under a copyleft license such as the " +
-                        "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
-                        "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
+                    "with the inbound license AGPL-3.0-only of its dependency " +
+                    "'Maven:group:package-foo-transitive:1'. Software under a copyleft license such as the " +
+                    "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
+                    "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
                 "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-bar:1' is incompatible " +
-                        "with the inbound license AGPL-3.0-only of its dependency " +
-                        "'Maven:group:package-bar-direct:1'. Software under a copyleft license such as the " +
-                        "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
-                        "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
+                    "with the inbound license AGPL-3.0-only of its dependency " +
+                    "'Maven:group:package-bar-direct:1'. Software under a copyleft license such as the " +
+                    "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
+                    "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses.",
                 "The outbound license AGPL-3.0-or-later of project 'Maven:group:project-bar:1' is incompatible " +
-                        "with the inbound license AGPL-3.0-only of its dependency " +
-                        "'Maven:group:package-bar-direct:2'. Software under a copyleft license such as the " +
-                        "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
-                        "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses."
+                    "with the inbound license AGPL-3.0-only of its dependency " +
+                    "'Maven:group:package-bar-direct:2'. Software under a copyleft license such as the " +
+                    "AGPL-3.0-only license normally cannot be redistributed under another copyleft license such " +
+                    "as the AGPL-3.0-or-later license, except if it were explicitly permitted in the licenses."
             )
         }
 
@@ -218,11 +218,11 @@ class EvaluatorTest : WordSpec({
 
             result.violations should haveSize(1)
             result.violations.first().message shouldBe "The outbound license Apache-2.0 of project " +
-                    "'Maven:group:project-name:1' is incompatible with the inbound license GPL-2.0-only " +
-                    "(simplified from 'GPL-2.0-only WITH Classpath-exception-2.0') of its dependency " +
-                    "'Maven:group:package-name:1'. Software under a copyleft license such as the GPL-2.0-only " +
-                    "license normally cannot be redistributed under a non-copyleft license such as the Apache-2.0 " +
-                    "license, except if it were explicitly permitted in the licenses."
+                "'Maven:group:project-name:1' is incompatible with the inbound license GPL-2.0-only " +
+                "(simplified from 'GPL-2.0-only WITH Classpath-exception-2.0') of its dependency " +
+                "'Maven:group:package-name:1'. Software under a copyleft license such as the GPL-2.0-only " +
+                "license normally cannot be redistributed under a non-copyleft license such as the Apache-2.0 " +
+                "license, except if it were explicitly permitted in the licenses."
         }
     }
 })

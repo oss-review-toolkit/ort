@@ -236,7 +236,7 @@ class OrtConfigurationTest : WordSpec({
 
                     get("FossId") shouldNotBeNull {
                         val urlMapping = "https://my-repo.example.org(?<repoPath>.*) -> " +
-                                "ssh://my-mapped-repo.example.org\${repoPath}"
+                            "ssh://my-mapped-repo.example.org\${repoPath}"
 
                         this shouldContainExactly mapOf(
                             "serverUrl" to "https://fossid.example.com/instance/",

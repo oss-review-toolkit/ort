@@ -172,12 +172,12 @@ class Conan(
             val dependenciesScope = Scope(
                 name = SCOPE_NAME_DEPENDENCIES,
                 dependencies =
-                    parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
+                parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEPENDENCIES, workingDir)
             )
             val devDependenciesScope = Scope(
                 name = SCOPE_NAME_DEV_DEPENDENCIES,
                 dependencies =
-                    parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                parseDependencies(pkgInfos, definitionFile.name, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
             )
 
             val projectPackage = parseProjectPackage(pkgInfos, definitionFile, workingDir)
@@ -207,8 +207,8 @@ class Conan(
     private fun verifyLockfileBelongsToProject(workingDir: File, lockfileName: String?) {
         require(workingDir.resolve(lockfileName.orEmpty()).canonicalFile.startsWith(workingDir.canonicalFile)) {
             "The provided lockfile path points to the directory outside of the analyzed project: '$lockfileName' and " +
-                    "potentially does not belong to the project. Please move the lockfile to the '$workingDir' and " +
-                    "set the path in '$ORT_CONFIG_FILENAME' accordingly."
+                "potentially does not belong to the project. Please move the lockfile to the '$workingDir' and " +
+                "set the path in '$ORT_CONFIG_FILENAME' accordingly."
         }
     }
 
@@ -276,7 +276,7 @@ class Conan(
 
                     val id = parsePackageId(pkgInfo, workingDir)
                     val dependencies = parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEPENDENCIES, workingDir) +
-                            parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
+                        parseDependencyTree(pkgInfos, pkgInfo, SCOPE_NAME_DEV_DEPENDENCIES, workingDir)
 
                     this += PackageReference(id, dependencies = dependencies)
                 }

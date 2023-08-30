@@ -73,7 +73,7 @@ object ConfigurationResolver : Logging {
             if (nonApplicableCurations.isNotEmpty()) {
                 logger.warn {
                     "The provider '$id' returned the following non-applicable curations: " +
-                            "${nonApplicableCurations.joinToString()}."
+                        "${nonApplicableCurations.joinToString()}."
                 }
             }
 

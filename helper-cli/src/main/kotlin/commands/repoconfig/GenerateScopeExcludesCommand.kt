@@ -39,7 +39,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateScopeExcludesCommand : CliktCommand(
     help = "Generate scope excludes based on common default for the package managers. The generated scope excludes " +
-            "get written to the given repository configuration file, replacing any existing scope excludes."
+        "get written to the given repository configuration file, replacing any existing scope excludes."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",

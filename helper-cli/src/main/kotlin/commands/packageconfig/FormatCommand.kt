@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class FormatCommand : CliktCommand(
     help = "Applies the formatting used by all ort-helper commands and strips all YAML comments. The output is " +
-            "written to the given package configuration file."
+        "written to the given package configuration file."
 ) {
     private val packageConfigurationFile by argument(
         "package-configuration-file",

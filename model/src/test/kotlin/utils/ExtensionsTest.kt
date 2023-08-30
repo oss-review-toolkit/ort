@@ -27,7 +27,7 @@ class ExtensionsTest : WordSpec({
         "return the manifest path" {
             "https://example.com/repo.git?manifest=default.xml".parseRepoManifestPath() shouldBe "default.xml"
             "https://example.com/repo.git?other=param&manifest=default.xml".parseRepoManifestPath() shouldBe
-                    "default.xml"
+                "default.xml"
         }
 
         "return null if no manifest is found" {

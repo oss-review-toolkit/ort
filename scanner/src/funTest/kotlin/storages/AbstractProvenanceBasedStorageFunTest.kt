@@ -221,11 +221,11 @@ private fun createScanResult(
     scannerDetails: ScannerDetails = createScannerDetails(),
     license: String = "Apache-2.0"
 ) = ScanResult(
-        provenance,
-        scannerDetails,
-        ScanSummary.EMPTY.copy(
-            licenseFindings = setOf(
-                LicenseFinding(license, TextLocation("file.txt", 1, 2))
-            )
+    provenance,
+    scannerDetails,
+    ScanSummary.EMPTY.copy(
+        licenseFindings = setOf(
+            LicenseFinding(license, TextLocation("file.txt", 1, 2))
         )
     )
+)

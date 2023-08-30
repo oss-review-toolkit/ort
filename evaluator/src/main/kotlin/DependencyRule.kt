@@ -65,7 +65,7 @@ class DependencyRule(
 ) : PackageRule(ruleSet, name, pkg, resolvedLicenseInfo) {
     override val description =
         "Evaluating rule '$name' for dependency '${dependency.id.toCoordinates()}' " +
-                "(project=${project.id.toCoordinates()}, scope=$scopeName, level=$level)."
+            "(project=${project.id.toCoordinates()}, scope=$scopeName, level=$level)."
 
     override fun issueSource() =
         "$name - ${pkg.metadata.id.toCoordinates()} (dependency of ${project.id.toCoordinates()} in scope $scopeName)"

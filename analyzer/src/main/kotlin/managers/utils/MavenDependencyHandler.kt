@@ -112,7 +112,7 @@ class MavenDependencyHandler(
             issues += createAndLogIssue(
                 source = managerName,
                 message = "Could not get package information for dependency '" +
-                        "${dependency.artifact.identifier()}': ${e.collectMessages()}"
+                    "${dependency.artifact.identifier()}': ${e.collectMessages()}"
             )
         }.getOrNull()
     }

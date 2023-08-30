@@ -229,7 +229,7 @@ class LicenseInfoResolver(
                 pathExcludes = findings.pathExcludes,
                 relativeFindingsPath = findings.relativeFindingsPath
             )
-         }
+        }
 
         return resolvedLocations
     }

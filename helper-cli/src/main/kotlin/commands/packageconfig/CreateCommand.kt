@@ -50,8 +50,8 @@ import org.ossreviewtoolkit.utils.spdx.SpdxSingleLicenseExpression
 
 internal class CreateCommand : CliktCommand(
     help = "Creates one package configuration for the source artifact scan and one for the VCS scan, if " +
-            "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
-            "package configuration YAML files are written to the given output directory."
+        "a corresponding scan result exists in the given ORT result for the respective provenance. The output " +
+        "package configuration YAML files are written to the given output directory."
 ) {
     private val scanResultsStorageDir by option(
         "--scan-results-storage-dir",
@@ -100,14 +100,14 @@ internal class CreateCommand : CliktCommand(
     private val nonOffendingLicenseCategories by option(
         "--non-offending-license-categories",
         help = "Specify licenses by their category which should be considered non-offending. Path excludes are not" +
-                "generated for files or directories which only contain non-offending licenses. Each category name " +
-                "must be present in the given license classifications file."
+            "generated for files or directories which only contain non-offending licenses. Each category name " +
+            "must be present in the given license classifications file."
     ).split(",").default(emptyList())
 
     private val nonOffendingLicenseIds by option(
         "--non-offending-license-ids",
         help = "Specify license IDs which should be considered non-offending. Path excludes are not generated for " +
-                "files or directories which only contain non-offending licenses."
+            "files or directories which only contain non-offending licenses."
     ).split(",").default(emptyList())
 
     private val noSkeletonFiles by option(
@@ -202,14 +202,14 @@ internal class CreateCommand : CliktCommand(
         val licenseClassifications = licenseClassificationsFile?.readValue<LicenseClassifications>()
             ?: throw UsageError(
                 message = "The license classifications file must be specified in order to resolve the given " +
-                        "non-offending license category names to license IDs.",
+                    "non-offending license category names to license IDs.",
                 statusCode = 2
             )
 
         nonOffendingLicenseCategories.flatMapTo(result) { categoryName ->
             licenseClassifications.licensesByCategory[categoryName] ?: throw UsageError(
                 message = "The given license category '$categoryName' was not found in " +
-                        "'${licenseClassificationsFile!!.absolutePath}'.",
+                    "'${licenseClassificationsFile!!.absolutePath}'.",
                 statusCode = 2
             )
         }

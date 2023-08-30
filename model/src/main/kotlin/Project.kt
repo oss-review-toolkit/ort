@@ -129,7 +129,7 @@ data class Project(
     init {
         require(scopeDependencies == null || scopeNames == null) {
             "Not both 'scopeDependencies' and 'scopeNames' may be set, as otherwise it is ambiguous which one " +
-                    "to use."
+                "to use."
         }
     }
 

@@ -35,7 +35,7 @@ class LicenseFindingCurationTest : WordSpec({
                 detected_license: "MIT"
                 reason: "INCORRECT"
                 concluded_license: "Apache-2.0"
-                """.trimIndent()
+            """.trimIndent()
 
             val curation = yaml.fromYaml<LicenseFindingCuration>().toYaml().fromYaml<LicenseFindingCuration>()
 

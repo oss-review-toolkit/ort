@@ -127,18 +127,18 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
         issues: MutableList<Issue>
     ): List<VulnerabilityReference> =
         runCatching {
-        val sourceUri = URI(url)
-        if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
-        return scores.map {
-            // VulnerableCode returns MODERATE instead of MEDIUM in case of cvssv3.1_qr, see:
-            // https://github.com/nexB/vulnerablecode/issues/1186
-            val severity = if (it.scoringSystem == "cvssv3.1_qr" && it.value == "MODERATE") "MEDIUM" else it.value
+            val sourceUri = URI(url)
+            if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
+            return scores.map {
+                // VulnerableCode returns MODERATE instead of MEDIUM in case of cvssv3.1_qr, see:
+                // https://github.com/nexB/vulnerablecode/issues/1186
+                val severity = if (it.scoringSystem == "cvssv3.1_qr" && it.value == "MODERATE") "MEDIUM" else it.value
 
-            VulnerabilityReference(sourceUri, it.scoringSystem, severity)
-        }
-    }.onFailure {
-        issues += createAndLogIssue(providerName, "Failed to map $this to ORT model due to $it.", Severity.HINT)
-    }.getOrElse { emptyList() }
+                VulnerabilityReference(sourceUri, it.scoringSystem, severity)
+            }
+        }.onFailure {
+            issues += createAndLogIssue(providerName, "Failed to map $this to ORT model due to $it.", Severity.HINT)
+        }.getOrElse { emptyList() }
 
     /**
      * Return a meaningful identifier for this vulnerability that can be used in reports. Obtain this identifier from

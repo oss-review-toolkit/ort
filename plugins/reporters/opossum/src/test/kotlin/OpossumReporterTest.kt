@@ -118,12 +118,12 @@ class OpossumReporterTest : WordSpec({
             fileList shouldContain "/"
             fileList shouldContain "/pom.xml/compile/first-package-group/first-package@0.0.1/LICENSE"
             fileList shouldContain "/npm-project/package.json/devDependencies/@something/somepackage@1.2.3/" +
-                    "dependencies/@something/somepackage-dep@1.2.3/dependencies/" +
-                    "@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
+                "dependencies/@something/somepackage-dep@1.2.3/dependencies/" +
+                "@something/somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
 
             opossumInput.attributionBreakpoints shouldContain "/npm-project/package.json/devDependencies/" +
-                    "@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/" +
-                    "@something/somepackage-dep-dep@1.2.3/dependencies/"
+                "@something/somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/" +
+                "@something/somepackage-dep-dep@1.2.3/dependencies/"
         }
 
         "create a file list that contains files from other lists" {
@@ -203,9 +203,9 @@ class OpossumReporterTest : WordSpec({
 
         "create valid baseUrlsForSources" {
             opossumInput.baseUrlsForSources["/"] shouldBe "https://github.com/path/first-project/" +
-                    "tree/master/sub/path/{path}"
+                "tree/master/sub/path/{path}"
             opossumInput.baseUrlsForSources["/pom.xml/compile/first-package-group/first-package@0.0.1/"] shouldBe
-                    "https://github.com/path/first-package-repo/tree/master/project-path/{path}"
+                "https://github.com/path/first-package-repo/tree/master/project-path/{path}"
         }
 
         "create issues containing all issues" {
@@ -235,8 +235,8 @@ class OpossumReporterTest : WordSpec({
 
         "exclude scopes" {
             fileListWithExcludedScopes shouldNotContain "/npm-project/package.json/devDependencies/@something/" +
-                    "somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/" +
-                    "somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
+                "somepackage@1.2.3/dependencies/@something/somepackage-dep@1.2.3/dependencies/@something/" +
+                "somepackage-dep-dep@1.2.3/dependencies/@something/somepackage-dep-dep-dep@1.2.3"
         }
     }
 })
@@ -317,7 +317,7 @@ private fun createOrtResult(): OrtResult {
                                                             PackageReference(
                                                                 id = Identifier(
                                                                     "NPM:@something:" +
-                                                                            "somepackage-dep-dep-dep:1.2.3"
+                                                                        "somepackage-dep-dep-dep:1.2.3"
                                                                 )
                                                             )
                                                         )
@@ -339,8 +339,8 @@ private fun createOrtResult(): OrtResult {
                         concludedLicense = "BSD-2-Clause AND BSD-3-Clause AND MIT".toSpdx(),
                         declaredLicenses = setOf("BSD-3-Clause", "MIT OR GPL-2.0-only"),
                         description = "A package with all supported attributes set, with a VCS URL containing a user " +
-                                "name, and with a scan result containing two copyright finding matched to a license " +
-                                "finding.",
+                            "name, and with a scan result containing two copyright finding matched to a license " +
+                            "finding.",
                         homepageUrl = "first package's homepage URL",
                         sourceArtifact = RemoteArtifact("https://some-host/first-package-sources.jar", Hash.NONE),
                         vcs = VcsInfo(
@@ -383,7 +383,7 @@ private fun createOrtResult(): OrtResult {
                         declaredLicenses = setOf("LicenseRef-scancode-philips-proprietary-notice-2000"),
                         concludedLicense = "LicenseRef-scancode-purdue-bsd".toSpdx(),
                         description = "A package used only from the excluded 'test' scope, with non-SPDX license IDs " +
-                                "in the declared and concluded license.",
+                            "in the declared and concluded license.",
                         homepageUrl = "",
                         sourceArtifact = RemoteArtifact.EMPTY,
                         vcs = VcsInfo.EMPTY

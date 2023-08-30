@@ -90,7 +90,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
                 issues += FossId.createAndLogIssue(
                     source = "FossId",
                     message = "Failed to parse license '${it.identifier}' as an SPDX expression: " +
-                            spdxException.collectMessages()
+                        spdxException.collectMessages()
                 )
             }
         }

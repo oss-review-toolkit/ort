@@ -67,7 +67,7 @@ class ScannerIntegrationFunTest : WordSpec({
             val expectedResultFile = getAssetFile("scanner-integration-all-pkgs-expected-ort-result.yml")
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
-                    matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultFile)
         }
 
         "return the expected (merged) scan results" {
@@ -76,7 +76,7 @@ class ScannerIntegrationFunTest : WordSpec({
             val scanResults = ortResult.getScanResults().toSortedMap()
 
             patchActualResult(scanResults.toYaml(), patchStartAndEndTime = true) should
-                    matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultFile)
         }
 
         "return the expected (merged) file lists" {
@@ -96,7 +96,7 @@ class ScannerIntegrationFunTest : WordSpec({
             val ortResult = createScanner().scan(analyzerResult, skipExcluded = false, emptyMap())
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
-                    matchExpectedResult(expectedResultFile)
+                matchExpectedResult(expectedResultFile)
         }
     }
 })

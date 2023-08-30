@@ -85,12 +85,12 @@ internal fun List<IgnoreRule>.filterLegacyRules(
     issues: MutableList<Issue>
 ): List<IgnoreRule> =
     rulesToTest.filterNot { ruleToTest ->
-    any { it.value == ruleToTest.value && it.type == ruleToTest.type }
-}.onEach {
-    issues += Issue(
-        source = "FossID.compare",
-        message = "Rule '${it.value}' with type '${it.type}' is not present in the .ort.yml path excludes. " +
+        any { it.value == ruleToTest.value && it.type == ruleToTest.type }
+    }.onEach {
+        issues += Issue(
+            source = "FossID.compare",
+            message = "Rule '${it.value}' with type '${it.type}' is not present in the .ort.yml path excludes. " +
                 "Add it to the .ort.yml file or remove it from the FossID scan.",
-        severity = Severity.HINT
-    )
-}
+            severity = Severity.HINT
+        )
+    }

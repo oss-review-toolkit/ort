@@ -86,7 +86,7 @@ class AdvisorCommand : OrtCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
-                "times. For example: --label distribution=external"
+            "times. For example: --label distribution=external"
     ).associate()
 
     private val resolutionsFile by option(
@@ -150,7 +150,7 @@ class AdvisorCommand : OrtCommand(
 
             println(
                 "$vulnerablePackageCount of $totalPackageCount package(s) (not counting excluded ones) are " +
-                        "vulnerable, with $vulnerabilityCount vulnerabilities in total."
+                    "vulnerable, with $vulnerabilityCount vulnerabilities in total."
             )
         }
 

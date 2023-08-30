@@ -54,7 +54,7 @@ abstract class OrtCommand(name: String, help: String) : CliktCommand(name = name
         if (existingOutputFiles.isNotEmpty()) {
             throw UsageError(
                 message = "None of the output files $existingOutputFiles must exist yet. To overwrite output files " +
-                        "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
+                    "set the 'forceOverwrite' option in '$ORT_CONFIG_FILENAME'.",
                 statusCode = 2
             )
         }

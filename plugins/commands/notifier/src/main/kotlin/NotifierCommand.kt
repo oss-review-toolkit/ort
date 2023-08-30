@@ -76,7 +76,7 @@ class NotifierCommand : OrtCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result passed to the notifier script, overwriting any existing label of the " +
-                "same name. Can be used multiple times. For example: --label distribution=external"
+            "same name. Can be used multiple times. For example: --label distribution=external"
     ).associate()
 
     override fun run() {
@@ -97,7 +97,7 @@ class NotifierCommand : OrtCommand(
         if (!notificationsFile.isFile) {
             throw UsageError(
                 "No notifications file option specified and no default notifications file found at " +
-                        "'$notificationsFile'."
+                    "'$notificationsFile'."
             )
         }
 
