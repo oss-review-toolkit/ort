@@ -83,7 +83,8 @@ private fun PathExclude.mapToRule(): IgnoreRule? {
 internal fun List<IgnoreRule>.filterLegacyRules(
     rulesToTest: List<IgnoreRule>,
     issues: MutableList<Issue>
-): List<IgnoreRule> = rulesToTest.filterNot { ruleToTest ->
+): List<IgnoreRule> =
+    rulesToTest.filterNot { ruleToTest ->
     any { it.value == ruleToTest.value && it.type == ruleToTest.type }
 }.onEach {
     issues += Issue(

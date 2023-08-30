@@ -238,8 +238,13 @@ class Bundler(
     }
 
     private fun parseScope(
-        workingDir: File, projectId: Identifier, groupName: String, dependencyList: List<String>,
-        scopes: MutableSet<Scope>, gemSpecs: MutableMap<String, GemSpec>, issues: MutableList<Issue>
+        workingDir: File,
+        projectId: Identifier,
+        groupName: String,
+        dependencyList: List<String>,
+        scopes: MutableSet<Scope>,
+        gemSpecs: MutableMap<String, GemSpec>,
+        issues: MutableList<Issue>
     ) {
         logger.debug {
             "Parsing scope '$groupName' with top-level dependencies $dependencyList for project " +
@@ -256,8 +261,12 @@ class Bundler(
     }
 
     private fun parseDependency(
-        workingDir: File, projectId: Identifier, gemName: String, gemSpecs: MutableMap<String, GemSpec>,
-        scopeDependencies: MutableSet<PackageReference>, issues: MutableList<Issue>
+        workingDir: File,
+        projectId: Identifier,
+        gemName: String,
+        gemSpecs: MutableMap<String, GemSpec>,
+        scopeDependencies: MutableSet<PackageReference>,
+        issues: MutableList<Issue>
     ) {
         logger.debug { "Parsing dependency '$gemName'." }
 

@@ -116,8 +116,7 @@ object DatabaseUtils : Logging {
     /**
      * Start a new transaction to execute the given [statement] on this [Database].
      */
-    fun <T> Database.transaction(statement: Transaction.() -> T): T =
-        transaction(this, statement)
+    fun <T> Database.transaction(statement: Transaction.() -> T): T = transaction(this, statement)
 
     /**
      * Start a new asynchronous transaction to execute the given [statement] on this [Database].

@@ -66,8 +66,7 @@ interface ClearlyDefinedService {
          * Create a ClearlyDefined service instance for communicating with the given [server], optionally using a
          * pre-built OkHttp [client].
          */
-        fun create(server: Server, client: OkHttpClient? = null): ClearlyDefinedService =
-            create(server.apiUrl, client)
+        fun create(server: Server, client: OkHttpClient? = null): ClearlyDefinedService = create(server.apiUrl, client)
 
         /**
          * Create a ClearlyDefined service instance for communicating with a server running at the given [url],

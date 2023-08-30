@@ -48,5 +48,4 @@ class OrtConfigPackageCurationProviderFunTest : StringSpec({
     }
 })
 
-private fun createPackagesFromIds(vararg ids: Identifier) =
-    ids.map { Package.EMPTY.copy(id = it) }
+private fun createPackagesFromIds(vararg ids: Identifier) = ids.map { Package.EMPTY.copy(id = it) }

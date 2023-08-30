@@ -139,8 +139,7 @@ object DependencyGraphConverter {
 
         override fun createPackage(dependency: PackageReference, issues: MutableList<Issue>): Package? = null
 
-        override fun issuesForDependency(dependency: PackageReference): Collection<Issue> =
-            dependency.issues
+        override fun issuesForDependency(dependency: PackageReference): Collection<Issue> = dependency.issues
     }
 }
 

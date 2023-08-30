@@ -28,6 +28,5 @@ import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 class OrtModelPlugin @Inject constructor(
     private val registry: ToolingModelBuilderRegistry
 ) : Plugin<Project> {
-    override fun apply(project: Project) =
-        registry.register(OrtModelBuilder())
+    override fun apply(project: Project) = registry.register(OrtModelBuilder())
 }

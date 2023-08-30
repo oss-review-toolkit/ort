@@ -241,7 +241,10 @@ private fun getLinkageForDependency(
  * [DEFAULT_SCOPE_NAME] so that the [source] depends on the [target].
  */
 private fun hasDefaultScopeLinkage(
-    source: String, target: String, relation: SpdxRelationship.Type, relationships: List<SpdxRelationship>
+    source: String,
+    target: String,
+    relation: SpdxRelationship.Type,
+    relationships: List<SpdxRelationship>
 ): Boolean {
     if (relation !in SPDX_LINKAGE_RELATIONSHIPS) return false
 

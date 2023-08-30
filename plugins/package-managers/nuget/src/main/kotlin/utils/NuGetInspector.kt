@@ -201,7 +201,8 @@ internal fun Collection<NuGetInspector.PackageData>.toOrtPackages(): Set<Package
     groupBy { "${it.name}:${it.version}" }.mapTo(mutableSetOf()) { (_, packages) ->
         val pkg = packages.first()
 
-        fun NuGetInspector.PackageData.getHash(): Hash = Hash.create(
+        fun NuGetInspector.PackageData.getHash(): Hash =
+            Hash.create(
             (sha512 ?: sha256 ?: sha1 ?: md5 ?: "").lowercase()
         )
 

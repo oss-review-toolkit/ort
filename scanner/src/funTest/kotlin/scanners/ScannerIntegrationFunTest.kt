@@ -147,8 +147,8 @@ private fun createAnalyzerResult(vararg packages: Package): OrtResult {
     return OrtResult.EMPTY.copy(analyzer = analyzerRun)
 }
 
-private fun createId(name: String): Identifier =
-    Identifier("Dummy::$name:1.0.0")
+private fun createId(name: String): Identifier = Identifier("Dummy::$name:1.0.0")
+
 private fun createPackage(name: String, vcs: VcsInfo): Package =
     Package.EMPTY.copy(
         id = createId(name),

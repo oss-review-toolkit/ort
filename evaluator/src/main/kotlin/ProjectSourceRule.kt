@@ -83,9 +83,7 @@ open class ProjectSourceRule(
     /**
      * Return the detected licenses for any file matching the given [glob expressions][patterns].
      */
-    fun projectSourceGetDetectedLicensesByFilePath(
-        vararg patterns: String
-    ): Map<String, Set<String>> =
+    fun projectSourceGetDetectedLicensesByFilePath(vararg patterns: String): Map<String, Set<String>> =
         detectedLicensesForFilePath.filter { (filePath, _) ->
             FileMatcher.match(patterns.toList(), filePath)
         }
@@ -139,8 +137,7 @@ open class ProjectSourceRule(
             override val description =
                 "projectSourceHasFileWithContents('$contentPattern', '${patterns.joinToString()}')"
 
-            override fun matches(): Boolean =
-                projectSourceFindFilesWithContent(contentPattern, *patterns).isNotEmpty()
+            override fun matches(): Boolean = projectSourceFindFilesWithContent(contentPattern, *patterns).isNotEmpty()
         }
 
     /**
@@ -154,7 +151,6 @@ open class ProjectSourceRule(
             override val description =
                 "projectSourceHasVcsType('${vcsTypes.joinToString()}')"
 
-            override fun matches(): Boolean =
-                projectSourceGetVcsType() in types
+            override fun matches(): Boolean = projectSourceGetVcsType() in types
         }
 }

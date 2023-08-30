@@ -240,7 +240,8 @@ private fun id(group: String, artifact: String, version: String): Identifier =
 /**
  * Output the dependency tree of the given scope as a string.
  */
-private fun scopeDependencies(scopes: Set<Scope>, name: String): String = buildString {
+private fun scopeDependencies(scopes: Set<Scope>, name: String): String =
+    buildString {
     scopes.find { it.name == name }?.let { scope ->
         scope.dependencies.sorted().forEach { dumpDependencies(it) }
     }

@@ -101,8 +101,7 @@ class JiraNotifier(private val restClient: JiraRestClient) {
     /**
      * Returns a [ProjectIssueBuilder] object, which can be used to do operations for the given [projectKey].
      */
-    fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder =
-        ProjectIssueBuilder(projectKey, restClient)
+    fun projectIssueBuilder(projectKey: String): ProjectIssueBuilder = ProjectIssueBuilder(projectKey, restClient)
 
     class ProjectIssueBuilder(private val projectKey: String, private val restClient: JiraRestClient) {
         private val issueTypes by lazy {

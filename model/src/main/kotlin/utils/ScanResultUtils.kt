@@ -78,7 +78,8 @@ fun mergeScanResultsByScanner(
  * Merge a list of [ScanResult.additionalData] by keeping all keys and concatenating values to a string separated by
  * commas.
  */
-private fun List<Map<String, String>>.mergeAdditionalData(): Map<String, String> = flatMap { it.entries }
+private fun List<Map<String, String>>.mergeAdditionalData(): Map<String, String> =
+    flatMap { it.entries }
     .groupBy({ it.key }) { it.value }
     .mapValues { it.value.joinToString(",") }
 

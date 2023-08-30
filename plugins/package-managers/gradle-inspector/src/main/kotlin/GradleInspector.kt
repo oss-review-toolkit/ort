@@ -117,7 +117,8 @@ class GradleInspector(
     private val initScriptFile by lazy { extractInitScript() }
 
     private fun extractInitScript(): File {
-        fun extractResource(name: String, target: File) = target.apply {
+        fun extractResource(name: String, target: File) =
+            target.apply {
             val resource = checkNotNull(GradleInspector::class.java.getResource(name)) {
                 "Resource '$name' not found."
             }
@@ -353,7 +354,10 @@ private fun Collection<OrtDependency>.toPackageRefs(
  * is retrieved remotely.
  */
 private fun createRemoteArtifact(
-    pomUrl: String?, classifier: String? = null, extension: String? = null, algorithm: String = "sha1"
+    pomUrl: String?,
+    classifier: String? = null,
+    extension: String? = null,
+    algorithm: String = "sha1"
 ): RemoteArtifact {
     val artifactBaseUrl = pomUrl?.removeSuffix(".pom") ?: return RemoteArtifact.EMPTY
 

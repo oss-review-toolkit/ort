@@ -63,8 +63,7 @@ class CompatibilityDependencyNavigator internal constructor(
         }
     }
 
-    override fun scopeNames(project: Project): Set<String> =
-        project.invokeNavigator(DependencyNavigator::scopeNames)
+    override fun scopeNames(project: Project): Set<String> = project.invokeNavigator(DependencyNavigator::scopeNames)
 
     override fun directDependencies(project: Project, scopeName: String): Sequence<DependencyNode> =
         project.invokeNavigator { directDependencies(it, scopeName) }
@@ -74,16 +73,14 @@ class CompatibilityDependencyNavigator internal constructor(
         scopeName: String,
         maxDepth: Int,
         matcher: DependencyMatcher
-    ): Set<Identifier> =
-        project.invokeNavigator { dependenciesForScope(it, scopeName, maxDepth, matcher) }
+    ): Set<Identifier> = project.invokeNavigator { dependenciesForScope(it, scopeName, maxDepth, matcher) }
 
     override fun packageDependencies(
         project: Project,
         packageId: Identifier,
         maxDepth: Int,
         matcher: DependencyMatcher
-    ): Set<Identifier> =
-        project.invokeNavigator { packageDependencies(it, packageId, maxDepth, matcher) }
+    ): Set<Identifier> = project.invokeNavigator { packageDependencies(it, packageId, maxDepth, matcher) }
 
     /**
      * Choose the correct [DependencyNavigator] to handle this [Project] and invoke [block] on it.

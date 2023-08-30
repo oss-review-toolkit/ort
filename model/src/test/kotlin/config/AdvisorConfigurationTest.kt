@@ -105,5 +105,4 @@ private fun loadAdvisorConfig(): AdvisorConfiguration =
  * Perform a serialization round-trip of the given advisor [config] and return the result. This is used to check
  * whether serialization and deserialization of advisor configurations work as expected.
  */
-private fun rereadAdvisorConfig(config: AdvisorConfiguration): AdvisorConfiguration =
-    config.toYaml().fromYaml()
+private fun rereadAdvisorConfig(config: AdvisorConfiguration): AdvisorConfiguration = config.toYaml().fromYaml()

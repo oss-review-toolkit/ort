@@ -304,10 +304,7 @@ private fun parseRepositoryUrl(node: JsonNode) = node["repository"].textValueOrE
 // for the specification for this kind of dependency.
 private val GIT_DEPENDENCY_REGEX = Regex("git\\+(https://.*)\\?(?:rev|tag|branch)=.+#([0-9a-zA-Z]+)")
 
-private fun parseSourceArtifact(
-    node: JsonNode,
-    hashes: Map<String, String>
-): RemoteArtifact? {
+private fun parseSourceArtifact(node: JsonNode, hashes: Map<String, String>): RemoteArtifact? {
     val source = node["source"]?.textValue() ?: return null
 
     if (source == "registry+https://github.com/rust-lang/crates.io-index") {
@@ -324,8 +321,7 @@ private fun parseSourceArtifact(
     return RemoteArtifact(url, Hash.create(hash))
 }
 
-private fun parseVcsInfo(node: JsonNode) =
-    VcsHost.parseUrl(parseRepositoryUrl(node))
+private fun parseVcsInfo(node: JsonNode) = VcsHost.parseUrl(parseRepositoryUrl(node))
 
 private fun getResolvedVersion(
     parentName: String,

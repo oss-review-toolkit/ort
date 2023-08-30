@@ -80,8 +80,7 @@ class OsvFunTest : StringSpec({
 private fun identifierToPackage(id: String): Package =
     Identifier(id).let { Package.EMPTY.copy(id = it, purl = it.toPurl()) }
 
-private fun createOsv(): Osv =
-    Osv("OSV", OsvConfiguration(serverUrl = null))
+private fun createOsv(): Osv = Osv("OSV", OsvConfiguration(serverUrl = null))
 
 private fun Map<Identifier, AdvisorResult>.patchTimes(): Map<Identifier, AdvisorResult> =
     mapValues { (_, advisorResult) ->

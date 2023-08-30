@@ -400,8 +400,11 @@ private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, m
  * Load all documents referenced by external references in this [SpdxDocument] using [cache]. Resolve relative paths
  * based on [documentUri]. If issues occur, use [managerName] as source.
  */
-private fun SpdxDocument.resolveReferences(cache: SpdxDocumentCache, documentUri: URI, managerName: String):
-        Map<SpdxExternalDocumentReference, ResolutionResult> =
+private fun SpdxDocument.resolveReferences(
+    cache: SpdxDocumentCache,
+    documentUri: URI,
+    managerName: String
+): Map<SpdxExternalDocumentReference, ResolutionResult> =
     externalDocumentRefs.associateWith { it.resolve(cache, documentUri, managerName) }
 
 /**

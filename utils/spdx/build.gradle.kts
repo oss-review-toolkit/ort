@@ -171,7 +171,11 @@ fun licenseToEnumEntry(info: LicenseInfo): String {
 }
 
 fun getLicenseInfo(
-    jsonUrl: String, description: String, listKeyName: String, idKeyName: String, isException: Boolean
+    jsonUrl: String,
+    description: String,
+    listKeyName: String,
+    idKeyName: String,
+    isException: Boolean
 ): List<LicenseInfo> {
     logger.quiet("Downloading SPDX $description list...")
 
@@ -191,7 +195,10 @@ fun getLicenseInfo(
 }
 
 fun Task.generateEnumClass(
-    className: String, description: String, info: List<LicenseInfo>, resourcePath: String
+    className: String,
+    description: String,
+    info: List<LicenseInfo>,
+    resourcePath: String
 ): List<LicenseInfo> {
     logger.quiet("Collected ${info.size} SPDX $description identifiers.")
 

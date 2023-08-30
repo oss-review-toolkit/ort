@@ -116,8 +116,7 @@ data class DependencyGraph(
          * [project]. This is used to ensure that the scope names are unique when constructing a dependency graph from
          * multiple projects.
          */
-        fun qualifyScope(project: Project, scopeName: String): String =
-            qualifyScope(project.id, scopeName)
+        fun qualifyScope(project: Project, scopeName: String): String = qualifyScope(project.id, scopeName)
 
         /**
          * Return a name for the given [scope][scopeName] that is qualified with parts of the given [projectId]. This

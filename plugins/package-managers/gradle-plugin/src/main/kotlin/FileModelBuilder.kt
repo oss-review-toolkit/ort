@@ -92,8 +92,7 @@ private class SimpleModelResolver(private val resolve: ModelSourceResolver) : Mo
     override fun resolveModel(groupId: String, artifactId: String, version: String): ModelSource2 =
         resolve(groupId, artifactId, version)
 
-    override fun resolveModel(parent: Parent): ModelSource2 =
-        resolve(parent.groupId, parent.artifactId, parent.version)
+    override fun resolveModel(parent: Parent): ModelSource2 = resolve(parent.groupId, parent.artifactId, parent.version)
 
     override fun resolveModel(dependency: Dependency): ModelSource2 =
         resolve(dependency.groupId, dependency.artifactId, dependency.version)

@@ -255,7 +255,8 @@ internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue>
  * Return all path excludes from this [OrtResult] represented as [RepositoryPathExcludes].
  */
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
-    fun isDefinitionsFile(pathExclude: PathExclude) = PackageManager.ENABLED_BY_DEFAULT.any {
+    fun isDefinitionsFile(pathExclude: PathExclude) =
+        PackageManager.ENABLED_BY_DEFAULT.any {
         it.matchersForDefinitionFiles.any { matcher ->
             pathExclude.pattern.endsWith(matcher.toString())
         }
@@ -363,8 +364,9 @@ internal fun RepositoryConfiguration.replaceScopeExcludes(scopeExcludes: List<Sc
 /**
  * Return a copy with the [RuleViolationResolution]s replaced by the given [ruleViolations].
  */
-internal fun RepositoryConfiguration.replaceRuleViolationResolutions(ruleViolations: List<RuleViolationResolution>):
-        RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
+internal fun RepositoryConfiguration.replaceRuleViolationResolutions(
+    ruleViolations: List<RuleViolationResolution>
+): RepositoryConfiguration = copy(resolutions = resolutions.copy(ruleViolations = ruleViolations))
 
 /**
  * Return a copy with sorting applied to all entry types which are to be sorted.
@@ -593,8 +595,7 @@ private data class LicenseFindingCurationKey(
     val detectedLicense: SpdxExpression?
 )
 
-private fun LicenseFindingCuration.key() =
-    LicenseFindingCurationKey(path, startLines, lineCount, detectedLicense)
+private fun LicenseFindingCuration.key() = LicenseFindingCurationKey(path, startLines, lineCount, detectedLicense)
 
 /**
  * Merge the given [PathExclude]s replacing entries with equal [PathExclude.pattern].
@@ -624,9 +625,7 @@ internal fun Collection<PathExclude>.sortPathExcludes(): List<PathExclude> =
 /**
  * Merge the given [ScopeExclude]s replacing entries with equal [ScopeExclude.pattern].
  */
-internal fun Collection<ScopeExclude>.mergeScopeExcludes(
-    other: Collection<ScopeExclude>
-): List<ScopeExclude> {
+internal fun Collection<ScopeExclude>.mergeScopeExcludes(other: Collection<ScopeExclude>): List<ScopeExclude> {
     val result = mutableMapOf<String, ScopeExclude>()
 
     associateByTo(result) { it.pattern }
@@ -666,9 +665,7 @@ internal fun Collection<VulnerabilityResolution>.mergeVulnerabilityResolutions(
 /**
  * Merge the given [RepositoryConfiguration] replacing entries with equal matchers.
  */
-internal fun RepositoryConfiguration.merge(
-    other: RepositoryConfiguration
-): RepositoryConfiguration =
+internal fun RepositoryConfiguration.merge(other: RepositoryConfiguration): RepositoryConfiguration =
     RepositoryConfiguration(
         excludes = Excludes(
             paths = excludes.paths.mergePathExcludes(other.excludes.paths),

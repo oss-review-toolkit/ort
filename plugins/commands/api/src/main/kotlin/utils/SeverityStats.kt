@@ -41,10 +41,7 @@ sealed class SeverityStats(
         SeverityStats(resolvedCounts, unresolvedCounts)
 
     companion object {
-        fun createFromIssues(
-            resolvedIssues: Collection<Issue>,
-            unresolvedIssues: Collection<Issue>
-        ) =
+        fun createFromIssues(resolvedIssues: Collection<Issue>, unresolvedIssues: Collection<Issue>) =
             IssueSeverityStats(
                 resolvedCounts = resolvedIssues.groupingBy { it.severity }.eachCount(),
                 unresolvedCounts = unresolvedIssues.groupingBy { it.severity }.eachCount()
@@ -53,8 +50,7 @@ sealed class SeverityStats(
         fun createFromRuleViolations(
             resolvedRuleViolations: Collection<RuleViolation>,
             unresolvedRuleViolations: Collection<RuleViolation>
-        ) =
-            RuleViolationsSeverityStats(
+        ) = RuleViolationsSeverityStats(
                 resolvedCounts = resolvedRuleViolations.groupingBy { it.severity }.eachCount(),
                 unresolvedCounts = unresolvedRuleViolations.groupingBy { it.severity }.eachCount()
             )

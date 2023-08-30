@@ -673,8 +673,7 @@ private fun createLicenseInfo(
     declaredLicenses: Set<String> = emptySet(),
     detectedLicenses: List<Findings> = emptyList(),
     concludedLicense: SpdxExpression? = null
-) =
-    LicenseInfo(
+) = LicenseInfo(
         id = id,
         declaredLicenseInfo = DeclaredLicenseInfo(
             authors = authors,
@@ -815,8 +814,7 @@ private fun ResolvedLicenseInfo.pathExcludesForLicense(
     license: String,
     provenance: Provenance,
     location: TextLocation
-) =
-    find { it.license == SpdxSingleLicenseExpression.parse(license) }
+) = find { it.license == SpdxSingleLicenseExpression.parse(license) }
         ?.locations
         ?.find { it.provenance == provenance && it.location == location }
         ?.matchingPathExcludes
@@ -826,8 +824,7 @@ private fun ResolvedLicenseInfo.pathExcludesForCopyright(
     copyright: String,
     provenance: Provenance,
     location: TextLocation
-) =
-    flatMap { license -> license.locations.filter { it.provenance == provenance } }
+) = flatMap { license -> license.locations.filter { it.provenance == provenance } }
         .flatMap { it.copyrights }
         .find { it.statement == copyright && it.location == location }
         ?.matchingPathExcludes

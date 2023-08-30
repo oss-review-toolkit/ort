@@ -32,7 +32,8 @@ open class VersionedFossIdService(
         user: String,
         apiKey: String,
         scanCode: String
-    ): EntityResponseBody<out UnversionedScanDescription> = delegate.checkScanStatus(
+    ): EntityResponseBody<out UnversionedScanDescription> =
+        delegate.checkScanStatus(
         PostRequestBody("check_status", SCAN_GROUP, user, apiKey, mapOf("scan_code" to scanCode))
     )
 }

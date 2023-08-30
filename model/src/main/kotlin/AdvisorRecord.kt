@@ -58,7 +58,8 @@ data class AdvisorRecord(
         fun resultsWithIssues(
             minSeverity: Severity = Severity.HINT,
             capability: AdvisorCapability? = null
-        ): AdvisorResultFilter = { result ->
+        ): AdvisorResultFilter =
+            { result ->
             (capability == null || capability in result.advisor.capabilities) && result.summary.issues.any {
                 it.severity >= minSeverity
             }

@@ -66,7 +66,8 @@ abstract class Rule(
     /**
      * Return true if all [matchers] match.
      */
-    private fun matches() = matchers.all { matcher ->
+    private fun matches() =
+        matchers.all { matcher ->
         matcher.matches().also { matches ->
             logger.info { "\t${matcher.description} == $matches" }
             if (!matches) logger.info { "\tRule skipped." }
@@ -155,8 +156,7 @@ abstract class Rule(
         licenseSource: LicenseSource?,
         message: String,
         howToFix: String
-    ) =
-        issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.HINT, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * Add a [warning][Severity.WARNING] to the list of [violations].
@@ -167,8 +167,7 @@ abstract class Rule(
         licenseSource: LicenseSource?,
         message: String,
         howToFix: String
-    ) =
-        issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.WARNING, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * Add an [error][Severity.ERROR] to the list of [violations].
@@ -179,8 +178,7 @@ abstract class Rule(
         licenseSource: LicenseSource?,
         message: String,
         howToFix: String
-    ) =
-        issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
+    ) = issue(Severity.ERROR, pkgId, license, licenseSource, message, howToFix)
 
     /**
      * A DSL helper class, providing convenience functions for adding [RuleMatcher]s to this rule.

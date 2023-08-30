@@ -43,6 +43,5 @@ class EnvVarAuthenticator(env: Map<String, String> = Os.env) : Authenticator() {
         null
     }
 
-    override fun getPasswordAuthentication(): PasswordAuthentication? =
-        auth ?: super.getPasswordAuthentication()
+    override fun getPasswordAuthentication(): PasswordAuthentication? = auth ?: super.getPasswordAuthentication()
 }

@@ -34,8 +34,7 @@ object DependencyTreeNavigator : DependencyNavigator {
         scopeName: String,
         maxDepth: Int,
         matcher: DependencyMatcher
-    ): Set<Identifier> =
-        project.findScope(scopeName)?.collectDependencies(maxDepth) { matcher(it) }.orEmpty()
+    ): Set<Identifier> = project.findScope(scopeName)?.collectDependencies(maxDepth) { matcher(it) }.orEmpty()
 
     override fun scopeDependencies(
         project: Project,

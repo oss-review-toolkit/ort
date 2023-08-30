@@ -38,9 +38,7 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
          * [enabled][ProviderPluginConfiguration.enabled] provider configuration in [configurations] ordered
          * highest-priority first. The given [configurations] must be ordered highest-priority first as well.
          */
-        fun create(
-            configurations: List<ProviderPluginConfiguration>
-        ): List<Pair<String, PackageCurationProvider>> =
+        fun create(configurations: List<ProviderPluginConfiguration>): List<Pair<String, PackageCurationProvider>> =
             configurations.filter {
                 it.enabled
             }.map {

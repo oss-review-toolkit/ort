@@ -54,11 +54,7 @@ class GitLabLicenseModelReporter : Reporter {
 
     private val reportFilename = "gl-license-scanning-report.json"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val skipExcluded = options[OPTION_SKIP_EXCLUDED].isTrue()
 
         val licenseModel = GitLabLicenseModelMapper.map(input.ortResult, skipExcluded)

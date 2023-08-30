@@ -24,5 +24,4 @@ package org.ossreviewtoolkit.analyzer.managers.utils
  * also any suffix starting with '+', because build metadata is not involved in version comparison according to
  * https://go.dev/ref/mod#incompatible-versions.
  */
-fun normalizeModuleVersion(moduleVersion: String): String =
-    moduleVersion.removePrefix("v").substringBefore("+")
+fun normalizeModuleVersion(moduleVersion: String): String = moduleVersion.removePrefix("v").substringBefore("+")

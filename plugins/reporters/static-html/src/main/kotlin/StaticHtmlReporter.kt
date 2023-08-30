@@ -82,11 +82,7 @@ class StaticHtmlReporter : Reporter {
     private val css = javaClass.getResource("/static-html-reporter.css").readText()
     private val licensesSha1 = mutableMapOf<String, String>()
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val reportTableModel = ReportTableModelMapper.map(
             input.ortResult,
             input.licenseInfoResolver,

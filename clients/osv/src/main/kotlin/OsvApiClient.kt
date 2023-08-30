@@ -53,8 +53,7 @@ interface OsvApiClient {
          * Create an OsvApiClient instance for communicating with the given [server], optionally using a pre-built
          * OkHttp [client].
          */
-        fun create(server: Server, client: OkHttpClient? = null): OsvApiClient =
-            create(server.url, client)
+        fun create(server: Server, client: OkHttpClient? = null): OsvApiClient = create(server.url, client)
 
         fun create(serverUrl: String? = null, client: OkHttpClient? = null): OsvApiClient {
             val converterFactory = JSON.asConverterFactory(contentType = "application/json".toMediaType())

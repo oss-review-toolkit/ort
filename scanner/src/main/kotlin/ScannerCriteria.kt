@@ -108,10 +108,7 @@ data class ScannerCriteria(
          * Generate a [ScannerCriteria] instance that is compatible with the given [details] and versions that differ
          * only in the provided [versionDiff].
          */
-        fun forDetails(
-            details: ScannerDetails,
-            versionDiff: VersionDiff = VersionDiff.NONE
-        ): ScannerCriteria {
+        fun forDetails(details: ScannerDetails, versionDiff: VersionDiff = VersionDiff.NONE): ScannerCriteria {
             val minVersion = Semver(details.version)
 
             val maxVersion = when (versionDiff) {
@@ -173,8 +170,7 @@ data class ScannerCriteria(
 /**
  * Parse the given [versionStr] to a [Semver] while trying to be failure tolerant.
  */
-private fun parseVersion(versionStr: String?): Semver? =
-    versionStr?.let { Semver(normalizeVersion(it)) }
+private fun parseVersion(versionStr: String?): Semver? = versionStr?.let { Semver(normalizeVersion(it)) }
 
 /**
  * Normalize the given [versionStr] to make sure that it can be parsed to a [Semver]. The [Semver] class

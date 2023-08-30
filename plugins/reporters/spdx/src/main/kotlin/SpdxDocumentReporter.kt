@@ -62,11 +62,7 @@ class SpdxDocumentReporter : Reporter {
 
     override val type = "SpdxDocument"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val outputFileFormats = options[OPTION_OUTPUT_FILE_FORMATS]
             ?.split(',')
             ?.mapTo(mutableSetOf()) { FileFormat.valueOf(it.uppercase()) }

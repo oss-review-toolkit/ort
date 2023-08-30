@@ -48,7 +48,8 @@ data class PathExclude(
     /**
      * Return true if and only if this [PathExclude] matches the given [path].
      */
-    fun matches(path: String) = FileMatcher.match(
+    fun matches(path: String) =
+        FileMatcher.match(
         pattern = pattern.removePrefix("./"),
         path = path
     )

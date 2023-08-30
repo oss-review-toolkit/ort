@@ -37,7 +37,8 @@ class RuleTest : WordSpec() {
     private val message = "violation message"
     private val howToFix = "how to fix"
 
-    private fun createRule() = object : Rule(ruleSet, "test") {
+    private fun createRule() =
+        object : Rule(ruleSet, "test") {
         override val description = "test"
         override fun issueSource() = name
     }
@@ -102,7 +103,8 @@ class RuleTest : WordSpec() {
 
         "require" should {
             "add the expected matchers" {
-                fun matcher() = object : RuleMatcher {
+                fun matcher() =
+                    object : RuleMatcher {
                     override val description = "test"
                     override fun matches() = true
                 }

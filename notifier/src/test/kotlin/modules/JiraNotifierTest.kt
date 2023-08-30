@@ -276,8 +276,7 @@ private val ISSUE_TYPES = listOf(
     createIssueType("Improvement")
 )
 
-private fun createIssueType(name: String) =
-    IssueType(URI(""), 0L, name, false, "", URI(""))
+private fun createIssueType(name: String) = IssueType(URI(""), 0L, name, false, "", URI(""))
 
 private fun createRestClient(block: JiraRestClient.() -> Unit): JiraRestClient =
     mockk {

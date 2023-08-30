@@ -164,6 +164,7 @@ private class InvariantEnvironmentSerializer : StdSerializer<Environment>(Enviro
     }
 }
 
-private fun Map<Regex, String>.replaceIn(text: String) = entries.fold(text) { currentText, (from, to) ->
+private fun Map<Regex, String>.replaceIn(text: String) =
+    entries.fold(text) { currentText, (from, to) ->
     currentText.replace(from, to)
 }

@@ -187,7 +187,8 @@ private fun getScannedPackages(
     return result.distinct()
 }
 
-private fun createAnalyzerResult(packages: Collection<ScannedPackage>) = OrtResult.EMPTY.copy(
+private fun createAnalyzerResult(packages: Collection<ScannedPackage>) =
+    OrtResult.EMPTY.copy(
     analyzer = AnalyzerRun(
         startTime = Instant.now(),
         endTime = Instant.now(),

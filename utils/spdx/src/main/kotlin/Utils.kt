@@ -139,8 +139,7 @@ fun getLicenseTextReader(
     }
 }
 
-private fun getLicenseTextResource(id: String): URL? =
-    object {}.javaClass.getResource("/licenserefs/$id")
+private fun getLicenseTextResource(id: String): URL? = object {}.javaClass.getResource("/licenserefs/$id")
 
 private val LICENSE_REF_FILENAME_REGEX by lazy { Regex("^LicenseRef-\\w+-") }
 

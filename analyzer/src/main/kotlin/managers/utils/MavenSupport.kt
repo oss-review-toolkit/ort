@@ -401,8 +401,7 @@ class MavenSupport(private val workspaceReader: WorkspaceReader) {
     /**
      * Looks up an instance of the class provided from the Maven Plexus container.
      */
-    inline fun <reified T> containerLookup(hint: String = "default"): T =
-        container.lookup(T::class.java, hint)
+    inline fun <reified T> containerLookup(hint: String = "default"): T = container.lookup(T::class.java, hint)
 
     /**
      * Build the Maven projects defined in the provided [pomFiles] without resolving dependencies. The result can later

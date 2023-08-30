@@ -109,7 +109,8 @@ internal fun createPurl(
     version: String,
     qualifiers: Map<String, String> = emptyMap(),
     subpath: String = ""
-): String = buildString {
+): String =
+    buildString {
     append("pkg:")
     append(type)
 

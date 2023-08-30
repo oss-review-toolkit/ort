@@ -64,9 +64,7 @@ internal class FossIdUrlProvider private constructor(
          * [urlMapping] must contain a regular expression to match URLs and a replacement string, separated by
          * [MAPPING_SEPARATOR].
          */
-        fun create(
-            urlMapping: Collection<String> = emptyList()
-        ): FossIdUrlProvider {
+        fun create(urlMapping: Collection<String> = emptyList()): FossIdUrlProvider {
             val mappings = urlMapping.toRegexMapping()
             mappings.forEach {
                 logger.info { "Mapping ${it.key} -> ${it.value}." }

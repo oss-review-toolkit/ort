@@ -923,10 +923,8 @@ private class FakeProvenanceBasedStorageWriter : ProvenanceBasedScanStorageWrite
     override fun write(scanResult: ScanResult) = Unit
 }
 
-private fun createContext(
-    labels: Map<String, String> = emptyMap(),
-    type: PackageType = PackageType.PACKAGE
-) = ScanContext(labels, type)
+private fun createContext(labels: Map<String, String> = emptyMap(), type: PackageType = PackageType.PACKAGE) =
+    ScanContext(labels, type)
 
 private fun createScanner(
     provenanceDownloader: ProvenanceDownloader = FakeProvenanceDownloader(),
@@ -936,8 +934,7 @@ private fun createScanner(
     nestedProvenanceResolver: NestedProvenanceResolver = FakeNestedProvenanceResolver(),
     packageScannerWrappers: List<ScannerWrapper> = emptyList(),
     projectScannerWrappers: List<ScannerWrapper> = emptyList()
-) =
-    Scanner(
+) = Scanner(
         ScannerConfiguration(archive = FileArchiverConfiguration(enabled = false)),
         DownloaderConfiguration(),
         provenanceDownloader,
@@ -980,8 +977,7 @@ private fun createScanResult(
     licenseFindings: Set<LicenseFinding> = setOf(
         LicenseFinding("Apache-2.0", TextLocation("${scannerDetails.name}.txt", 1, 2))
     )
-) =
-    ScanResult(
+) = ScanResult(
         provenance,
         scannerDetails,
         ScanSummary.EMPTY.copy(licenseFindings = licenseFindings)
@@ -991,8 +987,7 @@ private fun createNestedScanResult(
     provenance: KnownProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
-) =
-    NestedProvenanceScanResult(
+) = NestedProvenanceScanResult(
         NestedProvenance(root = provenance, subRepositories = subRepositories),
         scanResults = mapOf(
             provenance to listOf(createScanResult(provenance, scannerDetails))
@@ -1014,8 +1009,7 @@ private fun createStoredNestedScanResult(
     provenance: KnownProvenance,
     scannerDetails: ScannerDetails,
     subRepositories: Map<String, RepositoryProvenance> = emptyMap()
-) =
-    NestedProvenanceScanResult(
+) = NestedProvenanceScanResult(
         NestedProvenance(root = provenance, subRepositories = subRepositories),
         scanResults = mapOf(
             provenance to listOf(createStoredScanResult(provenance, scannerDetails))

@@ -125,7 +125,8 @@ class VulnerableCode(name: String, config: VulnerableCodeConfiguration) : Advice
      */
     private fun VulnerableCodeService.VulnerabilityReference.toModel(
         issues: MutableList<Issue>
-    ): List<VulnerabilityReference> = runCatching {
+    ): List<VulnerabilityReference> =
+        runCatching {
         val sourceUri = URI(url)
         if (scores.isEmpty()) return listOf(VulnerabilityReference(sourceUri, null, null))
         return scores.map {

@@ -60,10 +60,7 @@ class NuGet(
 
     private val nugetConfig = options[OPTION_NUGET_CONFIG]?.let { File(it) }
 
-    override fun resolveDependencies(
-        definitionFile: File,
-        labels: Map<String, String>
-    ): List<ProjectAnalyzerResult> {
+    override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
         val result = NuGetInspector.inspect(definitionFile, nugetConfig)
 
         val project = result.toOrtProject(managerName, analysisRoot, definitionFile)

@@ -213,8 +213,7 @@ abstract class ScanResultsStorage : PackageBasedScanStorage {
         pkg: Package,
         nestedProvenance: NestedProvenance,
         scannerCriteria: ScannerCriteria
-    ): List<NestedProvenanceScanResult> =
-        read(pkg, scannerCriteria).toNestedProvenanceScanResult(nestedProvenance)
+    ): List<NestedProvenanceScanResult> = read(pkg, scannerCriteria).toNestedProvenanceScanResult(nestedProvenance)
 
     private fun Result<List<ScanResult>>.toNestedProvenanceScanResult(nestedProvenance: NestedProvenance) =
         map { scanResults ->
