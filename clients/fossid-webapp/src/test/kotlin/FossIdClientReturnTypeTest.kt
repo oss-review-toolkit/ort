@@ -40,12 +40,14 @@ import org.ossreviewtoolkit.clients.fossid.listPendingFiles
 import org.ossreviewtoolkit.clients.fossid.listScanResults
 import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.listSnippets
+import org.ossreviewtoolkit.clients.fossid.markAsIdentified
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
+import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
 
 private const val PROJECT_CODE_1 = "semver4j"
 private const val PROJECT_CODE_2 = "semver4j_2"
@@ -262,6 +264,30 @@ class FossIdClientReturnTypeTest : StringSpec({
     "When the scan to delete does not exist, no exception is thrown" {
         service.deleteScan("", "", SCAN_CODE_1).shouldNotBeNull().run {
             error shouldBe "Classes.TableRepository.row_not_found"
+        }
+    }
+
+    "A file can be marked as identified" {
+        service.markAsIdentified(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Range.java",
+            false
+        ).shouldNotBeNull().run {
+            checkResponse("mark file as identified")
+        }
+    }
+
+    "A file can be unmarked as identified" {
+        service.unmarkAsIdentified(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Range.java",
+            false
+        ).shouldNotBeNull().run {
+            checkResponse("unmark file as identified")
         }
     }
 })

@@ -451,6 +451,56 @@ suspend fun FossIdRestService.generateReport(
 }
 
 /**
+ * Mark the given file with [path] as identified for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.markAsIdentified(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    isDirectory: Boolean
+): EntityResponseBody<Nothing> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val directoryFlag = if (isDirectory) "1" else "0"
+    return markAsIdentified(
+        PostRequestBody(
+            "mark_as_identified",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf("scan_code" to scanCode, "path" to base64Path, "is_directory" to directoryFlag)
+        )
+    )
+}
+
+/**
+ * Unmark the given file with [path] as identified for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.unmarkAsIdentified(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    isDirectory: Boolean
+): EntityResponseBody<Nothing> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val directoryFlag = if (isDirectory) "1" else "0"
+    return unmarkAsIdentified(
+        PostRequestBody(
+            "unmark_as_identified",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf("scan_code" to scanCode, "path" to base64Path, "is_directory" to directoryFlag)
+        )
+    )
+}
+
+/**
  * If this string starts with [prefix], return the string without the prefix, otherwise return [missingPrefixValue].
  */
 fun String?.withoutPrefix(prefix: String, missingPrefixValue: () -> String? = { null }): String? =
