@@ -55,7 +55,7 @@ springCore = "5.3.29"
 svnkit = "1.10.11"
 sw360Client = "16.0.0-m1"
 toml4j = "0.7.2"
-wiremock = "2.35.0"
+wiremock = "3.0.0"
 xz = "1.9"
 
 [plugins]
@@ -150,7 +150,7 @@ springCore = { module = "org.springframework:spring-core", version.ref = "spring
 svnkit = { module = "org.tmatesoft.svnkit:svnkit", version.ref = "svnkit" }
 sw360Client = { module = "org.eclipse.sw360:client", version.ref = "sw360Client" }
 toml4j = { module = "com.moandjiezana.toml:toml4j", version.ref = "toml4j" }
-wiremock = { module = "com.github.tomakehurst:wiremock-jre8", version.ref = "wiremock" }
+wiremock = { module = "com.github.tomakehurst:wiremock", version.ref = "wiremock" }
 xz = { module = "org.tukaani:xz", version.ref = "xz" }
 
 [bundles]
