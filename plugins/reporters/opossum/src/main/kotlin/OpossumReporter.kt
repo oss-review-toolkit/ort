@@ -96,7 +96,8 @@ class OpossumReporter : Reporter {
         val excludeFromNotice: Boolean = false,
         val uuid: UUID = UUID.randomUUID()
     ) {
-        fun toJson(): Map<*, *> = sortedMapOf(
+        fun toJson(): Map<*, *> =
+            sortedMapOf(
             uuid.toString() to sortedMapOf(
                 "source" to sortedMapOf(
                     "name" to source,
@@ -176,7 +177,8 @@ class OpossumReporter : Reporter {
         val fullName: String?,
         val defaultText: String?
     ) : Comparable<OpossumFrequentLicense> {
-        fun toJson(): Map<*, *> = sortedMapOf(
+        fun toJson(): Map<*, *> =
+            sortedMapOf(
             "shortName" to shortName,
             "fullName" to fullName,
             "defaultText" to defaultText
@@ -306,12 +308,7 @@ class OpossumReporter : Reporter {
             )
         }
 
-        private fun addDependency(
-            dependency: DependencyNode,
-            ortResult: OrtResult,
-            relRoot: String,
-            level: Int = 1
-        ) {
+        private fun addDependency(dependency: DependencyNode, ortResult: OrtResult, relRoot: String, level: Int = 1) {
             val dependencyId = dependency.id
 
             logger.debug { "$relRoot - ${dependencyId.toCoordinates()} - Dependency" }
@@ -344,11 +341,7 @@ class OpossumReporter : Reporter {
             }
         }
 
-        fun addProject(
-            project: Project,
-            ortResult: OrtResult,
-            relRoot: String = "/"
-        ) {
+        fun addProject(project: Project, ortResult: OrtResult, relRoot: String = "/") {
             val projectId = project.id
             val definitionFilePath = resolvePath(relRoot, project.definitionFilePath)
             logger.debug { "$definitionFilePath - $projectId - Project" }
@@ -505,10 +498,7 @@ class OpossumReporter : Reporter {
         jsonFile.delete()
     }
 
-    internal fun generateOpossumInput(
-        ortResult: OrtResult,
-        maxDepth: Int = Int.MAX_VALUE
-    ): OpossumInput {
+    internal fun generateOpossumInput(ortResult: OrtResult, maxDepth: Int = Int.MAX_VALUE): OpossumInput {
         val opossumInput = OpossumInput()
 
         opossumInput.addBaseUrl("/", ortResult.repository.vcs)
@@ -545,11 +535,7 @@ class OpossumReporter : Reporter {
         return opossumInput
     }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val maxDepth = options.getOrDefault(OPTION_SCANNER_MAX_DEPTH, "3").toInt()
         val opossumInput = generateOpossumInput(input.ortResult, maxDepth)
         val outputFile = outputDir.resolve("report.opossum")

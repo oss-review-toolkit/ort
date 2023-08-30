@@ -232,11 +232,8 @@ class FossId internal constructor(
     /**
      * Create a [ScanSummary] containing a single [issue], started at [startTime] and finished at [endTime].
      */
-    private fun createSingleIssueSummary(
-        startTime: Instant,
-        endTime: Instant = Instant.now(),
-        issue: Issue
-    ) = ScanSummary.EMPTY.copy(
+    private fun createSingleIssueSummary(startTime: Instant, endTime: Instant = Instant.now(), issue: Issue) =
+        ScanSummary.EMPTY.copy(
         startTime = startTime,
         endTime = endTime,
         issues = listOf(issue)

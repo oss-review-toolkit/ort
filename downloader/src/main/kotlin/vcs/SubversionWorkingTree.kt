@@ -89,6 +89,5 @@ class SubversionWorkingTree(
         return refs
     }
 
-    private fun doSvnInfo() =
-        runCatching { clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING) }.getOrNull()
+    private fun doSvnInfo() = runCatching { clientManager.wcClient.doInfo(workingDir, SVNRevision.WORKING) }.getOrNull()
 }

@@ -50,8 +50,7 @@ open class DirPackageConfigurationProviderFactory :
     PackageConfigurationProviderFactory<DirPackageConfigurationProviderConfig> {
     override val type = "Dir"
 
-    override fun create(config: DirPackageConfigurationProviderConfig) =
-        DirPackageConfigurationProvider(config)
+    override fun create(config: DirPackageConfigurationProviderConfig) = DirPackageConfigurationProvider(config)
 
     override fun parseConfig(config: Map<String, String>) =
         DirPackageConfigurationProviderConfig(

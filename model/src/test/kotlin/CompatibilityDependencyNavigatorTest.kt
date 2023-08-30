@@ -241,11 +241,7 @@ private fun createOrtResult(vararg projects: Project): OrtResult =
  * Create a [Project] with an identifier derived from the given [name] that has the dependency information passed as
  * [scopes] or [scopeNames].
  */
-private fun createProject(
-    name: String,
-    scopes: Set<Scope>? = null,
-    scopeNames: Set<String>? = null
-): Project {
+private fun createProject(name: String, scopes: Set<Scope>? = null, scopeNames: Set<String>? = null): Project {
     val id = Identifier.EMPTY.copy(name = name)
     return Project.EMPTY.copy(id = id, scopeDependencies = scopes, scopeNames = scopeNames)
 }

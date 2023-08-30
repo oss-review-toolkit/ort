@@ -33,6 +33,9 @@ formatting:
     active: false
   FinalNewline:
     active: false
+  FunctionSignature:
+    active: true
+    functionBodyExpressionWrapping: multiline
   ImportOrdering:
     active: false
   Indentation:

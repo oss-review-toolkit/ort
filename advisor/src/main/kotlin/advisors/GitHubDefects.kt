@@ -229,7 +229,8 @@ class GitHubDefects(name: String, config: GitHubDefectsConfiguration) : AdvicePr
     /**
      * Return a filtered list of [Issue]s according to the label filters defined in the configuration.
      */
-    private fun List<GitHubIssue>.applyLabelFilters(): List<GitHubIssue> = filter { issue ->
+    private fun List<GitHubIssue>.applyLabelFilters(): List<GitHubIssue> =
+        filter { issue ->
         val labels = issue.labels()
         labelFilters.find { it.matches(labels) }?.including ?: false
     }

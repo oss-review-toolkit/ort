@@ -34,7 +34,8 @@ interface Plugin {
         /**
          * Return instances for all ORT plugins of type [T].
          */
-        inline fun <reified T : Plugin> getAll() = getLoaderFor<T>()
+        inline fun <reified T : Plugin> getAll() =
+            getLoaderFor<T>()
             .iterator()
             .asSequence()
             .associateByTo(sortedMapOf(String.CASE_INSENSITIVE_ORDER)) {

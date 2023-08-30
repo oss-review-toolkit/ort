@@ -156,7 +156,10 @@ class Composer(
     }
 
     private fun parseScope(
-        scopeName: String, manifest: JsonNode, lockFile: JsonNode, packages: Map<String, Package>,
+        scopeName: String,
+        manifest: JsonNode,
+        lockFile: JsonNode,
+        packages: Map<String, Package>,
         virtualPackages: Set<String>
     ): Scope {
         val requiredPackages = manifest[scopeName].fieldNamesOrEmpty().asSequence()

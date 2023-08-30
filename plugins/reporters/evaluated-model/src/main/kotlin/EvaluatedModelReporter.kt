@@ -42,11 +42,7 @@ class EvaluatedModelReporter : Reporter {
 
     override val type = "EvaluatedModel"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
 
         val outputFiles = mutableListOf<File>()

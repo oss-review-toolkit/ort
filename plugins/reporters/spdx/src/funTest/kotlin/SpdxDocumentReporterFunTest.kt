@@ -140,7 +140,8 @@ private fun TestConfiguration.generateReport(
         .normalizeLineBreaks()
 }
 
-private fun SpdxDocument.getCustomReplacements() = mapOf(
+private fun SpdxDocument.getCustomReplacements() =
+    mapOf(
     "<REPLACE_LICENSE_LIST_VERSION>" to SpdxLicense.LICENSE_LIST_VERSION.substringBefore("-"),
     "<REPLACE_ORT_VERSION>" to Environment.ORT_VERSION,
     "<REPLACE_CREATION_DATE_AND_TIME>" to creationInfo.created.toString(),

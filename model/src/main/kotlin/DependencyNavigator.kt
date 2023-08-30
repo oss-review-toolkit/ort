@@ -160,8 +160,7 @@ interface DependencyNavigator {
         project: Project,
         maxDepth: Int = -1,
         matcher: DependencyMatcher = MATCH_ALL
-    ): Set<Identifier> =
-        scopeDependencies(project, maxDepth, matcher).collectDependencies()
+    ): Set<Identifier> = scopeDependencies(project, maxDepth, matcher).collectDependencies()
 
     /**
      * Return the depth of the dependency tree rooted at the given [project] associated with this [scopeName]. If the
@@ -180,10 +179,7 @@ interface DependencyNavigator {
      * Determine the map of the shortest paths for all the dependencies of a [project], given its map of
      * [scopeDependencies].
      */
-    private fun getShortestPathForScope(
-        project: Project,
-        scope: String
-    ): Map<Identifier, List<Identifier>> =
+    private fun getShortestPathForScope(project: Project, scope: String): Map<Identifier, List<Identifier>> =
         getShortestPathsForScope(directDependencies(project, scope), dependenciesForScope(project, scope))
 
     /**

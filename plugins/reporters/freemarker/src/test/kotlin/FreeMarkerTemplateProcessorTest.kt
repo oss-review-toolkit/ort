@@ -74,10 +74,7 @@ import org.ossreviewtoolkit.utils.spdx.toSpdx
 import org.ossreviewtoolkit.utils.test.advisorRunOf
 import org.ossreviewtoolkit.utils.test.scannerRunOf
 
-private fun scanResults(
-    vcsInfo: VcsInfo,
-    findingsPaths: Collection<String>
-): List<ScanResult> {
+private fun scanResults(vcsInfo: VcsInfo, findingsPaths: Collection<String>): List<ScanResult> {
     val licenseFindings = findingsPaths.mapTo(mutableSetOf()) { LicenseFinding("MIT", TextLocation(it, 1)) }
     val copyrightFindings = findingsPaths.mapTo(mutableSetOf()) { CopyrightFinding("(c)", TextLocation(it, 1)) }
 

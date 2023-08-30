@@ -225,8 +225,7 @@ class Stack(
         return listOf(ProjectAnalyzerResult(project, dependencyPackageMap.values.toSet()))
     }
 
-    private fun getPackageUrl(name: String, version: String) =
-        "https://hackage.haskell.org/package/$name-$version"
+    private fun getPackageUrl(name: String, version: String) = "https://hackage.haskell.org/package/$name-$version"
 
     private fun downloadCabalFile(pkgId: Identifier): String? {
         val url = "${getPackageUrl(pkgId.name, pkgId.version)}/src/${pkgId.name}.cabal"
@@ -237,8 +236,7 @@ class Stack(
     }
 
     private fun parseKeyValue(i: ListIterator<String>, keyPrefix: String = ""): Map<String, String> {
-        fun getIndentation(line: String) =
-            line.takeWhile { it.isWhitespace() }.length
+        fun getIndentation(line: String) = line.takeWhile { it.isWhitespace() }.length
 
         var indentation: Int? = null
         val map = mutableMapOf<String, String>()

@@ -59,8 +59,7 @@ internal class OrtModelBuilder : ToolingModelBuilder {
     private val errors = mutableListOf<String>()
     private val warnings = mutableListOf<String>()
 
-    override fun canBuild(modelName: String): Boolean =
-        modelName == OrtDependencyTreeModel::class.java.name
+    override fun canBuild(modelName: String): Boolean = modelName == OrtDependencyTreeModel::class.java.name
 
     override fun buildAll(modelName: String, project: Project): OrtDependencyTreeModel {
         repositories = project.repositories.associate { it.name to (it as? UrlArtifactRepository)?.url?.toString() }

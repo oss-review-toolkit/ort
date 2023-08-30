@@ -201,8 +201,7 @@ internal class ScanController(
     /**
      * Return the nested provenance resolution issues associated with the given [provenance].
      */
-    fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? =
-        nestedProvenanceResolutionIssues[id]
+    fun getNestedProvenanceResolutionIssue(id: Identifier): Issue? = nestedProvenanceResolutionIssues[id]
 
     /**
      * Get the [NestedProvenance] for the provided [id], or null if no nested provenance for the [id] is available.

@@ -40,11 +40,7 @@ import org.ossreviewtoolkit.utils.spdx.SpdxExpression
  * Generate a summary from the given SCANOSS [result], using [startTime], [endTime] as metadata. This variant can be
  * used if the result is not read from a local file.
  */
-internal fun generateSummary(
-    startTime: Instant,
-    endTime: Instant,
-    result: FullScanResponse
-): ScanSummary {
+internal fun generateSummary(startTime: Instant, endTime: Instant, result: FullScanResponse): ScanSummary {
     val licenseFindings = mutableSetOf<LicenseFinding>()
     val copyrightFindings = mutableSetOf<CopyrightFinding>()
     val snippetFindings = mutableSetOf<SnippetFinding>()

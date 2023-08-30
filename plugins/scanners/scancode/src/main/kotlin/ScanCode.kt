@@ -175,10 +175,8 @@ class ScanCode internal constructor(
     /**
      * Execute ScanCode with the configured arguments to scan the given [path] and produce [resultFile].
      */
-    internal fun runScanCode(
-        path: File,
-        resultFile: File
-    ) = ProcessCapture(
+    internal fun runScanCode(path: File, resultFile: File) =
+        ProcessCapture(
         command(),
         *commandLineOptions.toTypedArray(),
         path.absolutePath,

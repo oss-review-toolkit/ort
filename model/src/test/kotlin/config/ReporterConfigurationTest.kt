@@ -46,5 +46,4 @@ private fun loadReporterConfig(): ReporterConfiguration =
  * Perform a serialization round-trip of the given reporter [config] and return the result. This is used to check
  * whether serialization and deserialization of reporter configurations work as expected.
  */
-private fun rereadReporterConfig(config: ReporterConfiguration): ReporterConfiguration =
-    config.toYaml().fromYaml()
+private fun rereadReporterConfig(config: ReporterConfiguration): ReporterConfiguration = config.toYaml().fromYaml()

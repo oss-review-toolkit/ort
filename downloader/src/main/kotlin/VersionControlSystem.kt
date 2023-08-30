@@ -59,7 +59,8 @@ abstract class VersionControlSystem(
         /**
          * Return the applicable VCS for the given [vcsType], or null if none is applicable.
          */
-        fun forType(vcsType: VcsType) = ALL.find {
+        fun forType(vcsType: VcsType) =
+            ALL.find {
             it.isAvailable() && it.isApplicableType(vcsType)
         }
 

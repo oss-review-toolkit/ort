@@ -40,9 +40,5 @@ interface Reporter : Plugin {
      * [input] data is used depends on the specific reporter implementation, taking into account any format-specific
      * [options]. The list of generated report files is returned.
      */
-    fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String> = emptyMap()
-    ): List<File>
+    fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String> = emptyMap()): List<File>
 }

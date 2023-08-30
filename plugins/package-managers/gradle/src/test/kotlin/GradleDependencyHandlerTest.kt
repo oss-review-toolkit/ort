@@ -407,10 +407,7 @@ private fun OrtDependency.toId() = Identifier(type(), groupId, artifactId, versi
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].
  */
-private fun scopeDependencies(
-    scopes: Set<Scope>,
-    scopeName: String
-): Set<PackageReference> =
+private fun scopeDependencies(scopes: Set<Scope>, scopeName: String): Set<PackageReference> =
     scopes.find { it.name == scopeName }?.dependencies.orEmpty()
 
 /**

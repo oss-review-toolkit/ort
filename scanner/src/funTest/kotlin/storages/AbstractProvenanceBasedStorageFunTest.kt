@@ -220,8 +220,7 @@ private fun createScanResult(
     provenance: Provenance = createKnownProvenance(),
     scannerDetails: ScannerDetails = createScannerDetails(),
     license: String = "Apache-2.0"
-) =
-    ScanResult(
+) = ScanResult(
         provenance,
         scannerDetails,
         ScanSummary.EMPTY.copy(

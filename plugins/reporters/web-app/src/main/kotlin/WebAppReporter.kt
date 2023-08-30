@@ -49,11 +49,7 @@ class WebAppReporter : Reporter {
 
     private val reportFilename = "scan-report-web-app.html"
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val template = javaClass.getResource("/scan-report-template.html").readText()
         val evaluatedModel = EvaluatedModel.create(input, options[OPTION_DEDUPLICATE_DEPENDENCY_TREE].toBoolean())
 

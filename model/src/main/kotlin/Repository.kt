@@ -69,8 +69,7 @@ data class Repository(
      * in [nestedRepositories].
      */
     fun getRelativePath(vcs: VcsInfo): String? {
-        fun VcsInfo.matches(other: VcsInfo) =
-            type == other.type && url == other.url && revision == other.revision
+        fun VcsInfo.matches(other: VcsInfo) = type == other.type && url == other.url && revision == other.revision
 
         val normalizedVcs = vcs.normalize()
 

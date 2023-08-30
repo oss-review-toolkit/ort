@@ -111,10 +111,7 @@ internal fun <T : Summarizable> List<T>.mapSummary(
 /**
  * Map the raw snippets to ORT [SnippetFinding]s. If a snippet license cannot be parsed, an issues is added to [issues].
  */
-internal fun mapSnippetFindings(
-    rawResults: RawResults,
-    issues: MutableList<Issue>
-): Set<SnippetFinding> {
+internal fun mapSnippetFindings(rawResults: RawResults, issues: MutableList<Issue>): Set<SnippetFinding> {
     return rawResults.listSnippets.flatMap { (file, rawSnippets) ->
         rawSnippets.map { snippet ->
             val license = snippet.artifactLicense?.let {

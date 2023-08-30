@@ -242,8 +242,7 @@ fun OkHttpClient.execute(request: Request): Response =
 /**
  * Asynchronously enqueue a [request] using the client and await its response.
  */
-suspend fun OkHttpClient.await(request: Request): Response =
-    newCall(request).await()
+suspend fun OkHttpClient.await(request: Request): Response = newCall(request).await()
 
 /**
  * Asynchronously enqueue the [Call]'s request and await its [Response].

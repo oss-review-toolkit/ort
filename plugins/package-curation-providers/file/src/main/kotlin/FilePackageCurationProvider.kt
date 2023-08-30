@@ -50,8 +50,7 @@ class FilePackageCurationProviderConfig(
 open class FilePackageCurationProviderFactory : PackageCurationProviderFactory<FilePackageCurationProviderConfig> {
     override val type = "File"
 
-    override fun create(config: FilePackageCurationProviderConfig) =
-        FilePackageCurationProvider(config)
+    override fun create(config: FilePackageCurationProviderConfig) = FilePackageCurationProvider(config)
 
     override fun parseConfig(config: Map<String, String>) =
         FilePackageCurationProviderConfig(

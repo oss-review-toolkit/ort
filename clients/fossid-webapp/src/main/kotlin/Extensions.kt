@@ -120,8 +120,7 @@ suspend fun FossIdRestService.createProject(
     projectCode: String,
     projectName: String,
     comment: String = "Created by ORT"
-) =
-    createProject(
+) = createProject(
         PostRequestBody(
             "create",
             PROJECT_GROUP,
@@ -371,8 +370,7 @@ suspend fun FossIdRestService.createIgnoreRule(
     type: RuleType,
     value: String,
     scope: RuleScope
-) =
-    createIgnoreRule(
+) = createIgnoreRule(
         PostRequestBody(
             "ignore_rules_add",
             SCAN_GROUP,

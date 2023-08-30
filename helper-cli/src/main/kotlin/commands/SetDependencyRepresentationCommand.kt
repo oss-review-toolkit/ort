@@ -64,8 +64,7 @@ internal class SetDependencyRepresentationCommand : CliktCommand(
     enum class TargetFormat {
         /** The dependency graph format. */
         GRAPH {
-            override fun convert(result: AnalyzerResult): AnalyzerResult =
-                DependencyGraphConverter.convert(result)
+            override fun convert(result: AnalyzerResult): AnalyzerResult = DependencyGraphConverter.convert(result)
         },
 
         /** The classic dependency tree format. */

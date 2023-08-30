@@ -83,8 +83,7 @@ fun File.unpack(
     targetDirectory: File,
     forceArchiveType: ArchiveType = ArchiveType.NONE,
     filter: (ArchiveEntry) -> Boolean = { true }
-) =
-    when (forceArchiveType.takeUnless { it == ArchiveType.NONE } ?: ArchiveType.getType(name)) {
+) = when (forceArchiveType.takeUnless { it == ArchiveType.NONE } ?: ArchiveType.getType(name)) {
         ArchiveType.SEVENZIP -> unpack7Zip(targetDirectory, filter)
         ArchiveType.ZIP -> unpackZip(targetDirectory, filter)
 
@@ -273,8 +272,7 @@ private fun ArchiveInputStream.unpack(
     targetDirectory: File,
     shouldSkip: (ArchiveEntry) -> Boolean,
     mode: (ArchiveEntry) -> Int
-) =
-    use { input ->
+) = use { input ->
         val canonicalTargetDirectory = targetDirectory.canonicalFile
         var processed = false
 

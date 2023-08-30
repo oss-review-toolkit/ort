@@ -39,9 +39,7 @@ class OsvService(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
     /**
      * Get the vulnerabilities for the package matching the given [request].
      */
-    fun getVulnerabilitiesForPackage(
-        request: VulnerabilitiesForPackageRequest
-    ): Result<List<Vulnerability>> {
+    fun getVulnerabilitiesForPackage(request: VulnerabilitiesForPackageRequest): Result<List<Vulnerability>> {
         val response = client.getVulnerabilitiesForPackage(request).execute()
         val body = response.body()
 
@@ -55,9 +53,7 @@ class OsvService(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
     /**
      * Return the vulnerability IDs for the respective package matched by the given [requests].
      */
-    fun getVulnerabilityIdsForPackages(
-        requests: List<VulnerabilitiesForPackageRequest>
-    ): Result<List<List<String>>> {
+    fun getVulnerabilityIdsForPackages(requests: List<VulnerabilitiesForPackageRequest>): Result<List<List<String>>> {
         if (requests.isEmpty()) return Result.success(emptyList())
 
         val result = mutableListOf<MutableList<String>>()

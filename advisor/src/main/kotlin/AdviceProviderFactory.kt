@@ -59,8 +59,7 @@ abstract class AbstractAdviceProviderFactory<out T : AdviceProvider>(
      * Return a map with options for the [AdviceProvider] managed by this factory or an empty map if no options are
      * available.
      */
-    protected fun AdvisorConfiguration.providerOptions(): Options =
-        options.orEmpty()[type].orEmpty()
+    protected fun AdvisorConfiguration.providerOptions(): Options = options.orEmpty()[type].orEmpty()
 
     /**
      * Return the provider's name here to allow Clikt to display something meaningful when listing the advisors which

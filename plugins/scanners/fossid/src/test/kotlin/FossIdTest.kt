@@ -1260,8 +1260,7 @@ private fun createVcsInfo(
     type: VcsType = VcsType.GIT,
     path: String = "",
     revision: String = REVISION
-): VcsInfo =
-    VcsInfo(type = type, path = path, revision = revision, url = "https://github.com/test/$projectName.git")
+): VcsInfo = VcsInfo(type = type, path = path, revision = revision, url = "https://github.com/test/$projectName.git")
 
 /**
  * Create a test [Identifier] with properties derived from the given [index].
@@ -1380,7 +1379,8 @@ private fun createPendingFile(index: Int): String = "/pending/file/$index"
 /**
  * Generate a FossID snippet based on the given [index].
  */
-private fun createSnippet(index: Int): Snippet = Snippet(
+private fun createSnippet(index: Int): Snippet =
+    Snippet(
     index,
     "created$index",
     index,
@@ -1412,7 +1412,8 @@ private fun createSnippet(index: Int): Snippet = Snippet(
 /**
  * Generate a ORT snippet finding based on the given [index].
  */
-private fun createSnippetFindings(index: Int): Set<SnippetFinding> = (1..5).map { snippetIndex ->
+private fun createSnippetFindings(index: Int): Set<SnippetFinding> =
+    (1..5).map { snippetIndex ->
     SnippetFinding(
         TextLocation("/pending/file/$index", TextLocation.UNKNOWN_LINE),
         OrtSnippet(
@@ -1471,7 +1472,8 @@ private fun FossIdServiceWithVersion.expectListScans(projectCode: String, scans:
  * Prepare this service mock to return the list of [rules] for the given [scanCode].
  */
 private fun FossIdServiceWithVersion.expectListIgnoreRules(
-    scanCode: String, rules: List<IgnoreRule>
+    scanCode: String,
+    rules: List<IgnoreRule>
 ): FossIdServiceWithVersion {
     coEvery { listIgnoreRules(USER, API_KEY, scanCode) } returns
             PolymorphicResponseBody(status = 1, data = PolymorphicList(rules))

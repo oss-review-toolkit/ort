@@ -125,8 +125,7 @@ class ClearlyDefinedPackageCurationProviderFunTest : WordSpec({
     }
 })
 
-private fun createPackagesFromIds(vararg ids: String) =
-    ids.map { Package.EMPTY.copy(id = Identifier(it)) }
+private fun createPackagesFromIds(vararg ids: String) = ids.map { Package.EMPTY.copy(id = Identifier(it)) }
 
 private suspend fun <T> withRetry(f: suspend () -> T): T =
     retry(

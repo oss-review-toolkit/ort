@@ -135,11 +135,7 @@ class CycloneDxReporter : Reporter {
             }
         }
 
-    override fun generateReport(
-        input: ReporterInput,
-        outputDir: File,
-        options: Map<String, String>
-    ): List<File> {
+    override fun generateReport(input: ReporterInput, outputDir: File, options: Map<String, String>): List<File> {
         val outputFiles = mutableListOf<File>()
 
         val projects = input.ortResult.getProjects(omitExcluded = true).sortedBy { it.id }

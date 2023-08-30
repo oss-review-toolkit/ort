@@ -255,8 +255,7 @@ open class PackageRule(
         /**
          * Add a [hint][Severity.HINT] to the list of [violations].
          */
-        fun hint(message: String, howToFix: String) =
-            hint(pkg.metadata.id, license, licenseSource, message, howToFix)
+        fun hint(message: String, howToFix: String) = hint(pkg.metadata.id, license, licenseSource, message, howToFix)
 
         /**
          * Add a [warning][Severity.WARNING] to the list of [violations].
@@ -267,7 +266,6 @@ open class PackageRule(
         /**
          * Add an [error][Severity.ERROR] to the list of [violations].
          */
-        fun error(message: String, howToFix: String) =
-            error(pkg.metadata.id, license, licenseSource, message, howToFix)
+        fun error(message: String, howToFix: String) = error(pkg.metadata.id, license, licenseSource, message, howToFix)
     }
 }

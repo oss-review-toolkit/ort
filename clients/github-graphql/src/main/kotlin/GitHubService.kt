@@ -111,7 +111,8 @@ class GitHubService private constructor(
         owner: String,
         repository: String,
         paging: Paging = Paging.INITIAL
-    ): QueryResult<Release> = runCatching {
+    ): QueryResult<Release> =
+        runCatching {
         val query = ReleasesQuery(ReleasesQuery.Variables(owner, repository, paging.pageSize, paging.cursor))
         val result = client.executeAndCheck(query)
 

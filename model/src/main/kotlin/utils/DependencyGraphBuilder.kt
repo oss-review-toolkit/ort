@@ -417,7 +417,9 @@ class DependencyGraphBuilder<D>(
      * The scope mapping records all the direct dependencies of scopes.
      */
     private fun updateScopeMapping(
-        scopeName: String, ref: DependencyReference?, transitive: Boolean
+        scopeName: String,
+        ref: DependencyReference?,
+        transitive: Boolean
     ): DependencyReference? {
         if (!transitive && ref != null) {
             val index = RootDependencyIndex(ref.pkg, ref.fragment)

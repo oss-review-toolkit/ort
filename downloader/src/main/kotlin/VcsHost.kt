@@ -338,8 +338,8 @@ enum class VcsHost(
             val unknownVcsInfo = VcsInfo.EMPTY.copy(url = projectUrl)
             val projectUri = projectUrl.toUri().getOrElse { return unknownVcsInfo }
 
-            fun URI.isTfsGitUrl() = path != null && host != null &&
-                    ("/tfs/" in path || ".visualstudio.com" in host) && "/_git/" in path
+            fun URI.isTfsGitUrl() =
+                path != null && host != null && ("/tfs/" in path || ".visualstudio.com" in host) && "/_git/" in path
 
             // Fall back to generic URL detection for unknown VCS hosts.
             val svnBranchOrTagMatch = SVN_BRANCH_OR_TAG_PATTERN.matchEntire(projectUrl)
@@ -587,8 +587,13 @@ private fun gitProjectUrlToVcsInfo(projectUrl: URI, pathParser: (String, Iterato
 }
 
 private fun toGitPermalink(
-    vcsUrl: URI, revision: String, path: String, startLine: Int, endLine: Int,
-    startLineMarker: String, endLineMarker: String
+    vcsUrl: URI,
+    revision: String,
+    path: String,
+    startLine: Int,
+    endLine: Int,
+    startLineMarker: String,
+    endLineMarker: String
 ): String {
     var permalink = "https://${vcsUrl.host}${vcsUrl.path.removeSuffix(".git")}"
 

@@ -42,8 +42,7 @@ data class CopyrightGarbage(
     /**
      * Return whether the [statement] is garbage.
      */
-    operator fun contains(statement: String): Boolean =
-        statement in items || regexes.any { it.matches(statement) }
+    operator fun contains(statement: String): Boolean = statement in items || regexes.any { it.matches(statement) }
 }
 
 fun CopyrightGarbage?.orEmpty(): CopyrightGarbage = this ?: CopyrightGarbage()

@@ -29,7 +29,8 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
          * Construct a new instance of [FossIdServiceWithVersion] for given [delegate]. The implementation matching
          * FossID version will be instantiated and returned.
          */
-        fun instance(delegate: FossIdRestService): FossIdServiceWithVersion = runBlocking {
+        fun instance(delegate: FossIdRestService): FossIdServiceWithVersion =
+            runBlocking {
             val version = delegate.getFossIdVersion().orEmpty()
 
             when {

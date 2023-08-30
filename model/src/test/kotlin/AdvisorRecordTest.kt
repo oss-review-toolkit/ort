@@ -308,8 +308,7 @@ private fun createVulnerability(
 /**
  * Construct a [Defect] based on the given [id].
  */
-private fun createDefect(id: String): Defect =
-    Defect(id, URI("https://defects.example.org/$id"), "Defect $id")
+private fun createDefect(id: String): Defect = Defect(id, URI("https://defects.example.org/$id"), "Defect $id")
 
 /**
  * Create an [AdvisorResult] for an advisor with the given [advisorIndex] which has the given [capability], with the

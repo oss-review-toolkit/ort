@@ -29,11 +29,9 @@ import org.ossreviewtoolkit.model.RepositoryProvenance
 import org.ossreviewtoolkit.model.TextLocation
 import org.ossreviewtoolkit.model.VcsInfo
 
-fun String.prependPath(prefix: String): String =
-    if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
+fun String.prependPath(prefix: String): String = if (prefix.isBlank()) this else "${prefix.removeSuffix("/")}/$this"
 
-fun TextLocation.prependedPath(prefix: String): String =
-    path.prependPath(prefix)
+fun TextLocation.prependedPath(prefix: String): String = path.prependPath(prefix)
 
 fun TextLocation.prependPath(prefix: String): TextLocation =
     if (prefix.isEmpty()) this else copy(path = path.prependPath(prefix))

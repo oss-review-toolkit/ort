@@ -47,9 +47,8 @@ fun <T, U> transformingCollectionMatcher(
 /**
  * A helper function to create custom matchers that assert that the collection obtained by [transform] is empty.
  */
-fun <T, U> transformingCollectionEmptyMatcher(
-    transform: (T) -> Collection<U>
-): Matcher<T?> = neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
+fun <T, U> transformingCollectionEmptyMatcher(transform: (T) -> Collection<U>): Matcher<T?> =
+    neverNullMatcher { value -> beEmpty<U>().test(transform(value)) }
 
 /**
  * A matcher for comparing to expected result files, in particular serialized [ProjectAnalyzerResult]s and [OrtResult]s,

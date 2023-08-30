@@ -99,8 +99,7 @@ data class ScanSummary(
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath [path]. Findings which
      * [RootLicenseMatcher] assigns as root license files for [path] are also kept.
      */
-    fun filterByPath(path: String): ScanSummary =
-        filterByPaths(listOf(path))
+    fun filterByPath(path: String): ScanSummary = filterByPaths(listOf(path))
 
     /**
      * Filter all detected licenses and copyrights from this [ScanSummary] which are underneath the given [paths].
@@ -115,7 +114,8 @@ data class ScanSummary(
             directories = paths
         ).values.flatten().mapTo(mutableSetOf()) { it.location.path }
 
-        fun TextLocation.matchesPaths() = paths.any { filterPath ->
+        fun TextLocation.matchesPaths() =
+            paths.any { filterPath ->
             this.path.startsWith("$filterPath/") || this.path in applicableLicenseFiles
         }
 

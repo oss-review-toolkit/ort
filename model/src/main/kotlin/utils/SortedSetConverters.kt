@@ -76,8 +76,7 @@ class ProvenanceResolutionResultSortedSetConverter :
 }
 
 class ScannersMapConverter : StdConverter<Map<Identifier, Set<String>>, Map<Identifier, Set<String>>>() {
-    override fun convert(value: Map<Identifier, Set<String>>) =
-        value.mapValues { it.value.toSortedSet() }.toSortedMap()
+    override fun convert(value: Map<Identifier, Set<String>>) = value.mapValues { it.value.toSortedSet() }.toSortedMap()
 }
 
 /** Do not convert to SortedSet in order to not require a comparator consistent with equals */

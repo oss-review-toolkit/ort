@@ -54,7 +54,8 @@ class RuleViolationResolutionTest : WordSpec({
     }
 })
 
-private fun resolution(message: String) = RuleViolationResolution(
+private fun resolution(message: String) =
+    RuleViolationResolution(
     message = message,
     reason = RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
     comment = ""
