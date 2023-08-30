@@ -34,7 +34,7 @@ class HttpFileStorageConfigurationTest : StringSpec({
             headers:
               key1: "***"
               key2: "***"
-            """.trimIndent()
+        """.trimIndent()
     }
 
     "Query string should be masked in serialization" {
@@ -44,6 +44,6 @@ class HttpFileStorageConfigurationTest : StringSpec({
             ---
             url: "url"
             query: "***"
-            """.trimIndent()
+        """.trimIndent()
     }
 })

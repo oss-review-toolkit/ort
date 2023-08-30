@@ -103,7 +103,7 @@ object ReportTableModelMapper {
                     scanIssues = scanIssues.map { it.toResolvableIssue(resolutionProvider, howToFixTextProvider) }
                 ).also { row ->
                     val isRowExcluded = pathExcludes.isNotEmpty()
-                            || (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
+                        || (row.scopes.isNotEmpty() && row.scopes.all { it.value.isNotEmpty() })
 
                     val nonExcludedAnalyzerIssues = if (isRowExcluded) emptyList() else row.analyzerIssues
                     val nonExcludedScanIssues = if (isRowExcluded) emptyList() else row.scanIssues

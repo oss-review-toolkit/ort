@@ -302,7 +302,7 @@ class Scanner(
                             Issue(
                                 source = TOOL_NAME,
                                 message = "Could not resolve nested provenance for package " +
-                                        "'${id.toCoordinates()}': ${it.collectMessages()}"
+                                    "'${id.toCoordinates()}': ${it.collectMessages()}"
                             )
                         )
                     }
@@ -328,7 +328,7 @@ class Scanner(
                     if (!hasNestedProvenance) {
                         logger.debug {
                             "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
-                                    "no nested provenance for the package could be resolved."
+                                "no nested provenance for the package could be resolved."
                         }
                     }
 
@@ -336,7 +336,7 @@ class Scanner(
                     if (hasCompleteScanResult) {
                         logger.debug {
                             "Skipping scan of '${pkg.id.toCoordinates()}' with package scanner '${scanner.name}' as " +
-                                    "stored results are available."
+                                "stored results are available."
                         }
                     }
 
@@ -365,7 +365,7 @@ class Scanner(
                         val packageIds = packagesWithIncompleteScanResult.drop(1)
                             .joinToString("\n") { "\t${it.id.toCoordinates()}" }
                         "Scanning package '${referencePackage.id.toCoordinates()}' as reference for these packages " +
-                                "with the same provenance:\n$packageIds"
+                            "with the same provenance:\n$packageIds"
                     }
                 }
 
@@ -407,7 +407,7 @@ class Scanner(
                 if (controller.hasScanResult(scanner, provenance)) {
                     logger.debug {
                         "Skipping $provenance scan (${index + 1} of ${provenances.size}) with provenance scanner " +
-                                "'${scanner.name}' as a result is already available."
+                            "'${scanner.name}' as a result is already available."
                     }
 
                     return@scanner
@@ -415,7 +415,7 @@ class Scanner(
 
                 logger.info {
                     "Scanning $provenance (${index + 1} of ${provenances.size}) with provenance scanner " +
-                            "'${scanner.name}'."
+                        "'${scanner.name}'."
                 }
 
                 // Filter the scan context to hide the excludes from scanner with scan criteria.
@@ -498,7 +498,7 @@ class Scanner(
     private fun readStoredResults(controller: ScanController) {
         logger.info {
             "Reading stored scan results for ${controller.getPackageProvenancesWithoutVcsPath().size} package(s) " +
-                    "with ${controller.getAllProvenances().size} provenance(s)."
+                "with ${controller.getAllProvenances().size} provenance(s)."
         }
 
         val readDuration = measureTime {
@@ -538,7 +538,7 @@ class Scanner(
 
                         logger.warn {
                             "Could not read scan result for '${pkg.id.toCoordinates()}' from " +
-                                    "${reader.javaClass.simpleName}: ${e.collectMessages()}"
+                                "${reader.javaClass.simpleName}: ${e.collectMessages()}"
                         }
                     }
                 }
@@ -563,7 +563,7 @@ class Scanner(
 
                         logger.warn {
                             "Could not read scan result for $provenance from ${reader.javaClass.simpleName}: " +
-                                    e.collectMessages()
+                                e.collectMessages()
                         }
                     }
                 }
@@ -644,7 +644,7 @@ class Scanner(
 
                 logger.warn {
                     "Could not write scan result for $provenance to ${writer.javaClass.simpleName}: " +
-                            e.collectMessages()
+                        e.collectMessages()
                 }
             }
         }
@@ -659,7 +659,7 @@ class Scanner(
 
                 logger.warn {
                     "Could not write scan result for '${pkg.id.toCoordinates()}' to ${writer.javaClass.simpleName}: " +
-                            e.collectMessages()
+                        e.collectMessages()
                 }
             }
         }
@@ -689,7 +689,7 @@ class Scanner(
                                     Issue(
                                         source = "Downloader",
                                         message = "Could not create file list for " +
-                                                "'${id.toCoordinates()}': ${it.collectMessages()}"
+                                            "'${id.toCoordinates()}': ${it.collectMessages()}"
                                     )
                                 )
                             }
@@ -735,7 +735,7 @@ class Scanner(
                         Issue(
                             source = "Downloader",
                             message = "Could not create file archive for " +
-                                    "'${pkg.id.toCoordinates()}': ${it.collectMessages()}"
+                                "'${pkg.id.toCoordinates()}': ${it.collectMessages()}"
                         )
                     )
                 }

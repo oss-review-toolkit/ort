@@ -69,7 +69,7 @@ class AnalyzerCommand : OrtCommand(
     private val inputDir by option(
         "--input-dir", "-i",
         help = "The project directory to analyze. As a special case, if only one package manager is enabled, this " +
-                "may point to a definition file for that package manager to only analyze that single project."
+            "may point to a definition file for that package manager to only analyze that single project."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -93,7 +93,7 @@ class AnalyzerCommand : OrtCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides any repository configuration " +
-                "contained in a '$ORT_REPO_CONFIG_FILENAME' file in the repository."
+            "contained in a '$ORT_REPO_CONFIG_FILENAME' file in the repository."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -112,7 +112,7 @@ class AnalyzerCommand : OrtCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
-                "times. For example: --label distribution=external"
+            "times. For example: --label distribution=external"
     ).associate()
 
     private val dryRun by option(
@@ -160,7 +160,7 @@ class AnalyzerCommand : OrtCommand(
             } else if (repositoryPackageCurations.isNotEmpty()) {
                 logger.warn {
                     "Existing package curations from '${repositoryConfigurationFile.absolutePath}' are not applied " +
-                            "because the feature is disabled."
+                        "because the feature is disabled."
                 }
             }
 

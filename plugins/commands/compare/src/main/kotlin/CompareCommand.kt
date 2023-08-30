@@ -62,7 +62,7 @@ class CompareCommand : OrtCommand(
     private val method by option(
         "--method", "-m",
         help = "The method to use when comparing ORT results. Must be one of " +
-                "${CompareMethod.entries.map { it.name }}."
+            "${CompareMethod.entries.map { it.name }}."
     ).enum<CompareMethod>()
         .default(CompareMethod.TEXT_DIFF)
 
@@ -166,5 +166,5 @@ private class InvariantEnvironmentSerializer : StdSerializer<Environment>(Enviro
 
 private fun Map<Regex, String>.replaceIn(text: String) =
     entries.fold(text) { currentText, (from, to) ->
-    currentText.replace(from, to)
-}
+        currentText.replace(from, to)
+    }

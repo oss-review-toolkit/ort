@@ -60,7 +60,7 @@ data class ResolvedConfiguration(
         val duplicateProviderIds = packageCurations.getDuplicates().map { it.provider.id }
         require(duplicateProviderIds.isEmpty()) {
             "The list 'providers' contains the following duplicates, which is not allowed: " +
-                    "${duplicateProviderIds.joinToStringSingleQuoted()}."
+                "${duplicateProviderIds.joinToStringSingleQuoted()}."
         }
     }
 

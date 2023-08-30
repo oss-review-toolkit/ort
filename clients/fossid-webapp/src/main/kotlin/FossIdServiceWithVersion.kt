@@ -31,13 +31,13 @@ abstract class FossIdServiceWithVersion(val version: String) : FossIdRestService
          */
         fun instance(delegate: FossIdRestService): FossIdServiceWithVersion =
             runBlocking {
-            val version = delegate.getFossIdVersion().orEmpty()
+                val version = delegate.getFossIdVersion().orEmpty()
 
-            when {
-                version >= "2021.2" -> VersionedFossIdService2021dot2(delegate, version)
-                else -> VersionedFossIdService(delegate, version)
+                when {
+                    version >= "2021.2" -> VersionedFossIdService2021dot2(delegate, version)
+                    else -> VersionedFossIdService(delegate, version)
+                }
             }
-        }
     }
 
     /**

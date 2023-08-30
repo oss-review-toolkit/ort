@@ -52,7 +52,7 @@ class ConfigCommand : OrtCommand(
     private val showReference by option(
         "--show-reference",
         help = "Show the reference configuration. This configuration is never actually used as it just contains " +
-                "example entries for all supported configuration options."
+            "example entries for all supported configuration options."
     ).flag()
 
     private val checkSyntax by option(

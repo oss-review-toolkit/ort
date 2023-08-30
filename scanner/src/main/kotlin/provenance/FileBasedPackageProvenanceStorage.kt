@@ -64,7 +64,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
                 else -> {
                     logger.info {
                         "Could not read resolved provenances for '${id.toCoordinates()}' from path '$path': " +
-                                it.collectMessages()
+                            it.collectMessages()
                     }
 
                     emptyList()
@@ -107,7 +107,7 @@ class FileBasedPackageProvenanceStorage(val backend: FileStorage) : PackageProve
 
                     logger.warn {
                         "Could not store resolved provenances for '${id.toCoordinates()}' at path '$path': " +
-                                it.collectMessages()
+                            it.collectMessages()
                     }
                 }
                 else -> throw it

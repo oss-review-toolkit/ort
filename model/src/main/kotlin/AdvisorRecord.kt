@@ -60,10 +60,10 @@ data class AdvisorRecord(
             capability: AdvisorCapability? = null
         ): AdvisorResultFilter =
             { result ->
-            (capability == null || capability in result.advisor.capabilities) && result.summary.issues.any {
-                it.severity >= minSeverity
+                (capability == null || capability in result.advisor.capabilities) && result.summary.issues.any {
+                    it.severity >= minSeverity
+                }
             }
-        }
     }
 
     @JsonIgnore

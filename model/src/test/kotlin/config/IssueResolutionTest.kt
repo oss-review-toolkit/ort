@@ -56,10 +56,10 @@ class IssueResolutionTest : WordSpec({
 
 private fun resolution(message: String) =
     IssueResolution(
-    message = message,
-    reason = IssueResolutionReason.CANT_FIX_ISSUE,
-    comment = ""
-)
+        message = message,
+        reason = IssueResolutionReason.CANT_FIX_ISSUE,
+        comment = ""
+    )
 
 private fun issue(message: String) =
     Issue(

@@ -174,7 +174,7 @@ class PackageManagerFunTest : WordSpec({
         "take path excludes into account" {
             val tempDir = "test/"
             val definitionFilesWithExcludes = definitionFiles +
-                    listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
+                listOf("pom.xml", "build.gradle", "build.sbt").map { "$tempDir$it" }
             val rootDir = tempdir()
             definitionFilesWithExcludes.writeFiles(rootDir)
 

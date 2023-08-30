@@ -54,7 +54,7 @@ internal class PackageLinkageValueFilter {
 internal class ResolutionsFilter {
     override fun equals(other: Any?): Boolean =
         other is Resolutions &&
-                other.issues.isEmpty() &&
-                other.ruleViolations.isEmpty() &&
-                other.vulnerabilities.isEmpty()
+            other.issues.isEmpty() &&
+            other.ruleViolations.isEmpty() &&
+            other.vulnerabilities.isEmpty()
 }

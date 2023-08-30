@@ -35,7 +35,7 @@ data class FossInfo(
      */
     @SerialName("\$schema")
     val schema: String? = "https://github.com/boschrexroth/json-schema/blob/a84eab6/ctrlx-automation/ctrlx-core/apps/" +
-            "fossinfo/fossinfo.v1.schema.json",
+        "fossinfo/fossinfo.v1.schema.json",
 
     /**
      * An inlined OSS component, in case of a single component.

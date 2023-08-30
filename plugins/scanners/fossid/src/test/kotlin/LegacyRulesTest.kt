@@ -48,7 +48,7 @@ class LegacyRulesTest : WordSpec({
             issues shouldHaveSize 1
             issues.first().shouldNotBeNull {
                 message shouldBe "Rule '.pdf' with type '${RuleType.EXTENSION}' is not present in the .ort.yml path" +
-                        " excludes. Add it to the .ort.yml file or remove it from the FossID scan."
+                    " excludes. Add it to the .ort.yml file or remove it from the FossID scan."
                 severity shouldBe Severity.HINT
             }
             legacyRules shouldHaveSize 1

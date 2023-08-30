@@ -45,9 +45,9 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class RewriteTestAssetsCommand : CliktCommand(
     help = "Searches all test assets directories in the given ORT sources directory for recognized serialized files " +
-            "and tries to de-serialize and serialize the file. The command can be used to update the test assets " +
-            "after making changes to the corresponding model classes or serializer configuration, e.g. after " +
-            "annotating a property to not be serialized if empty."
+        "and tries to de-serialize and serialize the file. The command can be used to update the test assets " +
+        "after making changes to the corresponding model classes or serializer configuration, e.g. after " +
+        "annotating a property to not be serialized if empty."
 ) {
     private val ortSourcesDir by option(
         "--ort-sources-dir", "-i",

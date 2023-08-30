@@ -107,7 +107,7 @@ interface CommandLineTool {
         if (!actualVersion.satisfies(requiredVersion)) {
             logger.warn {
                 "The command is required in version $requiredVersion, but you are using version $actualVersion. This " +
-                        "could lead to problems."
+                    "could lead to problems."
             }
         }
     }

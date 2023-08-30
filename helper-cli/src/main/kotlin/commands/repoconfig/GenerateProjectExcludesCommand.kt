@@ -37,7 +37,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class GenerateProjectExcludesCommand : CliktCommand(
     help = "Generates path excludes for all definition files which are not yet excluded. The output is written to " +
-            "the given repository configuration file."
+        "the given repository configuration file."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
@@ -50,7 +50,7 @@ internal class GenerateProjectExcludesCommand : CliktCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "The repository configuration file to write the result to. If the file does already exist it " +
-                "overrides the repository configuration contained in the given input ORT file."
+            "overrides the repository configuration contained in the given input ORT file."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

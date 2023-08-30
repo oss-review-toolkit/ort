@@ -50,7 +50,7 @@ data class PathExclude(
      */
     fun matches(path: String) =
         FileMatcher.match(
-        pattern = pattern.removePrefix("./"),
-        path = path
-    )
+            pattern = pattern.removePrefix("./"),
+            path = path
+        )
 }

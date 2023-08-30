@@ -44,7 +44,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class RemoveEntriesCommand : CliktCommand(
     help = "Removes all non-matching path and scope excludes as well as rule violation resolutions. The output is " +
-            "written to the given repository configuration file."
+        "written to the given repository configuration file."
 ) {
     private val ortFile by option(
         "--ort-file", "-i",
@@ -57,7 +57,7 @@ internal class RemoveEntriesCommand : CliktCommand(
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "The repository configuration to remove all non-matching entries from. Its initial content overrides " +
-                "the repository configuration contained in the given ORT result file."
+            "the repository configuration contained in the given ORT result file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = true, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -66,8 +66,8 @@ internal class RemoveEntriesCommand : CliktCommand(
     private val sourceCodeDir by option(
         "--source-code-dir",
         help = "A directory containing the sources of the project(s) for which the configuration entries are to be " +
-                "removed. The provenance of these sources must match with the scan results contained in the given " +
-                "ORT result file."
+            "removed. The provenance of these sources must match with the scan results contained in the given " +
+            "ORT result file."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -128,10 +128,10 @@ internal class RemoveEntriesCommand : CliktCommand(
             val removedPathExcludes = repositoryConfiguration.excludes.paths.size - pathExcludes.size
             val removedScopeExcludes = repositoryConfiguration.excludes.scopes.size - scopeExcludes.size
             val removedLicenseFindingCurations = repositoryConfiguration.curations.licenseFindings.size -
-                    licenseFindingCurations.size
+                licenseFindingCurations.size
             val removedIssueResolutions = repositoryConfiguration.resolutions.issues.size - issueResolutions.size
             val removedRuleViolationResolutions = repositoryConfiguration.resolutions.ruleViolations.size -
-                    ruleViolationResolutions.size
+                ruleViolationResolutions.size
 
             appendLine("Removed entries:")
             appendLine()

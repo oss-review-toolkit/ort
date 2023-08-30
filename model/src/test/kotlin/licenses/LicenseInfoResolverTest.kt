@@ -674,21 +674,21 @@ private fun createLicenseInfo(
     detectedLicenses: List<Findings> = emptyList(),
     concludedLicense: SpdxExpression? = null
 ) = LicenseInfo(
-        id = id,
-        declaredLicenseInfo = DeclaredLicenseInfo(
-            authors = authors,
-            licenses = declaredLicenses,
-            processed = DeclaredLicenseProcessor.process(declaredLicenses),
-            appliedCurations = emptyList()
-        ),
-        detectedLicenseInfo = DetectedLicenseInfo(
-            findings = detectedLicenses
-        ),
-        concludedLicenseInfo = ConcludedLicenseInfo(
-            concludedLicense = concludedLicense,
-            appliedCurations = emptyList()
-        )
+    id = id,
+    declaredLicenseInfo = DeclaredLicenseInfo(
+        authors = authors,
+        licenses = declaredLicenses,
+        processed = DeclaredLicenseProcessor.process(declaredLicenses),
+        appliedCurations = emptyList()
+    ),
+    detectedLicenseInfo = DetectedLicenseInfo(
+        findings = detectedLicenses
+    ),
+    concludedLicenseInfo = ConcludedLicenseInfo(
+        concludedLicense = concludedLicense,
+        appliedCurations = emptyList()
     )
+)
 
 private class SimpleLicenseInfoProvider(licenseInfo: List<LicenseInfo>) : LicenseInfoProvider {
     private val licenseInfoById = licenseInfo.associateBy { it.id }
@@ -815,17 +815,17 @@ private fun ResolvedLicenseInfo.pathExcludesForLicense(
     provenance: Provenance,
     location: TextLocation
 ) = find { it.license == SpdxSingleLicenseExpression.parse(license) }
-        ?.locations
-        ?.find { it.provenance == provenance && it.location == location }
-        ?.matchingPathExcludes
-        ?.toSet().orEmpty()
+    ?.locations
+    ?.find { it.provenance == provenance && it.location == location }
+    ?.matchingPathExcludes
+    ?.toSet().orEmpty()
 
 private fun ResolvedLicenseInfo.pathExcludesForCopyright(
     copyright: String,
     provenance: Provenance,
     location: TextLocation
 ) = flatMap { license -> license.locations.filter { it.provenance == provenance } }
-        .flatMap { it.copyrights }
-        .find { it.statement == copyright && it.location == location }
-        ?.matchingPathExcludes
-        ?.toSet().orEmpty()
+    .flatMap { it.copyrights }
+    .find { it.statement == copyright && it.location == location }
+    ?.matchingPathExcludes
+    ?.toSet().orEmpty()

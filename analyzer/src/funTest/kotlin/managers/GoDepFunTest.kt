@@ -53,9 +53,9 @@ class GoDepFunTest : WordSpec({
 
             with(result) {
                 project.id shouldBe
-                        Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
+                    Identifier("GoDep::src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml:")
                 project.definitionFilePath shouldBe
-                        "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
+                    "analyzer/src/funTest/assets/projects/synthetic/godep/no-lockfile/Gopkg.toml"
                 packages should beEmpty()
                 issues.size shouldBe 1
                 issues.first().message should haveSubstring("IllegalArgumentException: No lockfile found in")
@@ -102,7 +102,7 @@ class GoDepFunTest : WordSpec({
             val vcsInfo = VcsInfo.EMPTY.copy(url = "https://github.com/oss-review-toolkit/ort.git")
 
             deduceImportPath(projectDir, vcsInfo, gopath) shouldBe
-                    gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
+                gopath.resolve("src/github.com/oss-review-toolkit/ort.git")
         }
 
         "deduce an import path without VCS info" {

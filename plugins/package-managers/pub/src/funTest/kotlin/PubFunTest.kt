@@ -86,7 +86,7 @@ class PubFunTest : WordSpec({
 
             ortResult.analyzer.shouldNotBeNull {
                 result.patchPackages().reduceToPubProjects().toYaml() should
-                        matchExpectedResult(expectedResultFile, definitionFile)
+                    matchExpectedResult(expectedResultFile, definitionFile)
             }
         }
 

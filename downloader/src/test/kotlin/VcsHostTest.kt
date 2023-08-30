@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.model.VcsType
 class VcsHostTest : WordSpec({
     "The Azure DevOps implementation" should {
         val projectUrl = "https://dev.azure.com/oss-review-toolkit/kotlin-devs/_git/ort?path=/README.md" +
-                "&version=GC0000000000000000000000000000000000000000"
+            "&version=GC0000000000000000000000000000000000000000"
         val vcsInfo = VcsInfo(
             type = VcsType.GIT,
             url = "https://dev.azure.com/oss-review-toolkit/kotlin-devs/_git/ort",
@@ -58,34 +58,34 @@ class VcsHostTest : WordSpec({
 
         "be able to create permalinks from VCS information" {
             AZURE_DEVOPS.toPermalink(vcsInfo, 1) shouldBe "https://dev.azure.com/oss-review-toolkit/kotlin-devs/_git/" +
-                    "ort?line=1&lineEnd=2" +
-                    "&lineStartColumn=1&lineEndColumn=1" +
-                    "&path=/README.md" +
-                    "&version=GC0000000000000000000000000000000000000000"
+                "ort?line=1&lineEnd=2" +
+                "&lineStartColumn=1&lineEndColumn=1" +
+                "&path=/README.md" +
+                "&version=GC0000000000000000000000000000000000000000"
 
             AZURE_DEVOPS.toPermalink(vcsInfo, 1, 3) shouldBe "https://dev.azure.com/oss-review-toolkit/kotlin-devs/" +
-                    "_git/ort?line=1&lineEnd=4" +
-                    "&lineStartColumn=1&lineEndColumn=1" +
-                    "&path=/README.md" +
-                    "&version=GC0000000000000000000000000000000000000000"
+                "_git/ort?line=1&lineEnd=4" +
+                "&lineStartColumn=1&lineEndColumn=1" +
+                "&path=/README.md" +
+                "&version=GC0000000000000000000000000000000000000000"
         }
 
         "be able to create source archive links from project URLs" {
             AZURE_DEVOPS.toArchiveDownloadUrl(vcsInfo) shouldBe "https://dev.azure.com/oss-review-toolkit/" +
-                    "kotlin-devs/_apis/git/repositories/ort/items?path=/" +
-                    "&versionDescriptor[version]=0000000000000000000000000000000000000000" +
-                    "&versionDescriptor[versionType]=commit" +
-                    "&\$format=zip&download=true"
+                "kotlin-devs/_apis/git/repositories/ort/items?path=/" +
+                "&versionDescriptor[version]=0000000000000000000000000000000000000000" +
+                "&versionDescriptor[versionType]=commit" +
+                "&\$format=zip&download=true"
         }
 
         "be able to create raw download URLs from file URLs" {
             AZURE_DEVOPS.toRawDownloadUrl(projectUrl) shouldBe "https://dev.azure.com/oss-review-toolkit/kotlin-devs/" +
-                    "_apis/git/repositories/ort/items?scopePath=/README.md"
+                "_apis/git/repositories/ort/items?scopePath=/README.md"
         }
 
         "not be applicable to a URL pointing to a package registry" {
             val url = "https://pkgs.dev.azure.com/project/0123456789/_packaging/some-npm-registry/" +
-                    "npm/registry/apkg/-/apkg-1.2.3.tgz"
+                "npm/registry/apkg/-/apkg-1.2.3.tgz"
 
             VcsHost.fromUrl(url) should beNull()
         }
@@ -93,7 +93,7 @@ class VcsHostTest : WordSpec({
 
     "The Bitbucket implementation" should {
         val projectUrl = "https://bitbucket.org/yevster/spdxtraxample/" +
-                "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt"
+            "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt"
         val vcsInfo = VcsInfo(
             type = VcsType.GIT,
             url = "https://bitbucket.org/yevster/spdxtraxample.git",
@@ -115,14 +115,14 @@ class VcsHostTest : WordSpec({
 
         "be able to create permalinks from VCS information" {
             BITBUCKET.toPermalink(vcsInfo, 1) shouldBe "https://bitbucket.org/yevster/spdxtraxample/" +
-                    "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-1"
+                "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-1"
             BITBUCKET.toPermalink(vcsInfo, 4, 8) shouldBe "https://bitbucket.org/yevster/spdxtraxample/" +
-                    "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-4:8"
+                "src/287aebca5e7ff4167af1fb648640dcdbdf4ec666/LICENSE.txt#lines-4:8"
         }
 
         "be able to create source archive links from project URLs" {
             BITBUCKET.toArchiveDownloadUrl(vcsInfo) shouldBe
-                    "https://bitbucket.org/yevster/spdxtraxample/get/287aebca5e7ff4167af1fb648640dcdbdf4ec666.tar.gz"
+                "https://bitbucket.org/yevster/spdxtraxample/get/287aebca5e7ff4167af1fb648640dcdbdf4ec666.tar.gz"
         }
 
         "be able to create raw download URLs from file URLs" {
@@ -134,7 +134,7 @@ class VcsHostTest : WordSpec({
 
     "The GitHub implementation" should {
         val projectUrl = "https://github.com/oss-review-toolkit/ort/" +
-                "blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
+            "blob/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md"
         val vcsInfo = VcsInfo(
             type = VcsType.GIT,
             url = "https://github.com/oss-review-toolkit/ort.git",
@@ -163,21 +163,21 @@ class VcsHostTest : WordSpec({
             )
 
             GITHUB.toPermalink(scpVcsInfo, 3) shouldBe "https://github.com/oss-review-toolkit/ort/" +
-                    "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
+                "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3"
             GITHUB.toPermalink(scpVcsInfo, 3, 5) shouldBe "https://github.com/oss-review-toolkit/ort/" +
-                    "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
+                "tree/4a836c3a6a42d358362fa07b014b7d83572a13ed/docs/examples/gradle.ort.yml#L3-L5"
         }
 
         "be able to create permalinks to Markdown files" {
             GITHUB.toPermalink(vcsInfo, 27) shouldBe "https://github.com/oss-review-toolkit/ort/" +
-                    "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27"
+                "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27"
             GITHUB.toPermalink(vcsInfo, 27, 28) shouldBe "https://github.com/oss-review-toolkit/ort/" +
-                    "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27-L28"
+                "blame/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7/README.md#L27-L28"
         }
 
         "be able to create source archive links from project URLs" {
             GITHUB.toArchiveDownloadUrl(vcsInfo) shouldBe
-                    "https://github.com/oss-review-toolkit/ort/archive/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7.tar.gz"
+                "https://github.com/oss-review-toolkit/ort/archive/da7e3a814fc0e6301bf3ed394eba1a661e4d88d7.tar.gz"
         }
 
         "be able to create raw download URLs from file URLs" {
@@ -229,22 +229,22 @@ class VcsHostTest : WordSpec({
             )
 
             GITLAB.toPermalink(scpVcsInfo, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
+                "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7"
             GITLAB.toPermalink(scpVcsInfo, 7, 9) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
+                "tree/12542c481ff1e0abcf8d561d6741e561ef5675ca/autogen.sh#L7-9"
         }
 
         "be able to create permalinks to Markdown files" {
             GITLAB.toPermalink(vcsInfo, 5) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
+                "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5"
             GITLAB.toPermalink(vcsInfo, 5, 7) shouldBe "https://gitlab.com/mbunkus/mkvtoolnix/" +
-                    "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5-7"
+                "blame/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/NEWS.md#L5-7"
         }
 
         "be able to create source archive links from project URLs" {
             GITLAB.toArchiveDownloadUrl(vcsInfo) shouldBe
-                    "https://gitlab.com/mbunkus/mkvtoolnix/-/archive/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/" +
-                    "mkvtoolnix-ec80478f87f1941fe52f15c5f4fa7ee6a70d7006.tar.gz"
+                "https://gitlab.com/mbunkus/mkvtoolnix/-/archive/ec80478f87f1941fe52f15c5f4fa7ee6a70d7006/" +
+                "mkvtoolnix-ec80478f87f1941fe52f15c5f4fa7ee6a70d7006.tar.gz"
         }
 
         "be able to create raw download URLs from file URLs" {
@@ -289,14 +289,14 @@ class VcsHostTest : WordSpec({
 
         "be able to create permalinks from Git VCS information" {
             SOURCEHUT.toPermalink(gitVcsInfo, 26) shouldBe
-                    "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26"
+                "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26"
             SOURCEHUT.toPermalink(gitVcsInfo, 26, 29) shouldBe
-                    "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26-29"
+                "https://git.sr.ht/~ben/web/tree/2c3d173d/assets/css/main.css#L26-29"
         }
 
         "be able to create permalinks from Mercurial VCS information" {
             SOURCEHUT.toPermalink(hgVcsInfo, 9) shouldBe
-                    "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
+                "https://hg.sr.ht/~duangle/paniq_legacy/browse/f04521a92844/masagin/README.txt#L9"
             // SourceHut does not support an end line in permalinks to Mercurial repos.
         }
 

@@ -34,7 +34,7 @@ class OrtConfigPackageConfigurationProviderFunTest : StringSpec({
         val provenance = ArtifactProvenance(
             RemoteArtifact(
                 url = "https://repo.maven.apache.org/maven2/net/java/dev/jna/jna-platform/5.8.0/" +
-                        "jna-platform-5.8.0-sources.jar",
+                    "jna-platform-5.8.0-sources.jar",
                 hash = Hash.NONE
             )
         )

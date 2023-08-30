@@ -457,14 +457,14 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
             issues: List<EvaluatedIssue>,
             children: List<DependencyTreeNode> = emptyList()
         ) = DependencyTreeNode(
-                linkage = linkage,
-                pkg = dependency,
-                scope = null,
-                children = children,
-                pathExcludes = emptyList(),
-                scopeExcludes = emptyList(),
-                issues = issues
-            )
+            linkage = linkage,
+            pkg = dependency,
+            scope = null,
+            children = children,
+            pathExcludes = emptyList(),
+            scopeExcludes = emptyList(),
+            issues = issues
+        )
 
         fun DependencyNode.toEvaluatedTreeNode(
             scope: EvaluatedScope,
@@ -502,7 +502,7 @@ internal class EvaluatedModelMapper(private val input: ReporterInput) {
                         } else {
                             node.toEvaluatedTreeNode(scope, path + dependency)
                         }
-                }.toList()
+                    }.toList()
             }
 
             return createDependencyNode(dependency, linkage, issues, children)

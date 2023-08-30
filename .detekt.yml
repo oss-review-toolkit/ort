@@ -38,8 +38,6 @@ formatting:
     functionBodyExpressionWrapping: multiline
   ImportOrdering:
     active: false
-  Indentation:
-    active: false
   MaximumLineLength:
     active: false
   NoUnusedImports:

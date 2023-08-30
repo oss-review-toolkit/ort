@@ -31,7 +31,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class FormatCommand : CliktCommand(
     help = "Applies the formatting used by all ort-helper commands and strips all YAML comments. The output is " +
-            "written to the given repository configuration file."
+        "written to the given repository configuration file."
 ) {
     private val repositoryConfigurationFile by argument(
         "repository-configuration-file",

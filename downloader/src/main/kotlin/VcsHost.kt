@@ -80,10 +80,10 @@ enum class VcsHost(
             }.orEmpty()
 
             return "https://dev.azure.com/$userOrOrg/$team/_apis/git/repositories/" +
-                    "$project/items?path=/" +
-                    "&versionDescriptor[version]=${vcsInfo.revision}" +
-                    "&versionDescriptor[versionType]=commit" +
-                    "&\$format=zip&download=true"
+                "$project/items?path=/" +
+                "&versionDescriptor[version]=${vcsInfo.revision}" +
+                "&versionDescriptor[versionType]=commit" +
+                "&\$format=zip&download=true"
         }
 
         override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo): String {
@@ -93,7 +93,7 @@ enum class VcsHost(
             }.orEmpty()
 
             return "https://dev.azure.com/$userOrOrg/$team/_apis/git/repositories/$project/items" +
-                    "?scopePath=/${vcsInfo.path}"
+                "?scopePath=/${vcsInfo.path}"
         }
 
         /**
@@ -307,11 +307,11 @@ enum class VcsHost(
 
         override fun toArchiveDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/archive/" +
-                    "${vcsInfo.revision}.tar.gz"
+                "${vcsInfo.revision}.tar.gz"
 
         override fun toRawDownloadUrlInternal(userOrOrg: String, project: String, vcsInfo: VcsInfo) =
             "https://${vcsInfo.type.toString().lowercase()}.$hostname/~$userOrOrg/$project/blob/${vcsInfo.revision}/" +
-                    vcsInfo.path
+                vcsInfo.path
     };
 
     companion object {

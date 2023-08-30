@@ -185,7 +185,7 @@ class Composer(
             if (packageName in dependencyBranch) {
                 logger.debug {
                     "Not adding circular dependency '$packageName' to the tree, it is already on this branch of the " +
-                            "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
+                        "dependency tree: ${dependencyBranch.joinToString(" -> ")}."
                 }
 
                 return@forEach

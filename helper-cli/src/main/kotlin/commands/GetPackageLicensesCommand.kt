@@ -56,7 +56,7 @@ internal class GetPackageLicensesCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgres.connection.schema=testSchema"
+            "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
     private val packageId by option(
@@ -68,7 +68,7 @@ internal class GetPackageLicensesCommand : CliktCommand(
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                "contain a single package configuration."
+            "contain a single package configuration."
     ).file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.expandTilde() }
 

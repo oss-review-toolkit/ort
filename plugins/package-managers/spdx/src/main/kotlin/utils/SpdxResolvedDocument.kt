@@ -277,7 +277,7 @@ internal fun SpdxExternalDocumentReference.resolve(
             issue = SpdxResolvedDocument.createAndLogIssue(
                 source = managerName,
                 message = "The SPDX document at '$spdxDocument' cannot be resolved as a URI (referred from $baseUri " +
-                        "as part of '$externalDocumentId')."
+                    "as part of '$externalDocumentId')."
             )
         )
     }
@@ -316,7 +316,7 @@ private fun SpdxExternalDocumentReference.resolveFromFile(
             issue = SpdxResolvedDocument.createAndLogIssue(
                 source = managerName,
                 message = "Failed to parse the SPDX document pointed to by '$uri' in reference " +
-                        "'$externalDocumentId': ${it.message}"
+                    "'$externalDocumentId': ${it.message}"
             )
         )
     }
@@ -357,7 +357,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
                 issue = SpdxResolvedDocument.createAndLogIssue(
                     source = managerName,
                     message = "Failed to download SPDX document from $uri (referred from $baseUri as part of " +
-                            "'$externalDocumentId'): ${it.collectMessages()}"
+                        "'$externalDocumentId'): ${it.collectMessages()}"
                 )
             )
         }
@@ -369,7 +369,7 @@ private fun SpdxExternalDocumentReference.resolveFromDownload(
                 issue = SpdxResolvedDocument.createAndLogIssue(
                     source = managerName,
                     message = "Failed to parse SPDX document from $uri (referred from $baseUri as part of " +
-                            "'$externalDocumentId'): ${it.message}"
+                        "'$externalDocumentId'): ${it.message}"
                 )
             )
         }
@@ -392,7 +392,7 @@ private fun SpdxExternalDocumentReference.verifyChecksum(file: File, uri: URI, m
         source = managerName,
         severity = Severity.WARNING,
         message = "The SPDX document at '$spdxDocument' does not match the expected $hash (referred from $uri as " +
-                "part of '$externalDocumentId')."
+            "part of '$externalDocumentId')."
     )
 }
 

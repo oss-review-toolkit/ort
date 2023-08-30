@@ -111,7 +111,7 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
         issues += ScanCode.createAndLogIssue(
             source = ScanCode.SCANNER_NAME,
             message = "The output format version $outputFormatVersion exceeds the supported major version " +
-                    "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
+                "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
             severity = Severity.WARNING
         )
     }
@@ -131,11 +131,11 @@ fun ScanCodeResult.toScanSummary(): ScanSummary {
         // ScanCode creates separate license entries for each license in an expression. Deduplicate these by grouping by
         // the same expression.
         val licenses = file.licenses.groupBy {
-                LicenseMatch(it.matchedRule.licenseExpression, it.startLine, it.endLine, it.score)
-            }.map {
-                // Arbitrarily take the first of the duplicate license entries.
-                it.value.first()
-            }
+            LicenseMatch(it.matchedRule.licenseExpression, it.startLine, it.endLine, it.score)
+        }.map {
+            // Arbitrarily take the first of the duplicate license entries.
+            it.value.first()
+        }
 
         licenses.mapTo(licenseFindings) { license ->
             // ScanCode uses its own license keys as identifiers in license expressions.

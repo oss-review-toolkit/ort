@@ -260,8 +260,8 @@ class CycloneDxReporter : Reporter {
 
         // Get all licenses, but note down their origins inside an extensible type.
         val licenseObjects = concludedLicenseNames.mapNamesToLicenses("concluded license", input) +
-                declaredLicenseNames.mapNamesToLicenses("declared license", input) +
-                detectedLicenseNames.mapNamesToLicenses("detected license", input)
+            declaredLicenseNames.mapNamesToLicenses("declared license", input) +
+            detectedLicenseNames.mapNamesToLicenses("detected license", input)
 
         val binaryHash = mapHash(pkg.binaryArtifact.hash)
         val sourceHash = mapHash(pkg.sourceArtifact.hash)

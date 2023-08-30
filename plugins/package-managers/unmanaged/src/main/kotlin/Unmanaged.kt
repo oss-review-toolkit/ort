@@ -74,7 +74,7 @@ class Unmanaged(
                 // a VCS working tree. In this case we have no chance to get a version.
                 logger.warn {
                     "Analysis of local directory '$definitionFile' which is not under version control will produce " +
-                            "non-cacheable results as no version for the cache key can be determined."
+                        "non-cacheable results as no version for the cache key can be determined."
                 }
 
                 Identifier(

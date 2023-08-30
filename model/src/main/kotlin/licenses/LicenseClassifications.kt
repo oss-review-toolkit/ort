@@ -93,7 +93,7 @@ data class LicenseClassifications(
                     val licenseIds = invalidCategorizations.keys.joinToString { it.id.toString() }
                     val categories = invalidCategorizations.values.flatten().toSet()
                     "Found licenses that reference non-existing categories: $licenseIds; " +
-                            "unknown categories are $categories."
+                        "unknown categories are $categories."
                 }
             }
     }

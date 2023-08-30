@@ -60,7 +60,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT)) shouldBe
-                        ArtifactProvenance(pkg.sourceArtifact)
+                    ArtifactProvenance(pkg.sourceArtifact)
             }
 
             "fail if the artifact does not exist" {
@@ -86,10 +86,10 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe
-                        RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
-                        )
+                    RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
+                    )
             }
 
             "resolve a tag name to a commit" {
@@ -102,10 +102,10 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe
-                        RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
-                        )
+                    RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
+                    )
             }
 
             "fail if the revision does not exist" {
@@ -131,10 +131,10 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe
-                        RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
-                        )
+                    RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
+                    )
             }
 
             "work for Subversion tags" {
@@ -148,10 +148,10 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS)) shouldBe
-                        RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = "380970"
-                        )
+                    RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = "380970"
+                    )
             }
         }
 
@@ -170,13 +170,13 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.ARTIFACT, SourceCodeOrigin.VCS)) shouldBe
-                        ArtifactProvenance(pkg.sourceArtifact)
+                    ArtifactProvenance(pkg.sourceArtifact)
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)) shouldBe
-                        RepositoryProvenance(
-                            vcsInfo = pkg.vcsProcessed,
-                            resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
-                        )
+                    RepositoryProvenance(
+                        vcsInfo = pkg.vcsProcessed,
+                        resolvedRevision = "ad0367b7b9920144a47b8d30cc0c84cea102b821"
+                    )
             }
 
             "try all provided source code origins" {
@@ -188,7 +188,7 @@ class DefaultPackageProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveProvenance(pkg, listOf(SourceCodeOrigin.VCS, SourceCodeOrigin.ARTIFACT)) shouldBe
-                        ArtifactProvenance(pkg.sourceArtifact)
+                    ArtifactProvenance(pkg.sourceArtifact)
             }
         }
     }

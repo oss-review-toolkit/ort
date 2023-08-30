@@ -257,10 +257,10 @@ internal fun OrtResult.getScanIssues(omitExcluded: Boolean = false): List<Issue>
 internal fun OrtResult.getRepositoryPathExcludes(): RepositoryPathExcludes {
     fun isDefinitionsFile(pathExclude: PathExclude) =
         PackageManager.ENABLED_BY_DEFAULT.any {
-        it.matchersForDefinitionFiles.any { matcher ->
-            pathExclude.pattern.endsWith(matcher.toString())
+            it.matchersForDefinitionFiles.any { matcher ->
+                pathExclude.pattern.endsWith(matcher.toString())
+            }
         }
-    }
 
     val pathExcludes = repository.config.excludes.paths.filterNot { isDefinitionsFile(it) }
 

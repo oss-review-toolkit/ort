@@ -264,9 +264,9 @@ data class OrtResult(
     @JsonIgnore
     fun getOpenIssues(minSeverity: Severity = Severity.WARNING) =
         getIssues()
-        .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
-        .flatten()
-        .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
+            .mapNotNull { (id, issues) -> issues.takeUnless { isExcluded(id) } }
+            .flatten()
+            .filter { issue -> issue.severity >= minSeverity && getResolutions().issues.none { it.matches(issue) } }
 
     /**
      * Return all projects and packages that are likely to belong to one of the organizations of the given [names]. If

@@ -38,7 +38,7 @@ class RuleViolationResolutionTest : WordSpec({
         }
 
         "ignore white spaces" {
-             resolution("Message with additional spaces. Another line.").matches(
+            resolution("Message with additional spaces. Another line.").matches(
                 ruleViolation(
                     """
                         Message with  additional spaces. 
@@ -56,10 +56,10 @@ class RuleViolationResolutionTest : WordSpec({
 
 private fun resolution(message: String) =
     RuleViolationResolution(
-    message = message,
-    reason = RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
-    comment = ""
-)
+        message = message,
+        reason = RuleViolationResolutionReason.EXAMPLE_OF_EXCEPTION,
+        comment = ""
+    )
 
 private fun ruleViolation(message: String) =
     RuleViolation(

@@ -126,7 +126,7 @@ private val AUTHENTICATION = PasswordAuthentication(USER, PASSWORD.toCharArray()
 
 /** A URL mapping that adds credentials to arbitrary URLs. */
 private const val ADD_CREDENTIALS_MAPPING = "(?<scheme>)://(?<host>)(?<port>:\\d+)?(?<path>.*) -> " +
-        "\${scheme}://#username:#password@\${host}\${port}\${path}"
+    "\${scheme}://#username:#password@\${host}\${port}\${path}"
 
 /**
  * Mock a request for authentication for the given [host] and [port] to return the specified

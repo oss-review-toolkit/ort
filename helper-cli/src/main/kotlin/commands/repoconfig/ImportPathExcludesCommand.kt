@@ -76,7 +76,7 @@ internal class ImportPathExcludesCommand : CliktCommand(
     private val vcsUrlMappingFile by option(
         "--vcs-url-mapping-file",
         help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
-                "the import."
+            "the import."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }

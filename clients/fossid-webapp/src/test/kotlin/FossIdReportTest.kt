@@ -68,8 +68,8 @@ class FossIdReportTest : StringSpec({
         )
         result.shouldBeSuccess {
             it shouldHaveName "fossid-" +
-                    "semver4j_semver4j__20220119_094101_delta-" +
-                    "cc1267688905d7493df292786a245297c9fd36ee.html"
+                "semver4j_semver4j__20220119_094101_delta-" +
+                "cc1267688905d7493df292786a245297c9fd36ee.html"
             it.useLines { lines ->
                 lines shouldContain "<html>"
             }

@@ -51,12 +51,12 @@ interface PackageCurationProviderFactory<CONFIG> : ConfigurablePluginFactory<Pac
                 val duplicateIds = getDuplicates { (id, _) -> id }.keys
                 require(duplicateIds.isEmpty()) {
                     "Found multiple package curation providers for the IDs ${duplicateIds.joinToString()}, which is " +
-                            "not allowed. Please configure a unique ID for each package curation provider."
+                        "not allowed. Please configure a unique ID for each package curation provider."
                 }
 
                 require(none { (id, _) -> id == REPOSITORY_CONFIGURATION_PROVIDER_ID }) {
                     "Found a package curation provider which uses '$REPOSITORY_CONFIGURATION_PROVIDER_ID' as its id " +
-                            "which is reserved and not allowed."
+                        "which is reserved and not allowed."
                 }
             }
     }

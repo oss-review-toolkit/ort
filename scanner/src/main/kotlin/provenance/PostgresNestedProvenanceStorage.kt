@@ -68,8 +68,8 @@ class PostgresNestedProvenanceStorage(
         database.transaction {
             table.select {
                 table.vcsType eq root.vcsInfo.type.toString() and
-                        (table.vcsUrl eq root.vcsInfo.url) and
-                        (table.vcsRevision eq root.resolvedRevision)
+                    (table.vcsUrl eq root.vcsInfo.url) and
+                    (table.vcsRevision eq root.resolvedRevision)
             }.map { it[table.result] }.find { it.nestedProvenance.root == root }
         }
 
@@ -77,8 +77,8 @@ class PostgresNestedProvenanceStorage(
         database.transaction {
             val idsToRemove = table.select {
                 table.vcsType eq root.vcsInfo.type.toString() and
-                        (table.vcsUrl eq root.vcsInfo.url) and
-                        (table.vcsRevision eq root.resolvedRevision)
+                    (table.vcsUrl eq root.vcsInfo.url) and
+                    (table.vcsRevision eq root.resolvedRevision)
             }.filter { it[table.result].nestedProvenance.root == root }.map { it[table.id].value }
 
             table.deleteWhere { table.id inList idsToRemove }

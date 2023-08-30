@@ -81,7 +81,7 @@ class ScannerCommand : OrtCommand(
         option(
             "--ort-file", "-i",
             help = "An ORT result file with an analyzer result to use. Source code is downloaded automatically if " +
-                    "needed. Must not be used together with '--input-path'."
+                "needed. Must not be used together with '--input-path'."
         ).convert { it.expandTilde() }
             .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
             .convert { it.absoluteFile.normalize() },
@@ -111,7 +111,7 @@ class ScannerCommand : OrtCommand(
     private val labels by option(
         "--label", "-l",
         help = "Set a label in the ORT result, overwriting any existing label of the same name. Can be used multiple " +
-                "times. For example: --label distribution=external"
+            "times. For example: --label distribution=external"
     ).associate()
 
     private val scanners by option(
@@ -122,8 +122,8 @@ class ScannerCommand : OrtCommand(
     private val projectScanners by option(
         "--project-scanners",
         help = "A comma-separated list of scanners to use for scanning the source code of projects. By default, " +
-                "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
-                "Possible values are: ${ScannerWrapper.ALL.keys}"
+            "projects and packages are scanned with the same scanners as specified by '--scanners'.\n" +
+            "Possible values are: ${ScannerWrapper.ALL.keys}"
     ).convertToScannerWrapperFactories()
 
     private val packageTypes by option(

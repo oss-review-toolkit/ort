@@ -149,5 +149,5 @@ data class ResolvedLicenseInfo(
 fun List<ResolvedLicense>.filterExcluded() =
     mapNotNull { it.filterExcludedOriginalExpressions() }.filter { resolvedLicense ->
         resolvedLicense.sources != setOf(LicenseSource.DETECTED) ||
-                resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
+            resolvedLicense.locations.any { it.matchingPathExcludes.isEmpty() }
     }.map { it.filterExcludedCopyrights() }

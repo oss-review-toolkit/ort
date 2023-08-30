@@ -113,14 +113,14 @@ class GitHubService private constructor(
         paging: Paging = Paging.INITIAL
     ): QueryResult<Release> =
         runCatching {
-        val query = ReleasesQuery(ReleasesQuery.Variables(owner, repository, paging.pageSize, paging.cursor))
-        val result = client.executeAndCheck(query)
+            val query = ReleasesQuery(ReleasesQuery.Variables(owner, repository, paging.pageSize, paging.cursor))
+            val result = client.executeAndCheck(query)
 
-        val releasesConnection = result.data?.repository?.releases
-        val pageInfo = releasesConnection?.pageInfo
-        val nextCursor = pageInfo?.endCursor?.takeIf { pageInfo.hasNextPage }
-        PagedResult(releasesConnection?.edges.orEmpty().mapNotNull { it?.node }, paging.pageSize, nextCursor)
-    }
+            val releasesConnection = result.data?.repository?.releases
+            val pageInfo = releasesConnection?.pageInfo
+            val nextCursor = pageInfo?.endCursor?.takeIf { pageInfo.hasNextPage }
+            PagedResult(releasesConnection?.edges.orEmpty().mapNotNull { it?.node }, paging.pageSize, nextCursor)
+        }
 }
 
 /**

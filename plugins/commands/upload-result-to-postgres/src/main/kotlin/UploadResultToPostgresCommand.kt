@@ -88,7 +88,7 @@ class UploadResultToPostgresCommand : OrtCommand(
                     val config = configs.first()
                     println(
                         "Multiple PostgreSQL storages are configured, using the first one which points to schema " +
-                                "${config.connection.schema} at ${config.connection.url}."
+                            "${config.connection.schema} at ${config.connection.url}."
                     )
                 }
 

@@ -126,7 +126,7 @@ data class ScannerRun(
         provenances.getDuplicates { it.id }.keys.let { idsForDuplicateProvenanceResolutionResults ->
             require(idsForDuplicateProvenanceResolutionResults.isEmpty()) {
                 "Found multiple provenance resolution results for the following ids: " +
-                        "${idsForDuplicateProvenanceResolutionResults.joinToString { it.toCoordinates() }}."
+                    "${idsForDuplicateProvenanceResolutionResults.joinToString { it.toCoordinates() }}."
             }
         }
 
@@ -138,7 +138,7 @@ data class ScannerRun(
         (scannedProvenances - resolvedProvenances).let {
             require(it.isEmpty()) {
                 "Found scan results which do not correspond to any resolved provenances, which is not allowed: \n" +
-                        it.toYaml()
+                    it.toYaml()
             }
         }
 
@@ -146,7 +146,7 @@ data class ScannerRun(
         (fileListProvenances - resolvedProvenances).let {
             require(it.isEmpty()) {
                 "Found a file lists which do not correspond to any resolved provenances, which is not allowed: \n" +
-                        it.toYaml()
+                    it.toYaml()
             }
         }
 
@@ -263,10 +263,10 @@ data class ScannerRun(
 
 private fun scanResultForProvenanceResolutionIssues(packageProvenance: KnownProvenance?, issues: List<Issue>) =
     ScanResult(
-    provenance = packageProvenance ?: UnknownProvenance,
-    scanner = ScannerDetails(name = "ProvenanceResolver", version = "", configuration = ""),
-    summary = ScanSummary.EMPTY.copy(issues = issues)
-)
+        provenance = packageProvenance ?: UnknownProvenance,
+        scanner = ScannerDetails(name = "ProvenanceResolver", version = "", configuration = ""),
+        summary = ScanSummary.EMPTY.copy(issues = issues)
+    )
 
 private fun ScanSummary.addIssue(issue: Issue?): ScanSummary =
     if (issue == null) this else copy(issues = (issues + issue).distinct())

@@ -40,7 +40,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class ExportPathExcludesCommand : CliktCommand(
     help = "Export the path excludes to a path excludes file which maps repository URLs to the path excludes for the " +
-            "respective repository"
+        "respective repository"
 ) {
     private val pathExcludesFile by option(
         "--path-excludes-file",
@@ -74,7 +74,7 @@ internal class ExportPathExcludesCommand : CliktCommand(
     private val vcsUrlMappingFile by option(
         "--vcs-url-mapping-file",
         help = "A YAML or JSON file containing a mapping of VCS URLs to other VCS URLs which will be replaced during " +
-                "the export."
+            "the export."
     ).file(mustExist = false, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
 

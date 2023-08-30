@@ -111,29 +111,29 @@ internal fun createPurl(
     subpath: String = ""
 ): String =
     buildString {
-    append("pkg:")
-    append(type)
+        append("pkg:")
+        append(type)
 
-    if (namespace.isNotEmpty()) {
+        if (namespace.isNotEmpty()) {
+            append('/')
+            append(namespace.percentEncode())
+        }
+
         append('/')
-        append(namespace.percentEncode())
+        append(name.percentEncode())
+
+        append('@')
+        append(version.percentEncode())
+
+        qualifiers.onEachIndexed { index, entry ->
+            if (index == 0) append("?") else append("&")
+            append(entry.key.percentEncode())
+            append("=")
+            append(entry.value.percentEncode())
+        }
+
+        if (subpath.isNotEmpty()) {
+            val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
+            append(value)
+        }
     }
-
-    append('/')
-    append(name.percentEncode())
-
-    append('@')
-    append(version.percentEncode())
-
-    qualifiers.onEachIndexed { index, entry ->
-        if (index == 0) append("?") else append("&")
-        append(entry.key.percentEncode())
-        append("=")
-        append(entry.value.percentEncode())
-    }
-
-    if (subpath.isNotEmpty()) {
-        val value = subpath.split('/').joinToString("/", prefix = "#") { it.percentEncode() }
-        append(value)
-    }
-}

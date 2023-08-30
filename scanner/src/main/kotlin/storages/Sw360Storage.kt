@@ -128,7 +128,7 @@ class Sw360Storage(
             }
         }.recoverCatching {
             val message = "Failed to add scan results for '${id.toCoordinates()}' to SW360: " +
-                    it.collectMessages()
+                it.collectMessages()
 
             logger.info { message }
 
@@ -156,7 +156,7 @@ class Sw360Storage(
 
 private fun isAttachmentAScanResult(attachment: SW360SparseAttachment) =
     attachment.attachmentType == SW360AttachmentType.SCAN_RESULT_REPORT
-            && attachment.filename == SCAN_RESULTS_FILE_NAME
+        && attachment.filename == SCAN_RESULTS_FILE_NAME
 
 private fun createReleaseName(id: Identifier) = "${id.namespace}/${id.name}"
 

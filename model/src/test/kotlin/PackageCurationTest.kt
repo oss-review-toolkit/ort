@@ -395,11 +395,11 @@ class PackageCurationTest : WordSpec({
             val result3 = curation3.apply(result2)
 
             result1.metadata.declaredLicensesProcessed.spdxExpression shouldBe
-                    "Apache-2.0 AND BSD-3-Clause".toSpdx()
+                "Apache-2.0 AND BSD-3-Clause".toSpdx()
             result2.metadata.declaredLicensesProcessed.spdxExpression shouldBe
-                    "Apache-2.0 AND BSD-3-Clause AND CC-BY-1.0".toSpdx()
+                "Apache-2.0 AND BSD-3-Clause AND CC-BY-1.0".toSpdx()
             result3.metadata.declaredLicensesProcessed.spdxExpression shouldBe
-                    "Apache-2.0 AND BSD-3-Clause AND CC-BY-2.0".toSpdx()
+                "Apache-2.0 AND BSD-3-Clause AND CC-BY-2.0".toSpdx()
 
             result3.curations[0].base.declaredLicenseMapping should beEmpty()
             result3.curations[1].base.declaredLicenseMapping should beEmpty()

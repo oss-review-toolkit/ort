@@ -56,7 +56,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveNestedProvenance(provenance) shouldBe
-                        NestedProvenance(root = provenance, subRepositories = emptyMap())
+                    NestedProvenance(root = provenance, subRepositories = emptyMap())
             }
         }
 
@@ -72,7 +72,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveNestedProvenance(provenance) shouldBe
-                        NestedProvenance(root = provenance, subRepositories = emptyMap())
+                    NestedProvenance(root = provenance, subRepositories = emptyMap())
             }
 
             "find recursive Git submodules" {
@@ -200,7 +200,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
 
                 shouldThrow<IOException> {
                     resolver.resolveNestedProvenance(provenance) shouldBe
-                            NestedProvenance(root = provenance, subRepositories = emptyMap())
+                        NestedProvenance(root = provenance, subRepositories = emptyMap())
                 }
             }
 
@@ -215,7 +215,7 @@ class DefaultNestedProvenanceResolverFunTest : WordSpec() {
                 )
 
                 resolver.resolveNestedProvenance(provenance) shouldBe
-                        NestedProvenance(root = provenance, subRepositories = emptyMap())
+                    NestedProvenance(root = provenance, subRepositories = emptyMap())
             }
         }
     }

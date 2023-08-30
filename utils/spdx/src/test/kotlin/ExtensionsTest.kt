@@ -33,7 +33,7 @@ class ExtensionsTest : WordSpec({
 
         "convert ORT Identifier coordinate strings" {
             "Maven:org.eclipse.jetty:jetty-client:9.4.42.v20210604".toSpdxId() shouldBe
-                    "Maven-org.eclipse.jetty-jetty-client-9.4.42.v20210604"
+                "Maven-org.eclipse.jetty-jetty-client-9.4.42.v20210604"
             "Pub:crypto:crypto:2.1.1+1".toSpdxId(allowPlusSuffix = true) shouldBe "Pub-crypto-crypto-2.1.1.1"
             "NPM::lodash._reinterpolate:3.0.0".toSpdxId() shouldBe "NPM-lodash.reinterpolate-3.0.0"
         }

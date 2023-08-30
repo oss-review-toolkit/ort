@@ -66,7 +66,7 @@ internal class DeleteCommand : CliktCommand(
     private val configArguments by option(
         "-P",
         help = "Override a key-value pair in the configuration file. For example: " +
-                "-P ort.scanner.storages.postgres.connection.schema=testSchema"
+            "-P ort.scanner.storages.postgres.connection.schema=testSchema"
     ).associate()
 
     private val sourceCodeOrigins by option(
@@ -160,7 +160,7 @@ internal class DeleteCommand : CliktCommand(
 
         logger.info {
             "Using Postgres storage with URL '${storageConfig.connection.url}' and schema " +
-                    "'${storageConfig.connection.schema}'."
+                "'${storageConfig.connection.schema}'."
         }
 
         val dataSource = DatabaseUtils.createHikariDataSource(

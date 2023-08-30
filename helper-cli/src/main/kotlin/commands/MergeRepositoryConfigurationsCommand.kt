@@ -36,7 +36,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MergeRepositoryConfigurationsCommand : CliktCommand(
     help = "Merges the given list of input repository configuration files and writes the result to the given output " +
-            "repository configuration file."
+        "repository configuration file."
 ) {
     private val inputRepositoryConfigurationFiles by option(
         "--input-repository-configuration-files", "-i",

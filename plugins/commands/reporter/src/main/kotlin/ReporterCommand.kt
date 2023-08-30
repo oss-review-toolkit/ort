@@ -109,7 +109,7 @@ class ReporterCommand : OrtCommand(
     private val copyrightGarbageFile by option(
         "--copyright-garbage-file",
         help = "A file containing copyright statements which are marked as garbage. This can make the output " +
-                "inconsistent with the evaluator output but is useful when testing copyright garbage."
+            "inconsistent with the evaluator output but is useful when testing copyright garbage."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -119,8 +119,8 @@ class ReporterCommand : OrtCommand(
     private val customLicenseTextsDir by option(
         "--custom-license-texts-dir",
         help = "A directory which maps custom license IDs to license texts. It should contain one text file per " +
-                "license with the license ID as the filename. A custom license text is used only if its ID has a " +
-                "'LicenseRef-' prefix and if the respective license text is not known by ORT."
+            "license with the license ID as the filename. A custom license text is used only if its ID has a " +
+            "'LicenseRef-' prefix and if the respective license text is not known by ORT."
     ).convert { it.expandTilde() }
         .file(mustExist = false, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = false)
         .convert { it.absoluteFile.normalize() }
@@ -130,7 +130,7 @@ class ReporterCommand : OrtCommand(
     private val howToFixTextProviderScript by option(
         "--how-to-fix-text-provider-script",
         help = "The path to a Kotlin script which returns an instance of a 'HowToFixTextProvider'. That provider " +
-                "injects how-to-fix texts in Markdown format for ORT issues."
+            "injects how-to-fix texts in Markdown format for ORT issues."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -140,7 +140,7 @@ class ReporterCommand : OrtCommand(
     private val licenseClassificationsFile by option(
         "--license-classifications-file",
         help = "A file containing the license classifications. This can make the output inconsistent with the " +
-                "evaluator output but is useful when testing license classifications."
+            "evaluator output but is useful when testing license classifications."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -150,8 +150,8 @@ class ReporterCommand : OrtCommand(
     private val packageConfigurationsDir by option(
         "--package-configurations-dir",
         help = "A directory that is searched recursively for package configuration files. Each file must only " +
-                "contain a single package configuration. This can make the output inconsistent with the evaluator " +
-                "output but is useful when testing package configurations."
+            "contain a single package configuration. This can make the output inconsistent with the evaluator " +
+            "output but is useful when testing package configurations."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = false, canBeDir = true, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -160,15 +160,15 @@ class ReporterCommand : OrtCommand(
     private val refreshResolutions by option(
         "--refresh-resolutions",
         help = "Use the resolutions from the global and repository configuration instead of the resolved " +
-                "configuration. This can make the output inconsistent with the evaluator output but is useful when " +
-                "testing resolutions."
+            "configuration. This can make the output inconsistent with the evaluator output but is useful when " +
+            "testing resolutions."
     ).flag().configurationGroup()
 
     private val repositoryConfigurationFile by option(
         "--repository-configuration-file",
         help = "A file containing the repository configuration. If set, overrides the repository configuration " +
-                "contained in the ORT result input file. This can make the output inconsistent with the output of " +
-                "previous commands but is useful when testing changes in the repository configuration."
+            "contained in the ORT result input file. This can make the output inconsistent with the output of " +
+            "previous commands but is useful when testing changes in the repository configuration."
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
@@ -186,8 +186,8 @@ class ReporterCommand : OrtCommand(
     private val reportOptions by option(
         "--report-option", "-O",
         help = "Specify a report-format-specific option. The key is the (case-insensitive) name of the report " +
-                "format, and the value is an arbitrary key-value pair. For example: " +
-                "-O PlainTextTemplate=template.id=NOTICE_SUMMARY"
+            "format, and the value is an arbitrary key-value pair. For example: " +
+            "-O PlainTextTemplate=template.id=NOTICE_SUMMARY"
     ).splitPair().convert { (format, option) ->
         require(format in Reporter.ALL.keys) {
             "Report formats must be one or more of ${Reporter.ALL.keys}."

@@ -61,8 +61,8 @@ abstract class VersionControlSystem(
          */
         fun forType(vcsType: VcsType) =
             ALL.find {
-            it.isAvailable() && it.isApplicableType(vcsType)
-        }
+                it.isAvailable() && it.isApplicableType(vcsType)
+            }
 
         /**
          * A map to cache the [VersionControlSystem], if any, for previously queried URLs. This helps to speed up
@@ -125,7 +125,7 @@ abstract class VersionControlSystem(
 
                         logger.debug {
                             "Exception while validating ${it.vcsType} working tree, treating it as non-applicable: " +
-                                    e.collectMessages()
+                                e.collectMessages()
                         }
 
                         false
@@ -266,7 +266,7 @@ abstract class VersionControlSystem(
             if (it.isNotBlank() && !workingTree.workingDir.resolve(it).exists()) {
                 throw DownloadException(
                     "The $type working directory at '${workingTree.workingDir}' does not contain the requested path " +
-                            "'$it'."
+                        "'$it'."
                 )
             }
         }
@@ -308,7 +308,7 @@ abstract class VersionControlSystem(
                     if (it !in revisionCandidates) {
                         logger.info {
                             "Adding $type revision '$it' (guessed from package '$project' and version '$version') as " +
-                                    "a candidate."
+                                "a candidate."
                         }
 
                         revisionCandidates += it
@@ -317,7 +317,7 @@ abstract class VersionControlSystem(
             }.onFailure {
                 logger.info {
                     "No $type revision for package '$project' and version '$version' found: " +
-                            it.collectMessages()
+                        it.collectMessages()
                 }
 
                 emptyRevisionCandidatesException.addSuppressed(it)
@@ -401,8 +401,8 @@ abstract class VersionControlSystem(
     fun isFixedRevision(workingTree: WorkingTree, revision: String): Result<Boolean> =
         runCatching {
             revision.isNotBlank()
-                    && revision !in latestRevisionNames
-                    && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
+                && revision !in latestRevisionNames
+                && (revision !in workingTree.listRemoteBranches() || revision in workingTree.listRemoteTags())
         }
 
     /**

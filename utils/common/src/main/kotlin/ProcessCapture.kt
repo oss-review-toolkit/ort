@@ -125,7 +125,7 @@ class ProcessCapture(
             } ?: stdout
 
             return "Running '$commandLine' in '$usedWorkingDir' failed with exit code $exitValue:\n" +
-                    limitOutputLines(message)
+                limitOutputLines(message)
         }
 
     init {

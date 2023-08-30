@@ -77,8 +77,8 @@ fun Collection<Int>.collapseToRanges(): List<Pair<Int, Int>> {
  */
 fun Collection<Pair<Int, Int>>.prettyPrintRanges(): String =
     joinToString { (startValue, endValue) ->
-    if (startValue == endValue) startValue.toString() else "$startValue-$endValue"
-}
+        if (startValue == endValue) startValue.toString() else "$startValue-$endValue"
+    }
 
 /**
  * Format this [Double] as a string with the provided number of [decimalPlaces].

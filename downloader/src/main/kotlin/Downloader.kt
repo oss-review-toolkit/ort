@@ -122,7 +122,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             logger.info {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.vcsProcessed} " +
-                        "took ${vcsMark.elapsedNow()}."
+                    "took ${vcsMark.elapsedNow()}."
             }
 
             // Clean up any left-over files (force to delete read-only files in ".git" directories on Windows).
@@ -151,7 +151,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             logger.info {
                 "Downloaded source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} in " +
-                        "${sourceArtifactMark.elapsedNow()}."
+                    "${sourceArtifactMark.elapsedNow()}."
             }
 
             return result
@@ -162,7 +162,7 @@ class Downloader(private val config: DownloaderConfiguration) {
 
             logger.info {
                 "Failed attempt to download source code for '${pkg.id.toCoordinates()}' from ${pkg.sourceArtifact} " +
-                        "took ${sourceArtifactMark.elapsedNow()}."
+                    "took ${sourceArtifactMark.elapsedNow()}."
             }
 
             // Clean up any left-over files.
@@ -191,23 +191,23 @@ class Downloader(private val config: DownloaderConfiguration) {
             val hint = when (pkg.id.type) {
                 "Bundler", "Gem" ->
                     " Please define the \"source_code_uri\" in the \"metadata\" of the Gemspec, see: " +
-                            "https://guides.rubygems.org/specification-reference/#metadata"
+                        "https://guides.rubygems.org/specification-reference/#metadata"
                 "Gradle" ->
                     " Please make sure the published POM file includes the SCM connection, see: " +
-                            "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
-                            "sec:modifying_the_generated_pom"
+                        "https://docs.gradle.org/current/userguide/publishing_maven.html#" +
+                        "sec:modifying_the_generated_pom"
                 "Maven" ->
                     " Please define the \"connection\" tag within the \"scm\" tag in the POM file, see: " +
-                            "https://maven.apache.org/pom.html#SCM"
+                        "https://maven.apache.org/pom.html#SCM"
                 "NPM" ->
                     " Please define the \"repository\" in the package.json file, see: " +
-                            "https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository"
+                        "https://docs.npmjs.com/cli/v7/configuring-npm/package-json#repository"
                 "PIP", "PyPI" ->
                     " Please make sure the setup.py defines the 'Source' attribute in 'project_urls', see: " +
-                            "https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls"
+                        "https://packaging.python.org/guides/distributing-packages-using-setuptools/#project-urls"
                 "SBT" ->
                     " Please make sure the published POM file includes the SCM connection, see: " +
-                            "https://maven.apache.org/pom.html#SCM"
+                        "https://maven.apache.org/pom.html#SCM"
                 else -> ""
             }
 

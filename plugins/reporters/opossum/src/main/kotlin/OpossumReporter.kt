@@ -98,34 +98,34 @@ class OpossumReporter : Reporter {
     ) {
         fun toJson(): Map<*, *> =
             sortedMapOf(
-            uuid.toString() to sortedMapOf(
-                "source" to sortedMapOf(
-                    "name" to source,
-                    "documentConfidence" to 80
-                ),
-                "attributionConfidence" to 80,
-                "packageType" to id?.getPurlType(),
-                "packageNamespace" to id?.namespace,
-                "packageName" to id?.name,
-                "packageVersion" to id?.version,
-                "copyright" to copyright,
-                "licenseName" to license?.toString(),
-                "url" to url,
-                "preSelected" to preselected,
-                "followUp" to "FOLLOW_UP".takeIf { followUp },
-                "excludeFromNotice" to excludeFromNotice,
-                "comment" to comment
+                uuid.toString() to sortedMapOf(
+                    "source" to sortedMapOf(
+                        "name" to source,
+                        "documentConfidence" to 80
+                    ),
+                    "attributionConfidence" to 80,
+                    "packageType" to id?.getPurlType(),
+                    "packageNamespace" to id?.namespace,
+                    "packageName" to id?.name,
+                    "packageVersion" to id?.version,
+                    "copyright" to copyright,
+                    "licenseName" to license?.toString(),
+                    "url" to url,
+                    "preSelected" to preselected,
+                    "followUp" to "FOLLOW_UP".takeIf { followUp },
+                    "excludeFromNotice" to excludeFromNotice,
+                    "comment" to comment
+                )
             )
-        )
 
         fun matches(other: OpossumSignal): Boolean =
             source == other.source
-                    && id == other.id
-                    && url == other.url
-                    && license == other.license
-                    && copyright == other.copyright
-                    && comment == other.comment
-                    && preselected == other.preselected
+                && id == other.id
+                && url == other.url
+                && license == other.license
+                && copyright == other.copyright
+                && comment == other.comment
+                && preselected == other.preselected
     }
 
     internal data class OpossumResources(
@@ -179,10 +179,10 @@ class OpossumReporter : Reporter {
     ) : Comparable<OpossumFrequentLicense> {
         fun toJson(): Map<*, *> =
             sortedMapOf(
-            "shortName" to shortName,
-            "fullName" to fullName,
-            "defaultText" to defaultText
-        )
+                "shortName" to shortName,
+                "fullName" to fullName,
+                "defaultText" to defaultText
+            )
 
         override fun compareTo(other: OpossumFrequentLicense) =
             compareValuesBy(

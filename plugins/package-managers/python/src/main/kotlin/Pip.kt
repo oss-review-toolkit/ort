@@ -103,7 +103,7 @@ class Pip(
 
         logger.info {
             "Resolving dependencies for '${definitionFile.absolutePath}' with Python version '$pythonVersionOption' " +
-                    "and operating system '$operatingSystemOption'."
+                "and operating system '$operatingSystemOption'."
         }
 
         return runCatching {
@@ -122,7 +122,7 @@ class Pip(
 
             logger.error {
                 "Unable to determine dependencies for definition file '${definitionFile.absolutePath}': " +
-                        e.collectMessages()
+                    e.collectMessages()
             }
         }.getOrThrow()
     }

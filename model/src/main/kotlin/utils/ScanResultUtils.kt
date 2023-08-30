@@ -80,8 +80,8 @@ fun mergeScanResultsByScanner(
  */
 private fun List<Map<String, String>>.mergeAdditionalData(): Map<String, String> =
     flatMap { it.entries }
-    .groupBy({ it.key }) { it.value }
-    .mapValues { it.value.joinToString(",") }
+        .groupBy({ it.key }) { it.value }
+        .mapValues { it.value.joinToString(",") }
 
 private fun Map<String, List<ScanResult>>.mergeLicenseFindings(): Set<LicenseFinding> {
     val findingsByPath = mapValues { (_, scanResults) ->

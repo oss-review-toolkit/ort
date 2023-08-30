@@ -108,13 +108,13 @@ class ScanCodeResultParserTest : FreeSpec({
 
                     summary should containCopyrightsExactly(
                         "Copyright (c) 2014 Jonathan Ong" to
-                                listOf(TextLocation("index.js", 3)),
+                            listOf(TextLocation("index.js", 3)),
                         "Copyright (c) 2014 Jonathan Ong <me@jongleberry.com>" to
-                                listOf(TextLocation("LICENSE", 3)),
+                            listOf(TextLocation("LICENSE", 3)),
                         "Copyright (c) 2015 Douglas Christopher Wilson" to
-                                listOf(TextLocation("index.js", 4)),
+                            listOf(TextLocation("index.js", 4)),
                         "Copyright (c) 2015 Douglas Christopher Wilson <doug@somethingdoug.com>" to
-                                listOf(TextLocation("LICENSE", 4))
+                            listOf(TextLocation("LICENSE", 4))
                     )
                 }
             }
@@ -156,7 +156,7 @@ class ScanCodeResultParserTest : FreeSpec({
                     timestamp = Instant.EPOCH,
                     source = ScanCode.SCANNER_NAME,
                     message = "The output format version 3.0.0 exceeds the supported major version " +
-                            "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
+                        "$MAX_SUPPORTED_OUTPUT_FORMAT_MAJOR_VERSION. Results may be incomplete or incorrect.",
                     severity = Severity.WARNING
                 )
             }

@@ -383,9 +383,9 @@ private fun createDependency(
     version: String,
     dependencies: Set<PackageReference> = emptySet()
 ) = PackageReference(
-        id = Identifier("test", group, artifact, version),
-        dependencies = dependencies
-    )
+    id = Identifier("test", group, artifact, version),
+    dependencies = dependencies
+)
 
 /**
  * Return the package references from the given [scopes] associated with the scope with the given [scopeName].

@@ -63,7 +63,7 @@ class FileBasedStorage(
             if (it is FileNotFoundException) return EMPTY_RESULT
 
             val message = "Could not read scan results for '${id.toCoordinates()}' from path '$path': " +
-                    it.collectMessages()
+                it.collectMessages()
 
             logger.info { message }
 
@@ -76,7 +76,7 @@ class FileBasedStorage(
 
         if (existingScanResults.any { it.scanner == scanResult.scanner && it.provenance == scanResult.provenance }) {
             val message = "Did not store scan result for '${id.toCoordinates()}' because a scan result for the same " +
-                    "scanner and provenance was already stored."
+                "scanner and provenance was already stored."
 
             logger.warn { message }
 
@@ -97,7 +97,7 @@ class FileBasedStorage(
                 it.showStackTrace()
 
                 val message = "Could not store scan result for '${id.toCoordinates()}' at path '$path': " +
-                        it.collectMessages()
+                    it.collectMessages()
 
                 logger.warn { message }
 

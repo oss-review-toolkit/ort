@@ -184,25 +184,25 @@ class NpmSupportTest : WordSpec() {
 
             "return valid URLs unmodified" {
                 expandNpmShortcutUrl("https://github.com/oss-review-toolkit/ort") shouldBe
-                        "https://github.com/oss-review-toolkit/ort"
+                    "https://github.com/oss-review-toolkit/ort"
             }
 
             "properly handle NPM shortcut URLs" {
                 val packages = mapOf(
                     "npm/npm"
-                            to "https://github.com/npm/npm.git",
+                        to "https://github.com/npm/npm.git",
                     "mochajs/mocha#4727d357ea"
-                            to "https://github.com/mochajs/mocha.git#4727d357ea",
+                        to "https://github.com/mochajs/mocha.git#4727d357ea",
                     "user/repo#feature/branch"
-                            to "https://github.com/user/repo.git#feature/branch",
+                        to "https://github.com/user/repo.git#feature/branch",
                     "github:snyk/node-tap#540c9e00f52809cb7fbfd80463578bf9d08aad50"
-                            to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
+                        to "https://github.com/snyk/node-tap.git#540c9e00f52809cb7fbfd80463578bf9d08aad50",
                     "gist:11081aaa281"
-                            to "https://gist.github.com/11081aaa281",
+                        to "https://gist.github.com/11081aaa281",
                     "bitbucket:example/repo"
-                            to "https://bitbucket.org/example/repo.git",
+                        to "https://bitbucket.org/example/repo.git",
                     "gitlab:another/repo"
-                            to "https://gitlab.com/another/repo.git"
+                        to "https://gitlab.com/another/repo.git"
                 )
 
                 packages.entries.forAll { (actualUrl, expectedUrl) ->
@@ -213,11 +213,11 @@ class NpmSupportTest : WordSpec() {
             "not mess with crazy URLs" {
                 val packages = mapOf(
                     "git@github.com/cisco/node-jose.git"
-                            to "git@github.com/cisco/node-jose.git",
+                        to "git@github.com/cisco/node-jose.git",
                     "https://git@github.com:hacksparrow/node-easyimage.git"
-                            to "https://git@github.com:hacksparrow/node-easyimage.git",
+                        to "https://git@github.com:hacksparrow/node-easyimage.git",
                     "github.com/improbable-eng/grpc-web"
-                            to "github.com/improbable-eng/grpc-web"
+                        to "github.com/improbable-eng/grpc-web"
                 )
 
                 packages.entries.forAll { (actualUrl, expectedUrl) ->

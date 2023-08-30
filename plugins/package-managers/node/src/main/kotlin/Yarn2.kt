@@ -351,7 +351,7 @@ class Yarn2(
                         if ("Yarn2" in dependency.type) {
                             val projectAsDependency = allProjects.entries.find { entry ->
                                 entry.key.type == "Yarn2" && entry.key.name == dependency.name &&
-                                        entry.key.namespace == dependency.namespace
+                                    entry.key.namespace == dependency.namespace
                             }
 
                             if (projectAsDependency == null) {
@@ -515,7 +515,7 @@ class Yarn2(
         return YarnDependencyType.entries.associateWith { dependencyType ->
             id to dependencies.filter {
                 dependencyToType[it.name] == dependencyType
-                        || (it.name !in dependencyToType && dependencyType == YarnDependencyType.DEPENDENCIES)
+                    || (it.name !in dependencyToType && dependencyType == YarnDependencyType.DEPENDENCIES)
             }
         }
     }

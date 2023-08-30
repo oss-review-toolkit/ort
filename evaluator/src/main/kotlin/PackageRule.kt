@@ -218,7 +218,7 @@ open class PackageRule(
         fun pkg() = pkg
 
         override val description = "\tEvaluating license rule '$name' for $licenseSource license " +
-                "'${resolvedLicense.license}'."
+            "'${resolvedLicense.license}'."
 
         override fun issueSource() =
             "$name - ${pkg.metadata.id.toCoordinates()} - ${resolvedLicense.license} ($licenseSource)"

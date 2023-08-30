@@ -32,7 +32,7 @@ import org.ossreviewtoolkit.utils.common.expandTilde
 
 internal class MapCopyrightsCommand : CliktCommand(
     help = "Reads processed copyright statements from the input file, maps them to unprocessed copyright statements " +
-            "using the given ORT file, and writes those mapped statements to the given output file."
+        "using the given ORT file, and writes those mapped statements to the given output file."
 ) {
     private val inputCopyrightGarbageFile by option(
         "--input-copyrights-file", "-i",

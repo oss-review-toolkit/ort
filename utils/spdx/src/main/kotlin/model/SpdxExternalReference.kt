@@ -87,7 +87,7 @@ data class SpdxExternalReference(
 
         require(referenceType.category == Category.OTHER || referenceType.category == referenceCategory) {
             "The category for '${referenceType.name}' must be '${referenceType.category}', but was " +
-                    "'$referenceCategory'."
+                "'$referenceCategory'."
         }
     }
 

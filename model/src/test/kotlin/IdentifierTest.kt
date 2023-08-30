@@ -37,13 +37,13 @@ class IdentifierTest : WordSpec({
         "be correct" {
             val mapping = mapOf(
                 Identifier("manager", "namespace", "name", "version")
-                        to "manager:namespace:name:version",
+                    to "manager:namespace:name:version",
                 Identifier("", "", "", "")
-                        to ":::",
+                    to ":::",
                 Identifier("manager", "namespace", "name", "")
-                        to "manager:namespace:name:",
+                    to "manager:namespace:name:",
                 Identifier("manager", "", "name", "version")
-                        to "manager::name:version"
+                    to "manager::name:version"
             )
 
             mapping.entries.forAll { (identifier, stringRepresentation) ->
@@ -54,13 +54,13 @@ class IdentifierTest : WordSpec({
         "be parsed correctly" {
             val mapping = mapOf(
                 "manager:namespace:name:version"
-                        to Identifier("manager", "namespace", "name", "version"),
+                    to Identifier("manager", "namespace", "name", "version"),
                 ":::"
-                        to Identifier("", "", "", ""),
+                    to Identifier("", "", "", ""),
                 "manager:namespace:name:"
-                        to Identifier("manager", "namespace", "name", ""),
+                    to Identifier("manager", "namespace", "name", ""),
                 "manager::name:version"
-                        to Identifier("manager", "", "name", "version")
+                    to Identifier("manager", "", "name", "version")
             )
 
             mapping.entries.forAll { (stringRepresentation, identifier) ->

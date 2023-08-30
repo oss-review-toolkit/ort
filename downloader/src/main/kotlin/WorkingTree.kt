@@ -95,7 +95,7 @@ abstract class WorkingTree(val workingDir: File, val vcsType: VcsType) {
             versionNames.isEmpty() ->
                 throw IOException(
                     "No matching tag for version '$version' found in $remoteTags. Please create a tag whose name " +
-                            "contains the version."
+                        "contains the version."
                 )
             versionNames.size > 1 ->
                 throw IOException(

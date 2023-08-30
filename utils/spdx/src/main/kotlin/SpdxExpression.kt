@@ -257,9 +257,9 @@ class SpdxCompoundExpression(
 
             SpdxOperator.AND -> when {
                 leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR &&
-                        rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
+                    rightDnf is SpdxCompoundExpression && rightDnf.operator == SpdxOperator.OR ->
                     ((leftDnf.left and rightDnf.left) or (leftDnf.left and rightDnf.right)) or
-                            ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
+                        ((leftDnf.right and rightDnf.left) or (leftDnf.right and rightDnf.right))
 
                 leftDnf is SpdxCompoundExpression && leftDnf.operator == SpdxOperator.OR ->
                     (leftDnf.left and rightDnf) or (leftDnf.right and rightDnf)
@@ -484,7 +484,7 @@ class SpdxLicenseWithExceptionExpression(
                 } else {
                     throw SpdxException(
                         "'$this' cannot be normalized, because the license '$license' contains the exception " +
-                                "'${normalizedLicense.exception}' which is different from '$exception'."
+                            "'${normalizedLicense.exception}' which is different from '$exception'."
                     )
                 }
             }

@@ -436,8 +436,8 @@ class FreeMarkerTemplateProcessorTest : WordSpec({
             val advisorResult = advisorResult(issues = listOf(issue))
 
             val advisorRun = advisorRunOf(
-                    idSubProject to listOf(advisorResult),
-                    idRootProject to listOf(advisorResult())
+                idSubProject to listOf(advisorResult),
+                idRootProject to listOf(advisorResult())
             )
             val ortResult = ORT_RESULT.copy(advisor = advisorRun)
             val input = ReporterInput(ortResult)

@@ -110,7 +110,7 @@ internal class GradleDependencyHandler(
                     issues += createAndLogIssue(
                         source = managerName,
                         message = "Could not get package information for dependency '${artifact.identifier()}': " +
-                                e.collectMessages()
+                            e.collectMessages()
                     )
 
                     null

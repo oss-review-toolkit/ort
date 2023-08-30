@@ -48,7 +48,7 @@ class PnpmFunTest : WordSpec({
             val ortResult = analyze(definitionFile.parentFile, packageManagers = setOf(Pnpm.Factory()))
 
             patchActualResult(ortResult.toYaml(), patchStartAndEndTime = true) should
-                    matchExpectedResult(expectedResultFile, definitionFile)
+                matchExpectedResult(expectedResultFile, definitionFile)
         }
     }
 })

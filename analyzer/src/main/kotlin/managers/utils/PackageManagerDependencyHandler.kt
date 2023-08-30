@@ -136,18 +136,18 @@ private data class PackageManagerDependency(
 
         require(project.id.type == packageManager) {
             "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' uses the wrong " +
-                    "package manager '${project.id.type}', expected is '$packageManager'."
+                "package manager '${project.id.type}', expected is '$packageManager'."
         }
 
         requireNotNull(project.scopeNames) {
             "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not use a " +
-                    "dependency graph."
+                "dependency graph."
         }
 
         if (scope !in project.scopeNames.orEmpty()) {
             logger.warn {
                 "The project '${project.id.toCoordinates()}' from definition file '$definitionFile' does not contain " +
-                        "the requested scope '$scope'."
+                    "the requested scope '$scope'."
             }
         }
     }

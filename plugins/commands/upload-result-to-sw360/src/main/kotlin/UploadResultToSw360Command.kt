@@ -118,7 +118,7 @@ class UploadResultToSw360Command : OrtCommand(
                         if (uploadResult.isSuccess) {
                             logger.info {
                                 "Successfully uploaded source attachment '${zipFile.name}' to release " +
-                                        "${release.id}:${release.name}"
+                                    "${release.id}:${release.name}"
                             }
                         } else {
                             logger.error { "Could not upload source attachment: " + uploadResult.failedUploads() }

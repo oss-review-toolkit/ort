@@ -90,8 +90,8 @@ data class NestedProvenanceScanResult(
 
         require(provenancesWithVcsPath.isEmpty()) {
             "Cannot filter scan results by VCS path that have a repository provenance with a non-blank VCS path " +
-                    "because their partial scan result might not contain the path to filter for. The following " +
-                    "provenances have a non-blank VCS path: ${provenancesWithVcsPath.joinToString("\n") { "\t$it" }}."
+                "because their partial scan result might not contain the path to filter for. The following " +
+                "provenances have a non-blank VCS path: ${provenancesWithVcsPath.joinToString("\n") { "\t$it" }}."
         }
 
         val pathsWithinProvenances = provenances.filter {
@@ -99,7 +99,7 @@ data class NestedProvenanceScanResult(
             // Return true if the provenance is on the same branch as the filter path. Otherwise it can be discarded,
             // because all findings would be filtered anyway.
             provenancePath.isEmpty() || provenancePath == path || provenancePath.startsWith("$path/") ||
-                    path.startsWith("$provenancePath/")
+                path.startsWith("$provenancePath/")
         }.associateWith { provenance ->
             val provenancePath = getPath(provenance)
 

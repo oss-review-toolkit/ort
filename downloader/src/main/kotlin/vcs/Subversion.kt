@@ -175,7 +175,7 @@ class Subversion : VersionControlSystem() {
 
             logger.warn {
                 "Failed to update the $type working tree at '${workingTree.workingDir}' to revision '$revision':\n" +
-                        it.collectMessages()
+                    it.collectMessages()
             }
         }.map {
             revision

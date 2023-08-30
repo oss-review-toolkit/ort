@@ -211,14 +211,14 @@ private fun getPackageJsonInfo(definitionFiles: Set<File>): Collection<PackageJs
             definitionFile = definitionFile,
             isPnpmWorkspaceRoot = isPnpmWorkspaceRoot(definitionFile.parentFile),
             isYarnWorkspaceRoot = isYarnWorkspaceRoot(definitionFile) &&
-                    !isPnpmWorkspaceRoot(definitionFile.parentFile),
+                !isPnpmWorkspaceRoot(definitionFile.parentFile),
             hasYarnLockfile = hasYarnLockFile(definitionFile.parentFile),
             hasNpmLockfile = hasNpmLockFile(definitionFile.parentFile),
             hasPnpmLockfile = hasPnpmLockFile(definitionFile.parentFile),
             hasYarn2ResourceFile = hasYarn2ResourceFile(definitionFile.parentFile),
             isPnpmWorkspaceSubmodule = definitionFile in pnpmWorkspaceSubmodules,
             isYarnWorkspaceSubmodule = definitionFile in yarnWorkspaceSubmodules &&
-                    definitionFile !in pnpmWorkspaceSubmodules
+                definitionFile !in pnpmWorkspaceSubmodules
         )
     }
 }
