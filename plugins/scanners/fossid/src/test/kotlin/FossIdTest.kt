@@ -109,7 +109,6 @@ import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.SERVER_URL_
 import org.ossreviewtoolkit.plugins.scanners.fossid.FossId.Companion.convertGitUrlToProjectName
 import org.ossreviewtoolkit.scanner.ScanContext
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
-import org.ossreviewtoolkit.utils.test.shouldNotBeNull
 
 @Suppress("LargeClass")
 class FossIdTest : WordSpec({
@@ -361,7 +360,7 @@ class FossIdTest : WordSpec({
             summary.issues.map { it.copy(timestamp = Instant.EPOCH) } shouldBe expectedIssues
         }
 
-        "report pending files as snippets" {
+        "report snippets of pending files" {
             val projectCode = projectCode(PROJECT)
             val scanCode = scanCode(PROJECT, null)
             val config = createConfig(deltaScans = false)
@@ -382,9 +381,9 @@ class FossIdTest : WordSpec({
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
             val expectedPendingFile = (1..5).map(::createPendingFile).toSet()
-            val expectedSnippetFindings = (1..5).map(::createSnippetFindings).flatten()
+            val expectedSnippetFindings = (1..5).map(::createSnippetFindings)
 
-            summary.snippetFindings shouldHaveSize expectedPendingFile.size * 5
+            summary.snippetFindings shouldHaveSize expectedPendingFile.size
             summary.snippetFindings.map { it.sourceLocation.path }.toSet() shouldBe expectedPendingFile
             summary.snippetFindings shouldBe expectedSnippetFindings
         }
@@ -409,14 +408,36 @@ class FossIdTest : WordSpec({
 
             val summary = fossId.scan(createPackage(pkgId, vcsInfo)).summary
 
-            summary.snippetFindings shouldHaveSize 1
-            summary.snippetFindings.first() shouldNotBeNull {
-                sourceLocation.startLine shouldBe(1)
-                sourceLocation.endLine shouldBe(3)
-                snippet.location.startLine shouldBe 11
-                snippet.location.endLine shouldBe 12
-                snippet.additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] shouldBe "1-3, 21-22, 36"
-                snippet.additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
+            summary.snippetFindings shouldHaveSize 3
+            summary.snippetFindings.first().apply {
+                sourceLocation shouldBe TextLocation("/pending/file/1", 1, 3)
+                snippets shouldHaveSize 1
+                snippets.first().apply {
+                    location.startLine shouldBe 11
+                    location.endLine shouldBe 12
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] shouldBe "1-3, 21-22, 36"
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
+                }
+            }
+            summary.snippetFindings.elementAt(1).apply {
+                sourceLocation shouldBe TextLocation("/pending/file/1", 21, 22)
+                snippets shouldHaveSize 1
+                snippets.first().apply {
+                    location.startLine shouldBe 11
+                    location.endLine shouldBe 12
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] shouldBe "1-3, 21-22, 36"
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
+                }
+            }
+            summary.snippetFindings.last().apply {
+                sourceLocation shouldBe TextLocation("/pending/file/1", 36)
+                snippets shouldHaveSize 1
+                snippets.first().apply {
+                    location.startLine shouldBe 11
+                    location.endLine shouldBe 12
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SOURCE] shouldBe "1-3, 21-22, 36"
+                    additionalData[FossId.SNIPPET_DATA_MATCHED_LINE_SNIPPET] shouldBe "11-12"
+                }
             }
         }
 
@@ -1410,10 +1431,10 @@ private fun createSnippet(index: Int): Snippet =
 /**
  * Generate a ORT snippet finding based on the given [index].
  */
-private fun createSnippetFindings(index: Int): Set<SnippetFinding> =
-    (1..5).map { snippetIndex ->
-        SnippetFinding(
-            TextLocation("/pending/file/$index", TextLocation.UNKNOWN_LINE),
+private fun createSnippetFindings(index: Int): SnippetFinding =
+    SnippetFinding(
+        TextLocation("/pending/file/$index", TextLocation.UNKNOWN_LINE),
+        (1..5).map { snippetIndex ->
             OrtSnippet(
                 snippetIndex.toFloat(),
                 TextLocation("file$snippetIndex", TextLocation.UNKNOWN_LINE),
@@ -1427,8 +1448,8 @@ private fun createSnippetFindings(index: Int): Set<SnippetFinding> =
                     FossId.SNIPPET_DATA_MATCH_TYPE to MatchType.PARTIAL.toString()
                 )
             )
-        )
-    }.toSet()
+        }.toSet()
+    )
 
 /**
  * Prepare this service mock to answer a request for a project with the given [projectCode]. Return a response with

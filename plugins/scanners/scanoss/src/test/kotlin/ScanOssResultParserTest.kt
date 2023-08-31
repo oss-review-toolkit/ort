@@ -115,19 +115,21 @@ class ScanOssResultParserTest : WordSpec({
             summary.snippetFindings.shouldContainExactly(
                 SnippetFinding(
                     TextLocation("src/main/java/com/vdurmont/semver4j/Requirement.java", 1, 710),
-                    Snippet(
-                        98.0f,
-                        TextLocation(
-                            "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
-                            1,
-                            710
-                        ),
-                        RepositoryProvenance(
-                            VcsInfo(VcsType.UNKNOWN, "https://github.com/vdurmont/semver4j", ""),
-                            "."
-                        ),
-                        "pkg:github/vdurmont/semver4j",
-                        SpdxExpression.parse("CC-BY-SA-2.0")
+                    setOf(
+                        Snippet(
+                            98.0f,
+                            TextLocation(
+                                "https://osskb.org/api/file_contents/6ff2427335b985212c9b79dfa795799f",
+                                1,
+                                710
+                            ),
+                            RepositoryProvenance(
+                                VcsInfo(VcsType.UNKNOWN, "https://github.com/vdurmont/semver4j", ""),
+                                "."
+                            ),
+                            "pkg:github/vdurmont/semver4j",
+                            SpdxExpression.parse("CC-BY-SA-2.0")
+                        )
                     )
                 )
             )

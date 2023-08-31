@@ -89,8 +89,7 @@ class ScopeSortedSetConverter : StdConverter<Set<Scope>, SortedSet<Scope>>() {
 }
 
 class SnippetFindingSortedSetConverter : StdConverter<Set<SnippetFinding>, SortedSet<SnippetFinding>>() {
-    override fun convert(value: Set<SnippetFinding>) =
-        value.toSortedSet(compareBy<SnippetFinding> { it.sourceLocation }.thenByDescending { it.snippet.purl })
+    override fun convert(value: Set<SnippetFinding>) = value.toSortedSet(compareBy { it.sourceLocation })
 }
 
 private fun Provenance.getSortKey(): String =

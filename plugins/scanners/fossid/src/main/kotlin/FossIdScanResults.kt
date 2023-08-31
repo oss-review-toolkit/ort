@@ -185,7 +185,7 @@ internal fun mapSnippetFindings(rawResults: RawResults, issues: MutableList<Issu
             }
         }
 
-        findings.flatMap { finding -> finding.value.map { SnippetFinding(finding.key, it) } }
+        findings.map { SnippetFinding(it.key, it.value) }
     }.toSet()
 }
 
