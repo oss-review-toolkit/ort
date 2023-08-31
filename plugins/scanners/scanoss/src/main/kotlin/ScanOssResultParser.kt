@@ -59,7 +59,8 @@ internal fun generateSummary(startTime: Instant, endTime: Instant, result: FullS
                 val snippets = getSnippets(scanResponse)
 
                 snippets.forEach {
-                    snippetFindings += SnippetFinding(sourceLocation, it)
+                    // TODO: Aggregate the snippet by source file location.
+                    snippetFindings += SnippetFinding(sourceLocation, setOf(it))
                 }
             }
         }

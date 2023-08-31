@@ -20,8 +20,8 @@
 package org.ossreviewtoolkit.model
 
 /**
- * A class representing a snippet finding for a source file. A snippet finding is a code snippet from another origin,
- * matching the code being scanned.
+ * A class representing the snippet findings for a source file location. A snippet finding is a code snippet from
+ * another origin, matching the code being scanned.
  * It is meant to be reviewed by an operator as it could be a false positive.
  */
 data class SnippetFinding(
@@ -31,7 +31,7 @@ data class SnippetFinding(
     val sourceLocation: TextLocation,
 
     /**
-     * The corresponding snippet.
+     * The corresponding snippets.
      */
-    val snippet: Snippet
+    val snippets: Set<Snippet>
 )

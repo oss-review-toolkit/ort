@@ -67,7 +67,9 @@ class FossIdLicenseMappingTest : WordSpec({
             issues should beEmpty()
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
-                snippet.licenses.toString() shouldBe "Apache-2.0"
+                snippets.first() shouldNotBeNull {
+                    licenses.toString() shouldBe "Apache-2.0"
+                }
             }
         }
 
@@ -80,7 +82,9 @@ class FossIdLicenseMappingTest : WordSpec({
             issues should beEmpty()
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
-                snippet.licenses.toString() shouldBe "Apache-2.0"
+                snippets.first() shouldNotBeNull {
+                    licenses.toString() shouldBe "Apache-2.0"
+                }
             }
         }
 
@@ -98,7 +102,9 @@ class FossIdLicenseMappingTest : WordSpec({
             }
             findings should haveSize(1)
             findings.first() shouldNotBeNull {
-                snippet.licenses shouldBe SpdxConstants.NOASSERTION.toSpdx()
+                snippets.first() shouldNotBeNull {
+                    licenses shouldBe SpdxConstants.NOASSERTION.toSpdx()
+                }
             }
         }
     }
