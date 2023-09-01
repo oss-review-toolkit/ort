@@ -23,46 +23,35 @@ import java.time.Instant
 import java.time.format.DateTimeFormatter
 
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.SerializationException
-import kotlinx.serialization.Serializer
+import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.json.JsonDecoder
-import kotlinx.serialization.json.JsonEncoder
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.JsonTransformingSerializer
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
 
 /**
- * Use a custom serializer in order to map the original data structure to a more strict and simple, enum based, model.
+ * Use a custom serializer to transform the legacy single-field events into newer typed events.
  */
-@Serializer(Event::class)
-internal object EventSerializer : KSerializer<Event> {
-    override fun deserialize(decoder: Decoder): Event {
-        val input = decoder as? JsonDecoder
-            ?: throw SerializationException("This serializer only works with the JSON format.")
-
-        val element = input.decodeJsonElement()
-        require(element is JsonObject)
-
-        require(element.entries.size == 1)
-        val (key, value) = element.entries.first()
-        val type = enumValueOf<Event.Type>(key.uppercase())
-
-        return Event(type, value.jsonPrimitive.content)
-    }
-
-    override fun serialize(encoder: Encoder, value: Event) {
-        val output = encoder as? JsonEncoder
-            ?: throw SerializationException("This serializer only works with the JSON format.")
-
-        val tree = JsonObject(mapOf(value.type.name.lowercase() to JsonPrimitive(value.value)))
-
-        output.encodeJsonElement(tree)
-    }
+internal object EventListSerializer : JsonTransformingSerializer<List<Event>>(ListSerializer(Event.serializer())) {
+    override fun transformDeserialize(element: JsonElement): JsonElement =
+        element.jsonArray.map {
+            val event = it.jsonObject
+            when (event.entries.size) {
+                1 -> {
+                    val (type, value) = event.entries.first()
+                    JsonObject(mapOf("type" to JsonPrimitive(type.uppercase()), "value" to value))
+                }
+                else -> event
+            }
+        }.let { JsonArray(it) }
 }
 
 /**
