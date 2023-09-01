@@ -868,7 +868,7 @@ project:
             dependencies:
             - id: "Pub:collection:collection:1.18.0"
             - id: "Pub:meta:meta:1.9.1"
-      - id: "Pub:webkit_inspection_protocol:webkit_inspection_protocol:1.2.0"
+      - id: "Pub:webkit_inspection_protocol:webkit_inspection_protocol:1.2.1"
         dependencies:
         - id: "Pub:logging:logging:1.2.0"
       - id: "Pub:yaml:yaml:3.1.2"
@@ -2057,8 +2057,8 @@ packages:
     url: "https://github.com/dart-lang/web_socket_channel.git"
     revision: ""
     path: ""
-- id: "Pub:webkit_inspection_protocol:webkit_inspection_protocol:1.2.0"
-  purl: "pkg:pub/webkit_inspection_protocol/webkit_inspection_protocol@1.2.0"
+- id: "Pub:webkit_inspection_protocol:webkit_inspection_protocol:1.2.1"
+  purl: "pkg:pub/webkit_inspection_protocol/webkit_inspection_protocol@1.2.1"
   declared_licenses: []
   declared_licenses_processed: {}
   description: "A client for the Chrome DevTools Protocol (previously called the Webkit\
