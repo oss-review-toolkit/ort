@@ -19,7 +19,6 @@
 
 package org.ossreviewtoolkit.plugins.commands.evaluator
 
-import com.github.ajalt.clikt.core.BadParameterValue
 import com.github.ajalt.clikt.core.ProgramResult
 import com.github.ajalt.clikt.core.terminal
 import com.github.ajalt.clikt.parameters.options.associate
@@ -115,7 +114,7 @@ class EvaluatorCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
         .convert { it.absoluteFile.normalize() }
-        .multiple(listOf(ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME)))
+        .multiple()
 
     private val rulesResource by option(
         "--rules-resource",
@@ -199,13 +198,13 @@ class EvaluatorCommand : OrtCommand(
     ).flag()
 
     override fun run() {
-        val scriptUrls = mutableListOf<URL>()
+        val scriptUrls = mutableSetOf<URL>()
 
         rulesFile.mapTo(scriptUrls) { it.toURI().toURL() }
         rulesResource.mapTo(scriptUrls) { javaClass.getResource(it) }
 
         if (scriptUrls.isEmpty()) {
-            throw BadParameterValue("Neither a rules file nor a rules resource was specified.")
+            scriptUrls += ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME).toURI().toURL()
         }
 
         val configurationFiles = listOfNotNull(

@@ -46,7 +46,7 @@ class EvaluatorCommandTest : StringSpec({
         }.message shouldContain ORT_EVALUATOR_RULES_FILENAME
     }
 
-    "If a rules resource is specified, the default rules file should not be required".config(enabled = false) {
+    "If a rules resource is specified, the default rules file should not be required" {
         val args = "--check-syntax --rules-resource /rules/osadl.rules.kts".split(' ')
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
