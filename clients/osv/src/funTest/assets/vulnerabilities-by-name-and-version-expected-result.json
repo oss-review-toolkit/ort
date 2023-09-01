@@ -2,13 +2,13 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-462w-v97r-4m45",
-        "modified": "2023-03-28T05:38:46.649127Z",
+        "modified": "2023-08-30T21:16:22.456465Z",
         "published": "2019-04-10T14:30:24Z",
         "aliases": [
             "CVE-2019-10906"
         ],
-        "summary": "High severity vulnerability that affects Jinja2",
-        "details": "In Pallets Jinja before 2.10.1, str.format_map allows a sandbox escape.",
+        "summary": "Jinja2 sandbox escape via string formatting",
+        "details": "In Pallets Jinja before 2.10.1, `str.format_map` allows a sandbox escape.\n\nThe sandbox is used to restrict what code can be evaluated when rendering untrusted, user-provided templates. Due to the way string formatting works in Python, the `str.format_map` method could be used to escape the sandbox.\n\nThis issue was previously addressed for the `str.format` method in Jinja 2.8.1, which discusses the issue in detail. However, the less-common `str.format_map` method was overlooked. This release applies the same sandboxing to both methods.\n\nIf you cannot upgrade Jinja, you can override the `is_safe_attribute` method on the sandbox and explicitly disallow the `format_map` method on string objects.",
         "severity": [
             {
                 "type": "CVSS_V3",
@@ -27,10 +27,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.10.1"
+                                "type": "FIXED",
+                                "value": "2.10.1"
                             }
                         ]
                     }
@@ -68,6 +70,11 @@
                     "2.9.5",
                     "2.9.6"
                 ],
+                "ecosystem_specific": {
+                    "affected_functions": [
+                        ""
+                    ]
+                },
                 "database_specific": {
                     "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2019/04/GHSA-462w-v97r-4m45/GHSA-462w-v97r-4m45.json"
                 }
@@ -171,7 +178,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2023-03-28T05:34:47.958777Z",
+        "modified": "2023-04-11T01:29:39.253214Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
             "CVE-2014-1402"
@@ -190,10 +197,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.7.2"
+                                "type": "FIXED",
+                                "value": "2.7.2"
                             }
                         ]
                     }
@@ -319,7 +328,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-fqh9-2qgg-h84h",
-        "modified": "2023-03-28T05:32:13.513552Z",
+        "modified": "2023-04-11T01:29:34.742416Z",
         "published": "2022-05-17T04:01:00Z",
         "aliases": [
             "CVE-2014-0012"
@@ -338,10 +347,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.7.2"
+                                "type": "FIXED",
+                                "value": "2.7.2"
                             }
                         ]
                     }
@@ -419,7 +430,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-g3rq-g295-4j3m",
-        "modified": "2023-04-03T19:04:42.225806Z",
+        "modified": "2023-04-11T01:27:03.685024Z",
         "published": "2021-03-19T21:28:05Z",
         "aliases": [
             "CVE-2020-28493"
@@ -444,10 +455,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.11.3"
+                                "type": "FIXED",
+                                "value": "2.11.3"
                             }
                         ]
                     }
@@ -548,7 +561,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-hj2j-77xm-mc5v",
-        "modified": "2023-03-28T05:27:00.632427Z",
+        "modified": "2023-04-11T01:41:57.013215Z",
         "published": "2019-04-10T14:30:13Z",
         "aliases": [
             "CVE-2016-10745"
@@ -573,10 +586,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.8.1"
+                                "type": "FIXED",
+                                "value": "2.8.1"
                             }
                         ]
                     }
@@ -700,10 +715,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.7.2"
+                                "type": "FIXED",
+                                "value": "2.7.2"
                             }
                         ]
                     }
@@ -831,10 +848,12 @@
                         "repo": "https://github.com/mitsuhiko/jinja2",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "acb672b6a179567632e032f547582f30fa2f4aa7"
+                                "type": "FIXED",
+                                "value": "acb672b6a179567632e032f547582f30fa2f4aa7"
                             }
                         ]
                     },
@@ -842,10 +861,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.7.3"
+                                "type": "FIXED",
+                                "value": "2.7.3"
                             }
                         ]
                     }
@@ -934,10 +955,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.10.1"
+                                "type": "FIXED",
+                                "value": "2.10.1"
                             }
                         ]
                     }
@@ -1086,10 +1109,12 @@
                         "repo": "https://github.com/pallets/jinja",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "9b53045c34e61013dc8f09b7e52a555fa16bed16"
+                                "type": "FIXED",
+                                "value": "9b53045c34e61013dc8f09b7e52a555fa16bed16"
                             }
                         ]
                     },
@@ -1097,10 +1122,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.8.1"
+                                "type": "FIXED",
+                                "value": "2.8.1"
                             }
                         ]
                     }
@@ -1208,10 +1235,12 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "introduced": "0"
+                                "type": "INTRODUCED",
+                                "value": "0"
                             },
                             {
-                                "fixed": "2.11.3"
+                                "type": "FIXED",
+                                "value": "2.11.3"
                             }
                         ]
                     }
