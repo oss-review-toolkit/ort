@@ -27,12 +27,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.10.1"
+                                "fixed": "2.10.1"
                             }
                         ]
                     }
@@ -178,7 +176,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-8r7q-cvjq-x353",
-        "modified": "2023-04-11T01:29:39.253214Z",
+        "modified": "2023-03-28T05:34:47.958777Z",
         "published": "2022-05-14T04:04:14Z",
         "aliases": [
             "CVE-2014-1402"
@@ -197,12 +195,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.7.2"
+                                "fixed": "2.7.2"
                             }
                         ]
                     }
@@ -328,7 +324,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-fqh9-2qgg-h84h",
-        "modified": "2023-04-11T01:29:34.742416Z",
+        "modified": "2023-03-28T05:32:13.513552Z",
         "published": "2022-05-17T04:01:00Z",
         "aliases": [
             "CVE-2014-0012"
@@ -347,12 +343,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.7.2"
+                                "fixed": "2.7.2"
                             }
                         ]
                     }
@@ -430,7 +424,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-g3rq-g295-4j3m",
-        "modified": "2023-04-11T01:27:03.685024Z",
+        "modified": "2023-04-03T19:04:42.225806Z",
         "published": "2021-03-19T21:28:05Z",
         "aliases": [
             "CVE-2020-28493"
@@ -455,12 +449,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.11.3"
+                                "fixed": "2.11.3"
                             }
                         ]
                     }
@@ -561,7 +553,7 @@
     {
         "schema_version": "1.4.0",
         "id": "GHSA-hj2j-77xm-mc5v",
-        "modified": "2023-04-11T01:41:57.013215Z",
+        "modified": "2023-03-28T05:27:00.632427Z",
         "published": "2019-04-10T14:30:13Z",
         "aliases": [
             "CVE-2016-10745"
@@ -586,12 +578,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.8.1"
+                                "fixed": "2.8.1"
                             }
                         ]
                     }
@@ -715,12 +705,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.7.2"
+                                "fixed": "2.7.2"
                             }
                         ]
                     }
@@ -848,12 +836,10 @@
                         "repo": "https://github.com/mitsuhiko/jinja2",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "acb672b6a179567632e032f547582f30fa2f4aa7"
+                                "fixed": "acb672b6a179567632e032f547582f30fa2f4aa7"
                             }
                         ]
                     },
@@ -861,12 +847,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.7.3"
+                                "fixed": "2.7.3"
                             }
                         ]
                     }
@@ -955,12 +939,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.10.1"
+                                "fixed": "2.10.1"
                             }
                         ]
                     }
@@ -1109,12 +1091,10 @@
                         "repo": "https://github.com/pallets/jinja",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "9b53045c34e61013dc8f09b7e52a555fa16bed16"
+                                "fixed": "9b53045c34e61013dc8f09b7e52a555fa16bed16"
                             }
                         ]
                     },
@@ -1122,12 +1102,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.8.1"
+                                "fixed": "2.8.1"
                             }
                         ]
                     }
@@ -1235,12 +1213,10 @@
                         "type": "ECOSYSTEM",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "0"
+                                "introduced": "0"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "2.11.3"
+                                "fixed": "2.11.3"
                             }
                         ]
                     }

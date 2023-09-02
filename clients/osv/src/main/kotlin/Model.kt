@@ -111,7 +111,7 @@ object Ecosystem {
     const val RUBY_GEMS = "RubyGems"
 }
 
-@Serializable
+@Serializable(EventSerializer::class)
 data class Event(
     val type: Type,
     val value: String
@@ -136,7 +136,6 @@ data class Package(
 data class Range(
     val type: Type,
     val repo: String? = null,
-    @Serializable(EventListSerializer::class)
     val events: List<Event>,
     val databaseSpecific: JsonObject? = null
 ) {

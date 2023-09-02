@@ -19,12 +19,10 @@
                         "repo": "https://github.com/harfbuzz/harfbuzz.git",
                         "events": [
                             {
-                                "type": "INTRODUCED",
-                                "value": "4009a05ca7de21fff2176621597cd0cd01e9d80e"
+                                "introduced": "4009a05ca7de21fff2176621597cd0cd01e9d80e"
                             },
                             {
-                                "type": "FIXED",
-                                "value": "cc8e9a436fa408a1c63f4b9afb7643cea76a079c"
+                                "fixed": "cc8e9a436fa408a1c63f4b9afb7643cea76a079c"
                             }
                         ]
                     }
