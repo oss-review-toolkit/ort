@@ -233,10 +233,11 @@ COPY --from=rubybuild /opt/rbenv /opt/rbenv
 # RUST - Build as a separate component
 FROM ort-base-image AS rustbuild
 
-ARG RUST_HOME=/opt/rust
-ARG CARGO_HOME=$RUST_HOME/cargo
-ARG RUSTUP_HOME=$RUST_HOME/rustup
-ARG RUST_VERSION=1.64.0
+ARG RUST_VERSION=1.72.0
+
+ENV RUST_HOME=/opt/rust
+ENV CARGO_HOME=$RUST_HOME/cargo
+ENV RUSTUP_HOME=$RUST_HOME/rustup
 RUN curl -ksSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain $RUST_VERSION
 
 FROM scratch AS rust

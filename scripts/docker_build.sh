@@ -93,4 +93,15 @@ image_build run ort "$GIT_REVISION" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
     --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/binaries:latest" \
+"$@"
+
+[ -z "$ALL_LANGUAGES" ] && exit 0
+
+# Build adjacent language containers
+
+# Rust
+# shellcheck disable=SC1091
+. .ortversions/rust.versions
+image_build rust rust "$RUST_VERSION" \
+    --build-arg RUST_VERSION="$RUST_VERSION" \
     "$@"
