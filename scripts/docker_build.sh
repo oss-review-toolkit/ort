@@ -17,15 +17,80 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-DOCKER_ARGS=$@
+set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | grep -oP "version: \K.+")
+GIT_REVISION=$("$GIT_ROOT/gradlew" -q properties --property version | grep -oP "version: \K.+")
+DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
-docker buildx build \
-    -f "$GIT_ROOT/Dockerfile" \
-    -t "${ORT_DOCKER_TAG:-ort}" \
+
+# ---------------------------
+# image_build function
+# Usage ( position paramenters):
+# image_build <target_name> <tag_name> <version> <extra_args...>
+
+image_build() {
+    local target
+    local name
+    local version
+    target="$1"
+    shift
+    name="$1"
+    shift
+    version="$1"
+    shift
+
+    docker buildx build \
+        -f "$GIT_ROOT/Dockerfile" \
+        --target "$target" \
+        --tag "${DOCKER_IMAGE_ROOT}/$name:$version" \
+        --tag "${DOCKER_IMAGE_ROOT}/$name:latest" \
+        --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/base:latest" \
+        "$@" .
+}
+
+# Base
+# shellcheck disable=SC1091
+. .ortversions/base.versions
+image_build ort-base-image base "${JAVA_VERSION}-jdk-${UBUNTU_VERSION}" \
+    --build-arg UBUNTU_VERSION="$UBUNTU_VERSION" \
+    --build-arg JAVA_VERSION="$JAVA_VERSION" \
+    "$@"
+
+# Python
+# shellcheck disable=SC1091
+. .ortversions/python.versions
+image_build python python "$PYTHON_VERSION" \
+    --build-arg PYTHON_VERSION="$PYTHON_VERSION" \
+    --build-arg CONAN_VERSION="$CONAN_VERSION" \
+    --build-arg PYTHON_INSPECTOR_VERSION="$PYTHON_INSPECTOR_VERSION" \
+    --build-arg PYTHON_PIPENV_VERSION="$PYTHON_PIPENV_VERSION" \
+    --build-arg PYTHON_POETRY_VERSION="$PYTHON_POETRY_VERSION" \
+    --build-arg PIPTOOL_VERSION="$PIPTOOL_VERSION" \
+    --build-arg SCANCODE_VERSION="$SCANCODE_VERSION" \
+    "$@"
+
+# Nodejs
+# shellcheck disable=SC1091
+. .ortversions/nodejs.versions
+image_build nodejs nodejs "$NODEJS_VERSION" \
+    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
+    --build-arg BOWER_VERSION="$BOWER_VERSION" \
+    --build-arg NPM_VERSION="$NPM_VERSION" \
+    --build-arg PNPM_VERSION="$PNPM_VERSION" \
+    --build-arg YARN_VERSION="$YARN_VERSION" \
+    "$@"
+
+# Ort
+image_build ortbin ortbin "$GIT_REVISION" \
     --build-arg ORT_VERSION="$GIT_REVISION" \
-    $DOCKER_ARGS \
-    "$GIT_ROOT"
+    "$@"
+
+# Runtime ORT image
+image_build run ort "$GIT_REVISION" \
+    --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
+    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
+    --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
+    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/binaries:latest" \
+    "$@"

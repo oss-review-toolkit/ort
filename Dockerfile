@@ -19,9 +19,10 @@
 
 # Set this to the Java version to use in the base image (and to build and run ORT with).
 ARG JAVA_VERSION=17
+ARG UBUNTU_VERSION=jammy
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:$JAVA_VERSION-jdk-jammy as ort-base-image
+FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION as ort-base-image
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -102,6 +103,12 @@ COPY "$CRT_FILES" /tmp/certificates/
 RUN /etc/scripts/export_proxy_certificates.sh /tmp/certificates/ \
     &&  /etc/scripts/import_certificates.sh /tmp/certificates/
 
+# Add syft to use as primary spdx docker scanner
+# Create docs dir to store future spdxs
+RUN curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sudo sh -s -- -b /usr/local/bin \
+    && mkdir -p /usr/share/doc/ort \
+    && chown $USER:$USER /usr/share/doc/ort
+
 USER $USER
 WORKDIR $HOME
 
@@ -109,7 +116,7 @@ ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
-FROM ort-base-image as pythonbuild
+FROM ort-base-image AS pythonbuild
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -126,8 +133,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     tk-dev \
     && sudo rm -rf /var/lib/apt/lists/*
 
-ARG PYTHON_VERSION=3.10.8
-ARG PYENV_GIT_TAG=v2.3.7
+ARG PYTHON_VERSION=3.10.13
+ARG PYENV_GIT_TAG=v2.3.25
 
 ENV PYENV_ROOT=/opt/python
 ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
@@ -138,7 +145,7 @@ RUN curl -kSs https://pyenv.run | bash \
 ARG CONAN_VERSION=1.57.0
 ARG PYTHON_INSPECTOR_VERSION=0.9.8
 ARG PYTHON_PIPENV_VERSION=2022.9.24
-ARG PYTHON_POETRY_VERSION=1.2.2
+ARG PYTHON_POETRY_VERSION=1.6.1
 ARG PIPTOOL_VERSION=22.2.2
 ARG SCANCODE_VERSION=32.0.6
 
@@ -148,21 +155,45 @@ RUN pip install --no-cache-dir -U \
     && pip install --no-cache-dir -U \
     Mercurial \
     conan=="$CONAN_VERSION" \
+    pip \
     pipenv=="$PYTHON_PIPENV_VERSION" \
     poetry=="$PYTHON_POETRY_VERSION" \
     python-inspector=="$PYTHON_INSPECTOR_VERSION"
 
 RUN ARCH=$(arch | sed s/aarch64/arm64/) \
     &&  if [ "$ARCH" == "arm64" ]; then \
-            pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
-        else \
-            curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
-            pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
-            rm requirements.txt; \
-        fi
+    pip install -U scancode-toolkit-mini==$SCANCODE_VERSION; \
+    else \
+    curl -Os https://raw.githubusercontent.com/nexB/scancode-toolkit/v$SCANCODE_VERSION/requirements.txt; \
+    pip install -U --constraint requirements.txt scancode-toolkit==$SCANCODE_VERSION; \
+    rm requirements.txt; \
+    fi
 
 FROM scratch AS python
 COPY --from=pythonbuild /opt/python /opt/python
+
+#------------------------------------------------------------------------
+# NODEJS - Build NodeJS as a separate component with nvm
+FROM ort-base-image AS nodejsbuild
+
+ARG BOWER_VERSION=1.8.12
+ARG NODEJS_VERSION=18.14.2
+ARG NPM_VERSION=8.15.1
+ARG PNPM_VERSION=7.8.0
+ARG YARN_VERSION=1.22.17
+
+ENV NVM_DIR=/opt/nvm
+ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
+
+RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
+RUN . $NVM_DIR/nvm.sh \
+    && nvm install "$NODEJS_VERSION" \
+    && nvm alias default "$NODEJS_VERSION" \
+    && nvm use default \
+    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
+
+FROM scratch AS nodejs
+COPY --from=nodejsbuild /opt/nvm /opt/nvm
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
@@ -197,29 +228,6 @@ RUN rbenv install $RUBY_VERSION -v \
 
 FROM scratch AS ruby
 COPY --from=rubybuild /opt/rbenv /opt/rbenv
-
-#------------------------------------------------------------------------
-# NODEJS - Build NodeJS as a separate component with nvm
-FROM ort-base-image AS nodebuild
-
-ARG BOWER_VERSION=1.8.12
-ARG NODEJS_VERSION=18.14.2
-ARG NPM_VERSION=8.15.1
-ARG PNPM_VERSION=7.8.0
-ARG YARN_VERSION=1.22.17
-
-ENV NVM_DIR=/opt/nvm
-ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-
-RUN git clone --depth 1 https://github.com/nvm-sh/nvm.git $NVM_DIR
-RUN . $NVM_DIR/nvm.sh \
-    && nvm install "$NODEJS_VERSION" \
-    && nvm alias default "$NODEJS_VERSION" \
-    && nvm use default \
-    && npm install --global npm@$NPM_VERSION bower@$BOWER_VERSION pnpm@$PNPM_VERSION yarn@$YARN_VERSION
-
-FROM scratch AS node
-COPY --from=nodebuild /opt/nvm /opt/nvm
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
@@ -293,8 +301,8 @@ RUN --mount=type=tmpfs,target=/android \
     && PROXY_HOST_AND_PORT=${https_proxy#*://} \
     && PROXY_HOST_AND_PORT=${PROXY_HOST_AND_PORT%/} \
     && if [ -n "$PROXY_HOST_AND_PORT" ]; then \
-        # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
-        SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
+    # While sdkmanager uses HTTPS by default, the proxy type is still called "http".
+    SDK_MANAGER_PROXY_OPTIONS="--proxy=http --proxy_host=${PROXY_HOST_AND_PORT%:*} --proxy_port=${PROXY_HOST_AND_PORT##*:}"; \
     fi \
     && yes | $ANDROID_HOME/cmdline-tools/bin/sdkmanager $SDK_MANAGER_PROXY_OPTIONS --sdk_root=$ANDROID_HOME "platform-tools" "cmdline-tools;latest"
 
@@ -355,116 +363,8 @@ FROM scratch AS spm
 COPY --from=spmbuild /opt/swift /opt/swift
 
 #------------------------------------------------------------------------
-# ORT
-FROM ort-base-image as ortbuild
-
-# Set this to the version ORT should report.
-ARG ORT_VERSION="DOCKER-SNAPSHOT"
-
-WORKDIR $HOME/src/ort
-
-# Prepare Gradle
-RUN --mount=type=cache,target=/var/tmp/gradle \
-    --mount=type=bind,target=$HOME/src/ort,rw \
-    export GRADLE_USER_HOME=/var/tmp/gradle \
-    && sudo chown -R "$USER". $HOME/src/ort /var/tmp/gradle \
-    && scripts/set_gradle_proxy.sh \
-    && ./gradlew --no-daemon --stacktrace \
-        -Pversion=$ORT_VERSION \
-        :cli:installDist \
-        :helper-cli:startScripts \
-    && mkdir /opt/ort \
-    && cp -a $HOME/src/ort/cli/build/install/ort /opt/ \
-    && cp -a $HOME/src/ort/scripts/*.sh /opt/ort/bin/ \
-    && cp -a $HOME/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
-    && cp -a $HOME/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
-
-FROM scratch AS ort
-COPY --from=ortbuild /opt/ort /opt/ort 
-
-#------------------------------------------------------------------------
-# Components container
-FROM ort-base-image as components
-
-# Remove ort build scripts
-RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
-
-# Apt install commands.
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update && \
-    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-        php \
-        subversion \
-        # dotnet requirements
-        libc6 \
-        libgcc1 \
-        libgcc-s1 \
-        libgssapi-krb5-2 \
-        libicu70 \
-        liblttng-ust1 \
-        libssl3 \
-        libstdc++6 \
-        libunwind8 \
-        zlib1g \
-    && sudo rm -rf /var/lib/apt/lists/*
-
-# Python
-ENV PYENV_ROOT=/opt/python
-ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
-COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
-
-# Ruby
-ENV RBENV_ROOT=/opt/rbenv/
-ENV GEM_HOME=/var/tmp/gem
-ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
-COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
-
-# NodeJS
-ARG NODEJS_VERSION=18.14.2
-ENV NVM_DIR=/opt/nvm
-ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
-COPY --from=node --chown=$USER:$USER $NVM_DIR $NVM_DIR
-
-# Rust
-ENV RUST_HOME=/opt/rust
-ENV CARGO_HOME=$RUST_HOME/cargo
-ENV RUSTUP_HOME=$RUST_HOME/rustup
-ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
-COPY --from=rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
-RUN chmod o+rwx $CARGO_HOME
-
-# Golang
-ENV PATH=$PATH:/opt/go/bin
-COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
-
-# Haskell
-ENV HASKELL_HOME=/opt/haskell
-ENV PATH=$PATH:$HASKELL_HOME/bin
-COPY --from=haskell --chown=$USER:$USER $HASKELL_HOME $HASKELL_HOME
-
-# Repo and Android
-ENV ANDROID_HOME=/opt/android-sdk
-ENV ANDROID_USER_HOME=$HOME/.android
-ENV PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/cmdline-tools/bin
-ENV PATH=$PATH:$ANDROID_HOME/platform-tools
-COPY --from=android --chown=$USER:$USER $ANDROID_HOME $ANDROID_HOME
-RUN chmod -R o+rw $ANDROID_HOME
-
-# Dart
-ENV DART_SDK=/opt/dart-sdk
-ENV PATH=$PATH:$DART_SDK/bin
-COPY --from=dart --chown=$USER:$USER $DART_SDK $DART_SDK
-
-# SBT
-ENV SBT_HOME=/opt/sbt
-ENV PATH=$PATH:$SBT_HOME/bin
-COPY --from=sbt --chown=$USER:$USER $SBT_HOME $SBT_HOME
-
-# SPM
-ENV SWIFT_HOME=/opt/swift
-ENV PATH=$PATH:$SWIFT_HOME/bin
-COPY --from=spm --chown=$USER:$USER $SWIFT_HOME $SWIFT_HOME
+# PHP
+FROM ort-base-image AS phpbuild
 
 # PHP composer
 ARG COMPOSER_VERSION=2.2
@@ -473,6 +373,12 @@ ENV PATH=$PATH:/opt/php/bin
 RUN mkdir -p /opt/php/bin \
     && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
 
+FROM scratch AS php
+COPY --from=phpbuild /opt/php /opt/php
+
+#------------------------------------------------------------------------
+# NUGET
+FROM ort-base-image AS nugetbuilld
 # nuget-inspector
 ENV NUGET_INSPECTOR_HOME=/opt/nuget-inspector
 ENV NUGET_INSPECTOR_BIN=$NUGET_INSPECTOR_HOME/bin
@@ -491,14 +397,69 @@ RUN mkdir -p $NUGET_INSPECTOR_BIN \
     && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
     | tar --strip-components=1 -C $NUGET_INSPECTOR_BIN -xz
 
-ENTRYPOINT ["/bin/bash"]
+FROM scratch AS nuget
+COPY --from=nugetbuild /opt/nuget-inspector /opt/nuget-inspector
 
 #------------------------------------------------------------------------
-# Main Runtime container
-FROM components AS run
+# ORT
+FROM ort-base-image as ortbuild
+
+# Set this to the version ORT should report.
+ARG ORT_VERSION="DOCKER-SNAPSHOT"
+
+WORKDIR $HOME/src/ort
+
+# Prepare Gradle
+RUN --mount=type=cache,target=/var/tmp/gradle \
+    --mount=type=bind,target=$HOME/src/ort,rw \
+    export GRADLE_USER_HOME=/var/tmp/gradle \
+    && sudo chown -R "$USER". $HOME/src/ort /var/tmp/gradle \
+    && scripts/set_gradle_proxy.sh \
+    && ./gradlew --no-daemon --stacktrace \
+    -Pversion=$ORT_VERSION \
+    :cli:installDist \
+    :helper-cli:startScripts \
+    && mkdir /opt/ort \
+    && cp -a $HOME/src/ort/cli/build/install/ort /opt/ \
+    && cp -a $HOME/src/ort/scripts/*.sh /opt/ort/bin/ \
+    && cp -a $HOME/src/ort/helper-cli/build/scripts/orth /opt/ort/bin/ \
+    && cp -a $HOME/src/ort/helper-cli/build/libs/helper-cli-*.jar /opt/ort/lib/
+
+FROM scratch AS ortbin
+COPY --from=ortbuild /opt/ort /opt/ort
+
+#------------------------------------------------------------------------
+# Main Minimal Runtime container
+FROM ort-base-image as run
+
+# Remove ort build scripts
+RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
+
+# Minor requirements
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update && \
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    subversion \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+RUN syft / --exclude '*/usr/share/doc' --exclude '*/etc' -o spdx-json --file /usr/share/doc/ort/ort-base.spdx.json
+
+# Python
+ENV PYENV_ROOT=/opt/python
+ENV PATH=$PATH:$PYENV_ROOT/shims:$PYENV_ROOT/bin
+COPY --from=python --chown=$USER:$USER $PYENV_ROOT $PYENV_ROOT
+RUN syft $PYENV_ROOT -o spdx-json --file /usr/share/doc/ort/ort-python.spdx.json
+
+# NodeJS
+ARG NODEJS_VERSION=18.14.2
+ENV NVM_DIR=/opt/nvm
+ENV PATH=$PATH:$NVM_DIR/versions/node/v$NODEJS_VERSION/bin
+COPY --from=nodejs --chown=$USER:$USER $NVM_DIR $NVM_DIR
+RUN syft $NVM_DIR  -o spdx-json --file /usr/share/doc/ort/ort-nodejs.spdx.json
 
 # ORT
-COPY --from=ort --chown=$USER:$USER /opt/ort /opt/ort
+COPY --from=ortbin --chown=$USER:$USER /opt/ort /opt/ort
 ENV PATH=$PATH:/opt/ort/bin
 
 USER $USER
