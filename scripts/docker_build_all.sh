@@ -20,7 +20,8 @@
 set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+GIT_REVISION=$(git describe --abbrev=10 --always --tags --dirty --match=[0-9]*)
+DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ort}"
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
 
@@ -45,21 +46,17 @@ image_build() {
         --target "$target" \
         --tag "${DOCKER_IMAGE_ROOT}/$name:$version" \
         --tag "${DOCKER_IMAGE_ROOT}/$name:latest" \
+        --tag "ghcr.io/${DOCKER_IMAGE_ROOT}/$name:$version" \
+        --tag "ghcr.io/${DOCKER_IMAGE_ROOT}/$name:latest" \
         --build-context "base=docker-image://${DOCKER_IMAGE_ROOT}/base:latest" \
         "$@" .
 }
 
+#for containers in base android dart golang haskell nodejs python ruby rust sbt spm binaries runtime; do
 # Base
-# shellcheck disable=SC1091
-. .ortversions/base.versions
-image_build ort-base-image base "${JAVA_VERSION}-jdk-${UBUNTU_VERSION}" \
-    --build-arg UBUNTU_VERSION="$UBUNTU_VERSION" \
-    --build-arg JAVA_VERSION="$JAVA_VERSION" \
-    "$@"
+image_build ort-base-image base "$UBUNTU_VERSION" --build-arg JAVA_VERSION="$JAVA_VERSION" "$@"
 
 # Python
-# shellcheck disable=SC1091
-. .ortversions/python.versions
 image_build python python "$PYTHON_VERSION" \
     --build-arg PYTHON_VERSION="$PYTHON_VERSION" \
     --build-arg CONAN_VERSION="$CONAN_VERSION" \
@@ -70,9 +67,13 @@ image_build python python "$PYTHON_VERSION" \
     --build-arg SCANCODE_VERSION="$SCANCODE_VERSION" \
     "$@"
 
+# Ruby
+image_build ruby ruby "$RUBY_VERSION" \
+    --build-arg RUBY_VERSION="$RUBY_VERSION" \
+    --build-arg COCOAPODS_VERSION="$COCOAPODS_VERSION" \
+    "$@"
+
 # Nodejs
-# shellcheck disable=SC1091
-. .ortversions/nodejs.versions
 image_build nodejs nodejs "$NODEJS_VERSION" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-arg BOWER_VERSION="$BOWER_VERSION" \
@@ -82,86 +83,62 @@ image_build nodejs nodejs "$NODEJS_VERSION" \
     "$@"
 
 # Rust
-# shellcheck disable=SC1091
-. .ortversions/rust.versions
 image_build rust rust "$RUST_VERSION" \
     --build-arg RUST_VERSION="$RUST_VERSION" \
     "$@"
 
-# Ruby
-# shellcheck disable=SC1091
-. .ortversions/ruby.versions
-image_build ruby ruby "$RUBY_VERSION" \
-    --build-arg RUBY_VERSION="$RUBY_VERSION" \
-    --build-arg COCOAPODS_VERSION="$COCOAPODS_VERSION" \
-    "$@"
-
 # Golang
-# shellcheck disable=SC1091
-. .ortversions/golang.versions
 image_build golang golang "$GO_VERSION" \
     --build-arg GO_VERSION="$GO_VERSION" \
     --build-arg GO_DEP_VERSION="$GO_DEP_VERSION" \
     "$@"
 
+# Haskell
+image_build haskell haskell "$HASKELL_STACK_VERSION" \
+    --build-arg HASKELL_STACK_VERSION="$HASKELL_STACK_VERSION" \
+    "$@"
+
+# Android
+image_build android android "$ANDROID_CMD_VERSION" \
+    --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
+    "$@"
+
+# Dart
+image_build dart dart "$DART_VERSION" \
+    --build-arg DART_VERSION="$DART_VERSION" \
+    "$@"
+
+# SBT
+image_build sbt sbt "$SBT_VERSION" \
+    --build-arg SBT_VERSION="$SBT_VERSION" \
+    "$@"
+
+# Spm
+image_build spm spm "$SWIFT_VERSION" \
+    --build-arg SWIFT_VERSION="$SWIFT_VERSION" \
+    "$@"
+
 # Ort
-image_build ortbin ortbin "$GIT_REVISION" \
+image_build ort binaries "$GIT_REVISION" \
     --build-arg ORT_VERSION="$GIT_REVISION" \
     "$@"
 
 # Runtime ORT image
 image_build run ort "$GIT_REVISION" \
     --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
+    --build-context "ruby=docker-image://${DOCKER_IMAGE_ROOT}/ruby:latest" \
+    --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
     --build-context "rust=docker-image://${DOCKER_IMAGE_ROOT}/rust:latest" \
     --build-context "golang=docker-image://${DOCKER_IMAGE_ROOT}/golang:latest" \
-    --build-context "ruby=docker-image://${DOCKER_IMAGE_ROOT}/ruby:latest" \
-    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/ortbin:latest" \
-    "$@"
-
-# Build adjacent language containers if ALL_LANGUAGES is set.
-[ -z "$ALL_LANGUAGES" ] && exit 0
-
-# Android
-# shellcheck disable=SC1091
-. .ortversions/android.versions
-image_build android android "$ANDROID_CMD_VERSION" \
-    --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
-    "$@"
-
-# Swift
-# shellcheck disable=SC1091
-. .ortversions/swift.versions
-image_build swift swift "$SWIFT_VERSION" \
-    --build-arg SWIFT_VERSION="$SWIFT_VERSION" \
-    "$@"
-
-# SBT
-# shellcheck disable=SC1091
-. .ortversions/sbt.versions
-image_build sbt sbt "$SBT_VERSION" \
-    --build-arg SBT_VERSION="$SBT_VERSION" \
-    "$@"
-
-# Dart
-# shellcheck disable=SC1091
-. .ortversions/dart.versions
-image_build dart dart "$DART_VERSION" \
-    --build-arg DART_VERSION="$DART_VERSION" \
-    "$@"
-
-# Dotnet
-# shellcheck disable=SC1091
-. .ortversions/dotnet.versions
-image_build dotnet dotnet "$DOTNET_VERSION" \
-    --build-arg DOTNET_VERSION="$DOTNET_VERSION" \
+    --build-context "haskell=docker-image://${DOCKER_IMAGE_ROOT}/haskell:latest" \
+    --build-context "android=docker-image://${DOCKER_IMAGE_ROOT}/android:latest" \
+    --build-context "dart=docker-image://${DOCKER_IMAGE_ROOT}/dart:latest" \
+    --build-context "sbt=docker-image://${DOCKER_IMAGE_ROOT}/sbt:latest" \
+    --build-context "spm=docker-image://${DOCKER_IMAGE_ROOT}/spm:latest" \
+    --build-context "ort=docker-image://${DOCKER_IMAGE_ROOT}/binaries:latest" \
+    --build-arg COMPOSER_VERSION="$COMPOSER_VERSION" \
     --build-arg NUGET_INSPECTOR_VERSION="$NUGET_INSPECTOR_VERSION" \
-    "$@"
-
-# Dotnet
-# shellcheck disable=SC1091
-. .ortversions/haskell.versions
-image_build dotnet dotnet "$HASKELL_STACK_VERSION" \
-    --build-arg HASKELL_STACK_VERSION="$HASKELL_STACK_VERSION" \
-    "$@"
+    --tag "ghcr.io/vwdfive/ort:latest"
+"$@"

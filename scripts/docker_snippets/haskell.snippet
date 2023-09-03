@@ -1,0 +1,32 @@
+# Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+ARG HASKELL_STACK_VERSION=2.7.5
+ENV HASKELL_HOME=/opt/haskell
+ENV PATH=$PATH:$HASKELL_HOME/bin
+
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    sudo apt-get update -qq \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
+    zlib1g-dev \
+    && sudo rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d $HASKELL_HOME/bin
+
+FROM scratch AS haskell
+COPY --from=haskellbuild /opt/haskell /opt/haskell
