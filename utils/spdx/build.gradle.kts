@@ -136,7 +136,7 @@ class ScanCodeLicenseTextProvider : SpdxLicenseTextProvider {
 class SpdxLicenseListDataProvider : SpdxLicenseTextProvider {
     private val url = "https://raw.githubusercontent.com/spdx/license-list-data/v$spdxLicenseListVersion"
 
-    override fun getLicenseUrl(info: LicenseInfo): URI? {
+    override fun getLicenseUrl(info: LicenseInfo): URI {
         val prefix = "deprecated_".takeIf { info.isDeprecated && !info.isException }.orEmpty()
         return URI("$url/text/$prefix${info.id}.txt")
     }
