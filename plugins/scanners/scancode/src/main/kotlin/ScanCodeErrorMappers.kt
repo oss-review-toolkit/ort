@@ -24,7 +24,7 @@ import org.ossreviewtoolkit.model.Issue
 // Note: The "(File: ...)" part in the patterns below is actually added by our own getRawResult() function.
 private val UNKNOWN_ERROR_REGEX = Regex(
     "(ERROR: for scanner: (?<scanner>\\w+):\n)?" +
-        "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)(:|\n)(?<message>.*) \\(File: (?<file>.+)\\)",
+        "ERROR: Unknown error:\n.+\n(?<error>\\w+Error)[:\n](?<message>.*) \\(File: (?<file>.+)\\)",
     RegexOption.DOT_MATCHES_ALL
 )
 
