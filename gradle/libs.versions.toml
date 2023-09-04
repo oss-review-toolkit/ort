@@ -9,7 +9,7 @@ ideaExtPlugin = "1.1.7"
 kotlinPlugin = "1.9.10"
 versionsPlugin = "0.47.0"
 
-antlr = "4.13.0"
+antlr = "4.13.1"
 asciidoctorj = "2.5.10"
 asciidoctorjPdf = "2.3.9"
 clikt = "4.2.0"
