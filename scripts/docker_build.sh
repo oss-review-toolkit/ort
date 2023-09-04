@@ -119,3 +119,11 @@ image_build ruby ruby "$RUBY_VERSION" \
 image_build android android "$ANDROID_CMD_VERSION" \
     --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
     "$@"
+
+# Golang
+# shellcheck disable=SC1091
+. .ortversions/golang.versions
+image_build golang golang "$GO_VERSION" \
+    --build-arg GO_VERSION="$GO_VERSION" \
+    --build-arg GO_DEP_VERSION="$GO_DEP_VERSION" \
+    "$@"
