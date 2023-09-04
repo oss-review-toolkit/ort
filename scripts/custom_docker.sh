@@ -24,7 +24,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 # Define the list of valid components
-valid_components=("rust" "ruby" "android" "golang")
+valid_components=("rust" "ruby" "android" "golang" "swift")
 
 # Define the Dockerfile template
 dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
@@ -35,7 +35,7 @@ output_file="Dockerfile.custom"
 function usage() {
     echo "Usage: $0 -components <component1> [<component2> ...] -output <output_file>"
     echo "Options:"
-    echo "  -components <component1> [<component2> ...]: List of language components to include in the Dockerfile (php, rust, android, swift)"
+    echo "  -components <component1> [<component2> ...]: List of language components to include in the Dockerfile: ${valid_components[*]}"
     echo "  -output <output_file>: Output file for the generated Dockerfile"
     echo "  -h: Display this help message"
 }

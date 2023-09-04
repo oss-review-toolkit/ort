@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Docker Golang Container
+name: Ort Docker Swift Container
 
 on:
     workflow_dispatch:
@@ -24,7 +24,7 @@ on:
             - main
     push:
         paths:
-            - '.ortversions/golang.versions'
+            - '.ortversions/swift.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
         workflows: ["Ort Docker Base Image"]
@@ -38,7 +38,7 @@ permissions: write-all
 
 jobs:
     build:
-        name: Build ORT Golang Image
+        name: Build ORT Swift Image
         runs-on: ubuntu-22.04
         permissions:
             contents: read
@@ -50,7 +50,7 @@ jobs:
 
             -   name: Set environment variables
                 run: |
-                    cat .ortversions/golang.versions >> $GITHUB_ENV
+                    cat .ortversions/swift.versions >> $GITHUB_ENV
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v2
@@ -67,27 +67,26 @@ jobs:
                 uses: docker/metadata-action@v4
                 with:
                     images: |
-                        ${{ env.REGISTRY }}/${{ github.repository }}/golang
+                        ${{ env.REGISTRY }}/${{ github.repository }}/swift
                     tags: |
-                        type=semver,pattern={{version}},value=${{ env.GO_VERSION }}
+                        type=raw,value=${{ env.SWIFT_VERSION }}
 
 
-            -   name: Build ORT Golang container
+            -   name: Build ORT Swift container
                 uses: docker/build-push-action@v4
                 with:
                     context: .
-                    target: golang
+                    target: swift
                     push: ${{ github.event_name == 'push' }}
                     load: false
                     build-args: |
-                        GO_DEP_VERSION=${{ env.GO_DEP_VERSION }}
-                        GO_VERSION=${{ env.GO_VERSION }}
+                        SWIFT_VERSION=${{ env.SWIFT_VERSION }}
                     tags: |
                         ${{ steps.meta.outputs.tags }}
-                        ${{ env.REGISTRY }}/${{ github.repository }}/golang:latest
+                        ${{ env.REGISTRY }}/${{ github.repository }}/swift:latest
                     labels: ${{ steps.meta.outputs.labels }}
                     build-contexts: |
                         ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
-                    cache-from: type=gha,scope=ortgolang
-                    cache-to: type=gha,scope=ortgolang,mode=max
+                    cache-from: type=gha,scope=ortswift
+                    cache-to: type=gha,scope=ortswift,mode=max
 

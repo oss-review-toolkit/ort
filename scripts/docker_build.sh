@@ -127,3 +127,10 @@ image_build golang golang "$GO_VERSION" \
     --build-arg GO_VERSION="$GO_VERSION" \
     --build-arg GO_DEP_VERSION="$GO_DEP_VERSION" \
     "$@"
+
+# Spm
+# shellcheck disable=SC1091
+. .ortversions/swift.versions
+image_build swift swift "$SWIFT_VERSION" \
+    --build-arg SWIFT_VERSION="$SWIFT_VERSION" \
+    "$@"
