@@ -95,9 +95,8 @@ image_build run ort "$GIT_REVISION" \
     --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/ortbin:latest" \
     "$@"
 
+# Build adjacent language containers if ALL_LANGUAGES is set.
 [ -z "$ALL_LANGUAGES" ] && exit 0
-
-# Build adjacent language containers
 
 # Rust
 # shellcheck disable=SC1091
@@ -112,4 +111,11 @@ image_build rust rust "$RUST_VERSION" \
 image_build ruby ruby "$RUBY_VERSION" \
     --build-arg RUBY_VERSION="$RUBY_VERSION" \
     --build-arg COCOAPODS_VERSION="$COCOAPODS_VERSION" \
+    "$@"
+
+# Android
+# shellcheck disable=SC1091
+. .ortversions/android.versions
+image_build android android "$ANDROID_CMD_VERSION" \
+    --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
     "$@"

@@ -24,7 +24,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 # Define the list of valid components
-valid_components=("rust" "ruby")
+valid_components=("rust" "ruby" "android")
 
 # Define the Dockerfile template
 dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
@@ -95,6 +95,6 @@ echo -e "${dockerfile_template}" >"${output_file}"
 # Add the components to the Dockerfile template
 for component in "${components[@]}"; do
     # Add the component to the custom Dockerfile
-    cat "${SCRIPT_DIR}/docker_snippets/${component}.snippet" >> "${output_file}"
+    cat "${SCRIPT_DIR}/docker_snippets/${component}.snippet" >>"${output_file}"
     echo -e "\n" >>"${output_file}"
 done

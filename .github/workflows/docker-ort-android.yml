@@ -19,13 +19,17 @@ name: Ort Docker Android Container
 
 on:
     workflow_dispatch:
+    pull_request:
+        branches:
+            - main
     push:
         paths:
-            - '.versions'
+            - '.ortversions/android.versions'
             - '.github/workflows/docker-ort-base.yml'
-            - '.github/workflows/docker-ort-android.yml'
     workflow_run:
         workflows: ["Ort Docker Base Image"]
+        types:
+            - completed
 
 env:
     REGISTRY: ghcr.io
@@ -46,7 +50,7 @@ jobs:
 
             -   name: Set environment variables
                 run: |
-                    cat .versions >> $GITHUB_ENV
+                    cat .ortversions/android.versions >> $GITHUB_ENV
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v2
