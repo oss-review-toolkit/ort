@@ -92,8 +92,8 @@ image_build run ort "$GIT_REVISION" \
     --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
     --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
     --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
-    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/binaries:latest" \
-"$@"
+    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/ortbin:latest" \
+    "$@"
 
 [ -z "$ALL_LANGUAGES" ] && exit 0
 
@@ -104,4 +104,12 @@ image_build run ort "$GIT_REVISION" \
 . .ortversions/rust.versions
 image_build rust rust "$RUST_VERSION" \
     --build-arg RUST_VERSION="$RUST_VERSION" \
+    "$@"
+
+# Ruby
+# shellcheck disable=SC1091
+. .ortversions/ruby.versions
+image_build ruby ruby "$RUBY_VERSION" \
+    --build-arg RUBY_VERSION="$RUBY_VERSION" \
+    --build-arg COCOAPODS_VERSION="$COCOAPODS_VERSION" \
     "$@"

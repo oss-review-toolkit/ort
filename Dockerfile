@@ -214,6 +214,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
 
 ARG COCOAPODS_VERSION=1.11.2
 ARG RUBY_VERSION=3.1.2
+
 ENV RBENV_ROOT=/opt/rbenv
 ENV PATH=$RBENV_ROOT/bin:$RBENV_ROOT/shims/:$RBENV_ROOT/plugins/ruby-build/bin:$PATH
 

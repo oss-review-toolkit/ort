@@ -1,0 +1,91 @@
+# Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# SPDX-License-Identifier: Apache-2.0
+# License-Filename: LICENSE
+
+name: Ort Docker Ruby Container
+
+on:
+    workflow_run:
+        workflows: ["Ort Docker Base Image"]
+    workflow_dispatch:
+    pull_request:
+        branches:
+            - main
+    push:
+        paths:
+            - '.ortversions/ruby.versions'
+            - '.github/workflows/docker-ort-base.yml'
+
+env:
+    REGISTRY: ghcr.io
+
+permissions: write-all
+
+jobs:
+    build:
+        name: Build ORT Ruby Image
+        runs-on: ubuntu-22.04
+        permissions:
+            contents: read
+            packages: write
+
+        steps:
+            -   name: Checkout main repository
+                uses: actions/checkout@v3
+
+            -   name: Set environment variables
+                run: |
+                    cat .ortversions/ruby.versions >> $GITHUB_ENV
+
+            -   name: Set up Docker Buildx
+                uses: docker/setup-buildx-action@v2
+
+            -   name: Login to GitHub Container Registry
+                uses: docker/login-action@v2
+                with:
+                    registry: ${{ env.REGISTRY }}
+                    username: ${{ github.actor }}
+                    password: ${{ secrets.GITHUB_TOKEN }}
+
+            -   name: Extract components metadata (tags, labels) for base image
+                id: meta
+                uses: docker/metadata-action@v4
+                with:
+                    images: |
+                        ${{ env.REGISTRY }}/${{ github.repository }}/ruby
+                    tags: |
+                        type=semver,pattern={{version}},value=${{ env.RUBY_VERSION }}
+
+
+            -   name: Build ORT Ruby container
+                if: github.event_name == 'push'
+                uses: docker/build-push-action@v4
+                with:
+                    context: .
+                    target: ruby
+                    push: ${{ github.event_name == 'push' }}
+                    load: false
+                    build-args: |
+                            RUBY_VERSION=${{ env.RUBY_VERSION }}
+                            COCOAPODS_VERSION=${{ env.COCOAPODS_VERSION }}
+                    tags: |
+                        ${{ steps.meta.outputs.tags }}
+                        ${{ env.REGISTRY }}/${{ github.repository }}/ruby:latest
+                    labels: ${{ steps.meta.outputs.labels }}
+                    build-contexts: |
+                        ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
+                    cache-from: type=gha,scope=ortruby
+                    cache-to: type=gha,scope=ortruby,mode=max
