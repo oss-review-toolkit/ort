@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.plugins.scanners.fossid
 
-import io.kotest.assertions.throwables.shouldThrow
+import io.kotest.assertions.async.shouldTimeout
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.collections.shouldContainExactlyInAnyOrder
 import io.kotest.matchers.collections.shouldHaveSize
@@ -38,9 +38,9 @@ import io.mockk.unmockkObject
 import java.time.Instant
 import java.util.concurrent.atomic.AtomicInteger
 
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration.Companion.milliseconds
+
+import kotlinx.coroutines.runInterruptible
 
 import org.ossreviewtoolkit.clients.fossid.EntityResponseBody
 import org.ossreviewtoolkit.clients.fossid.FossIdRestService
@@ -564,18 +564,16 @@ class FossIdTest : WordSpec({
 
             val fossId = createFossId(config)
 
-            shouldThrow<TimeoutCancellationException> {
-                withTimeout(1000) {
-                    launch {
-                        fossId.scanPackage(
-                            createPackage(createIdentifier(index = 1), vcsInfo),
-                            ScanContext(
-                                labels = emptyMap(),
-                                packageType = PackageType.PACKAGE,
-                                Excludes()
-                            )
+            shouldTimeout(1000.milliseconds) {
+                runInterruptible {
+                    fossId.scanPackage(
+                        createPackage(createIdentifier(index = 1), vcsInfo),
+                        ScanContext(
+                            labels = emptyMap(),
+                            packageType = PackageType.PACKAGE,
+                            Excludes()
                         )
-                    }
+                    )
                 }
             }
 
