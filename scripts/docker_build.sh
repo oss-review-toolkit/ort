@@ -141,3 +141,11 @@ image_build swift swift "$SWIFT_VERSION" \
 image_build sbt sbt "$SBT_VERSION" \
     --build-arg SBT_VERSION="$SBT_VERSION" \
     "$@"
+
+# Dart
+# SBT
+# shellcheck disable=SC1091
+. .ortversions/dart.versions
+image_build dart dart "$DART_VERSION" \
+    --build-arg DART_VERSION="$DART_VERSION" \
+    "$@"
