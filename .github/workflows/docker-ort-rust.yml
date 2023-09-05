@@ -87,4 +87,3 @@ jobs:
                         ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
                     cache-from: type=gha,scope=ortrust
                     cache-to: type=gha,scope=ortrust,mode=max
-

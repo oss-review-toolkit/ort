@@ -90,4 +90,3 @@ jobs:
                         ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
                     cache-from: type=gha,scope=ortgolang
                     cache-to: type=gha,scope=ortgolang,mode=max
-
