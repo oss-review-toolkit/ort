@@ -143,9 +143,15 @@ image_build sbt sbt "$SBT_VERSION" \
     "$@"
 
 # Dart
-# SBT
 # shellcheck disable=SC1091
 . .ortversions/dart.versions
 image_build dart dart "$DART_VERSION" \
     --build-arg DART_VERSION="$DART_VERSION" \
+    "$@"
+
+# Dotnet
+# shellcheck disable=SC1091
+. .ortversions/dotnet.versions
+image_build dotnet dotnet "$NUGET_INSPECTOR_VERSION" \
+    --build-arg NUGET_INSPECTOR_VERSION="$NUGET_INSPECTOR_VERSION" \
     "$@"

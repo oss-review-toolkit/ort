@@ -386,7 +386,8 @@ COPY --from=phpbuild /opt/php /opt/php
 
 #------------------------------------------------------------------------
 # NUGET
-FROM ort-base-image AS nugetbuilld
+FROM ort-base-image AS dotnetbuild
+
 # nuget-inspector
 ENV NUGET_INSPECTOR_HOME=/opt/nuget-inspector
 ENV NUGET_INSPECTOR_BIN=$NUGET_INSPECTOR_HOME/bin
@@ -405,8 +406,8 @@ RUN mkdir -p $NUGET_INSPECTOR_BIN \
     && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
     | tar --strip-components=1 -C $NUGET_INSPECTOR_BIN -xz
 
-FROM scratch AS nuget
-COPY --from=nugetbuild /opt/nuget-inspector /opt/nuget-inspector
+FROM scratch AS dotnet
+COPY --from=dotnetbuild /opt/nuget-inspector /opt/nuget-inspector
 
 #------------------------------------------------------------------------
 # ORT
