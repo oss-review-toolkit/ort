@@ -51,14 +51,20 @@ graalvmNative {
             val initializeAtBuildTime = listOf(
                 "ch.qos.logback.classic.Level",
                 "ch.qos.logback.classic.Logger",
+                "ch.qos.logback.classic.LoggerContext",
                 "ch.qos.logback.classic.PatternLayout",
                 "ch.qos.logback.core.CoreConstants",
                 "ch.qos.logback.core.status.InfoStatus",
                 "ch.qos.logback.core.status.StatusBase",
                 "ch.qos.logback.core.util.Loader",
                 "ch.qos.logback.core.util.StatusPrinter",
+                "org.apache.sshd.common.file.root.RootedFileSystemProvider",
                 "org.apache.sshd.sftp.client.fs.SftpFileSystemProvider",
-                "org.slf4j.LoggerFactory"
+                "org.slf4j.LoggerFactory",
+                "org.slf4j.helpers.NOPLoggerFactory",
+                "org.slf4j.helpers.NOP_FallbackServiceProvider",
+                "org.slf4j.helpers.SubstituteLoggerFactory",
+                "org.slf4j.helpers.SubstituteServiceProvider"
             ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
 
             buildArgs.add(initializeAtBuildTime)
