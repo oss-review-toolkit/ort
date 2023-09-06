@@ -281,7 +281,7 @@ class ReporterCommand : OrtCommand(
                 reportFormats.map { reporter ->
                     async {
                         val threadName = Thread.currentThread().name
-                        println("Generating the '${reporter.type}' report in thread '$threadName'...")
+                        echo("Generating the '${reporter.type}' report in thread '$threadName'...")
 
                         reporter to measureTimedValue {
                             val options = reportOptionsMap[reporter.type].orEmpty()
@@ -299,7 +299,7 @@ class ReporterCommand : OrtCommand(
 
             timedValue.value.onSuccess { files ->
                 val fileList = files.joinToString { "'$it'" }
-                println("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
+                echo("Successfully created '$name' report(s) at $fileList in ${timedValue.duration}.")
             }.onFailure { e ->
                 e.showStackTrace()
 
@@ -312,7 +312,7 @@ class ReporterCommand : OrtCommand(
         }
 
         val successCount = reportFormats.size - failureCount
-        println("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
+        echo("Created $successCount of ${reportFormats.size} report(s) in ${reportDurationMap.duration}.")
 
         if (failureCount > 0) throw ProgramResult(2)
     }

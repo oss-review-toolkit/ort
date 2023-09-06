@@ -118,8 +118,8 @@ class AdvisorCommand : OrtCommand(
         validateOutputFiles(outputFiles)
 
         val distinctProviders = providerFactories.distinct()
-        println("The following advisors are activated:")
-        println("\t" + distinctProviders.joinToString().ifEmpty { "<None>" })
+        echo("The following advisors are activated:")
+        echo("\t" + distinctProviders.joinToString().ifEmpty { "<None>" })
 
         val advisor = Advisor(distinctProviders, ortConfig.advisor)
 
@@ -133,12 +133,12 @@ class AdvisorCommand : OrtCommand(
 
         val advisorRun = ortResultOutput.advisor
         if (advisorRun == null) {
-            println("No advisor run was created.")
+            echo("No advisor run was created.")
             throw ProgramResult(1)
         }
 
         val duration = with(advisorRun) { Duration.between(startTime, endTime).toKotlinDuration() }
-        println("The advice took $duration.")
+        echo("The advice took $duration.")
 
         with(advisorRun.results.getVulnerabilities()) {
             val includedPackages = ortResultOutput.getPackages(omitExcluded = true).map { it.metadata.id }
@@ -148,7 +148,7 @@ class AdvisorCommand : OrtCommand(
             }
             val vulnerabilityCount = filterKeys { it in includedPackages }.values.sumOf { it.size }
 
-            println(
+            echo(
                 "$vulnerablePackageCount of $totalPackageCount package(s) (not counting excluded ones) are " +
                     "vulnerable, with $vulnerabilityCount vulnerabilities in total."
             )

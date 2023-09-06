@@ -83,12 +83,12 @@ class CompareCommand : OrtCommand(
 
     override fun run() {
         if (fileA == fileB) {
-            println("The arguments point to the same file.")
+            echo("The arguments point to the same file.")
             throw ProgramResult(0)
         }
 
         if (fileA.extension != fileB.extension) {
-            println("The file arguments need to be of the same type.")
+            echo("The file arguments need to be of the same type.")
             throw ProgramResult(2)
         }
 
@@ -132,14 +132,14 @@ class CompareCommand : OrtCommand(
                 )
 
                 if (diff.isEmpty()) {
-                    println("The ORT results are the same.")
+                    echo("The ORT results are the same.")
                     throw ProgramResult(0)
                 }
 
-                println("The ORT results differ:")
+                echo("The ORT results differ:")
 
                 diff.forEach {
-                    println(it)
+                    echo(it)
                 }
 
                 throw ProgramResult(1)

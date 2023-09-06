@@ -86,7 +86,7 @@ class UploadResultToPostgresCommand : OrtCommand(
             ?.filterIsInstance<PostgresStorageConfiguration>()?.let { configs ->
                 if (configs.size > 1) {
                     val config = configs.first()
-                    println(
+                    echo(
                         "Multiple PostgreSQL storages are configured, using the first one which points to schema " +
                             "${config.connection.schema} at ${config.connection.url}."
                     )
@@ -134,11 +134,11 @@ class UploadResultToPostgresCommand : OrtCommand(
                 }
             }
 
-            println("Successfully stored ORT result.")
+            echo("Successfully stored ORT result.")
         } catch (e: SQLException) {
             e.showStackTrace()
 
-            println("Could not store ORT result: ${e.collectMessages()}")
+            echo("Could not store ORT result: ${e.collectMessages()}")
         }
     }
 }

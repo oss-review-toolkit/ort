@@ -76,36 +76,36 @@ class ConfigCommand : OrtCommand(
 
     override fun run() {
         if (showDefault) {
-            println("The default configuration is:")
-            println()
-            println(OrtConfiguration().renderYaml())
+            echo("The default configuration is:")
+            echo()
+            echo(OrtConfiguration().renderYaml())
         }
 
         if (showActive) {
-            println("The active configuration is:")
-            println()
-            println(ortConfig.renderYaml())
+            echo("The active configuration is:")
+            echo()
+            echo(ortConfig.renderYaml())
         }
 
         if (showReference) {
-            println("The reference configuration is:")
-            println()
-            println(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
+            echo("The reference configuration is:")
+            echo()
+            echo(javaClass.getResource("/$REFERENCE_CONFIG_FILENAME").readText())
         }
 
         checkSyntax?.run {
             runCatching {
                 OrtConfiguration.load(file = this)
             }.onSuccess {
-                println("The syntax of the configuration file '$this' is valid.")
+                echo("The syntax of the configuration file '$this' is valid.")
             }.onFailure {
-                println(it.collectMessages())
+                echo(it.collectMessages())
                 throw ProgramResult(2)
             }
         }
 
         hoconToYaml?.run {
-            println(convertHoconToYaml(readText()))
+            echo(convertHoconToYaml(readText()))
         }
     }
 }
