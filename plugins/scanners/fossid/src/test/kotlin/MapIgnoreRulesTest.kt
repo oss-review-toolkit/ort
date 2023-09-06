@@ -93,6 +93,34 @@ class MapIgnoreRulesTest : WordSpec({
             issues should beEmpty()
         }
 
+        "map rule with directory containing a dash" {
+            val exclude = Excludes(listOf(PathExclude("test-prod/", PathExcludeReason.OTHER)))
+            val issues = mutableListOf<Issue>()
+
+            val ignoreRules = convertRules(exclude, issues)
+
+            ignoreRules shouldHaveSize 1
+            ignoreRules.first().shouldNotBeNull {
+                value shouldBe "test-prod"
+                type shouldBe RuleType.DIRECTORY
+            }
+        }
+
+        "map rule with directory containing subdirectories with a dash" {
+            val exclude = Excludes(listOf(PathExclude("src/test-prod/templates/", PathExcludeReason.OTHER)))
+            val issues = mutableListOf<Issue>()
+
+            val ignoreRules = convertRules(exclude, issues)
+
+            ignoreRules shouldHaveSize 1
+            ignoreRules.first().shouldNotBeNull {
+                value shouldBe "src/test-prod/templates"
+                type shouldBe RuleType.DIRECTORY
+            }
+
+            issues should beEmpty()
+        }
+
         "map rule with directory" {
             val exclude = Excludes(listOf(PathExclude("directory/", PathExcludeReason.OTHER)))
             val issues = mutableListOf<Issue>()
@@ -109,7 +137,7 @@ class MapIgnoreRulesTest : WordSpec({
         }
 
         "map rule with directory containing subdirectories" {
-            val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2", PathExcludeReason.OTHER)))
+            val exclude = Excludes(listOf(PathExclude("directory/sub1/sub2/", PathExcludeReason.OTHER)))
             val issues = mutableListOf<Issue>()
 
             val ignoreRules = convertRules(exclude, issues)

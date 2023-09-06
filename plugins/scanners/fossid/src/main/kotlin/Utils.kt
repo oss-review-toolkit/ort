@@ -26,7 +26,7 @@ import org.ossreviewtoolkit.model.Severity
 import org.ossreviewtoolkit.model.config.Excludes
 import org.ossreviewtoolkit.model.config.PathExclude
 
-private val DIRECTORY_REGEX = "(?<directory>(?:[\\w.]+/)*[\\w.]+)/?(?<starstar>\\*\\*)?".toRegex()
+private val DIRECTORY_REGEX = "(?<directory>.+)/(?<starstar>\\*\\*)?".toRegex()
 private val EXTENSION_REGEX = "\\*\\.(?<extension>\\w+)".toRegex()
 private val FILE_REGEX = "(?<file>[^/]+)".toRegex()
 
