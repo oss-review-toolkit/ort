@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.cli
 
-import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.testing.test
 
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.StringSpec
@@ -43,7 +43,6 @@ import org.ossreviewtoolkit.model.readValue
 import org.ossreviewtoolkit.model.toYaml
 import org.ossreviewtoolkit.model.writeValue
 import org.ossreviewtoolkit.utils.common.EnvironmentVariableFilter
-import org.ossreviewtoolkit.utils.common.redirectStdout
 import org.ossreviewtoolkit.utils.test.getAssetFile
 import org.ossreviewtoolkit.utils.test.matchExpectedResult
 import org.ossreviewtoolkit.utils.test.patchActualResult
@@ -80,20 +79,22 @@ class OrtMainFunTest : StringSpec() {
         "Enabling only Gradle works" {
             val inputDir = tempdir()
 
-            val stdout = runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path
-            )
+            val stdout = OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path
+                )
+            ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
-            iterator.next() shouldBe "\tGradle"
+            iterator.next().trim() shouldBe "Gradle"
         }
 
         "Disabling only Gradle works" {
@@ -101,52 +102,57 @@ class OrtMainFunTest : StringSpec() {
             val markerLine = "The following ${expectedPackageManagers.size} package manager(s) are enabled:"
             val inputDir = tempdir()
 
-            val stdout = runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path
-            )
+            val stdout = OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path
+                )
+            ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == markerLine) break
             }
 
             iterator.hasNext() shouldBe true
-            iterator.next() shouldBe "\t${expectedPackageManagers.joinToString { it.type }}"
+            iterator.next().trim() shouldBe "${expectedPackageManagers.joinToString { it.type }}"
         }
 
         "Disabling a package manager overrides enabling it" {
             val inputDir = tempdir()
 
-            val stdout = runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
-                "-P", "ort.analyzer.disabledPackageManagers=Gradle",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path
-            )
+            val stdout = OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                    "-P", "ort.analyzer.disabledPackageManagers=Gradle",
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path
+                )
+            ).stdout.lineSequence()
             val iterator = stdout.iterator()
             while (iterator.hasNext()) {
                 if (iterator.next() == "The following 1 package manager(s) are enabled:") break
             }
 
             iterator.hasNext() shouldBe true
-            iterator.next() shouldBe "\tNPM"
+            iterator.next().trim() shouldBe "NPM"
         }
 
         "An Unmanaged project is created if no definition files are found" {
             val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
-            @Suppress("IgnoredReturnValue")
-            runMain(
-                "-c", configFile.path,
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path
+            OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path
+                )
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
@@ -161,13 +167,14 @@ class OrtMainFunTest : StringSpec() {
             val inputDir = tempdir()
             inputDir.resolve("test").writeText("test")
 
-            @Suppress("IgnoredReturnValue")
-            runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path
+            OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.enabledPackageManagers=Gradle,NPM",
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path
+                )
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>()
@@ -180,14 +187,16 @@ class OrtMainFunTest : StringSpec() {
         "Output formats are deduplicated" {
             val inputDir = tempdir()
 
-            val stdout = runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                "analyze",
-                "-i", inputDir.path,
-                "-o", outputDir.path,
-                "-f", "json,yaml,json"
-            )
+            val stdout = OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                    "analyze",
+                    "-i", inputDir.path,
+                    "-o", outputDir.path,
+                    "-f", "json,yaml,json"
+                )
+            ).stdout.lineSequence()
             val lines = stdout.filter { it.startsWith("Writing analyzer result to ") }
 
             lines.count() shouldBe 2
@@ -200,13 +209,14 @@ class OrtMainFunTest : StringSpec() {
             val expectedResultFile = getAssetFile("gradle-all-dependencies-expected-result-with-curations.yml")
             val expectedResult = matchExpectedResult(expectedResultFile, definitionFile)
 
-            @Suppress("IgnoredReturnValue")
-            runMain(
-                "-c", configFile.path,
-                "-P", "ort.analyzer.enabledPackageManagers=Gradle",
-                "analyze",
-                "-i", definitionFile.parentFile.absolutePath,
-                "-o", outputDir.path
+            OrtMain().test(
+                listOf(
+                    "-c", configFile.path,
+                    "-P", "ort.analyzer.enabledPackageManagers=Gradle",
+                    "analyze",
+                    "-i", definitionFile.parentFile.absolutePath,
+                    "-o", outputDir.path
+                )
             )
 
             val ortResult = outputDir.resolve("analyzer-result.yml").readValue<OrtResult>().withResolvedScopes()
@@ -217,24 +227,15 @@ class OrtMainFunTest : StringSpec() {
         "EnvironmentVariableFilter is correctly initialized" {
             val referenceConfigFile = File("../model/src/main/resources/$REFERENCE_CONFIG_FILENAME").absolutePath
 
-            @Suppress("IgnoredReturnValue")
-            runMain(
-                "-c", referenceConfigFile,
-                "config"
+            OrtMain().test(
+                listOf(
+                    "-c", referenceConfigFile,
+                    "config"
+                )
             )
 
             EnvironmentVariableFilter.isAllowed("PASSPORT") shouldBe true
             EnvironmentVariableFilter.isAllowed("DB_PASS") shouldBe false
         }
     }
-
-    private fun runMain(vararg args: String) =
-        redirectStdout {
-            @Suppress("SwallowedException")
-            try {
-                OrtMain().parse(args.asList())
-            } catch (e: ProgramResult) {
-                // Ignore exceptions that just propagate the program result.
-            }
-        }.lineSequence()
 }
