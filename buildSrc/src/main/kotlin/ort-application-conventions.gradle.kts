@@ -67,7 +67,12 @@ graalvmNative {
                 "org.slf4j.helpers.SubstituteServiceProvider"
             ).joinToString(separator = ",", prefix = "--initialize-at-build-time=")
 
-            buildArgs.addAll(initializeAtBuildTime, "--report-unsupported-elements-at-runtime")
+            buildArgs.addAll(
+                initializeAtBuildTime,
+                "--report-unsupported-elements-at-runtime",
+                "--parallelism=8",
+                "-J-Xmx16g"
+            )
         }
     }
 
