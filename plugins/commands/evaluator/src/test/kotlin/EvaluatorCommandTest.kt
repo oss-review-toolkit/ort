@@ -19,6 +19,8 @@
 
 package org.ossreviewtoolkit.plugins.commands.evaluator
 
+import com.github.ajalt.clikt.testing.test
+
 import io.kotest.assertions.throwables.shouldNotThrow
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.StringSpec
@@ -29,20 +31,17 @@ import io.kotest.matchers.string.shouldContain
 
 import java.io.FileNotFoundException
 
-import org.ossreviewtoolkit.utils.common.Os
 import org.ossreviewtoolkit.utils.ort.ORT_CONFIG_DIR_ENV_NAME
 import org.ossreviewtoolkit.utils.ort.ORT_EVALUATOR_RULES_FILENAME
 import org.ossreviewtoolkit.utils.ort.ortConfigDirectory
 
 class EvaluatorCommandTest : StringSpec({
-    Os.env[ORT_CONFIG_DIR_ENV_NAME] = tempdir().path
-
     "If no rules are specified, the default rules file should be required" {
         val args = "--check-syntax".split(' ')
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
         shouldThrow<FileNotFoundException> {
-            EvaluatorCommand().parse(args)
+            EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
         }.message shouldContain ORT_EVALUATOR_RULES_FILENAME
     }
 
@@ -51,7 +50,7 @@ class EvaluatorCommandTest : StringSpec({
 
         ortConfigDirectory.resolve(ORT_EVALUATOR_RULES_FILENAME) shouldNot exist()
         shouldNotThrow<FileNotFoundException> {
-            EvaluatorCommand().parse(args)
+            EvaluatorCommand().test(args, envvars = mapOf(ORT_CONFIG_DIR_ENV_NAME to tempdir().path))
         }
     }
 })
