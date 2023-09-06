@@ -115,7 +115,7 @@ class RequirementsCommand : OrtCommand(
         var statusCode = 0
 
         allTools.forEach { (category, tools) ->
-            println("${category}s:")
+            echo("${category}s:")
 
             tools.forEach { tool ->
                 // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
@@ -169,27 +169,27 @@ class RequirementsCommand : OrtCommand(
                     append(suffix)
                 }
 
-                println(message)
+                echo(message)
             }
 
-            println()
+            echo()
         }
 
-        println("Prefix legend:")
-        println("\t- The tool was not found in the PATH environment.")
-        println("\t+ The tool was found in the PATH environment, but not in the required version.")
-        println("\t* The tool was found in the PATH environment in the required version.")
+        echo("Prefix legend:")
+        echo("\t- The tool was not found in the PATH environment.")
+        echo("\t+ The tool was found in the PATH environment, but not in the required version.")
+        echo("\t* The tool was found in the PATH environment in the required version.")
 
-        println()
+        echo()
         if (scanCodeLicenseTextDir != null) {
-            println("ScanCode license texts found in '$scanCodeLicenseTextDir'.")
+            echo("ScanCode license texts found in '$scanCodeLicenseTextDir'.")
         } else {
-            println("ScanCode license texts not found.")
+            echo("ScanCode license texts not found.")
         }
 
         if (statusCode != 0) {
-            println()
-            println("Not all tools were found in their required versions.")
+            echo()
+            echo("Not all tools were found in their required versions.")
             throw ProgramResult(statusCode)
         }
     }

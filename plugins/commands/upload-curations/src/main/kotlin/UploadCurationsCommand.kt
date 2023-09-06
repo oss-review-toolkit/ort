@@ -107,7 +107,7 @@ class UploadCurationsCommand : OrtCommand(
         unharvestedCurations.forEach { curation ->
             val definitionUrl = "${server.webUrl}/definitions/${curationsToCoordinates[curation]}"
 
-            println(
+            echo(
                 "Package '${curation.id.toCoordinates()}' was not harvested until now, but harvesting was requested. " +
                     "Check $definitionUrl for the harvesting status."
             )
@@ -122,25 +122,28 @@ class UploadCurationsCommand : OrtCommand(
             val patch = curation.toContributionPatch()
 
             if (patch == null) {
-                println("Unable to convert $curation (${index + 1} of $count) to a contribution patch.")
+                echo("Unable to convert $curation (${index + 1} of $count) to a contribution patch.")
             } else {
-                print("Curation ${index + 1} of $count for package '${curation.id.toCoordinates()}' ")
+                echo(
+                    "Curation ${index + 1} of $count for package '${curation.id.toCoordinates()}' ",
+                    trailingNewline = false
+                )
 
                 runCatching {
                     service.callBlocking { putCuration(patch) }
                 }.onSuccess {
-                    println("was uploaded successfully:\n${it.url}")
+                    echo("was uploaded successfully:\n${it.url}")
                     ++uploadedCurationsCount
                 }.onFailure {
-                    println("failed to be uploaded.")
+                    echo("failed to be uploaded.")
                 }
             }
         }
 
-        println("Successfully uploaded $uploadedCurationsCount of $count curations.")
+        echo("Successfully uploaded $uploadedCurationsCount of $count curations.")
 
         if (uploadedCurationsCount != count) {
-            println("At least one curation failed to be uploaded.")
+            echo("At least one curation failed to be uploaded.")
             throw ProgramResult(2)
         }
     }

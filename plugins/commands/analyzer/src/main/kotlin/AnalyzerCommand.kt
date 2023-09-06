@@ -136,8 +136,8 @@ class AnalyzerCommand : OrtCommand(
             file.absolutePath + " (does not exist)".takeIf { !file.exists() }.orEmpty()
         }
 
-        println("Looking for analyzer-specific configuration in the following files and directories:")
-        println("\t" + configurationInfo)
+        echo("Looking for analyzer-specific configuration in the following files and directories:")
+        echo("\t" + configurationInfo)
 
         val repositoryConfiguration = repositoryConfigurationFile.takeIf { it.isFile }?.readValueOrNull()
             ?: RepositoryConfiguration()
@@ -147,8 +147,8 @@ class AnalyzerCommand : OrtCommand(
 
         val enabledPackageManagers = analyzerConfiguration.determineEnabledPackageManagers()
 
-        println("The following ${enabledPackageManagers.size} package manager(s) are enabled:")
-        println("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
+        echo("The following ${enabledPackageManagers.size} package manager(s) are enabled:")
+        echo("\t" + enabledPackageManagers.joinToString().ifEmpty { "<None>" })
 
         val analyzer = Analyzer(analyzerConfiguration, labels)
 
@@ -167,36 +167,36 @@ class AnalyzerCommand : OrtCommand(
             addAll(PackageCurationProviderFactory.create(ortConfig.packageCurationProviders))
         }
 
-        println("The following ${enabledCurationProviders.size} package curation provider(s) are enabled:")
-        println("\t" + enabledCurationProviders.joinToString { it.first }.ifEmpty { "<None>" })
+        echo("The following ${enabledCurationProviders.size} package curation provider(s) are enabled:")
+        echo("\t" + enabledCurationProviders.joinToString { it.first }.ifEmpty { "<None>" })
 
-        println("Analyzing project path:\n\t$inputDir")
+        echo("Analyzing project path:\n\t$inputDir")
 
         val info = analyzer.findManagedFiles(inputDir, enabledPackageManagers, repositoryConfiguration)
         if (info.managedFiles.isEmpty()) {
-            println("No definition files found.")
+            echo("No definition files found.")
         } else {
             val filesPerManager = info.managedFiles.mapKeysTo(sortedMapOf()) { it.key.managerName }
             var count = 0
 
             filesPerManager.forEach { (manager, files) ->
                 count += files.size
-                println("Found ${files.size} $manager definition file(s) at:")
+                echo("Found ${files.size} $manager definition file(s) at:")
 
                 files.forEach { file ->
                     val relativePath = file.toRelativeString(inputDir).takeIf { it.isNotEmpty() } ?: "."
-                    println("\t$relativePath")
+                    echo("\t$relativePath")
                 }
             }
 
-            println(
+            echo(
                 "Found in total $count definition file(s) from the following ${filesPerManager.size} package " +
                     "manager(s):\n\t${filesPerManager.keys.joinToString()}"
             )
         }
 
         if (dryRun) {
-            println("Not performing the actual project analysis as this is a dry run.")
+            echo("Not performing the actual project analysis as this is a dry run.")
             return
         }
 
@@ -207,22 +207,22 @@ class AnalyzerCommand : OrtCommand(
 
         val analyzerRun = ortResult.analyzer
         if (analyzerRun == null) {
-            println("No analyzer run was created.")
+            echo("No analyzer run was created.")
             throw ProgramResult(1)
         }
 
         val duration = with(analyzerRun) { Duration.between(startTime, endTime).toKotlinDuration() }
-        println("The analysis took $duration.")
+        echo("The analysis took $duration.")
 
         val projects = ortResult.getProjects(omitExcluded = true)
         val packages = ortResult.getPackages(omitExcluded = true)
-        println(
+        echo(
             "Found ${projects.size} project(s) and ${packages.size} package(s) in total (not counting excluded ones)."
         )
 
         val curationCount = packages.sumOf { it.curations.size }
         val providerCount = ortResult.resolvedConfiguration.packageCurations.count { it.curations.isNotEmpty() }
-        println(
+        echo(
             "Applied $curationCount curation(s) from $providerCount of ${enabledCurationProviders.size} provider(s)."
         )
 

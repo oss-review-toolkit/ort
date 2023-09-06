@@ -210,7 +210,7 @@ class DownloaderCommand : OrtCommand(
         }
 
         val verb = if (dryRun) "verification" else "download"
-        println("The $verb took $duration.")
+        echo("The $verb took $duration.")
 
         if (failureMessages.isNotEmpty()) {
             logger.error {
@@ -233,7 +233,7 @@ class DownloaderCommand : OrtCommand(
             throw ProgramResult(0)
         }
 
-        println(
+        echo(
             "Downloading ${packageTypes.joinToString(" and ") { "${it}s" }} from ORT result file at " +
                 "'${ortFile.canonicalPath}'..."
         )
@@ -241,13 +241,13 @@ class DownloaderCommand : OrtCommand(
         val packages = mutableListOf<Package>().apply {
             if (PackageType.PROJECT in packageTypes) {
                 val projects = consolidateProjectPackagesByVcs(ortResult.getProjects(skipExcluded)).keys
-                println("Found ${projects.size} project(s) in the ORT result.")
+                echo("Found ${projects.size} project(s) in the ORT result.")
                 addAll(projects)
             }
 
             if (PackageType.PACKAGE in packageTypes) {
                 val packages = ortResult.getPackages(skipExcluded).map { it.metadata }
-                println("Found ${packages.size} packages(s) the ORT result.")
+                echo("Found ${packages.size} packages(s) the ORT result.")
                 addAll(packages)
             }
         }
@@ -260,7 +260,7 @@ class DownloaderCommand : OrtCommand(
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                println("Removed $diffCount package(s) which do not match the specified id pattern.")
+                echo("Removed $diffCount package(s) which do not match the specified id pattern.")
             }
         }
 
@@ -285,11 +285,11 @@ class DownloaderCommand : OrtCommand(
 
             if (isModified) {
                 val diffCount = originalCount - packages.size
-                println("Removed $diffCount package(s) which do not match the specified license classification.")
+                echo("Removed $diffCount package(s) which do not match the specified license classification.")
             }
         }
 
-        println("Downloading ${packages.size} project(s) / package(s) in total.")
+        echo("Downloading ${packages.size} project(s) / package(s) in total.")
 
         val packageDownloadDirs = packages.associateWith { outputDir.resolve(it.id.toPath()) }
 
@@ -321,10 +321,10 @@ class DownloaderCommand : OrtCommand(
                     val progress = "${index + 1} of ${packageDownloadDirs.size}"
 
                     val verb = if (dryRun) "Verifying" else "Starting"
-                    println("$verb download for '${pkg.id.toCoordinates()}' ($progress).")
+                    echo("$verb download for '${pkg.id.toCoordinates()}' ($progress).")
 
                     downloadPackage(pkg, dir, failureMessages).also {
-                        if (!dryRun) println("Finished download for ${pkg.id.toCoordinates()} ($progress).")
+                        if (!dryRun) echo("Finished download for ${pkg.id.toCoordinates()} ($progress).")
                     }
                 }
             }.awaitAll()
@@ -393,7 +393,7 @@ class DownloaderCommand : OrtCommand(
 
         runCatching {
             val dummyPackage = if (archiveType != ArchiveType.NONE) {
-                println("Downloading $archiveType artifact from $projectUrl...")
+                echo("Downloading $archiveType artifact from $projectUrl...")
                 Package.EMPTY.copy(id = dummyId, sourceArtifact = RemoteArtifact.EMPTY.copy(url = projectUrl))
             } else {
                 val vcs = VersionControlSystem.forUrl(projectUrl)
@@ -407,7 +407,7 @@ class DownloaderCommand : OrtCommand(
                     path = vcsPath
                 )
 
-                println("Downloading from $vcsType VCS at $projectUrl...")
+                echo("Downloading from $vcsType VCS at $projectUrl...")
                 Package.EMPTY.copy(id = dummyId, vcs = vcsInfo, vcsProcessed = vcsInfo.normalize())
             }
 
@@ -417,7 +417,7 @@ class DownloaderCommand : OrtCommand(
             val config = ortConfig.downloader.copy(allowMovingRevisions = true)
 
             val provenance = Downloader(config).download(dummyPackage, outputDir, dryRun)
-            println("Successfully downloaded $provenance.")
+            echo("Successfully downloaded $provenance.")
         }.onFailure {
             it.showStackTrace()
 

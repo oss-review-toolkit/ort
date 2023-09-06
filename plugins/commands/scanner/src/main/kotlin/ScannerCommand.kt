@@ -159,12 +159,12 @@ class ScannerCommand : OrtCommand(
 
         val scannerRun = ortResult.scanner
         if (scannerRun == null) {
-            println("No scanner run was created.")
+            echo("No scanner run was created.")
             throw ProgramResult(1)
         }
 
         val duration = with(scannerRun) { Duration.between(startTime, endTime).toKotlinDuration() }
-        println("The scan took $duration.")
+        echo("The scan took $duration.")
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResult, resolutionsFile)
         val issues = scannerRun.getIssues().flatMap { it.value }
@@ -185,17 +185,17 @@ class ScannerCommand : OrtCommand(
             .map { it.create(ortConfig.scanner, ortConfig.downloader) }
 
         if (projectScannerWrappers.isNotEmpty()) {
-            println("Scanning projects with:")
-            println(projectScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
+            echo("Scanning projects with:")
+            echo(projectScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
         } else {
-            println("Projects will not be scanned.")
+            echo("Projects will not be scanned.")
         }
 
         if (packageScannerWrappers.isNotEmpty()) {
-            println("Scanning packages with:")
-            println(packageScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
+            echo("Scanning packages with:")
+            echo(packageScannerWrappers.joinToString { "\t${it.name} (version ${it.version})" })
         } else {
-            println("Packages will not be scanned.")
+            echo("Packages will not be scanned.")
         }
 
         val scanStorages = ScanStorages.createFromConfig(ortConfig.scanner)
