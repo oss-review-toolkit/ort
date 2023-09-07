@@ -82,22 +82,6 @@ image_build nodejs nodejs "$NODEJS_VERSION" \
     --build-arg YARN_VERSION="$YARN_VERSION" \
     "$@"
 
-# Ort
-image_build ortbin ortbin "$GIT_REVISION" \
-    --build-arg ORT_VERSION="$GIT_REVISION" \
-    "$@"
-
-# Runtime ORT image
-image_build run ort "$GIT_REVISION" \
-    --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
-    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
-    --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
-    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/ortbin:latest" \
-    "$@"
-
-# Build adjacent language containers if ALL_LANGUAGES is set.
-[ -z "$ALL_LANGUAGES" ] && exit 0
-
 # Rust
 # shellcheck disable=SC1091
 . .ortversions/rust.versions
@@ -113,19 +97,38 @@ image_build ruby ruby "$RUBY_VERSION" \
     --build-arg COCOAPODS_VERSION="$COCOAPODS_VERSION" \
     "$@"
 
-# Android
-# shellcheck disable=SC1091
-. .ortversions/android.versions
-image_build android android "$ANDROID_CMD_VERSION" \
-    --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
-    "$@"
-
 # Golang
 # shellcheck disable=SC1091
 . .ortversions/golang.versions
 image_build golang golang "$GO_VERSION" \
     --build-arg GO_VERSION="$GO_VERSION" \
     --build-arg GO_DEP_VERSION="$GO_DEP_VERSION" \
+    "$@"
+
+# Ort
+image_build ortbin ortbin "$GIT_REVISION" \
+    --build-arg ORT_VERSION="$GIT_REVISION" \
+    "$@"
+
+# Runtime ORT image
+image_build run ort "$GIT_REVISION" \
+    --build-context "python=docker-image://${DOCKER_IMAGE_ROOT}/python:latest" \
+    --build-arg NODEJS_VERSION="$NODEJS_VERSION" \
+    --build-context "nodejs=docker-image://${DOCKER_IMAGE_ROOT}/nodejs:latest" \
+    --build-context "rust=docker-image://${DOCKER_IMAGE_ROOT}/rust:latest" \
+    --build-context "golang=docker-image://${DOCKER_IMAGE_ROOT}/golang:latest" \
+    --build-context "ruby=docker-image://${DOCKER_IMAGE_ROOT}/ruby:latest" \
+    --build-context "ortbin=docker-image://${DOCKER_IMAGE_ROOT}/ortbin:latest" \
+    "$@"
+
+# Build adjacent language containers if ALL_LANGUAGES is set.
+[ -z "$ALL_LANGUAGES" ] && exit 0
+
+# Android
+# shellcheck disable=SC1091
+. .ortversions/android.versions
+image_build android android "$ANDROID_CMD_VERSION" \
+    --build-arg ANDROID_CMD_VERSION="$ANDROID_CMD_VERSION" \
     "$@"
 
 # Swift

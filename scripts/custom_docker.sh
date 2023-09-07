@@ -24,7 +24,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 # Define the list of valid components
-valid_components=("rust" "ruby" "android" "golang" "swift" "sbt" "dart" "dotnet" "php")
+valid_components=("android" "swift" "sbt" "dart" "dotnet" "php" "haskell")
 
 # Define the Dockerfile template
 dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
@@ -33,17 +33,17 @@ dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
 output_file="Dockerfile.custom"
 
 function usage() {
-    echo "Usage: $0 -components <component1> [<component2> ...] -output <output_file>"
+    echo "Usage: $0 -c <component1> [<component2> ...] -output <output_file>"
     echo "Options:"
-    echo "  -components <component1> [<component2> ...]: List of language components to include in the Dockerfile: ${valid_components[*]}"
-    echo "  -output <output_file>: Output file for the generated Dockerfile"
+    echo "  -c <component1> [<component2> ...]: List of language components to include in the Dockerfile: ${valid_components[*]}"
+    echo "  -output <output_file>: Output file for the generated Dockerfile, Defaults to Dockerfile.custom."
     echo "  -h: Display this help message"
 }
 
 # Parse the command-line options
 while [[ $# -gt 0 ]]; do
     case "$1" in
-    -components)
+    -c)
         shift
         components=("$@")
         break
