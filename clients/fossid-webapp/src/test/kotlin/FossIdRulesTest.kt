@@ -27,6 +27,10 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockkObject
+
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType
@@ -43,11 +47,18 @@ class FossIdRulesTest : StringSpec({
 
     beforeSpec {
         server.start()
+
+        mockkObject(FossIdServiceWithVersion)
+        every { FossIdServiceWithVersion.instance(any()) } answers {
+            VersionedFossIdService2021dot2(firstArg(), "2021.2.2")
+        }
+
         service = FossIdRestService.create("http://localhost:${server.port()}")
     }
 
     afterSpec {
         server.stop()
+        clearAllMocks()
     }
 
     beforeTest {
