@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.fossid
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -30,8 +32,6 @@ import java.io.File
 
 import kotlin.io.path.createTempDirectory
 
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.generateReport
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 

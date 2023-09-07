@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.fossid
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -30,25 +32,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
-import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService
-import org.ossreviewtoolkit.clients.fossid.checkDownloadStatus
-import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.createProject
-import org.ossreviewtoolkit.clients.fossid.createScan
-import org.ossreviewtoolkit.clients.fossid.deleteScan
-import org.ossreviewtoolkit.clients.fossid.downloadFromGit
-import org.ossreviewtoolkit.clients.fossid.getProject
-import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
-import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
-import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
-import org.ossreviewtoolkit.clients.fossid.listPendingFiles
-import org.ossreviewtoolkit.clients.fossid.listScanResults
-import org.ossreviewtoolkit.clients.fossid.listScansForProject
 import org.ossreviewtoolkit.clients.fossid.model.status.DownloadStatus
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
-import org.ossreviewtoolkit.clients.fossid.runScan
 
 private const val PROJECT_CODE = "semver4j"
 private const val SCAN_CODE = "${PROJECT_CODE}_20201203_090342"

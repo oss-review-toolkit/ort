@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.fossid
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -28,26 +30,12 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeTypeOf
 
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.deleteScan
-import org.ossreviewtoolkit.clients.fossid.getScan
-import org.ossreviewtoolkit.clients.fossid.listIdentifiedFiles
-import org.ossreviewtoolkit.clients.fossid.listIgnoredFiles
-import org.ossreviewtoolkit.clients.fossid.listMarkedAsIdentifiedFiles
-import org.ossreviewtoolkit.clients.fossid.listMatchedLines
-import org.ossreviewtoolkit.clients.fossid.listPendingFiles
-import org.ossreviewtoolkit.clients.fossid.listScanResults
-import org.ossreviewtoolkit.clients.fossid.listScansForProject
-import org.ossreviewtoolkit.clients.fossid.listSnippets
-import org.ossreviewtoolkit.clients.fossid.markAsIdentified
 import org.ossreviewtoolkit.clients.fossid.model.Scan
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.result.FossIdScanResult
 import org.ossreviewtoolkit.clients.fossid.model.result.Snippet
-import org.ossreviewtoolkit.clients.fossid.unmarkAsIdentified
 
 private const val PROJECT_CODE_1 = "semver4j"
 private const val PROJECT_CODE_2 = "semver4j_2"
