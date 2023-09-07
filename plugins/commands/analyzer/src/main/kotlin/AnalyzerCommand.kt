@@ -203,7 +203,7 @@ class AnalyzerCommand : OrtCommand(
         val ortResult = analyzer.analyze(info, enabledCurationProviders).mergeLabels(labels)
 
         outputDir.safeMkdirs()
-        writeOrtResult(ortResult, outputFiles, "analyzer")
+        writeOrtResult(ortResult, outputFiles)
 
         val analyzerRun = ortResult.analyzer
         if (analyzerRun == null) {

@@ -330,7 +330,7 @@ class EvaluatorCommand : OrtCommand(
 
         outputDir?.let { absoluteOutputDir ->
             absoluteOutputDir.safeMkdirs()
-            writeOrtResult(ortResultOutput, outputFiles, "evaluation")
+            writeOrtResult(ortResultOutput, outputFiles)
         }
 
         SeverityStatsPrinter(terminal, resolutionProvider).stats(evaluatorRun.violations)

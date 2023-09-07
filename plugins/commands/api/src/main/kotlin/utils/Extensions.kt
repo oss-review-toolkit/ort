@@ -56,11 +56,13 @@ fun Logging.readOrtResult(ortFile: File): OrtResult {
 }
 
 /**
- * Write the [ortResult] to all [outputFiles] for the given [resultName].
+ * Write the [ortResult] to all [outputFiles].
  */
-fun Logging.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>, resultName: String) {
+fun Logging.writeOrtResult(ortResult: OrtResult, outputFiles: Collection<File>) {
     outputFiles.forEach { file ->
+        val resultName = file.name.substringBefore('-')
         println("Writing $resultName result to '$file'.")
+
         val duration = measureTime { file.writeValue(ortResult) }
 
         logger.info { "Wrote ORT result to '${file.name}' (${file.formatSizeInMib}) in $duration." }
