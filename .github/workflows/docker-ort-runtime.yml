@@ -30,6 +30,9 @@ on:
             - 'Ort Binaries Container'
             - 'Ort Python Container'
             - 'Ort NodeJS Container'
+            - 'Ort Ruby Container'
+            - 'Ort Rust Container'
+            - 'Ort Golang Container'
         types:
             - completed
 

@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Docker Golang Container
+name: Ort Golang Container
 
 on:
     workflow_dispatch:
