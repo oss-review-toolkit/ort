@@ -37,7 +37,8 @@ class PythonInspectorFunTest : StringSpec({
             PythonInspector.inspect(
                 workingDir = workingDir,
                 definitionFile = definitionFile,
-                pythonVersion = "27"
+                pythonVersion = "27",
+                operatingSystem = "linux"
             )
         } finally {
             workingDir.resolve(".cache").safeDeleteRecursively(force = true)
