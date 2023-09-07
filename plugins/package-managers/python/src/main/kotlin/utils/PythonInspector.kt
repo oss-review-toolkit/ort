@@ -64,12 +64,7 @@ internal object PythonInspector : CommandLineTool, Logging {
 
     override fun getVersionRequirement(): RangesList = RangesListFactory.create("[0.9.2,)")
 
-    fun inspect(
-        workingDir: File,
-        definitionFile: File,
-        pythonVersion: String = "38",
-        operatingSystem: String = "linux"
-    ): Result {
+    fun inspect(workingDir: File, definitionFile: File, pythonVersion: String, operatingSystem: String): Result {
         val outputFile = createOrtTempFile(prefix = "python-inspector", suffix = ".json")
 
         val commandLineOptions = buildList {
