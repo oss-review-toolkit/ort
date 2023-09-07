@@ -321,7 +321,7 @@ configure<PublishingExtension> {
             url = uri(if (version.toString().endsWith("-SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
 
             credentials {
-                username = System.getenv("OSSRH_USER") ?: return@credentials
+                username = System.getenv("OSSRH_USERNAME") ?: return@credentials
                 password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
             }
         }
