@@ -24,7 +24,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 # Define the list of valid components
-valid_components=("rust" "ruby" "android" "golang" "swift" "sbt" "dart" "dotnet")
+valid_components=("rust" "ruby" "android" "golang" "swift" "sbt" "dart" "dotnet" "php")
 
 # Define the Dockerfile template
 dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
