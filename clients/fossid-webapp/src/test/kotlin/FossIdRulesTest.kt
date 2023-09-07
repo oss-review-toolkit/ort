@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.fossid
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -25,11 +27,6 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.nulls.shouldNotBeNull
 
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
-import org.ossreviewtoolkit.clients.fossid.checkResponse
-import org.ossreviewtoolkit.clients.fossid.createIgnoreRule
-import org.ossreviewtoolkit.clients.fossid.listIgnoreRules
 import org.ossreviewtoolkit.clients.fossid.model.rules.IgnoreRule
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleScope
 import org.ossreviewtoolkit.clients.fossid.model.rules.RuleType

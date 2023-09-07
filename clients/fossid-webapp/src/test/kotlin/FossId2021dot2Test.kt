@@ -17,6 +17,8 @@
  * License-Filename: LICENSE
  */
 
+package org.ossreviewtoolkit.clients.fossid
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 
@@ -25,10 +27,6 @@ import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-import org.ossreviewtoolkit.clients.fossid.FossIdRestService
-import org.ossreviewtoolkit.clients.fossid.FossIdServiceWithVersion
-import org.ossreviewtoolkit.clients.fossid.VersionedFossIdService2021dot2
-import org.ossreviewtoolkit.clients.fossid.checkResponse
 import org.ossreviewtoolkit.clients.fossid.model.status.ScanStatus
 
 private const val PROJECT_CODE = "semver4j"
