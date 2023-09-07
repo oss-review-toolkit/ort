@@ -15,12 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-ENV NUGET_INSPECTOR_HOME=/opt/nuget-inspector
-ENV NUGET_INSPECTOR_BIN=$NUGET_INSPECTOR_HOME/bin
-ENV DOTNET_HOME=$NUGET_INSPECTOR_HOME/dotnet
+ENV DOTNET_HOME=/opt/dotnet
+ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
+ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 
-ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$NUGET_INSPECTOR_BIN
+COPY --from=ghcr.io/oss-review-toolkit/dotnet --chown=$USER:$USER $DOTNET_HOME $DOTNET_HOME
 
-COPY --from=ghcr.io/oss-review-toolkit/dotnet --chown=$USER:$USER $NUGET_INSPECTOR_HOME $NUGET_INSPECTOR_HOME
-
-RUN syft $NUGET_INSPECTOR_HOME -o spdx-json --file /usr/share/doc/ort/ort-dotnet.spdx.json
+RUN syft $DOTNET_HOME -o spdx-json --file /usr/share/doc/ort/ort-dotnet.spdx.json

@@ -152,6 +152,7 @@ image_build dart dart "$DART_VERSION" \
 # Dotnet
 # shellcheck disable=SC1091
 . .ortversions/dotnet.versions
-image_build dotnet dotnet "$NUGET_INSPECTOR_VERSION" \
+image_build dotnet dotnet "$DOTNET_VERSION" \
+    --build-arg DOTNET_VERSION="$DOTNET_VERSION" \
     --build-arg NUGET_INSPECTOR_VERSION="$NUGET_INSPECTOR_VERSION" \
     "$@"

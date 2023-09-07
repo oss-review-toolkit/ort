@@ -371,43 +371,33 @@ FROM scratch AS swift
 COPY --from=swiftbuild /opt/swift /opt/swift
 
 #------------------------------------------------------------------------
-# PHP
-FROM ort-base-image AS phpbuild
-
-# PHP composer
-ARG COMPOSER_VERSION=2.2
-
-ENV PATH=$PATH:/opt/php/bin
-RUN mkdir -p /opt/php/bin \
-    && curl -ksS https://getcomposer.org/installer | php -- --install-dir=/opt/php/bin --filename=composer --$COMPOSER_VERSION
-
-FROM scratch AS php
-COPY --from=phpbuild /opt/php /opt/php
-
-#------------------------------------------------------------------------
-# NUGET
+# DOTNET
 FROM ort-base-image AS dotnetbuild
 
-# nuget-inspector
-ENV NUGET_INSPECTOR_HOME=/opt/nuget-inspector
-ENV NUGET_INSPECTOR_BIN=$NUGET_INSPECTOR_HOME/bin
-ENV DOTNET_HOME=$NUGET_INSPECTOR_HOME/dotnet
+ARG DOTNET_VERSION=6.0
+ARG NUGET_INSPECTOR_VERSION=0.9.12
 
-ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$NUGET_INSPECTOR_BIN
+ENV DOTNET_HOME=/opt/dotnet
+ENV NUGET_INSPECTOR_HOME=$DOTNET_HOME
+ENV PATH=$PATH:$DOTNET_HOME:$DOTNET_HOME/tools:$DOTNET_HOME/bin
 
 # Note: We are not installing a dotnet package directly because
 # debian packages from Ubuntu and Microsoft are incomplete
-RUN mkdir -p $DOTNET_HOME \
-    && curl -L https://aka.ms/dotnet/6.0/dotnet-sdk-linux-x64.tar.gz \
-    | tar -C $DOTNET_HOME -xz
 
-ARG NUGET_INSPECTOR_VERSION=0.9.12
-RUN mkdir -p $NUGET_INSPECTOR_BIN \
+RUN mkdir -p $DOTNET_HOME \
+    && echo $SWIFT_VERSION \
+    && if [ "$(arch)" = "aarch64" ]; then \
+    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-arm64.tar.gz | tar -C $DOTNET_HOME -xz; \
+    else \
+    curl -L https://aka.ms/dotnet/$DOTNET_VERSION/dotnet-sdk-linux-x64.tar.gz | tar -C $DOTNET_HOME -xz; \
+    fi
+
+RUN mkdir -p $DOTNET_HOME/bin \
     && curl -L https://github.com/nexB/nuget-inspector/releases/download/v$NUGET_INSPECTOR_VERSION/nuget-inspector-v$NUGET_INSPECTOR_VERSION-linux-x64.tar.gz \
-    | tar --strip-components=1 -C $NUGET_INSPECTOR_BIN -xz
+    | tar --strip-components=1 -C $DOTNET_HOME/bin -xz
 
 FROM scratch AS dotnet
-COPY --from=dotnetbuild /opt/nuget-inspector /opt/nuget-inspector
+COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 
 #------------------------------------------------------------------------
 # ORT
