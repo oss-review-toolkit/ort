@@ -45,7 +45,7 @@ import org.ossreviewtoolkit.model.FileFormat
 import org.ossreviewtoolkit.model.utils.DefaultResolutionProvider
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
-import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStats
+import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.readOrtResult
@@ -155,10 +155,8 @@ class AdvisorCommand : OrtCommand(
         }
 
         val resolutionProvider = DefaultResolutionProvider.create(ortResultOutput, resolutionsFile)
-        val (resolvedIssues, unresolvedIssues) = advisorRun.results.getIssues().flatMap { it.value }
-            .partition { resolutionProvider.isResolved(it) }
-        val severityStats = SeverityStats.createFromIssues(resolvedIssues, unresolvedIssues)
-
-        severityStats.print(terminal).conclude(ortConfig.severeIssueThreshold, 2)
+        val issues = advisorRun.results.getIssues().flatMap { it.value }
+        SeverityStatsPrinter(terminal, resolutionProvider).stats(issues)
+            .print().conclude(ortConfig.severeIssueThreshold, 2)
     }
 }
