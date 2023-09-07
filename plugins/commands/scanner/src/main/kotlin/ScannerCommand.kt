@@ -155,7 +155,7 @@ class ScannerCommand : OrtCommand(
         val ortResult = runScanners(scanners, projectScanners ?: scanners, ortConfig).mergeLabels(labels)
 
         outputDir.safeMkdirs()
-        writeOrtResult(ortResult, outputFiles)
+        writeOrtResult(ortResult, outputFiles, terminal)
 
         val scannerRun = ortResult.scanner
         if (scannerRun == null) {
