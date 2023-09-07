@@ -179,7 +179,9 @@ class Pub(
 
         logger.info { "Downloading flutter-$flutterVersion from $url... " }
         flutterInstallDir.safeMkdirs()
-        val flutterArchive = okHttpClient.downloadFile(url, flutterInstallDir).getOrThrow()
+        val flutterArchive = okHttpClient.downloadFile(url, flutterInstallDir).onFailure {
+            logger.warn { "Unable to download Flutter $flutterVersion from $url." }
+        }.getOrThrow()
 
         logger.info { "Unpacking '$flutterArchive' to '$flutterInstallDir'... " }
         flutterArchive.unpack(flutterInstallDir)
