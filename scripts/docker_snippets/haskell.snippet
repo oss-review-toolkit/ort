@@ -15,18 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-ARG HASKELL_STACK_VERSION=2.7.5
+# Haskell
 ENV HASKELL_HOME=/opt/haskell
 ENV PATH=$PATH:$HASKELL_HOME/bin
 
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,target=/var/lib/apt,sharing=locked \
-    sudo apt-get update -qq \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -y --no-install-recommends \
-    zlib1g-dev \
-    && sudo rm -rf /var/lib/apt/lists/*
+COPY --from=ghcr.io/oss-review-toolkit/haskell /opt/haskell /opt/haskell
 
-RUN curl -sSL https://get.haskellstack.org/ | bash -s -- -d $HASKELL_HOME/bin
-
-FROM scratch AS haskell
-COPY --from=haskellbuild /opt/haskell /opt/haskell
+RUN syft /opt/haskell -o spdx-json --file /usr/share/doc/ort/ort-haskell.spdx.json

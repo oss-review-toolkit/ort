@@ -21,6 +21,7 @@ set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
 
@@ -159,9 +160,9 @@ image_build dotnet dotnet "$DOTNET_VERSION" \
     --build-arg NUGET_INSPECTOR_VERSION="$NUGET_INSPECTOR_VERSION" \
     "$@"
 
-# Dotnet
+# Haskell
 # shellcheck disable=SC1091
 . .ortversions/haskell.versions
-image_build dotnet dotnet "$HASKELL_STACK_VERSION" \
+image_build haskell haskell "$HASKELL_STACK_VERSION" \
     --build-arg HASKELL_STACK_VERSION="$HASKELL_STACK_VERSION" \
     "$@"

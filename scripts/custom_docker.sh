@@ -33,7 +33,7 @@ dockerfile_template="FROM ghcr.io/oss-review-toolkit/ort\n"
 output_file="Dockerfile.custom"
 
 function usage() {
-    echo "Usage: $0 -c <component1> [<component2> ...] -output <output_file>"
+    echo "Usage: $0 -c <component1> [<component2> ...] -o <output_file>"
     echo "Options:"
     echo "  -c <component1> [<component2> ...]: List of language components to include in the Dockerfile: ${valid_components[*]}"
     echo "  -output <output_file>: Output file for the generated Dockerfile, Defaults to Dockerfile.custom."
@@ -48,7 +48,7 @@ while [[ $# -gt 0 ]]; do
         components=("$@")
         break
         ;;
-    -output)
+    -o)
         shift
         output_file=$1
         ;;

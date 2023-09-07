@@ -15,17 +15,17 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Docker Base Container
+name: Base Image
 
 on:
     workflow_dispatch:
     pull_request:
+        paths:
+            - '.ortversions/base.versions'
+            - 'Dockerfile'
+    push:
         branches:
             - main
-    push:
-        paths:
-            - 'Dockerfile'
-            - '.ortversions/base.versions'
 
 env:
     REGISTRY: ghcr.io
@@ -70,7 +70,7 @@ jobs:
                 with:
                     context: .
                     target: ort-base-image
-                    push: true
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                             JAVA_VERSION=${{ env.JAVA_VERSION }}

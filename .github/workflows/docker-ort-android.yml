@@ -15,19 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Docker Android Container
+name: Android Image
 
 on:
     workflow_dispatch:
     pull_request:
-        branches:
-            - main
-    push:
         paths:
             - '.ortversions/android.versions'
             - '.github/workflows/docker-ort-base.yml'
+    push:
+        branches:
+            - main
     workflow_run:
-        workflows: ["Ort Docker Base Image"]
+        workflows: ["Base Image"]
         types:
             - completed
 
@@ -77,7 +77,7 @@ jobs:
                 with:
                     context: .
                     target: android
-                    push: true
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                         ANDROID_CMD_VERSION=${{ env.ANDROID_CMD_VERSION }}

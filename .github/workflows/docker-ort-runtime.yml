@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Runtime Container
+name: Runtime Image
 
 on:
     workflow_dispatch:
@@ -27,12 +27,11 @@ on:
             - main
     workflow_run:
         workflows:
-            - 'Ort Binaries Container'
-            - 'Ort Python Container'
-            - 'Ort NodeJS Container'
-            - 'Ort Ruby Container'
-            - 'Ort Rust Container'
-            - 'Ort Golang Container'
+            - 'Python Image'
+            - 'NodeJS Image'
+            - 'Ruby Image'
+            - 'Rust Image'
+            - 'Golang Image'
         types:
             - completed
 
@@ -81,7 +80,7 @@ jobs:
                 with:
                     context: .
                     target: run
-                    push: ${{ github.event_name == 'push' }}
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                         NODEJS_VERSION=${{ env.NODEJS_VERSION }}
@@ -90,7 +89,6 @@ jobs:
                         ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort:latest
                     labels: ${{ steps.meta.outputs.labels }}
                     build-contexts: |
-                        ort=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/ortbin:latest
                         nodejs=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/nodejs:latest
                         python=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/python:latest
                         rust=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/rust:latest

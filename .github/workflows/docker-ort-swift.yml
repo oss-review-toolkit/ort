@@ -15,19 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Docker Swift Container
+name: Swift Image
 
 on:
     workflow_dispatch:
-    pull_request:
+    push:
         branches:
             - main
-    push:
+    pull_request:
         paths:
             - '.ortversions/swift.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Ort Docker Base Image"]
+        workflows: ["Base Image"]
         types:
             - completed
 
@@ -77,7 +77,7 @@ jobs:
                 with:
                     context: .
                     target: swift
-                    push: ${{ github.event_name == 'push' }}
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                         SWIFT_VERSION=${{ env.SWIFT_VERSION }}

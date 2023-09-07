@@ -15,19 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Rust Container
+name: Rust Image
 
 on:
     workflow_dispatch:
-    pull_request:
+    push:
         branches:
             - main
-    push:
+    pull_request:
         paths:
             - '.ortversions/rust.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Ort Docker Base Image"]
+        workflows: ["Base Image"]
 
 env:
     REGISTRY: ghcr.io
@@ -75,7 +75,7 @@ jobs:
                 with:
                     context: .
                     target: rust
-                    push: ${{ github.event_name == 'push' }}
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                             RUST_VERSION=${{ env.RUST_VERSION }}
