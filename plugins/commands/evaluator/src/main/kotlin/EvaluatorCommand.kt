@@ -61,7 +61,7 @@ import org.ossreviewtoolkit.model.utils.addPackageCurations
 import org.ossreviewtoolkit.model.utils.addResolutions
 import org.ossreviewtoolkit.model.utils.mergeLabels
 import org.ossreviewtoolkit.plugins.commands.api.OrtCommand
-import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStats
+import org.ossreviewtoolkit.plugins.commands.api.utils.SeverityStatsPrinter
 import org.ossreviewtoolkit.plugins.commands.api.utils.configurationGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.inputGroup
 import org.ossreviewtoolkit.plugins.commands.api.utils.outputGroup
@@ -333,11 +333,8 @@ class EvaluatorCommand : OrtCommand(
             writeOrtResult(ortResultOutput, outputFiles, "evaluation")
         }
 
-        val (resolvedViolations, unresolvedViolations) =
-            evaluatorRun.violations.partition { resolutionProvider.isResolved(it) }
-        val severityStats = SeverityStats.createFromRuleViolations(resolvedViolations, unresolvedViolations)
-
-        severityStats.print(terminal).conclude(ortConfig.severeRuleViolationThreshold, 2)
+        SeverityStatsPrinter(terminal, resolutionProvider).stats(evaluatorRun.violations)
+            .print().conclude(ortConfig.severeRuleViolationThreshold, 2)
     }
 }
 
