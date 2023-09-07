@@ -20,7 +20,7 @@
 DOCKER_ARGS=$@
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | grep -oP "version: \K.+")
+GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
 docker buildx build \
