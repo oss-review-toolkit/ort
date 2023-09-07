@@ -129,7 +129,7 @@ class AdvisorCommand : OrtCommand(
         }
 
         outputDir.safeMkdirs()
-        writeOrtResult(ortResultOutput, outputFiles)
+        writeOrtResult(ortResultOutput, outputFiles, terminal)
 
         val advisorRun = ortResultOutput.advisor
         if (advisorRun == null) {
