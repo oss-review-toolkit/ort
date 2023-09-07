@@ -15,19 +15,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Ort Ruby Container
+name: Ruby Image
 
 on:
-    workflow_run:
-        workflows: ["Ort Docker Base Image"]
     workflow_dispatch:
-    pull_request:
+    push:
         branches:
             - main
-    push:
+    pull_request:
         paths:
             - '.ortversions/ruby.versions'
             - '.github/workflows/docker-ort-base.yml'
+    workflow_run:
+        workflows: ["Base Image"]
+
 
 env:
     REGISTRY: ghcr.io
@@ -76,7 +77,7 @@ jobs:
                 with:
                     context: .
                     target: ruby
-                    push: ${{ github.event_name == 'push' }}
+                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
                             RUBY_VERSION=${{ env.RUBY_VERSION }}

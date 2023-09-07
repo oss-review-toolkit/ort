@@ -462,20 +462,20 @@ ENV RUST_HOME=/opt/rust
 ENV CARGO_HOME=$RUST_HOME/cargo
 ENV RUSTUP_HOME=$RUST_HOME/rustup
 ENV PATH=$PATH:$CARGO_HOME/bin:$RUSTUP_HOME/bin
-COPY --from=ghcr.io/oss-review-toolkit/rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
+COPY --from=rust --chown=$USER:$USER $RUST_HOME $RUST_HOME
 RUN chmod o+rwx $CARGO_HOME
 RUN syft $RUST_HOME -o spdx-json --file /usr/share/doc/ort/ort-rust.spdx.json
 
 # Golang
 ENV PATH=$PATH:/opt/go/bin
-COPY --from=ghcr.io/oss-review-toolkit/golang --chown=$USER:$USER /opt/go /opt/go
+COPY --from=golang --chown=$USER:$USER /opt/go /opt/go
 RUN syft /opt/go -o spdx-json --file /usr/share/doc/ort/ort-golang.spdx.json
 
 # Ruby
 ENV RBENV_ROOT=/opt/rbenv/
 ENV GEM_HOME=/var/tmp/gem
 ENV PATH=$PATH:$RBENV_ROOT/bin:$RBENV_ROOT/shims:$RBENV_ROOT/plugins/ruby-install/bin
-COPY --from=ghcr.io/oss-review-toolkit/ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
+COPY --from=ruby --chown=$USER:$USER $RBENV_ROOT $RBENV_ROOT
 RUN syft $RBENV_ROOT -o spdx-json --file /usr/share/doc/ort/ort-ruby.spdx.json
 
 # ORT
