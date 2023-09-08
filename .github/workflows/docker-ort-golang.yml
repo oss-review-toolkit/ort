@@ -27,7 +27,7 @@ on:
             - '.ortversions/golang.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Base Image"]
+        workflows: ["Ruby Image"]
         types:
             - completed
 

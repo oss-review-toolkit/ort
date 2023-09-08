@@ -27,7 +27,7 @@ on:
             - '.ortversions/dart.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Base Image"]
+        workflows: ["Scale Image"]
         types:
             - completed
 

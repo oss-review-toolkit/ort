@@ -27,7 +27,7 @@ on:
         branches:
             - main
     workflow_run:
-        workflows: ["Base Image"]
+        workflows: ["Runtime Image"]
         types:
             - completed
 

@@ -27,10 +27,6 @@ on:
             - main
     workflow_run:
         workflows:
-            - 'Python Image'
-            - 'NodeJS Image'
-            - 'Ruby Image'
-            - 'Rust Image'
             - 'Golang Image'
         types:
             - completed

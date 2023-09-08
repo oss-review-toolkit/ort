@@ -27,7 +27,9 @@ on:
             - '.ortversions/rust.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Base Image"]
+        workflows: ["NodeJS Image"]
+        types:
+            - completed
 
 env:
     REGISTRY: ghcr.io

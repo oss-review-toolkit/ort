@@ -27,7 +27,7 @@ on:
             - '.ortversions/swift.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Base Image"]
+        workflows: ["Android Image"]
         types:
             - completed
 

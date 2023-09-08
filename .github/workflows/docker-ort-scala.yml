@@ -15,7 +15,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Haskell Image
+name: Scala Image
 
 on:
     workflow_dispatch:
@@ -24,10 +24,10 @@ on:
             - main
     pull_request:
         paths:
-            - '.ortversions/haskell.versions'
+            - '.ortversions/sbt.versions'
             - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Dotnet Image"]
+        workflows: ["Swift Image"]
         types:
             - completed
 
@@ -38,7 +38,7 @@ permissions: write-all
 
 jobs:
     build:
-        name: Build ORT Haskell Image
+        name: Build ORT sbt Image
         runs-on: ubuntu-22.04
         permissions:
             contents: read
@@ -50,7 +50,7 @@ jobs:
 
             -   name: Set environment variables
                 run: |
-                    cat .ortversions/haskell.versions >> $GITHUB_ENV
+                    cat .ortversions/sbt.versions >> $GITHUB_ENV
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v2
@@ -67,25 +67,25 @@ jobs:
                 uses: docker/metadata-action@v4
                 with:
                     images: |
-                        ${{ env.REGISTRY }}/${{ github.repository }}/haskell
+                        ${{ env.REGISTRY }}/${{ github.repository }}/sbt
                     tags: |
-                        type=semver,pattern={{version}},value=${{ env.HASKELL_STACK_VERSION }}
+                        type=semver,pattern={{version}},value=${{ env.SBT_VERSION }}
 
 
-            -   name: Build ORT Haskell container
+            -   name: Build ORT sbt container
                 uses: docker/build-push-action@v4
                 with:
                     context: .
-                    target: haskell
+                    target: sbt
                     push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
                     build-args: |
-                            HASKELL_STACK_VERSION=${{ env.HASKELL_STACK_VERSION }}
+                            SBT_VERSION=${{ env.SBT_VERSION }}
                     tags: |
                         ${{ steps.meta.outputs.tags }}
-                        ${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
+                        ${{ env.REGISTRY }}/${{ github.repository }}/sbt:latest
                     labels: ${{ steps.meta.outputs.labels }}
                     build-contexts: |
                         ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
-                    cache-from: type=gha,scope=orthaskell
-                    cache-to: type=gha,scope=orthaskell,mode=max
+                    cache-from: type=gha,scope=ortsbt
+                    cache-to: type=gha,scope=ortsbt,mode=max
