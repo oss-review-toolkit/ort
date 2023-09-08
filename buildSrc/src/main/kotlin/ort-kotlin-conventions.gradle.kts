@@ -43,8 +43,6 @@ private val Project.libs: LibrariesForLibs
 plugins {
     // Apply core plugins.
     jacoco
-    `maven-publish`
-    signing
 
     // Apply precompiled plugins.
     id("ort-base-conventions")
@@ -176,7 +174,7 @@ tasks.withType<KotlinCompile>().configureEach {
     }
 }
 
-val sourcesJar by tasks.registering(Jar::class) {
+tasks.register<Jar>("sourcesJar") {
     archiveClassifier = "sources"
     from(sourceSets.main.get().allSource)
 }
@@ -190,7 +188,7 @@ tasks.register<Jar>("docsHtmlJar") {
     archiveClassifier = "htmldoc"
 }
 
-val docsJavadocJar by tasks.registering(Jar::class) {
+tasks.register<Jar>("docsJavadocJar") {
     description = "Assembles a JAR containing the Javadoc documentation."
     group = "Documentation"
 
@@ -276,67 +274,4 @@ tasks.register("jacocoReport") {
     group = "Reporting"
 
     dependsOn(tasks.withType<JacocoReport>())
-}
-
-configure<PublishingExtension> {
-    publications {
-        val publicationName = name.replace(Regex("([a-z])-([a-z])")) {
-            "${it.groupValues[1]}${it.groupValues[2].uppercase()}"
-        }
-
-        create<MavenPublication>(publicationName) {
-            fun getGroupId(parent: Project?): String =
-                parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
-
-            groupId = "org${getGroupId(parent)}"
-
-            from(components["java"])
-            artifact(sourcesJar)
-            artifact(docsJavadocJar)
-
-            pom {
-                licenses {
-                    license {
-                        name = "Apache-2.0"
-                        url = "https://www.apache.org/licenses/LICENSE-2.0"
-                    }
-                }
-
-                scm {
-                    connection = "scm:git:https://github.com/oss-review-toolkit/ort.git"
-                    developerConnection = "scm:git:git@github.com:oss-review-toolkit/ort.git"
-                    tag = version.toString()
-                    url = "https://github.com/oss-review-toolkit/ort"
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            name = "OSSRH"
-
-            val releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-            val snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-            url = uri(if (version.toString().endsWith("-SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
-
-            credentials {
-                username = System.getenv("OSSRH_USERNAME") ?: return@credentials
-                password = System.getenv("OSSRH_PASSWORD") ?: return@credentials
-            }
-        }
-    }
-}
-
-signing {
-    val signingKey = System.getenv("SIGNING_KEY") ?: return@signing
-    val signingPassword = System.getenv("SIGNING_PASSWORD") ?: return@signing
-    useInMemoryPgpKeys(signingKey, signingPassword)
-
-    setRequired {
-        // Do not require signing for `PublishToMavenLocal` tasks only.
-        gradle.taskGraph.allTasks.any { it is PublishToMavenRepository }
-    }
-
-    sign(publishing.publications)
 }

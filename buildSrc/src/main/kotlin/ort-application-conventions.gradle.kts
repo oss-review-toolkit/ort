@@ -27,7 +27,7 @@ plugins {
     application
 
     // Apply precompiled plugins.
-    id("ort-kotlin-conventions")
+    id("ort-publication-conventions")
 
     // Apply third-party plugins.
     id("org.graalvm.buildtools.native")
