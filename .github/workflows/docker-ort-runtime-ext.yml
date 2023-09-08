@@ -1,4 +1,4 @@
-# Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+ # Copyright (C) 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,19 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Haskell Image
+name: Extended Image
 
 on:
     workflow_dispatch:
+    pull_request:
+        branches:
+            - main
     push:
         branches:
             - main
-    pull_request:
-        paths:
-            - '.ortversions/haskell.versions'
-            - '.github/workflows/docker-ort-base.yml'
     workflow_run:
-        workflows: ["Dotnet Image"]
+        workflows:
+            - 'Haskell Image'
         types:
             - completed
 
@@ -38,19 +38,15 @@ permissions: write-all
 
 jobs:
     build:
-        name: Build ORT Haskell Image
+        name: Build ORT Extended Image
         runs-on: ubuntu-22.04
         permissions:
             contents: read
             packages: write
 
         steps:
-            -   name: Checkout main repository
+            -   name: Checkout default branch
                 uses: actions/checkout@v3
-
-            -   name: Set environment variables
-                run: |
-                    cat .ortversions/haskell.versions >> $GITHUB_ENV
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v2
@@ -62,30 +58,31 @@ jobs:
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
 
-            -   name: Extract components metadata (tags, labels) for base image
-                id: meta
+            -   name: Extract components metadata (tags, labels) for Ort runtime image
+                id: meta-ort
                 uses: docker/metadata-action@v4
                 with:
                     images: |
-                        ${{ env.REGISTRY }}/${{ github.repository }}/haskell
+                        ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended
                     tags: |
-                        type=semver,pattern={{version}},value=${{ env.HASKELL_STACK_VERSION }}
+                        type=raw,sha,enable=true,format=short
 
-
-            -   name: Build ORT Haskell container
+            -   name: Build ORT runtime container
                 uses: docker/build-push-action@v4
                 with:
                     context: .
-                    target: haskell
+                    file: Dockerfile-extended
                     push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                     load: false
-                    build-args: |
-                            HASKELL_STACK_VERSION=${{ env.HASKELL_STACK_VERSION }}
                     tags: |
-                        ${{ steps.meta.outputs.tags }}
-                        ${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
+                        ${{ steps.meta-ort.outputs.tags }}
+                        ${{ env.REGISTRY }}/${{ github.repository_owner }}/ort-extended:latest
                     labels: ${{ steps.meta.outputs.labels }}
                     build-contexts: |
-                        ort-base-image=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/base:latest
-                    cache-from: type=gha,scope=orthaskell
-                    cache-to: type=gha,scope=orthaskell,mode=max
+                        android=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/android:latest
+                        swift=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/swift:latest
+                        sbt=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/sbt:latest
+                        dart=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dart:latest
+                        dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:latest
+                        haskell=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/haskell:latest
+                        dotnet=docker-image://${{ env.REGISTRY }}/${{ github.repository }}/dotnet:latest

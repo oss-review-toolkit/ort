@@ -20,7 +20,7 @@
 set -e -o pipefail
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
-GIT_REVISION=$($GIT_ROOT/gradlew -q properties --property version | sed -nr "s/version: (.+)/\1/p")
+GIT_REVISION=$("$GIT_ROOT/gradlew" -q properties --property version | sed -nr "s/version: (.+)/\1/p")
 DOCKER_IMAGE_ROOT="${DOCKER_IMAGE_ROOT:-ghcr.io/oss-review-toolkit}"
 
 echo "Setting ORT_VERSION to $GIT_REVISION."
@@ -166,3 +166,17 @@ image_build dotnet dotnet "$DOTNET_VERSION" \
 image_build haskell haskell "$HASKELL_STACK_VERSION" \
     --build-arg HASKELL_STACK_VERSION="$HASKELL_STACK_VERSION" \
     "$@"
+
+# Runtime Extended ORT image
+docker buildx build \
+    --file Dockerfile-extended \
+    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:$GIT_REVISION" \
+    --tag "${DOCKER_IMAGE_ROOT}/ort-extended:latest" \
+    --build-context "sbt=docker-image://${DOCKER_IMAGE_ROOT}/sbt:latest" \
+    --build-context "dotnet=docker-image://${DOCKER_IMAGE_ROOT}/dotnet:latest" \
+    --build-context "swift=docker-image://${DOCKER_IMAGE_ROOT}/swift:latest" \
+    --build-context "android=docker-image://${DOCKER_IMAGE_ROOT}/android:latest" \
+    --build-context "dart=docker-image://${DOCKER_IMAGE_ROOT}/dart:latest" \
+    --build-context "haskell=docker-image://${DOCKER_IMAGE_ROOT}/haskell:latest" \
+    "$@" .
+
