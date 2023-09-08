@@ -286,7 +286,7 @@ configure<PublishingExtension> {
 
         create<MavenPublication>(publicationName) {
             fun getGroupId(parent: Project?): String =
-                if (parent == null) "" else "${getGroupId(parent.parent)}.${parent.name.replace("-", "")}"
+                parent?.let { "${getGroupId(it.parent)}.${it.name.replace("-", "")}" }.orEmpty()
 
             groupId = "org${getGroupId(parent)}"
 
