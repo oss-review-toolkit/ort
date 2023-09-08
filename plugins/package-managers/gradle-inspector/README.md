@@ -10,7 +10,7 @@ As the [GradleInspector] is disabled by default, it needs to be enabled explicit
 managers that should be enabled):
 
 ```shell
-ort analyze -P ort.analyzer.enabledPackageManagers=GradleInspector[,...]
+ort -P ort.analyzer.enabledPackageManagers=GradleInspector[,...] analyze
 ```
 
 It is recommended to *not* also enable the "legacy" [Gradle] analyzer at the same time, as both analyzers would find the
