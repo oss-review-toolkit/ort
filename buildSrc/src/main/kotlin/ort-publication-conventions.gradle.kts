@@ -77,8 +77,8 @@ configure<PublishingExtension> {
 }
 
 signing {
-    val signingKey = System.getenv("SIGNING_KEY") ?: return@signing
-    val signingPassword = System.getenv("SIGNING_PASSWORD") ?: return@signing
+    val signingKey = System.getenv("SIGNING_KEY")
+    val signingPassword = System.getenv("SIGNING_PASSWORD")
     useInMemoryPgpKeys(signingKey, signingPassword)
 
     setRequired {
