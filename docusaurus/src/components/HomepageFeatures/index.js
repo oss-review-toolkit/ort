@@ -3,36 +3,60 @@ import clsx from 'clsx';
 import styles from './styles.module.css';
 
 const FeatureList = [
-  {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
-  },
-  {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
-  },
-  {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
-  },
+    {
+        title: 'Analyzer',
+        Svg: require('@site/static/img/analyzer.svg').default,
+        description: (
+            <>
+                Get the dependencies of your projects, supporting over a dozen different package managers.
+            </>
+        ),
+    },
+    {
+        title: 'Downloader',
+        Svg: require('@site/static/img/downloader.svg').default,
+        description: (
+            <>
+                Download the source code of your dependencies from version control systems or source artifacts.
+            </>
+        ),
+    },
+    {
+        title: 'Scanner',
+        Svg: require('@site/static/img/scanner.svg').default,
+        description: (
+            <>
+                Scan the source code using the supported license, copyright, and snippet scanners.
+            </>
+        ),
+    },
+    {
+        title: 'Advisor',
+        Svg: require('@site/static/img/advisor.svg').default,
+        description: (
+            <>
+                Get the vulnerabilities of your dependencies from different providers.
+            </>
+        ),
+    },
+    {
+        title: 'Evaluator',
+        Svg: require('@site/static/img/evaluator.svg').default,
+        description: (
+            <>
+                Apply custom policy rules against the gathered data using Kotlin scripting.
+            </>
+        ),
+    },
+    {
+        title: 'Reporter',
+        Svg: require('@site/static/img/reporter.svg').default,
+        description: (
+            <>
+                Generate visual reports, open source notices, SBOMs, and more.
+            </>
+        ),
+    },
 ];
 
 function Feature({Svg, title, description}) {
