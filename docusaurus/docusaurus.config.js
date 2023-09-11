@@ -54,6 +54,21 @@ const config = {
     ],
   ],
 
+  plugins: [
+    [
+      'content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'tutorial',
+        path: 'tutorial',
+        routeBasePath: '/tutorial/',
+        sidebarPath: require.resolve('./sidebars.js'),
+        editUrl:
+          'https://github.com/oss-review-toolkit/ort/tree/main/docusaurus/',
+      }),
+    ]
+  ],
+
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -73,6 +88,12 @@ const config = {
             label: 'Docs',
           },
           {
+            to: '/tutorial/intro',
+            label: 'Tutorial',
+            position: 'left',
+            activeBaseRegex: `/tutorial/`,
+          },
+          {
             href: 'https://github.com/oss-review-toolkit/ort',
             label: 'GitHub',
             position: 'right',
@@ -88,6 +109,10 @@ const config = {
               {
                 label: 'Docs',
                 to: '/docs/intro',
+              },
+              {
+                label: 'Tutorial',
+                to: '/tutorial/intro',
               },
             ],
           },
