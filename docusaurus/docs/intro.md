@@ -2,46 +2,36 @@
 sidebar_position: 1
 ---
 
-# Tutorial Intro
+# Introduction
 
-Let's discover **Docusaurus in less than 5 minutes**.
+The OSS Review Toolkit (ORT) is a FOSS policy automation and orchestration toolkit which you can use to manage your
+(open source) software dependencies in a strategic, safe and efficient manner.
 
-## Getting Started
+You can use it to:
 
-Get started by **creating a new site**.
+* Generate CycloneDX, SPDX SBOMs, or custom FOSS attribution documentation for your software project
+* Automate your FOSS policy using risk-based Policy as Code to do licensing, security vulnerability, InnerSource
+  and engineering standards checks for your software project and its dependencies
+* Create a source code archive for your software project and its dependencies to comply with certain licenses or have
+  your own copy as nothing on the internet is forever
+* Correct package metadata or licensing findings yourself, using InnerSource or with the help of the FOSS community
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+ORT can be used as library (for programmatic use), via a command line interface (for scripted use), or via its CI
+integrations. It consists of the following tools which can be combined into a *highly customizable* pipeline:
 
-### What you'll need
+* [*Analyzer*](#analyzer) - determines the dependencies of projects and their metadata, abstracting which package
+  managers or build systems are actually being used.
+* [*Downloader*](#downloader) - fetches all source code of the projects and their dependencies, abstracting which
+  Version Control System (VCS) or other means are used to retrieve the source code.
+* [*Scanner*](#scanner) - uses configured source code scanners to detect license / copyright findings, abstracting
+  the type of scanner.
+* [*Advisor*](#advisor) - retrieves security advisories for used dependencies from configured vulnerability data
+  services.
+* [*Evaluator*](#evaluator) - evaluates custom policy rules along with custom license classifications against the data
+  gathered in preceding stages and returns a list of policy violations, e.g. to flag license findings.
+* [*Reporter*](#reporter) - presents results in various formats such as visual reports, Open Source notices or
+  Bill-Of-Materials (BOMs) to easily identify dependencies, licenses, copyrights or policy rule violations.
+* [*Notifier*](./notifier) - sends result notifications via different channels (like
+  [emails](./examples/example.notifications.kts) and / or JIRA tickets).
 
-- [Node.js](https://nodejs.org/en/download/) version 16.14 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
-
-## Generate a new site
-
-Generate a new Docusaurus site using the **classic template**.
-
-The classic template will automatically be added to your project after you run the command:
-
-```bash
-npm init docusaurus@latest my-website classic
-```
-
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
-
-The command also installs all necessary dependencies you need to run Docusaurus.
-
-## Start your site
-
-Run the development server:
-
-```bash
-cd my-website
-npm run start
-```
-
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+Also see the [list of related tools](#related-tools) that help with running ORT.
