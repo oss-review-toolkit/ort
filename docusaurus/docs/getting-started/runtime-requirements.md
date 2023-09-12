@@ -1,4 +1,4 @@
-# System requirements
+# Runtime Requirements
 
 ORT is being continuously used on Linux, Windows and macOS by the
 [core development team](https://github.com/orgs/oss-review-toolkit/people), so these operating systems are
