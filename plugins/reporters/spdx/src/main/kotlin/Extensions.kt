@@ -224,10 +224,15 @@ private fun ProcessedDeclaredLicense.toSpdxDeclaredLicense(): String =
  * Use [licenseTextProvider] to add the license texts for all packages to the [SpdxDocument].
  */
 internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTextProvider): SpdxDocument {
-    val nonSpdxLicenses = packages.flatMapTo(mutableSetOf()) {
-        // TODO: Also add detected non-SPDX licenses here.
-        SpdxExpression.parse(it.licenseConcluded).licenses() + SpdxExpression.parse(it.licenseDeclared).licenses()
-    }.filter {
+    val allLicenses = buildSet {
+        packages.forEach {
+            add(it.licenseConcluded)
+            add(it.licenseDeclared)
+            // TODO: Also add detected non-SPDX licenses here.
+        }
+    }.flatMapTo(mutableSetOf()) { SpdxExpression.parse(it).licenses() }
+
+    val nonSpdxLicenses = allLicenses.filter {
         SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null && SpdxLicenseException.forId(it) == null
     }
 
