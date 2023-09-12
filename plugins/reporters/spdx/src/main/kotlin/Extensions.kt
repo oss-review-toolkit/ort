@@ -82,6 +82,11 @@ internal fun Identifier.toSpdxId(infix: String = "Package", suffix: String = "")
     }.toSpdxId()
 
 /**
+ * Convert an [Identifier]'s coordinates to an SPDX reference ID for the specified [type].
+ */
+internal fun Identifier.toSpdxId(type: SpdxPackageType): String = toSpdxId(type.infix, type.suffix)
+
+/**
  * Get the text with all Copyright statements associated with the package of the given [id], or return `NONE` if there
  * are no associated Copyright statements.
  */
@@ -145,7 +150,7 @@ internal fun Package.toSpdxPackage(
     }
 
     return SpdxPackage(
-        spdxId = id.toSpdxId(type.infix, type.suffix),
+        spdxId = id.toSpdxId(type),
         checksums = when (type) {
             SpdxPackageType.BINARY_PACKAGE -> listOfNotNull(binaryArtifact.hash.toSpdxChecksum())
             SpdxPackageType.SOURCE_PACKAGE -> listOfNotNull(sourceArtifact.hash.toSpdxChecksum())
