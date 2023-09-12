@@ -56,9 +56,6 @@ packages:
   homepage: "first package's homepage URL"
   licenseConcluded: "BSD-2-Clause AND BSD-3-Clause AND MIT"
   licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
-  licenseInfoFromFiles:
-  - "Apache-2.0"
-  - "BSD-2-Clause"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\
@@ -105,9 +102,6 @@ packages:
   homepage: "first package's homepage URL"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "BSD-3-Clause AND (MIT OR GPL-2.0-only)"
-  licenseInfoFromFiles:
-  - "Apache-2.0"
-  - "BSD-2-Clause"
   name: "first-package"
   summary: "A package with all supported attributes set, with a VCS URL containing\
     \ a user name, and with two scan results for the VCS containing copyright findings\
@@ -152,8 +146,6 @@ packages:
   homepage: "NONE"
   licenseConcluded: "NOASSERTION"
   licenseDeclared: "NOASSERTION"
-  licenseInfoFromFiles:
-  - "GPL-3.0-only"
   name: "seventh-package"
   summary: "A package with a source artifact scan result."
   versionInfo: "0.0.1"
