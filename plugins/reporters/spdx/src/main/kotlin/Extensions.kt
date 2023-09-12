@@ -47,7 +47,6 @@ import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.spdx.SpdxConstants
 import org.ossreviewtoolkit.utils.spdx.SpdxExpression
 import org.ossreviewtoolkit.utils.spdx.SpdxLicense
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseException
 import org.ossreviewtoolkit.utils.spdx.calculatePackageVerificationCode
 import org.ossreviewtoolkit.utils.spdx.model.SpdxChecksum
 import org.ossreviewtoolkit.utils.spdx.model.SpdxDocument
@@ -232,9 +231,7 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTe
         }
     }.flatMapTo(mutableSetOf()) { SpdxExpression.parse(it).licenses() }
 
-    val nonSpdxLicenses = allLicenses.filter {
-        SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null && SpdxLicenseException.forId(it) == null
-    }
+    val nonSpdxLicenses = allLicenses.filter { SpdxConstants.isPresent(it) && SpdxLicense.forId(it) == null }
 
     val extractedLicenseInfo = nonSpdxLicenses.sorted().mapNotNull { license ->
         licenseTextProvider.getLicenseText(license)?.let { text ->
