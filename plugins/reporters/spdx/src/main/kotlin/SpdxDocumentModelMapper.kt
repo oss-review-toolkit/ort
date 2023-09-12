@@ -72,7 +72,8 @@ internal object SpdxDocumentModelMapper : Logging {
 
             ortResult.getDependencies(
                 id = project.id,
-                maxLevel = 1
+                maxLevel = 1,
+                omitExcluded = true
             ).mapTo(relationships) { dependency ->
                 SpdxRelationship(
                     spdxElementId = spdxProjectPackage.spdxId,
@@ -96,7 +97,8 @@ internal object SpdxDocumentModelMapper : Logging {
 
             ortResult.getDependencies(
                 id = pkg.id,
-                maxLevel = 1
+                maxLevel = 1,
+                omitExcluded = true
             ).mapTo(relationships) { dependency ->
                 SpdxRelationship(
                     spdxElementId = binaryPackage.spdxId,
