@@ -228,7 +228,7 @@ internal fun SpdxDocument.addExtractedLicenseInfo(licenseTextProvider: LicenseTe
         packages.forEach {
             add(it.licenseConcluded)
             add(it.licenseDeclared)
-            // TODO: Also add detected non-SPDX licenses here.
+            addAll(it.licenseInfoFromFiles)
         }
     }.flatMapTo(mutableSetOf()) { SpdxExpression.parse(it).licenses() }
 
