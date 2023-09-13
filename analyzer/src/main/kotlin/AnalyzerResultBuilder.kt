@@ -44,12 +44,48 @@ class AnalyzerResultBuilder {
     private val issues = mutableMapOf<Identifier, List<Issue>>()
     private val dependencyGraphs = mutableMapOf<String, DependencyGraph>()
 
+    private fun getPaths(
+        dependencyGraph: DependencyGraph?,
+        identifier: Identifier,
+    ): MutableList<Identifier> {
+
+        val packageName = dependencyGraph!!.packages.find { it == identifier   }  // gets the whole Identifier of the duplicate
+        val packageNameId = dependencyGraph.packages.indexOf(packageName) // gets the id from the duplicate
+        var packageList: MutableList<Identifier> = mutableListOf<Identifier>()
+        packageList = findSource(packageNameId,dependencyGraph,packageList)
+        return packageList
+    }
+
+    private fun findSource(
+        pkgId: Int,
+        dependencyGraph: DependencyGraph,
+        packageList: MutableList<Identifier>
+    ): MutableList<Identifier> {
+        packageList.add(dependencyGraph.packages[pkgId])
+        try {
+
+            val dependencyKid = dependencyGraph.dependencies.map { dependency -> dependency.value.find { it.pkg == pkgId } }.filterNotNull()
+            val parent = dependencyGraph.dependencies.filterValues { it.contains(dependencyKid[0]) }.keys.iterator().next().pkg
+
+            findSource(parent, dependencyGraph, packageList)
+
+        } catch (inEx: IndexOutOfBoundsException) {
+            return packageList
+        }
+        return packageList
+    }
+
     fun build(excludes: Excludes = Excludes.EMPTY): AnalyzerResult {
         val duplicates = (projects.map { it.toPackage() } + packages).getDuplicates { it.id }
         require(duplicates.isEmpty()) {
+            val reverseDependencyTree = mutableListOf<Any>()
+            duplicates.forEach() {
+                val dependencyPaths =  getPaths(dependencyGraphs[it.key.type],it.key)
+                reverseDependencyTree.add(dependencyPaths)
+            }
             "Unable to create the AnalyzerResult as it contains packages and projects with the same ids: " +
-                duplicates.values
-        }
+                duplicates.values + "  Here are the complete paths for each duplicate dependency: " + reverseDependencyTree
+    }
 
         return AnalyzerResult(projects, packages, issues, dependencyGraphs)
             .convertToDependencyGraph(excludes)
