@@ -163,11 +163,11 @@ class Pub(
         }
 
         if (flutterAbsolutePath.resolve(flutterCommand).isFile) {
-            logger.info { "Skipping to bootstrap flutter as it was found in $flutterAbsolutePath." }
+            logger.info { "Skipping to bootstrap Flutter as it was found in $flutterAbsolutePath." }
             return
         }
 
-        logger.info { "Bootstrapping flutter as it was not found." }
+        logger.info { "Bootstrapping Flutter as it was not found." }
 
         val archive = when {
             Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
@@ -511,7 +511,7 @@ class Pub(
         val packages = mutableMapOf<Identifier, Package>()
         val issues = mutableListOf<Issue>()
 
-        // Flag if the project is a flutter project.
+        // Flag if the project is a Flutter project.
         var containsFlutter = false
 
         listOf("packages"/*, "packages-dev"*/).forEach {
@@ -567,7 +567,7 @@ class Pub(
                         }
 
                         pkgInfoFromLockFile["description"].textValueOrEmpty() == "flutter" -> {
-                            // Set flutter flag, which triggers another scan for iOS and Android native dependencies.
+                            // Set Flutter flag, which triggers another scan for iOS and Android native dependencies.
                             containsFlutter = true
                             // Set hardcoded package details.
                             rawName = "flutter"
@@ -626,7 +626,7 @@ class Pub(
         // the ".pub-cache" directory.
         if (containsFlutter && !pubDependenciesOnly) {
             lockFile["packages"]?.forEach { pkgInfoFromLockFile ->
-                // As this package contains flutter, trigger Gradle manually for it.
+                // As this package contains Flutter, trigger Gradle manually for it.
                 scanAndroidPackages(pkgInfoFromLockFile, labels, workingDir).forEach { result ->
                     result.collectPackagesByScope("releaseCompileClasspath").forEach { pkg ->
                         packages[pkg.id] = pkg
@@ -635,7 +635,7 @@ class Pub(
                     issues += result.issues
                 }
 
-                // As this package contains flutter, trigger CocoaPods manually for it.
+                // As this package contains Flutter, trigger CocoaPods manually for it.
                 scanIosPackages(pkgInfoFromLockFile, workingDir)?.let { result ->
                     result.packages.forEach { pkg ->
                         packages[pkg.id] = pkg
