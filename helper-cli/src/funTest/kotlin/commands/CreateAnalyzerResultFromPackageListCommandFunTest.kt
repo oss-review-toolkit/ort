@@ -19,7 +19,7 @@
 
 package org.ossreviewtoolkit.helper.commands
 
-import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.clikt.testing.test
 
 import io.kotest.core.spec.style.WordSpec
 import io.kotest.matchers.shouldBe
@@ -39,12 +39,14 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
             val outputFile = createOrtTempDir().resolve("analyzer-result.yml")
             val expectedOutputFile = getAssetFile("create-analyzer-result-from-pkg-list-expected-output.yml")
 
-            runMain(
-                "create-analyzer-result-from-package-list",
-                "--package-list-file",
-                inputFile.absolutePath,
-                "--ort-file",
-                outputFile.absolutePath
+            HelperMain().test(
+                listOf(
+                    "create-analyzer-result-from-package-list",
+                    "--package-list-file",
+                    inputFile.absolutePath,
+                    "--ort-file",
+                    outputFile.absolutePath
+                )
             )
 
             outputFile.readValue<OrtResult>().patchAnalyzerResult() shouldBe
@@ -52,15 +54,6 @@ class CreateAnalyzerResultFromPackageListCommandFunTest : WordSpec({
         }
     }
 })
-
-private fun runMain(vararg args: String) {
-    @Suppress("SwallowedException")
-    try {
-        HelperMain().parse(args.asList())
-    } catch (e: ProgramResult) {
-        // Ignore exceptions that just propagate the program result.
-    }
-}
 
 private fun OrtResult.patchAnalyzerResult(): OrtResult =
     copy(
