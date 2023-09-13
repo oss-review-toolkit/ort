@@ -20,6 +20,7 @@
 package org.ossreviewtoolkit.plugins.commands.requirements
 
 import com.github.ajalt.clikt.core.ProgramResult
+import com.github.ajalt.mordant.rendering.Theme
 
 import java.io.File
 import java.lang.reflect.Modifier
@@ -39,6 +40,10 @@ import org.ossreviewtoolkit.utils.spdx.scanCodeLicenseTextDir
 import org.reflections.Reflections
 
 import org.semver4j.Semver
+
+private val DANGER_PREFIX = "\t${Theme.Default.danger("-")} "
+private val WARNING_PREFIX = "\t${Theme.Default.warning("+")} "
+private val SUCCESS_PREFIX = "\t${Theme.Default.success("*")} "
 
 class RequirementsCommand : OrtCommand(
     name = "requirements",
@@ -115,7 +120,7 @@ class RequirementsCommand : OrtCommand(
         var statusCode = 0
 
         allTools.forEach { (category, tools) ->
-            echo("${category}s:")
+            echo(Theme.Default.info("${category}s:"))
 
             tools.forEach { tool ->
                 val message = buildString {
@@ -128,21 +133,21 @@ class RequirementsCommand : OrtCommand(
                                 }
 
                                 if (isRequiredVersion) {
-                                    Pair("\t* ", "Found version $actualVersion.")
+                                    Pair(SUCCESS_PREFIX, "Found version $actualVersion.")
                                 } else {
                                     statusCode = statusCode or 2
-                                    Pair("\t+ ", "Found version $actualVersion.")
+                                    Pair(WARNING_PREFIX, "Found version $actualVersion.")
                                 }
                             }.getOrElse {
                                 statusCode = statusCode or 2
-                                Pair("\t+ ", "Found version '$actualVersion'.")
+                                Pair(WARNING_PREFIX, "Found version '$actualVersion'.")
                             }
                         }.getOrElse {
                             if (!tool.getVersionRequirement().isSatisfiedByAny) {
                                 statusCode = statusCode or 2
                             }
 
-                            Pair("\t+ ", "Could not determine the version.")
+                            Pair(WARNING_PREFIX, "Could not determine the version.")
                         }
                     } else {
                         // Tolerate the following to be missing when determining the status code:
@@ -155,7 +160,7 @@ class RequirementsCommand : OrtCommand(
                             statusCode = statusCode or 4
                         }
 
-                        Pair("\t- ", "Tool not found.")
+                        Pair(DANGER_PREFIX, "Tool not found.")
                     }
 
                     append(prefix)
@@ -177,20 +182,20 @@ class RequirementsCommand : OrtCommand(
         }
 
         echo("Prefix legend:")
-        echo("\t- The tool was not found in the PATH environment.")
-        echo("\t+ The tool was found in the PATH environment, but not in the required version.")
-        echo("\t* The tool was found in the PATH environment in the required version.")
+        echo("${DANGER_PREFIX}The tool was not found in the PATH environment.")
+        echo("${WARNING_PREFIX}The tool was found in the PATH environment, but not in the required version.")
+        echo("${SUCCESS_PREFIX}The tool was found in the PATH environment in the required version.")
 
         echo()
         if (scanCodeLicenseTextDir != null) {
-            echo("ScanCode license texts found in '$scanCodeLicenseTextDir'.")
+            echo(Theme.Default.info("ScanCode license texts found in '$scanCodeLicenseTextDir'."))
         } else {
-            echo("ScanCode license texts not found.")
+            echo(Theme.Default.warning("ScanCode license texts not found."))
         }
 
         if (statusCode != 0) {
             echo()
-            echo("Not all tools were found in their required versions.")
+            echo(Theme.Default.warning("Not all tools were found in their required versions."))
             throw ProgramResult(statusCode)
         }
     }
