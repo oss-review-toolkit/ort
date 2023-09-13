@@ -118,7 +118,6 @@ class RequirementsCommand : OrtCommand(
             echo("${category}s:")
 
             tools.forEach { tool ->
-                // TODO: State whether a tool can be bootstrapped, but that requires refactoring of CommandLineTool.
                 val message = buildString {
                     val (prefix, suffix) = if (tool.isInPath() || File(tool.command()).isFile) {
                         runCatching {
@@ -146,8 +145,10 @@ class RequirementsCommand : OrtCommand(
                             Pair("\t+ ", "Could not determine the version.")
                         }
                     } else {
-                        // Tolerate scanners and Pub to be missing as they can be bootstrapped.
-                        // Tolerate Yarn2 because it is provided in code repositories that use it.
+                        // Tolerate the following to be missing when determining the status code:
+                        // - Pub, as it can be bootstrapped as part of the Flutter SDK,
+                        // - Yarn 2+, as it is provided with the code that uses it,
+                        // - scanners, as scanning is basically optional and one scanner would be enough.
                         if (category != "Scanner" && tool.javaClass.simpleName != "Pub"
                             && tool.javaClass.simpleName != "Yarn2"
                         ) {
