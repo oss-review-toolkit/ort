@@ -41,16 +41,10 @@ import org.ossreviewtoolkit.model.Scope
 import org.ossreviewtoolkit.model.VcsInfo
 import org.ossreviewtoolkit.model.VcsType
 import org.ossreviewtoolkit.utils.common.CommandLineTool
-import org.ossreviewtoolkit.utils.ort.DeclaredLicenseProcessor
-import org.ossreviewtoolkit.utils.ort.ProcessedDeclaredLicense
 import org.ossreviewtoolkit.utils.ort.createOrtTempFile
-import org.ossreviewtoolkit.utils.spdx.SpdxLicenseIdExpression
 
 import org.semver4j.RangesList
 import org.semver4j.RangesListFactory
-
-private const val GENERIC_BSD_LICENSE = "BSD License"
-private const val SHORT_STRING_MAX_CHARS = 200
 
 private val json = Json {
     ignoreUnknownKeys = true
@@ -265,27 +259,6 @@ private fun PythonInspector.DeclaredLicense.getDeclaredLicenses() =
         addAll(classifiers.mapNotNull { getLicenseFromClassifier(it) })
     }
 
-private fun processDeclaredLicenses(id: Identifier, declaredLicenses: Set<String>): ProcessedDeclaredLicense {
-    var declaredLicensesProcessed = DeclaredLicenseProcessor.process(declaredLicenses)
-
-    // Python's classifiers only support a coarse license declaration of "BSD License". So if there is another
-    // more specific declaration of a BSD license, align on that one.
-    if (GENERIC_BSD_LICENSE in declaredLicensesProcessed.unmapped) {
-        declaredLicensesProcessed.spdxExpression?.decompose()?.singleOrNull {
-            it is SpdxLicenseIdExpression && it.isValid() && it.toString().startsWith("BSD-")
-        }?.let { license ->
-            PythonInspector.logger.debug { "Mapping '$GENERIC_BSD_LICENSE' to '$license' for '${id.toCoordinates()}'." }
-
-            declaredLicensesProcessed = declaredLicensesProcessed.copy(
-                mapped = declaredLicensesProcessed.mapped + mapOf(GENERIC_BSD_LICENSE to license),
-                unmapped = declaredLicensesProcessed.unmapped - GENERIC_BSD_LICENSE
-            )
-        }
-    }
-
-    return declaredLicensesProcessed
-}
-
 internal fun List<PythonInspector.Package>.toOrtPackages(): Set<Package> =
     groupBy { "${it.name}:${it.version}" }.mapTo(mutableSetOf()) { (_, packages) ->
         // The python inspector currently often contains two entries for a package where the only difference is the
@@ -350,23 +323,3 @@ private fun PythonInspector.ResolvedDependency.toPackageReference() =
         id = Identifier(type = TYPE, namespace = "", name = packageName, version = installedVersion),
         dependencies = dependencies.toPackageReferences()
     )
-
-private fun getLicenseFromClassifier(classifier: String): String? {
-    // Example license classifier (also see https://pypi.org/classifiers/):
-    // "License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)"
-    val classifiers = classifier.split(" :: ").map { it.trim() }
-    val licenseClassifiers = listOf("License", "OSI Approved")
-    val license = classifiers.takeIf { it.first() in licenseClassifiers }?.last()
-    return license?.takeUnless { it in licenseClassifiers }
-}
-
-private fun getLicenseFromLicenseField(value: String?): String? {
-    if (value.isNullOrBlank() || value == "UNKNOWN") return null
-
-    // See https://docs.python.org/3/distutils/setupscript.html#additional-meta-data for what a "short string" is.
-    val isShortString = value.length <= SHORT_STRING_MAX_CHARS && value.lines().size == 1
-    if (!isShortString) return null
-
-    // Apply a work-around for projects that declare licenses in classifier-syntax in the license field.
-    return getLicenseFromClassifier(value) ?: value
-}
