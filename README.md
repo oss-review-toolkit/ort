@@ -705,6 +705,8 @@ following formats are supported (reporter names are case-insensitive):
   (`-f Opossum`)
 * [SPDX Document](https://spdx.dev/specifications/), version 2.2 (`-f SpdxDocument`)
 * Static HTML (`-f StaticHtml`)
+* [TrustSource](https://www.trustsource.io/) JSON file (`-f TrustSource`)
+  * Use this as an alternative to [ts-scan](https://github.com/TrustSource/ts-scan) for support of more build systems.
 * Web App (`-f WebApp`)
   * Also see the [EvaluatedModelReporter](plugins/reporters/evaluated-model/src/main/kotlin/EvaluatedModelReporter.kt)
     (`-f EvaluatedModel`) which is the JSON / YAML format used by the Web App report that is also suitable for custom
