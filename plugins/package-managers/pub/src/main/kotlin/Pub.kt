@@ -172,6 +172,14 @@ class Pub(
         val archive = when {
             Os.isWindows -> "windows/flutter_windows_$flutterVersion.zip"
             Os.isLinux -> "linux/flutter_linux_$flutterVersion.tar.xz"
+            Os.isMac -> {
+                val arch = when {
+                    System.getProperty("os.arch") == "x86_64" -> ""
+                    System.getProperty("os.arch") == "aarch64" -> "_arm64"
+                    else -> throw IllegalArgumentException("Unsupported architecture on macOS.")
+                }
+                "macos/flutter_macos${arch}_$flutterVersion.zip"
+            }
             else -> throw IllegalArgumentException("Unsupported operating system.")
         }
 
