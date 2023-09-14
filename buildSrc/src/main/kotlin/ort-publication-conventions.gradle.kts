@@ -35,9 +35,8 @@ configure<PublishingExtension> {
 
             groupId = "org${getGroupId(parent)}"
 
-            from(components["java"])
-            artifact(tasks["sourcesJar"])
-            artifact(tasks["docsJavadocJar"])
+            listOf("java", "javaPlatform").mapNotNull { components.findByName(it) }.forEach(::from)
+            listOf("sourcesJar", "docsJavadocJar").mapNotNull { tasks.findByName(it) }.forEach(::artifact)
 
             pom {
                 name = project.name
