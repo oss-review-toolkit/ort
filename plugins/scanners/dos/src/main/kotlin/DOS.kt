@@ -54,19 +54,22 @@ class DOS internal constructor(
     override fun scanPackage(pkg: Package, context: ScanContext): ScanResult {
         val thisScanStartTime = Instant.now()
         val tmpDir = "/tmp/"
-        val provenance: Provenance
+
         val summary: ScanSummary
         val issues = mutableListOf<Issue>()
-
-        logger.info { "Package to scan: ${pkg.purl}" }
-        // Use ORT specific local file structure
-        val dosDir = createOrtTempDir()
         var scanResults: DOSService.ScanResultsResponseBody?
 
-        // Download the package
-        val downloader = Downloader(downloaderConfig)
-        provenance = downloader.download(pkg, dosDir)
-        logger.info { "Package downloaded to: $dosDir" }
+        // Decide which provenance type this package is
+        val provenance: Provenance
+        if (pkg.vcsProcessed != VcsInfo.EMPTY) {
+            provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
+        } else if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
+            provenance = ArtifactProvenance(pkg.sourceArtifact)
+        } else {
+            provenance = UnknownProvenance
+        }
+
+        logger.info { "Package to scan: ${pkg.purl}" }
 
         runBlocking {
             // Ask for scan results from DOS API
@@ -77,6 +80,13 @@ class DOS internal constructor(
             }
             when (scanResults?.state?.status) {
                 "no-results" -> {
+                    // Download the package to an ORT specific local file structure
+                    val dosDir = createOrtTempDir()
+                    val downloader = Downloader(downloaderConfig)
+                    downloader.download(pkg, dosDir)
+                    logger.info { "Package downloaded to: $dosDir" }
+
+                    // Start backend scanning
                     scanResults = runBackendScan(
                         pkg,
                         dosDir,
@@ -90,7 +100,7 @@ class DOS internal constructor(
                     }
                 }
                 "pending" -> scanResults?.state?.id?.let { waitForPendingScan(pkg, it, thisScanStartTime) }
-                "ready" -> deleteFileOrDir(dosDir)
+                "ready" -> { /* Results exist, form an ORT result and move on to the next package */ }
             }
         }
         val thisScanEndTime = Instant.now()
