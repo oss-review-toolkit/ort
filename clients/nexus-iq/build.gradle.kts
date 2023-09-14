@@ -28,6 +28,7 @@ plugins {
 }
 
 dependencies {
+    api(libs.okhttp)
     api(libs.retrofit)
 
     implementation(libs.bundles.kotlinxSerialization)
