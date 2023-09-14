@@ -30,10 +30,10 @@ where the declared and detected licenses do not match.
 
 ### Concluded license
 
-The concluded license is manually created via a [curation](../configuration/package-curations.md). In cases where the union of
-declared and detected licenses is wrong (e.g. due to mistakes in metadata or false positives from scanners), the
-concluded license can be used to set which licenses actually match reality. Curating a concluded license should be an
-objective decision based on verifiable facts. It should not yet apply a license choice, as it is the complete license
+The concluded license is manually created via a [curation](../configuration/package-curations.md). In cases where the
+union of declared and detected licenses is wrong (e.g. due to mistakes in metadata or false positives from scanners),
+the concluded license can be used to set which licenses actually match reality. Curating a concluded license should be
+an objective decision based on verifiable facts. It should not yet apply a license choice, as it is the complete license
 expression a package can theoretically be used under.
 
 ### Effective license

@@ -19,8 +19,8 @@ To add packages found by ORT to projects and releases in SW360.
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your
-[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
-`--config` option as shown below.
+[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT
+command with the `--config` option as shown below.
 
 ```yaml
 ort:
@@ -68,8 +68,8 @@ Note:
 
 In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360
 instance. You can do this by defining a `sw360Configuration` within the `analyzer` section of your
-[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
-`--config` option as shown below.
+[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT
+command with the `--config` option as shown below.
 
 ```yaml
 ort:

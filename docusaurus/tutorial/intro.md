@@ -348,8 +348,9 @@ Created 'PlainTextTemplate' report: [reporter-output-dir]/NOTICE_DEFAULT
 
 If you do not want to run the *evaluator* you can pass the *scanner* result e.g. `[scanner-output-dir]/scan-result.yml`
 to the `reporter` instead. To learn how you can customize generated notices see
-[Reporter Templates](../docs/configuration/reporter-templates#plain-text-templates). To learn how to customize the how-to-fix texts for scanner
-and analyzer issues see [how-to-fix-text-provider-kts.md](../docs/configuration/how-to-fix-text-provider).
+[Reporter Templates](../docs/configuration/reporter-templates#plain-text-templates). To learn how to customize the
+how-to-fix texts for scanner and analyzer issues see
+[how-to-fix-text-provider-kts.md](../docs/configuration/how-to-fix-text-provider).
 
 ## 8. Curating Package Metadata or License Findings
 
@@ -363,7 +364,7 @@ ORT provides a variety of mechanisms to fix a variety of issues, for details see
   to address issues found within a project's code repository.
 * [The package configuration file](../docs/configuration/package-configurations) - package (dependency) and provenance
   specific license finding curations and exclusions to address issues found within a scan result for a package.
-* [The curations.yml file](../docs/configuration/package-curations) - curations correct invalid or missing package metadata and set
-  the concluded license for packages.
+* [The curations.yml file](../docs/configuration/package-curations) - curations correct invalid or missing package
+  metadata and set the concluded license for packages.
 * [The resolutions.yml file](../docs/configuration/resolutions) - resolutions allow *resolving* any issues or policy rule
   violations by providing a reason why they are acceptable and can be ignored.

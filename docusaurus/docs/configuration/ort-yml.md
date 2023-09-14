@@ -75,8 +75,8 @@ excludes:
 ```
 
 Where the list of available options for `reason` is defined in
-[PathExcludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/PathExcludeReason.kt). For how to write a glob pattern, please
-see the
+[PathExcludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/PathExcludeReason.kt).
+For how to write a glob pattern, please see the
 [AntPathMatcher documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html).
 
 The path exclude above has the following effects:

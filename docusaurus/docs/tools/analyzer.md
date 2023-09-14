@@ -17,58 +17,58 @@ Currently, the following package managers (grouped by the programming language t
 supported:
 
 * C / C++
-    * [Conan](https://conan.io/)
-    * Also see: [SPDX documents](#analyzer-for-spdx-documents)
+  * [Conan](https://conan.io/)
+  * Also see: [SPDX documents](#analyzer-for-spdx-documents)
 * Dart / Flutter
-    * [Pub](https://pub.dev/)
+  * [Pub](https://pub.dev/)
 * Go
-    * [dep](https://golang.github.io/dep/)
-    * [Glide](https://github.com/Masterminds/glide)
-    * [Godep](https://github.com/tools/godep)
-    * [GoMod](https://github.com/golang/go/wiki/Modules)
+  * [dep](https://golang.github.io/dep/)
+  * [Glide](https://github.com/Masterminds/glide)
+  * [Godep](https://github.com/tools/godep)
+  * [GoMod](https://github.com/golang/go/wiki/Modules)
 * Haskell
-    * [Stack](https://haskellstack.org/)
+  * [Stack](https://haskellstack.org/)
 * Java
-    * [Gradle](https://gradle.org/)
-    * [Maven](https://maven.apache.org/) (limitations:
-      [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
+  * [Gradle](https://gradle.org/)
+  * [Maven](https://maven.apache.org/) (limitations:
+    [default profile only](https://github.com/oss-review-toolkit/ort/issues/1774))
 * JavaScript / Node.js
-    * [Bower](https://bower.io/)
-    * [NPM](https://www.npmjs.com/) (limitations:
-      [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-    * [PNPM](https://pnpm.io/) (limitations:
-      [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
-    * [Yarn 1](https://classic.yarnpkg.com/)
-    * [Yarn 2+](https://v2.yarnpkg.com/)
+  * [Bower](https://bower.io/)
+  * [NPM](https://www.npmjs.com/) (limitations:
+    [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [PNPM](https://pnpm.io/) (limitations:
+    [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
+  * [Yarn 1](https://classic.yarnpkg.com/)
+  * [Yarn 2+](https://v2.yarnpkg.com/)
 * .NET
-    * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
-      [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
-      [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
-    * [NuGet](https://www.nuget.org/) (limitations:
-      [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
-      [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
+  * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
+    [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
+    [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
+  * [NuGet](https://www.nuget.org/) (limitations:
+    [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
+    [no target framework](https://github.com/oss-review-toolkit/ort/issues/4083))
 * Objective-C / Swift
-    * [Carthage](https://github.com/Carthage/Carthage) (limitation:
-      [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
-    * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
-      [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
-    * [Swift Package Manager](https://www.swift.org/package-manager)
+  * [Carthage](https://github.com/Carthage/Carthage) (limitation:
+    [no `cartfile.private`](https://github.com/oss-review-toolkit/ort/issues/3774))
+  * [CocoaPods](https://github.com/CocoaPods/CocoaPods) (limitations:
+    [no custom source repositories](https://github.com/oss-review-toolkit/ort/issues/4188))
+  * [Swift Package Manager](https://www.swift.org/package-manager)
 * PHP
-    * [Composer](https://getcomposer.org/)
+  * [Composer](https://getcomposer.org/)
 * Python
-    * [PIP](https://pip.pypa.io/)
-    * [Pipenv](https://pipenv.pypa.io/en/latest/)
-    * [Poetry](https://python-poetry.org/)
+  * [PIP](https://pip.pypa.io/)
+  * [Pipenv](https://pipenv.pypa.io/en/latest/)
+  * [Poetry](https://python-poetry.org/)
 * Ruby
-    * [Bundler](https://bundler.io/) (limitations:
-      [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
+  * [Bundler](https://bundler.io/) (limitations:
+    [restricted to the version available on the host](https://github.com/oss-review-toolkit/ort/issues/1308))
 * Rust
-    * [Cargo](https://doc.rust-lang.org/cargo/)
+  * [Cargo](https://doc.rust-lang.org/cargo/)
 * Scala
-    * [SBT](https://www.scala-sbt.org/)
+  * [SBT](https://www.scala-sbt.org/)
 * Unmanaged
-    * This is a special "package manager" that manages all files that cannot be associated to any of the other package
-      managers.
+  * This is a special "package manager" that manages all files that cannot be associated to any of the other package
+    managers.
 
 <a name="analyzer-for-spdx-documents"></a>
 

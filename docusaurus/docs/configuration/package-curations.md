@@ -9,26 +9,26 @@ You can use the [curations.yml example](#example) as the base configuration file
 Curations can be used to:
 
 * correct invalid or missing package metadata such as:
-    * package source code repository.
-    * tag or revision (SHA1) for specific package version.
-    * binary or source artifacts.
-    * declared license.
-    * package description or URL to its homepage.
+  * package source code repository.
+  * tag or revision (SHA1) for specific package version.
+  * binary or source artifacts.
+  * declared license.
+  * package description or URL to its homepage.
 * set the concluded license for a package:
-    * concluded license is the license applicable to a package dependency defined as an SPDX license expression.
+  * concluded license is the license applicable to a package dependency defined as an SPDX license expression.
 * set the *is_metadata_only* flag:
-    * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
-      *downloader* just skips the download and the *scanner* skips the scan. Also, any *evaluator rule* may optionally
-      skip its execution.
+  * metadata-only packages, such as Maven BOM files, do not have any source code. Thus, when the flag is set the
+    *downloader* just skips the download and the *scanner* skips the scan. Also, any *evaluator rule* may optionally
+    skip its execution.
 * set the *is_modified* flag:
-    * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork
-      of an upstream Open Source project, or a copy of the code in this project's repository.
+  * indicates whether files of this package have been modified compared to the original files, e.g., in case of a fork
+    of an upstream Open Source project, or a copy of the code in this project's repository.
 * set the *declared_license_mapping* property:
-    * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
-      be fixed by mapping these strings to a valid license. If multiple curations declare license mappings, they get
-      combined into a single mapping. Thus, multiple curations can contribute to the declared license mapping for the
-      package. The effect of its application can be seen in the *declared_license_processed* property of the respective
-      curated package.
+  * Packages may have declared license string values which cannot be parsed to SpdxExpressions. In some cases this can
+    be fixed by mapping these strings to a valid license. If multiple curations declare license mappings, they get
+    combined into a single mapping. Thus, multiple curations can contribute to the declared license mapping for the
+    package. The effect of its application can be seen in the *declared_license_processed* property of the respective
+    curated package.
 
 The sections below explain how to create curations in the `curations.yml` file which,
 if passed to the *analyzer*, is applied to all package metadata found in the analysis.
