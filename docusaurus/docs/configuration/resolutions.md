@@ -3,7 +3,7 @@
 Resolutions allow you to *resolve* issues, policy rule violations or vulnerabilities by providing a reason why they are
 acceptable and can be ignored.
 
-You can use the [resolutions.yml example](../examples/resolutions.yml) as the base configuration file for your scans.
+You can use the [resolutions.yml example](#example) as the base configuration file for your scans.
 
 ## When to Use Resolutions
 
@@ -11,7 +11,7 @@ Resolutions should be used when it is impossible to solve an issue or a fix is p
 
 The sections below explain how to create resolutions in the `resolutions.yml` file which, if passed as an argument to
 the *reporter*, applies to each scan made. If a resolution is project-specific, then add it in the
-[.ort.yml](config-file-ort-yml.md) file for the project.
+[.ort.yml](ort-yml.md) file for the project.
 
 Resolutions are only taken into account by the *reporter*, while the *analyzer* and *scanner* ignore them.
 
@@ -45,7 +45,7 @@ issues:
 ```
 
 Where the list of available options for `reason` is defined in
-[IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt).
+[IssueResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/IssueResolutionReason.kt).
 
 For example, to ignore an issue related to a build tool problem, your `resolutions.yml` could include:
 
@@ -60,8 +60,8 @@ issues:
 
 Resolutions should not be used to resolve license policy rule violations as they do not the change generated open source
 notices. To resolve a license policy rule violation either add a local `license_findings` curation to the
-[.ort.yml file](./config-file-ort-yml.md) if the finding is in your code repository or add a curation to the
-[curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
+[.ort.yml file](./ort-yml.md) if the finding is in your code repository or add a curation to the
+[curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `resolutions.yml` file:
 
@@ -73,7 +73,7 @@ rule_violations:
 ```
 
 Where the list of available options for `reason` is defined in
-[RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
+[RuleViolationResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
 
 For example, to confirm your organization has acquired an org-wide Qt commercial license, your `resolutions.yml` could
 include:
@@ -97,7 +97,7 @@ vulnerabilities:
 ```
 
 Where the list of available options for `reason` is defined in
-[VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
+[VulnerabilityResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
 
 For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your
 `resolutions.yml` could include:

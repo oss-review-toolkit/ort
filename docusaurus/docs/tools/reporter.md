@@ -7,7 +7,7 @@ sidebar_position: 6
 The *reporter* generates a wide variety of documents in different formats from ORT result files. Currently, the
 following formats are supported (reporter names are case-insensitive):
 
-* [AsciiDoc Template](docs/reporters/asciidoc-templates.md) (`-f AsciiDocTemplate`)
+* [AsciiDoc Template](../configuration/reporter-templates.md#asciidoc-templates) (`-f AsciiDocTemplate`)
     * Content customizable with [Apache Freemarker](https://freemarker.apache.org/) templates and
       [AsciiDoc](https://asciidoc.org/)
     * PDF style customizable with Asciidoctor
@@ -36,6 +36,7 @@ following formats are supported (reporter names are case-insensitive):
 * [TrustSource](https://www.trustsource.io/) JSON file (`-f TrustSource`)
     * Use this as an alternative to [ts-scan](https://github.com/TrustSource/ts-scan) for support of more build systems.
 * Web App (`-f WebApp`)
-    * Also see the [EvaluatedModelReporter](plugins/reporters/evaluated-model/src/main/kotlin/EvaluatedModelReporter.kt)
+    * Also see the
+      [EvaluatedModelReporter](https://github.com/oss-review-toolkit/ort/blob/main/plugins/reporters/evaluated-model/src/main/kotlin/EvaluatedModelReporter.kt)
       (`-f EvaluatedModel`) which is the JSON / YAML format used by the Web App report that is also suitable for custom
       post-processing.

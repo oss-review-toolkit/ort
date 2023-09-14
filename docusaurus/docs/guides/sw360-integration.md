@@ -19,7 +19,7 @@ To add packages found by ORT to projects and releases in SW360.
 
 In order to be able to upload ORT results to SW360, first set the connection parameters to your SW360 instance.
 You can do this by defining a `sw360Configuration` scanner storage in the `storages` section of your
-[config.yml](../README.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
+[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
 `--config` option as shown below.
 
 ```yaml
@@ -39,7 +39,8 @@ ort:
 ### Command Line
 
 Uploading to SW360 is a stand-alone
-[ORT command](../plugins/commands/upload-result-to-sw360/src/main/kotlin/UploadResultToSw360Command.kt), which:
+[ORT command](https://github.com/oss-review-toolkit/ort/blob/main/plugins/commands/upload-result-to-sw360/src/main/kotlin/UploadResultToSw360Command.kt),
+which:
 
 1. Takes an *analyzer* result file as an input,
 2. Creates components/releases in SW360 for the packages and ...
@@ -55,7 +56,7 @@ cli/build/install/ort/bin/ort upload-result-to-sw360
 ### When to use
 
 If you prefer to use the SW360 web frontend to correct package metadata instead of ORT's
-[curations.yml file](config-file-curations-yml.md).
+[curations.yml file](../configuration/package-curations.md).
 
 Note:
 
@@ -67,7 +68,7 @@ Note:
 
 In order to be able to use SW360 data in the ORT *analyzer*, first set the connection parameters for your SW360
 instance. You can do this by defining a `sw360Configuration` within the `analyzer` section of your
-[config.yml](../README.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
+[config.yml](../getting-started/usage.md#ort-configuration-file) (e.g. in `${HOME}/.ort/conf`) or pass it to the ORT command with the
 `--config` option as shown below.
 
 ```yaml

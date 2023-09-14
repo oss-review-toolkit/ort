@@ -17,9 +17,9 @@ package might have declared itself to be licensed under the MIT license, but in 
 BSD-3-Clause license header.
 
 Declared licenses often come in non-SPDX form or contains typos. For universally valid cases ORT has built-in
-[mappings](../utils/spdx/src/main/resources/declared-license-mapping.yml). For cases that might be ambiguous in general
-but are valid in the specific context of a package, [curations](config-file-curations-yml.md) can be used to define a
-`declared_license_mapping`.
+[mappings](https://github.com/oss-review-toolkit/ort/blob/main/utils/spdx/src/main/resources/declared-license-mapping.yml).
+For cases that might be ambiguous in general but are valid in the specific context of a package,
+[curations](../configuration/package-curations.md) can be used to define a `declared_license_mapping`.
 
 ### Detected license
 
@@ -30,7 +30,7 @@ where the declared and detected licenses do not match.
 
 ### Concluded license
 
-The concluded license is manually created via a [curation](config-file-curations-yml.md). In cases where the union of
+The concluded license is manually created via a [curation](../configuration/package-curations.md). In cases where the union of
 declared and detected licenses is wrong (e.g. due to mistakes in metadata or false positives from scanners), the
 concluded license can be used to set which licenses actually match reality. Curating a concluded license should be an
 objective decision based on verifiable facts. It should not yet apply a license choice, as it is the complete license
@@ -39,7 +39,7 @@ expression a package can theoretically be used under.
 ### Effective license
 
 The effective license finally is the one that takes effect for the package, taking into account any project-specific
-context like making a [license choice](config-file-ort-yml.md#license-choices) in case of dual-licensing. This is the
+context like making a [license choice](../configuration/ort-yml.md#license-choices) in case of dual-licensing. This is the
 license that should primarily be used in ORT's *evaluator* rules.
 
 ## Curating licenses
@@ -50,7 +50,7 @@ versions of a package: There is a risk that a newer package version introduces n
 with a concluded license that blindly overrides everything.
 
 That is why in such scenarios a
-[license finding curation](config-file-package-configuration-yml.md#defining-path-excludes-and-license-finding-curations)
+[license finding curation](../configuration/package-configurations.md#defining-path-excludes-and-license-finding-curations)
 as part of a package configuration is the better option, as it allows to conclude a single exact finding of a license.
 That way unmatched licenses are not affected by the curation and new / changed licenses will not go unnoticed.
 

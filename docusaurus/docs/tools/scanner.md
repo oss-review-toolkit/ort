@@ -49,11 +49,13 @@ queried. Only if all of these steps fail, the scanner has to actually process th
 When storing a newly generated scan result the scanner invokes all the storages declared as writers. The storage
 operation is considered successful if all writer storages could successfully persist the scan result.
 
-The configuration of storage backends is located in the [ORT configuration file](#ort-configuration-file). (For the
-general structure of this file and the set of options available refer to the
-[reference configuration](./model/src/main/resources/reference.yml).) The file has a section named *storages* that
-lists all the storage backends and assigns them a name. Each storage backend is of a specific type and needs to be
-configured with type-specific properties. The different types of storage backends supported by ORT are described below.
+The configuration of storage backends is located in the
+[ORT configuration file](../getting-started/usage.md#ort-configuration-file). (For the general structure of this file
+and the set of options available refer to the
+[reference configuration](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml).)
+The file has a section named *storages* that lists all the storage backends and assigns them a name. Each storage
+backend is of a specific type and needs to be configured with type-specific properties. The different types of storage
+backends supported by ORT are described below.
 
 After the declaration of the storage backends, the configuration file has to specify which ones of them the
 scanner should use for looking up existing scan results or to store new results. This is done in two list properties
@@ -136,7 +138,8 @@ store the data in a [jsonb](https://www.postgresql.org/docs/current/datatype-jso
 
 If you do not want to use SSL set the `sslmode` to `disable`, other possible values are explained in the
 [documentation](https://jdbc.postgresql.org/documentation/ssl/#configuring-the-client). For other supported
-configuration options see [ScanStorageConfiguration.kt](./model/src/main/kotlin/config/ScanStorageConfiguration.kt).
+configuration options see
+[ScanStorageConfiguration.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/ScanStorageConfiguration.kt).
 
 ### ClearlyDefined Storage
 

@@ -2,7 +2,7 @@
 
 A package configuration file allows you to define path excludes and license finding curations for a specific package
 (dependency) and provenance. Conceptually, the file is similar to
-[.ort.yml](https://github.com/oss-review-toolkit/ort/blob/main/docs/config-file-ort-yml.md), but it is used only for
+[.ort.yml](ort-yml.md), but it is used only for
 packages included via a package manager as project dependencies, and not for the project's own source code repository to
 be scanned.
 
@@ -44,8 +44,8 @@ in the source repository but only used for building, documenting or testing the 
 to fix incorrect scan results, for example if a wrong license was detected, or if a finding is a false positive.
 
 The entries for path excludes and license finding curations have the same syntax and semantics as in the `ort.yml` file,
-see [excluding paths](config-file-ort-yml.md#excluding-paths) and
-[curating license findings](config-file-ort-yml.md#curating-project-license-findings) for details.
+see [excluding paths](ort-yml.md#excluding-paths) and
+[curating license findings](ort-yml.md#curating-project-license-findings) for details.
 
 ```yaml
 id: "Pip::example-package:0.0.1"
