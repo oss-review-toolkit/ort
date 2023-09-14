@@ -10,10 +10,10 @@ vulnerabilities returned by these services are then stored in the output result 
 information like the source of the data and a severity (if available).
 
 Multiple providers for security advisories are available. The providers require specific configuration in the
-[ORT configuration file](./model/src/main/resources/reference.yml), which needs to be placed in the *advisor*
-section. When executing the advisor the providers to enable are selected with the `--advisors` option (or its short
-alias `-a`); here a comma-separated list with provider IDs is expected. The following sections describe the providers
-supported by the advisor:
+[ORT configuration file](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml),
+which needs to be placed in the *advisor* section. When executing the advisor the providers to enable are selected with
+the `--advisors` option (or its short alias `-a`); here a comma-separated list with provider IDs is expected. The
+following sections describe the providers supported by the advisor:
 
 ## NexusIQ
 

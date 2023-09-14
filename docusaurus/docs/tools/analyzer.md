@@ -74,6 +74,5 @@ supported:
 
 If another package manager that is not part of the list above is used (or no package manager at all), the generic
 fallback to [SPDX documents](https://spdx.dev/specifications/) can be leveraged to describe
-[projects](./plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml)
-or [packages](./plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).
-
+[projects](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/inline-packages/project-xyz.spdx.yml)
+or [packages](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-managers/spdx/src/funTest/assets/projects/synthetic/libs/curl/package.spdx.yml).

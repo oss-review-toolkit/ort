@@ -2,7 +2,7 @@
 
 Curations correct invalid or missing package metadata and set the concluded license for packages.
 
-You can use the [curations.yml example](../examples/curations.yml) as the base configuration file for your scans.
+You can use the [curations.yml example](#example) as the base configuration file for your scans.
 
 ## When to Use Curations
 
@@ -33,7 +33,7 @@ Curations can be used to:
 The sections below explain how to create curations in the `curations.yml` file which,
 if passed to the *analyzer*, is applied to all package metadata found in the analysis.
 If a license detected in the source code of a package needs to be corrected, add
-a license finding curation in the [.ort.yml](config-file-ort-yml.md#curations) file for the project.
+a license finding curation in the [.ort.yml](ort-yml.md#curations) file for the project.
 
 ## Curations Basics
 
@@ -48,7 +48,7 @@ location of source artifacts.
 
 Hint: If the `concluded_license` *and* the `authors` are curated, this package will be skipped during the `scan` step,
 as no more information from the scanner is required. This requires the `skipConcluded` scanner option to be enabled in
-the [config.yml](../README.md#ort-configuration-file).
+the [config.yml](../getting-started/usage.md#ort-configuration-file).
 
 The structure of the curations file consist of one or more `id` entries:
 
@@ -83,7 +83,7 @@ The structure of the curations file consist of one or more `id` entries:
 ```
 
 Where the list of available options for curations is defined in
-[PackageCurationData.kt](../model/src/main/kotlin/PackageCurationData.kt).
+[PackageCurationData.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/PackageCurationData.kt).
 
 ## Command Line
 
@@ -98,10 +98,11 @@ cli/build/install/ort/bin/ort analyze
 
 Alternatively to a single file, curations may also be split across multiple files below a directory, by default
 `$ORT_CONFIG_DIR/curations`. File and directory package curation providers may also be configured as
-[FilePackageCurationProviders](../plugins/package-curation-providers/file/src/main/kotlin/FilePackageCurationProvider.kt)
+[FilePackageCurationProviders](https://github.com/oss-review-toolkit/ort/blob/main/plugins/package-curation-providers/file/src/main/kotlin/FilePackageCurationProvider.kt)
 in `$ORT_CONFIG_DIR/config.yml`. Similarly, ORT can use [ClearlyDefined](https://clearlydefined.io/) and
 [SW360](https://www.eclipse.org/sw360/) as sources for curated metadata. See the
-[reference configuration file](../model/src/main/resources/reference.yml) for examples.
+[reference configuration file](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/resources/reference.yml)
+for examples.
 
 To override curations, e.g. for testing them locally, you can also pass a `curations.yml` file or a curations directory
 via the `--package-curations-file` / `--package-curations-dir` options of the *evaluator*:

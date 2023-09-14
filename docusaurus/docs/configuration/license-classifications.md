@@ -2,7 +2,7 @@
 
 The `license-classifications.yml` file holds a user-defined categorization of licenses.
 
-You can use the [license-classifications.yml example] as the base configuration
+You can use the [example](#example) as the base configuration
 file for your scans.
 
 The file consists of two sections: The first one, *categories*, allows defining arbitrary categories for grouping
@@ -26,7 +26,7 @@ The information from the `license-classifications.yml` is evaluated by the follo
   decide, which licenses to include into the generated notice file.
 
 The [license-classifications.yml example] demonstrates the intended use cases. It defines some categories that specify
-whether licenses are applicable to development projects. The [example.rules.kts] checks ORT results against these
+whether licenses are applicable to development projects. The [example](#example) checks ORT results against these
 categories and generates issues if the rules detect a misuse.
 
 In addition, there are some other categories to be evaluated by the templates for the notice file: The
@@ -52,12 +52,10 @@ cli/build/install/ort/bin/ort evaluate
   --rules-file $ORT_CONFIG_DIR/evaluator.rules.kts
 ```
 
-[license-classifications.yml example]: ../examples/license-classifications.yml
 [generated license-classifications.yml]: https://github.com/maxhbr/LDBcollector/blob/generated/ort/license-classifications.yml
 [LDBcollector]: https://github.com/maxhbr/LDBcollector
-[Rules]: scripts/rules-kts.md
-[Plain text templates]: reporters/plain-text-templates.md
-[example.rules.kts]: ../examples/example.rules.kts
+[Rules]: evaluator-rules.md
+[Plain text templates]: reporter-templates.md#plain-text-templates
 
 ## Example
 

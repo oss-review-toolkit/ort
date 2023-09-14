@@ -2,8 +2,7 @@
 
 The `copyright-garbage.yml` file allows to define which Copyright statements are to be considered as garbage, like any
 invalid findings from a scanner. This can be done by literal strings or regular expression patterns. The *evaluator* and
-*reporter* take the file as optional input. See the [copyright-garbage.yml example](../examples/copyright-garbage.yml)
-as a base to get started.
+*reporter* take the file as optional input. See the [example](#example) as a base to get started.
 
 ## Command Line
 

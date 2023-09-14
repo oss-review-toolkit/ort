@@ -51,7 +51,7 @@ Depending on how ORT was installed, it can be run in the following ways:
   docker run ort --help
   ```
 
-  You can find further hints for using ORT with Docker in the [documentation](./docs/hints-for-use-with-docker.md).
+  You can find further hints for using ORT with Docker in the [documentation](../guides/docker.md).
 
 * If the ORT distribution was built from sources, use
 

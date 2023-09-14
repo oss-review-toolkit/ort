@@ -10,8 +10,8 @@ increased degree of automation and local configurations should only be done if t
 * [resolutions](#resolutions) - Resolve any issues or policy rule violations.
 * [license choices](#license-choices) - Select a license for packages which offer a license choice.
 
-The sections below explain each in further detail. Prefer to learn by example? See the [.ort.yml](../.ort.yml) for the
-OSS Review Toolkit itself.
+The sections below explain each in further detail. Prefer to learn by example? See the
+[.ort.yml](https://github.com/oss-review-toolkit/ort/blob/main/.ort.yml) for the OSS Review Toolkit itself.
 
 ## Excludes
 
@@ -75,7 +75,7 @@ excludes:
 ```
 
 Where the list of available options for `reason` is defined in
-[PathExcludeReason.kt](../model/src/main/kotlin/config/PathExcludeReason.kt). For how to write a glob pattern, please
+[PathExcludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/PathExcludeReason.kt). For how to write a glob pattern, please
 see the
 [AntPathMatcher documentation](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/util/AntPathMatcher.html).
 
@@ -83,7 +83,7 @@ The path exclude above has the following effects:
 
 * All projects found below the `test-data` directory are marked as excluded.
 * License findings in files below the `test-data` directory are marked as excluded. This can be used in
-  [evaluator rules](getting-started.md#6-running-the-evaluator) to for instance change the severity from error to
+  [evaluator rules](../../tutorial/intro#6-running-the-evaluator) to for instance change the severity from error to
   warning.
 
 ```yaml
@@ -118,7 +118,7 @@ The above example excludes all the following scopes for all projects: `testAnnot
 `testRuntimeOnly`.
 
 Where the list of available options for scopes is defined in
-[ScopeExcludeReason.kt](../model/src/main/kotlin/config/ScopeExcludeReason.kt).
+[ScopeExcludeReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/ScopeExcludeReason.kt).
 
 See the examples below for typical scope excludes for the supported package managers. Note that you must verify that the
 scopes defined in the examples below match the scopes in your project.
@@ -164,7 +164,7 @@ import Yarn from '!!raw-loader!@site/../examples/yarn.ort.yml'
 
 License finding curations should be used when you want to correct the licenses detected in the source code of the
 project. To define curations on global level for third-party packages, please use
-[curations](config-file-curations-yml.md) or [package configurations](config-file-package-configuration-yml.md).
+[curations](package-curations.md) or [package configurations](package-configurations.md).
 
 ### Curating Project License Findings
 
@@ -189,7 +189,7 @@ curations:
 
 To correct identified licenses in a dependency you can use a package configuration to overwrite scanner findings. Note
 that this feature requires `enableRepositoryPackageConfigurations` to be enabled in the
-[config.yml](../README.md#ort-configuration-file).
+[config.yml](../getting-started/usage.md#ort-configuration-file).
 
 ```yaml
 package_configurations:
@@ -206,9 +206,9 @@ package_configurations:
 ```
 
 For details of the specification, see
-[LicenseFindingCuration.kt](../model/src/main/kotlin/config/LicenseFindingCuration.kt).
+[LicenseFindingCuration.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCuration.kt).
 The list of available options for `reason` are defined in
-[LicenseFindingCurationReason.kt](../model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
+[LicenseFindingCurationReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/LicenseFindingCurationReason.kt).
 
 ### Curating Metadata
 
@@ -216,7 +216,7 @@ Package curations can be added if you want to correct metadata of third-party de
 
 The following example corrects the source-artifact URL of the package with the id `Maven:com.example:dummy:0.0.1`.  Note
 that this feature requires `enableRepositoryPackageCurations` to be enabled in the
-[config.yml](../README.md#ort-configuration-file).
+[config.yml](../getting-started/usage.md#ort-configuration-file).
 
 ```yaml
 curations:
@@ -229,7 +229,7 @@ curations:
 ```
 
 For more information about package curations see
-[the documentation for the curations.yml file](config-file-curations-yml.md).
+[the documentation for the curations.yml file](package-curations.md).
 
 ### Example
 
@@ -245,7 +245,7 @@ import Curations from '!!raw-loader!@site/../examples/curations.ort.yml'
 
 Resolutions should be used if you are unable to solve an issue by other means.
 
-If a resolution is not project-specific than add it to [resolutions.yml](./config-file-resolutions-yml.md) so that it is
+If a resolution is not project-specific than add it to [resolutions.yml](resolutions.md) so that it is
 applied to each scan.
 
 ### Resolution Basics
@@ -280,7 +280,7 @@ resolutions:
 ```
 
 Where the list of available options for `reason` is defined in
-[IssueResolutionReason.kt](../model/src/main/kotlin/config/IssueResolutionReason.kt)
+[IssueResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/IssueResolutionReason.kt)
 
 For example, to ignore an issue related to a build tool problem, your `.ort.yml` could include:
 
@@ -297,7 +297,7 @@ resolutions:
 Resolutions should not be used to resolve license policy rule violations as they do not change the generated open
 source notices. To resolve a license policy rule violation either add a [license finding curation](#curations) to the
 .ort.yml file if the finding is in your code repository or add a curation to the
-[curations.yml](config-file-curations-yml.md) if the violation occurs in a third-party dependency.
+[curations.yml](package-curations.md) if the violation occurs in a third-party dependency.
 
 The code below shows the structure of a policy rule violation resolution in the `.ort.yml` file:
 
@@ -310,7 +310,7 @@ resolutions:
 ```
 
 Where the list of available options for `reason` is defined in
-[RuleViolationResolutionReason.kt](../model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
+[RuleViolationResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/RuleViolationResolutionReason.kt).
 
 For example, to confirm you acquired a commercial Qt license for your project, your `.ort.yml` could include:
 
@@ -335,7 +335,7 @@ resolutions:
 ```
 
 Where the list of available options for `reason` is defined in
-[VulnerabilityResolutionReason.kt](../model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
+[VulnerabilityResolutionReason.kt](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/config/VulnerabilityResolutionReason.kt).
 
 For example, to ignore a vulnerability that is ineffective, because it is not invoked in your project, your `.ort.yml`
 could include:
@@ -363,7 +363,7 @@ import Resolutions from '!!raw-loader!@site/../examples/resolutions.ort.yml'
 For multi-licensed dependencies a specific license can be selected. The license choice can be applied to a package or
 globally to an SPDX expression in the project. A choice is only valid for licenses combined with the SPDX operator `OR`.
 The choices are applied in the evaluator, and the reporter to the effective license of a package, which is calculated by
-the chosen [LicenseView](../model/src/main/kotlin/licenses/LicenseView.kt).
+the chosen [LicenseView](https://github.com/oss-review-toolkit/ort/blob/main/model/src/main/kotlin/licenses/LicenseView.kt).
 
 ### License Choice by Package
 
