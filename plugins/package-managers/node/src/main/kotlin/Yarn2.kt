@@ -80,7 +80,7 @@ private enum class YarnDependencyType(val type: String) {
 }
 
 /**
- * The [Yarn 2+](https://next.yarnpkg.com/) package manager for JavaScript.
+ * The [Yarn 2+](https://v2.yarnpkg.com/) package manager for JavaScript.
  *
  * This package manager supports the following [options][PackageManagerConfiguration.options]:
  * - *disableRegistryCertificateVerification*: If true, the `yarn npm info` commands called by this package manager will

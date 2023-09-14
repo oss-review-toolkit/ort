@@ -385,7 +385,7 @@ supported:
   * [PNPM](https://pnpm.io/) (limitations:
     [no peer dependencies](https://github.com/oss-review-toolkit/ort/issues/95))
   * [Yarn 1](https://classic.yarnpkg.com/)
-  * [Yarn 2+](https://next.yarnpkg.com/)
+  * [Yarn 2+](https://v2.yarnpkg.com/)
 * .NET
   * [DotNet](https://docs.microsoft.com/en-us/dotnet/core/tools/) (limitations:
     [no floating versions / ranges](https://github.com/oss-review-toolkit/ort/pull/1303#issue-253860146),
