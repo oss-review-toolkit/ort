@@ -21,9 +21,6 @@ plugins {
     // Apply core plugins.
     `maven-publish`
     signing
-
-    // Apply precompiled plugins.
-    id("ort-kotlin-conventions")
 }
 
 configure<PublishingExtension> {
