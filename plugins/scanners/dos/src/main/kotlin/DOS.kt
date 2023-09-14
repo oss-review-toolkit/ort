@@ -61,7 +61,7 @@ class DOS internal constructor(
 
         // Decide which provenance type this package is
         val provenance: Provenance
-        if (pkg.vcsProcessed != VcsInfo.EMPTY) {
+        if (pkg.vcsProcessed != VcsInfo.EMPTY && pkg.vcsProcessed.revision != "") {
             provenance = RepositoryProvenance(pkg.vcsProcessed, pkg.vcsProcessed.revision)
         } else if (pkg.sourceArtifact != RemoteArtifact.EMPTY) {
             provenance = ArtifactProvenance(pkg.sourceArtifact)
