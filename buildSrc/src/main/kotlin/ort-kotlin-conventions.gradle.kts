@@ -84,9 +84,6 @@ kotlin.target.compilations.apply {
 
 configurations.all {
     resolutionStrategy {
-        // Ensure all OkHttp versions match our version >= 4 to avoid Kotlin vs. Java issues with OkHttp 3.
-        force(libs.okhttp)
-
         // Ensure all JRuby versions match our version to avoid Psych YAML library issues.
         force(libs.jruby)
 
