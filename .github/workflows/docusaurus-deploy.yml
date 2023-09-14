@@ -1,0 +1,39 @@
+name: Docusaurus Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Docusaurus Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: docusaurus/package-lock.json
+      - name: Install dependencies
+        run: npm install
+        working-directory: docusaurus
+      - name: Build website
+        run: npm run build
+        working-directory: docusaurus
+      - uses: actions/upload-pages-artifact@v2
+        with:
+          path: docusaurus/build
+  deploy:
+    name: Docusaurus Deploy
+    needs: build
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/deploy-pages@v2
