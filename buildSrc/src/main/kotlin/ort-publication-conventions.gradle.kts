@@ -43,6 +43,18 @@ configure<PublishingExtension> {
             artifact(tasks["docsJavadocJar"])
 
             pom {
+                name = project.name
+                description = "Part of the OSS Review Toolkit (ORT), a suite to automate software compliance checks."
+                url = "https://oss-review-toolkit.org/"
+
+                developers {
+                    developer {
+                        name = "The ORT Project Authors"
+                        email = "ort@ossreviewtoolkit.org"
+                        url = "https://github.com/oss-review-toolkit/ort/blob/main/NOTICE"
+                    }
+                }
+
                 licenses {
                     license {
                         name = "Apache-2.0"
