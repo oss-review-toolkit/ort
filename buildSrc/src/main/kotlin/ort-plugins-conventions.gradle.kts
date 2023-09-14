@@ -24,6 +24,7 @@ plugins {
 
     // Apply precompiled plugins.
     id("ort-base-conventions")
+    id("ort-publication-conventions")
 }
 
 javaPlatform {
@@ -39,31 +40,5 @@ dependencies {
         it.name !in embeddedProjects
     }.forEach {
         api(it)
-    }
-}
-
-configure<PublishingExtension> {
-    publications {
-        create<MavenPublication>(name) {
-            groupId = "org.ossreviewtoolkit.plugins"
-
-            from(components["javaPlatform"])
-
-            pom {
-                licenses {
-                    license {
-                        name = "Apache-2.0"
-                        url = "https://www.apache.org/licenses/LICENSE-2.0"
-                    }
-                }
-
-                scm {
-                    connection = "scm:git:https://github.com/oss-review-toolkit/ort.git"
-                    developerConnection = "scm:git:git@github.com:oss-review-toolkit/ort.git"
-                    tag = version.toString()
-                    url = "https://github.com/oss-review-toolkit/ort"
-                }
-            }
-        }
     }
 }
