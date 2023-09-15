@@ -47,6 +47,7 @@ object CopyrightableFiles {
     private val excludedExtensions = listOf(
         "css",
         "graphql",
+        "ico",
         "json",
         "md",
         "png",
