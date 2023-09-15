@@ -25,7 +25,10 @@ plugins {
 dependencies {
     api(project(":plugins:commands:command-api"))
 
+    implementation(project(":plugins:package-curation-providers:ort-config-package-curation-provider"))
+    implementation(project(":plugins:package-managers:nuget-package-manager"))
     implementation(project(":utils:common-utils"))
 
     implementation(libs.clikt)
+    implementation(libs.jacksonModuleKotlin)
 }
