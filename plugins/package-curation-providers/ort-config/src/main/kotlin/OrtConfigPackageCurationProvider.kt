@@ -82,7 +82,7 @@ open class OrtConfigPackageCurationProvider : PackageCurationProvider {
  * The path must be aligned with the
  * [conventions for the ort-config repository](https://github.com/oss-review-toolkit/ort-config#curations).
  */
-private fun Identifier.toCurationPath() = "${type.encodeOr("_")}/${namespace.encodeOr("_")}/${name.encodeOr("_")}.yml"
+fun Identifier.toCurationPath() = "${type.encodeOr("_")}/${namespace.encodeOr("_")}/${name.encodeOr("_")}.yml"
 
 private fun updateOrtConfig(dir: File) {
     dir.safeMkdirs()
