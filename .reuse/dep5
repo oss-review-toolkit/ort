@@ -56,8 +56,12 @@ Files: clients/github-graphql/src/main/assets/*
 Copyright: 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
-Files: docusaurus/*
+Files: docs/*
 Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+License: Apache-2.0
+
+Files: docusaurus/*
+Copyright: 2023 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
 Files: examples/*
@@ -85,6 +89,10 @@ Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-tool
 License: Apache-2.0
 
 Files: plugins/reporters/web-app-template/*
+Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
+License: Apache-2.0
+
+Files: tutorial/*
 Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 

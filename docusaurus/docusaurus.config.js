@@ -39,12 +39,13 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
+          path: '../docs',
           routeBasePath: '/docs/',
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/oss-review-toolkit/ort/tree/main/docusaurus/',
+            'https://github.com/oss-review-toolkit/ort/tree/main/',
         },
         blog: false,
         theme: {
@@ -60,11 +61,11 @@ const config = {
       /** @type {import('@docusaurus/plugin-content-docs').Options} */
       ({
         id: 'tutorial',
-        path: 'tutorial',
+        path: '../tutorial',
         routeBasePath: '/tutorial/',
         sidebarPath: require.resolve('./sidebars.js'),
         editUrl:
-          'https://github.com/oss-review-toolkit/ort/tree/main/docusaurus/',
+          'https://github.com/oss-review-toolkit/ort/tree/main/',
       }),
     ]
   ],
