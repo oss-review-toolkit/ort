@@ -61,12 +61,6 @@ class ConfigCommand : OrtCommand(
     ).convert { it.expandTilde() }
         .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
 
-    private val hoconToYaml by option(
-        "--hocon-to-yaml",
-        help = "Perform a simple conversion of the given HOCON configuration file to YAML and print the result."
-    ).convert { it.expandTilde() }
-        .file(mustExist = true, canBeFile = true, canBeDir = false, mustBeWritable = false, mustBeReadable = true)
-
     private val mapper = YAMLMapper().apply {
         registerKotlinModule()
     }
@@ -103,44 +97,5 @@ class ConfigCommand : OrtCommand(
                 throw ProgramResult(2)
             }
         }
-
-        hoconToYaml?.run {
-            echo(convertHoconToYaml(readText()))
-        }
     }
-}
-
-private val curlyBraceToColonRegex = Regex("""^(\s*\w+)\s*\{$""")
-private val equalSignToColonRegex = Regex("""^(\s*\w+)\s*=\s*""")
-
-private fun convertHoconToYaml(hocon: String): String {
-    val yamlLines = mutableListOf<String>()
-
-    val hoconLines = hocon.lines().map { it.trimEnd() }
-    val i = hoconLines.iterator()
-
-    while (i.hasNext()) {
-        var line = i.next()
-        val trimmedLine = line.trimStart()
-
-        if (trimmedLine.startsWith("//")) {
-            line = line.replaceFirst("//", "#")
-        }
-
-        if (line.isEmpty() || trimmedLine.startsWith("#")) {
-            yamlLines += line
-            continue
-        }
-
-        if (trimmedLine.endsWith("}")) continue
-
-        line = line.replace(curlyBraceToColonRegex, "$1:")
-        line = line.replace(equalSignToColonRegex, "$1: ")
-
-        line = line.replace("\"", "'")
-
-        yamlLines += line
-    }
-
-    return yamlLines.joinToString("\n")
 }
