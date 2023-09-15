@@ -20,11 +20,13 @@
 import React from 'react';
 import clsx from 'clsx';
 import styles from './styles.module.css';
+import Link from "@docusaurus/Link";
 
 const FeatureList = [
     {
         title: 'Analyzer',
         Svg: require('@site/static/img/analyzer.svg').default,
+        link: 'docs/tools/analyzer',
         description: (
             <>
                 Get the dependencies of your projects, supporting over a dozen different package managers.
@@ -34,6 +36,7 @@ const FeatureList = [
     {
         title: 'Downloader',
         Svg: require('@site/static/img/downloader.svg').default,
+        link: 'docs/tools/downloader',
         description: (
             <>
                 Download the source code of your dependencies from version control systems or source artifacts.
@@ -43,6 +46,7 @@ const FeatureList = [
     {
         title: 'Scanner',
         Svg: require('@site/static/img/scanner.svg').default,
+        link: 'docs/tools/scanner',
         description: (
             <>
                 Scan the source code using the supported license, copyright, and snippet scanners.
@@ -52,6 +56,7 @@ const FeatureList = [
     {
         title: 'Advisor',
         Svg: require('@site/static/img/advisor.svg').default,
+        link: 'docs/tools/advisor',
         description: (
             <>
                 Get the vulnerabilities of your dependencies from different providers.
@@ -61,6 +66,7 @@ const FeatureList = [
     {
         title: 'Evaluator',
         Svg: require('@site/static/img/evaluator.svg').default,
+        link: 'docs/tools/evaluator',
         description: (
             <>
                 Apply custom policy rules against the gathered data using Kotlin scripting.
@@ -70,6 +76,7 @@ const FeatureList = [
     {
         title: 'Reporter',
         Svg: require('@site/static/img/reporter.svg').default,
+        link: 'docs/tools/reporter',
         description: (
             <>
                 Generate visual reports, open source notices, SBOMs, and more.
@@ -78,11 +85,13 @@ const FeatureList = [
     },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({Svg, title, link, description}) {
   return (
     <div className={clsx('col col--4')}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <Link to={link}>
+          <Svg className={styles.featureSvg} role="img" />
+        </Link>
       </div>
       <div className="text--center padding-horiz--md">
         <h3>{title}</h3>
