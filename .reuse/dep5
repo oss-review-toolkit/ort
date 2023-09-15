@@ -56,7 +56,7 @@ Files: clients/github-graphql/src/main/assets/*
 Copyright: 2021 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
-Files: docs/*
+Files: docusaurus/*
 Copyright: 2017 The ORT Project Authors (see <https://github.com/oss-review-toolkit/ort/blob/main/NOTICE>)
 License: Apache-2.0
 
