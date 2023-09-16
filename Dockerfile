@@ -22,7 +22,7 @@ ARG JAVA_VERSION=17
 ARG UBUNTU_VERSION=jammy
 
 # Use OpenJDK Eclipe Temurin Ubuntu LTS
-FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION as ort-base-image
+FROM eclipse-temurin:$JAVA_VERSION-jdk-$UBUNTU_VERSION as base
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -116,7 +116,7 @@ ENTRYPOINT [ "/bin/bash" ]
 
 #------------------------------------------------------------------------
 # PYTHON - Build Python as a separate component with pyenv
-FROM ort-base-image AS pythonbuild
+FROM base AS pythonbuild
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -174,7 +174,7 @@ COPY --from=pythonbuild /opt/python /opt/python
 
 #------------------------------------------------------------------------
 # NODEJS - Build NodeJS as a separate component with nvm
-FROM ort-base-image AS nodejsbuild
+FROM base AS nodejsbuild
 
 ARG BOWER_VERSION=1.8.12
 ARG NODEJS_VERSION=18.14.2
@@ -197,7 +197,7 @@ COPY --from=nodejsbuild /opt/nvm /opt/nvm
 
 #------------------------------------------------------------------------
 # RUBY - Build Ruby as a separate component with rbenv
-FROM ort-base-image AS rubybuild
+FROM base AS rubybuild
 
 # hadolint ignore=DL3004
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -232,7 +232,7 @@ COPY --from=rubybuild /opt/rbenv /opt/rbenv
 
 #------------------------------------------------------------------------
 # RUST - Build as a separate component
-FROM ort-base-image AS rustbuild
+FROM base AS rustbuild
 
 ARG RUST_VERSION=1.72.0
 
@@ -246,7 +246,7 @@ COPY --from=rustbuild /opt/rust /opt/rust
 
 #------------------------------------------------------------------------
 # GOLANG - Build as a separate component
-FROM ort-base-image AS gobuild
+FROM base AS gobuild
 
 ARG GO_DEP_VERSION=0.5.4
 ARG GO_VERSION=1.20.5
@@ -263,7 +263,7 @@ COPY --from=gobuild /opt/go /opt/go
 
 #------------------------------------------------------------------------
 # HASKELL STACK
-FROM ort-base-image AS haskellbuild
+FROM base AS haskellbuild
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -284,7 +284,7 @@ COPY --from=haskellbuild /opt/haskell /opt/haskell
 
 #------------------------------------------------------------------------
 # REPO / ANDROID SDK
-FROM ort-base-image AS androidbuild
+FROM base AS androidbuild
 
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
@@ -316,7 +316,7 @@ COPY --from=androidbuild /opt/android-sdk /opt/android-sdk
 
 #------------------------------------------------------------------------
 #  Dart
-FROM ort-base-image AS dartbuild
+FROM base AS dartbuild
 
 ARG DART_VERSION=2.18.4
 WORKDIR /opt/
@@ -336,7 +336,7 @@ COPY --from=dartbuild /opt/dart-sdk /opt/dart-sdk
 
 #------------------------------------------------------------------------
 # SBT
-FROM ort-base-image AS sbtbuild
+FROM base AS scalabuild
 
 ARG SBT_VERSION=1.6.1
 
@@ -345,12 +345,12 @@ ENV PATH=$PATH:$SBT_HOME/bin
 
 RUN curl -L https://github.com/sbt/sbt/releases/download/v$SBT_VERSION/sbt-$SBT_VERSION.tgz | tar -C /opt -xz
 
-FROM scratch AS sbt
-COPY --from=sbtbuild /opt/sbt /opt/sbt
+FROM scratch AS scala
+COPY --from=scalabuild /opt/sbt /opt/sbt
 
 #------------------------------------------------------------------------
 # SWIFT
-FROM ort-base-image AS swiftbuild
+FROM base AS swiftbuild
 
 ARG SWIFT_VERSION=5.8.1
 
@@ -372,7 +372,7 @@ COPY --from=swiftbuild /opt/swift /opt/swift
 
 #------------------------------------------------------------------------
 # DOTNET
-FROM ort-base-image AS dotnetbuild
+FROM base AS dotnetbuild
 
 ARG DOTNET_VERSION=6.0
 ARG NUGET_INSPECTOR_VERSION=0.9.12
@@ -401,7 +401,7 @@ COPY --from=dotnetbuild /opt/dotnet /opt/dotnet
 
 #------------------------------------------------------------------------
 # ORT
-FROM ort-base-image as ortbuild
+FROM base as ortbuild
 
 # Set this to the version ORT should report.
 ARG ORT_VERSION="DOCKER-SNAPSHOT"
@@ -429,7 +429,7 @@ COPY --from=ortbuild /opt/ort /opt/ort
 
 #------------------------------------------------------------------------
 # Main Minimal Runtime container
-FROM ort-base-image as run
+FROM base as run
 
 # Remove ort build scripts
 RUN [ -d /etc/scripts ] && sudo rm -rf /etc/scripts
@@ -486,6 +486,6 @@ USER $USER
 WORKDIR $HOME
 
 # Ensure that the ORT data directory exists to be able to mount the config into it with correct permissions.
-RUN mkdir -p "$HOMEDIR/.ort"
+RUN mkdir -p "$HOME/.ort"
 
 ENTRYPOINT ["/opt/ort/bin/ort"]

@@ -15,21 +15,19 @@
 # SPDX-License-Identifier: Apache-2.0
 # License-Filename: LICENSE
 
-name: Runtime Image
+name: MegaDocker Runtime Image
 
 on:
     workflow_dispatch:
     pull_request:
-        branches:
-            - main
+        paths:
+            - '.versions'
+            - 'Dockerfile'
     push:
         branches:
             - main
-    workflow_run:
-        workflows:
-            - 'Golang Image'
-        types:
-            - completed
+        tags:
+            - '*'
 
 env:
     REGISTRY: ghcr.io
@@ -37,7 +35,134 @@ env:
 permissions: write-all
 
 jobs:
-    build:
+    base_image:
+        name: Base Image
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build Base Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: base
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.JAVA_VERSION }}-jdk-${{ env.UBUNTU_VERSION }}"
+                    build-args: |
+                        JAVA_VERSION=${{ env.JAVA_VERSION }}
+                        UBUNTU_VERSION=${{ env.UBUNTU_VERSION }}
+
+    nodejs_image:
+        name: NodeJS Image
+        needs: [base_image]
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build NodeJS Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: nodejs
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.NODEJS_VERSION }}"
+                    build-args: |
+                        NODEJS_VERSION=${{ env.NODEJS_VERSION }}
+                        NPM_VERSION=${{ env.NPM_VERSION }}
+                        PNPM_VERSION=${{ env.PNPM_VERSION }}
+                        YARN_VERSION=${{ env.YARN_VERSION }}
+
+    python_image:
+        name: Python Image
+        needs: [base_image]
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build Python Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: python
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.PYTHON_VERSION }}"
+                    build-args: |
+                        CONAN_VERSION=${{ env.CONAN_VERSION }}
+                        PIPTOOL_VERSION=${{ env.PIPTOOL_VERSION }}
+                        PYENV_GIT_TAG=${{ env.PYENV_GIT_TAG }}
+                        PYTHON_INSPECTOR_VERSION=${{ env.PYTHON_INSPECTOR_VERSION }}
+                        PYTHON_PIPENV_VERSION=${{ env.PYTHON_PIPENV_VERSION }}
+                        PYTHON_POETRY_VERSION=${{ env.PYTHON_POETRY_VERSION }}
+                        PYTHON_VERSION=${{ env.PYTHON_VERSION }}
+                        SCANCODE_VERSION=${{ env.SCANCODE_VERSION }}
+
+    rust_image:
+        name: Rust Image
+        needs: [base_image]
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build Rust Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: rust
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.RUST_VERSION }}"
+                    build-args: |
+                        RUST_VERSION=${{ env.RUST_VERSION }}
+
+    ruby_image:
+        name: Ruby Image
+        needs: [base_image]
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build Ruby Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: ruby
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.RUBY_VERSION }}"
+                    build-args: |
+                        RUBY_VERSION=${{ env.RUBY_VERSION }}
+                        COCOAPODS_VERSION=${{ env.COCOAPODS_VERSION }}
+
+    golang_image:
+        name: Golang Image
+        needs: [base_image]
+        runs-on: ubuntu-22.04
+        steps:
+            -   name: Checkout default branch
+                uses: actions/checkout@v3
+            -   name: Set environment variables
+                run: |
+                    cat .versions >> $GITHUB_ENV
+            -   name: Build Golang Image
+                uses: ./.github/actions/ortdocker
+                with:
+                    name: golang
+                    token: ${{ secrets.GITHUB_TOKEN }}
+                    version: "${{ env.GO_VERSION }}"
+                    build-args: |
+                        GO_DEP_VERSION=${{ env.GO_DEP_VERSION }}
+                        GO_VERSION=${{ env.GO_VERSION }}
+
+    runtime_image:
+        needs: [base_image, nodejs_image, python_image, rust_image, ruby_image, golang_image]
         name: Build ORT runtime Image
         runs-on: ubuntu-22.04
         permissions:
@@ -50,7 +175,7 @@ jobs:
 
             -   name: Set environment variables
                 run: |
-                    cat .ortversions/nodejs.versions >> $GITHUB_ENV
+                    cat .versions >> $GITHUB_ENV
 
             -   name: Set up Docker Buildx
                 uses: docker/setup-buildx-action@v2
@@ -72,11 +197,12 @@ jobs:
                         type=raw,sha,enable=true,format=short
 
             -   name: Build ORT runtime container
+                if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
                 uses: docker/build-push-action@v4
                 with:
                     context: .
                     target: run
-                    push: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+                    push: true
                     load: false
                     build-args: |
                         NODEJS_VERSION=${{ env.NODEJS_VERSION }}
