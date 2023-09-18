@@ -13,12 +13,14 @@ on:
 
 jobs:
   publish:
+    env:
+      ORT_VERSION: ${{ inputs.tag || github.ref_name }}
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.tag || github.ref }}
+          ref: ${{ env.ORT_VERSION }}
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
