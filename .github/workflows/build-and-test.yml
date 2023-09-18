@@ -4,9 +4,15 @@ on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - docusaurus/**
+      - examples/**
   push:
     branches:
       - main
+    paths-ignore:
+      - docusaurus/**
+      - examples/**
 
 env:
   GRADLE_OPTS: -Dorg.gradle.daemon=false
