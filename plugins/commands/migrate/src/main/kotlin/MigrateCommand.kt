@@ -108,13 +108,14 @@ class MigrateCommand : OrtCommand(
             if (curationsWithFixedIds != curations) {
                 val oldPath = file.relativeTo(curationsDir).path
                 val newPath = curationsWithFixedIds.first().id.toCurationPath()
+                val newFile = curationsDir.resolve(newPath)
 
                 // TODO: Maybe make this optional to support layouts that do not follow ort-config conventions.
                 if (newPath != oldPath) {
                     curationsDir.resolve(oldPath).delete()
+                    newFile.parentFile.safeMkdirs()
                 }
 
-                val newFile = curationsDir.resolve(newPath).apply { parentFile.safeMkdirs() }
                 configYamlMapper.writeValue(newFile, curationsWithFixedIds)
             }
         }
