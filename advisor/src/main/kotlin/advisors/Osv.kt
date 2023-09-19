@@ -111,7 +111,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
             }
         }.onFailure {
             logger.error {
-                "Requesting vulnerabilities IDs for packages failed: ${it.collectMessages()}"
+                "Requesting vulnerability IDs for packages failed: ${it.collectMessages()}"
             }
         }
 
@@ -123,7 +123,7 @@ class Osv(name: String, config: OsvConfiguration) : AdviceProvider(name) {
 
         return result.getOrElse {
             logger.error {
-                "Requesting vulnerabilities IDs for packages failed: ${it.collectMessages()}"
+                "Requesting vulnerabilities for IDs failed: ${it.collectMessages()}"
             }
             emptyList()
         }
