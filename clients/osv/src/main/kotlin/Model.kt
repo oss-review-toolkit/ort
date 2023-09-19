@@ -164,7 +164,12 @@ data class Reference(
     enum class Type {
         ADVISORY,
         ARTICLE,
+        DETECTION,
+        DISCUSSION,
+        EVIDENCE,
         FIX,
+        GIT,
+        INTRODUCED,
         PACKAGE,
         REPORT,
         WEB
