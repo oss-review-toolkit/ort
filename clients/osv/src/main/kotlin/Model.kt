@@ -86,7 +86,20 @@ data class Affected(
 data class Credit(
     val name: String,
     val contact: List<String> = emptyList()
-)
+) {
+    enum class Type {
+        ANALYST,
+        COORDINATOR,
+        FINDER,
+        OTHER,
+        REMEDIATION_DEVELOPER,
+        REMEDIATION_REVIEWER,
+        REMEDIATION_VERIFIER,
+        REPORTER,
+        SPONSOR,
+        TOOL
+    }
+}
 
 /**
  * Defined package ecosystem values, see https://ossf.github.io/osv-schema/#affectedpackage-field.
@@ -182,6 +195,7 @@ data class Severity(
     val score: String
 ) {
     enum class Type {
+        CVSS_V2,
         CVSS_V3
     }
 }
