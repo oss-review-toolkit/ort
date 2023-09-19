@@ -92,6 +92,7 @@ class MigrateCommand : OrtCommand(
             }
         }.toMap()
 
+        val configsDir = getCommonParentFile(pkgConfigFiles.keys)
         candidateFiles -= pkgConfigFiles.keys
         echo("Skipping ${candidateFiles.size} files of unknown format.")
 
@@ -129,7 +130,18 @@ class MigrateCommand : OrtCommand(
             }
 
             if (configWithFixedId != config) {
-                configYamlMapper.writeValue(file, configWithFixedId)
+                val oldPath = file.relativeTo(configsDir).path
+                val newName = if (configWithFixedId.sourceArtifactUrl != null) "source-artifact" else "vcs"
+                val newPath = "${configWithFixedId.id.toPath(emptyValue = "_")}/$newName.yml"
+                val newFile = configsDir.resolve(newPath)
+
+                // TODO: Maybe make this optional to support layouts that do not follow ort-config conventions.
+                if (newPath != oldPath) {
+                    configsDir.resolve(oldPath).delete()
+                    newFile.parentFile.safeMkdirs()
+                }
+
+                configYamlMapper.writeValue(newFile, configWithFixedId)
             }
         }
     }
