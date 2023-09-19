@@ -114,7 +114,8 @@ class OsvService(serverUrl: String? = null, httpClient: OkHttpClient? = null) {
                 }
 
                 override fun onFailure(call: Call<Vulnerability>, t: Throwable) {
-                    failureThrowable.set(t)
+                    val exception = IOException("Could not get vulnerability information for '$id'.", t)
+                    failureThrowable.set(exception)
                     latch.countDown()
                 }
             })
