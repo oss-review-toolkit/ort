@@ -36,10 +36,9 @@ import kotlinx.serialization.json.JsonObject
 // 3. https://github.com/Kotlin/kotlinx.serialization/issues/1058
 
 /**
- * Implementation of the "Open Source Vulnerability format" according to schema version 1.3.0 (March 24, 2022), see
- * https://ossf.github.io/osv-schema/ which links to
- * https://github.com/ossf/osv-schema/blob/11524982426be469795b9c684ba340c5c90895d0/validation/schema.json which was
- * used as a reference.
+ * Implementation of the "Open Source Vulnerability format" according to schema version 1.6.0 (Aug 11, 2023), see
+ * https://github.com/ossf/osv-schema/blob/v1.6.0/validation/schema.json, also referenced from
+ * https://ossf.github.io/osv-schema/.
  *
  * For the documentation of all entities and properties please refer to above links.
  */
