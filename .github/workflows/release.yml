@@ -28,21 +28,19 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Publish to OSSRH
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
+        with:
+          gradle-home-cache-cleanup: true
+      - name: Publish to OSSRH
         env:
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
           SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
-        with:
-          gradle-home-cache-cleanup: true
-          arguments: publishAllPublicationsToOSSRHRepository
+        run: ./gradlew publishAllPublicationsToOSSRHRepository
       - name: Build ORT Distributions
-        uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-          arguments: :cli:distZip :helper-cli:distZip
+        run: ./gradlew :cli:distZip :helper-cli:distZip
       - name: Create GitHub Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
