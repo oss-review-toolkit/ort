@@ -151,7 +151,7 @@ jobs:
       with:
         distribution: temurin
         java-version: 17
-    - name: Restore Gradle cache entries
+    - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
     - name: Validate Batect wrapper scripts
       uses: batect/batect-wrapper-validation-action@v0
