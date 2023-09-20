@@ -21,26 +21,26 @@ project:
     - id: "SPM:apple:swift-crypto:2.6.0"
     - id: "SPM:apple:swift-log:1.5.3"
     - id: "SPM:apple:swift-metrics:2.4.1"
-    - id: "SPM:apple:swift-nio:2.58.0"
+    - id: "SPM:apple:swift-nio:2.59.0"
       dependencies:
       - id: "SPM:apple:swift-atomics:1.1.0"
       - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:apple:swift-nio-extras:1.19.0"
       dependencies:
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:apple:swift-nio-http2:1.27.0"
       dependencies:
       - id: "SPM:apple:swift-atomics:1.1.0"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:apple:swift-nio-ssl:2.25.0"
       dependencies:
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
@@ -48,33 +48,33 @@ project:
       dependencies:
       - id: "SPM:apple:swift-atomics:1.1.0"
       - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-extras:1.19.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-http2:1.27.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-ssl:2.25.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-transport-services:1.19.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
@@ -86,21 +86,21 @@ project:
         - id: "SPM:apple:swift-numerics:1.0.2"
       - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:vapor:console-kit:4.8.0"
       dependencies:
       - id: "SPM:apple:swift-log:1.5.3"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
     - id: "SPM:vapor:multipart-kit:4.5.4"
       dependencies:
       - id: "SPM:apple:swift-collections:1.0.4"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
@@ -110,26 +110,26 @@ project:
     - id: "SPM:vapor:websocket-kit:2.14.0"
       dependencies:
       - id: "SPM:apple:swift-atomics:1.1.0"
-      - id: "SPM:apple:swift-nio:2.58.0"
+      - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-extras:1.19.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-ssl:2.25.0"
         dependencies:
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
       - id: "SPM:apple:swift-nio-transport-services:1.19.0"
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
-        - id: "SPM:apple:swift-nio:2.58.0"
+        - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
           - id: "SPM:apple:swift-atomics:1.1.0"
           - id: "SPM:apple:swift-collections:1.0.4"
@@ -302,8 +302,8 @@ packages:
     url: "https://github.com/apple/swift-metrics.git"
     revision: "2.4.1"
     path: ""
-- id: "SPM:apple:swift-nio:2.58.0"
-  purl: "pkg:swift/apple/swift-nio@2.58.0"
+- id: "SPM:apple:swift-nio:2.59.0"
+  purl: "pkg:swift/apple/swift-nio@2.59.0"
   authors:
   - "apple"
   declared_licenses: []
@@ -323,12 +323,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio.git"
-    revision: "2.58.0"
+    revision: "2.59.0"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio.git"
-    revision: "2.58.0"
+    revision: "2.59.0"
     path: ""
 - id: "SPM:apple:swift-nio-extras:1.19.0"
   purl: "pkg:swift/apple/swift-nio-extras@1.19.0"
