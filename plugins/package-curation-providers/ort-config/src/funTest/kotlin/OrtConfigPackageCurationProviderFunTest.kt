@@ -29,8 +29,8 @@ import org.ossreviewtoolkit.model.Package
 
 class OrtConfigPackageCurationProviderFunTest : StringSpec({
     "provider can load curations from the ort-config repository" {
-        val azureCore = Identifier("NuGet::Azure.Core:1.22.0")
-        val azureCoreAmqp = Identifier("NuGet::Azure.Core.Amqp:1.2.0")
+        val azureCore = Identifier("NuGet:Azure:Core:1.22.0")
+        val azureCoreAmqp = Identifier("NuGet:Azure.Core:Amqp:1.2.0")
         val packages = createPackagesFromIds(azureCore, azureCoreAmqp)
 
         val curations = OrtConfigPackageCurationProvider().getCurationsFor(packages)
