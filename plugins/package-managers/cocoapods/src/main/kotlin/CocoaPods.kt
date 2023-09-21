@@ -197,7 +197,6 @@ class CocoaPods(
                 "spec", "which", podspecName,
                 "--version=${id.version}",
                 "--allow-root",
-                "--regex",
                 workingDir = workingDir
             )
         }.getOrElse {
