@@ -229,7 +229,10 @@ private const val LOCKFILE_FILENAME = "Podfile.lock"
 
 private const val SCOPE_NAME = "dependencies"
 
-private val NAME_AND_VERSION_REGEX = "(\\S+)\\s+(.*)".toRegex()
+private fun parseNameAndVersion(entry: String): Pair<String, String?> {
+    val info = entry.split(' ', limit = 2)
+    return info[0] to info.getOrNull(1)?.removeSurrounding("(", ")")
+}
 
 private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
     val versionForName = mutableMapOf<String, String>()
@@ -245,10 +248,8 @@ private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
             else -> node.textValue()
         }
 
-        val (name, version) = NAME_AND_VERSION_REGEX.find(entry)!!.groups.let {
-            it[1]!!.value to it[2]!!.value.removeSurrounding("(", ")")
-        }
-        versionForName[name] = version
+        val (name, version) = parseNameAndVersion(entry)
+        versionForName[name] = checkNotNull(version)
 
         val dependencies = node[entry]?.map { it.textValue().substringBefore(" ") }.orEmpty()
         dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
