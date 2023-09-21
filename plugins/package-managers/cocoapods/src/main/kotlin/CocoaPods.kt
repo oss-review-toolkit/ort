@@ -231,7 +231,13 @@ private const val SCOPE_NAME = "dependencies"
 
 private fun parseNameAndVersion(entry: String): Pair<String, String?> {
     val info = entry.split(' ', limit = 2)
-    return info[0] to info.getOrNull(1)?.removeSurrounding("(", ")")
+    val name = info[0]
+
+    // A version entry could look something like "(6.3.0)", "(= 2021.06.28.00-v2)", "(~> 8.15.0)", etc. Also see
+    // https://guides.cocoapods.org/syntax/podfile.html#pod.
+    val version = info.getOrNull(1)?.removeSurrounding("(", ")")?.substringAfterLast(' ')
+
+    return name to version
 }
 
 private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
@@ -251,14 +257,18 @@ private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
         val (name, version) = parseNameAndVersion(entry)
         versionForName[name] = checkNotNull(version)
 
-        val dependencies = node[entry]?.map { it.textValue().substringBefore(" ") }.orEmpty()
+        val dependencies = node[entry]?.map { depNode ->
+            val (depName, depVersion) = parseNameAndVersion(depNode.textValue())
+            depName.also { if (depVersion != null) versionForName[it] = depVersion }
+        }.orEmpty()
+
         dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
     }
 
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
             id = Identifier("Pod", "", name, versionForName.getValue(name)),
-            dependencies = dependenciesForName.getValue(name).mapTo(mutableSetOf()) { createPackageReference(it) }
+            dependencies = dependenciesForName[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
         )
 
     return root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
