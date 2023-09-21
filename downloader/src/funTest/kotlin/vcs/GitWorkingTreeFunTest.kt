@@ -46,7 +46,7 @@ class GitWorkingTreeFunTest : StringSpec({
     }
 
     "Git detects non-working-trees" {
-        git.getWorkingTree(ortDataDirectory).isValid() shouldBe false
+        git.getWorkingTree(tempdir()).isValid() shouldBe false
     }
 
     "Detected Git working tree information is correct" {
