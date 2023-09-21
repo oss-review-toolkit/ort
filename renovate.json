@@ -15,6 +15,7 @@
   ],
   "ignorePaths": [
     "plugins/reporters/web-app-template",
+    "website",
     "**/src/funTest/assets/**",
     "**/src/test/assets/**"
   ],
