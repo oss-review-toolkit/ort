@@ -42,7 +42,7 @@ class OsvFunTest : StringSpec({
             "Go::github.com/nats-io/nats-server/v2:2.1.0",
             "Maven:com.jfinal:jfinal:1.4",
             "NPM::rebber:1.0.0",
-            "NuGet::Microsoft.ChakraCore:1.10.0",
+            "NuGet:Microsoft:ChakraCore:1.10.0",
             "Pub::http:0.13.1",
             "PyPI::Plone:3.2"
         ).mapTo(mutableSetOf()) {
