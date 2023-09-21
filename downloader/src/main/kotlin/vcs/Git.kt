@@ -239,6 +239,12 @@ class Git : VersionControlSystem(), CommandLineTool {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772 is implemented.
             run("checkout", revision, workingDir = workingTree.workingDir)
 
+            // In case of a non-fixed revision (branch or tag) reset the working tree to ensure that the previously
+            // fetched changes are applied.
+            if (!isFixedRevision(workingTree, revision).getOrThrow()) {
+                run("reset", "--hard", "FETCH_HEAD", workingDir = workingTree.workingDir)
+            }
+
             revision
         }
 
