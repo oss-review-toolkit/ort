@@ -194,7 +194,7 @@ class CocoaPods(
 
         val podspecCommand = runCatching {
             run(
-                "spec", "which", podspecName,
+                "spec", "which", "^$podspecName$",
                 "--version=${id.version}",
                 "--allow-root",
                 "--regex",
