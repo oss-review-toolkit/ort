@@ -236,6 +236,9 @@ private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
     val dependenciesForName = mutableMapOf<String, MutableSet<String>>()
     val root = yamlMapper.readTree(podfileLock)
 
+    // The "PODS" section lists the direct dependencies and, if applicable, their direct dependencies each. That is, the
+    // nesting never goes deeper than two levels, and in order to build up a full dependency tree, one needs to
+    // recursively step through all direct dependencies.
     root.get("PODS").asIterable().forEach { node ->
         val entry = when (node) {
             is ObjectNode -> node.fieldNames().asSequence().first()
