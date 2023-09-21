@@ -194,7 +194,7 @@ class CocoaPods(
 
         val podspecCommand = runCatching {
             run(
-                "spec", "which", podspecName,
+                "spec", "which", "^$podspecName$",
                 "--version=${id.version}",
                 "--allow-root",
                 "--regex",
@@ -249,6 +249,26 @@ private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
 
         val dependencies = node[entry]?.map { it.textValue().substringBefore(" ") }.orEmpty()
         dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
+
+        // If this node has sub dependencies, append them to the dependency tracking.
+        // Sub dependencies are additional dependencies that are required.
+        // For more details, refer to issue #7523.
+        if (node is ObjectNode) {
+            val subEntries = node[entry].map { it.textValue() }
+            subEntries.filter { it.contains("(= ") }.forEach { subEntry ->
+                val (subDependencyName, subDependencyVersion) = NAME_AND_VERSION_REGEX.find(subEntry)!!.groups.let {
+                    it[1]!!.value to it[2]!!.value.removeSurrounding("(= ", ")")
+                }
+
+                // Add sub dependency if it's not already tracked
+                if (!versionForName.containsKey(subDependencyName)) {
+                    versionForName[subDependencyName] = subDependencyVersion
+
+                    val subDependencies = node[subEntry]?.map { it.textValue().substringBefore(" ") }.orEmpty()
+                    dependenciesForName.getOrPut(subDependencyName) { mutableSetOf() } += subDependencies
+                }
+            }
+        }
     }
 
     fun createPackageReference(name: String): PackageReference =
