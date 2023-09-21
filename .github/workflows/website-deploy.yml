@@ -1,4 +1,4 @@
-name: Docusaurus Deploy
+name: Website Deploy
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    name: Docusaurus Build
+    name: Website Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,18 +15,18 @@ jobs:
         with:
           node-version: 18
           cache: npm
-          cache-dependency-path: docusaurus/package-lock.json
+          cache-dependency-path: website/package-lock.json
       - name: Install dependencies
         run: npm ci
-        working-directory: docusaurus
+        working-directory: website
       - name: Build website
         run: npm run build
-        working-directory: docusaurus
+        working-directory: website
       - uses: actions/upload-pages-artifact@v2
         with:
-          path: docusaurus/build
+          path: website/build
   deploy:
-    name: Docusaurus Deploy
+    name: Website Deploy
     needs: build
     permissions:
       pages: write
