@@ -127,10 +127,12 @@ class CocoaPods(
         val issues = mutableListOf<Issue>()
 
         if (lockfile.isFile) {
-            val dependencies = getPackageReferences(lockfile)
+            val lockfileData = parseLockfile(lockfile)
 
-            scopes += Scope(SCOPE_NAME, dependencies)
-            packages += scopes.flatMap { it.collectDependencies() }.map { getPackage(it, workingDir) }
+            scopes += Scope(SCOPE_NAME, lockfileData.dependencies)
+            packages += scopes.flatMap { it.collectDependencies() }.map {
+                lockfileData.externalSources[it] ?: getPackage(it, workingDir)
+            }
         } else {
             issues += createAndLogIssue(
                 source = managerName,
@@ -240,7 +242,12 @@ private fun parseNameAndVersion(entry: String): Pair<String, String?> {
     return name to version
 }
 
-private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
+private data class LockfileData(
+    val dependencies: Set<PackageReference>,
+    val externalSources: Map<Identifier, Package>
+)
+
+private fun parseLockfile(podfileLock: File): LockfileData {
     val versionForName = mutableMapOf<String, String>()
     val dependenciesForName = mutableMapOf<String, MutableSet<String>>()
     val root = yamlMapper.readTree(podfileLock)
@@ -265,16 +272,44 @@ private fun getPackageReferences(podfileLock: File): Set<PackageReference> {
         dependenciesForName.getOrPut(name) { mutableSetOf() } += dependencies
     }
 
+    val externalSources = root.get("CHECKOUT OPTIONS")?.fields()?.asSequence()?.mapNotNull {
+        val checkout = it.value as ObjectNode
+        val url = checkout[":git"]?.textValue() ?: return@mapNotNull null
+        val revision = checkout[":commit"].textValueOrEmpty()
+
+        // The version written to the lockfile matches the version specified in the project's ".podspec" file at the
+        // given revision, so the same version might be used in different revisions. To still get a unique identifier,
+        // append the revision to the version.
+        val versionFromPodspec = checkNotNull(versionForName[it.key])
+        val uniqueVersion = "$versionFromPodspec-$revision"
+        val id = Identifier("Pod", "", it.key, uniqueVersion)
+
+        // Write the unique version back for correctly associating dependencies below.
+        versionForName[it.key] = uniqueVersion
+
+        id to Package(
+            id = id,
+            declaredLicenses = emptySet(),
+            description = "",
+            homepageUrl = url,
+            binaryArtifact = RemoteArtifact.EMPTY,
+            sourceArtifact = RemoteArtifact.EMPTY,
+            vcs = VcsInfo(VcsType.GIT, url, revision)
+        )
+    }?.toMap()
+
     fun createPackageReference(name: String): PackageReference =
         PackageReference(
             id = Identifier("Pod", "", name, versionForName.getValue(name)),
             dependencies = dependenciesForName[name].orEmpty().mapTo(mutableSetOf()) { createPackageReference(it) }
         )
 
-    return root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
+    val dependencies = root.get("DEPENDENCIES").mapTo(mutableSetOf()) { node ->
         val name = node.textValue().substringBefore(" ")
         createPackageReference(name)
     }
+
+    return LockfileData(dependencies, externalSources.orEmpty())
 }
 
 @JsonIgnoreProperties(ignoreUnknown = true)
