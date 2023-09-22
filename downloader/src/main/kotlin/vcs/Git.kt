@@ -174,7 +174,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             Git(this).use { git ->
                 logger.info { "Updating working tree from '${workingTree.getRemoteUrl()}'." }
 
-                updateWorkingTreeWithoutSubmodules(git, revision).mapCatching {
+                updateWorkingTreeWithoutSubmodules(workingTree, git, revision).mapCatching {
                     // In case this throws the exception gets encapsulated as a failure.
                     if (recursive) updateSubmodules(workingTree)
 
@@ -183,7 +183,11 @@ class Git : VersionControlSystem(), CommandLineTool {
             }
         }
 
-    private fun updateWorkingTreeWithoutSubmodules(git: Git, revision: String): Result<String> =
+    private fun updateWorkingTreeWithoutSubmodules(
+        workingTree: WorkingTree,
+        git: Git,
+        revision: String
+    ): Result<String> =
         runCatching {
             logger.info { "Trying to fetch only revision '$revision' with depth limited to $GIT_HISTORY_DEPTH." }
 
@@ -222,7 +226,6 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.info { "Could not fetch everything using JGit: ${it.collectMessages()}" }
             logger.info { "Falling back to Git CLI." }
 
-            val workingTree = GitWorkingTree(git.repository.workTree, VcsType.GIT)
             if (workingTree.isShallow()) {
                 workingTree.runGit("fetch", "--unshallow", "--tags", "origin")
             } else {
@@ -234,7 +237,7 @@ class Git : VersionControlSystem(), CommandLineTool {
             logger.warn { "Failed to fetch everything: ${it.collectMessages()}" }
         }.mapCatching {
             // TODO: Migrate this to JGit once https://bugs.eclipse.org/bugs/show_bug.cgi?id=383772 is implemented.
-            run("checkout", revision, workingDir = git.repository.workTree)
+            run("checkout", revision, workingDir = workingTree.workingDir)
 
             revision
         }
