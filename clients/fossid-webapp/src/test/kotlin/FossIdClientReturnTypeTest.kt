@@ -31,6 +31,7 @@ import io.kotest.matchers.shouldNot
 import io.kotest.matchers.types.shouldBeTypeOf
 
 import org.ossreviewtoolkit.clients.fossid.model.Scan
+import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.identification.identifiedFiles.IdentifiedFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.ignored.IgnoredFile
 import org.ossreviewtoolkit.clients.fossid.model.identification.markedAsIdentified.MarkedAsIdentifiedFile
@@ -276,6 +277,32 @@ class FossIdClientReturnTypeTest : StringSpec({
             false
         ).shouldNotBeNull().run {
             checkResponse("unmark file as identified")
+        }
+    }
+
+    "A license identification can be added to a file" {
+        service.addLicenseIdentification(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Range.java",
+            "Apache-2.0",
+            LicenseMatchType.SNIPPET,
+            false
+        ).shouldNotBeNull().run {
+            checkResponse("add license identification")
+        }
+    }
+
+    "A comment can be added to a file" {
+        service.addFileComment(
+            "",
+            "",
+            SCAN_CODE_1,
+            "src/main/java/com/vdurmont/semver4j/Range.java",
+            "TestORT"
+        ).shouldNotBeNull().run {
+            checkResponse("add file comment")
         }
     }
 })
