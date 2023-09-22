@@ -129,7 +129,7 @@ class RequirementsCommand : OrtCommand(
                             val actualVersion = tool.getVersion()
                             runCatching {
                                 val isRequiredVersion = tool.getVersionRequirement().let {
-                                    Semver.coerce(actualVersion).satisfies(it)
+                                    Semver.coerce(actualVersion)?.satisfies(it) == true
                                 }
 
                                 if (isRequiredVersion) {

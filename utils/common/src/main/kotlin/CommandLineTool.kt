@@ -104,7 +104,7 @@ interface CommandLineTool {
         val actualVersion = Semver.coerce(getVersion(workingDir))
         val requiredVersion = getVersionRequirement()
 
-        if (!actualVersion.satisfies(requiredVersion)) {
+        if (actualVersion?.satisfies(requiredVersion) != true) {
             logger.warn {
                 "The command is required in version $requiredVersion, but you are using version $actualVersion. This " +
                     "could lead to problems."

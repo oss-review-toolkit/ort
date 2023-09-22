@@ -80,7 +80,7 @@ data class PackageCuration(
                     "'${id.version}' is not a valid version range."
                 }
 
-                return Semver.coerce(pkgId.version).satisfies(range)
+                return Semver.coerce(pkgId.version)?.satisfies(range) == true
             }
 
             return false
