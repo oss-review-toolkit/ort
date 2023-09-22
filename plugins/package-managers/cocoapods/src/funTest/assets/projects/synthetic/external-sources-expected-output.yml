@@ -1,0 +1,286 @@
+---
+project:
+  id: "CocoaPods::src/funTest/assets/projects/synthetic/external-sources/Podfile:"
+  definition_file_path: "plugins/package-managers/cocoapods/src/funTest/assets/projects/synthetic/external-sources/Podfile"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  vcs:
+    type: ""
+    url: ""
+    revision: ""
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "<REPLACE_URL_PROCESSED>"
+    revision: "<REPLACE_REVISION>"
+    path: "<REPLACE_PATH>"
+  homepage_url: ""
+  scopes:
+  - name: "dependencies"
+    dependencies:
+    - id: "Pod::AFNetworking:3.2.1"
+      dependencies:
+      - id: "Pod::AFNetworking/NSURLSession:3.2.1"
+        dependencies:
+        - id: "Pod::AFNetworking/Reachability:3.2.1"
+        - id: "Pod::AFNetworking/Security:3.2.1"
+        - id: "Pod::AFNetworking/Serialization:3.2.1"
+      - id: "Pod::AFNetworking/Reachability:3.2.1"
+      - id: "Pod::AFNetworking/Security:3.2.1"
+      - id: "Pod::AFNetworking/Serialization:3.2.1"
+      - id: "Pod::AFNetworking/UIKit:3.2.1"
+    - id: "Pod::CocoaSecurity:1.2.4"
+    - id: "Pod::MLHudAlert:0.0.4-3f23fa41632f8935fed028b04335576633ec53a2"
+    - id: "Pod::Ono:2.1.1"
+packages:
+- id: "Pod::AFNetworking:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::AFNetworking/NSURLSession:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking%2FNSURLSession@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::AFNetworking/Reachability:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking%2FReachability@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::AFNetworking/Security:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking%2FSecurity@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::AFNetworking/Serialization:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking%2FSerialization@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::AFNetworking/UIKit:3.2.1"
+  purl: "pkg:cocoapods/AFNetworking%2FUIKit@3.2.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A delightful iOS and OS X networking framework."
+  homepage_url: "https://github.com/AFNetworking/AFNetworking"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/AFNetworking/AFNetworking.git"
+    revision: "3.2.1"
+    path: ""
+- id: "Pod::CocoaSecurity:1.2.4"
+  purl: "pkg:cocoapods/CocoaSecurity@1.2.4"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "Encrypt/Decrypt: AES. Hash: MD5, SHA(SHA1, SHA224, SHA256, SHA384,\
+    \ SHA512). Encode/Decode: Base64, Hex."
+  homepage_url: "https://github.com/kelp404/CocoaSecurity.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/kelp404/CocoaSecurity.git"
+    revision: "1.2.4"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/kelp404/CocoaSecurity.git"
+    revision: "1.2.4"
+    path: ""
+- id: "Pod::MLHudAlert:0.0.4-3f23fa41632f8935fed028b04335576633ec53a2"
+  purl: "pkg:cocoapods/MLHudAlert@0.0.4-3f23fa41632f8935fed028b04335576633ec53a2"
+  declared_licenses: []
+  declared_licenses_processed: {}
+  description: ""
+  homepage_url: "https://github.com/MacLabs/MLHudAlert.git"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/MacLabs/MLHudAlert.git"
+    revision: "3f23fa41632f8935fed028b04335576633ec53a2"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/MacLabs/MLHudAlert.git"
+    revision: "3f23fa41632f8935fed028b04335576633ec53a2"
+    path: ""
+- id: "Pod::Ono:2.1.1"
+  purl: "pkg:cocoapods/Ono@2.1.1"
+  declared_licenses:
+  - "MIT"
+  declared_licenses_processed:
+    spdx_expression: "MIT"
+  description: "A sensible way to deal with XML & HTML."
+  homepage_url: "https://github.com/mattt/Ono"
+  binary_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  source_artifact:
+    url: ""
+    hash:
+      value: ""
+      algorithm: ""
+  vcs:
+    type: "Git"
+    url: "https://github.com/mattt/Ono.git"
+    revision: "2.1.1"
+    path: ""
+  vcs_processed:
+    type: "Git"
+    url: "https://github.com/mattt/Ono.git"
+    revision: "2.1.1"
+    path: ""

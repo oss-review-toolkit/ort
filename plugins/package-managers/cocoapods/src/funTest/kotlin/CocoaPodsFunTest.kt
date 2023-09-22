@@ -49,6 +49,15 @@ class CocoaPodsFunTest : WordSpec({
             result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
         }
 
+        "determine dependencies from a Podfile with a external sources" {
+            val definitionFile = getAssetFile("projects/synthetic/external-sources/Podfile")
+            val expectedResultFile = getAssetFile("projects/synthetic/external-sources-expected-output.yml")
+
+            val result = create("CocoaPods").resolveSingleProject(definitionFile)
+
+            result.toYaml() should matchExpectedResult(expectedResultFile, definitionFile)
+        }
+
         "return no dependencies along with an issue if the lockfile is absent" {
             val definitionFile = getAssetFile("projects/synthetic/no-lockfile/Podfile")
             val expectedResultFile = getAssetFile("projects/synthetic/no-lockfile-expected-output.yml")
