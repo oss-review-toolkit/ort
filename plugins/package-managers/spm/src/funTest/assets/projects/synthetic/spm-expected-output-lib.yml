@@ -25,7 +25,7 @@ project:
       dependencies:
       - id: "SPM:apple:swift-atomics:1.1.0"
       - id: "SPM:apple:swift-collections:1.0.4"
-    - id: "SPM:apple:swift-nio-extras:1.19.0"
+    - id: "SPM:apple:swift-nio-extras:1.19.1"
       dependencies:
       - id: "SPM:apple:swift-nio:2.59.0"
         dependencies:
@@ -52,7 +52,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
-      - id: "SPM:apple:swift-nio-extras:1.19.0"
+      - id: "SPM:apple:swift-nio-extras:1.19.1"
         dependencies:
         - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
@@ -114,7 +114,7 @@ project:
         dependencies:
         - id: "SPM:apple:swift-atomics:1.1.0"
         - id: "SPM:apple:swift-collections:1.0.4"
-      - id: "SPM:apple:swift-nio-extras:1.19.0"
+      - id: "SPM:apple:swift-nio-extras:1.19.1"
         dependencies:
         - id: "SPM:apple:swift-nio:2.59.0"
           dependencies:
@@ -330,8 +330,8 @@ packages:
     url: "https://github.com/apple/swift-nio.git"
     revision: "2.59.0"
     path: ""
-- id: "SPM:apple:swift-nio-extras:1.19.0"
-  purl: "pkg:swift/apple/swift-nio-extras@1.19.0"
+- id: "SPM:apple:swift-nio-extras:1.19.1"
+  purl: "pkg:swift/apple/swift-nio-extras@1.19.1"
   authors:
   - "apple"
   declared_licenses: []
@@ -351,12 +351,12 @@ packages:
   vcs:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.19.0"
+    revision: "1.19.1"
     path: ""
   vcs_processed:
     type: "Git"
     url: "https://github.com/apple/swift-nio-extras.git"
-    revision: "1.19.0"
+    revision: "1.19.1"
     path: ""
 - id: "SPM:apple:swift-nio-http2:1.27.0"
   purl: "pkg:swift/apple/swift-nio-http2@1.27.0"
