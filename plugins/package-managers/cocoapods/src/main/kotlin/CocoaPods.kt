@@ -102,7 +102,7 @@ class CocoaPods(
     override fun beforeResolution(definitionFiles: List<File>) = checkVersion()
 
     override fun resolveDependencies(definitionFile: File, labels: Map<String, String>): List<ProjectAnalyzerResult> {
-        return stashDirectories(File("~/.cocoapods/repos")).use {
+        return stashDirectories(Os.userHomeDirectory.resolve(".cocoapods/repos")).use {
             // Ensure to use the CDN instead of the monolithic specs repo.
             run("repo", "add-cdn", "trunk", "https://cdn.cocoapods.org", "--allow-root")
 
