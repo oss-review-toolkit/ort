@@ -24,7 +24,10 @@ internal data class DOSConfig(
     val pollInterval: Int,
 
     /** Backend REST messaging timeout **/
-    val restTimeout: Int
+    val restTimeout: Int,
+
+    /** The URL where the DOS / package curation front-end is running. **/
+    val frontendUrl: String
 ) {
     companion object: Logging {
         /** Name of the configuration property for the server URL. **/
@@ -35,6 +38,9 @@ internal data class DOSConfig(
 
         /** Name of the configuration property for the REST timeout. **/
         private const val REST_TIMEOUT_PROPERTY = "restTimeout"
+
+        /** Name of the configuration property for the curation front-end URL. **/
+        private const val FRONT_END_URL_PROPERTY = "frontendUrl"
 
         private const val DEFAULT_SERVER_URL = "https://double-open-server.herokuapp.com/api/"
         private const val DEFAULT_POLLING_INTERVAL = 5
@@ -62,11 +68,14 @@ internal data class DOSConfig(
                 "REST timeout must be >= $DEFAULT_REST_TIMEOUT, current value is $restTimeout"
             }
 
+            val frontendUrl = dosScannerOptions?.get(FRONT_END_URL_PROPERTY) ?: ""
+
             return DOSConfig(
                 serverUrl,
                 serverToken,
                 pollInterval,
-                restTimeout
+                restTimeout,
+                frontendUrl
             )
         }
     }
