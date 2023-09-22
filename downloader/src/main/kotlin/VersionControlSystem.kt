@@ -410,6 +410,6 @@ abstract class VersionControlSystem(
      */
     fun isAtLeastVersion(expectedVersion: String): Boolean {
         val actualVersion = Semver.coerce(getVersion())
-        return actualVersion.isGreaterThanOrEqualTo(Semver.coerce(expectedVersion))
+        return Semver.coerce(expectedVersion)?.let { actualVersion?.isGreaterThanOrEqualTo(it) } == true
     }
 }
