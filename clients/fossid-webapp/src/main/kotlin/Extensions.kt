@@ -27,6 +27,7 @@ import java.util.Base64
 import okio.buffer
 import okio.sink
 
+import org.ossreviewtoolkit.clients.fossid.model.identification.common.LicenseMatchType
 import org.ossreviewtoolkit.clients.fossid.model.report.ReportType
 import org.ossreviewtoolkit.clients.fossid.model.report.SelectionType
 import org.ossreviewtoolkit.clients.fossid.model.result.MatchedLines
@@ -494,6 +495,73 @@ suspend fun FossIdRestService.unmarkAsIdentified(
             user,
             apiKey,
             mapOf("scan_code" to scanCode, "path" to base64Path, "is_directory" to directoryFlag)
+        )
+    )
+}
+
+/**
+ * Add license identification [licenseIdentifier] to file with [path] for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.addLicenseIdentification(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    licenseIdentifier: String,
+    identificationOn: LicenseMatchType,
+    isDirectory: Boolean
+): EntityResponseBody<Nothing> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val directoryFlag = if (isDirectory) "1" else "0"
+    return addLicenseIdentification(
+        PostRequestBody(
+            "add_license_identification",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf(
+                "scan_code" to scanCode,
+                "path" to base64Path,
+                "license_identifier" to licenseIdentifier,
+                "identification_on" to identificationOn.name.lowercase(),
+                "is_directory" to directoryFlag
+            )
+        )
+    )
+}
+
+/**
+ * Add a [comment] to file with [path] for the given [scanCode].
+ *
+ * The HTTP request is sent with [user] and [apiKey] as credentials.
+ */
+suspend fun FossIdRestService.addFileComment(
+    user: String,
+    apiKey: String,
+    scanCode: String,
+    path: String,
+    comment: String,
+    isImportant: Boolean = false,
+    includeInReport: Boolean = false
+): EntityResponseBody<Nothing> {
+    val base64Path = base64Encoder.encodeToString(path.toByteArray())
+    val isImportantFlag = if (isImportant) "1" else "0"
+    val includeInReportFlag = if (includeInReport) "1" else "0"
+    return addFileComment(
+        PostRequestBody(
+            "add_file_comment",
+            FILES_AND_FOLDERS_GROUP,
+            user,
+            apiKey,
+            mapOf(
+                "scan_code" to scanCode,
+                "path" to base64Path,
+                "comment" to comment,
+                "is_important" to isImportantFlag,
+                "include_in_report" to includeInReportFlag
+            )
         )
     )
 }
