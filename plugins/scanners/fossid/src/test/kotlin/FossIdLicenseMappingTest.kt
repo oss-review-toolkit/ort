@@ -133,6 +133,7 @@ private fun createMarkAsIdentifiedFile(license: String): MarkedAsIdentifiedFile 
 
     return MarkedAsIdentifiedFile(
         "comment",
+        emptyMap(),
         1,
         "copyright",
         1,
