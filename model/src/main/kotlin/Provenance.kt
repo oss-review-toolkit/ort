@@ -37,7 +37,7 @@ sealed interface Provenance {
     fun matches(pkg: Package): Boolean
 }
 
-object UnknownProvenance : Provenance {
+data object UnknownProvenance : Provenance {
     override fun matches(pkg: Package): Boolean = false
 }
 
