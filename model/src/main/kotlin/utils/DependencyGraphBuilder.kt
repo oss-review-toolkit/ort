@@ -64,7 +64,7 @@ private sealed interface DependencyGraphSearchResult {
      * tree. In this case, a new fragment has to be added to the graph to host this special variant of this
      * dependency.
      */
-    object Incompatible : DependencyGraphSearchResult
+    data object Incompatible : DependencyGraphSearchResult
 }
 
 /**

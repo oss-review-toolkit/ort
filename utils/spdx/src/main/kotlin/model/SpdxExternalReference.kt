@@ -68,16 +68,16 @@ data class SpdxExternalReference(
         val name: String,
         val category: Category
     ) {
-        object Cpe22Type : Type("cpe22Type", Category.SECURITY)
-        object Cpe23Type : Type("cpe23Type", Category.SECURITY)
+        data object Cpe22Type : Type("cpe22Type", Category.SECURITY)
+        data object Cpe23Type : Type("cpe23Type", Category.SECURITY)
 
-        object Bower : Type("bower", Category.PACKAGE_MANAGER)
-        object MavenCentral : Type("maven-central", Category.PACKAGE_MANAGER)
-        object Npm : Type("npm", Category.PACKAGE_MANAGER)
-        object NuGet : Type("nuget", Category.PACKAGE_MANAGER)
-        object Purl : Type("purl", Category.PACKAGE_MANAGER)
+        data object Bower : Type("bower", Category.PACKAGE_MANAGER)
+        data object MavenCentral : Type("maven-central", Category.PACKAGE_MANAGER)
+        data object Npm : Type("npm", Category.PACKAGE_MANAGER)
+        data object NuGet : Type("nuget", Category.PACKAGE_MANAGER)
+        data object Purl : Type("purl", Category.PACKAGE_MANAGER)
 
-        object SoftwareHeritage : Type("swh", Category.PERSISTENT_ID)
+        data object SoftwareHeritage : Type("swh", Category.PERSISTENT_ID)
 
         data class Other(private val typeName: String) : Type(typeName, Category.OTHER)
     }
