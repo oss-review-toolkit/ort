@@ -97,7 +97,7 @@ abstract class AbstractStorageFunTest(vararg listeners: TestListener) : WordSpec
     private val scannerDetailsCompatibleVersion2 = ScannerDetails("name 1", "1.0.1-alpha.1", "config 1")
     private val scannerDetailsIncompatibleVersion = ScannerDetails("name 1", "1.1.0", "config 1")
 
-    private val scannerCriteriaForDetails1 = ScannerCriteria.forDetails(scannerDetails1, Semver.VersionDiff.PATCH)
+    private val scannerCriteriaForDetails1 = ScannerCriteria.create(scannerDetails1)
 
     private val scanSummaryWithFiles = ScanSummary.EMPTY.copy(
         startTime = Instant.EPOCH + Duration.ofMinutes(1),

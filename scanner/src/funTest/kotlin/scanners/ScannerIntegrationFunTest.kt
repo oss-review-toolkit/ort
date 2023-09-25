@@ -215,7 +215,7 @@ internal class DummyScanner(override val name: String = "Dummy") : PathScannerWr
     override val version = "1.0.0"
     override val configuration = ""
 
-    override val criteria = ScannerCriteria.forDetails(details)
+    override val criteria = ScannerCriteria.create(details)
 
     override fun scanPath(path: File, context: ScanContext): ScanSummary {
         val relevantFiles = path.walk()
